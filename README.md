@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+![TechGrit logo](public/techgrit-logo.png)
 
-## Getting Started
+# TechGrit Website V2
 
-First, run the development server:
+This repository is the revamp of the TechGrit company website, built with [Next.js](https://nextjs.org) and designed as a modern, content-first marketing platform.
+
+## Overview
+
+This monorepo is structured to support a content-driven TechGrit website rebuild with a separate frontend app, CMS app, shared packages, and infrastructure code.
+
+### Repository layout
+
+```text
+techgrit-webiste-v2/
+├── .husky/                 # Git hooks configuration
+├── app/                    # current root-level Next.js app scaffold
+├── docs/
+│   ├── adr/                # architecture decision records
+│   └── superpowers/specs/  # design and implementation specs
+├── infra/                  # infrastructure and deployment code
+├── packages/
+│   ├── config/             # shared config presets and tooling
+│   ├── types/              # shared TypeScript types
+│   └── ui/                 # shared UI component library
+├── public/                 # static assets and images
+├── apps/
+│   ├── web/
+│   │   ├── app/            # App Router routes and pages
+│   │   ├── components/     # reusable frontend components
+│   │   ├── lib/            # utilities, CMS client, server actions
+│   │   └── public/         # web app static assets
+│   └── cms/
+│       └── src/
+│           ├── api/        # Strapi collection and single-type APIs
+│           └── components/ # Strapi dynamic zone blocks
+├── package.json
+├── README.md
+└── tsconfig.json
+```
+
+### What each folder is for
+
+- `app/` — the existing root-level Next.js scaffold from the starter template.
+- `apps/web/` — intended main frontend application for the website rebuild.
+- `apps/cms/` — Strapi CMS app structure for content modeling and API work.
+- `packages/ui/` — shared React/UI components and design system primitives.
+- `packages/types/` — shared TypeScript definitions, contracts, and content schemas.
+- `packages/config/` — reusable Tailwind, ESLint, TypeScript, and build presets.
+- `infra/` — deployment and infrastructure-as-code artifacts.
+- `docs/` — project documentation, specs, and ADRs.
+- `public/` — shared static assets such as logos and icons.
+
+## Quick start
+
+Install dependencies and install Husky hooks:
+
+```bash
+npm install
+npm run prepare
+```
+
+Start the development server from the repo root:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — start the Next.js development server
+- `npm run build` — build the Next.js app
+- `npm run start` — run the production build locally
+- `npm run lint` — lint the repository with ESLint
+- `npm run prepare` — install Husky hooks
 
-## Learn More
+## Git hooks
 
-To learn more about Next.js, take a look at the following resources:
+A Husky `pre-commit` hook is configured at `.husky/pre-commit` and runs:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run lint`
+- `npm run build`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This ensures linting and build validation before commits are created.
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- The frontend entry file is currently `apps/web/app/page.tsx` once the app content is added.
+- The logo shown above is sourced from `public/techgrit-logo.png`.
+- `apps/cms` is a placeholder structure for later Strapi content modeling and API work.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Learn more
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Husky](https://typicode.github.io/husky/#/)
