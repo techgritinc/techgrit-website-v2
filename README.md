@@ -1,4 +1,4 @@
-![TechGrit logo](public/techgrit-logo.png)
+![TechGrit logo](public/logos/techgrit-logo-white.png)
 
 # TechGrit Website V2
 
@@ -22,7 +22,11 @@ techgrit-webiste-v2/
 │   ├── config/             # shared config presets and tooling
 │   ├── types/              # shared TypeScript types
 │   └── ui/                 # shared UI component library
-├── public/                 # static assets and images
+├── public/
+│   ├── icons/
+│   │   └── favicon.png     # browser tab icon (wired via metadata in app/layout.tsx)
+│   └── logos/
+│       └── techgrit-logo-white.png   # white logo — dark backgrounds
 ├── apps/
 │   ├── web/
 │   │   ├── app/            # App Router routes and pages
@@ -40,6 +44,7 @@ techgrit-webiste-v2/
 
 ### What each folder is for
 
+- `public/` — static assets served at the root URL. `logos/` holds the TechGrit brand logo; `icons/` holds the favicon used across all pages.
 - `app/` — the existing root-level Next.js scaffold from the starter template.
 - `apps/web/` — intended main frontend application for the website rebuild.
 - `apps/cms/` — Strapi CMS app structure for content modeling and API work.
@@ -87,7 +92,7 @@ This ensures linting and build validation before commits are created.
 ## Notes
 
 - The frontend entry file is currently `apps/web/app/page.tsx` once the app content is added.
-- The logo shown above is sourced from `public/techgrit-logo.png`.
+- The logo shown above is sourced from `public/logos/techgrit-logo-white.png`.
 - `apps/cms` is a placeholder structure for later Strapi content modeling and API work.
 
 ## Learn more
