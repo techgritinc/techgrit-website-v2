@@ -116,6 +116,19 @@ textarea::placeholder {
 }
 
 /* ----------------------------------------------------------
+ * FOCUS VISIBILITY
+ * Every interactive element (links, buttons, inputs) gets a
+ * clearly visible, on-brand focus ring for keyboard users.
+ * ---------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* ----------------------------------------------------------
  * Container
  * .container — max-width wrapper, centered, padded
  * ---------------------------------------------------------- */
@@ -446,6 +459,421 @@ textarea::placeholder {
 }
 
 /* ----------------------------------------------------------
+ * SITE HEADER
+ * Shared global header (components/layout/Header.tsx).
+ * Default: solid, sticky, on every route.
+ * .site-header-hero: homepage-only — transparent over the hero
+ * until `.is-scrolled` is added by the component's scroll listener.
+ * ---------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  background: var(--color-nav-glass);
+  backdrop-filter: blur(var(--blur-nav));
+  -webkit-backdrop-filter: blur(var(--blur-nav));
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+/* Homepage-only transparent-over-hero state. The scrolled values come from the
+ * reference homepage's own scroll handler (Homepage.dc.html's _setupHero onScroll)
+ * and are declared as tokens in tokens.css (--color-header-scrolled-bg,
+ * --color-border-header-scrolled, --shadow-header-scrolled, --blur-header-scrolled). */
+.site-header-hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  transition: background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.site-header-hero.is-scrolled {
+  background: var(--color-header-scrolled-bg);
+  backdrop-filter: blur(var(--blur-header-scrolled));
+  -webkit-backdrop-filter: blur(var(--blur-header-scrolled));
+  border-bottom-color: var(--color-border-header-scrolled);
+  box-shadow: var(--shadow-header-scrolled);
+}
+
+.site-header-inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* Homepage-only: nav height shrinks 80px -> 70px on scroll, matching the reference exactly. */
+.site-header-hero .site-header-inner {
+  height: 80px;
+  transition: height 0.3s ease;
+}
+
+.site-header-hero.is-scrolled .site-header-inner {
+  height: 70px;
+}
+
+.site-header-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.site-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.site-header-burger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--color-text-primary);
+}
+
+/* No mobile-specific nav-height override: none of the read reference files change the
+ * header bar's own height at the mobile breakpoint — only which children are visible. */
+
+/* ----------------------------------------------------------
+ * NAV LINK / DROPDOWN
+ * Usage: header primary navigation (Header component)
+ * ---------------------------------------------------------- */
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-nav);
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--transition-base), background var(--transition-base);
+}
+
+.nav-link:hover,
+.nav-link[aria-expanded="true"],
+.nav-link.is-active {
+  color: var(--color-text-primary);
+  background: var(--color-glass);
+}
+
+.nav-chev {
+  transition: transform var(--transition-base);
+}
+
+.nav-dd {
+  position: absolute;
+  top: calc(100% + 11px);
+  left: 0;
+  min-width: 216px;
+  background: var(--color-dd-bg);
+  backdrop-filter: blur(var(--blur-nav));
+  -webkit-backdrop-filter: blur(var(--blur-nav));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 8px;
+  box-shadow: var(--shadow-dropdown);
+  z-index: var(--z-dropdown);
+}
+
+.nav-dd a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 13px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-nav-sub);
+  white-space: nowrap;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-dd a:hover,
+.nav-dd a.is-active {
+  background: var(--color-overlay-orange);
+  color: var(--color-text-primary);
+}
+
+.dd-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+ * MOBILE MENU PANEL
+ * Driven by the --menu-max-h custom property set inline by
+ * Header.tsx — the only inline style used, per project convention
+ * for state-driven values.
+ * ---------------------------------------------------------- */
+.mobile-menu {
+  overflow: hidden auto;
+  max-height: var(--menu-max-h, 0px);
+  /* --color-mobile-menu-bg is a distinct, blacker near-black than --color-dd-bg
+   * (the desktop dropdown's background) — matches the reference exactly. */
+  background: var(--color-mobile-menu-bg);
+  transition: max-height var(--transition-medium);
+}
+
+.mobile-menu-label {
+  padding: 14px 36px 8px;
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-text-ghost);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.m-sub a {
+  display: block;
+  padding: 10px 36px 10px 52px;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-secondary);
+}
+
+.m-sub a:hover,
+.m-sub a.is-active {
+  color: var(--color-text-primary);
+}
+
+.mobile-menu-link {
+  display: block;
+  padding: 14px 36px;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-secondary);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.mobile-menu-link.is-active {
+  color: var(--color-text-primary);
+}
+
+.mobile-menu-cta {
+  display: block;
+  padding: 16px 36px;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-orange);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+/* ----------------------------------------------------------
+ * SITE FOOTER
+ * Shared global footer (components/layout/Footer.tsx).
+ * Structure is identical on every page; only the quick-link
+ * group's heading/links vary by route.
+ * ---------------------------------------------------------- */
+.site-footer {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.site-footer-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-blue), var(--color-teal), var(--color-amber), var(--color-orange));
+}
+
+.site-footer-glow {
+  position: absolute;
+  top: -140px;
+  right: -90px;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  background: var(--color-orange);
+  opacity: 0.08;
+  filter: blur(130px);
+  pointer-events: none;
+}
+
+.site-footer-inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 78px var(--container-padding) 0;
+  position: relative;
+}
+
+.site-footer-top {
+  display: grid;
+  grid-template-columns: 1.9fr 1fr 1fr 1.3fr;
+  gap: 48px;
+}
+
+.site-footer-desc {
+  margin-top: 20px;
+  font-size: var(--text-sm);
+  line-height: var(--lh-body);
+  color: var(--color-text-secondary);
+  max-width: 310px;
+}
+
+.site-footer-social {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.site-footer-social-link {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: border-color var(--transition-base), color var(--transition-base);
+}
+
+.site-footer-social-link:hover {
+  border-color: var(--color-orange);
+  color: var(--color-text-primary);
+}
+
+.site-footer-heading {
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  margin-bottom: 18px;
+}
+
+.site-footer-link {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+  transition: color var(--transition-base);
+}
+
+.site-footer-link:hover {
+  color: var(--color-text-primary);
+}
+
+.site-footer-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-bottom: 13px;
+  transition: color var(--transition-base);
+}
+
+.site-footer-contact-link:hover {
+  color: var(--color-text-primary);
+}
+
+.site-footer-contact-icon {
+  color: var(--color-orange);
+  flex-shrink: 0;
+}
+
+.site-footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  background: var(--gradient-brand);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-bold);
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-nav-btn);
+  transition: transform var(--transition-base);
+}
+
+.site-footer-cta:hover {
+  transform: translateY(-2px);
+}
+
+.site-footer-ghost {
+  margin-top: 54px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(74px, 17vw, 232px);
+  line-height: 0.74;
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.045em;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+}
+
+.site-footer-bottom {
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.site-footer-bottom-inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 22px var(--container-padding);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.site-footer-copyright {
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+}
+
+.site-footer-legal {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.site-footer-legal a {
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+  transition: color var(--transition-base);
+}
+
+.site-footer-legal a:hover {
+  color: var(--color-text-primary);
+}
+
+/* ----------------------------------------------------------
  * ANIMATIONS  (tg* naming convention — TechGrit branded)
  * ---------------------------------------------------------- */
 
@@ -603,12 +1031,17 @@ textarea::placeholder {
   h1 { font-size: 44px; }
   .section    { padding-block: 60px; }
   .glass-card { padding: 24px 28px; }
+
+  .site-footer-top { grid-template-columns: 1fr 1fr; gap: 34px; }
 }
 
 @media (max-width: 560px) {
   .container    { padding-inline: 20px; }
   .glass-card   { padding: 20px 20px; }
   .btn-lg       { font-size: var(--text-sm); padding: 14px 22px; }
+
+  .site-footer-top          { grid-template-columns: 1fr; }
+  .site-footer-bottom-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
 
 /* ----------------------------------------------------------

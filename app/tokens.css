@@ -80,6 +80,9 @@
   --color-glass-hover:    rgba(255, 255, 255, 0.08); /* Input fill on focus */
   --color-nav-glass:      rgba(10, 24, 34, 0.70);    /* Sticky nav background */
   --color-dd-bg:          rgba(13, 26, 37, 0.97);    /* Dropdown menu bg */
+  --color-mobile-menu-bg: rgba(10, 24, 34, 0.97);    /* Mobile nav panel bg (darker than dd-bg) */
+  --color-header-scrolled-bg:     rgba(8, 16, 24, 0.86);   /* Homepage header once solid on scroll */
+  --color-border-header-scrolled: rgba(255, 255, 255, 0.08); /* Homepage header border once scrolled */
   --color-overlay-orange: rgba(232, 119, 34, 0.16);  /* Ambient orb / bg glow */
   --color-overlay-blue:   rgba(2, 132, 199, 0.12);   /* Ambient orb / bg glow */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
@@ -196,6 +199,7 @@
   --shadow-card-hover:    0 20px 44px -14px rgba(0, 0, 0, 0.65);       /* Card hover */
   --shadow-glass:         0 24px 60px -20px rgba(0, 0, 0, 0.60);       /* Glass panels */
   --shadow-dropdown:      0 26px 54px -16px rgba(0, 0, 0, 0.75);       /* Dropdown menus */
+  --shadow-header-scrolled: 0 12px 34px -14px rgba(0, 0, 0, 0.75);     /* Homepage header once solid on scroll */
   --shadow-glow-orange:   0  0  12px  2px rgba(232, 119, 34, 0.80);    /* Status dot glow */
   --shadow-glow-blue:     0  0  16px  3px rgba(56,  189, 248, 0.70);   /* Blue orbit dot */
   --shadow-glow-teal:     0  0  16px  3px rgba(45,  212, 191, 0.70);   /* Teal orbit dot */
@@ -242,4 +246,5 @@
   --blur-md:   8px;   /* Agent floating cards */
   --blur-lg:   14px;  /* Glass cards */
   --blur-nav:  16px;  /* Sticky nav */
+  --blur-header-scrolled: 18px; /* Homepage header once solid on scroll */
 }
