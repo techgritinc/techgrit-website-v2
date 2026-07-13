@@ -172,6 +172,15 @@
   --nav-height:         80px;    /* Desktop sticky nav height */
   --nav-height-mobile:  74px;    /* Mobile nav height */
 
+  /* Documented breakpoint contract (see globals.css breakpoints section).
+     NOTE: also duplicated as literal values in globals.css's @theme inline
+     block, which drives Tailwind's sm:/md:/lg: prefixes — Tailwind/Lightning
+     CSS requires literal values there (var() indirection breaks @media
+     generation), so these values must be kept in sync by hand if changed. */
+  --breakpoint-sm:      560px;   /* Footer stacks, stat rows tighten */
+  --breakpoint-md:      960px;   /* Grids collapse to one column, H1 shrinks */
+  --breakpoint-lg:      1140px;  /* Desktop nav links hide, burger shows */
+
   /* ----------------------------------------------------------
    * 9. BORDER RADIUS
    * ---------------------------------------------------------- */
