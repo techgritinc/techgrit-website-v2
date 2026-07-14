@@ -139,7 +139,9 @@ You **MUST** consider the user input before proceeding (if not empty).
 6. Parse tasks.md structure and extract:
    - **Task phases**: Setup, Tests, Core, Integration, Polish
    - **Task dependencies**: Sequential vs parallel execution rules
-   - **Task details**: ID, description, file paths, parallel markers [P]
+   - **Task details**: ID, description, file paths, markers [P] and [UI]
+   - **UI tasks**: Every task tagged `[UI]` (Constitution Principle VI) requires the
+     `frontend-design` skill to be invoked before execution
    - **Execution flow**: Order and dependency requirements
 
 7. Execute implementation following the task plan:
@@ -147,6 +149,17 @@ You **MUST** consider the user input before proceeding (if not empty).
    - **Respect dependencies**: Run sequential tasks in order, parallel tasks [P] can run together  
    - **Follow TDD approach**: Execute test tasks before their corresponding implementation tasks
    - **File-based coordination**: Tasks affecting the same files must run sequentially
+   - **UI task gate (Constitution Principle VI)**: For any task marked `[UI]`, BEFORE writing
+     code for it, invoke the vendored `frontend-design` skill at
+     `.claude/skills/frontend-design/SKILL.md` via the Skill tool. Give it:
+       - The user story context from spec.md
+       - The "UI Design Approach" section from plan.md (as the aesthetic direction to execute)
+       - The exact task description and target file paths
+     Then write the code using the skill's guidance, reconciled against Constitution
+     Principles I–V (tokens, breakpoints, existing component library, reference-file
+     translation rules, dark-first brand). Repo principles ALWAYS win over the skill's
+     generic aesthetic suggestions. Batch UI tasks that share a component/file into a single
+     skill invocation rather than re-invoking per micro-edit.
    - **Validation checkpoints**: Verify each phase completion before proceeding
 
 8. Implementation execution rules:

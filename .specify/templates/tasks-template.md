@@ -12,10 +12,15 @@ description: "Task list template for feature implementation"
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
-## Format: `[ID] [P?] [Story] Description`
+## Format: `[ID] [P?] [UI?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
+- **[UI]** (Constitution Principle VI): Task produces user-visible frontend output
+  (component, page, layout, styling). `/speckit.implement` invokes the vendored
+  `frontend-design` skill before executing any `[UI]`-tagged task. Do NOT tag
+  backend/API/config/tests tasks.
 - **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
+- Marker order when multiple apply: `[P] [UI] [Story]`
 - Include exact file paths in descriptions
 
 ## Path Conventions
@@ -243,6 +248,8 @@ With multiple developers:
 ## Notes
 
 - [P] tasks = different files, no dependencies
+- [UI] tasks (Constitution Principle VI) = produce user-visible frontend output; the
+  `frontend-design` skill is invoked before executing them
 - [Story] label maps task to specific user story for traceability
 - Each user story should be independently completable and testable
 - Verify tests fail before implementing

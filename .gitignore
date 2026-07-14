@@ -2,8 +2,11 @@
 
 
 # local only, do not push
-.claude
-.claude/skills
+# Ignore .claude contents by default (personal settings, session state)...
+.claude/*
+# ...but track shared, team-wide project skills vendored into the repo
+# (see .specify/memory/constitution.md Principle VI).
+!.claude/skills/
 raw-files
 
 # dependencies
