@@ -19,7 +19,7 @@ const STEPS = [
 export default function NextSteps() {
   return (
     <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 44 }}>
-      <h2 style={{ fontSize: "clamp(24px,2.8vw,32px)", fontWeight: 700, letterSpacing: "-0.03em", color: "#fff", textAlign: "center" }}>What happens next</h2>
+      <h2 style={{ fontSize: "clamp(24px,2.8vw,32px)", fontWeight: 700, letterSpacing: "-0.03em", color: "#fff", textAlign: "center", fontFamily: "var(--font-display)" }}>What happens next</h2>
       <div className="grid grid-cols-1 tg-md:grid-cols-3" style={{ marginTop: 34, gap: 24 }}>
         {STEPS.map((step) => (
           <div
@@ -34,7 +34,7 @@ export default function NextSteps() {
           >
             <span
               style={{
-                fontFamily: '"Space Grotesk", "Manrope", sans-serif',
+                fontFamily: "var(--font-display)",
                 fontSize: 15,
                 fontWeight: 700,
                 color: "#F7B733",
@@ -42,7 +42,7 @@ export default function NextSteps() {
             >
               {step.number}
             </span>
-            <h3 style={{ marginTop: 12, fontSize: 18, fontWeight: 700, color: "#fff" }}>
+            <h3 style={{ marginTop: 12, fontSize: 18, fontWeight: 700, color: "#fff", fontFamily: "var(--font-display)" }}>
               {step.title}
             </h3>
             <p

@@ -90,7 +90,7 @@ export default function ContactHeroForm() {
   const firstName = name.trim().split(" ")[0];
 
   return (
-    <div className="grid grid-cols-1 tg-md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] gap-[34px] tg-md:gap-[60px] items-start">
+    <div className="grid grid-cols-1 tg-md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] gap-[34px] tg-md:gap-[60px] items-start leading-[normal]">
       {/* Intro + contact info */}
       <div className="pt-2">
         <div className="inline-flex items-center gap-2.5 bg-[rgba(232,119,34,0.1)] border border-[rgba(232,119,34,0.3)] px-4 py-2 rounded-full mb-6">
@@ -173,7 +173,7 @@ export default function ContactHeroForm() {
                   </label>
                   <input
                     id="name"
-                    className={`${fldClass} h-[50px]`}
+                    className={fldClass}
                     type="text"
                     required
                     placeholder="Jane Doe"
@@ -190,7 +190,7 @@ export default function ContactHeroForm() {
                   </label>
                   <input
                     id="email"
-                    className={`${fldClass} h-[50px]`}
+                    className={fldClass}
                     type="email"
                     required
                     placeholder="jane@company.com"
@@ -209,7 +209,7 @@ export default function ContactHeroForm() {
                 </label>
                 <input
                   id="company"
-                  className={`${fldClass} h-[50px]`}
+                  className={fldClass}
                   type="text"
                   placeholder="Company name"
                   value={company}
@@ -235,7 +235,7 @@ export default function ContactHeroForm() {
                 />
               </div>
 
-              <button type="submit" className="mt-1 inline-flex items-center justify-center gap-[9px] bg-gradient-to-br from-[#F59E0B] to-[#E87722] text-white text-[16px] font-bold p-4 border-none rounded-[12px] cursor-pointer shadow-[0_14px_36px_-10px_rgba(232,119,34,0.8)] hover:-translate-y-0.5 transition-transform w-full">
+              <button type="submit" className="mt-1 inline-flex items-center justify-center gap-[9px] bg-gradient-to-br from-[#F59E0B] to-[#E87722] text-white text-[16px] font-bold px-4 h-[51.1328px] border-none rounded-[12px] cursor-pointer shadow-[0_14px_36px_-10px_rgba(232,119,34,0.8)] hover:-translate-y-0.5 transition-transform w-full">
                 Send message <span className="text-[17px]">&#8594;</span>
               </button>
               <p className="text-[12.5px] text-white/45 text-center leading-[1.5]">
