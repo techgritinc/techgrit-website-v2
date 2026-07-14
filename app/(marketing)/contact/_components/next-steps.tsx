@@ -20,7 +20,7 @@ export default function NextSteps() {
   return (
     <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 44 }}>
       <h2 style={{ fontSize: "clamp(24px,2.8vw,32px)", fontWeight: 700, letterSpacing: "-0.03em", color: "#fff", textAlign: "center" }}>What happens next</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3" style={{ marginTop: 34, gap: 24 }}>
+      <div className="grid grid-cols-1 tg-md:grid-cols-3" style={{ marginTop: 34, gap: 24 }}>
         {STEPS.map((step) => (
           <div
             key={step.number}

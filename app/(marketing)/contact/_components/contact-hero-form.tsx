@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
+import { MailIcon, ClockIcon, GlobeIcon, CheckCircleIcon } from "./icons";
 
 const TOPICS = ["New project", "Partnership", "Hiring TechGrit", "Support"] as const;
 
@@ -8,9 +9,7 @@ type ContactInfoItem = {
   label: string;
   value: string;
   href?: string;
-  bg: string;
-  border: string;
-  stroke: string;
+  iconWrapperClass: string;
   icon: ReactNode;
 };
 
@@ -19,92 +18,34 @@ const CONTACT_INFO: ContactInfoItem[] = [
     label: "Email us",
     value: "support@techgrit.com",
     href: "mailto:support@techgrit.com",
-    bg: "var(--color-overlay-orange)",
-    border: "var(--color-border-orange)",
-    stroke: "var(--color-amber-light)",
-    icon: (
-      <>
-        <rect x="2" y="4" width="20" height="16" rx="2" />
-        <path d="m22 7-10 5L2 7" />
-      </>
-    ),
+    iconWrapperClass: "bg-[rgba(232,119,34,0.12)] border-[rgba(232,119,34,0.3)]",
+    icon: <MailIcon className="text-[var(--color-amber-light)]" />,
   },
   {
     label: "Response time",
     value: "Within 1 business day",
-    bg: "rgba(2, 132, 199, 0.12)",
-    border: "rgba(56, 189, 248, 0.3)",
-    stroke: "var(--color-blue-light)",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="10" />
-        <polyline points="12 6 12 12 16 14" />
-      </>
-    ),
+    iconWrapperClass: "bg-[rgba(2,132,199,0.12)] border-[rgba(56,189,248,0.3)]",
+    icon: <ClockIcon className="text-[var(--color-blue-light)]" />,
   },
   {
     label: "Where we work",
     value: "Remote-first · global delivery",
-    bg: "rgba(45, 212, 191, 0.12)",
-    border: "rgba(45, 212, 191, 0.3)",
-    stroke: "var(--color-teal-light)",
-    icon: (
-      <>
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-        <circle cx="12" cy="10" r="3" />
-      </>
-    ),
+    iconWrapperClass: "bg-[rgba(45,212,191,0.12)] border-[rgba(45,212,191,0.3)]",
+    icon: <GlobeIcon className="text-[var(--color-teal-light)]" />,
   },
 ];
 
-function ContactInfoRow({ label, value, href, bg, border, stroke, icon }: ContactInfoItem) {
+function ContactInfoRow({ label, value, href, iconWrapperClass, icon }: ContactInfoItem) {
   const content = (
     <>
-      <span
-        style={{
-          width: 46,
-          height: 46,
-          borderRadius: 12,
-          background: bg,
-          border: `1px solid ${border}`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0
-        }}
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke={stroke}
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          {icon}
-        </svg>
+      <span className={`w-[46px] h-[46px] rounded-[12px] flex items-center justify-center shrink-0 border ${iconWrapperClass}`}>
+        {icon}
       </span>
       <span>
-        <span
-          style={{
-            display: "block",
-            fontSize: "12.5px",
-            color: "rgba(255,255,255,0.5)",
-            fontWeight: 600,
-          }}
-        >
+        <span className="block text-[12.5px] text-white/50 font-semibold">
           {label}
         </span>
-        <span
-          style={{
-            display: "block",
-            fontSize: "16px",
-            color: "#fff",
-            fontWeight: 700,
-          }}
-        >
+        <span className="block text-[16px] text-white font-bold">
           {value}
         </span>
       </span>
@@ -113,16 +54,17 @@ function ContactInfoRow({ label, value, href, bg, border, stroke, icon }: Contac
 
   if (href) {
     return (
-      <a href={href} style={{ display: "flex", alignItems: "center", gap: 14 }} className="hover:opacity-85 transition-opacity">
+      <a href={href} className="flex items-center gap-[14px] hover:opacity-85 transition-opacity">
         {content}
       </a>
     );
   }
 
-  return <div style={{ display: "flex", alignItems: "center", gap: 14 }}>{content}</div>;
+  return <div className="flex items-center gap-[14px]">{content}</div>;
 }
 
-const fldClass = "w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.14)] rounded-xl px-4 py-[14px] text-[15px] text-white outline-none transition-colors focus:border-[rgba(232,119,34,0.6)] focus:bg-[rgba(255,255,255,0.08)] placeholder:text-[rgba(255,255,255,0.4)] font-[inherit]";
+const fldClass = "w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.14)] rounded-[12px] px-4 py-[14px] text-[15px] text-white outline-none transition-colors focus:border-[rgba(232,119,34,0.6)] focus:bg-[rgba(255,255,255,0.08)] placeholder:text-[rgba(255,255,255,0.4)] font-[inherit]";
+const labelClass = "block text-[13px] font-semibold text-white/70 mb-[7px]";
 
 export default function ContactHeroForm() {
   const [topic, setTopic] = useState<(typeof TOPICS)[number]>(TOPICS[0]);
@@ -148,52 +90,25 @@ export default function ContactHeroForm() {
   const firstName = name.trim().split(" ")[0];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] lg:gap-[60px] gap-[34px] items-start">
+    <div className="grid grid-cols-1 tg-md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] gap-[34px] tg-md:gap-[60px] items-start">
       {/* Intro + contact info */}
-      <div style={{ paddingTop: 8 }}>
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 10,
-            background: "rgba(232,119,34,0.1)",
-            border: "1px solid rgba(232,119,34,0.3)",
-            padding: "8px 16px",
-            borderRadius: 40,
-            marginBottom: 24,
-          }}
-        >
-          <span
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: "#E87722",
-              boxShadow: "0 0 12px 2px rgba(232,119,34,0.8)",
-            }}
-          />
-          <span style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: "0.1em", color: "rgba(255,255,255,0.92)", textTransform: "uppercase" }}>Contact Us</span>
+      <div className="pt-2">
+        <div className="inline-flex items-center gap-2.5 bg-[rgba(232,119,34,0.1)] border border-[rgba(232,119,34,0.3)] px-4 py-2 rounded-full mb-6">
+          <span className="w-2 h-2 rounded-full bg-[#E87722] shadow-[0_0_12px_2px_rgba(232,119,34,0.8)]" />
+          <span className="text-[12.5px] font-bold tracking-[0.1em] text-[rgba(255,255,255,0.92)] uppercase">Contact Us</span>
         </div>
 
-        <h1 style={{ fontSize: "clamp(38px,4.8vw,54px)", lineHeight: 1.05, fontWeight: 700, letterSpacing: "-0.035em", color: "#fff" }}>
+        <h1 className="text-[clamp(38px,4.8vw,54px)] leading-[1.05] font-bold tracking-[-0.035em] text-white">
           Let&apos;s build something{" "}
-          <span style={{ background: "linear-gradient(120deg,#F59E0B,#E87722)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>remarkable.</span>
+          <span className="text-gradient">remarkable.</span>
         </h1>
 
-        <p
-          style={{
-            margin: "20px 0 0",
-            maxWidth: 440,
-            fontSize: 18,
-            lineHeight: 1.65,
-            color: "rgba(255,255,255,0.72)",
-          }}
-        >
+        <p className="mt-5 max-w-[440px] text-[18px] leading-[1.65] text-[rgba(255,255,255,0.72)]">
           Tell us about your product, your timeline, and what success looks
           like. We&apos;ll get back within one business day.
         </p>
 
-        <div style={{ marginTop: 34, display: "flex", flexDirection: "column", gap: 18 }}>
+        <div className="mt-[34px] flex flex-col gap-[18px]">
           {CONTACT_INFO.map((item) => (
             <ContactInfoRow key={item.label} {...item} />
           ))}
@@ -201,86 +116,33 @@ export default function ContactHeroForm() {
       </div>
 
       {/* Form card */}
-      <div style={{ position: "relative", borderRadius: 24, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)", backdropFilter: "blur(10px)", padding: "36px 34px", boxShadow: "0 30px 70px -30px rgba(0,0,0,0.7)" }}>
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: -1,
-            left: 30,
-            right: 30,
-            height: 2,
-            background:
-              "linear-gradient(90deg, transparent, rgba(232,119,34,0.7), transparent)",
-          }}
-        />
+      <div className="relative rounded-[24px] border border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.04)] backdrop-blur-[10px] px-[34px] py-[36px] shadow-[0_30px_70px_-30px_rgba(0,0,0,0.7)]">
+        <div aria-hidden className="absolute -top-px left-[30px] right-[30px] h-0.5 bg-gradient-to-r from-transparent via-[rgba(232,119,34,0.7)] to-transparent" />
 
         {sent ? (
-          <div style={{ padding: "30px 6px 10px" }}>
-            <div
-              style={{
-                width: 64,
-                height: 64,
-                borderRadius: "50%",
-                background: "rgba(45, 212, 191, 0.15)",
-                border: "1px solid rgba(45, 212, 191, 0.4)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "0 auto 20px"
-              }}
-            >
-              <svg
-                width="30"
-                height="30"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#2dd4bf"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+          <div className="p-[30px_6px_10px]">
+            <div className="w-16 h-16 rounded-full bg-[rgba(45,212,191,0.15)] border border-[rgba(45,212,191,0.4)] flex items-center justify-center mx-auto mb-5">
+              <CheckCircleIcon className="text-[#2dd4bf]" />
             </div>
-            <h3 style={{ fontSize: 24, fontWeight: 700, color: "#fff", textAlign: "center" }}>Message sent.</h3>
-            <p
-              style={{
-                marginTop: 10,
-                fontSize: 16,
-                lineHeight: 1.6,
-                color: "rgba(255,255,255,0.7)",
-                textAlign: "center",
-                maxWidth: 340,
-                marginLeft: "auto",
-                marginRight: "auto"
-              }}
-            >
+            <h3 className="text-2xl font-bold text-white text-center">Message sent.</h3>
+            <p className="mt-2.5 text-[16px] leading-[1.6] text-white/70 text-center max-w-[340px] mx-auto">
               Thanks{firstName ? `, ${firstName}` : ""} — we&apos;ve received
               your note and will reply within one business day.
             </p>
             <button
               type="button"
               onClick={handleReset}
-              style={{ margin: "22px auto 0", display: "block", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.16)", color: "#fff", fontSize: "14.5px", fontWeight: 700, padding: "12px 22px", borderRadius: 11, cursor: "pointer" }}
+              className="mt-[22px] mx-auto block bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.16)] text-white text-[14.5px] font-bold py-3 px-[22px] rounded-[11px] cursor-pointer hover:bg-white/10 transition-colors"
             >
               Send another
             </button>
           </div>
         ) : (
           <div>
-            <div
-              style={{
-                fontSize: 13,
-                fontWeight: 700,
-                letterSpacing: "0.04em",
-                color: "rgba(255,255,255,0.6)",
-                marginBottom: 14
-              }}
-            >
+            <div className="text-[13px] font-bold tracking-[0.04em] text-white/60 mb-[14px]">
               What can we help with?
             </div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24 }}>
+            <div className="flex gap-2 flex-wrap mb-6">
               {TOPICS.map((t) => {
                 const active = topic === t;
                 return (
@@ -288,25 +150,11 @@ export default function ContactHeroForm() {
                     key={t}
                     type="button"
                     onClick={() => setTopic(t)}
-                    style={{
-                      fontFamily: "inherit",
-                      fontSize: "13.5px",
-                      fontWeight: 700,
-                      padding: "9px 15px",
-                      borderRadius: 30,
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                      transition: "all .18s ease",
-                      border: active
-                        ? "1px solid rgba(232,119,34,0.6)"
-                        : "1px solid rgba(255,255,255,0.14)",
-                      background: active
-                        ? "rgba(232,119,34,0.16)"
-                        : "rgba(255,255,255,0.04)",
-                      color: active
-                        ? "#fff"
-                        : "rgba(255,255,255,0.7)",
-                    }}
+                    className={`font-[inherit] text-[13.5px] font-bold py-[9px] px-[15px] rounded-[30px] cursor-pointer whitespace-nowrap transition-all duration-200 ease-in-out border ${
+                      active
+                        ? "border-[rgba(232,119,34,0.6)] bg-[rgba(232,119,34,0.16)] text-[#fff]"
+                        : "border-[rgba(255,255,255,0.14)] bg-[rgba(255,255,255,0.04)] text-[rgba(255,255,255,0.7)] hover:bg-[rgba(255,255,255,0.08)]"
+                    }`}
                   >
                     {t}
                   </button>
@@ -314,42 +162,40 @@ export default function ContactHeroForm() {
               })}
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 tg-sm:grid-cols-2 gap-4">
                 <div>
                   <label
                     htmlFor="name"
-                    style={{ display: "block", fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)", marginBottom: 7 }}
+                    className={labelClass}
                   >
                     Full name
                   </label>
                   <input
                     id="name"
-                    className={fldClass}
+                    className={`${fldClass} h-[50px]`}
                     type="text"
                     required
                     placeholder="Jane Doe"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    style={{ height: "50px", borderRadius: "10px", padding: "9px 15px" }}
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="email"
-                    style={{ display: "block", fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)", marginBottom: 7 }}
+                    className={labelClass}
                   >
                     Work email
                   </label>
                   <input
                     id="email"
-                    className={fldClass}
+                    className={`${fldClass} h-[50px]`}
                     type="email"
                     required
                     placeholder="jane@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    style={{ height: "50px", borderRadius: "10px", padding: "9px 15px" }}
                   />
                 </div>
               </div>
@@ -357,52 +203,43 @@ export default function ContactHeroForm() {
               <div>
                 <label
                   htmlFor="company"
-                  style={{ display: "block", fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)", marginBottom: 7 }}
+                  className={labelClass}
                 >
                   Company
                 </label>
                 <input
                   id="company"
-                  className={fldClass}
+                  className={`${fldClass} h-[50px]`}
                   type="text"
                   placeholder="Company name"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  style={{ height: "50px", borderRadius: "9px", padding: "9px 15px" }}
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="message"
-                  style={{ display: "block", fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)", marginBottom: 7 }}
+                  className={labelClass}
                 >
                   Tell us about your project
                 </label>
                 <textarea
                   id="message"
-                  className={fldClass}
+                  className={`${fldClass} resize-y min-h-[108px]`}
                   rows={4}
                   required
                   placeholder="What are you building, and what's the goal?"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  style={{ resize: "vertical", minHeight: 108, padding: "9px 15px" }}
                 />
               </div>
 
-              <button type="submit" style={{ marginTop: 4, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 9, background: "linear-gradient(135deg,#F59E0B,#E87722)", color: "#fff", fontSize: 16, fontWeight: 700, padding: 16, border: "none", borderRadius: 12, cursor: "pointer", boxShadow: "0 14px 36px -10px rgba(232,119,34,0.8)" }} className="hover:-translate-y-0.5 transition-transform">
-                Send message <span style={{ fontSize: 17 }}>&#8594;</span>
+              <button type="submit" className="mt-1 inline-flex items-center justify-center gap-[9px] bg-gradient-to-br from-[#F59E0B] to-[#E87722] text-white text-[16px] font-bold p-4 border-none rounded-[12px] cursor-pointer shadow-[0_14px_36px_-10px_rgba(232,119,34,0.8)] hover:-translate-y-0.5 transition-transform w-full">
+                Send message <span className="text-[17px]">&#8594;</span>
               </button>
-              <p
-                style={{
-                  fontSize: "12.5px",
-                  color: "rgba(255,255,255,0.45)",
-                  textAlign: "center",
-                }}
-              >
-                By submitting, you agree to our privacy policy. We never
-                share your details.
+              <p className="text-[12.5px] text-white/45 text-center leading-[1.5]">
+                By submitting, you agree to our privacy policy. We never share your details.
               </p>
             </form>
           </div>

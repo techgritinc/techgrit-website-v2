@@ -10,15 +10,45 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main style={{ background: "linear-gradient(to right, #061f30ff, #191818ff)", minHeight: "100vh" }}>
-      <section style={{ position: "relative" }}>
-        <div className="container" style={{ paddingBlock: "74px 50px" }}>
+    <main style={{ minHeight: "100vh", position: "relative", overflow: "hidden" }}>
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: -160,
+          right: -120,
+          width: 560,
+          height: 560,
+          borderRadius: "50%",
+          background: "var(--color-overlay-orange)",
+          filter: "blur(120px)",
+          animation: "tgorb 16s ease-in-out infinite",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: -160,
+          left: -180,
+          width: 520,
+          height: 520,
+          borderRadius: "50%",
+          background: "var(--color-overlay-blue)",
+          filter: "blur(130px)",
+          animation: "tgorb 20s ease-in-out infinite reverse",
+          pointerEvents: "none",
+        }}
+      />
+      <section id="form" style={{ position: "relative" }}>
+        <div className="mx-auto max-w-(--container-max) px-9" style={{ paddingBlock: "74px 50px"}}>
           <ContactHeroForm />
         </div>
       </section>
 
       <section style={{ position: "relative" }}>
-        <div className="container" style={{ paddingBlock: "30px 80px" }}>
+        <div className="mx-auto max-w-(--container-max) px-9" style={{ paddingBlock: "30px 80px" }}>
           <NextSteps />
         </div>
       </section>
