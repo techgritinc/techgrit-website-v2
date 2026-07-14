@@ -1,8 +1,8 @@
 @AGENTS.md
 
 ## Active Technologies
-- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4.3.2 (via (001-about-us-page)
-- N/A — content is a typed, in-repo dummy module (`app/about/_data/about-us-content.ts`) (001-about-us-page)
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (via (TMS-63)
+- N/A — navigation and footer link content is static configuration, not persisted data (TMS-63)
 
 ## Recent Changes
-- 001-about-us-page: Added TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4.3.2 (via
+- TMS-63: Added TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (via
