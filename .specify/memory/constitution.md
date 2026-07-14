@@ -1,5 +1,21 @@
 <!--
-CONSTITUTION UPDATE REPORT
+CONSTITUTION UPDATE REPORT (latest amendment)
+Generated: 2026-07-13 (v1.2.0) — implementation-triggered amendment from TMS-63
+
+VERSION CHANGE: 1.1.0 → 1.2.0
+Bump Type: MINOR
+Rationale: Implementing TMS-63 (global Header/Footer) put real code into the root-level
+`components/` directory for the first time, exactly the scenario "Additional Constraints"
+said must be "introduced deliberately... and amend this constitution" rather than left as
+silent drift. Updated that section to record `components/layout/` as the shared-UI location,
+its contents, and that route-local code still belongs in `app/`. No principle was reversed —
+additive/clarifying, hence MINOR.
+TEMPLATE UPDATES: none required — plan/spec/tasks templates remain generic.
+DEFERRED ITEMS: TODO(RATIFICATION_DATE) still unresolved, carried over unchanged.
+-->
+
+<!--
+CONSTITUTION UPDATE REPORT (previous amendment, kept for history)
 Generated: 2026-07-10T00:00:00Z (v1.0.0) — Revised same day (v1.1.0) after full-file re-analysis
 Mode: Discovery (--discover)
 
@@ -236,13 +252,16 @@ confirmed by a full read of the v1-light file's frameworks section, not inferred
 
 ## Additional Constraints
 
-As implemented today, this repository is **one** Next.js App Router application rooted directly
-at `app/` — `app/layout.tsx`, `app/page.tsx`, `app/globals.css`, `app/tokens.css`. There is no
-`components/`, `lib/`, or `types/` directory yet, regardless of what any planning document
-describes. New code MUST be added inside the existing `app/` tree rather than pre-creating a
-folder structure the implementation hasn't reached yet; when a real components/lib split becomes
-necessary, introduce it deliberately (and amend this constitution) rather than scaffolding it
-speculatively.
+This repository is **one** Next.js App Router application rooted at `app/` —
+`app/layout.tsx`, `app/page.tsx`, `app/globals.css`, `app/tokens.css` — plus, as of the TMS-63
+Header/Footer feature, a root-level `components/` directory holding shared, cross-route UI:
+`components/layout/` (`Header.tsx`, `Footer.tsx`, `nav-config.ts`, `footer-config.ts`,
+`icons.tsx`), imported via the existing `@/*` → `./*` path alias in `tsconfig.json`. This is the
+deliberate, recorded introduction this constitution previously called for — `components/` is not
+a place to pre-scaffold speculative structure; new shared UI belongs there only when it is
+genuinely consumed by more than one route (per Principle III), and route-local/one-off code MUST
+still stay inside `app/` rather than migrating into `components/` by default. There is still no
+`lib/` or `types/` directory.
 
 - Styling load order is fixed and MUST be preserved: `tokens.css` → `tailwindcss` →
   base/reset/component rules, exactly as `globals.css`'s own header comment states ("Import order
@@ -289,5 +308,5 @@ speculatively.
   simply the current, unfinished state, recorded here so future amendments can address them
   deliberately.
 
-**Version**: 1.1.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
-exists; this discovery run is the first codification | **Last Amended**: 2026-07-10
+**Version**: 1.2.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
+exists; this discovery run is the first codification | **Last Amended**: 2026-07-13

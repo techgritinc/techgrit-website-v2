@@ -37,16 +37,16 @@
   --font-display: var(--font-display);
 
   /* Border radius */
-  --radius-xs:   var(--radius-xs);
-  --radius-sm:   var(--radius-sm);
-  --radius-md:   var(--radius-md);
-  --radius-card: var(--radius-card);
-  --radius-lg:   var(--radius-lg);
-  --radius-xl:   var(--radius-xl);
-  --radius-2xl:  var(--radius-2xl);
-  --radius-3xl:  var(--radius-3xl);
-  --radius-4xl:  var(--radius-4xl);
-  --radius-pill: var(--radius-pill);
+  --radius-xs:    var(--radius-xs);
+  --radius-sm:    var(--radius-sm);
+  --radius-md:    var(--radius-md);
+  --radius-card:  var(--radius-card);
+  --radius-lg:    var(--radius-lg);
+  --radius-xl:    var(--radius-xl);
+  --radius-2xl:   var(--radius-2xl);
+  --radius-3xl:   var(--radius-3xl);
+  --radius-4xl:   var(--radius-4xl);
+  --radius-pill:  var(--radius-pill);
 
   /* Breakpoints — match the documented 1140/960/560 contract (see BREAKPOINTS
      comment below) so Tailwind's sm:/md:/lg: prefixes collapse at the exact
@@ -54,20 +54,65 @@
   --breakpoint-sm: 560px;
   --breakpoint-md: 960px;
   --breakpoint-lg: 1140px;
-}
 
-/* ----------------------------------------------------------
- * Base layer — wrapped in @layer base so Tailwind utility
- * classes (@layer utilities) can still override these defaults.
- * Without this, unlayered CSS beats ALL layered Tailwind
- * utilities regardless of specificity (CSS Cascade Layers spec),
- * silently breaking every margin, padding, and arbitrary-value
- * utility class (e.g. mx-auto, p-8, text-[60px]).
- * ---------------------------------------------------------- */
+  /* Header/Footer (components/layout/) — added so this component can be built
+   * from Tailwind utility classes instead of bespoke CSS. Only tokens actually
+   * consumed by Header/Footer are mapped here; pre-existing .btn/.card/.badge/etc.
+   * classes elsewhere in this file are unaffected and keep consuming var()
+   * directly, per the scope decision to migrate only new work to Tailwind. */
+  --color-nav-glass: var(--color-nav-glass);
+  --color-dd-bg: var(--color-dd-bg);
+  --color-mobile-menu-bg: var(--color-mobile-menu-bg);
+  --color-header-scrolled-bg: var(--color-header-scrolled-bg);
+  --color-border-header-scrolled: var(--color-border-header-scrolled);
+  --color-border: var(--color-border);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+  
+  --color-nav: var(--color-text-nav);
+  --color-nav-sub: var(--color-text-nav-sub);
+  --color-primary: var(--color-text-primary);
+  --color-secondary: var(--color-text-secondary);
+  --color-muted: var(--color-text-muted);
+  --color-ghost: var(--color-text-ghost);
+  --color-glass: var(--color-glass);
+  --color-overlay-orange: var(--color-overlay-orange);
+
+  --shadow-dropdown: var(--shadow-dropdown);
+  --shadow-header-scrolled: var(--shadow-header-scrolled);
+  --shadow-nav-btn: var(--shadow-nav-btn);
+
+  --blur-nav: var(--blur-nav);
+  --blur-header-scrolled: var(--blur-header-scrolled);
+
+  /* Named spacing so the nav bar's height is a real utility (h-nav) rather
+   * than an arbitrary value repeated at every use site. */
+  --spacing-nav: var(--nav-height);
+
+  /* Custom breakpoints matching the constitution's documented 1140/960/560
+   * contract exactly (Tailwind's own sm/md/lg default to 640/768/1024, which
+   * do not match the reference files). Media queries can't read CSS custom
+   * properties, so these must be literal values, not var() references —
+   * kept in sync with app/tokens.css's breakpoint comment by hand. */
+  --breakpoint-tg-lg: 1140px;
+  --breakpoint-tg-md: 960px;
+  --breakpoint-tg-sm: 560px;
+
+}
 @layer base {
+  /* ----------------------------------------------------------
+   * Base layer — wrapped in @layer base so Tailwind utility
+   * classes (@layer utilities) can still override these defaults.
+   * Without this, unlayered CSS beats ALL layered Tailwind
+   * utilities regardless of specificity (CSS Cascade Layers spec),
+   * silently breaking every margin, padding, and arbitrary-value
+   * utility class (e.g. mx-auto, p-8, text-[60px]).
+   * ---------------------------------------------------------- */
 
   /* CSS Reset */
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -78,7 +123,9 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  /* Base Body */
+  /* ----------------------------------------------------------
+   * Base Body
+   * ---------------------------------------------------------- */
   body {
     font-family: var(--font-body);
     background: var(--color-ink);
@@ -87,9 +134,13 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
+}
 
-  /* Base Typography */
-  h1, h2, h3, h4, h5, h6 {
+@layer base {
+  /* ----------------------------------------------------------
+   * Base Typography
+   * ---------------------------------------------------------- */
+  h1, h2, h3, h4, h5, h6 {     
     font-family: var(--font-display);
     font-weight: var(--fw-bold);
     color: var(--color-text-primary);
@@ -135,45 +186,58 @@
 @layer components {
 
 /* ----------------------------------------------------------
- * Container
- * .tg-container — max-width wrapper, centered, padded
- * Named tg-container (not "container") because Tailwind ships its
- * own built-in `.container` utility in the utilities layer, which
- * always wins over a same-named class declared here in components —
- * it would keep Tailwind's default xl/2xl breakpoints (1280px/1536px)
- * alongside our overridden sm/md/lg ones, letting containers balloon
- * past --container-max on very wide screens.
+ * FOCUS VISIBILITY
+ * Every interactive element (links, buttons, inputs) gets a
+ * clearly visible, on-brand focus ring for keyboard users.
  * ---------------------------------------------------------- */
-.tg-container {
-  width: 100%;
-  max-width: var(--container-max);
-  margin-inline: auto;
-  padding-inline: var(--container-padding);
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
 }
 
-.tg-container-sm {
-  width: 100%;
-  max-width: var(--container-max-sm);
-  margin-inline: auto;
-  padding-inline: var(--container-padding);
-}
+  /* ----------------------------------------------------------
+   * Container
+   * .tg-container — max-width wrapper, centered, padded
+   * Named tg-container (not "container") because Tailwind ships its own
+   * built-in `.container` utility in the utilities layer, which always wins
+   * over a same-named class declared here in components — it would keep
+   * Tailwind's default xl/2xl breakpoints (1280px/1536px) alongside our
+   * overridden sm/md/lg ones, letting containers balloon past
+   * --container-max on very wide screens.
+   * ---------------------------------------------------------- */
+  .tg-container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
 
-/* ----------------------------------------------------------
+  .tg-container-sm {
+    width: 100%;
+    max-width: var(--container-max-sm);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
+  /* ----------------------------------------------------------
  * Section padding
  * ---------------------------------------------------------- */
-.section {
-  padding-block: var(--space-section-md);
-}
+  .section {
+    padding-block: var(--space-section-md);
+  }
 
-.section-sm {
-  padding-block: var(--space-section-sm);
-}
+  .section-sm {
+    padding-block: var(--space-section-sm);
+  }
 
-.section-lg {
-  padding-block: var(--space-section-lg);
-}
+  .section-lg {
+    padding-block: var(--space-section-lg);
+  }
 
-/* ----------------------------------------------------------
+  /* ----------------------------------------------------------
  * BUTTONS
  * Usage:
  *   <button class="btn btn-primary">Talk to Us →</button>
@@ -181,476 +245,640 @@
  *   <button class="btn btn-outline">Documentation</button>
  *   <button class="btn btn-primary" disabled>Submitting…</button>
  * ---------------------------------------------------------- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: var(--fw-bold);
-  padding: 14px 26px;
-  border-radius: var(--radius-card);
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base), border-color var(--transition-base);
-  position: relative;
-  overflow: hidden;
-}
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--fw-bold);
+    padding: 14px 26px;
+    border-radius: var(--radius-card);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base), border-color var(--transition-base);
+    position: relative;
+    overflow: hidden;
+  }
 
-/* Primary — Signal Orange gradient. The main CTA. */
-.btn-primary {
-  background: var(--gradient-brand);
-  color: #fff;
-  box-shadow: var(--shadow-btn-primary);
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-btn-hover);
-}
-.btn-primary:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-btn-primary);
-}
+  /* Primary — Signal Orange gradient. The main CTA. */
+  .btn-primary {
+    background: var(--gradient-brand);
+    color: #fff;
+    box-shadow: var(--shadow-btn-primary);
+  }
 
-/* Primary with shine sweep — Hero Crazy/Topo style animated CTA */
-/* Usage: add class .btn-shine to any .btn-primary */
-.btn-shine::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 38%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-  animation: tgshine 3.4s ease-in-out infinite;
-  pointer-events: none;
-}
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-btn-hover);
+  }
 
-/* Ghost — transparent with glass fill */
-.btn-ghost {
-  background: var(--color-glass);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border-strong);
-  backdrop-filter: blur(var(--blur-sm));
-}
-.btn-ghost:hover {
-  border-color: var(--color-orange);
-}
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-btn-primary);
+  }
 
-/* Outline — border only, no fill */
-.btn-outline {
-  background: transparent;
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-}
-.btn-outline:hover {
-  border-color: var(--color-orange);
-  background: var(--color-glass);
-}
+  /* Primary with shine sweep — Hero Crazy/Topo style animated CTA */
+  /* Usage: add class .btn-shine to any .btn-primary */
+  .btn-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 38%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: tgshine 3.4s ease-in-out infinite;
+    pointer-events: none;
+  }
 
-/* Disabled — for all button variants */
-.btn:disabled,
-.btn-disabled,
-.btn[aria-disabled="true"] {
-  opacity: 0.45;
-  cursor: not-allowed;
-  pointer-events: none;
-  box-shadow: none;
-  transform: none;
-}
+  /* Ghost — transparent with glass fill */
+  .btn-ghost {
+    background: var(--color-glass);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-strong);
+    backdrop-filter: blur(var(--blur-sm));
+  }
 
-/* Size variants */
-.btn-sm {
-  font-size: var(--text-xs);
-  padding: 10px 18px;
-  border-radius: var(--radius-sm);
-}
+  .btn-ghost:hover {
+    border-color: var(--color-orange);
+  }
 
-.btn-lg {
-  font-size: 16px;
-  padding: 16px 28px;
-  border-radius: var(--radius-card);
-}
+  /* Outline — border only, no fill */
+  .btn-outline {
+    background: transparent;
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+  }
 
-/* ----------------------------------------------------------
+  .btn-outline:hover {
+    border-color: var(--color-orange);
+    background: var(--color-glass);
+  }
+
+  /* Disabled — for all button variants */
+  .btn:disabled,
+  .btn-disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* Size variants */
+  .btn-sm {
+    font-size: var(--text-xs);
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+  }
+
+  .btn-lg {
+    font-size: 16px;
+    padding: 16px 28px;
+    border-radius: var(--radius-card);
+  }
+
+  /* ----------------------------------------------------------
  * CARDS
  * Usage:
  *   <div class="card">…</div>          ← standard glass card
  *   <div class="card card-solid">…</div> ← solid dark surface
  *   <div class="card card-image">…</div> ← image container card
  * ---------------------------------------------------------- */
-.card {
-  border-radius: var(--radius-3xl);
-  background: var(--color-glass);
-  border: 1px solid var(--color-border);
-  backdrop-filter: blur(var(--blur-lg));
-  -webkit-backdrop-filter: blur(var(--blur-lg));
-  box-shadow: var(--shadow-glass);
-  overflow: hidden;
-  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
-}
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-card-hover);
-  border-color: var(--color-border-strong);
-}
+  .card {
+    border-radius: var(--radius-3xl);
+    background: var(--color-glass);
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(var(--blur-lg));
+    -webkit-backdrop-filter: blur(var(--blur-lg));
+    box-shadow: var(--shadow-glass);
+    overflow: hidden;
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+  }
 
-/* Blog / Case Study cards — solid dark bg */
-.card-solid {
-  background: var(--color-ink-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-card);
-}
-.card-solid:hover {
-  border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-3px);
-}
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--color-border-strong);
+  }
 
-/* Image container cards (Careers gallery) */
-.card-image {
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-border-image);
-  overflow: hidden;
-}
+  /* Blog / Case Study cards — solid dark bg */
+  .card-solid {
+    background: var(--color-ink-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card);
+  }
 
-/* ----------------------------------------------------------
+  .card-solid:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-3px);
+  }
+
+  /* Image container cards (Careers gallery) */
+  .card-image {
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border-image);
+    overflow: hidden;
+  }
+
+  /* ----------------------------------------------------------
  * GLASS CARD
  * Larger glass panel (subscribe section, platform card)
  * ---------------------------------------------------------- */
-.glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-3xl);
-  backdrop-filter: blur(var(--blur-lg));
-  -webkit-backdrop-filter: blur(var(--blur-lg));
-  box-shadow: var(--shadow-glass);
-  padding: 38px 44px;
-}
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-3xl);
+    backdrop-filter: blur(var(--blur-lg));
+    -webkit-backdrop-filter: blur(var(--blur-lg));
+    box-shadow: var(--shadow-glass);
+    padding: 38px 44px;
+  }
 
-/* ----------------------------------------------------------
+  /* ----------------------------------------------------------
  * FORM FIELDS
  * Usage: <input class="field" type="text" placeholder="Name" />
  * ---------------------------------------------------------- */
-.field {
-  width: 100%;
-  background: var(--color-glass-strong);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-card);
-  padding: 14px 16px;
-  font-size: var(--text-sm);
-  font-weight: var(--fw-medium);
-  color: var(--color-text-primary);
-  outline: none;
-  transition: border-color var(--transition-base), background var(--transition-base);
-}
-.field:focus {
-  border-color: var(--color-border-orange-strong);
-  background: var(--color-glass-hover);
-}
-.field::placeholder {
-  color: var(--color-text-placeholder);
-}
+  .field {
+    width: 100%;
+    background: var(--color-glass-strong);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-card);
+    padding: 14px 16px;
+    font-size: var(--text-sm);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-primary);
+    outline: none;
+    transition: border-color var(--transition-base), background var(--transition-base);
+  }
 
-/* ----------------------------------------------------------
+  .field:focus {
+    border-color: var(--color-border-orange-strong);
+    background: var(--color-glass-hover);
+  }
+
+  .field::placeholder {
+    color: var(--color-text-placeholder);
+  }
+
+  /* ----------------------------------------------------------
  * EYEBROW / LABEL
  * Small ALL-CAPS label above headings
  * Usage: <span class="eyebrow">Meet OrbitAI™</span>
  * ---------------------------------------------------------- */
-.eyebrow {
-  display: inline-block;
-  font-size: var(--text-2xs);
-  font-weight: var(--fw-bold);
-  letter-spacing: var(--ls-widest);
-  text-transform: uppercase;
-  color: var(--color-orange);
-}
+  .eyebrow {
+    display: inline-block;
+    font-size: var(--text-2xs);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-widest);
+    text-transform: uppercase;
+    color: var(--color-orange);
+  }
 
-/* ----------------------------------------------------------
+  /* ----------------------------------------------------------
  * BADGE / TAG
  * Small pill label (blog category, status, nav section)
  * Usage: <span class="badge badge-orange">Live Webinar</span>
  * ---------------------------------------------------------- */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--text-2xs);
-  font-weight: var(--fw-extrabold);
-  letter-spacing: var(--ls-wider);
-  text-transform: uppercase;
-  padding: 5px 11px;
-  border-radius: var(--radius-pill);
-}
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-2xs);
+    font-weight: var(--fw-extrabold);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: var(--radius-pill);
+  }
 
-.badge-orange {
-  background: var(--gradient-brand);
-  color: var(--color-ink);
-}
+  .badge-orange {
+    background: var(--gradient-brand);
+    color: var(--color-ink);
+  }
 
-.badge-glass {
-  background: var(--color-glass);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-primary);
-  backdrop-filter: blur(var(--blur-sm));
-}
+  .badge-glass {
+    background: var(--color-glass);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    backdrop-filter: blur(var(--blur-sm));
+  }
 
-.badge-blue {
-  background: rgba(2, 132, 199, 0.16);
-  color: var(--color-blue-light);
-}
+  .badge-blue {
+    background: rgba(2, 132, 199, 0.16);
+    color: var(--color-blue-light);
+  }
 
-.badge-teal {
-  background: rgba(15, 118, 110, 0.20);
-  color: var(--color-teal-light);
-}
+  .badge-teal {
+    background: rgba(15, 118, 110, 0.20);
+    color: var(--color-teal-light);
+  }
 
-/* ----------------------------------------------------------
+  /* ----------------------------------------------------------
  * TEXT GRADIENT
  * Usage: <span class="text-gradient">orchestrated.</span>
  * ---------------------------------------------------------- */
-/* Static clip — for body/section heading highlights */
-.text-gradient {
-  background: var(--gradient-brand-text);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
+  /* Static clip — for body/section heading highlights */
+  .text-gradient {
+    background: var(--gradient-brand-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 
-/* Animated flowing gradient — for hero H1 highlight word (Hero Crazy / Topo style) */
-/* Usage: <span class="text-gradient-flow">orchestrated.</span> */
-.text-gradient-flow {
-  background: linear-gradient(90deg, #F59E0B, #E87722, #F7B733, #E87722);
-  background-size: 220% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: tgflow 4s linear infinite;
-}
+  /* Animated flowing gradient — for hero H1 highlight word (Hero Crazy / Topo style) */
+  /* Usage: <span class="text-gradient-flow">orchestrated.</span> */
+  .text-gradient-flow {
+    background: linear-gradient(90deg, #F59E0B, #E87722, #F7B733, #E87722);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: tgflow 4s linear infinite;
+  }
 
-/* ----------------------------------------------------------
+  /* ----------------------------------------------------------
  * SECTION DIVIDER
  * ---------------------------------------------------------- */
-.divider {
-  border: none;
-  border-top: 1px solid var(--color-border-subtle);
-}
+  .divider {
+    border: none;
+    border-top: 1px solid var(--color-border-subtle);
+  }
 
-/* ----------------------------------------------------------
+  /* ----------------------------------------------------------
  * LIVE STATUS DOT
  * Usage: <span class="status-dot status-live"></span>
  * ---------------------------------------------------------- */
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
-}
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
 
-.status-live {
-  background: var(--color-green);
-  box-shadow: 0 0 12px 2px rgba(52, 211, 153, 0.85);
-  animation: tgblink 2s ease-in-out infinite;
-}
+  .status-live {
+    background: var(--color-green);
+    box-shadow: 0 0 12px 2px rgba(52, 211, 153, 0.85);
+    animation: tgblink 2s ease-in-out infinite;
+  }
 
-.status-orange {
-  background: var(--color-orange);
-  box-shadow: var(--shadow-glow-orange);
-}
+  .status-orange {
+    background: var(--color-orange);
+    box-shadow: var(--shadow-glow-orange);
+  }
 
-/* ----------------------------------------------------------
+  /* ----------------------------------------------------------
  * SCROLL MARGIN — accounts for sticky nav
  * ---------------------------------------------------------- */
-[id] {
-  scroll-margin-top: var(--nav-height);
-}
+  [id] {
+    scroll-margin-top: var(--nav-height);
+  }
 
-/* ----------------------------------------------------------
+  /* Header and Footer (components/layout/) are built from Tailwind utility
+ * classes directly in the component, per the decision to migrate this
+ * feature's styling off bespoke CSS — see the Header/Footer @theme block
+ * above for the tokens exposed as utilities. Nothing below this point is
+ * consumed by Header/Footer.
+ * ---------------------------------------------------------- */
+
+  /* ----------------------------------------------------------
  * ANIMATIONS  (tg* naming convention — TechGrit branded)
  * ---------------------------------------------------------- */
 
-/* Fade in + slide up — primary reveal animation */
-@keyframes tgrise {
-  from { opacity: 0; transform: translateY(26px); }
-  to   { opacity: 1; transform: none; }
-}
+  /* Fade in + slide up — primary reveal animation */
+  @keyframes tgrise {
+    from {
+      opacity: 0;
+      transform: translateY(26px);
+    }
 
-/* Phase entrance (subtler version of rise) */
-@keyframes tgPhaseIn {
-  from { opacity: 0; transform: translateY(22px) scale(0.985); }
-  to   { opacity: 1; transform: none; }
-}
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 
-/* Floating orb background animation */
-@keyframes tgorb {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%       { transform: translate(30px, -20px) scale(1.1); }
-}
+  /* Phase entrance (subtler version of rise) */
+  @keyframes tgPhaseIn {
+    from {
+      opacity: 0;
+      transform: translateY(22px) scale(0.985);
+    }
 
-/* Floating element (agent cards, icons) */
-@keyframes tgfloat {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-14px); }
-}
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 
-/* Small nudge float (hero elements) */
-@keyframes tgheflo {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-12px); }
-}
+  /* Floating orb background animation */
+  @keyframes tgorb {
 
-/* Pulse glow (OrbitAI center pulse) */
-@keyframes tgpulse {
-  0%, 100% { transform: scale(1);    opacity: 0.55; }
-  50%       { transform: scale(1.18); opacity: 0.15; }
-}
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
 
-/* Spin (orbit rings) */
-@keyframes tgspin {
-  to { transform: rotate(360deg); }
-}
+    50% {
+      transform: translate(30px, -20px) scale(1.1);
+    }
+  }
 
-/* SVG dash animation (orbit connector lines) */
-@keyframes tgdash {
-  to { stroke-dashoffset: -26; }
-}
+  /* Floating element (agent cards, icons) */
+  @keyframes tgfloat {
 
-/* Logo marquee (horizontal scroll) */
-@keyframes tgmarquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
+    0%,
+    100% {
+      transform: translateY(0);
+    }
 
-/* Scroll cue bounce arrow */
-@keyframes tgbounce {
-  0%, 100% { transform: translateY(0);  opacity: 0.5; }
-  50%       { transform: translateY(7px); opacity: 1; }
-}
+    50% {
+      transform: translateY(-14px);
+    }
+  }
 
-/* Status dot blink (live indicator) */
-@keyframes tgblink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.25; }
-}
+  /* Small nudge float (hero elements) */
+  @keyframes tgheflo {
 
-/* Shimmer sweep (skeleton / loading) */
-@keyframes tgshimmer {
-  0%   { transform: translateX(-120%); }
-  100% { transform: translateX(420%); }
-}
+    0%,
+    100% {
+      transform: translateY(0);
+    }
 
-/* Button shine sweep — white light streak across CTA button (Hero Crazy/Topo) */
-@keyframes tgshine {
-  0%           { transform: translateX(-120%) skewX(-20deg); }
-  60%, 100%    { transform: translateX(320%) skewX(-20deg); }
-}
+    50% {
+      transform: translateY(-12px);
+    }
+  }
 
-/* Animated text gradient (tgflow) — moving gradient on headline word */
-@keyframes tgflow {
-  to { background-position: 220% center; }
-}
+  /* Pulse glow (OrbitAI center pulse) */
+  @keyframes tgpulse {
 
-/* Text line reveal from bottom — splits each H1 line up through a clip mask */
-@keyframes tgreveal {
-  from { transform: translateY(115%) rotate(3deg); }
-  to   { transform: translateY(0) rotate(0); }
-}
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
 
-/* Liquid mesh orb movements (Hero Crazy background) */
-@keyframes tgm1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%       { transform: translate(7vw, 5vh) scale(1.25); }
-}
-@keyframes tgm2 {
-  0%, 100% { transform: translate(0, 0) scale(1.1); }
-  50%       { transform: translate(-7vw, -5vh) scale(0.88); }
-}
-@keyframes tgm3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%       { transform: translate(5vw, -7vh) scale(1.22); }
-}
+    50% {
+      transform: scale(1.18);
+      opacity: 0.15;
+    }
+  }
 
-/* Rotating conic gradient sheen (Hero Crazy background ring) */
-@keyframes tgconic {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
+  /* Spin (orbit rings) */
+  @keyframes tgspin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 
-/* Ken Burns (image slow zoom) */
-@keyframes tgkenburns {
-  from { transform: scale(1.06); }
-  to   { transform: scale(1.2) translate(-2.5%, -2%); }
-}
+  /* SVG dash animation (orbit connector lines) */
+  @keyframes tgdash {
+    to {
+      stroke-dashoffset: -26;
+    }
+  }
 
-/* Wave flow (hero background) */
-@keyframes tgwaveflow {
-  0%   { transform: scale(1.12) translate(-2.4%, -0.6%); }
-  50%  { transform: scale(1.17) translate(2.4%, 1.4%); }
-  100% { transform: scale(1.12) translate(-2.4%, -0.6%); }
-}
+  /* Logo marquee (horizontal scroll) */
+  @keyframes tgmarquee {
+    from {
+      transform: translateX(0);
+    }
 
-/* Horizontal nudge (arrow icons) */
-@keyframes tgnudgex {
-  0%, 100% { transform: translateX(0); }
-  50%       { transform: translateX(6px); }
-}
+    to {
+      transform: translateX(-50%);
+    }
+  }
 
-/* ----------------------------------------------------------
+  /* Scroll cue bounce arrow */
+  @keyframes tgbounce {
+
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.5;
+    }
+
+    50% {
+      transform: translateY(7px);
+      opacity: 1;
+    }
+  }
+
+  /* Status dot blink (live indicator) */
+  @keyframes tgblink {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  /* Shimmer sweep (skeleton / loading) */
+  @keyframes tgshimmer {
+    0% {
+      transform: translateX(-120%);
+    }
+
+    100% {
+      transform: translateX(420%);
+    }
+  }
+
+  /* Button shine sweep — white light streak across CTA button (Hero Crazy/Topo) */
+  @keyframes tgshine {
+    0% {
+      transform: translateX(-120%) skewX(-20deg);
+    }
+
+    60%,
+    100% {
+      transform: translateX(320%) skewX(-20deg);
+    }
+  }
+
+  /* Animated text gradient (tgflow) — moving gradient on headline word */
+  @keyframes tgflow {
+    to {
+      background-position: 220% center;
+    }
+  }
+
+  /* Text line reveal from bottom — splits each H1 line up through a clip mask */
+  @keyframes tgreveal {
+    from {
+      transform: translateY(115%) rotate(3deg);
+    }
+
+    to {
+      transform: translateY(0) rotate(0);
+    }
+  }
+
+  /* Liquid mesh orb movements (Hero Crazy background) */
+  @keyframes tgm1 {
+
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+      transform: translate(7vw, 5vh) scale(1.25);
+    }
+  }
+
+  @keyframes tgm2 {
+
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1.1);
+    }
+
+    50% {
+      transform: translate(-7vw, -5vh) scale(0.88);
+    }
+  }
+
+  @keyframes tgm3 {
+
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+      transform: translate(5vw, -7vh) scale(1.22);
+    }
+  }
+
+  /* Rotating conic gradient sheen (Hero Crazy background ring) */
+  @keyframes tgconic {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  /* Ken Burns (image slow zoom) */
+  @keyframes tgkenburns {
+    from {
+      transform: scale(1.06);
+    }
+
+    to {
+      transform: scale(1.2) translate(-2.5%, -2%);
+    }
+  }
+
+  /* Wave flow (hero background) */
+  @keyframes tgwaveflow {
+    0% {
+      transform: scale(1.12) translate(-2.4%, -0.6%);
+    }
+
+    50% {
+      transform: scale(1.17) translate(2.4%, 1.4%);
+    }
+
+    100% {
+      transform: scale(1.12) translate(-2.4%, -0.6%);
+    }
+  }
+
+  /* Horizontal nudge (arrow icons) */
+  @keyframes tgnudgex {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(6px);
+    }
+  }
+
+  /* ----------------------------------------------------------
  * Animation utility classes
  * ---------------------------------------------------------- */
-[data-rise] {
-  opacity: 0;
-  animation: tgrise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
-}
+  [data-rise] {
+    opacity: 0;
+    animation: tgrise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
 
-/* ----------------------------------------------------------
+  /* ----------------------------------------------------------
  * BREAKPOINTS — matches HTML design files exactly
  *
- *  lg  = 1140px  → desktop nav collapses, burger shows
+ *  lg  = 1140px  → desktop nav collapses, burger shows (Header uses the
+ *                  tg-lg Tailwind breakpoint from @theme above, not this rule)
  *  md  = 960px   → grids go 1-column, H1 shrinks to 44px
- *  sm  = 560px   → footer stacks, stat row tightens
+ *  sm  = 560px   → footer stacks, stat row tightens (Footer uses tg-md/tg-sm)
  *
- * In Tailwind: use sm:, md:, lg: prefixes.
+ * In Tailwind: use sm:, md:, lg: prefixes for anything on Tailwind's default
+ * scale; use tg-lg:/tg-md:/tg-sm: (or max-tg-lg: etc.) to match this exact
+ * 1140/960/560 contract.
  * ---------------------------------------------------------- */
 
-@media (max-width: 1140px) {
-  /* Nav: desktop links hide, burger appears */
-  [data-desktop-nav],
-  [data-cta-nav] { display: none !important; }
-  [data-burger]  { display: block !important; }
-}
+  @media (max-width: 960px) {
+    h1 {
+      font-size: 44px;
+    }
 
-@media (max-width: 960px) {
-  h1 { font-size: 44px; }
-  .section    { padding-block: 60px; }
-  .glass-card { padding: 24px 28px; }
-}
+    .section {
+      padding-block: 60px;
+    }
 
-@media (max-width: 560px) {
-  .tg-container { padding-inline: 20px; }
-  .glass-card   { padding: 20px 20px; }
-  .btn-lg       { font-size: var(--text-sm); padding: 14px 22px; }
-}
+    .glass-card {
+      padding: 24px 28px;
+    }
+  }
 
-} /* end @layer components */
+  @media (max-width: 560px) {
+    .tg-container {
+      padding-inline: 20px;
+    }
 
-/* ----------------------------------------------------------
+    .glass-card {
+      padding: 20px 20px;
+    }
+
+    .btn-lg {
+      font-size: var(--text-sm);
+      padding: 14px 22px;
+    }
+  }
+
+  /* ----------------------------------------------------------
  * SCROLLBAR styling (testimonial / case study tracks)
  * ---------------------------------------------------------- */
-[data-testi-track],
-[data-cases] {
-  scrollbar-width: none;
-}
-[data-testi-track]::-webkit-scrollbar,
-[data-cases]::-webkit-scrollbar {
-  display: none;
-}
-[data-cases]::-webkit-scrollbar { height: 6px; }
-[data-cases]::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
-  border-radius: 6px;
+  [data-testi-track],
+  [data-cases] {
+    scrollbar-width: none;
+  }
+
+  [data-testi-track]::-webkit-scrollbar,
+  [data-cases]::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-cases]::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  [data-cases]::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+  }
 }
