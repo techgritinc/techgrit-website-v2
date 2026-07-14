@@ -47,86 +47,111 @@
   --radius-3xl:  var(--radius-3xl);
   --radius-4xl:  var(--radius-4xl);
   --radius-pill: var(--radius-pill);
+
+  /* Breakpoints — match the documented 1140/960/560 contract (see BREAKPOINTS
+     comment below) so Tailwind's sm:/md:/lg: prefixes collapse at the exact
+     widths this codebase already documents, instead of Tailwind's defaults. */
+  --breakpoint-sm: 560px;
+  --breakpoint-md: 960px;
+  --breakpoint-lg: 1140px;
 }
 
 /* ----------------------------------------------------------
- * CSS Reset
+ * Base layer — wrapped in @layer base so Tailwind utility
+ * classes (@layer utilities) can still override these defaults.
+ * Without this, unlayered CSS beats ALL layered Tailwind
+ * utilities regardless of specificity (CSS Cascade Layers spec),
+ * silently breaking every margin, padding, and arbitrary-value
+ * utility class (e.g. mx-auto, p-8, text-[60px]).
  * ---------------------------------------------------------- */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
 
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
+  /* CSS Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Base Body */
+  body {
+    font-family: var(--font-body);
+    background: var(--color-ink);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Base Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    color: var(--color-text-primary);
+    line-height: var(--lh-tight);
+  }
+
+  h1 { font-size: var(--text-h1); letter-spacing: var(--ls-tight); }
+  h2 { font-size: var(--text-h2); letter-spacing: var(--ls-snug);  line-height: var(--lh-snug); }
+  h3 { font-size: var(--text-h3); letter-spacing: var(--ls-normal); line-height: var(--lh-normal); }
+  h4 { font-size: var(--text-h4); letter-spacing: var(--ls-normal); }
+
+  p {
+    font-size: var(--text-base);
+    line-height: var(--lh-body);
+    color: var(--color-text-secondary);
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  input, textarea, select, button {
+    font-family: inherit;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-text-placeholder);
+  }
+
+  ::selection {
+    background: var(--color-orange);
+    color: #fff;
+  }
 }
 
 /* ----------------------------------------------------------
- * Base Body
+ * Components layer — wrapped in @layer components so Tailwind
+ * utility classes (@layer utilities, higher priority) can still
+ * override/extend these when combined in the same className.
  * ---------------------------------------------------------- */
-body {
-  font-family: var(--font-body);
-  background: var(--color-ink);
-  color: var(--color-text-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-}
-
-/* ----------------------------------------------------------
- * Base Typography
- * ---------------------------------------------------------- */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  font-weight: var(--fw-bold);
-  color: var(--color-text-primary);
-  line-height: var(--lh-tight);
-}
-
-h1 { font-size: var(--text-h1); letter-spacing: var(--ls-tight); }
-h2 { font-size: var(--text-h2); letter-spacing: var(--ls-snug);  line-height: var(--lh-snug); }
-h3 { font-size: var(--text-h3); letter-spacing: var(--ls-normal); line-height: var(--lh-normal); }
-h4 { font-size: var(--text-h4); letter-spacing: var(--ls-normal); }
-
-p {
-  font-size: var(--text-base);
-  line-height: var(--lh-body);
-  color: var(--color-text-secondary);
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-input, textarea, select, button {
-  font-family: inherit;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--color-text-placeholder);
-}
-
-::selection {
-  background: var(--color-orange);
-  color: #fff;
-}
+@layer components {
 
 /* ----------------------------------------------------------
  * Container
- * .container — max-width wrapper, centered, padded
+ * .tg-container — max-width wrapper, centered, padded
+ * Named tg-container (not "container") because Tailwind ships its
+ * own built-in `.container` utility in the utilities layer, which
+ * always wins over a same-named class declared here in components —
+ * it would keep Tailwind's default xl/2xl breakpoints (1280px/1536px)
+ * alongside our overridden sm/md/lg ones, letting containers balloon
+ * past --container-max on very wide screens.
  * ---------------------------------------------------------- */
-.container {
+.tg-container {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
   padding-inline: var(--container-padding);
 }
 
-.container-sm {
+.tg-container-sm {
   width: 100%;
   max-width: var(--container-max-sm);
   margin-inline: auto;
@@ -606,10 +631,12 @@ textarea::placeholder {
 }
 
 @media (max-width: 560px) {
-  .container    { padding-inline: 20px; }
+  .tg-container { padding-inline: 20px; }
   .glass-card   { padding: 20px 20px; }
   .btn-lg       { font-size: var(--text-sm); padding: 14px 22px; }
 }
+
+} /* end @layer components */
 
 /* ----------------------------------------------------------
  * SCROLLBAR styling (testimonial / case study tracks)
