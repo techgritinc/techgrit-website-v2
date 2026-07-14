@@ -2,11 +2,6 @@ export default function StyleTest() {
   return (
     <div style={{ background: "var(--color-ink)", color: "var(--color-text-primary)", fontFamily: "var(--font-body)", minHeight: "100vh" }}>
 
-      {/* NAV BAR */}
-      <div style={{ background: "var(--color-nav-glass)", backdropFilter: "blur(16px)", borderBottom: "1px solid var(--color-border-subtle)", padding: "18px 36px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100 }}>
-        <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18 }}>TechGrit Style Kit</span>
-        <span className="badge badge-glass">Design Tokens Live</span>
-      </div>
 
       <div style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "48px var(--container-padding)", display: "flex", flexDirection: "column", gap: 56 }}>
 
@@ -164,15 +159,6 @@ export default function StyleTest() {
           </div>
         </section>
 
-        {/* FOOTER */}
-        <div style={{ borderTop: "1px solid var(--color-border-subtle)", paddingTop: 24, textAlign: "center" }}>
-          <p style={{ fontSize: 12, color: "var(--color-text-ghost)" }}>
-            <code style={{ background: "var(--color-ink-card)", padding: "2px 8px", borderRadius: 6 }}>tokens.css</code>
-            {" → "}
-            <code style={{ background: "var(--color-ink-card)", padding: "2px 8px", borderRadius: 6 }}>globals.css</code>
-            {" — Manrope + Space Grotesk via next/font"}
-          </p>
-        </div>
 
       </div>
     </div>
