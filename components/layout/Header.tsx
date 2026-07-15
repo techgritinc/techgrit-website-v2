@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronIcon, HamburgerIcon } from "./icons";
+import { ChevronIcon, HamburgerIcon } from "@/components/ui/icons";
 import { NAV_CTA, NAV_ITEMS, type NavItem } from "./nav-config";
 
 function isItemActive(item: NavItem, pathname: string): boolean {

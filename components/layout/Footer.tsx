@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { LinkedInIcon, MailIcon, PhoneIcon, YouTubeIcon } from "./icons";
+import { LinkedInIcon, MailIcon, PhoneIcon, YouTubeIcon } from "@/components/ui/icons";
 import { CONTACT_DETAILS, FOOTER_CTA, FOOTER_LINK_GROUPS, LEGAL_LINKS, SOCIAL_LINKS } from "./footer-config";
 
 const SOCIAL_ICONS = {

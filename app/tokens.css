@@ -244,6 +244,7 @@
    * ---------------------------------------------------------- */
   --blur-sm:   6px;   /* Hero badge */
   --blur-md:   8px;   /* Agent floating cards */
+  --blur-cta:  12px;  /* Final CTA panel (TMS-62) */
   --blur-lg:   14px;  /* Glass cards */
   --blur-nav:  16px;  /* Sticky nav */
   --blur-header-scrolled: 18px; /* Homepage header once solid on scroll */

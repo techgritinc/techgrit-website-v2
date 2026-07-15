@@ -91,6 +91,84 @@
   --breakpoint-tg-md: 960px;
   --breakpoint-tg-sm: 560px;
 
+  /* Homepage (components/ui/, components/home/) — same approach as Header/
+   * Footer above: only tokens actually consumed by this feature's Tailwind-
+   * first components are mapped here. Pre-existing .btn/.card/.badge/.field
+   * classes above are unaffected and unused by this feature's new work. */
+  --color-glass-strong: var(--color-glass-strong);
+  --color-glass-hover: var(--color-glass-hover);
+  --color-border-orange: var(--color-border-orange);
+  --color-border-orange-strong: var(--color-border-orange-strong);
+  --color-error: var(--color-error);
+  --color-badge-text: var(--color-badge-text);
+  --color-ink-card: var(--color-ink-card);
+  --color-yellow: var(--color-yellow);
+  --color-text-placeholder: var(--color-text-placeholder);
+  /* Renamed (drop the redundant "text-" prefix) so it generates a clean
+   * `text-ghost` utility, matching how --color-nav/-primary/-secondary/-muted
+   * were already renamed above — the un-renamed --color-text-ghost entry
+   * further up only ever generated `text-text-ghost`, so plain `text-ghost`
+   * (already used in Header.tsx's mobile menu labels) was previously a
+   * silent no-op; this entry makes it resolve correctly everywhere. */
+  --color-ghost: var(--color-text-ghost);
+  --color-faint: var(--color-text-faint);
+
+  --shadow-btn-primary: var(--shadow-btn-primary);
+  --shadow-btn-hover: var(--shadow-btn-hover);
+  --shadow-card: var(--shadow-card);
+  --shadow-card-hover: var(--shadow-card-hover);
+  --shadow-glass: var(--shadow-glass);
+  --shadow-glow-orange: var(--shadow-glow-orange);
+
+  --blur-sm: var(--blur-sm);
+  --blur-lg: var(--blur-lg);
+
+  --z-modal: var(--z-modal);
+  --z-overlay: var(--z-overlay);
+
+  /* --------------------------------------------------------------------
+   * Complete token → Tailwind mapping (2026-07-15, Constitution Principle I)
+   * Every tokens.css value Tailwind can represent as a utility scale is
+   * mapped here, once — not incrementally per-component — so a bare
+   * utility class can never silently fall back to Tailwind's own shipped
+   * default instead of our token. See
+   * docs/superpowers/specs/2026-07-14-homepage-composition-design.md and
+   * the follow-up Tailwind/tokens design session for the full rationale.
+   * -------------------------------------------------------------------- */
+
+  /* Font-size — fixes text-2xs/xs/sm/base/lg resolving to Tailwind's own
+   * 12/14/16/18px instead of our 12.5/14/15/17/18.5px. Heading sizes
+   * (--text-h1..h4) are intentionally NOT mapped — they stay CSS-only,
+   * consumed solely by the base h1-h4 tag rules below. */
+  --text-2xs: var(--text-2xs);
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-base);
+  --text-lg: var(--text-lg);
+
+  /* Letter-spacing — fixes tracking-wide/wider/widest resolving to
+   * Tailwind's own 0.025/0.05/0.1em instead of our 0.06/0.10/0.16em.
+   * Heading letter-spacing (--ls-tight/-snug/-normal) is intentionally
+   * NOT mapped — same reasoning as heading font-size above. */
+  --tracking-wide: var(--ls-wide);
+  --tracking-wider: var(--ls-wider);
+  --tracking-widest: var(--ls-widest);
+
+  /* Blur — fixes the 8-spot "too hazy" bug (blur-md was never registered,
+   * so components fell back to blur-lg) plus the Final CTA panel. */
+  --blur-md: var(--blur-md);
+  --blur-cta: var(--blur-cta);
+
+  /* Colors/shadows not yet consumed by name, mapped for completeness so
+   * future work can't miss them the same way. */
+  --color-purple: var(--color-purple);
+  --color-overlay-blue: var(--color-overlay-blue);
+  --color-overlay-amber: var(--color-overlay-amber);
+  --color-border-image: var(--color-border-image);
+  --shadow-glow-blue: var(--shadow-glow-blue);
+  --shadow-glow-teal: var(--shadow-glow-teal);
+  --shadow-glow-amber: var(--shadow-glow-amber);
+  --shadow-orange-border: var(--shadow-orange-border);
 }
 @layer base {
   /* ----------------------------------------------------------
