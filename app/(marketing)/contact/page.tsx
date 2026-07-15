@@ -28,7 +28,7 @@ export default function ContactPage() {
             width: 560,
             height: 560,
             borderRadius: "50%",
-            background: "rgba(232,119,34,0.13)",
+            background: "var(--color-overlay-orange)",
             filter: "blur(120px)",
             animation: "tgorb 16s ease-in-out infinite",
           }}
@@ -41,7 +41,7 @@ export default function ContactPage() {
             width: 520,
             height: 520,
             borderRadius: "50%",
-            background: "rgba(2,132,199,0.10)",
+            background: "var(--color-overlay-blue)",
             filter: "blur(130px)",
             animation: "tgorb 20s ease-in-out infinite reverse",
           }}
