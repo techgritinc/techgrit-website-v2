@@ -56,6 +56,13 @@
   --radius-4xl:   var(--radius-4xl);
   --radius-pill:  var(--radius-pill);
 
+  /* Breakpoints — match the documented 1140/960/560 contract (see BREAKPOINTS
+     comment below) so Tailwind's sm:/md:/lg: prefixes collapse at the exact
+     widths this codebase already documents, instead of Tailwind's defaults. */
+  --breakpoint-sm: 560px;
+  --breakpoint-md: 960px;
+  --breakpoint-lg: 1140px;
+
   /* Header/Footer (components/layout/) — added so this component can be built
    * from Tailwind utility classes instead of bespoke CSS. Only tokens actually
    * consumed by Header/Footer are mapped here; pre-existing .btn/.card/.badge/etc.
@@ -75,7 +82,7 @@
   --color-primary: var(--color-text-primary);
   --color-secondary: var(--color-text-secondary);
   --color-muted: var(--color-text-muted);
-  --color-text-ghost: var(--color-text-ghost);
+  --color-ghost: var(--color-text-ghost);
   --color-glass: var(--color-glass);
   --color-overlay-orange: var(--color-overlay-orange);
 
@@ -102,8 +109,15 @@
 }
 @layer base {
   /* ----------------------------------------------------------
-   * CSS Reset
+   * Base layer — wrapped in @layer base so Tailwind utility
+   * classes (@layer utilities) can still override these defaults.
+   * Without this, unlayered CSS beats ALL layered Tailwind
+   * utilities regardless of specificity (CSS Cascade Layers spec),
+   * silently breaking every margin, padding, and arbitrary-value
+   * utility class (e.g. mx-auto, p-8, text-[60px]).
    * ---------------------------------------------------------- */
+
+  /* CSS Reset */
   *,
   *::before,
   *::after {
@@ -141,35 +155,49 @@
     line-height: var(--lh-tight);
   }
 
-h1 { font-size: var(--text-h1); letter-spacing: var(--ls-tight); }
-h2 { font-size: var(--text-h2); letter-spacing: var(--ls-snug);  line-height: var(--lh-snug); }
-h3 { font-size: var(--text-h3); letter-spacing: var(--ls-normal); line-height: var(--lh-normal); }
-h4 { font-size: var(--text-h4); letter-spacing: var(--ls-normal); }
+  h1 { font-size: var(--text-h1); letter-spacing: var(--ls-tight); }
+  h2 { font-size: var(--text-h2); letter-spacing: var(--ls-snug);  line-height: var(--lh-snug); }
+  h3 { font-size: var(--text-h3); letter-spacing: var(--ls-normal); line-height: var(--lh-normal); }
+  h4 { font-size: var(--text-h4); letter-spacing: var(--ls-normal); }
 
-p {
-  font-size: var(--text-base);
-  line-height: var(--lh-body);
-  color: var(--color-text-secondary);
+  p {
+    font-size: var(--text-base);
+    line-height: var(--lh-body);
+    color: var(--color-text-secondary);
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  input, textarea, select, button {
+    font-family: inherit;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-text-placeholder);
+  }
+
+  ::selection {
+    background: var(--color-orange);
+    color: #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bg-ambient-orbs span {
+      animation: none;
+    }
+  }
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-input, textarea, select, button {
-  font-family: inherit;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--color-text-placeholder);
-}
-
-::selection {
-  background: var(--color-orange);
-  color: #fff;
-}
+/* ----------------------------------------------------------
+ * Components layer — wrapped in @layer components so Tailwind
+ * utility classes (@layer utilities, higher priority) can still
+ * override/extend these when combined in the same className.
+ * ---------------------------------------------------------- */
+@layer components {
 
 /* ----------------------------------------------------------
  * FOCUS VISIBILITY
@@ -184,19 +212,24 @@ button:focus-visible,
   border-radius: var(--radius-xs);
 }
 
-@layer components {
   /* ----------------------------------------------------------
    * Container
-   * .container — max-width wrapper, centered, padded
+   * .tg-container — max-width wrapper, centered, padded
+   * Named tg-container (not "container") because Tailwind ships its own
+   * built-in `.container` utility in the utilities layer, which always wins
+   * over a same-named class declared here in components — it would keep
+   * Tailwind's default xl/2xl breakpoints (1280px/1536px) alongside our
+   * overridden sm/md/lg ones, letting containers balloon past
+   * --container-max on very wide screens.
    * ---------------------------------------------------------- */
-  .container {
+  .tg-container {
     width: 100%;
     max-width: var(--container-max);
     margin-inline: auto;
     padding-inline: var(--container-padding);
   }
 
-  .container-sm {
+  .tg-container-sm {
     width: 100%;
     max-width: var(--container-max-sm);
     margin-inline: auto;
@@ -827,7 +860,7 @@ button:focus-visible,
   }
 
   @media (max-width: 560px) {
-    .container {
+    .tg-container {
       padding-inline: 20px;
     }
 
@@ -862,5 +895,4 @@ button:focus-visible,
     background: rgba(255, 255, 255, 0.18);
     border-radius: 6px;
   }
-}
 }
