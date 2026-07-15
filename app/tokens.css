@@ -162,8 +162,8 @@
   --space-19:  48px;
   --space-20:  56px;
   --space-21:  60px;
-  --space-section-sm:  50px;  /* Section vertical padding (small) */
-  --space-section-md: 60px;   /* Section vertical padding (medium) */
+  --space-section-sm:  88px;  /* Section vertical padding (small) */
+  --space-section-md: 96px;   /* Section vertical padding (medium) */
   --space-section-lg: 108px;  /* Section vertical padding (large) */
 
   /* ----------------------------------------------------------
