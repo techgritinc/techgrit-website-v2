@@ -63,7 +63,7 @@ The tasks.md should be immediately executable - each task must be specific enoug
 Every task MUST strictly follow this format:
 
 ```text
-- [ ] [TaskID] [P?] [Story?] Description with file path
+- [ ] [TaskID] [P?] [UI?] [Story?] Description with file path
 ```
 
 **Format Components**:
@@ -71,13 +71,20 @@ Every task MUST strictly follow this format:
 1. **Checkbox**: ALWAYS start with `- [ ]` (markdown checkbox)
 2. **Task ID**: Sequential number (T001, T002, T003...) in execution order
 3. **[P] marker**: Include ONLY if task is parallelizable (different files, no dependencies on incomplete tasks)
-4. **[Story] label**: REQUIRED for user story phase tasks only
+4. **[UI] marker** (Constitution Principle VI): Include when the task produces user-visible
+   frontend output — a component, page, layout, styling change, form, or any file under
+   `app/`, `components/`, `app/globals.css`, `app/tokens.css`, or similar. `/speckit.implement`
+   uses this marker to decide when to invoke the `frontend-design` skill before executing the
+   task. Do NOT mark tasks that only touch backend/API/config/tests.
+5. **[Story] label**: REQUIRED for user story phase tasks only
    - Format: [US1], [US2], [US3], etc. (maps to user stories from spec.md)
    - Setup phase: NO story label
    - Foundational phase: NO story label  
    - User Story phases: MUST have story label
    - Polish phase: NO story label
-5. **Description**: Clear action with exact file path
+6. **Description**: Clear action with exact file path
+
+**Marker order (when multiple apply)**: `[P] [UI] [Story]`.
 
 **Examples**:
 
@@ -85,6 +92,8 @@ Every task MUST strictly follow this format:
 - ✅ CORRECT: `- [ ] T005 [P] Implement authentication middleware in src/middleware/auth.py`
 - ✅ CORRECT: `- [ ] T012 [P] [US1] Create User model in src/models/user.py`
 - ✅ CORRECT: `- [ ] T014 [US1] Implement UserService in src/services/user_service.py`
+- ✅ CORRECT: `- [ ] T020 [UI] [US1] Build Header component in components/layout/Header.tsx`
+- ✅ CORRECT: `- [ ] T021 [P] [UI] [US2] Style hero section in app/page.tsx and app/globals.css`
 - ❌ WRONG: `- [ ] Create User model` (missing ID and Story label)
 - ❌ WRONG: `T001 [US1] Create model` (missing checkbox)
 - ❌ WRONG: `- [ ] [US1] Create User model` (missing Task ID)
@@ -100,6 +109,9 @@ Every task MUST strictly follow this format:
      - Endpoints/UI needed for that story
      - If tests requested: Tests specific to that story
    - Mark story dependencies (most stories should be independent)
+   - Apply the `[UI]` marker (Constitution Principle VI) to every task that produces
+     user-visible frontend output. This is not optional — a missed `[UI]` marker means
+     `/speckit.implement` will not invoke `frontend-design` for that task.
 
 2. **From Contracts**:
    - Map each contract/endpoint → to the user story it serves

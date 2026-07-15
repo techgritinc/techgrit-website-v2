@@ -74,7 +74,30 @@ Given that feature description, do this:
 
 5. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
 
-6. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
+6. **UI Detection & frontend-design Skill Invocation** (Constitution Principle VI):
+
+   a. **Detect whether this feature is UI work.** Apply the detection rule from Constitution
+      Principle VI:
+      - **Tech signal**: this repo is Next.js 16 + React 19 — the tech signal is always true here.
+      - **Content signal**: scan the drafted spec.md for any of these keywords: page, component,
+        screen, layout, form, button, view, dashboard, modal, navigation, styling, hero, section,
+        card.
+      - If EITHER signal matches → UI mode ON. Otherwise → skip to step 7.
+
+   b. **If UI mode ON, invoke the `frontend-design` skill** via the Skill tool. Reference the
+      vendored skill at `.claude/skills/frontend-design/SKILL.md`. Ask the skill to shape
+      user-visible flows and interaction intent for the drafted stories (NOT styling/tech detail
+      — this phase is still about WHAT, not HOW).
+
+   c. **Fold the skill's guidance back into spec.md** in a new subsection under "User Scenarios
+      & Testing" titled **"UI Interaction Intent"**. Capture: intended tone/aesthetic direction
+      at a high level, key interaction moments, and any user-flow refinements suggested by the
+      skill. Keep this section technology-agnostic per this phase's Quality Guidelines.
+
+   d. **Record invocation** in the feature's checklist file (created in step 7) so downstream
+      phases can audit that Principle VI was honored.
+
+7. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
 
    a. **Create Spec Quality Checklist**: Generate a checklist file at `FEATURE_DIR/checklists/requirements.md` using the checklist template structure with these validation items:
 
@@ -166,7 +189,7 @@ Given that feature description, do this:
 
    d. **Update Checklist**: After each validation iteration, update the checklist file with current pass/fail status
 
-7. Report completion with feature directory name, spec file path, checklist results, and readiness for the next phase.
+8. Report completion with feature directory name, spec file path, checklist results, and readiness for the next phase.
 
    **MANUAL REVIEW GATE**: After spec generation, the workflow pauses for human review. Display:
 

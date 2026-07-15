@@ -26,8 +26,12 @@ export const aboutUsContent: AboutUsPageContent = {
     {
       type: "showcase",
       order: 2,
-      // No real photography exists yet — null exercises the FR-013 placeholder path.
-      image: null,
+      image: {
+        url: "/images/about-us/pasted-1782818442912-0.png",
+        alternativeText: "The TechGrit team at work",
+        width: 2048,
+        height: 1536,
+      },
     },
     {
       type: "whoYouAre",

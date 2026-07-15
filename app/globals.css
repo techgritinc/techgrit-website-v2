@@ -176,6 +176,12 @@
     background: var(--color-orange);
     color: #fff;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bg-ambient-orbs span {
+      animation: none;
+    }
+  }
 }
 
 /* ----------------------------------------------------------

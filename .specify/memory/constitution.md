@@ -1,5 +1,24 @@
 <!--
 CONSTITUTION UPDATE REPORT (latest amendment)
+Generated: 2026-07-14 (v1.3.0) — workflow amendment integrating the `frontend-design` skill
+into spec-driven development.
+
+VERSION CHANGE: 1.2.0 → 1.3.0
+Bump Type: MINOR
+Rationale: Added Principle VI ("UI Craft via frontend-design Skill") requiring the vendored
+`.claude/skills/frontend-design/SKILL.md` skill to be invoked during /speckit.specify,
+/speckit.plan, and /speckit.implement whenever a feature is detected as UI work (frontend
+tech stack in `plan.md` Technical Context OR UI keywords in `spec.md`). No prior principle
+was reversed — this is additive workflow guidance, hence MINOR.
+TEMPLATE UPDATES: `plan-template.md` gains a "UI Design Approach" section; `tasks-template.md`
+documents the `[UI]` label convention.
+COMMAND UPDATES: `speckit.specify.md`, `speckit.plan.md`, `speckit.tasks.md`, and
+`speckit.implement.md` gain UI-detection + skill-invocation steps.
+DEFERRED ITEMS: TODO(RATIFICATION_DATE) still unresolved, carried over unchanged.
+-->
+
+<!--
+CONSTITUTION UPDATE REPORT (previous amendment, kept for history)
 Generated: 2026-07-13 (v1.2.0) — implementation-triggered amendment from TMS-63
 
 VERSION CHANGE: 1.1.0 → 1.2.0
@@ -250,6 +269,53 @@ near-verbatim in `app/layout.tsx` metadata and in the Homepage/Hero Crazy/About 
 indicating settled brand copy rather than placeholder text. The 4D™/PRISM™/AI IMPACT™ names were
 confirmed by a full read of the v1-light file's frameworks section, not inferred.
 
+### VI. UI Craft via frontend-design Skill
+
+All UI-facing work in this repository MUST invoke the vendored `frontend-design` skill at
+`.claude/skills/frontend-design/SKILL.md` during spec-driven development. This is a workflow
+principle — its purpose is to prevent generic "AI-slop" UI output and to keep design thinking
+(typography, composition, motion, atmosphere) explicit rather than accidental.
+
+**Detection — a feature is UI work if EITHER holds:**
+
+- **Tech signal**: the feature's `plan.md` Technical Context lists a frontend framework as a
+  Primary Dependency (Next.js, React, Vue, Svelte, Angular, SolidJS). This repository always
+  matches this signal by default (Next.js 16 + React 19).
+- **Content signal**: the feature's `spec.md` mentions any of: page, component, screen,
+  layout, form, button, view, dashboard, modal, navigation, styling, hero, section, card.
+
+If either signal is true, the feature is UI work and this principle applies. If neither holds
+(a pure backend/API/config change with no user-visible surface), the principle does not fire
+and the skill is skipped.
+
+**Required invocation points:**
+
+- **During `/speckit.specify`** — after user stories are drafted, invoke `frontend-design` to
+  shape user-visible flows and interaction intent (not styling detail — that comes later).
+- **During `/speckit.plan`** — before Phase 1 (design & contracts), invoke `frontend-design`
+  to shape component architecture and record its guidance in `plan.md` under
+  "UI Design Approach".
+- **During `/speckit.implement`** — before executing any task marked `[UI]` in `tasks.md`,
+  invoke `frontend-design` so the actual code writing benefits from the skill's aesthetic
+  and craft guidance.
+
+**Boundary with existing principles:** `frontend-design` shapes creative direction and craft.
+Principles I–V remain the authority on tokens, breakpoints, component library, reference-file
+translation, and brand system. Where the skill's generic guidance conflicts with a repo-specific
+principle (e.g. skill says "pick any distinctive font" but Principle V mandates Manrope + Space
+Grotesk), the repo principle wins. Use the skill for *how* to design, not to override *what*
+this project has already decided.
+
+**Evidence requirement:** the `plan.md` for any UI feature MUST contain a "UI Design Approach"
+section recording the frontend-design invocation and its output. A missing section on a UI
+feature is a constitution violation and blocks progress at `/speckit.plan`'s Constitution Check
+gate.
+
+**Rationale**: the team wants spec-driven UI work to consistently benefit from the skill's
+design thinking without relying on any individual developer remembering to invoke it. Vendoring
+the skill into `.claude/skills/frontend-design/` and wiring invocation into all four speckit
+commands makes the rule survive across contributors and Claude sessions.
+
 ## Additional Constraints
 
 This repository is **one** Next.js App Router application rooted at `app/` —
@@ -308,5 +374,5 @@ still stay inside `app/` rather than migrating into `components/` by default. Th
   simply the current, unfinished state, recorded here so future amendments can address them
   deliberately.
 
-**Version**: 1.2.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
-exists; this discovery run is the first codification | **Last Amended**: 2026-07-13
+**Version**: 1.3.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
+exists; this discovery run is the first codification | **Last Amended**: 2026-07-14

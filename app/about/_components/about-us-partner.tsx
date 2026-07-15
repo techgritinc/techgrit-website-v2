@@ -5,19 +5,19 @@ import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
 export function AboutUsPartner({ section }: { section: PartnerSection }) {
   return (
     <section className="section">
-      <div className="tg-container">
+      <div className="tg-container" style={{ maxWidth: 1180 }}>
         <RevealOnScroll>
           <div className="grid grid-cols-1 items-center gap-9 md:grid-cols-[0.9fr_1.1fr] md:gap-15">
             <div>
               <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-              <h2>{section.title}</h2>
-              <p className="mt-5" style={{ color: "var(--color-text-muted)" }}>
+              <h2 style={{ fontSize: "clamp(30px, 3.6vw, 40px)", lineHeight: 1.1 }}>{section.title}</h2>
+              <p className="mt-5" style={{ color: "var(--color-text-muted)", fontSize: "16.5px", lineHeight: 1.7 }}>
                 {section.description}
               </p>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3.5">
               {section.outcomes.map((outcome, index) => (
-                <div key={index} className="card flex items-center gap-4 rounded-lg px-6 py-5">
+                <div key={index} className="card flex items-center gap-3.5 rounded-lg" style={{ padding: "20px 22px" }}>
                   <span
                     className="flex flex-shrink-0 items-center justify-center rounded-full"
                     style={{ width: 26, height: 26, background: "var(--color-overlay-orange)" }}

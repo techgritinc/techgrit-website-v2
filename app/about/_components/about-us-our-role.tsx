@@ -11,12 +11,15 @@ export function AboutUsOurRole({ section }: { section: OurRoleSection }) {
         <RevealOnScroll>
           <div className="mx-auto text-center" style={{ maxWidth: 1000 }}>
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2>
+            <h2 style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>
               {before}
               <span className="text-gradient">{section.titleHighlight}</span>
               {after}
             </h2>
-            <p className="mx-auto mt-5" style={{ maxWidth: 680 }}>
+            <p
+              className="mx-auto"
+              style={{ marginTop: 22, maxWidth: 680, fontSize: "clamp(16px, 1.4vw, 18px)", lineHeight: 1.7 }}
+            >
               {section.description}
             </p>
           </div>

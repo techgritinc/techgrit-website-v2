@@ -44,9 +44,9 @@ export function AboutUsValues({ section }: { section: ValuesSection }) {
     <section id="values" className="section">
       <div className="tg-container">
         <RevealOnScroll>
-          <div className="mx-auto mb-11 max-w-[680px] text-center">
+          <div className="mx-auto mb-[50px] max-w-[680px] text-center">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2>{section.title}</h2>
+            <h2 style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>{section.title}</h2>
           </div>
           <div
             className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16"
@@ -55,8 +55,12 @@ export function AboutUsValues({ section }: { section: ValuesSection }) {
             {section.values.map((value) => (
               <div
                 key={value.order}
-                className="flex gap-5 px-1 py-7"
-                style={{ borderTop: "1px solid var(--color-border-subtle)" }}
+                className="flex px-1"
+                style={{
+                  gap: "var(--space-9)",
+                  paddingBlock: "var(--space-13)",
+                  borderTop: "1px solid var(--color-border-subtle)",
+                }}
               >
                 <span
                   className="flex-shrink-0"
@@ -67,6 +71,7 @@ export function AboutUsValues({ section }: { section: ValuesSection }) {
                     color: "var(--color-orange)",
                     fontSize: 14,
                     letterSpacing: "var(--ls-wide)",
+                    paddingTop: "var(--space-1)",
                   }}
                 >
                   {String(value.order).padStart(2, "0")}
@@ -74,7 +79,7 @@ export function AboutUsValues({ section }: { section: ValuesSection }) {
                 <div>
                   <div className="flex items-center gap-3">
                     <ValueIcon order={value.order} />
-                    <h3>{value.title}</h3>
+                    <h3 style={{fontSize: "19px"}}>{value.title}</h3>
                   </div>
                   <p className="mt-2" style={{ fontSize: "var(--text-sm)", color: "var(--color-text-faint)" }}>
                     {value.description}
