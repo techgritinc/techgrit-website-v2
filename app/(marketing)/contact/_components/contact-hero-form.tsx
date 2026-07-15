@@ -93,22 +93,38 @@ export default function ContactHeroForm() {
     <div className="grid grid-cols-1 tg-md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] gap-[34px] tg-md:gap-[60px] items-start leading-[normal]">
       {/* Intro + contact info */}
       <div className="pt-2">
-        <div className="inline-flex items-center gap-2.5 bg-[var(--color-overlay-orange)] border border-[var(--color-border-orange)] px-4 py-2 rounded-full mb-6">
+        <div
+          data-rise
+          style={{ animationDelay: ".05s" }}
+          className="inline-flex items-center gap-2.5 bg-[var(--color-overlay-orange)] border border-[var(--color-border-orange)] px-4 py-2 rounded-full mb-6"
+        >
           <span className="status-dot status-orange" />
           <span className="text-[12.5px] font-bold tracking-[0.1em] text-white/[.92] uppercase">Contact Us</span>
         </div>
 
-        <h1 className="text-[clamp(38px,4.8vw,54px)] leading-[1.05] font-bold tracking-[-0.035em] text-white">
+        <h1
+          data-rise
+          style={{ animationDelay: ".12s" }}
+          className="text-[clamp(38px,4.8vw,54px)] leading-[1.05] font-bold tracking-[-0.035em] text-white"
+        >
           Let&apos;s build something{" "}
           <span className="text-gradient">remarkable.</span>
         </h1>
 
-        <p className="mt-5 max-w-[440px] text-[18px] leading-[1.65] text-[var(--color-text-secondary)]">
+        <p
+          data-rise
+          style={{ animationDelay: ".2s" }}
+          className="mt-5 max-w-[440px] text-[18px] leading-[1.65] text-[var(--color-text-secondary)]"
+        >
           Tell us about your product, your timeline, and what success looks
           like. We&apos;ll get back within one business day.
         </p>
 
-        <div className="mt-[34px] flex flex-col gap-[18px]">
+        <div
+          data-rise
+          style={{ animationDelay: ".28s" }}
+          className="mt-[34px] flex flex-col gap-[18px]"
+        >
           {CONTACT_INFO.map((item) => (
             <ContactInfoRow key={item.label} {...item} />
           ))}
@@ -116,7 +132,11 @@ export default function ContactHeroForm() {
       </div>
 
       {/* Form card */}
-      <div className="relative rounded-[24px] border border-[var(--color-border)] bg-[var(--color-glass)] backdrop-blur-[10px] px-[34px] py-[36px] shadow-[var(--shadow-glass)]">
+      <div
+        data-rise
+        style={{ animationDelay: ".2s" }}
+        className="relative rounded-[24px] border border-[var(--color-border)] bg-[var(--color-glass)] backdrop-blur-[10px] px-[34px] py-[36px] shadow-[var(--shadow-glass)]"
+      >
         <div aria-hidden className="absolute -top-px left-[30px] right-[30px] h-0.5 bg-gradient-to-r from-transparent via-orange/70 to-transparent" />
 
         {sent ? (
