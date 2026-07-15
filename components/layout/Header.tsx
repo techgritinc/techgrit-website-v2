@@ -23,6 +23,8 @@ const NAV_LINK_BASE =
 export default function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isContact = pathname === "/contact";
+  const cta = isContact ? { label: "Start a project", href: "#form" } : NAV_CTA;
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -89,7 +91,7 @@ export default function Header() {
             height={34}
             width={114}
             priority
-            className="h-[34px] w-auto"
+            className="h-[32px] w-auto"
           />
         </Link>
 
@@ -151,11 +153,11 @@ export default function Header() {
         </nav>
 
         <Link
-          href={NAV_CTA.href}
+          href={cta.href}
           onClick={closeMenus}
           className="hidden items-center gap-2 whitespace-nowrap rounded-[11px] bg-[image:var(--gradient-brand)] px-[22px] py-[12px] text-[15px] font-bold text-white shadow-nav-btn transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_14px_32px_-8px_rgba(232,119,34,0.9)] tg-lg:inline-flex"
         >
-          {NAV_CTA.label} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
+          {cta.label} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
         </Link>
 
         <button
@@ -217,11 +219,11 @@ export default function Header() {
           );
         })}
         <Link
-          href={NAV_CTA.href}
+          href={cta.href}
           onClick={closeMenus}
           className="block border-t border-border-subtle px-9 py-4 text-sm font-bold text-orange"
         >
-          {NAV_CTA.label} <span aria-hidden="true">&rarr;</span>
+          {cta.label} <span aria-hidden="true">&rarr;</span>
         </Link>
       </div>
     </header>
