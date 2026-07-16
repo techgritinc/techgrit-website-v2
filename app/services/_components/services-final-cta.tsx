@@ -49,6 +49,7 @@ export function ServicesFinalCta({ section }: { section: FinalCtaSection }) {
                     gap: "10px",
                     padding: "17px 34px",
                     borderRadius: 13,
+                    whiteSpace: "normal",
                   }}
                 >
                   {section.ctaLabel} <span aria-hidden="true" style={{ fontSize: 18 }}>&#8594;</span>

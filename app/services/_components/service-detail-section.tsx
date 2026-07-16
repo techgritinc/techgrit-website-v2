@@ -66,7 +66,7 @@ function ApproachSteps({ section }: { section: ServiceDetailSectionData }) {
         Our approach
       </div>
       <div
-        className="grid grid-cols-1 tg-md:grid-cols-3"
+        className="grid grid-cols-1 min-[921px]:grid-cols-3"
         style={{ rowGap: 0, columnGap: 56, borderBottom: "1px solid var(--color-border-image)" }}
       >
         {items.map((step) => (
@@ -98,7 +98,7 @@ function CapabilityGrid({ section }: { section: ServiceDetailSectionData }) {
   const padding = CAPABILITY_PADDING[section.accentColor] ?? "26px";
 
   return (
-    <div className="grid grid-cols-1 tg-sm:grid-cols-2 tg-lg:grid-cols-3" style={{ marginTop: 46, gap: 22 }}>
+    <div className="grid grid-cols-1 tg-sm:grid-cols-2 min-[921px]:grid-cols-3" style={{ marginTop: 46, gap: 22 }}>
       {items.map((item) => (
         <div
           key={item.title}
@@ -130,7 +130,7 @@ export function ServiceDetailSection({ section }: { section: ServiceDetailSectio
       <div className="tg-container" style={{ padding: "60px 36px" }}>
         <RevealOnScroll>
           <div>
-            <div className="grid grid-cols-1 items-center gap-[34px] tg-md:grid-cols-2 tg-md:gap-[56px]">
+            <div className="grid grid-cols-1 items-center gap-[34px] min-[921px]:grid-cols-2 min-[921px]:gap-[56px]">
               <div>
                 <SectionEyebrow accentColor={accent}>{section.categoryLabel}</SectionEyebrow>
                 <h2 style={{ fontSize: "clamp(30px, 3.6vw, 40px)", lineHeight: 1.08 }}>{section.heading}</h2>

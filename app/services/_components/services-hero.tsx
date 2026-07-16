@@ -42,7 +42,7 @@ export function ServicesHero({ section }: { section: HeroSection }) {
         </div>
         <h1
           data-rise
-          className="text-[46px] leading-[1.02] tracking-[var(--ls-tight)] tg-md:text-[58px]"
+          className="text-[46px] leading-[1.02] tracking-[var(--ls-tight)] min-[921px]:text-[58px]"
           style={{ animationDelay: ".12s" }}
         >
           {before}

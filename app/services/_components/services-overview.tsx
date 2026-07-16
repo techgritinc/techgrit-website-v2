@@ -19,7 +19,7 @@ export function ServicesOverview({ section }: { section: OverviewSection }) {
     <section>
       <div className="tg-container" style={{ paddingTop: 20, paddingBottom: 70 }}>
         <RevealOnScroll>
-          <div className="grid grid-cols-1 gap-6 tg-md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 min-[921px]:grid-cols-3">
             {section.cards.map((card) => (
               <a
                 key={card.targetId}
