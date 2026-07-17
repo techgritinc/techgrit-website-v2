@@ -5,24 +5,24 @@ export function ServicesHero({ section }: { section: HeroSection }) {
 
   return (
     <section>
-      <div className="mx-auto text-center" style={{ maxWidth: 1000, padding: "96px 36px 64px" }}>
+      <div className="mx-auto text-center" style={{ maxWidth: 1000, paddingTop: 96, paddingInline: "var(--space-15)", paddingBottom: 64 }}>
         <div
           data-rise
           className="inline-flex items-center"
           style={{
             animationDelay: ".05s",
-            gap: 10,
+            gap: "var(--space-3)",
             background: "var(--color-glass)",
             border: "1px solid var(--color-border)",
-            padding: "8px 16px",
+            padding: "var(--space-2) var(--space-6)",
             borderRadius: "var(--radius-pill)",
-            marginBottom: 28,
+            marginBottom: "var(--space-12)",
           }}
         >
           <span
             style={{
-              width: 8,
-              height: 8,
+              width: "var(--space-2)",
+              height: "var(--space-2)",
               borderRadius: "50%",
               background: "var(--color-orange)",
               boxShadow: "var(--shadow-glow-orange)",
@@ -54,10 +54,10 @@ export function ServicesHero({ section }: { section: HeroSection }) {
           className="mx-auto"
           style={{
             animationDelay: ".2s",
-            marginTop: 26,
+            marginTop: "var(--space-11)",
             maxWidth: 640,
             fontSize: 18.5,
-            lineHeight: 1.65,
+            lineHeight: "var(--lh-body)",
             color: "var(--color-text-secondary)",
           }}
         >
@@ -66,7 +66,7 @@ export function ServicesHero({ section }: { section: HeroSection }) {
         <div
           data-rise
           className="flex flex-wrap items-center justify-center"
-          style={{ animationDelay: ".3s", marginTop: 36, gap: 15 }}
+          style={{ animationDelay: ".3s", marginTop: "var(--space-15)", gap: 15 }}
         >
           <a href={section.primaryCtaHref} className="btn btn-primary btn-lg" style={{ gap: 9 }}>
             {section.primaryCtaLabel} <span aria-hidden="true">&#8594;</span>
@@ -74,7 +74,7 @@ export function ServicesHero({ section }: { section: HeroSection }) {
           <a
             href={section.secondaryCtaHref}
             className="btn btn-ghost btn-ghost--static-border btn-lg"
-            style={{ gap: 9, padding: "16px 26px" }}
+            style={{ gap: 9, padding: "var(--space-6) var(--space-11)" }}
           >
             {section.secondaryCtaLabel}
           </a>

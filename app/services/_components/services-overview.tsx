@@ -17,7 +17,7 @@ const HOVER_BORDER: Record<ServiceAccent, string> = {
 export function ServicesOverview({ section }: { section: OverviewSection }) {
   return (
     <section>
-      <div className="tg-container" style={{ paddingTop: 20, paddingBottom: 70, paddingInline: 36 }}>
+      <div className="tg-container" style={{ paddingTop: "var(--space-8)", paddingBottom: 70, paddingInline: "var(--space-15)" }}>
         <RevealOnScroll>
           <div className="grid grid-cols-1 gap-6 min-[921px]:grid-cols-3">
             {section.cards.map((card) => (
@@ -51,25 +51,25 @@ export function ServicesOverview({ section }: { section: OverviewSection }) {
                     Drop a service image
                   </div>
                 )}
-                <div style={{ padding: "26px 28px 30px" }}>
+                <div style={{ padding: "var(--space-11) var(--space-12) var(--space-13)" }}>
                   <div
                     style={{
                       fontSize: 12,
                       fontWeight: "var(--fw-bold)",
-                      letterSpacing: "0.12em",
+                      letterSpacing: "var(--ls-label)",
                       textTransform: "uppercase",
                       color: LABEL_COLOR[card.accentColor],
                     }}
                   >
                     {card.sequenceLabel}
                   </div>
-                  <h3 style={{ marginTop: 10, fontSize: 22 }}>{card.title}</h3>
-                  <p style={{ marginTop: 9, fontSize: 15, lineHeight: 1.6, color: "var(--color-text-faint)" }}>
+                  <h3 style={{ marginTop: "var(--space-3)", fontSize: 22 }}>{card.title}</h3>
+                  <p style={{ marginTop: 9, fontSize: 15, lineHeight: "var(--lh-relaxed)", color: "var(--color-text-faint)" }}>
                     {card.description}
                   </p>
                   <span
                     style={{
-                      marginTop: 16,
+                      marginTop: "var(--space-6)",
                       display: "inline-flex",
                       alignItems: "center",
                       gap: 7,
