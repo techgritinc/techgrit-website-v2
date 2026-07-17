@@ -14,14 +14,14 @@ export function AboutUsCultureGallery({ section }: { section: CultureGallerySect
     <section className="section">
       <div className="tg-container">
         <RevealOnScroll>
-          <div className="mx-auto mb-11 max-w-[680px] text-center">
+          <div className="mx-auto mb-11 text-center content-max-lg">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "clamp(30px, 3.6vw, 42px)" }}>{section.title}</h2>
+            <h2 style={{ fontSize: "var(--text-h2-sub)" }}>{section.title}</h2>
             <p className="mt-4" style={{ color: "var(--color-text-muted)" }}>
               {section.subtitle}
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2 lg:auto-rows-[200px] lg:grid-cols-[1.4fr_1fr_1fr]">
+          <div className="grid grid-cols-1 gap-[var(--space-7)] sm:grid-cols-2 lg:auto-rows-[200px] lg:grid-cols-[1.4fr_1fr_1fr]">
             {section.photos.map((photo, index) => (
               <div
                 key={index}

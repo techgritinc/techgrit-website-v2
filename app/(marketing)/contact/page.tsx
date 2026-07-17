@@ -51,13 +51,13 @@ export default function ContactPage() {
       <div style={{ position: "relative", zIndex: 1 }}>
         <main id="top">
           <section id="form" style={{ position: "relative", scrollMarginTop: "84px" }}>
-            <div style={{ maxWidth: 1280, margin: "0 auto", padding: "74px 36px 50px" }}>
+            <div className="tg-container" style={{ paddingTop: 74, paddingBottom: 50 }}>
               <ContactHeroForm />
             </div>
           </section>
 
           <section style={{ position: "relative" }}>
-            <div style={{ maxWidth: 1280, margin: "0 auto", padding: "30px 36px 80px" }}>
+            <div className="tg-container" style={{ paddingTop: 30, paddingBottom: 80 }}>
               <NextSteps />
             </div>
           </section>

@@ -105,11 +105,21 @@
   --text-h3:    clamp(22px, 2.4vw, 30px);  /* Sub-section heading */
   --text-h4:    clamp(18px, 1.8vw, 22px);  /* Card heading */
   --text-lg:    clamp(16px, 1.4vw, 18.5px); /* Lead / hero body */
+  --text-lg-sm: clamp(16px, 1.4vw, 18px);   /* Lead / hero body — narrower variant */
   --text-base:  17px;                        /* Body default */
+  --text-md:    16px;                        /* Closing statement / emphasis line */
   --text-sm:    15px;                        /* Secondary body, nav links */
   --text-xs:    14px;                        /* Captions, card meta */
   --text-2xs:   12.5px;                      /* Eyebrow, labels */
+  --text-2xs-lg: 13px;                       /* Eyebrow, labels — slightly larger variant */
   --text-blog-card: clamp(26px, 2.9vw, 34px); /* Blog/Case Study card title */
+  --text-h2-sub:    clamp(30px, 3.6vw, 42px); /* About page sub-section heading (narrower than --text-h2) */
+  --text-h2-sub-sm: clamp(30px, 3.6vw, 40px); /* About page sub-section heading — narrower variant */
+  --text-h3-card:   22px;                     /* Process step card heading (static, not fluid) */
+  --text-h3-values: 19px;                     /* Values card title (static, not fluid) */
+  --text-h2-cta:    clamp(34px, 4.4vw, 48px); /* About page final CTA heading (larger than --text-h2) */
+  --text-btn-cta:   clamp(16px, 1.4vw, 17px); /* About page final CTA button label */
+  --text-btn-cta-icon: clamp(17px, 1.4vw, 18px); /* About page final CTA button arrow icon */
 
   /* Font weights */
   --fw-regular:    400;
@@ -162,6 +172,11 @@
   --space-19:  48px;
   --space-20:  56px;
   --space-21:  60px;
+  --space-22:  40px;   /* Glass-card horizontal padding (Achievements, Final CTA) */
+  --space-23:  76px;   /* Glass-card vertical padding (Final CTA) */
+  --space-24: 110px;   /* Final CTA section bottom padding */
+  --space-25:  50px;   /* Heading block bottom margin (Process, Values) */
+  --space-26:  32px;   /* Who You Are quote block padding */
   --space-section-sm:  50px;  /* Section vertical padding (small) */
   --space-section-md: 60px;   /* Section vertical padding (medium) */
   --space-section-lg: 108px;  /* Section vertical padding (large) */
@@ -170,10 +185,19 @@
    * 8. LAYOUT
    * ---------------------------------------------------------- */
   --container-max:      1280px;
+  --container-max-lg:   1180px;  /* Narrower container (About page sections) */
+  --container-max-md:   1140px;  /* Narrower container (About page showcase image) */
   --container-max-sm:   1020px;  /* Narrower container (subscribe band) */
   --container-padding:  36px;    /* Horizontal padding on all containers */
   --nav-height:         80px;    /* Desktop sticky nav height */
   --nav-height-mobile:  74px;    /* Mobile nav height */
+
+  /* Centered content/copy widths — narrower than a full container, used to
+     keep headings and paragraphs from stretching full-width when centered. */
+  --content-max-xl: 1000px;  /* Centered hero/section heading block */
+  --content-max-lg:  680px;  /* Body copy under a centered heading */
+  --content-max-md:  640px;  /* Hero lead paragraph */
+  --content-max-sm:  600px;  /* CTA panel description */
 
   /* Documented breakpoint contract (see globals.css breakpoints section).
      NOTE: also duplicated as literal values in globals.css's @theme inline

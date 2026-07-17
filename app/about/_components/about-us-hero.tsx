@@ -5,7 +5,7 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
 
   return (
     <section>
-      <div className="mx-auto text-center" style={{ maxWidth: 1000, padding: "96px 36px 70px" }}>
+      <div className="mx-auto text-center content-max-xl" style={{ padding: "96px 36px 70px" }}>
         <div
           data-rise
           className="inline-flex items-center"
@@ -44,11 +44,10 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
         </h1>
         <p
           data-rise
-          className="mx-auto"
+          className="mx-auto content-max-md"
           style={{
             animationDelay: ".2s",
             marginTop: 26,
-            maxWidth: 640,
             fontSize: 18.5,
             lineHeight: 1.65,
             color: "var(--color-text-secondary)",
@@ -61,10 +60,15 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
           className="flex flex-wrap items-center justify-center"
           style={{ animationDelay: ".3s", marginTop: 36, gap: 15 }}
         >
-          <a href={section.primaryCtaLink} className="btn btn-primary btn-lg">
+          <a
+            href={section.primaryCtaLink}
+            className="btn btn-primary btn-lg"
+          >
             {section.primaryCtaLabel} <span aria-hidden="true">&#8594;</span>
           </a>
-          <a href={section.secondaryCtaLink} className="btn btn-ghost btn-lg">
+          <a href={section.secondaryCtaLink} className="btn btn-ghost btn-lg"
+            style={{ padding: "var(--space-6) var(--space-11)" }}
+          >
             {section.secondaryCtaLabel}
           </a>
         </div>

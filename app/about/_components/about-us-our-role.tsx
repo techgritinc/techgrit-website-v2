@@ -9,16 +9,16 @@ export function AboutUsOurRole({ section }: { section: OurRoleSection }) {
     <section className="section">
       <div className="tg-container">
         <RevealOnScroll>
-          <div className="mx-auto text-center" style={{ maxWidth: 1000 }}>
+          <div className="mx-auto text-center content-max-xl">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>
+            <h2 style={{ fontSize: "var(--text-h2-sub)", lineHeight: 1.1 }}>
               {before}
               <span className="text-gradient">{section.titleHighlight}</span>
               {after}
             </h2>
             <p
-              className="mx-auto"
-              style={{ marginTop: 22, maxWidth: 680, fontSize: "clamp(16px, 1.4vw, 18px)", lineHeight: 1.7 }}
+              className="mx-auto content-max-lg"
+              style={{ marginTop: 22, fontSize: "var(--text-lg-sm)", lineHeight: 1.7 }}
             >
               {section.description}
             </p>

@@ -4,11 +4,11 @@ import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
 export function AboutUsFinalCta({ section }: { section: FinalCtaSection }) {
   return (
     <section>
-      <div className="tg-container" style={{ maxWidth: 1180, paddingTop: 40, paddingBottom: 110 }}>
+      <div className="tg-container-lg section-cta">
         <RevealOnScroll>
           <div
-            className="glass-card mx-auto text-center"
-            style={{ padding: "76px 40px", position: "relative", overflow: "hidden" }}
+            className="glass-card glass-card-lg mx-auto text-center"
+            style={{ position: "relative", overflow: "hidden" }}
           >
             <div
               aria-hidden="true"
@@ -36,22 +36,22 @@ export function AboutUsFinalCta({ section }: { section: FinalCtaSection }) {
               >
                 {section.eyebrow}
               </div>
-              <h2 className="mt-4" style={{ fontSize: "clamp(34px, 4.4vw, 48px)" }}>{section.title}</h2>
-              <p className="mx-auto mt-5" style={{ maxWidth: 600, color: "var(--color-text-secondary)", fontSize: "clamp(16px, 1.4vw, 18px)" }}>
+              <h2 className="mt-4" style={{ fontSize: "var(--text-h2-cta)" }}>{section.title}</h2>
+              <p className="mx-auto mt-5 content-max-sm" style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-lg-sm)" }}>
                 {section.description}
               </p>
-              <div style={{ marginTop: 34 }}>
+              <div style={{ marginTop: "var(--space-14)" }}>
                 <a
                   href={section.ctaLink}
                   className="btn btn-primary btn-lg"
                   style={{
-                    fontSize: "clamp(16px, 1.4vw, 17px)",
+                    fontSize: "var(--text-btn-cta)",
                     gap: "10px",
                     padding: "17px 34px",
                     borderRadius: 13,
                   }}
                 >
-                  {section.ctaLabel} <span aria-hidden="true" style={{ fontSize: "clamp(17px, 1.4vw, 18px)" }}>&#8594;</span>
+                  {section.ctaLabel} <span aria-hidden="true" style={{ fontSize: "var(--text-btn-cta-icon)" }}>&#8594;</span>
                 </a>
               </div>
             </div>

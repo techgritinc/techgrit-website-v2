@@ -4,9 +4,9 @@ import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
 export function AboutUsAchievements({ section }: { section: AchievementsSection }) {
   return (
     <section className="section-sm">
-      <div className="tg-container" style={{ maxWidth: 1180 }}>
+      <div className="tg-container-lg">
         <RevealOnScroll>
-          <div className="glass-card" style={{ borderRadius: "var(--radius-4xl)", padding: "44px 40px" }}>
+          <div className="glass-card glass-card-md" style={{ borderRadius: "var(--radius-4xl)" }}>
             <div className="grid grid-cols-2 gap-5 text-center sm:grid-cols-4">
               {section.stats.map((stat, index) => (
                 <div key={index}>

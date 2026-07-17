@@ -5,7 +5,7 @@ import { AboutUsShowcase } from "./_components/about-us-showcase";
 import { AboutUsWhoYouAre } from "./_components/about-us-who-you-are";
 import { AboutUsOurRole } from "./_components/about-us-our-role";
 import { AboutUsValues } from "./_components/about-us-values";
-import { AboutUsProcess } from "./_components/about-us-process";
+import { AboutHowWeWork } from "./_components/about-how-we-work";
 import { AboutUsAchievements } from "./_components/about-us-achievements";
 import { AboutUsPartner } from "./_components/about-us-partner";
 import { AboutUsCultureGallery } from "./_components/about-us-culture-gallery";
@@ -32,7 +32,7 @@ export default function AboutPage() {
           case "values":
             return <AboutUsValues key={section.order} section={section} />;
           case "process":
-            return <AboutUsProcess key={section.order} section={section} />;
+            return <AboutHowWeWork key={section.order} section={section} />;
           case "achievements":
             return <AboutUsAchievements key={section.order} section={section} />;
           case "partner":

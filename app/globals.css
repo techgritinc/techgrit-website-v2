@@ -229,12 +229,32 @@ button:focus-visible,
     padding-inline: var(--container-padding);
   }
 
+  .tg-container-lg {
+    width: 100%;
+    max-width: var(--container-max-lg);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
+  .tg-container-md {
+    width: 100%;
+    max-width: var(--container-max-md);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
   .tg-container-sm {
     width: 100%;
     max-width: var(--container-max-sm);
     margin-inline: auto;
     padding-inline: var(--container-padding);
   }
+
+  /* Centered content/copy widths — see tokens.css --content-max-* */
+  .content-max-xl { max-width: var(--content-max-xl); }
+  .content-max-lg { max-width: var(--content-max-lg); }
+  .content-max-md { max-width: var(--content-max-md); }
+  .content-max-sm { max-width: var(--content-max-sm); }
 
   /* ----------------------------------------------------------
  * Section padding
@@ -249,6 +269,13 @@ button:focus-visible,
 
   .section-lg {
     padding-block: var(--space-section-lg);
+  }
+
+  /* Final CTA section — asymmetric top/bottom padding (extra bottom
+   * breathing room before the footer). Usage: About page Final CTA. */
+  .section-cta {
+    padding-top: var(--space-22);
+    padding-bottom: var(--space-24);
   }
 
   /* ----------------------------------------------------------
@@ -414,6 +441,18 @@ button:focus-visible,
     -webkit-backdrop-filter: blur(var(--blur-lg));
     box-shadow: var(--shadow-glass);
     padding: 38px 44px;
+  }
+
+  /* Glass-card padding variants
+   * Usage: <div class="glass-card glass-card-md">…</div>  ← Achievements stats panel
+   *        <div class="glass-card glass-card-lg">…</div>  ← Final CTA panel
+   */
+  .glass-card-md {
+    padding: var(--space-17) var(--space-22); /* 44px 40px */
+  }
+
+  .glass-card-lg {
+    padding: var(--space-23) var(--space-22); /* 76px 40px */
   }
 
   /* ----------------------------------------------------------
