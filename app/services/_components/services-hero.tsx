@@ -68,13 +68,17 @@ export function ServicesHero({ section }: { section: HeroSection }) {
           className="flex flex-wrap items-center justify-center"
           style={{ animationDelay: ".3s", marginTop: "var(--space-15)", gap: 15 }}
         >
-          <a href={section.primaryCtaHref} className="btn btn-primary btn-lg" style={{ gap: 9 }}>
+          <a
+            href={section.primaryCtaHref}
+            className="btn btn-primary btn-lg"
+            style={{ gap: 9, fontSize: 16, padding: "var(--space-6) var(--space-12)" }}
+          >
             {section.primaryCtaLabel} <span aria-hidden="true">&#8594;</span>
           </a>
           <a
             href={section.secondaryCtaHref}
             className="btn btn-ghost btn-ghost--static-border btn-lg"
-            style={{ gap: 9, padding: "var(--space-6) var(--space-11)" }}
+            style={{ gap: 9, fontSize: 16, padding: "var(--space-6) var(--space-11)" }}
           >
             {section.secondaryCtaLabel}
           </a>
