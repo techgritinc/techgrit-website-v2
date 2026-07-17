@@ -107,6 +107,7 @@
   --text-lg:    clamp(16px, 1.4vw, 18.5px); /* Lead / hero body */
   --text-lg-sm: clamp(16px, 1.4vw, 18px);   /* Lead / hero body — narrower variant */
   --text-base:  17px;                        /* Body default */
+  --text-md-lg: 16.5px;                      /* Partner section description */
   --text-md:    16px;                        /* Closing statement / emphasis line */
   --text-sm:    15px;                        /* Secondary body, nav links */
   --text-xs:    14px;                        /* Captions, card meta */
@@ -177,6 +178,8 @@
   --space-24: 110px;   /* Final CTA section bottom padding */
   --space-25:  50px;   /* Heading block bottom margin (Process, Values) */
   --space-26:  32px;   /* Who You Are quote block padding */
+  --space-27:  70px;   /* Hero content block bottom padding */
+  --space-28:  96px;   /* Hero content block top padding */
   --space-section-sm:  50px;  /* Section vertical padding (small) */
   --space-section-md: 60px;   /* Section vertical padding (medium) */
   --space-section-lg: 108px;  /* Section vertical padding (large) */

@@ -5,7 +5,7 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
 
   return (
     <section>
-      <div className="mx-auto text-center content-max-xl" style={{ padding: "96px 36px 70px" }}>
+      <div className="mx-auto text-center content-max-xl" style={{ padding: "var(--space-28) var(--space-15) var(--space-27)" }}>
         <div
           data-rise
           className="inline-flex items-center"
@@ -47,8 +47,8 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
           className="mx-auto content-max-md"
           style={{
             animationDelay: ".2s",
-            marginTop: 26,
-            fontSize: 18.5,
+            marginTop: "var(--space-11)",
+            fontSize: "var(--text-lg)",
             lineHeight: 1.65,
             color: "var(--color-text-secondary)",
           }}
@@ -58,7 +58,7 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
         <div
           data-rise
           className="flex flex-wrap items-center justify-center"
-          style={{ animationDelay: ".3s", marginTop: 36, gap: 15 }}
+          style={{ animationDelay: ".3s", marginTop: "var(--space-15)", gap: 15 }}
         >
           <a
             href={section.primaryCtaLink}

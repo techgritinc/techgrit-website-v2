@@ -11,7 +11,7 @@ export function AboutUsPartner({ section }: { section: PartnerSection }) {
             <div>
               <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
               <h2 style={{ fontSize: "var(--text-h2-sub-sm)", lineHeight: 1.1 }}>{section.title}</h2>
-              <p className="mt-5" style={{ color: "var(--color-text-muted)", fontSize: "16.5px", lineHeight: 1.7 }}>
+              <p className="mt-5" style={{ color: "var(--color-text-muted)", fontSize: "var(--text-md-lg)", lineHeight: 1.7 }}>
                 {section.description}
               </p>
             </div>
