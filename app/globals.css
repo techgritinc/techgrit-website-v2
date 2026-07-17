@@ -911,6 +911,16 @@ button:focus-visible,
       font-size: var(--text-sm);
       padding: 14px 22px;
     }
+
+    /* Final CTA button — its font-size/padding are set inline (always beat
+     * any class rule), so only non-inline properties can fix it here: cap
+     * its width to the card and let the label wrap instead of being clipped. */
+    .section-cta .btn-lg {
+      max-width: 100%;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.3;
+    }
   }
 
   /* ----------------------------------------------------------
