@@ -17,7 +17,7 @@ const HOVER_BORDER: Record<ServiceAccent, string> = {
 export function ServicesOverview({ section }: { section: OverviewSection }) {
   return (
     <section>
-      <div className="tg-container" style={{ paddingTop: 20, paddingBottom: 70 }}>
+      <div className="tg-container" style={{ paddingTop: 20, paddingBottom: 70, paddingInline: 36 }}>
         <RevealOnScroll>
           <div className="grid grid-cols-1 gap-6 min-[921px]:grid-cols-3">
             {section.cards.map((card) => (

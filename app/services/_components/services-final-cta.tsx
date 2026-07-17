@@ -4,11 +4,11 @@ import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
 export function ServicesFinalCta({ section }: { section: FinalCtaSection }) {
   return (
     <section>
-      <div className="tg-container" style={{ maxWidth: 1180, paddingTop: 40, paddingBottom: 110 }}>
+      <div className="tg-container" style={{ maxWidth: 1180, paddingTop: 40, paddingBottom: 110, paddingInline: 36 }}>
         <RevealOnScroll>
           <div
             className="glass-card mx-auto text-center"
-            style={{ padding: "76px 40px", position: "relative", overflow: "hidden" }}
+            style={{ padding: "76px 40px", borderRadius: 28, position: "relative", overflow: "hidden" }}
           >
             <div
               aria-hidden="true"

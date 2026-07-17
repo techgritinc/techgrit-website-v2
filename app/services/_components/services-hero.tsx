@@ -73,7 +73,7 @@ export function ServicesHero({ section }: { section: HeroSection }) {
           </a>
           <a
             href={section.secondaryCtaHref}
-            className="btn btn-ghost btn-lg"
+            className="btn btn-ghost btn-ghost--static-border btn-lg"
             style={{ gap: 9, padding: "16px 26px" }}
           >
             {section.secondaryCtaLabel}
