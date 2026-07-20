@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Button from "@/components/ui/Button";
 import { ChevronIcon, HamburgerIcon } from "@/components/ui/icons";
 import { NAV_CTA, NAV_ITEMS, type NavItem } from "./nav-config";
 
@@ -18,7 +19,7 @@ function isItemActive(item: NavItem, pathname: string): boolean {
 }
 
 const NAV_LINK_BASE =
-  "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-3.5 py-[9px] text-sm font-semibold text-nav transition-colors hover:bg-glass hover:text-primary aria-expanded:bg-glass aria-expanded:text-primary";
+  "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-3.5 py-[9px] text-sm font-semibold text-nav leading-[normal] transition-colors hover:bg-nav-hover hover:text-white aria-expanded:bg-nav-hover aria-expanded:text-white";
 
 export default function Header() {
   const pathname = usePathname();
@@ -66,7 +67,7 @@ export default function Header() {
     };
   }, [openDropdown]);
 
-  
+
   const scrolledAttr = isHome && scrolled ? "true" : "false";
 
   const headerClasses = isHome
@@ -75,23 +76,20 @@ export default function Header() {
 
   const innerClasses = isHome
     ? "h-nav transition-[height] duration-300 ease-out data-[scrolled=true]:h-[70px]"
-    : "h-nav";
+    : "h-[78px]";
 
   return (
-    <header className={headerClasses} data-scrolled={scrolledAttr}>
+    <header className={`${headerClasses} leading-[normal]`} data-scrolled={scrolledAttr}>
       <div
         ref={navRef}
         data-scrolled={scrolledAttr}
         className={`mx-auto flex max-w-(--container-max) items-center justify-between gap-6 px-9 ${innerClasses}`}
       >
-        <Link href="/" aria-label="TechGrit home" onClick={closeMenus} className="flex shrink-0 items-center">
-          <Image
+        <Link href="/" aria-label="TechGrit home" onClick={closeMenus} className="flex shrink-0 items-center gap-[12px]">
+          <img
             src="/logos/techgrit-logo-white.png"
             alt="TechGrit"
-            height={34}
-            width={114}
-            priority
-            className="h-[32px] w-auto"
+            style={{ height: isHome ? '34px' : '32px', width: 'auto', display: 'block' }}
           />
         </Link>
 
@@ -104,7 +102,7 @@ export default function Header() {
                 <div className="relative" key={item.label}>
                   <button
                     type="button"
-                    className={[NAV_LINK_BASE, active && "bg-glass text-primary"].filter(Boolean).join(" ")}
+                    className={[NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ")}
                     aria-haspopup="menu"
                     aria-expanded={isOpen}
                     onClick={() => setOpenDropdown(isOpen ? null : item.label)}
@@ -144,7 +142,7 @@ export default function Header() {
                 key={item.label}
                 href={item.href ?? "#"}
                 onClick={closeMenus}
-                className={[NAV_LINK_BASE, active && "bg-glass text-primary"].filter(Boolean).join(" ")}
+                className={[NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ")}
               >
                 {item.label}
               </Link>
@@ -152,22 +150,20 @@ export default function Header() {
           })}
         </nav>
 
-        <Link
-          href={cta.href}
-          onClick={closeMenus}
-          className="hidden items-center gap-2 whitespace-nowrap rounded-[11px] bg-[image:var(--gradient-brand)] px-[22px] py-[12px] text-[15px] font-bold text-white shadow-nav-btn transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_14px_32px_-8px_rgba(232,119,34,0.9)] tg-lg:inline-flex"
-        >
-          {cta.label} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
-        </Link>
+        <div className="hidden tg-lg:block">
+          <Button href={cta.href} size="nav" onClick={closeMenus}>
+            {cta.label} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
+          </Button>
+        </div>
 
         <button
           type="button"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((open) => !open)}
-          className="flex cursor-pointer items-center justify-center p-2 text-primary tg-lg:hidden"
+          className="flex cursor-pointer items-center justify-center p-2 text-white tg-lg:hidden"
         >
-          <HamburgerIcon />
+          <HamburgerIcon className="h-[26px] w-[26px]" />
         </button>
       </div>
 
@@ -179,7 +175,7 @@ export default function Header() {
           if (item.children) {
             return (
               <div key={item.label}>
-                <div className="border-t border-border-subtle px-9 pt-3.5 pb-2 text-[12.5px] font-bold tracking-[0.12em] text-ghost uppercase">
+                <div className="border-t border-border-subtle px-9 pt-3.5 pb-2 text-[12px] font-bold tracking-[0.12em] text-[rgba(255,255,255,0.4)] uppercase">
                   {item.label}
                 </div>
                 <div>
@@ -189,8 +185,8 @@ export default function Header() {
                       href={child.href}
                       onClick={closeMenus}
                       className={[
-                        "block py-2.5 pr-9 pl-13 text-[14.5px] font-semibold text-muted",
-                        child.href === pathname && "text-primary",
+                        "block py-2.5 pr-9 pl-13 text-[14.5px] font-semibold text-[rgba(255,255,255,0.62)] hover:text-white transition-colors",
+                        child.href === pathname && "text-white",
                       ]
                         .filter(Boolean)
                         .join(" ")}
@@ -208,8 +204,8 @@ export default function Header() {
               href={item.href ?? "#"}
               onClick={closeMenus}
               className={[
-                "block border-t border-border-subtle px-9 py-3.5 text-sm font-semibold text-secondary",
-                item.href === pathname && "text-primary",
+                "block border-t border-border-subtle px-9 py-3.5 text-[16px] font-semibold text-[rgba(255,255,255,0.85)]",
+                item.href === pathname && "text-white",
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -221,7 +217,7 @@ export default function Header() {
         <Link
           href={cta.href}
           onClick={closeMenus}
-          className="block border-t border-border-subtle px-9 py-4 text-sm font-bold text-orange"
+          className="block border-t border-border-subtle px-9 py-4 text-[16px] font-bold text-orange"
         >
           {cta.label} <span aria-hidden="true">&rarr;</span>
         </Link>

@@ -36,24 +36,24 @@ export default function SubscribeBand() {
   }
 
   return (
-    <section id="webinars" className="relative border-t border-border-subtle bg-[rgba(255,255,255,0.015)]">
+    <section id="webinars" className="relative z-overlay scroll-mt-[90px] border-t border-border-subtle bg-[rgba(255,255,255,0.015)]">
       <div className="mx-auto max-w-[1020px] px-9 py-[88px]">
-        <div className="glass-card">
-          <div className="grid grid-cols-[1fr_auto] items-center gap-9 max-tg-md:grid-cols-1">
+        <div className="glass-card px-11 py-[38px]">
+          <div className="grid grid-cols-[1fr_auto] items-center gap-9 max-tg-md:grid-cols-1 max-tg-md:gap-11">
             <div>
               <h3 className="text-[25px] leading-[1.2]">Stay ahead of the legacy.</h3>
-              <p className="mt-2 text-base text-muted">
+              <p className="mt-2 text-[16px] leading-[1.5] text-muted">
                 Subscribe for exclusive access to our upcoming AI-first webinars and podcasts.
               </p>
             </div>
 
             {status === "success" ? (
-              <div className="min-w-[300px] rounded-card border border-teal bg-[rgba(15,118,110,0.18)] px-8 py-5 text-center">
+              <div className="min-w-[300px] rounded-card border border-teal bg-[rgba(15,118,110,0.18)] px-[30px] py-5 text-center">
                 <div className="text-2xl text-green">&#10003;</div>
-                <div className="mt-1 text-base font-bold text-primary">Thanks for submitting!</div>
+                <div className="mt-1 text-[16px] leading-[normal] font-bold text-primary">Thanks for submitting!</div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate className="flex flex-wrap items-start gap-2.5">
+              <form onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-2.5">
                 <FormField label="Name" name="name" type="text" placeholder="Name" containerClassName="w-[150px]" />
                 <FormField
                   label="Business Email"
@@ -62,8 +62,11 @@ export default function SubscribeBand() {
                   placeholder="Business Email"
                   containerClassName="w-[180px]"
                 />
-                <Button type="submit">
-                  Submit <span aria-hidden="true">&rarr;</span>
+                <Button
+                  type="submit"
+                  className="!px-[24px] !py-3 gap-[7px] rounded-[10px] leading-[normal] shadow-nav-btn hover:shadow-nav-btn active:shadow-nav-btn"
+                >
+                  Submit <span aria-hidden="true" className="inline-block leading-none">&rarr;</span>
                 </Button>
               </form>
             )}

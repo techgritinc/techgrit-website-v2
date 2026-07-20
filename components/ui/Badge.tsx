@@ -8,7 +8,7 @@ type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
 };
 
 const BASE =
-  "inline-flex items-center gap-1.5 rounded-full px-[11px] py-[5px] text-[12.5px] font-extrabold tracking-wider uppercase";
+  "inline-flex items-center gap-1.5 rounded-full px-[11px] py-[5px] text-[10.5px] font-extrabold tracking-wider uppercase";
 
 const TONE_CLASSES: Record<BadgeTone, string> = {
   orange: "bg-[image:var(--gradient-brand)] text-badge-text",

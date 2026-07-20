@@ -16,13 +16,13 @@ export default function LifeGallery() {
             <span aria-hidden="true" className="h-[2px] w-6 bg-orange" />
             <span className="text-[12.5px] font-bold tracking-widest text-orange uppercase">Inside TechGrit</span>
           </div>
-          <h2 className="text-[clamp(30px,3.6vw,42px)] leading-[1.1]">Life at TechGrit.</h2>
-          <p className="mx-auto mt-4 text-lg leading-[1.6] text-muted">
+          <h2 className="font-display text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">Life at TechGrit.</h2>
+          <p className="mx-auto mt-4 text-[17px] leading-[1.6] text-muted">
             The people and the culture behind the engineering.
           </p>
         </div>
 
-        <div className="grid grid-cols-[1.4fr_1fr_1fr] grid-rows-[repeat(2,200px)] gap-4.5 max-tg-md:grid-cols-2">
+        <div className="grid auto-rows-[200px] grid-cols-[1.4fr_1fr_1fr] gap-[18px] max-tg-md:auto-rows-[170px] max-tg-md:grid-cols-2">
           {CULTURE_GALLERY_IMAGES.map((item) => (
             <div key={item.image?.src ?? item.span} className={`relative overflow-hidden rounded-xl ${SPAN_CLASSES[item.span]}`}>
               <MediaSlot

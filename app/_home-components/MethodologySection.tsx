@@ -74,11 +74,12 @@ export default function MethodologySection() {
       <div ref={trackRef} className="relative" style={{ height: "420vh" }}>
         <div
           ref={stageRef}
-          className="absolute inset-x-0 top-0 flex min-h-screen flex-col items-center justify-center overflow-hidden px-9 py-10"
+          className="flex min-h-screen flex-col items-center justify-center overflow-hidden px-tg-15 py-tg-16a"
+          style={{ position: "absolute", top: 0, left: 0, right: 0 }}
         >
           <div className="mx-auto w-full max-w-[1100px]">
             <div className="mb-3.5 text-center">
-              <span className="inline-flex items-center gap-2.5 text-[12.5px] font-bold tracking-widest text-orange uppercase">
+              <span className="inline-flex items-center gap-[9px] text-[12.5px] font-bold tracking-[0.16em] text-orange uppercase">
                 <span aria-hidden="true" className="h-[2px] w-6 bg-orange" />
                 How we deliver
               </span>
@@ -102,9 +103,10 @@ export default function MethodologySection() {
                   clipPath: `inset(0 ${100 - railFillPercent}% 0 0)`,
                 }}
               />
-              <div className="relative grid grid-cols-4 gap-[18px] max-tg-sm:gap-[7px]">
+              <div className="relative grid grid-cols-4 gap-tg-7 max-tg-sm:gap-tg-1b">
                 {METHODOLOGY_PHASES.map((phase, index) => {
                   const isActive = index === activeIndex;
+                  const isTodo = index > activeIndex;
                   return (
                     <button
                       key={phase.n}
@@ -113,9 +115,28 @@ export default function MethodologySection() {
                       aria-current={isActive}
                       className="flex cursor-pointer flex-col items-center border-none bg-transparent p-0 text-center"
                     >
-                      <div className={`font-display text-lg font-bold ${isActive ? "text-orange" : "text-faint"}`}>{phase.n}</div>
-                      <div className={`mt-1 text-sm font-bold ${isActive ? "text-primary" : "text-muted"}`}>{phase.title}</div>
-                      <div className="mt-0.5 text-xs text-faint">{phase.week}</div>
+                      <div
+                        className={`flex h-[58px] w-[58px] items-center justify-center rounded-full border font-display text-[22px] font-bold transition-all duration-300 ${
+                          isTodo ? "border-border-18 bg-glass-strong text-text-70" : "border-border-30 text-primary"
+                        } ${isActive ? "scale-[1.08] shadow-phase-active" : "scale-100 shadow-phase-ring"}`}
+                        style={isTodo ? undefined : { background: "var(--gradient-phase-node)" }}
+                      >
+                        {phase.n}
+                      </div>
+                      <div 
+                        style={{ fontFamily: "Arial, sans-serif" }}
+                        className={`mt-tg-5a text-sm font-bold transition-colors duration-300 ${isActive ? "text-primary" : "text-text-60"}`}
+                      >
+                        {phase.title}
+                      </div>
+                      <div
+                        style={{ fontFamily: "Arial, sans-serif" }}
+                        className={`text-xs-alt font-bold tracking-wider whitespace-nowrap uppercase transition-colors duration-300 ${
+                          isActive ? "text-amber-light" : "text-text-40"
+                        }`}
+                      >
+                        {phase.week}
+                      </div>
                     </button>
                   );
                 })}
@@ -124,31 +145,35 @@ export default function MethodologySection() {
 
             <div
               key={active.n}
-              className="mt-8 grid grid-cols-[1.25fr_0.75fr] overflow-hidden rounded-3xl border border-border bg-[rgba(255,255,255,0.04)] shadow-glass backdrop-blur-md motion-safe:animate-[tgPhaseIn_0.45s_cubic-bezier(.2,.7,.2,1)] max-tg-md:grid-cols-1"
+              className="mt-8 grid grid-cols-[1.25fr_0.75fr] overflow-hidden rounded-3xl border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)] shadow-[0_24px_60px_-30px_rgba(0,0,0,0.6)] backdrop-blur-md motion-safe:animate-[tgPhaseIn_0.45s_cubic-bezier(.2,.7,.2,1)]"
             >
-              <div className="p-11">
-                <div className="text-xs font-bold tracking-wide text-[#F7B733] uppercase">{active.week}</div>
-                <h3 className="mt-2 text-[clamp(26px,3vw,32px)]">{active.title}</h3>
-                <p className="mt-3.5 text-base leading-[1.65] text-secondary">{active.description}</p>
+              <div className="py-tg-16a px-tg-17">
+                <div className="text-12 font-bold tracking-hint text-[#F7B733] uppercase">{active.week}</div>
+                <h3 className="mt-2 text-[clamp(26px,3vw,32px)] font-bold tracking-[-0.02em] text-white">{active.title}</h3>
+                <p className="mt-3.5 text-[16px] leading-[1.65] text-[rgba(255,255,255,0.7)]">{active.description}</p>
                 <div className="mt-6 flex flex-col gap-3">
                   {active.deliverables.map((item) => (
                     <div key={item} className="flex items-center gap-3">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[rgba(232,119,34,0.16)]">
-                        <CheckIcon className="text-[#F7B733]" />
+                        <CheckIcon className="text-[#F7B733]" strokeWidth={3} />
                       </span>
-                      <span className="text-[15px] text-secondary">{item}</span>
+                      <span className="text-[15px] text-[rgba(255,255,255,0.85)]">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="relative flex min-h-[300px] items-center justify-center overflow-hidden border-l border-border-subtle bg-[linear-gradient(150deg,rgba(232,119,34,0.18),rgba(10,24,34,0.15))]">
-                <div className="bg-[image:linear-gradient(160deg,#F7B733,#E87722)] bg-clip-text font-display text-[170px] font-bold text-transparent">
+              <div className="relative flex min-h-[300px] items-center justify-center overflow-hidden border-l border-border-subtle bg-[linear-gradient(150deg,rgba(232,119,34,0.18),rgba(10,24,34,0.15))] max-tg-sm:min-h-[180px]">
+                <div aria-hidden="true" className="absolute h-[240px] w-[240px] rounded-full bg-[rgba(232,119,34,0.22)] blur-[55px]" />
+                <div className="relative z-10 bg-[image:linear-gradient(160deg,#F7B733,#E87722)] bg-clip-text font-display text-[170px] font-bold leading-none text-transparent">
                   {active.n}
                 </div>
-                <div className="absolute right-[26px] bottom-[22px] text-[11.5px] font-bold tracking-wide text-muted uppercase">
+                <div className="absolute right-[26px] bottom-[22px] z-10 text-xs-alt font-bold tracking-[0.18em] text-[rgba(255,255,255,0.4)] uppercase">
                   Phase 0{active.n}
                 </div>
               </div>
+            </div>
+            <div className="mt-tg-7 text-center text-12 font-semibold tracking-hint text-text-32 uppercase">
+              Phase {activeIndex + 1} of {PHASE_COUNT} {"\u2022"} scroll to advance
             </div>
           </div>
         </div>

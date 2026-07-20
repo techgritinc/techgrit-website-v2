@@ -8,7 +8,7 @@ type FormFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "classN
 };
 
 const INPUT_BASE =
-  "w-full rounded-card border bg-glass-strong px-4 py-3.5 text-sm font-medium text-primary outline-none transition-colors placeholder:text-[color:var(--color-text-placeholder)] focus:bg-glass-hover";
+  "w-full rounded-[10px] border bg-glass-strong px-4 py-3.5 text-sm leading-[normal] font-normal text-primary outline-none transition-colors placeholder:!font-light focus:bg-glass-hover";
 
 /** Shared labeled input primitive (FR-015) for the subscribe form. */
 export default function FormField({
@@ -31,7 +31,7 @@ export default function FormField({
         type={type}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
-        className={[INPUT_BASE, error ? "border-error" : "border-border-strong focus:border-orange"].join(" ")}
+        className={[INPUT_BASE, error ? "border-error" : "border-border-strong"].join(" ")}
         {...rest}
       />
       {error && (
