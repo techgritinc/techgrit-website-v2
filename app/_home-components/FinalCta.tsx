@@ -4,10 +4,10 @@ export default function FinalCta() {
   return (
     <section id="contact" className="relative scroll-mt-(--nav-height)">
       <div className="mx-auto max-w-[1180px] px-9 pt-9 pb-27.5">
-        <div className="relative overflow-hidden rounded-[28px] border border-border bg-[rgba(255,255,255,0.04)] px-10 py-20 text-center backdrop-blur-cta">
+        <div className="relative overflow-hidden rounded-[28px] border border-border bg-glass-4 px-10 py-20 text-center backdrop-blur-cta">
           <div
             aria-hidden="true"
-            className="absolute bottom-[-120px] left-1/2 h-[340px] w-[520px] -translate-x-1/2 rounded-full bg-[rgba(232,119,34,0.28)] blur-[90px]"
+            className="absolute bottom-[-120px] left-1/2 h-[340px] w-[520px] -translate-x-1/2 rounded-full bg-overlay-orange-strong blur-glow-lg"
           />
           <div className="relative">
             <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase">See how we help teams win</div>
@@ -30,7 +30,7 @@ export default function FinalCta() {
               </Button>
               <a
                 href="#methodology"
-                className="inline-flex items-center gap-2 border-b border-border-orange-strong pb-[3px] text-[15.5px] font-semibold text-primary"
+                className="inline-flex items-center gap-2 border-b border-border-orange-strong pb-[3px] text-15-5 font-semibold text-primary"
               >
                 Explore how our 6-week framework can accelerate your next big bet{" "}
                 <span aria-hidden="true" className="text-orange">&rarr;</span>

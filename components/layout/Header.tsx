@@ -86,10 +86,13 @@ export default function Header() {
         className={`mx-auto flex max-w-(--container-max) items-center justify-between gap-6 px-9 ${innerClasses}`}
       >
         <Link href="/" aria-label="TechGrit home" onClick={closeMenus} className="flex shrink-0 items-center gap-[12px]">
-          <img
+          <Image
             src="/logos/techgrit-logo-white.png"
             alt="TechGrit"
-            style={{ height: isHome ? '34px' : '32px', width: 'auto', display: 'block' }}
+            width={114}
+            height={34}
+            priority
+            className={isHome ? "h-[34px] w-auto" : "h-[32px] w-auto"}
           />
         </Link>
 

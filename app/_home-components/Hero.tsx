@@ -15,14 +15,14 @@ export default function Hero() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           className="absolute inset-0 h-full w-full object-cover object-[64%_46%]"
         />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,13,0.95)_0%,rgba(5,8,13,0.74)_30%,rgba(5,8,13,0.26)_56%,rgba(5,8,13,0)_80%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,13,0.5)_0%,rgba(5,8,13,0)_20%,rgba(5,8,13,0)_60%,rgba(8,17,26,0.92)_100%)]" />
       </div>
 
-      <div className="relative z-[1] mx-auto flex min-h-[60vh] w-full max-w-(--container-max) items-center px-9 pt-24 pb-10">
+      <div className="relative z-raised mx-auto flex min-h-[60vh] w-full max-w-(--container-max) items-center px-9 pt-24 pb-10">
         <div className="max-w-[700px]">
           <a
             href="https://www.youtube.com/@TechGritInc"
@@ -84,7 +84,7 @@ export default function Hero() {
                     stat.staticValue
                   )}
                 </div>
-                <div className="mt-1 text-[12px] font-bold tracking-stat text-dim uppercase">{stat.label}</div>
+                <div className="mt-1 text-12 font-bold tracking-stat text-dim uppercase">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -93,15 +93,15 @@ export default function Hero() {
 
       <a
         href="#platform"
-        className="opacity-0 [animation-delay:0.6s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 relative z-[1] mx-auto mt-1.5 flex flex-col items-center gap-[7px] text-[10.5px] font-bold tracking-[0.22em] text-dim uppercase"
+        className="opacity-0 [animation-delay:0.6s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 relative z-raised mx-auto mt-1.5 flex flex-col items-center gap-[7px] text-[10.5px] font-bold tracking-[0.22em] text-dim uppercase"
       >
         <span>Scroll</span>
         <ChevronIcon width={20} height={20} className="animate-[tgbounce_1.8s_ease-in-out_infinite] motion-reduce:animate-none" />
       </a>
 
-      <div className="relative z-[1] mx-auto mt-[30px] max-w-[1180px] px-9 pb-9">
+      <div className="relative z-raised mx-auto mt-[30px] max-w-[1180px] px-9 pb-9">
         <div className="border-t border-border-subtle pt-8">
-          <div className="text-center text-[12px] font-bold tracking-[0.2em] text-ghost uppercase">Trusted by our clients</div>
+          <div className="text-center text-12 font-bold tracking-[0.2em] text-ghost uppercase">Trusted by our clients</div>
           <div className="mt-7 flex items-center justify-center gap-3 max-tg-sm:justify-start max-tg-sm:overflow-x-auto max-tg-sm:[scrollbar-width:none] max-tg-sm:[&::-webkit-scrollbar]:hidden">
             {TRUSTED_CLIENT_LOGOS.map((logo) => (
               <div

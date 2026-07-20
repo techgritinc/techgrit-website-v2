@@ -26,11 +26,12 @@ export default function Footer() {
       <div className="relative mx-auto max-w-[var(--container-max)] px-9 pt-[78px] leading-[normal]">
         <div className="leading-[normal] grid grid-cols-[1.9fr_1fr_1fr_1.3fr] gap-12 max-tg-md:grid-cols-[1.4fr_1fr_1fr] max-tg-md:gap-9 max-tg-sm:grid-cols-1">
           <div>
-            <img
+            <Image
               src="/logos/techgrit-logo-white.png"
               alt="TechGrit"
-              className="inline-block align-baseline"
-              style={{ height: '32px', width: 'auto' }}
+              width={107}
+              height={32}
+              className="inline-block h-8 w-auto align-baseline"
             />
             <p className="mt-5 max-w-[310px] text-[15px] leading-[1.65] text-[rgba(255,255,255,0.6)]">
               The AI-First Software Engine. OrbitAI orchestrates production-grade software for mid-market enterprises, from vision to scale in weeks, not years.

@@ -145,29 +145,29 @@ export default function MethodologySection() {
 
             <div
               key={active.n}
-              className="mt-8 grid grid-cols-[1.25fr_0.75fr] overflow-hidden rounded-3xl border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)] shadow-[0_24px_60px_-30px_rgba(0,0,0,0.6)] backdrop-blur-md motion-safe:animate-[tgPhaseIn_0.45s_cubic-bezier(.2,.7,.2,1)]"
+              className="mt-8 grid grid-cols-[1.25fr_0.75fr] overflow-hidden rounded-3xl border border-[rgba(255,255,255,0.1)] bg-glass-4 shadow-glass backdrop-blur-md motion-safe:animate-[tgPhaseIn_0.45s_cubic-bezier(.2,.7,.2,1)]"
             >
               <div className="py-tg-16a px-tg-17">
-                <div className="text-12 font-bold tracking-hint text-[#F7B733] uppercase">{active.week}</div>
+                <div className="text-12 font-bold tracking-hint text-amber-light uppercase">{active.week}</div>
                 <h3 className="mt-2 text-[clamp(26px,3vw,32px)] font-bold tracking-[-0.02em] text-white">{active.title}</h3>
-                <p className="mt-3.5 text-[16px] leading-[1.65] text-[rgba(255,255,255,0.7)]">{active.description}</p>
+                <p className="mt-3.5 text-[16px] leading-[1.65] text-text-70">{active.description}</p>
                 <div className="mt-6 flex flex-col gap-3">
                   {active.deliverables.map((item) => (
                     <div key={item} className="flex items-center gap-3">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[rgba(232,119,34,0.16)]">
-                        <CheckIcon className="text-[#F7B733]" strokeWidth={3} />
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-overlay-orange">
+                        <CheckIcon className="text-amber-light" strokeWidth={3} />
                       </span>
-                      <span className="text-[15px] text-[rgba(255,255,255,0.85)]">{item}</span>
+                      <span className="text-[15px] text-text-85">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="relative flex min-h-[300px] items-center justify-center overflow-hidden border-l border-border-subtle bg-[linear-gradient(150deg,rgba(232,119,34,0.18),rgba(10,24,34,0.15))] max-tg-sm:min-h-[180px]">
-                <div aria-hidden="true" className="absolute h-[240px] w-[240px] rounded-full bg-[rgba(232,119,34,0.22)] blur-[55px]" />
-                <div className="relative z-10 bg-[image:linear-gradient(160deg,#F7B733,#E87722)] bg-clip-text font-display text-[170px] font-bold leading-none text-transparent">
+                <div aria-hidden="true" className="absolute h-[240px] w-[240px] rounded-full bg-overlay-orange-22 blur-glow" />
+                <div className="relative z-10 bg-[image:linear-gradient(160deg,var(--color-amber-light),var(--color-orange))] bg-clip-text font-display text-[170px] font-bold leading-none text-transparent">
                   {active.n}
                 </div>
-                <div className="absolute right-[26px] bottom-[22px] z-10 text-xs-alt font-bold tracking-[0.18em] text-[rgba(255,255,255,0.4)] uppercase">
+                <div className="absolute right-[26px] bottom-[22px] z-10 text-xs-alt font-bold tracking-[0.18em] text-text-40 uppercase">
                   Phase 0{active.n}
                 </div>
               </div>

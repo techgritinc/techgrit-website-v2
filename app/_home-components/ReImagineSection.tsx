@@ -7,17 +7,17 @@ import { COMPARISON_METRICS, DIFFERENTIATORS } from "./home-data";
 
 const DIFFERENTIATOR_TONE = {
   orange: {
-    iconBg: "bg-[rgba(232,119,34,0.15)]",
+    iconBg: "bg-overlay-orange",
     iconColor: "text-orange",
     hoverBorder: "",
   },
   blue: {
-    iconBg: "bg-[rgba(2,132,199,0.16)]",
+    iconBg: "bg-icon-bg-blue",
     iconColor: "text-blue-light",
     hoverBorder: "",
   },
   teal: {
-    iconBg: "bg-[rgba(15,118,110,0.2)]",
+    iconBg: "bg-icon-bg-teal",
     iconColor: "text-teal-light",
     hoverBorder: "",
   },
@@ -76,10 +76,10 @@ export default function ReImagineSection() {
 
         <div
           ref={panelRef}
-          className="mt-6 grid grid-cols-[0.8fr_1.2fr] items-center gap-12 rounded-[20px] border border-border bg-[rgba(255,255,255,0.04)] py-tg-16a px-tg-17 backdrop-blur-md max-tg-md:grid-cols-1"
+          className="mt-6 grid grid-cols-[0.8fr_1.2fr] items-center gap-12 rounded-[20px] border border-border bg-glass-4 py-tg-16a px-tg-17 backdrop-blur-md max-tg-md:grid-cols-1"
         >
           <div className="flex items-start gap-4.5">
-            <div className="flex h-11.5 w-11.5 shrink-0 items-center justify-center rounded-card bg-[rgba(232,119,34,0.15)]">
+            <div className="flex h-11.5 w-11.5 shrink-0 items-center justify-center rounded-card bg-overlay-orange">
               <LightningIcon className="text-orange" />
             </div>
             <div>
@@ -99,9 +99,9 @@ export default function ReImagineSection() {
                   <span>{metric.label}</span>
                   <span>{metric.displayValue}</span>
                 </div>
-                <div className="h-3.5 rounded-full bg-[rgba(255,255,255,0.1)]">
+                <div className="h-3.5 rounded-full bg-glass-10">
                   <div
-                    className={`h-full rounded-full transition-[width] duration-[1100ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] ${index === 0 ? "bg-[rgba(255,255,255,0.22)]" : "bg-[linear-gradient(90deg,var(--color-amber),var(--color-orange))] shadow-[0_0_18px_rgba(232,119,34,0.6)]"}`}
+                    className={`h-full rounded-full transition-[width] duration-[1100ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] ${index === 0 ? "bg-border-22" : "bg-[linear-gradient(90deg,var(--color-amber),var(--color-orange))] shadow-[0_0_18px_rgba(232,119,34,0.6)]"}`}
                     style={{ width: revealed ? `${metric.barPercent}%` : "0%" }}
                   />
                 </div>

@@ -59,11 +59,15 @@
   --color-text-placeholder: rgba(255, 255, 255, 0.30); /* Form placeholder text */
   --color-text-nav:       rgba(255, 255, 255, 0.80); /* Nav links default */
   --color-text-nav-sub:   rgba(255, 255, 255, 0.82); /* Nav dropdown links */
+  --color-text-85:        rgba(255, 255, 255, 0.85); /* Methodology deliverable list items */
+  --color-text-75:        rgba(255, 255, 255, 0.75); /* Testimonials video-badge label */
   --color-text-70:        rgba(255, 255, 255, 0.70); /* Methodology phase-node text — todo state */
   --color-text-60:        rgba(255, 255, 255, 0.60);
   --color-text-55:        rgba(255, 255, 255, 0.55);
   --color-text-40:        rgba(255, 255, 255, 0.40);
   --color-text-32:        rgba(255, 255, 255, 0.32);
+  --color-text-64:        rgba(255, 255, 255, 0.64); /* Case study card description text */
+  --color-text-13:        rgba(255, 255, 255, 0.13); /* Testimonials video-card initials watermark */
   /* Methodology scroll-hint caption */
 
   /* ----------------------------------------------------------
@@ -90,6 +94,8 @@
   --color-border-image:   rgba(255, 255, 255, 0.10); /* Image card border (Careers) */
   --color-border-18:      rgba(255, 255, 255, 0.18); /* Phase-node border — todo state (Methodology) */
   --color-border-30:      rgba(255, 255, 255, 0.30); /* Phase-node border — done/active state (Methodology) */
+  --color-border-28:      rgba(255, 255, 255, 0.28); /* Testimonials video-badge pill border */
+  --color-border-22:      rgba(255, 255, 255, 0.22); /* Testimonials lightbox close-button border */
 
   --color-glass:          rgba(255, 255, 255, 0.05); /* Glass card fill */
   --color-glass-4:        rgba(255, 255, 255, 0.04); /* Secondary glass fill */
@@ -106,16 +112,21 @@
   --color-overlay-blue:   rgba(2, 132, 199, 0.12);   /* Ambient orb / bg glow */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
   --color-overlay-orange-22: rgba(232, 119, 34, 0.22);/* Methodology numeral ambient glow */
+  --color-icon-bg-blue: rgba(2, 132, 199, 0.16);  /* Icon background tint — blue tone (differentiator/platform agent cards) */
+  --color-icon-bg-teal: rgba(15, 118, 110, 0.20); /* Icon background tint — teal tone (differentiator/platform agent cards) */
 
   /* Specific UI Colors */
   --color-console-bg: rgba(13, 24, 33, 0.72);
   --color-glass-faint: rgba(255, 255, 255, 0.03);
-  --color-glass-4: rgba(255, 255, 255, 0.04);
   --color-glass-8: rgba(255, 255, 255, 0.08);
   --color-border-8: rgba(255, 255, 255, 0.08);
   --color-mac-red: #ff5f57;
   --color-mac-yellow: #febc2e;
   --color-mac-green: #28c840;
+  --color-glass-10:       rgba(255, 255, 255, 0.10); /* Testimonials lightbox close-button fill */
+  --color-badge-ink-45:   rgba(7, 15, 22, 0.45);      /* Testimonials video-badge pill background */
+  --color-white-96:       rgba(255, 255, 255, 0.96);  /* Testimonials play-button circle fill */
+  --color-modal-backdrop: rgba(5, 10, 15, 0.88);      /* Testimonials lightbox modal backdrop */
 
   /* ----------------------------------------------------------
    * 5. GRADIENTS
@@ -123,6 +134,10 @@
   --gradient-brand:      linear-gradient(135deg, #F59E0B, #E87722);
   --gradient-brand-text: linear-gradient(120deg, #F59E0B, #E87722); /* Use with background-clip: text */
   --gradient-phase-node: linear-gradient(140deg, #F7B733, #E87722); /* Methodology phase-node — done/active background */
+  --gradient-testimonial-video:       linear-gradient(150deg, rgba(232, 119, 34, 0.92), rgba(154, 52, 18, 0.96)); /* Testimonials video-card background */
+  --gradient-testimonial-fade:        linear-gradient(180deg, transparent, rgba(7, 15, 22, 0.82)); /* Testimonials video-card bottom fade */
+  --gradient-testimonial-edge:        linear-gradient(90deg, rgba(8, 17, 26, 0) 0%, rgba(8, 17, 26, 0.92) 78%); /* Testimonials carousel right-edge fade */
+  --gradient-testimonial-placeholder: linear-gradient(150deg, rgba(232, 119, 34, 0.2), rgba(10, 24, 34, 0.5)); /* Testimonials lightbox placeholder background */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY
@@ -317,4 +332,5 @@
   --blur-nav:  16px;  /* Sticky nav */
   --blur-header-scrolled: 18px; /* Homepage header once solid on scroll */
   --blur-glow: 55px;  /* Methodology numeral ambient glow */
+  --blur-glow-lg: 90px; /* CTA panel / case study card ambient glow blob */
 }

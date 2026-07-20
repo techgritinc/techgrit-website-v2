@@ -15,7 +15,7 @@ export default function CaseStudiesSection() {
             <h2 className="mt-3.5 font-display text-[44px] font-bold leading-[1.04] tracking-[-0.03em] text-white">Case Studies &amp; Insights.</h2>
           </div>
           <Button href="/case-studies" variant="ghost" size="nav" className="!px-[22px] !py-[13px] !text-[14.5px]">
-            View all case studies <span aria-hidden="true" className="text-[#F7B733]">&rarr;</span>
+            View all case studies <span aria-hidden="true" className="text-amber-light">&rarr;</span>
           </Button>
         </div>
 
@@ -28,11 +28,11 @@ export default function CaseStudiesSection() {
             >
               {/* Blue bg glow (top-left tint and top-right orb) */}
               <div aria-hidden="true" className="absolute inset-0 z-0 opacity-[0.14]" style={{ background: `radial-gradient(circle at top left, ${featured.accentColor}, transparent 75%)` }} />
-              <div aria-hidden="true" className="absolute -top-[20%] -right-[15%] z-0 h-[70%] w-[50%] rounded-full blur-[90px]" style={{ background: featured.accentColor, opacity: 0.16 }} />
+              <div aria-hidden="true" className="absolute -top-[20%] -right-[15%] z-0 h-[70%] w-[50%] rounded-full blur-glow-lg" style={{ background: featured.accentColor, opacity: 0.16 }} />
 
               <div className="relative z-10 flex w-full flex-col justify-center gap-4">
                 <span
-                  className="inline-flex w-fit items-center rounded-[20px] px-[13px] py-[6px] text-[12px] font-bold tracking-[0.1em] uppercase"
+                  className="inline-flex w-fit items-center rounded-[20px] px-[13px] py-[6px] text-12 font-bold tracking-[0.1em] uppercase"
                   style={{
                     color: featured.accentColor,
                     background: `color-mix(in srgb, ${featured.accentColor} 14%, transparent)`,
@@ -48,15 +48,15 @@ export default function CaseStudiesSection() {
                   >
                     {featured.metric}
                   </span>
-                  <span className="pb-3 text-[15px] text-[rgba(255,255,255,0.6)]">{featured.metricLabel}</span>
+                  <span className="pb-3 text-[15px] text-text-60">{featured.metricLabel}</span>
                 </div>
                 <h3 className="mt-1.5 font-display text-[clamp(23px,2.5vw,28px)] font-bold leading-[1.2] tracking-[-0.02em] text-white">
                   {featured.title}
                 </h3>
                 {featured.description && (
-                  <p className="max-w-[460px] text-[15.5px] leading-[1.6] text-[rgba(255,255,255,0.64)]">{featured.description}</p>
+                  <p className="max-w-[460px] text-15-5 leading-[1.6] text-text-64">{featured.description}</p>
                 )}
-                <span className="mt-1.5 inline-flex items-center gap-2 text-[15px] font-bold text-[#F7B733]">
+                <span className="mt-1.5 inline-flex items-center gap-2 text-[15px] font-bold text-amber-light">
                   Read case study <span aria-hidden="true" className="text-[17px]">&rarr;</span>
                 </span>
               </div>
@@ -80,16 +80,16 @@ export default function CaseStudiesSection() {
                           boxShadow: `0 0 8px ${study.accentColor}`
                         }}
                       />
-                      <span className="text-[11.5px] font-bold leading-[normal] tracking-[0.1em] text-[rgba(255,255,255,0.55)] uppercase">{study.industry}</span>
+                      <span className="text-xs-alt font-bold leading-[normal] tracking-[0.1em] text-text-55 uppercase">{study.industry}</span>
                     </span>
-                    <span className="shrink-0 text-[18px] leading-[normal] text-[#F7B733] transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+                    <span className="shrink-0 text-[18px] leading-[normal] text-amber-light transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
                   </div>
                   <h3 className="font-display text-[16.5px] font-bold leading-[1.6] tracking-normal text-white">{study.title}</h3>
                   <div className="flex items-baseline gap-[9px]">
                     <span className="font-display text-[22px] font-bold leading-none tracking-[-0.01em]" style={{ color: study.accentColor }}>
                       {study.metric}
                     </span>
-                    <span className="text-[13px] leading-[normal] text-[rgba(255,255,255,0.5)]">{study.metricLabel}</span>
+                    <span className="text-[13px] leading-[normal] text-dim">{study.metricLabel}</span>
                   </div>
                 </GlassCard>
               </a>
