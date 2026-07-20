@@ -468,6 +468,11 @@ button:focus-visible,
     border-color: var(--color-orange);
   }
 
+  /* Services page only: keep the ghost CTA border static on hover */
+  .btn-ghost.btn-ghost--static-border:hover {
+    border-color: var(--color-border-strong);
+  }
+
   /* Outline — border only, no fill */
   .btn-outline {
     background: transparent;
