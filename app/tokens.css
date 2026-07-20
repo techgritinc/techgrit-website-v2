@@ -48,9 +48,11 @@
    * 2. TEXT COLORS  (dark-surface defaults)
    * ---------------------------------------------------------- */
   --color-text-primary:   rgba(255, 255, 255, 1.00); /* Headings, strong UI text */
+  --color-text-strong:    rgba(255, 255, 255, 0.92); /* Hero eyebrow/badge label text */
   --color-text-secondary: rgba(255, 255, 255, 0.72); /* Body paragraph text */
   --color-text-muted:     rgba(255, 255, 255, 0.62); /* Supporting copy */
   --color-text-faint:     rgba(255, 255, 255, 0.58); /* Icon captions, sub-labels */
+  --color-text-dim:       rgba(255, 255, 255, 0.50); /* Muted small-caps section labels */
   --color-text-ghost:     rgba(255, 255, 255, 0.42); /* Section labels, eyebrow text */
   --color-text-placeholder: rgba(255, 255, 255, 0.40); /* Form placeholder text */
   --color-text-nav:       rgba(255, 255, 255, 0.80); /* Nav links default */
@@ -73,6 +75,9 @@
   --color-border-strong:  rgba(255, 255, 255, 0.16); /* Button ghost border */
   --color-border-orange:  rgba(232, 119, 34, 0.38);  /* Orange-tinted border (hero badge) */
   --color-border-orange-strong: rgba(232, 119, 34, 0.60); /* Input focus border */
+  --color-border-orange-medium: rgba(232, 119, 34, 0.50); /* Card hover border (orange accent, softer) */
+  --color-border-blue-strong: rgba(2, 132, 199, 0.60);   /* Card hover border (blue accent) */
+  --color-border-teal-strong: rgba(15, 118, 110, 0.70);  /* Card hover border (teal accent) */
   --color-border-image:   rgba(255, 255, 255, 0.10); /* Image card border (Careers) */
 
   --color-glass:          rgba(255, 255, 255, 0.05); /* Glass card fill */
@@ -84,6 +89,7 @@
   --color-header-scrolled-bg:     rgba(8, 16, 24, 0.86);   /* Homepage header once solid on scroll */
   --color-border-header-scrolled: rgba(255, 255, 255, 0.08); /* Homepage header border once scrolled */
   --color-overlay-orange: rgba(232, 119, 34, 0.16);  /* Ambient orb / bg glow */
+  --color-overlay-orange-strong: rgba(232, 119, 34, 0.28); /* CTA panel glow blob */
   --color-overlay-blue:   rgba(2, 132, 199, 0.12);   /* Ambient orb / bg glow */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
 
@@ -214,6 +220,7 @@
   --shadow-glow-teal:     0  0  16px  3px rgba(45,  212, 191, 0.70);   /* Teal orbit dot */
   --shadow-glow-amber:    0  0  16px  3px rgba(251, 191, 36,  0.75);   /* Amber orbit dot */
   --shadow-orange-border: 0  0  0    1px rgba(232, 119, 34, 0.40);     /* Card orange outline on hover */
+  --shadow-image-lift:    0 30px 70px -30px rgba(0, 0, 0, 0.80);       /* Detail-section image drop shadow */
 
   /* ----------------------------------------------------------
    * 11. TRANSITIONS
