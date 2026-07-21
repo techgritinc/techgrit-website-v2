@@ -22,8 +22,10 @@
   --color-amber-light:   var(--color-amber-light);
   --color-blue:          var(--color-blue);
   --color-blue-light:    var(--color-blue-light);
+  --color-blue-bright:   var(--color-blue-bright);
   --color-teal:          var(--color-teal);
   --color-teal-light:    var(--color-teal-light);
+  --color-teal-bright:   var(--color-teal-bright);
   --color-green:         var(--color-green);
 
   --color-surface-white: var(--color-surface-white);
@@ -76,7 +78,9 @@
   --color-border: var(--color-border);
   --color-border-subtle: var(--color-border-subtle);
   --color-border-strong: var(--color-border-strong);
-  
+  --color-border-18: var(--color-border-18);
+  --color-border-30: var(--color-border-30);
+
   --color-nav: var(--color-text-nav);
   --color-nav-sub: var(--color-text-nav-sub);
   --color-primary: var(--color-text-primary);
@@ -84,11 +88,14 @@
   --color-muted: var(--color-text-muted);
   --color-ghost: var(--color-text-ghost);
   --color-glass: var(--color-glass);
+  --color-nav-hover: var(--color-nav-hover);
   --color-overlay-orange: var(--color-overlay-orange);
+  --color-overlay-orange-22: var(--color-overlay-orange-22);
 
   --shadow-dropdown: var(--shadow-dropdown);
   --shadow-header-scrolled: var(--shadow-header-scrolled);
   --shadow-nav-btn: var(--shadow-nav-btn);
+  --shadow-nav-btn-hover: var(--shadow-nav-btn-hover);
 
   --blur-nav: var(--blur-nav);
   --blur-header-scrolled: var(--blur-header-scrolled);
@@ -106,6 +113,161 @@
   --breakpoint-tg-md: 960px;
   --breakpoint-tg-sm: 560px;
 
+  /* Homepage (components/ui/, components/home/) — same approach as Header/
+   * Footer above: only tokens actually consumed by this feature's Tailwind-
+   * first components are mapped here. Pre-existing .btn/.card/.badge/.field
+   * classes above are unaffected and unused by this feature's new work. */
+  --color-glass-strong: var(--color-glass-strong);
+  --color-glass-hover: var(--color-glass-hover);
+  --color-border-orange: var(--color-border-orange);
+  --color-border-orange-strong: var(--color-border-orange-strong);
+  --color-border-orange-hover: var(--color-border-orange-hover);
+  --color-error: var(--color-error);
+  --color-badge-text: var(--color-badge-text);
+  --color-ink-card: var(--color-ink-card);
+  --color-yellow: var(--color-yellow);
+  --color-text-placeholder: var(--color-text-placeholder);
+  /* Renamed (drop the redundant "text-" prefix) so it generates a clean
+   * `text-ghost` utility, matching how --color-nav/-primary/-secondary/-muted
+   * were already renamed above — the un-renamed --color-text-ghost entry
+   * further up only ever generated `text-text-ghost`, so plain `text-ghost`
+   * (already used in Header.tsx's mobile menu labels) was previously a
+   * silent no-op; this entry makes it resolve correctly everywhere. */
+  --color-ghost: var(--color-text-ghost);
+  --color-faint: var(--color-text-faint);
+  --color-dim:   var(--color-text-dim);
+
+  --shadow-btn-primary: var(--shadow-btn-primary);
+  --shadow-btn-hover: var(--shadow-btn-hover);
+  --shadow-btn-subscribe: var(--shadow-btn-subscribe);
+  --shadow-card: var(--shadow-card);
+  --shadow-card-hover: var(--shadow-card-hover);
+  --shadow-glass: var(--shadow-glass);
+  --shadow-glow-orange: var(--shadow-glow-orange);
+
+  --blur-sm: var(--blur-sm);
+  --blur-lg: var(--blur-lg);
+
+  --z-raised: var(--z-raised);
+  --z-modal: var(--z-modal);
+  --z-overlay: var(--z-overlay);
+
+  /* Specific UI Colors */
+  --color-console-bg: var(--color-console-bg);
+  --color-glass-faint: var(--color-glass-faint);
+  --color-glass-4: var(--color-glass-4);
+  --color-glass-8: var(--color-glass-8);
+  --color-border-8: var(--color-border-8);
+  --color-border-image: var(--color-border-image);
+  --color-border-28: var(--color-border-28);
+  --color-border-22: var(--color-border-22);
+  --color-mac-red: var(--color-mac-red);
+  --color-mac-yellow: var(--color-mac-yellow);
+  --color-mac-green: var(--color-mac-green);
+  --color-glass-10: var(--color-glass-10);
+  --color-badge-ink-45: var(--color-badge-ink-45);
+  --color-white-96: var(--color-white-96);
+  --color-modal-backdrop: var(--color-modal-backdrop);
+
+  --color-text-85: var(--color-text-85);
+  --color-text-75: var(--color-text-75);
+  --color-text-70: var(--color-text-70);
+  --color-text-64: var(--color-text-64);
+  --color-text-60: var(--color-text-60);
+  --color-text-55: var(--color-text-55);
+  --color-text-40: var(--color-text-40);
+  --color-text-32: var(--color-text-32);
+  --color-text-13: var(--color-text-13);
+
+  /* Spacing */
+  --spacing-tg-1: var(--space-1);
+  --spacing-tg-1a: var(--space-1a);
+  --spacing-tg-1b: var(--space-1b);
+  --spacing-tg-0a: var(--space-0a);
+  --spacing-tg-1c: var(--space-1c);
+  --spacing-tg-2: var(--space-2);
+  --spacing-tg-3: var(--space-3);
+  --spacing-tg-3a: var(--space-3a);
+  --spacing-tg-4: var(--space-4);
+  --spacing-tg-4a: var(--space-4a);
+  --spacing-tg-5: var(--space-5);
+  --spacing-tg-5a: var(--space-5a);
+  --spacing-tg-7: var(--space-7);
+  --spacing-tg-8: var(--space-8);
+  --spacing-tg-9a: var(--space-9a);
+  --spacing-tg-13: var(--space-13);
+  --spacing-tg-14: var(--space-14);
+  --spacing-tg-14a: var(--space-14a);
+  --spacing-tg-15: var(--space-15);
+  --spacing-tg-16a: var(--space-16a);
+  --spacing-tg-17: var(--space-17);
+  --spacing-tg-19a: var(--space-19a);
+  --spacing-tg-20: var(--space-20);
+  --spacing-section-lg: var(--space-section-lg);
+  --spacing-tg-82: var(--size-82);
+
+  /* --------------------------------------------------------------------
+   * Complete token → Tailwind mapping (2026-07-15, Constitution Principle I)
+   * Every tokens.css value Tailwind can represent as a utility scale is
+   * mapped here, once — not incrementally per-component — so a bare
+   * utility class can never silently fall back to Tailwind's own shipped
+   * default instead of our token. See
+   * docs/superpowers/specs/2026-07-14-homepage-composition-design.md and
+   * the follow-up Tailwind/tokens design session for the full rationale.
+   * -------------------------------------------------------------------- */
+
+  /* Font-size — fixes text-2xs/xs/sm/base/lg resolving to Tailwind's own
+   * 12/14/16/18px instead of our 12.5/14/15/17/18.5px. Heading sizes
+   * (--text-h1..h4) are intentionally NOT mapped — they stay CSS-only,
+   * consumed solely by the base h1-h4 tag rules below. */
+  --text-2xs: var(--text-2xs);
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-base);
+  --text-lg: var(--text-lg);
+  --text-3xs: var(--text-3xs);
+  --text-xs-alt: var(--text-xs-alt);
+  --text-12: var(--text-12);
+  --text-15-5: var(--text-15-5);
+  --text-21: var(--text-21);
+  --text-stat: var(--text-stat);
+
+  /* Letter-spacing — fixes tracking-wide/wider/widest resolving to
+   * Tailwind's own 0.025/0.05/0.1em instead of our 0.06/0.10/0.16em.
+   * Heading letter-spacing (--ls-tight/-snug/-normal) is intentionally
+   * NOT mapped — same reasoning as heading font-size above. */
+  --tracking-wide: var(--ls-wide);
+  --tracking-wider: var(--ls-wider);
+  --tracking-widest: var(--ls-widest);
+  --tracking-stat: var(--ls-stat);
+  --tracking-label: var(--ls-label);
+  --tracking-08: var(--ls-08);
+  --tracking-04: var(--ls-04);
+  --tracking-hint: var(--ls-hint);
+  --tracking-badge: var(--ls-badge);
+
+  /* Blur — fixes the 8-spot "too hazy" bug (blur-md was never registered,
+   * so components fell back to blur-lg) plus the Final CTA panel. */
+  --blur-md: var(--blur-md);
+  --blur-cta: var(--blur-cta);
+  --blur-glow: var(--blur-glow);
+  --blur-glow-lg: var(--blur-glow-lg);
+
+  /* Colors/shadows not yet consumed by name, mapped for completeness so
+   * future work can't miss them the same way. */
+  --color-purple: var(--color-purple);
+  --color-overlay-blue: var(--color-overlay-blue);
+  --color-overlay-amber: var(--color-overlay-amber);
+  --color-overlay-orange-strong: var(--color-overlay-orange-strong);
+  --color-icon-bg-blue: var(--color-icon-bg-blue);
+  --color-icon-bg-teal: var(--color-icon-bg-teal);
+  --color-border-image: var(--color-border-image);
+  --shadow-glow-blue: var(--shadow-glow-blue);
+  --shadow-glow-teal: var(--shadow-glow-teal);
+  --shadow-glow-amber: var(--shadow-glow-amber);
+  --shadow-orange-border: var(--shadow-orange-border);
+  --shadow-phase-ring: var(--shadow-phase-ring);
+  --shadow-phase-active: var(--shadow-phase-active);
 }
 @layer base {
   /* ----------------------------------------------------------
