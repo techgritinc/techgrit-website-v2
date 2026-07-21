@@ -456,6 +456,15 @@ directory.
   pinned to exact versions in `package.json`; devDependencies use caret ranges. Preserve this
   split rather than normalizing to one style.
 
+### Manual Specification Protocol (speckit.specify)
+Because we track all work against TMS tickets (even when manually specifying features outside of the automated Jira integration), the default `001-` sequential naming convention is prohibited.
+
+When a user invokes `/speckit.specify` or asks to start a new feature:
+1. **Halt and Prompt:** The AI MUST immediately ask the user: *"What is the TMS ticket number for this feature?"* (Skip this if they already provided it in their initial prompt).
+2. **Format Enforcement:** Ensure the ID uses the `TMS-<number>` format. If the user just says "72", assume `TMS-72`.
+3. **Execute with Short-Name:** Pass the ticket ID to the underlying script using the `--short-name` flag.
+   - Example execution: `bash .specify/scripts/bash/create-new-feature.sh --short-name TMS-72 "Feature description"`
+
 ## Governance
 
 - **Amendment procedure**: propose changes via the same `/speckit.constitution` workflow used to
@@ -474,5 +483,5 @@ directory.
   `layout/`, `ui/`, `home/`). Do not treat these as decisions to defend — they are simply the
   current, unfinished state, recorded here so future amendments can address them deliberately.
 
-**Version**: 1.4.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
-exists; this discovery run is the first codification | **Last Amended**: 2026-07-15
+**Version**: 1.5.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
+exists; this discovery run is the first codification | **Last Amended**: 2026-07-22

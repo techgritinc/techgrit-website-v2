@@ -24,13 +24,13 @@ export default function FinalCta() {
               <Button
                 href="mailto:support@techgrit.com?subject=OrbitAI%20Demo%20Request"
                 size="lg"
-                className="!gap-[10px] !rounded-[13px] !px-[34px] !py-[17px] !text-[17px] !whitespace-normal hover:!shadow-btn-primary"
+                className="!leading-[normal] !gap-[10px] !rounded-[13px] !px-[34px] !py-[17px] !text-[17px] !whitespace-normal hover:!shadow-btn-primary"
               >
                 Schedule an OrbitAI Demo <span aria-hidden="true" className="text-[18px]">&rarr;</span>
               </Button>
               <a
                 href="#methodology"
-                className="inline-flex items-center gap-2 border-b border-border-orange-strong pb-[3px] text-15-5 font-semibold text-primary"
+                className="inline-flex items-center gap-2 border-b border-border-orange-strong pb-[3px] text-15-5 font-semibold text-primary leading-[normal]"
               >
                 Explore how our 6-week framework can accelerate your next big bet{" "}
                 <span aria-hidden="true" className="text-orange">&rarr;</span>
