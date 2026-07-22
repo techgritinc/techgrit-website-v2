@@ -13,3 +13,10 @@
 
 ## Recent Changes
 - TMS-63: Added TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (via
+
+## Active Technologies
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-68)
+- N/A — case-study content is a static local TypeScript content module, not persisted data (TMS-68)
+
+## Recent Changes
+- TMS-68: Added TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4

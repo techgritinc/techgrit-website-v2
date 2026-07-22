@@ -43,4 +43,4 @@ All checklist items pass on first validation pass. No spec updates required.
   `.dc.html` reference files, documented under Assumptions.
 - Feature Readiness: FR-012 and SC-005 explicitly carry the "static now, structured for dynamic
   later" requirement called out as important by the user, without prescribing any specific
-  implementation mechanism — that translation is deferred to `/speckit.plan`.
+  implementation mechanism — that translation is deferred to `/speckit.plan`. 

@@ -230,4 +230,4 @@ collapsing to a single column and no content clipped, overlapping, or requiring 
 - The header and footer used on these pages are the already-implemented shared components from the
   site's global layout; this feature makes no changes to their content, structure, or behavior.
 - "Published date" and industry/category tag values shown on the detail page are per-case-study
-  content, not fixed text — they vary with whichever case study is being viewed.
+  content, not fixed text — they vary with whichever case study is being viewed. 
