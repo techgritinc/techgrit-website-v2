@@ -97,7 +97,7 @@ const DESC_VARIANTS: Record<GlassCardVariant, string> = {
 
 export function GlassCardDescription({ children, className = "", variant = "default" }: GlassCardDescriptionProps) {
   return (
-    <p className={`text-muted ${DESC_VARIANTS[variant]} ${className}`}>
+    <p className={`${DESC_VARIANTS[variant]} ${className}`}>
       {children}
     </p>
   );

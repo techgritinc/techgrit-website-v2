@@ -31,6 +31,7 @@ export interface FeaturedPost {
 }
 
 export interface BlogPost {
+  slug: string;
   topic: string;
   accent: BlogAccentToken;
   title: string;

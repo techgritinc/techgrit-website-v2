@@ -28,6 +28,7 @@ export const BLOG_CONTENT: BlogPageContent = {
   topics: ["All", "Engineering", "Modernization", "Product", "Methodology", "Industry", "Design"],
   posts: [
     {
+      slug: "legacy-modernization-stalling-ai-first-fix",
       topic: "Modernization",
       accent: "blue-light",
       title: "Why your legacy modernization keeps stalling — and the AI-first fix",
@@ -39,6 +40,7 @@ export const BLOG_CONTENT: BlogPageContent = {
       href: "#",
     },
     {
+      slug: "inside-orbitai-orchestrating-specialized-agents",
       topic: "Product",
       accent: "orange",
       title: "Inside OrbitAI: orchestrating specialized agents across the build",
@@ -50,6 +52,7 @@ export const BLOG_CONTENT: BlogPageContent = {
       href: "#",
     },
     {
+      slug: "six-weeks-to-production-sprint-to-scale-playbook",
       topic: "Methodology",
       accent: "amber",
       title: "From six weeks to production: the sprint-to-scale playbook",
@@ -61,6 +64,7 @@ export const BLOG_CONTENT: BlogPageContent = {
       href: "#",
     },
     {
+      slug: "human-in-the-loop-governing-ai-generated-code",
       topic: "Engineering",
       accent: "teal-light",
       title: "Human-in-the-loop: governing AI-generated code at enterprise scale",
@@ -72,6 +76,7 @@ export const BLOG_CONTENT: BlogPageContent = {
       href: "#",
     },
     {
+      slug: "fintech-compliance-ai-first-build-pipeline",
       topic: "Industry",
       accent: "blue",
       title: "FinTech compliance in an AI-first build pipeline",
@@ -83,6 +88,7 @@ export const BLOG_CONTENT: BlogPageContent = {
       href: "#",
     },
     {
+      slug: "design-thinking-meets-agentic-delivery",
       topic: "Design",
       accent: "yellow",
       title: "Design-thinking meets agentic delivery",
@@ -94,6 +100,7 @@ export const BLOG_CONTENT: BlogPageContent = {
       href: "#",
     },
     {
+      slug: "testing-strategies-agent-generated-codebases",
       topic: "Engineering",
       accent: "purple",
       title: "Testing strategies for agent-generated codebases",
@@ -105,6 +112,7 @@ export const BLOG_CONTENT: BlogPageContent = {
       href: "#",
     },
     {
+      slug: "strangler-fig-pattern-revisited-ai-era",
       topic: "Modernization",
       accent: "blue-light",
       title: "The strangler-fig pattern, revisited for the AI era",
@@ -116,6 +124,7 @@ export const BLOG_CONTENT: BlogPageContent = {
       href: "#",
     },
     {
+      slug: "shipping-trust-measuring-quality-beyond-coverage",
       topic: "Product",
       accent: "orange",
       title: "Shipping trust: how we measure quality beyond test coverage",

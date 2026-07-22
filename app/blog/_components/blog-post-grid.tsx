@@ -27,7 +27,7 @@ export function BlogPostGrid({ topics, posts }: { topics: string[]; posts: BlogP
             {filteredPosts.map((post) => {
               const hex = accentHex(post.accent);
               return (
-                <a key={post.title} href={post.href} style={{ display: "contents" }}>
+                <a key={post.slug} href={post.href} style={{ display: "contents" }}>
                   <GlassCard
                     variant="blogCard"
                     hoverBorderColor="hover:border-border-28"

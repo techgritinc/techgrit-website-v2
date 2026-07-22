@@ -52,24 +52,30 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
                 </div>
               ) : (
                 <>
-                  <form onSubmit={handleSubmit} noValidate className="flex flex-wrap gap-tg-3">
+                  <form onSubmit={handleSubmit} noValidate className="flex flex-wrap items-start gap-tg-3">
                     <FormField
                       label="Email"
                       name="email"
                       type="email"
                       placeholder="Your work email"
-                      containerClassName="flex-1 min-w-[200px] flex flex-col [&_input]:!flex-1 [&_input]:!rounded-[12px] [&_input]:!px-[18px] [&_input]:!py-[15px] [&_input]:!text-[15px] [&_input::placeholder]:!font-normal"
+                      error={status === "error" ? content.errorText : undefined}
+                      containerClassName="flex-1 min-w-[200px] flex flex-col [&_input]:!flex-1 [&_input]:!rounded-[12px] [&_input]:!px-[18px] [&_input]:!py-[15px] [&_input]:!text-[15px] [&_input::placeholder]:!font-normal max-sm:[&_p]:hidden"
                     />
                     <Button
                       type="submit"
-                      className="!leading-[normal] gap-[9px] !py-tg-5a !px-tg-11 !text-15-5 !shadow-btn-subscribe !rounded-[12px] active:!shadow-btn-subscribe"
+                      className="!leading-[normal] gap-[9px] !py-tg-4a sm:!py-tg-5a !px-tg-11 !text-15-5 !shadow-btn-subscribe !rounded-[12px] active:!shadow-btn-subscribe"
                     >
                       {content.ctaLabel} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
                     </Button>
+                    {status === "error" && (
+                      <p className="w-full text-2xs sm:mt-tg-3a text-error sm:hidden">
+                        {content.errorText}
+                      </p>
+                    )}
                   </form>
-                  <p className={`mt-tg-3a text-2xs ${status === "error" ? "text-error" : "text-text-45"}`}>
-                    {status === "error" ? content.errorText : content.helperText}
-                  </p>
+                  {status !== "error" && (
+                    <p className="mt-tg-3a text-2xs text-text-45">{content.helperText}</p>
+                  )}
                 </>
               )}
             </div>
