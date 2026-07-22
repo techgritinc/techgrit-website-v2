@@ -33,6 +33,26 @@
 
 [Gates determined based on constitution file]
 
+## UI Design Approach
+
+*Required for UI features per Constitution Principle VI. Skip (delete this section) only if this
+feature has NO user-visible frontend surface (pure backend/API/config change).*
+
+**UI mode detection**: [UI mode ON — tech signal (Next.js/React) matched | content signal
+matched: "..." | OR: UI mode OFF because no user-visible surface — reason: ...]
+
+**`frontend-design` skill invocation**: [Summarize what was asked and what the skill returned —
+aesthetic direction, component architecture guidance, motion/interaction strategy, key craft
+considerations for this feature.]
+
+**Reconciliation with Principles I–V**: [Where the skill's generic suggestions had to yield to
+this repo's rules — e.g. "skill suggested Playfair Display but Principle V mandates Manrope +
+Space Grotesk; kept Manrope/Space Grotesk". "Skill proposed a purple gradient but Principle V
+mandates dark-first ink-navy with orange→amber accent; kept the brand palette."]
+
+**Anchor components / files affected**: [List the components, pages, and CSS files this feature
+will create or touch — this seeds the `[UI]` markers in tasks.md.]
+
 ## Project Structure
 
 ### Documentation (this feature)

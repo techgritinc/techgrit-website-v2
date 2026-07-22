@@ -28,9 +28,25 @@ This command chains two stages automatically:
    - Fill Constitution Check section from constitution
    - Evaluate gates (ERROR if violations unjustified)
    - Phase 0: Generate research.md (resolve all NEEDS CLARIFICATION)
+   - **Phase 0.5: UI Detection & frontend-design Invocation** — apply Constitution Principle VI:
+     - Detect UI mode: tech signal (Technical Context "Primary Dependencies" includes Next.js /
+       React / Vue / Svelte / Angular / SolidJS) OR content signal (spec.md mentions page,
+       component, screen, layout, form, button, view, dashboard, modal, navigation, styling,
+       hero, section, card).
+     - If UI mode ON: invoke the `frontend-design` skill via the Skill tool (vendored at
+       `.claude/skills/frontend-design/SKILL.md`). Ask it to shape component architecture,
+       aesthetic direction, motion/interaction strategy, and any craft considerations that
+       should inform Phase 1 design.
+     - Reconcile the skill's guidance against Principles I–V — repo-specific rules (tokens,
+       breakpoints, existing component library, Manrope/Space Grotesk fonts, dark-first brand)
+       always win. Note any reconciliations explicitly.
+     - Record output in `plan.md` under a new "UI Design Approach" section. A missing or empty
+       section on a UI feature is a Constitution Check violation.
+     - If UI mode OFF: skip and note the reason in plan.md (e.g., "Backend-only feature — no
+       UI surfaces; Principle VI does not apply this cycle").
    - Phase 1: Generate data-model.md, contracts/, quickstart.md
    - Phase 1: Update agent context by running the agent script
-   - Re-evaluate Constitution Check post-design
+   - Re-evaluate Constitution Check post-design (including Principle VI evidence)
 
 4. **Report Stage 1 completion**: Report branch, IMPL_PLAN path, and generated artifacts. Then proceed automatically to Stage 2.
 
@@ -134,7 +150,7 @@ This command chains two stages automatically:
 Every task MUST strictly follow this format:
 
 ```text
-- [ ] [TaskID] [P?] [Story?] Description with file path
+- [ ] [TaskID] [P?] [UI?] [Story?] Description with file path
 ```
 
 **Format Components**:
@@ -142,13 +158,20 @@ Every task MUST strictly follow this format:
 1. **Checkbox**: ALWAYS start with `- [ ]` (markdown checkbox)
 2. **Task ID**: Sequential number (T001, T002, T003...) in execution order
 3. **[P] marker**: Include ONLY if task is parallelizable (different files, no dependencies on incomplete tasks)
-4. **[Story] label**: REQUIRED for user story phase tasks only
+4. **[UI] marker** (Constitution Principle VI): Include when the task produces user-visible
+   frontend output — a component, page, layout, styling change, form, or any file under
+   `app/`, `components/`, `app/globals.css`, `app/tokens.css`. `/speckit.implement` uses this
+   marker to decide when to invoke the `frontend-design` skill before executing the task. Do
+   NOT mark tasks that only touch backend/API/config/tests.
+5. **[Story] label**: REQUIRED for user story phase tasks only
    - Format: [US1], [US2], [US3], etc. (maps to user stories from spec.md)
    - Setup phase: NO story label
    - Foundational phase: NO story label
    - User Story phases: MUST have story label
    - Polish phase: NO story label
-5. **Description**: Clear action with exact file path
+6. **Description**: Clear action with exact file path
+
+**Marker order (when multiple apply)**: `[P] [UI] [Story]`.
 
 **Examples**:
 
@@ -156,6 +179,8 @@ Every task MUST strictly follow this format:
 - CORRECT: `- [ ] T005 [P] Implement authentication middleware in src/middleware/auth.py`
 - CORRECT: `- [ ] T012 [P] [US1] Create User model in src/models/user.py`
 - CORRECT: `- [ ] T014 [US1] Implement UserService in src/services/user_service.py`
+- CORRECT: `- [ ] T020 [UI] [US1] Build Header component in components/layout/Header.tsx`
+- CORRECT: `- [ ] T021 [P] [UI] [US2] Style hero section in app/page.tsx and app/globals.css`
 - WRONG: `- [ ] Create User model` (missing ID and Story label)
 - WRONG: `T001 [US1] Create model` (missing checkbox)
 - WRONG: `- [ ] [US1] Create User model` (missing Task ID)
