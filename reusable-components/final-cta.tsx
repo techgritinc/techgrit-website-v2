@@ -1,7 +1,15 @@
-import type { FinalCtaSection } from "../_data/types";
 import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
 
-export function AboutUsFinalCta({ section }: { section: FinalCtaSection }) {
+export interface FinalCtaContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  ctaLabel: string;
+  ctaLink: string;
+  secondaryCta?: { label: string; link: string };
+}
+
+export function FinalCta({ section }: { section: FinalCtaContent }) {
   return (
     <section>
       <div className="tg-container" style={{ maxWidth: 1180, paddingTop: 40, paddingBottom: 110 }}>
@@ -40,7 +48,10 @@ export function AboutUsFinalCta({ section }: { section: FinalCtaSection }) {
               <p className="mx-auto mt-5" style={{ maxWidth: 600, color: "var(--color-text-secondary)", fontSize: "clamp(16px, 1.4vw, 18px)" }}>
                 {section.description}
               </p>
-              <div style={{ marginTop: 34 }}>
+              <div
+                className="flex flex-wrap items-center justify-center"
+                style={{ marginTop: 34, gap: 15 }}
+              >
                 <a
                   href={section.ctaLink}
                   className="btn btn-primary btn-lg"
@@ -53,6 +64,11 @@ export function AboutUsFinalCta({ section }: { section: FinalCtaSection }) {
                 >
                   {section.ctaLabel} <span aria-hidden="true" style={{ fontSize: "clamp(17px, 1.4vw, 18px)" }}>&#8594;</span>
                 </a>
+                {section.secondaryCta && (
+                  <a href={section.secondaryCta.link} className="btn btn-ghost btn-lg">
+                    {section.secondaryCta.label}
+                  </a>
+                )}
               </div>
             </div>
           </div>

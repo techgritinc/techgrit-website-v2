@@ -16,7 +16,11 @@ Us page (560/960/1140px). Header/nav and footer are explicitly out of scope for 
 confirmed during clarification, another team member is delivering them separately. This feature
 follows the same implementation approach as `001-about-us-page`, reusing its shared
 `RevealOnScroll`/`SectionEyebrow` components from `reusable-components/` rather than duplicating
-them.
+them. The closing CTA section goes one step further: `about-us-final-cta.tsx` is promoted from
+`app/about/_components/` into `reusable-components/final-cta.tsx` and extended with an optional
+secondary CTA prop (mirroring the `SectionEyebrow` `tone`-prop precedent), so both the About Us
+and Construction pages render their closing CTA from one shared component instead of each
+maintaining its own copy.
 
 ## Technical Context
 
@@ -55,7 +59,7 @@ pagination, no forms.
 |---|---|---|
 | I. Token-Only Styling | All section styling uses `var(--token-name)` / Tailwind utilities generated from `@theme inline`; no new hardcoded hex/px values. The reference's near-duplicate amber (`#fbbf24`) is mapped to the existing `--color-amber-light` token instead of adding a new one (research.md §4). | PASS |
 | II. Documented Breakpoint Contract | Reuses the 1140/960/560 breakpoints via Tailwind `sm:`/`md:`/`lg:` prefixes — already correctly configured in `@theme inline` by `001-about-us-page`; no further breakpoint work needed. | PASS |
-| III. Centralized Utility-Class Component Library | Reuses `.btn`/`.card`/`.glass-card`/`.eyebrow`/`.text-gradient`/`.tg-container`/`.section` and the shared `reusable-components/reveal-on-scroll.tsx` + `reusable-components/section-eyebrow.tsx` (extended with a `tone` prop, research.md §5, rather than forked). Header/footer explicitly excluded from this feature (they belong to the one shared `Header`/`Footer` component per this same principle, being built separately). | PASS |
+| III. Centralized Utility-Class Component Library | Reuses `.btn`/`.card`/`.glass-card`/`.eyebrow`/`.text-gradient`/`.tg-container`/`.section` and the shared `reusable-components/reveal-on-scroll.tsx` + `reusable-components/section-eyebrow.tsx` (extended with a `tone` prop, research.md §5, rather than forked). The closing CTA also reuses a shared component: `about-us-final-cta.tsx` is promoted to `reusable-components/final-cta.tsx` and extended with an optional secondary CTA prop so Construction's two-button closing section (primary schedule + secondary email) renders from the same component as About Us's single-button closing section, rather than Construction forking its own copy. Header/footer explicitly excluded from this feature (they belong to the one shared `Header`/`Footer` component per this same principle, being built separately). | PASS |
 | IV. Design References Are Visual Truth, Not Copy-Paste Source | `TechGrit Construction.dc.html` is used only to identify sections/copy/layout/icon intent; its `x-dc`/`DCLogic`/`{{ }}`/`sc-for`/`sc-if` scaffolding, inline hex styles, real external Calendly URL, and placeholder footer legal links are explicitly not carried into the React components as-is (footer isn't part of this feature; the Calendly link is deliberately swapped for a placeholder per clarification). | PASS |
 | V. Dark-First Brand System | Page uses the existing dark ink surface, orange→amber accent gradient (CTAs and eyebrow accents only, never as a fill), Manrope/Space Grotesk via the already-configured `next/font` setup in `app/layout.tsx`. No v1-light variant or additional named frameworks (4D™/PRISM™/AI IMPACT™) are referenced by the Construction copy — only OrbitAI™ (the diagram's central engine), which is the one framework name confirmed to recur across dark-theme pages. | PASS |
 | Additional Constraints (single `app/`-rooted project + reusable-components) | New page-specific code added under `app/construction/` only (`page.tsx`, `_components/`, `_data/`); cross-page-reusable pieces reused from (and, for the tone prop, extended in) the existing `reusable-components/` directory rather than a new duplicate location. No new top-level directory introduced. | PASS |
@@ -87,7 +91,10 @@ app/
 ├── globals.css                                         # existing — untouched (breakpoints already correct)
 ├── tokens.css                                          # existing — untouched (no new tokens needed; see research.md §4)
 ├── page.tsx                                             # existing style-kit page — untouched
-├── about/                                               # existing — untouched by this feature
+├── about/
+│   ├── page.tsx                                         # modified — imports `FinalCta` from reusable-components/ instead of the local component
+│   └── _components/
+│       └── about-us-final-cta.tsx                       # removed — superseded by reusable-components/final-cta.tsx
 └── construction/
     ├── page.tsx                                         # new — Construction route, composes the 8 sections in order from construction-content.ts
     ├── _data/
@@ -100,12 +107,13 @@ app/
         ├── construction-solutions.tsx                     # new — FR-005
         ├── construction-lifecycle-diagram.tsx              # new — FR-006, FR-012
         ├── construction-advantage.tsx                      # new — FR-007
-        ├── construction-impact.tsx                         # new — FR-008
-        └── construction-final-cta.tsx                      # new — FR-009
+        └── construction-impact.tsx                         # new — FR-008
+        # (no construction-final-cta.tsx — FR-009 is rendered via reusable-components/final-cta.tsx)
 
 reusable-components/
 ├── reveal-on-scroll.tsx                                 # existing — reused as-is
-└── section-eyebrow.tsx                                  # existing — extended with `tone?: "orange" | "amber"` prop (research.md §5)
+├── section-eyebrow.tsx                                  # existing — extended with `tone?: "orange" | "amber"` prop (research.md §5)
+└── final-cta.tsx                                        # new — promoted from app/about/_components/about-us-final-cta.tsx; renamed export `FinalCta`; extended with an optional `secondaryCta?: { label: string; link: string }` prop so Construction's primary+secondary (schedule + email) closing CTA can reuse it — About Us's existing single-CTA usage is unaffected since the prop is optional
 ```
 
 **Structure Decision**: Single Next.js App Router project (no frontend/backend split — matches the
@@ -117,7 +125,14 @@ pieces continue to live in the existing top-level `reusable-components/` directo
 FR-010's requirement that each content section be an independent, self-contained, reorderable
 block: each section is its own component file taking its slice of `ConstructionPageContent` as
 props, and `app/construction/page.tsx` is a thin composition root that maps the ordered `sections`
-array to the matching component per `data-model.md`'s "Mapping to components" table.
+array to the matching component per `data-model.md`'s "Mapping to components" table. The one
+exception is the closing CTA: since both `001-about-us-page` and this feature need a
+visually-identical closing panel (only the CTA count differs — About Us has one action, Construction
+has two), that section is promoted to `reusable-components/final-cta.tsx` and consumed by both
+pages' composition roots, rather than Construction adding its own near-duplicate
+`construction-final-cta.tsx`. This still satisfies FR-010 — the section remains a single,
+self-contained, reorderable block — it is simply implemented once and shared, matching how
+`RevealOnScroll`/`SectionEyebrow` are already shared today.
 
 ## Complexity Tracking
 
