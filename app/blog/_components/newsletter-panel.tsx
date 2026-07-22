@@ -59,7 +59,7 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
                       type="email"
                       placeholder="Your work email"
                       error={status === "error" ? content.errorText : undefined}
-                      containerClassName="flex-1 min-w-[200px] flex flex-col [&_input]:!flex-1 [&_input]:!rounded-[12px] [&_input]:!px-[18px] [&_input]:!py-[15px] [&_input]:!text-[15px] [&_input::placeholder]:!font-normal max-sm:[&_p]:hidden"
+                      containerClassName="flex-1 min-w-[200px] flex flex-col [&_input]:!flex-1 [&_input]:!rounded-[12px] [&_input]:!px-[18px] [&_input]:!py-[15px] [&_input]:!text-[15px] [&_input::placeholder]:!font-normal max-sm:[&_p]:sr-only"
                     />
                     <Button
                       type="submit"
@@ -68,7 +68,7 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
                       {content.ctaLabel} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
                     </Button>
                     {status === "error" && (
-                      <p className="w-full text-2xs sm:mt-tg-3a text-error sm:hidden">
+                      <p aria-hidden="true" className="w-full text-2xs sm:mt-tg-3a text-error sm:hidden">
                         {content.errorText}
                       </p>
                     )}
