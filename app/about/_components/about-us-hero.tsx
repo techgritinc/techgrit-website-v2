@@ -35,7 +35,7 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
         </div>
         <h1
           data-rise
-          className="text-[44px] leading-[1.02] tracking-[var(--ls-tight)] md:text-[60px]"
+          className="text-[46px] leading-[1.02] tracking-[var(--ls-tight)] lg:text-[60px]"
           style={{ animationDelay: ".12s" }}
         >
           {before}
