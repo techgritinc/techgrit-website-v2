@@ -60,6 +60,7 @@ Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored 
 - Navigation/footer link content and all current homepage content (stats, phases, testimonials, case studies, industries) are static configuration, not persisted data
 
 ## Recent Changes
+- TMS-69: building the dynamic Blog page (hero, featured-story panel, topic-filterable post grid, subscribe panel) — extends `GlassCard`/`Badge` with new variants/tone instead of forking components, adds new tokens to `tokens.css`/`globals.css`
 - TMS-62: built the dynamic homepage (ten sections) and added `components/ui/` as a second, Tailwind-first shared-primitive convention alongside the vanilla `globals.css` classes
 - TMS-63: added global `Header`/`Footer` in `components/layout/`
 - 001-contact-us-page: added the Contact page

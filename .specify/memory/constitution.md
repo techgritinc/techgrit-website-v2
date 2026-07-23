@@ -1,5 +1,25 @@
 <!--
 CONSTITUTION UPDATE REPORT (latest amendment)
+Generated: 2026-07-22 (v1.6.0) — review-triggered amendment from a PR #9 (TMS-69) code review
+finding
+
+VERSION CHANGE: 1.5.0 → 1.6.0
+Bump Type: MINOR
+Rationale: PR #9's review flagged `app/blog/_components/blog-post-grid.tsx` keying its rendered
+list on `post.title` — a display-text field with no uniqueness guarantee — because `BlogPost` had
+no `id`/`slug` field at all. Fixed the immediate instance (added `slug` to `BlogPost` in
+`app/blog/_data/types.ts`, populated it for all 9 posts in `app/blog/_data/blog-content.ts`, keyed
+`blog-post-grid.tsx` on `post.slug`) and, since this is a pattern that will recur anywhere a data
+list is rendered via `.map()`, codified the general rule as a new bullet under Principle III:
+repeated/list-rendered UI content must key on a stable, content-independent `id`/`slug` field,
+never on display text. No principle was removed or reversed — this adds enforceable detail to an
+existing principle, hence a MINOR bump.
+TEMPLATE UPDATES: none required.
+DEFERRED ITEMS: TODO(RATIFICATION_DATE) still unresolved, carried over unchanged.
+-->
+
+<!--
+CONSTITUTION UPDATE REPORT (previous amendment, kept for history)
 Generated: 2026-07-15 (v1.4.0) — implementation-triggered amendment from TMS-62 (fidelity audit
 + component-convention reconciliation)
 
@@ -262,6 +282,15 @@ All motion MUST come from the existing `tg*`-prefixed keyframes (`tgrise`, `tgfl
 `tgbounce`, `tgshimmer`, `tgnudgex`, `tgkenburns`, `tgwaveflow`, `tgPhaseIn`, `tgheflo`) — new
 animations follow the same `tg` prefix.
 
+**Stable identity for repeated content.** Whenever the same UI content is rendered more than once
+from a data list (e.g. a `.map()` over posts, cards, testimonials, or any other collection), each
+iteration's React `key` — and any other per-item identity, such as a detail-page route — MUST
+derive from a stable, content-independent field (an `id` or `slug` declared on the data shape),
+never from display text (`title`, `label`, `name`, excerpt, etc.) that a content edit could rename
+or a future entry could duplicate. If the data shape doesn't yet have such a field, add it to the
+type/interface and populate it in the data file before wiring the render — do not key on derived or
+display text as a stopgap.
+
 - Class naming is kebab-case, base + modifier (`card` → `card-solid`, `badge` → `badge-orange`) —
   the dominant, unambiguous pattern across every class in `globals.css`.
 - Reference-file-only shorthand classes seen in `raw-files/*.dc.html` (`disp`, `fld`, `dd-dot`,
@@ -456,6 +485,15 @@ directory.
   pinned to exact versions in `package.json`; devDependencies use caret ranges. Preserve this
   split rather than normalizing to one style.
 
+### Manual Specification Protocol (speckit.specify)
+Because we track all work against TMS tickets (even when manually specifying features outside of the automated Jira integration), the default `001-` sequential naming convention is prohibited.
+
+When a user invokes `/speckit.specify` or asks to start a new feature:
+1. **Halt and Prompt:** The AI MUST immediately ask the user: *"What is the TMS ticket number for this feature?"* (Skip this if they already provided it in their initial prompt).
+2. **Format Enforcement:** Ensure the ID uses the `TMS-<number>` format. If the user just says "72", assume `TMS-72`.
+3. **Execute with Short-Name:** Pass the ticket ID to the underlying script using the `--short-name` flag.
+   - Example execution: `bash .specify/scripts/bash/create-new-feature.sh --short-name TMS-72 "Feature description"`
+
 ## Governance
 
 - **Amendment procedure**: propose changes via the same `/speckit.constitution` workflow used to
@@ -474,5 +512,5 @@ directory.
   `layout/`, `ui/`, `home/`). Do not treat these as decisions to defend — they are simply the
   current, unfinished state, recorded here so future amendments can address them deliberately.
 
-**Version**: 1.4.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
-exists; this discovery run is the first codification | **Last Amended**: 2026-07-15
+**Version**: 1.6.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
+exists; this discovery run is the first codification | **Last Amended**: 2026-07-22

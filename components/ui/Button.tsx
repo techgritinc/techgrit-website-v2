@@ -20,7 +20,7 @@ type ButtonAsLink = SharedProps &
 export type ButtonProps = ButtonAsButton | ButtonAsLink;
 
 const BASE =
-  "inline-flex items-center justify-center shrink-0 whitespace-nowrap font-bold transition-all duration-200 ease-[ease] disabled:pointer-events-none disabled:opacity-45 aria-disabled:pointer-events-none aria-disabled:opacity-45";
+  "inline-flex items-center justify-center shrink-0 whitespace-nowrap font-bold transition-all duration-200 ease-[ease] cursor-pointer disabled:pointer-events-none disabled:opacity-45 aria-disabled:pointer-events-none aria-disabled:opacity-45";
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
   sm: "gap-[7px] rounded-sm px-[18px] py-2.5 text-xs",

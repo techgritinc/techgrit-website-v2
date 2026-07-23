@@ -74,6 +74,7 @@
   --color-text-60:        rgba(255, 255, 255, 0.60);
   --color-text-55:        rgba(255, 255, 255, 0.55);
   --color-text-40:        rgba(255, 255, 255, 0.40);
+  --color-text-45:        rgba(255, 255, 255, 0.45); /* Blog newsletter helper text — default state */
   --color-text-32:        rgba(255, 255, 255, 0.32);
   --color-text-64:        rgba(255, 255, 255, 0.64); /* Case study card description text */
   --color-text-13:        rgba(255, 255, 255, 0.13); /* Testimonials video-card initials watermark */
@@ -105,6 +106,8 @@
   --color-border-30:      rgba(255, 255, 255, 0.30); /* Phase-node border — done/active state (Methodology) */
   --color-border-28:      rgba(255, 255, 255, 0.28); /* Testimonials video-badge pill border */
   --color-border-22:      rgba(255, 255, 255, 0.22); /* Testimonials lightbox close-button border */
+  --color-border-14:      rgba(255, 255, 255, 0.14); /* Topic filter inactive chip border (Blog) */
+  --color-border-green-40: rgba(52, 211, 153, 0.40); /* Blog newsletter success-state border */
 
   --color-glass:          rgba(255, 255, 255, 0.05); /* Glass card fill */
   --color-glass-hairline: rgba(255, 255, 255, 0.02); /* Architecture-diagram panel gradient stop */
@@ -124,6 +127,8 @@
   --color-overlay-teal:   rgba(15, 118, 110, 0.12);  /* Ambient orb / bg glow */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
   --color-overlay-orange-22: rgba(232, 119, 34, 0.22);/* Methodology numeral ambient glow */
+  --color-overlay-orange-18: rgba(232, 119, 34, 0.18);/* Blog newsletter panel decorative orb */
+  --color-overlay-green-12: rgba(52, 211, 153, 0.12); /* Blog newsletter success-state background */
   --color-icon-bg-blue: rgba(2, 132, 199, 0.16);  /* Icon background tint — blue tone (differentiator/platform agent cards) */
   --color-icon-bg-teal: rgba(15, 118, 110, 0.20); /* Icon background tint — teal tone (differentiator/platform agent cards) */
 
@@ -156,6 +161,7 @@
   --gradient-testimonial-fade:        linear-gradient(180deg, transparent, rgba(7, 15, 22, 0.82)); /* Testimonials video-card bottom fade */
   --gradient-testimonial-edge:        linear-gradient(90deg, rgba(8, 17, 26, 0) 0%, rgba(8, 17, 26, 0.92) 78%); /* Testimonials carousel right-edge fade */
   --gradient-testimonial-placeholder: linear-gradient(150deg, rgba(232, 119, 34, 0.2), rgba(10, 24, 34, 0.5)); /* Testimonials lightbox placeholder background */
+  --gradient-blog-featured: linear-gradient(150deg, rgba(232, 119, 34, 0.20), rgba(2, 132, 199, 0.06)); /* Blog featured-post visual panel background */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY
@@ -168,6 +174,7 @@
   --text-h2:    clamp(32px, 3.6vw, 46px);  /* Section heading */
   --text-h3:    clamp(22px, 2.4vw, 30px);  /* Sub-section heading */
   --text-h4:    clamp(18px, 1.8vw, 22px);  /* Card heading */
+  --text-blog-hero: clamp(40px, 5.4vw, 58px); /* Blog hero headline — narrower clamp than --text-h1 */
   --text-lg:    clamp(16px, 1.4vw, 18.5px); /* Lead / hero body */
   --text-base:  17px;                        /* Body default */
   --text-sm:    15px;                        /* Secondary body, nav links */
@@ -180,6 +187,7 @@
   --text-21: 21px;
   --text-stat: 26px;
   --text-blog-card: clamp(26px, 2.9vw, 34px); /* Blog/Case Study card title */
+  --text-blog-newsletter-heading: clamp(26px, 3vw, 36px); /* Blog newsletter panel heading — unmapped, arbitrary-value only */
 
   /* Font weights */
   --fw-regular:    400;
@@ -194,6 +202,7 @@
   --lh-normal: 1.32;   /* H3/H4 */
   --lh-body:   1.65;   /* Paragraphs */
   --lh-relaxed: 1.6;   /* Alternate body */
+  --lh-newsletter-heading: 1.1; /* Blog newsletter panel heading — unmapped, arbitrary-value only */
 
   /* Letter spacing */
   --ls-tight:    -0.04em;  /* H1 standard */
@@ -209,6 +218,7 @@
   --ls-04:      0.04em;  /* Testimonials drag-hint caption */
   --ls-hint:    0.14em;  /* Methodology scroll-hint caption */
   --ls-badge:   0.18em;  /* Methodology phase-corner label */
+  --ls-01:      0.01em;  /* Topic filter chip label spacing (Blog) */
 
   /* ----------------------------------------------------------
    * 7. SPACING
@@ -247,6 +257,8 @@
   --space-19a: 52px;
   --space-20:  56px;
   --space-21:  60px;
+  --space-22:  84px; /* Blog hero top padding */
+  --space-23:  92px; /* Blog newsletter section bottom padding */
   --space-section-sm:  50px;  /* Section vertical padding (small) */
   --space-section-md: 60px;   /* Section vertical padding (medium) */
   --space-section-lg: 108px;  /* Section vertical padding (large) */
@@ -260,6 +272,16 @@
   --nav-height:         80px;    /* Desktop sticky nav height */
   --nav-height-mobile:  74px; /* Mobile nav height */
   --size-82: 82px;
+  --measure-blog-lead: 640px; /* Blog hero lead paragraph max-width */
+  --measure-blog-hero: 900px; /* Blog hero container max-width */
+  --measure-blog-featured-desc: 520px; /* Blog featured-post description max-width */
+  --size-42: 42px;   /* Blog featured-post author avatar diameter */
+  --size-130: 130px; /* Blog featured-panel decorative network-icon square */
+  --size-180: 180px; /* Blog grid-card cover glow blob diameter */
+  --size-300: 300px; /* Blog featured-panel decorative visual-half column width */
+  --size-320: 320px; /* Blog featured-panel visual min-height */
+  --size-380: 380px; /* Blog newsletter panel decorative orb diameter */
+  --measure-blog-newsletter-copy: 460px; /* Blog newsletter copy max-width */
 
   /* Documented breakpoint contract (see globals.css breakpoints section).
      NOTE: also duplicated as literal values in globals.css's @theme inline
@@ -289,7 +311,8 @@
    * ---------------------------------------------------------- */
   --shadow-btn-primary:   0 14px 36px -10px rgba(232, 119, 34, 0.75); /* CTA button */
   --shadow-btn-hover:     0 18px 44px -10px rgba(232, 119, 34, 0.90); /* CTA button hover */
-  --shadow-btn-subscribe: 0 10px 26px -10px rgba(232, 119, 34, 0.70); /* Subscribe submit button (same on hover — reference only translates) */
+  --shadow-btn-subscribe: 0 12px 30px -10px rgba(232, 119, 34, 0.80); /* Subscribe submit button (same on hover — reference only translates) */
+  --shadow-chip-active:   0 10px 26px -12px rgba(232, 119, 34, 0.80); /* Topic filter active chip shadow (Blog) */
   --shadow-nav-btn:       0 8px 24px -8px rgba(232, 119, 34, 0.70); /* Nav CTA */
   --shadow-nav-btn-hover: 0 14px 32px -8px rgba(232, 119, 34, 0.90); /* Nav CTA hover */
   --shadow-card:          0 14px 34px -14px rgba(0, 0, 0, 0.50);       /* Logo tile / card */
@@ -350,6 +373,8 @@
   --blur-lg:   14px;  /* Glass cards */
   --blur-nav:  16px;  /* Sticky nav */
   --blur-header-scrolled: 18px; /* Homepage header once solid on scroll */
-  --blur-glow: 55px;  /* Methodology numeral ambient glow */
+  --blur-glow: 55px;  /* Methodology numeral ambient glow / Blog grid-card cover glow blob */
   --blur-glow-lg: 90px; /* CTA panel / case study card ambient glow blob */
+  --blur-glow-md: 70px; /* Blog featured-panel cover glow blob */
+  --blur-glow-xl: 115px; /* Blog newsletter panel ambient glow blob */
 }
