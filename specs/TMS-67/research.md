@@ -20,7 +20,7 @@
 
 ## 3. Content source shape
 
-**Decision**: Implement a typed local content module (`app/construction/_data/construction-content.ts`) that exports the Construction page content in the same CMS-shaped structure as `specs/001-about-us-page/contracts/about-us-page-response.json` (a `data.sections` ordered array of typed, `__component`-discriminated entries), documented in `specs/002-construction-page/contracts/construction-page-response.json`.
+**Decision**: Implement a typed local content module (`app/construction/_data/construction-content.ts`) that exports the Construction page content in the same CMS-shaped structure as `specs/001-about-us-page/contracts/about-us-page-response.json` (a `data.sections` ordered array of typed, `__component`-discriminated entries), documented in `specs/TMS-67/contracts/construction-page-response.json`.
 
 **Rationale**: FR-015 requires content sourced from a structured, ordered, typed `sections` list rather than hard-coded markup, mirroring the About Us page's approach exactly as the user requested. Modeling the dummy module after the same shape means only the data-fetching call (not component props) changes when a real CMS is wired up later.
 

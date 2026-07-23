@@ -5,7 +5,7 @@ description: "Task list for Construction Industry Page feature implementation"
 
 # Tasks: Construction Industry Page
 
-**Input**: Design documents from `/specs/002-construction-page/`
+**Input**: Design documents from `/specs/TMS-67/`
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/construction-page-response.json
 
 **Tests**: No test tasks are included. No test framework is configured in this repo (per
@@ -48,7 +48,7 @@ this feature does not touch them.
 
 - [X] T003 Extend `reusable-components/section-eyebrow.tsx` with an optional `tone?: "orange" | "amber"` prop (default `"orange"`) that switches the dash + label color to `var(--color-amber-light)` when `tone="amber"` (research.md §5) — used by the Solutions, Lifecycle Diagram, and Impact sections later in this feature; About Us's existing usage is unaffected since it relies on the default
 - [X] T004 [P] Create `app/construction/_data/types.ts` with the `PageSectionEntry` discriminated union and all section field types from data-model.md (`HeroSection`, `IntegrationsStripSection`, `ChallengesSection`, `SolutionsSection`, `LifecycleDiagramSection`, `AdvantageSection`, `ImpactSection`, `FinalCtaSection`, `SectionImage`, `PageSeo`, `ConstructionPageContent`)
-- [X] T005 Create `app/construction/_data/construction-content.ts` exporting a typed `ConstructionPageContent` object populated with the content from `specs/002-construction-page/contracts/construction-page-response.json` (depends on T004)
+- [X] T005 Create `app/construction/_data/construction-content.ts` exporting a typed `ConstructionPageContent` object populated with the content from `specs/TMS-67/contracts/construction-page-response.json` (depends on T004)
 - [X] T006 Create `app/construction/page.tsx` as the composition root: import `construction-content.ts`, set page `metadata` from `content.seo`, and map `content.sections` to a per-`type` switch that will render each section's component (component imports added incrementally as each user story lands) (depends on T004, T005)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin

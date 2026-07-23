@@ -1,6 +1,6 @@
 import type { ConstructionPageContent } from "./types";
 
-// Content shape mirrors specs/002-construction-page/contracts/construction-page-response.json.
+// Content shape mirrors specs/TMS-67/contracts/construction-page-response.json.
 // The contract discriminates sections by `__component` (e.g. "page-reusable-sections.construction-hero");
 // here that maps to the `type` field each section component expects (see data-model.md).
 export const constructionContent: ConstructionPageContent = {

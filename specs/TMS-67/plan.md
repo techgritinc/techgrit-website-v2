@@ -1,7 +1,7 @@
 # Implementation Plan: Construction Industry Page
 
-**Branch**: `002-construction-page` | **Date**: 2026-07-14 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/specs/002-construction-page/spec.md`
+**Branch**: `TMS-67` | **Date**: 2026-07-14 | **Spec**: [spec.md](./spec.md)
+**Input**: Feature specification from `/specs/TMS-67/spec.md`
 
 ## Summary
 
@@ -71,7 +71,7 @@ No violations — Complexity Tracking table is not needed.
 ### Documentation (this feature)
 
 ```text
-specs/002-construction-page/
+specs/TMS-67/
 ├── plan.md              # This file (/speckit.plan command output)
 ├── research.md          # Phase 0 output
 ├── data-model.md         # Phase 1 output
