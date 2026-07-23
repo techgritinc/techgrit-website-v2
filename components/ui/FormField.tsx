@@ -31,11 +31,11 @@ export default function FormField({
         type={type}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
-        className={[INPUT_BASE, error ? "border-error" : "border-border-strong"].join(" ")}
+        className={[INPUT_BASE, "border-border-strong"].join(" ")}
         {...rest}
       />
       {error && (
-        <p id={errorId} role="alert" className="mt-1.5 text-xs font-semibold text-error">
+        <p id={errorId} role="alert" className="mt-2 text-2xs text-error">
           {error}
         </p>
       )}

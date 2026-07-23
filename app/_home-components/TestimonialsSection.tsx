@@ -91,8 +91,8 @@ export default function TestimonialsSection() {
                   </div>
                   <div className="absolute inset-x-0 bottom-0 bg-[image:var(--gradient-testimonial-fade)] px-5.5 pt-8.5 pb-5">
                     <p className="text-15-5 leading-[1.45] font-semibold text-white">&ldquo;{testimonial.quote}&rdquo;</p>
-                    <div className="mt-3 text-[14.5px] leading-none font-bold text-white">{testimonial.name}</div>
-                    <div className="text-[13px] leading-none text-nav-sub">{testimonial.role}</div>
+                    <div className="mt-3 text-[14.5px] leading-[normal] font-bold text-white">{testimonial.name}</div>
+                    <div className="text-[13px] leading-[normal] text-nav-sub">{testimonial.role}</div>
                   </div>
                 </button>
               );
@@ -113,8 +113,8 @@ export default function TestimonialsSection() {
                     {testimonial.initials}
                   </div>
                   <div>
-                    <div className="text-[15px] font-bold text-primary">{testimonial.name}</div>
-                    <div className="text-[13px] text-muted">{testimonial.role}</div>
+                    <div className="text-[15px] leading-[normal] font-semibold text-primary">{testimonial.name}</div>
+                    <div className="text-[13px] leading-[normal] text-muted">{testimonial.role}</div>
                   </div>
                 </div>
               </div>
