@@ -85,6 +85,7 @@
   --color-nav-sub: var(--color-text-nav-sub);
   --color-primary: var(--color-text-primary);
   --color-secondary: var(--color-text-secondary);
+  --color-strong: var(--color-text-strong);
   --color-muted: var(--color-text-muted);
   --color-ghost: var(--color-text-ghost);
   --color-glass: var(--color-glass);
@@ -140,6 +141,7 @@
   --shadow-btn-primary: var(--shadow-btn-primary);
   --shadow-btn-hover: var(--shadow-btn-hover);
   --shadow-btn-subscribe: var(--shadow-btn-subscribe);
+  --shadow-chip-active: var(--shadow-chip-active);
   --shadow-card: var(--shadow-card);
   --shadow-card-hover: var(--shadow-card-hover);
   --shadow-glass: var(--shadow-glass);
@@ -161,6 +163,8 @@
   --color-border-image: var(--color-border-image);
   --color-border-28: var(--color-border-28);
   --color-border-22: var(--color-border-22);
+  --color-border-14: var(--color-border-14);
+  --color-border-green-40: var(--color-border-green-40);
   --color-mac-red: var(--color-mac-red);
   --color-mac-yellow: var(--color-mac-yellow);
   --color-mac-green: var(--color-mac-green);
@@ -168,6 +172,8 @@
   --color-badge-ink-45: var(--color-badge-ink-45);
   --color-white-96: var(--color-white-96);
   --color-modal-backdrop: var(--color-modal-backdrop);
+  --color-overlay-orange-18: var(--color-overlay-orange-18);
+  --color-overlay-green-12: var(--color-overlay-green-12);
 
   --color-text-85: var(--color-text-85);
   --color-text-75: var(--color-text-75);
@@ -175,6 +181,7 @@
   --color-text-64: var(--color-text-64);
   --color-text-60: var(--color-text-60);
   --color-text-55: var(--color-text-55);
+  --color-text-45: var(--color-text-45);
   --color-text-40: var(--color-text-40);
   --color-text-32: var(--color-text-32);
   --color-text-13: var(--color-text-13);
@@ -194,17 +201,33 @@
   --spacing-tg-5a: var(--space-5a);
   --spacing-tg-7: var(--space-7);
   --spacing-tg-8: var(--space-8);
+  --spacing-tg-9: var(--space-9);
   --spacing-tg-9a: var(--space-9a);
+  --spacing-tg-11: var(--space-11);
   --spacing-tg-13: var(--space-13);
   --spacing-tg-14: var(--space-14);
   --spacing-tg-14a: var(--space-14a);
   --spacing-tg-15: var(--space-15);
   --spacing-tg-16a: var(--space-16a);
   --spacing-tg-17: var(--space-17);
+  --spacing-tg-19: var(--space-19);
   --spacing-tg-19a: var(--space-19a);
   --spacing-tg-20: var(--space-20);
+  --spacing-tg-21: var(--space-21);
+  --spacing-tg-22: var(--space-22);
+  --spacing-tg-23: var(--space-23);
   --spacing-section-lg: var(--space-section-lg);
   --spacing-tg-82: var(--size-82);
+  --spacing-tg-blog-lead: var(--measure-blog-lead);
+  --spacing-tg-blog-hero: var(--measure-blog-hero);
+  --spacing-tg-blog-featured-desc: var(--measure-blog-featured-desc);
+  --spacing-tg-blog-newsletter-copy: var(--measure-blog-newsletter-copy);
+  --spacing-tg-42: var(--size-42);
+  --spacing-tg-130: var(--size-130);
+  --spacing-tg-180: var(--size-180);
+  --spacing-tg-300: var(--size-300);
+  --spacing-tg-320: var(--size-320);
+  --spacing-tg-380: var(--size-380);
 
   /* --------------------------------------------------------------------
    * Complete token → Tailwind mapping (2026-07-15, Constitution Principle I)
@@ -243,6 +266,7 @@
   --tracking-label: var(--ls-label);
   --tracking-08: var(--ls-08);
   --tracking-04: var(--ls-04);
+  --tracking-01: var(--ls-01);
   --tracking-hint: var(--ls-hint);
   --tracking-badge: var(--ls-badge);
 
@@ -252,6 +276,8 @@
   --blur-cta: var(--blur-cta);
   --blur-glow: var(--blur-glow);
   --blur-glow-lg: var(--blur-glow-lg);
+  --blur-glow-md: var(--blur-glow-md);
+  --blur-glow-xl: var(--blur-glow-xl);
 
   /* Colors/shadows not yet consumed by name, mapped for completeness so
    * future work can't miss them the same way. */

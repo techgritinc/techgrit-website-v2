@@ -376,3 +376,33 @@ export function CheckIcon(props: IconProps) {
     </svg>
   );
 }
+
+// Blog (app/blog/_components/)
+
+/** Featured-post panel decorative network-node glyph. */
+export function NetworkNodeIcon(props: IconProps) {
+  return (
+    <svg
+      width="130"
+      height="130"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="rgba(255,255,255,0.88)"
+      strokeWidth={1.3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <circle cx="12" cy="12" r="3" />
+      <circle cx="5" cy="5" r="2" />
+      <circle cx="19" cy="5" r="2" />
+      <circle cx="5" cy="19" r="2" />
+      <circle cx="19" cy="19" r="2" />
+      <line x1="7" y1="6.5" x2="10" y2="10" />
+      <line x1="17" y1="6.5" x2="14" y2="10" />
+      <line x1="7" y1="17.5" x2="10" y2="14" />
+      <line x1="17" y1="17.5" x2="14" y2="14" />
+    </svg>
+  );
+}

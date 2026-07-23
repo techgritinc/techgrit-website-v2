@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
-export type BadgeTone = "orange" | "glass" | "blue" | "teal";
+export type BadgeTone = "orange" | "glass" | "blue" | "teal" | "accent";
 
 type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
   tone?: BadgeTone;
@@ -15,6 +15,7 @@ const TONE_CLASSES: Record<BadgeTone, string> = {
   glass: "bg-glass border border-border text-primary backdrop-blur-sm",
   blue: "bg-[rgba(2,132,199,0.16)] text-blue-light",
   teal: "bg-[rgba(15,118,110,0.20)] text-teal-light",
+  accent: "bg-glass-4 border border-border",
 };
 
 /** Shared status/label pill primitive (FR-014). */
