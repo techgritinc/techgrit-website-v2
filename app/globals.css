@@ -283,6 +283,7 @@
   --color-icon-bg-teal: var(--color-icon-bg-teal);
   --color-border-image: var(--color-border-image);
   --shadow-glow-blue: var(--shadow-glow-blue);
+  --shadow-glow-blue-sm: var(--shadow-glow-blue-sm);
   --shadow-glow-teal: var(--shadow-glow-teal);
   --shadow-glow-amber: var(--shadow-glow-amber);
   --shadow-orange-border: var(--shadow-orange-border);

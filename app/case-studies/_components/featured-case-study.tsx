@@ -8,84 +8,49 @@ export function FeaturedCaseStudy({ caseStudy }: { caseStudy: CaseStudy }) {
 
   return (
     <section>
-      <div className="tg-container" style={{ paddingTop: 30, paddingBottom: 10, paddingInline: "var(--space-15)" }}>
+      <div className="tg-container pt-[30px] pb-[10px] px-[var(--space-15)]">
         <RevealOnScroll>
           <Link
             href={`/case-studies/${caseStudy.slug}`}
-            className="grid grid-cols-1 tg-md:grid-cols-[1.1fr_0.9fr] transition-transform duration-[250ms] ease-out hover:-translate-y-[5px] hover:border-[var(--hover-border)]"
-            style={{
-              ["--hover-border" as string]: accentMix(caseStudy.accent, 50),
-              position: "relative",
-              overflow: "hidden",
-              borderRadius: "var(--radius-4xl)",
-              border: "1px solid var(--color-border)",
-              background: "var(--color-glass-faint)",
-              backdropFilter: "blur(8px)",
-            }}
+            className="relative overflow-hidden grid grid-cols-1 tg-md:grid-cols-[1.1fr_0.9fr] rounded-4xl border border-border bg-glass-faint backdrop-blur-md transition-transform duration-[250ms] ease-out hover:-translate-y-[5px] hover:border-[var(--hover-border)]"
+            style={{ ["--hover-border" as string]: accentMix(caseStudy.accent, 50) }}
           >
-            <div className="flex flex-col justify-center" style={{ padding: "48px 44px", gap: 16 }}>
+            <div className="flex flex-col justify-center gap-4 px-[44px] py-[48px]">
               <span
-                className="inline-flex items-center"
-                style={{
-                  alignSelf: "flex-start",
-                  fontSize: 12,
-                  fontWeight: 700,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  padding: "8px 12px",
-                  borderRadius: 30,
-                  background: accentMix(caseStudy.accent, 12),
-                  color: accentColor,
-                  gap: 8,
-                  lineHeight: 1,
-                }}
+                className="inline-flex items-center self-start gap-2 text-[12px] font-bold tracking-[0.1em] uppercase leading-none py-2 px-3 rounded-[30px]"
+                style={{ background: accentMix(caseStudy.accent, 12), color: accentColor }}
               >
                 Featured &middot; {caseStudy.industry}
               </span>
-              <div className="flex flex-wrap items-end" style={{ gap: 14 }}>
+              <div className="flex flex-wrap items-end gap-3.5">
                 <span
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: 54,
-                    fontWeight: "var(--fw-bold)",
-                    lineHeight: 1,
-                    letterSpacing: "var(--ls-snug)",
-                    color: accentColor,
-                  }}
+                  className="font-display text-[54px] font-bold leading-none tracking-[var(--ls-snug)]"
+                  style={{ color: accentColor }}
                 >
                   {caseStudy.headlineMetric.value}
                 </span>
-                <span style={{ paddingBottom: 8, fontSize: 15, color: "var(--color-text-soft)" }}>
+                <span className="pb-2 text-[15px] text-text-soft">
                   {caseStudy.headlineMetric.label}
                 </span>
               </div>
-              <h2 style={{ fontSize: "clamp(26px, 2.8vw, 32px)", fontWeight: "var(--fw-bold)", lineHeight: 1.15, letterSpacing: "-0.02em" }}>
+              <h2 className="text-[clamp(26px,2.8vw,32px)] font-bold leading-[1.15] tracking-[-0.02em]">
                 {caseStudy.title}
               </h2>
-              <p style={{ maxWidth: 520, fontSize: 15.5, lineHeight: "var(--lh-relaxed)", color: "var(--color-text-dimmer)" }}>
+              <p className="max-w-[520px] text-[15.5px] leading-[var(--lh-relaxed)] text-text-dimmer">
                 {caseStudy.summary}
               </p>
-              <span
-                className="inline-flex items-center"
-                style={{ marginTop: 6, gap: 8, fontSize: 15, fontWeight: "var(--fw-bold)", color: "var(--color-amber-light)" }}
-              >
-                Read case study <span aria-hidden="true" style={{ fontSize: 17 }}>&#8594;</span>
+              <span className="inline-flex items-center mt-1.5 gap-2 text-[15px] font-bold text-amber-light">
+                Read case study <span aria-hidden="true" className="text-[17px]">&#8594;</span>
               </span>
             </div>
             <div
-              className="relative flex items-center justify-center"
-              style={{ minHeight: 300, background: accentFeaturedPanelGradient(caseStudy.accent) }}
+              className="relative flex items-center justify-center min-h-[300px]"
+              style={{ background: accentFeaturedPanelGradient(caseStudy.accent) }}
             >
               <div
                 aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  width: 280,
-                  height: 280,
-                  borderRadius: "50%",
-                  background: accentMix(caseStudy.accent, 20),
-                  filter: "blur(70px)",
-                }}
+                className="absolute w-[280px] h-[280px] rounded-full blur-[70px]"
+                style={{ background: accentMix(caseStudy.accent, 20) }}
               />
               <svg
                 width="120"
@@ -96,7 +61,7 @@ export function FeaturedCaseStudy({ caseStudy }: { caseStudy: CaseStudy }) {
                 strokeWidth="1.4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                style={{ position: "relative" }}
+                className="relative"
                 aria-hidden="true"
               >
                 <polyline points="16 18 22 12 16 6" />
