@@ -64,3 +64,10 @@ Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored 
 - TMS-62: built the dynamic homepage (ten sections) and added `components/ui/` as a second, Tailwind-first shared-primitive convention alongside the vanilla `globals.css` classes
 - TMS-63: added global `Header`/`Footer` in `components/layout/`
 - 001-contact-us-page: added the Contact page
+
+## Active Technologies
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-68)
+- N/A — case-study content is a static local TypeScript content module, not persisted data (TMS-68)
+
+## Recent Changes
+- TMS-68: Added TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4

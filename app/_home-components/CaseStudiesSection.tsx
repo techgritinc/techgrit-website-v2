@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Button from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { CASE_STUDIES } from "./home-data";
@@ -20,7 +21,7 @@ export default function CaseStudiesSection() {
         </div>
 
         <div className="mt-11 leading-[normal] grid grid-cols-[1.3fr_1fr] gap-6 max-tg-md:grid-cols-1">
-          <a href="/case-studies" style={{ display: "contents" }}>
+          <Link href="/case-studies" style={{ display: "contents" }}>
             <GlassCard
               variant="reimagine"
               hoverBorderColor=""
@@ -61,11 +62,11 @@ export default function CaseStudiesSection() {
                 </span>
               </div>
             </GlassCard>
-          </a>
+          </Link>
 
           <div className="flex flex-col leading-[normal] gap-6">
             {others.map((study) => (
-              <a key={study.title} href="/case-studies" style={{ display: "contents" }}>
+              <Link key={study.title} href="/case-studies" style={{ display: "contents" }}>
                 <GlassCard
                   variant="reimagine"
                   hoverBorderColor=""
@@ -92,7 +93,7 @@ export default function CaseStudiesSection() {
                     <span className="text-[13px] leading-[normal] text-dim">{study.metricLabel}</span>
                   </div>
                 </GlassCard>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
