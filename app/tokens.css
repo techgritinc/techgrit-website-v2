@@ -59,6 +59,15 @@
   --color-text-placeholder: rgba(255, 255, 255, 0.30); /* Form placeholder text */
   --color-text-nav:       rgba(255, 255, 255, 0.80); /* Nav links default */
   --color-text-nav-sub:   rgba(255, 255, 255, 0.82); /* Nav dropdown links */
+  --color-icon-stroke:    rgba(255, 255, 255, 0.85); /* Decorative SVG icon stroke (case study panels) */
+  --color-text-role:      rgba(255, 255, 255, 0.78); /* Team-panel role label text */
+  --color-text-bright:    rgba(255, 255, 255, 0.90); /* Architecture-diagram integration chip label */
+  --color-text-quiet:     rgba(255, 255, 255, 0.70); /* CTA banner paragraph copy */
+  --color-text-subtle:    rgba(255, 255, 255, 0.75); /* Case-study challenge pain-point text */
+  --color-text-dimmer:    rgba(255, 255, 255, 0.64); /* Featured case-study paragraph copy */
+  --color-text-soft:      rgba(255, 255, 255, 0.60); /* Case-study metric labels, card descriptions */
+  --color-text-faded:     rgba(255, 255, 255, 0.55); /* Case-study grid/related industry label */
+  --color-text-whisper:   rgba(255, 255, 255, 0.30); /* Architecture-diagram flow-down arrow */
   --color-text-85:        rgba(255, 255, 255, 0.85); /* Methodology deliverable list items */
   --color-text-75:        rgba(255, 255, 255, 0.75); /* Testimonials video-badge label */
   --color-text-70:        rgba(255, 255, 255, 0.70); /* Methodology phase-node text — todo state */
@@ -101,6 +110,7 @@
   --color-border-green-40: rgba(52, 211, 153, 0.40); /* Blog newsletter success-state border */
 
   --color-glass:          rgba(255, 255, 255, 0.05); /* Glass card fill */
+  --color-glass-hairline: rgba(255, 255, 255, 0.02); /* Architecture-diagram panel gradient stop */
   --color-glass-4:        rgba(255, 255, 255, 0.04); /* Secondary glass fill */
   --color-glass-strong:   rgba(255, 255, 255, 0.06); /* Input fill */
   --color-glass-hover:    rgba(255, 255, 255, 0.08); /* Input fill on focus */
@@ -113,6 +123,8 @@
   --color-overlay-orange: rgba(232, 119, 34, 0.16);  /* Ambient orb / bg glow */
   --color-overlay-orange-strong: rgba(232, 119, 34, 0.28); /* CTA panel glow blob */
   --color-overlay-blue:   rgba(2, 132, 199, 0.12);   /* Ambient orb / bg glow */
+  --color-overlay-blue-soft: rgba(2, 132, 199, 0.10); /* Ambient orb / bg glow */
+  --color-overlay-teal:   rgba(15, 118, 110, 0.12);  /* Ambient orb / bg glow */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
   --color-overlay-orange-22: rgba(232, 119, 34, 0.22);/* Methodology numeral ambient glow */
   --color-overlay-orange-18: rgba(232, 119, 34, 0.18);/* Blog newsletter panel decorative orb */
@@ -132,6 +144,12 @@
   --color-badge-ink-45:   rgba(7, 15, 22, 0.45);      /* Testimonials video-badge pill background */
   --color-white-96:       rgba(255, 255, 255, 0.96);  /* Testimonials play-button circle fill */
   --color-modal-backdrop: rgba(5, 10, 15, 0.88);      /* Testimonials lightbox modal backdrop */
+  --color-border-faint:   rgba(255, 255, 255, 0.10); /* Case-study glass card border */
+  --color-glass-faint:    rgba(255, 255, 255, 0.04); /* Case-study glass card fill */
+  --color-border-hairline: rgba(255, 255, 255, 0.14); /* Case-studies hero badge border */
+  --color-border-plain:   rgba(255, 255, 255, 0.28); /* Case-study grid card hover border */
+  --color-border-cover:   rgba(255, 255, 255, 0.08); /* Case-study grid cover divider */
+  --color-overlay-orange-soft: rgba(232, 119, 34, 0.18); /* CTA banner glow blob */
 
   /* ----------------------------------------------------------
    * 5. GRADIENTS
@@ -305,6 +323,7 @@
   --shadow-header-scrolled: 0 12px 34px -14px rgba(0, 0, 0, 0.75);     /* Homepage header once solid on scroll */
   --shadow-glow-orange:   0 0 12px 2px rgba(232, 119, 34, 0.80);    /* Status dot glow */
   --shadow-glow-blue:     0 0 16px 3px rgba(56, 189, 248, 0.70);      /* Blue orbit dot */
+  --shadow-glow-blue-sm:  0  0  12px  2px rgba(56,  189, 248, 0.70);   /* Small blue badge-dot glow */
   --shadow-glow-teal:     0 0 16px 3px rgba(45, 212, 191, 0.70);  /* Teal orbit dot */
   --shadow-glow-amber:    0 0 16px 3px rgba(251, 191, 36, 0.75);  /* Amber orbit dot */
   --shadow-orange-border: 0 0 0 1px rgba(232, 119, 34, 0.40);  /* Card orange outline on hover */

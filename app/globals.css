@@ -91,6 +91,26 @@
   --color-glass: var(--color-glass);
   --color-nav-hover: var(--color-nav-hover);
   --color-overlay-orange: var(--color-overlay-orange);
+  --color-overlay-orange-soft: var(--color-overlay-orange-soft);
+  --color-overlay-teal: var(--color-overlay-teal);
+  --color-overlay-blue-soft: var(--color-overlay-blue-soft);
+  --color-border-faint: var(--color-border-faint);
+  --color-border-hairline: var(--color-border-hairline);
+  --color-border-plain: var(--color-border-plain);
+  --color-border-cover: var(--color-border-cover);
+  --color-glass-faint: var(--color-glass-faint);
+  --color-glass-hairline: var(--color-glass-hairline);
+  --color-text-soft: var(--color-text-soft);
+  --color-text-faint: var(--color-text-faint);
+  --color-text-faded: var(--color-text-faded);
+  --color-text-dimmer: var(--color-text-dimmer);
+  --color-text-quiet: var(--color-text-quiet);
+  --color-text-subtle: var(--color-text-subtle);
+  --color-text-whisper: var(--color-text-whisper);
+  --color-text-bright: var(--color-text-bright);
+  --color-text-role: var(--color-text-role);
+  --color-text-placeholder: var(--color-text-placeholder);
+  --color-icon-stroke: var(--color-icon-stroke);
   --color-overlay-orange-22: var(--color-overlay-orange-22);
 
   --shadow-dropdown: var(--shadow-dropdown);
@@ -289,6 +309,7 @@
   --color-icon-bg-teal: var(--color-icon-bg-teal);
   --color-border-image: var(--color-border-image);
   --shadow-glow-blue: var(--shadow-glow-blue);
+  --shadow-glow-blue-sm: var(--shadow-glow-blue-sm);
   --shadow-glow-teal: var(--shadow-glow-teal);
   --shadow-glow-amber: var(--shadow-glow-amber);
   --shadow-orange-border: var(--shadow-orange-border);
@@ -583,6 +604,20 @@ button:focus-visible,
   }
 
   .card-solid:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-3px);
+  }
+
+  /* Case Study cards — translucent glass bg */
+  .card-glass {
+    background: var(--color-glass-faint);
+    border: 1px solid var(--color-border-faint);
+    backdrop-filter: blur(var(--blur-md));
+    border-radius: var(--radius-2xl);
+  }
+
+  .card-glass:hover {
     border-color: var(--color-border-strong);
     box-shadow: var(--shadow-card-hover);
     transform: translateY(-3px);
