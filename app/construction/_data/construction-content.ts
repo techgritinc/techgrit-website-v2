@@ -22,7 +22,12 @@ export const constructionContent: ConstructionPageContent = {
       primaryCtaLink: "/contact/",
       secondaryCtaLabel: "See Solutions",
       secondaryCtaLink: "#solutions",
-      image: null,
+      image: {
+        url: "/samples/ind-construction.png",
+        alternativeText: "Construction site with AI-assisted field monitoring",
+        width: 720,
+        height: 360,
+      },
       stats: [
         { value: "<30d", label: "to first MVP" },
         { value: "1000s", label: "field hours saved" },

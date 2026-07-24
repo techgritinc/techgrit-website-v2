@@ -2,11 +2,12 @@
 
 import { usePathname } from "next/navigation";
 
-// Site-wide decorative glow layer. Case-studies pages carry their own
-// accent-driven backgrounds and must not show this orb set (per reference).
+// Site-wide decorative glow layer. Case-studies and Construction pages carry
+// their own accent-driven backgrounds and must not show this orb set (per
+// their own reference files — Construction's second orb is amber, not blue).
 export function AmbientOrbs() {
   const pathname = usePathname();
-  if (pathname?.startsWith("/case-studies")) return null;
+  if (pathname?.startsWith("/case-studies") || pathname?.startsWith("/construction")) return null;
 
   return (
     <div

@@ -214,4 +214,4 @@ interface CaseStudySummary {
 | lifecycleDiagram       | `app/construction/_components/construction-lifecycle-diagram.tsx`     |
 | advantage              | `app/construction/_components/construction-advantage.tsx`             |
 | impact                 | `app/construction/_components/construction-impact.tsx`                |
-| finalCta               | `app/construction/_components/construction-final-cta.tsx`             |
+| finalCta               | `reusable-components/final-cta.tsx` (shared with About Us — see plan.md's Structure Decision; no page-local `construction-final-cta.tsx` file exists) |

@@ -1,4 +1,4 @@
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
+import Button from "@/components/ui/Button";
 
 export interface FinalCtaContent {
   eyebrow: string;
@@ -9,11 +9,22 @@ export interface FinalCtaContent {
   secondaryCta?: { label: string; link: string };
 }
 
-export function FinalCta({ section }: { section: FinalCtaContent }) {
+export function FinalCta({
+  section,
+  tone = "orange",
+  paddingTop = 40,
+  titleLineHeight,
+}: {
+  section: FinalCtaContent;
+  tone?: "orange" | "amber";
+  paddingTop?: number | string;
+  titleLineHeight?: number | string;
+}) {
+  const glow = tone === "amber" ? "var(--color-overlay-amber-strong)" : "var(--color-overlay-orange-strong)";
+  const eyebrowColor = tone === "amber" ? "var(--color-amber-light)" : "var(--color-orange)";
   return (
     <section>
-      <div className="tg-container" style={{ maxWidth: 1180, paddingTop: 40, paddingBottom: 110 }}>
-        <RevealOnScroll>
+      <div className="tg-container" style={{ maxWidth: 1180, paddingTop: paddingTop, paddingBottom: 110 }}>
           <div
             className="glass-card mx-auto text-center"
             style={{ padding: "76px 40px", position: "relative", overflow: "hidden" }}
@@ -28,7 +39,7 @@ export function FinalCta({ section }: { section: FinalCtaContent }) {
                 width: 520,
                 height: 340,
                 borderRadius: "50%",
-                background: "rgba(232, 119, 34, 0.28)",
+                background: glow,
                 filter: "blur(90px)",
               }}
             />
@@ -39,12 +50,12 @@ export function FinalCta({ section }: { section: FinalCtaContent }) {
                   fontWeight: "var(--fw-bold)",
                   letterSpacing: "var(--ls-widest)",
                   textTransform: "uppercase",
-                  color: "var(--color-orange)",
+                  color: eyebrowColor,
                 }}
               >
                 {section.eyebrow}
               </div>
-              <h2 className="mt-4" style={{ fontSize: "clamp(34px, 4.4vw, 48px)" }}>{section.title}</h2>
+              <h2 className="mt-4" style={{ fontSize: "clamp(34px, 4.4vw, 48px)", lineHeight: titleLineHeight }}>{section.title}</h2>
               <p className="mx-auto mt-5" style={{ maxWidth: 600, color: "var(--color-text-secondary)", fontSize: "clamp(16px, 1.4vw, 18px)" }}>
                 {section.description}
               </p>
@@ -52,27 +63,33 @@ export function FinalCta({ section }: { section: FinalCtaContent }) {
                 className="flex flex-wrap items-center justify-center"
                 style={{ marginTop: 34, gap: 15 }}
               >
-                <a
+                <Button
                   href={section.ctaLink}
-                  className="btn btn-primary btn-lg"
+                  variant="primary"
+                  size="lg"
                   style={{
                     fontSize: "clamp(16px, 1.4vw, 17px)",
                     gap: "10px",
                     padding: "17px 34px",
                     borderRadius: 13,
+                    lineHeight: "normal",
                   }}
                 >
                   {section.ctaLabel} <span aria-hidden="true" style={{ fontSize: "clamp(17px, 1.4vw, 18px)" }}>&#8594;</span>
-                </a>
+                </Button>
                 {section.secondaryCta && (
-                  <a href={section.secondaryCta.link} className="btn btn-ghost btn-lg">
+                  <Button
+                    href={section.secondaryCta.link}
+                    className="leading-[normal] text-[16px]"
+                    variant="ghost"
+                    size="lg"
+                  >
                     {section.secondaryCta.label}
-                  </a>
+                  </Button>
                 )}
               </div>
             </div>
           </div>
-        </RevealOnScroll>
       </div>
     </section>
   );

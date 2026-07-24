@@ -1,118 +1,147 @@
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
-import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
 import type { LifecycleDiagramSection } from "../_data/types";
 
-const DIAGRAM_WIDTH = 640;
-const DIAGRAM_HEIGHT = 520;
-const CENTER_X = DIAGRAM_WIDTH / 2;
-const CENTER_Y = DIAGRAM_HEIGHT / 2;
-const RADIUS_X = 265;
-const RADIUS_Y = 205;
-const NODE_WIDTH = 148;
-const NODE_HEIGHT = 62;
+const NODE_POSITIONS: React.CSSProperties[] = [
+  { left: "2%", top: "9%" },
+  { left: "28%", top: "2%" },
+  { right: "28%", top: "2%" },
+  { right: "2%", top: "9%" },
+  { left: "2%", bottom: "9%" },
+  { left: "28%", bottom: "2%" },
+  { right: "28%", bottom: "2%" },
+  { right: "2%", bottom: "9%" },
+];
 
-function nodePosition(index: number, total: number) {
-  const angle = (index / total) * Math.PI * 2 - Math.PI / 2;
-  return {
-    x: CENTER_X + RADIUS_X * Math.cos(angle),
-    y: CENTER_Y + RADIUS_Y * Math.sin(angle),
-  };
-}
+const CONNECTOR_PATHS = [
+  "M550 150 C 360 150, 300 70, 150 70",
+  "M550 150 C 420 150, 380 70, 410 70",
+  "M550 150 C 680 150, 720 70, 690 70",
+  "M550 150 C 740 150, 800 70, 950 70",
+  "M550 150 C 360 150, 300 230, 150 230",
+  "M550 150 C 420 150, 380 230, 410 230",
+  "M550 150 C 680 150, 720 230, 690 230",
+  "M550 150 C 740 150, 800 230, 950 230",
+];
 
 export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDiagramSection }) {
-  const positions = section.nodes.map((node, index) => ({
-    node,
-    ...nodePosition(index, section.nodes.length),
-  }));
-
   return (
-    <section className="section">
+    <section className="section" style={{paddingTop: 80, paddingBottom: 40}}>
       <div className="tg-container">
-        <RevealOnScroll>
-          <div className="mx-auto mb-[50px] max-w-[680px] text-center">
-            <SectionEyebrow tone="amber">{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>{section.title}</h2>
-          </div>
-
           <div
-            className="relative mx-auto hidden lg:block"
-            style={{ width: "100%", maxWidth: DIAGRAM_WIDTH, height: DIAGRAM_HEIGHT }}
+            className="relative overflow-hidden rounded-[24px] border border-border-faint"
+            style={{
+              background: "linear-gradient(160deg, var(--color-glass), var(--color-glass-hairline))",
+              padding: "42px 40px",
+            }}
           >
-            <svg
-              className="pointer-events-none absolute inset-0"
-              width="100%"
-              height="100%"
-              viewBox={`0 0 ${DIAGRAM_WIDTH} ${DIAGRAM_HEIGHT}`}
-              aria-hidden="true"
-            >
-              {positions.map(({ node, x, y }) => (
-                <line
-                  key={node.order}
-                  x1={CENTER_X}
-                  y1={CENTER_Y}
-                  x2={x}
-                  y2={y}
-                  stroke="var(--color-border-strong)"
-                  strokeWidth={1.5}
-                  strokeDasharray="6 6"
-                  style={{ animation: "tgdash 1.4s linear infinite" }}
-                />
-              ))}
-            </svg>
-
             <div
-              className="absolute flex flex-col items-center justify-center text-center"
+              aria-hidden="true"
+              className="absolute rounded-full"
               style={{
-                left: CENTER_X,
-                top: CENTER_Y,
-                transform: "translate(-50%, -50%)",
-                width: 148,
-                height: 148,
-                borderRadius: "50%",
-                background: "var(--gradient-brand)",
-                boxShadow: "0 20px 50px -18px rgba(232,119,34,0.6)",
-                zIndex: 2,
+                top: -80,
+                right: "10%",
+                width: 360,
+                height: 360,
+                background: "var(--color-overlay-amber-12)",
+                filter: "blur(110px)",
               }}
-            >
-              <span style={{ fontFamily: "var(--font-display)", fontWeight: "var(--fw-bold)", fontSize: 19, color: "var(--color-ink)" }}>
-                {section.engineLabel}
+            />
+
+            <div className="relative mx-auto mb-[8px] max-w-[680px] text-center">
+              <span className="eyebrow" style={{ color: "var(--color-amber-light)", lineHeight: "normal" }}>
+                {section.eyebrow}
               </span>
-              <span style={{ fontSize: "var(--text-2xs)", fontWeight: "var(--fw-bold)", letterSpacing: "var(--ls-wide)", textTransform: "uppercase", color: "rgba(10,24,34,0.75)" }}>
-                {section.engineSubLabel}
-              </span>
+              <h2 className="mt-[14px]" style={{ fontSize: "clamp(26px, 3.2vw, 36px)", lineHeight: 1.1 }}>
+                {section.title}
+              </h2>
             </div>
 
-            {positions.map(({ node, x, y }) => (
-              <div
-                key={node.order}
-                className="card absolute flex items-center justify-center text-center"
-                style={{
-                  left: x,
-                  top: y,
-                  transform: "translate(-50%, -50%)",
-                  width: NODE_WIDTH,
-                  height: NODE_HEIGHT,
-                  padding: "8px 14px",
-                  zIndex: 1,
-                }}
-              >
-                <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
-                  {node.name}
-                </span>
-              </div>
-            ))}
-          </div>
+            <div className="relative mt-[46px] hidden md:block">
+              <svg viewBox="0 0 1100 300" className="block w-full overflow-visible" style={{ height: "auto" }} aria-hidden="true">
+                <defs>
+                  <linearGradient id="tg-lifecycle-flow" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" style={{ stopColor: "var(--color-amber)" }} />
+                    <stop offset="1" style={{ stopColor: "var(--color-orange)" }} />
+                  </linearGradient>
+                </defs>
+                <g
+                  stroke="url(#tg-lifecycle-flow)"
+                  strokeWidth={2}
+                  fill="none"
+                  opacity={0.55}
+                  strokeDasharray="6 7"
+                  style={{ animation: "tgdash 7s linear infinite" }}
+                >
+                  {CONNECTOR_PATHS.map((d, i) => (
+                    <path key={i} d={d} />
+                  ))}
+                </g>
+                <circle
+                  cx={550}
+                  cy={150}
+                  r={78}
+                  fill="var(--color-overlay-amber)"
+                  stroke="color-mix(in srgb, var(--color-amber) 50%, transparent)"
+                  strokeWidth={1.5}
+                />
+                <circle
+                  cx={550}
+                  cy={150}
+                  r={52}
+                  fill="url(#tg-lifecycle-flow)"
+                  opacity={0.9}
+                  style={{ transformOrigin: "550px 150px", animation: "tgpulsecore 4s ease-in-out infinite" }}
+                />
+                <text className="leading-normal" x={550} y={145} textAnchor="middle" fill="#fff" fontFamily="var(--font-display)" fontWeight={700} fontSize={19}>
+                  {section.engineLabel}
+                </text>
+                <text
+                  className="leading-normal"
+                  x={550}
+                  y={166}
+                  textAnchor="middle"
+                  fill="rgba(255,255,255,0.85)"
+                  fontFamily="var(--font-body)"
+                  fontWeight={600}
+                  fontSize={12}
+                >
+                  {section.engineSubLabel}
+                </text>
+              </svg>
 
-          <div className="grid grid-cols-2 gap-4 lg:hidden">
-            {section.nodes.map((node) => (
-              <div key={node.order} className="card" style={{ padding: "18px 16px", textAlign: "center" }}>
-                <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
-                  {node.name}
-                </span>
+              <div className="pointer-events-none absolute inset-0">
+                {section.nodes.map((node, i) => (
+                  <div
+                    key={node.order}
+                    className="absolute text-center"
+                    style={{ width: 170, ...NODE_POSITIONS[i] }}
+                  >
+                    <div
+                      className="rounded-[12px] border border-border"
+                      style={{ background: "var(--color-nav-glass)", padding: "12px 10px", backdropFilter: "blur(6px)" }}
+                    >
+                      <div style={{ fontSize: "13.5px", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
+                        {node.name}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <div className="relative mt-8 grid grid-cols-2 gap-[12px] md:hidden">
+              {section.nodes.map((node) => (
+                <div
+                  key={node.order}
+                  className="rounded-[12px] border border-border text-center"
+                  style={{ background: "var(--color-ink-glass-60)", padding: 14 }}
+                >
+                  <span style={{ fontSize: "13.5px", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
+                    {node.name}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </RevealOnScroll>
       </div>
     </section>
   );

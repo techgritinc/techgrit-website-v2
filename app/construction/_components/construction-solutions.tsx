@@ -1,25 +1,24 @@
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
 import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
+import { GlassCard, GlassCardIcon, GlassCardTitle, GlassCardDescription } from "@/components/ui/GlassCard";
 import type { SolutionsSection } from "../_data/types";
 
 const SOLUTION_ICON_PATHS: Record<number, React.ReactNode> = {
   1: (
     <>
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <path d="M14 2v6h6" />
-      <path d="M9 15l2 2 4-4" />
+      <path d="M9 11l3 3L22 4" />
+      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
     </>
   ),
   2: (
     <>
-      <path d="M3 3v18h18" />
-      <path d="M18 9l-5 5-4-4-4 4" />
+      <path d="M23 6l-9.5 9.5-5-5L1 18" />
+      <polyline points="17 6 23 6 23 12" />
     </>
   ),
   3: (
     <>
       <rect x="5" y="2" width="14" height="20" rx="2" />
-      <line x1="9" y1="18" x2="15" y2="18" />
+      <line x1="12" y1="18" x2="12" y2="18" />
     </>
   ),
   4: (
@@ -30,15 +29,16 @@ const SOLUTION_ICON_PATHS: Record<number, React.ReactNode> = {
   ),
   5: (
     <>
-      <rect x="2" y="7" width="20" height="14" rx="2" />
-      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+      <ellipse cx="12" cy="5" rx="9" ry="3" />
+      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+      <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
     </>
   ),
   6: (
     <>
-      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-      <line x1="12" y1="22.08" x2="12" y2="12" />
+      <path d="M12 2 2 7l10 5 10-5-10-5z" />
+      <path d="m2 17 10 5 10-5" />
+      <path d="m2 12 10 5 10-5" />
     </>
   ),
 };
@@ -46,8 +46,8 @@ const SOLUTION_ICON_PATHS: Record<number, React.ReactNode> = {
 function SolutionIcon({ order }: { order: number }) {
   return (
     <svg
-      width="20"
-      height="20"
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="var(--color-amber-light)"
@@ -63,35 +63,35 @@ function SolutionIcon({ order }: { order: number }) {
 
 export function ConstructionSolutions({ section }: { section: SolutionsSection }) {
   return (
-    <section id="solutions" className="section">
+    <section id="solutions" className="">
       <div className="tg-container">
-        <RevealOnScroll>
-          <div className="mx-auto mb-[50px] max-w-[680px] text-center">
+          <div className="mb-[40px] max-w-[760px]">
             <SectionEyebrow tone="amber">{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>{section.title}</h2>
+            <h2 className="leading-[1.08]" style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>{section.title}</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[22px]">
             {section.solutions.map((solution) => (
-              <div key={solution.order} className="card" style={{ padding: "30px 26px" }}>
-                <div
-                  className="flex items-center justify-center"
+              <GlassCard
+                key={solution.order}
+                variant="constructionSolution"
+                hoverBorderColor=""
+              >
+                <GlassCardIcon
+                  variant="constructionSolution"
+                  wrapperClassName="border"
                   style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: "var(--radius-lg)",
-                    background: "rgba(247, 183, 51, 0.14)",
+                    background:
+                      "linear-gradient(140deg, color-mix(in srgb, var(--color-amber) 22%, transparent), color-mix(in srgb, var(--color-orange) 10%, transparent))",
+                    borderColor: "color-mix(in srgb, var(--color-amber) 30%, transparent)",
                   }}
                 >
                   <SolutionIcon order={solution.order} />
-                </div>
-                <h3 className="mt-4" style={{ fontSize: "18px" }}>{solution.title}</h3>
-                <p className="mt-2" style={{ fontSize: "var(--text-sm)", color: "var(--color-text-faint)", lineHeight: 1.6 }}>
-                  {solution.description}
-                </p>
-              </div>
+                </GlassCardIcon>
+                <GlassCardTitle className="leading-[normal] tracking-[normal]" variant="constructionSolution">{solution.title}</GlassCardTitle>
+                <GlassCardDescription variant="constructionSolution">{solution.description}</GlassCardDescription>
+              </GlassCard>
             ))}
           </div>
-        </RevealOnScroll>
       </div>
     </section>
   );

@@ -71,6 +71,7 @@
    * classes elsewhere in this file are unaffected and keep consuming var()
    * directly, per the scope decision to migrate only new work to Tailwind. */
   --color-nav-glass: var(--color-nav-glass);
+  --color-ink-glass-60: var(--color-ink-glass-60);
   --color-dd-bg: var(--color-dd-bg);
   --color-mobile-menu-bg: var(--color-mobile-menu-bg);
   --color-header-scrolled-bg: var(--color-header-scrolled-bg);
@@ -304,14 +305,19 @@
   --color-purple: var(--color-purple);
   --color-overlay-blue: var(--color-overlay-blue);
   --color-overlay-amber: var(--color-overlay-amber);
+  --color-overlay-amber-soft: var(--color-overlay-amber-soft);
+  --color-overlay-amber-12: var(--color-overlay-amber-12);
   --color-overlay-orange-strong: var(--color-overlay-orange-strong);
+  --color-overlay-amber-strong: var(--color-overlay-amber-strong);
   --color-icon-bg-blue: var(--color-icon-bg-blue);
   --color-icon-bg-teal: var(--color-icon-bg-teal);
   --color-border-image: var(--color-border-image);
+  --color-border-amber-soft: var(--color-border-amber-soft);
   --shadow-glow-blue: var(--shadow-glow-blue);
   --shadow-glow-blue-sm: var(--shadow-glow-blue-sm);
   --shadow-glow-teal: var(--shadow-glow-teal);
   --shadow-glow-amber: var(--shadow-glow-amber);
+  --shadow-glow-yellow: var(--shadow-glow-yellow);
   --shadow-orange-border: var(--shadow-orange-border);
   --shadow-phase-ring: var(--shadow-phase-ring);
   --shadow-phase-active: var(--shadow-phase-active);
@@ -777,6 +783,11 @@ button:focus-visible,
     box-shadow: var(--shadow-glow-orange);
   }
 
+  .status-yellow {
+    background: var(--color-yellow);
+    box-shadow: var(--shadow-glow-yellow);
+  }
+
   /* ----------------------------------------------------------
  * SCROLL MARGIN — accounts for sticky nav
  * ---------------------------------------------------------- */
@@ -885,7 +896,19 @@ button:focus-visible,
   /* SVG dash animation (orbit connector lines) */
   @keyframes tgdash {
     to {
-      stroke-dashoffset: -26;
+      stroke-dashoffset: -220;
+    }
+  }
+
+  /* Lifecycle diagram core pulse (TMS-67) */
+  @keyframes tgpulsecore {
+    0%, 100% {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.95;
+      transform: scale(1.06);
     }
   }
 
@@ -1088,9 +1111,9 @@ button:focus-visible,
   }
 
   @media (max-width: 560px) {
-    .tg-container {
+    /* .tg-container {
       padding-inline: 20px;
-    }
+    } */
 
     .glass-card {
       padding: 20px 20px;

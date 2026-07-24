@@ -1,13 +1,12 @@
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
 import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
+import { GlassCard, GlassCardIcon, GlassCardTitle } from "@/components/ui/GlassCard";
 import type { ChallengesSection } from "../_data/types";
 
 const CHALLENGE_ICON_PATHS: Record<number, React.ReactNode> = {
   1: (
     <>
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <path d="M14 2v6h6" />
-      <path d="M9 15l2 2 4-4" />
+      <polyline points="14 2 14 8 20 8" />
     </>
   ),
   2: (
@@ -18,18 +17,23 @@ const CHALLENGE_ICON_PATHS: Record<number, React.ReactNode> = {
   ),
   3: (
     <>
-      <path d="M17 6.1H3" />
-      <path d="M21 12.1H3" />
-      <path d="M15.1 18H3" />
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
     </>
   ),
   4: (
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <>
+      <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </>
   ),
   5: (
     <>
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 8v4l3 2" />
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+      <line x1="2" y1="2" x2="22" y2="22" />
     </>
   ),
 };
@@ -41,7 +45,7 @@ function ChallengeIcon({ order }: { order: number }) {
       height="20"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="var(--color-orange)"
+      stroke="var(--color-amber-light)"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -54,41 +58,30 @@ function ChallengeIcon({ order }: { order: number }) {
 
 export function ConstructionChallenges({ section }: { section: ChallengesSection }) {
   return (
-    <section className="section">
+    <section className="section-lg" style={{ paddingTop: 80}}>
       <div className="tg-container">
-        <RevealOnScroll>
-          <div className="mx-auto mb-[50px] max-w-[680px] text-center">
+          <div className="mb-[38px] max-w-[760px]">
+          <div style={{ lineHeight: "normal" }}>
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>{section.title}</h2>
-            <p className="mt-5" style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-base)" }}>
+          </div>
+            <h2 className="leading-[1.08]" style={{ fontSize: "clamp(30px, 3.6vw, 42px)" }}>{section.title}</h2>
+            <p className="mt-4" style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-base)" }}>
               {section.description}
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-[18px]">
             {section.challenges.map((challenge) => (
-              <div
-                key={challenge.order}
-                className="card"
-                style={{ padding: "28px 22px", textAlign: "center" }}
-              >
-                <div
-                  className="mx-auto flex items-center justify-center"
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: "var(--radius-lg)",
-                    background: "var(--color-overlay-orange)",
-                  }}
+              <GlassCard key={challenge.order} variant="constructionChallenge" hoverBorderColor="">
+                <GlassCardIcon
+                  variant="constructionChallenge"
+                  wrapperClassName="bg-overlay-orange"
                 >
                   <ChallengeIcon order={challenge.order} />
-                </div>
-                <p className="mt-4" style={{ fontSize: "var(--text-sm)", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
-                  {challenge.label}
-                </p>
-              </div>
+                </GlassCardIcon>
+                <GlassCardTitle variant="constructionChallenge" className="tracking-normal">{challenge.label}</GlassCardTitle>
+              </GlassCard>
             ))}
           </div>
-        </RevealOnScroll>
       </div>
     </section>
   );

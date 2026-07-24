@@ -1,45 +1,41 @@
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
 import type { IntegrationsStripSection } from "../_data/types";
 
 export function ConstructionIntegrationsStrip({ section }: { section: IntegrationsStripSection }) {
   return (
     <section>
-      <div className="tg-container" style={{ maxWidth: 1140, paddingTop: 20, paddingBottom: 20 }}>
-        <RevealOnScroll>
+      <div className="tg-container" style={{ paddingTop: 18 }}>
           <div
+            className="flex flex-wrap items-center justify-between"
             style={{
-              borderTop: "1px solid var(--color-border)",
-              paddingTop: 32,
+              borderTop: "1px solid var(--color-border-8)",
+              borderBottom: "1px solid var(--color-border-8)",
+              padding: "26px 0",
+              gap: 30,
             }}
           >
-            <div
-              className="text-center"
+            <span
+              className="leading-[normal]"
               style={{
                 fontSize: "var(--text-2xs)",
                 fontWeight: "var(--fw-bold)",
-                letterSpacing: "var(--ls-wider)",
+                letterSpacing: "1.75px",
                 textTransform: "uppercase",
-                color: "var(--color-text-faint)",
+                color: "var(--color-text-ghost)",
+                whiteSpace: "nowrap",
               }}
             >
               {section.label}
-            </div>
-            <div
-              className="flex flex-wrap items-center justify-center"
-              style={{ marginTop: 22, gap: 12 }}
-            >
+            </span>
+            <div className="flex flex-wrap items-center gap-[14px] sm:gap-[34px] leading-[normal]">
               {section.partners.map((partner) => (
                 <span
                   key={partner.name}
                   style={{
-                    background: "var(--color-glass)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: "var(--radius-pill)",
-                    padding: "10px 22px",
-                    fontSize: "var(--text-sm)",
+                    fontFamily: "var(--font-display)",
+                    fontSize: 21,
                     fontWeight: "var(--fw-bold)",
-                    color: "var(--color-text-secondary)",
-                    backdropFilter: "blur(var(--blur-sm))",
+                    color: "var(--color-text-muted)",
+                    letterSpacing: "-0.01em",
                   }}
                 >
                   {partner.name}
@@ -47,7 +43,6 @@ export function ConstructionIntegrationsStrip({ section }: { section: Integratio
               ))}
             </div>
           </div>
-        </RevealOnScroll>
       </div>
     </section>
   );
