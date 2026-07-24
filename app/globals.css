@@ -38,14 +38,6 @@
   --font-sans:    var(--font-body);
   --font-display: var(--font-display);
 
-  /* Breakpoints — remap Tailwind's sm:/md:/lg: to the documented contract.
-     Must be literal values (not var() indirection): Tailwind/Lightning CSS
-     inlines these into @media conditions at build time and cannot resolve a
-     CSS custom property there. Canonical values still live in tokens.css. */
-  --breakpoint-sm: 560px;
-  --breakpoint-md: 960px;
-  --breakpoint-lg: 1140px;
-
   /* Border radius */
   --radius-xs:    var(--radius-xs);
   --radius-sm:    var(--radius-sm);

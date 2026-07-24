@@ -11,7 +11,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
         className="tg-container grid grid-cols-1 items-center gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-16"
         style={{ paddingTop: 78, paddingBottom: 26 }}
       >
-        <div className="order-2 md:order-1">
+        <div className="order-1">
           <div
             data-rise
             className="inline-flex items-center"
