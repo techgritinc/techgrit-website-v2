@@ -114,9 +114,9 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
               style={{ background: "linear-gradient(180deg, rgba(10,24,34,0) 45%, rgba(10,24,34,0.55))" }}
             />
             <div className="absolute flex leading-[normal]" style={{ left: 20, bottom: 18, right: 20, gap: 10 }}>
-              {section.stats.map((stat, index) => (
+              {section.stats.map((stat) => (
                 <div
-                  key={index}
+                  key={stat.order}
                   className="flex-1 leading-[normal]"
                   style={{
                     background: "rgba(10,24,34,0.6)",

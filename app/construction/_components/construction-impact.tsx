@@ -4,7 +4,6 @@ import type { ImpactSection } from "../_data/types";
 
 export function ConstructionImpact({ section }: { section: ImpactSection }) {
   return (
-// In construction-impact.tsx
    <section className="section" style={{ paddingTop: 20 }}>
       <div className="tg-container">
           <div className="mb-[38px] max-w-[760px]">

@@ -29,9 +29,9 @@ export const constructionContent: ConstructionPageContent = {
         height: 360,
       },
       stats: [
-        { value: "<30d", label: "to first MVP" },
-        { value: "1000s", label: "field hours saved" },
-        { value: "24/7", label: "safety monitoring" },
+        { order: 1, value: "<30d", label: "to first MVP" },
+        { order: 2, value: "1000s", label: "field hours saved" },
+        { order: 3, value: "24/7", label: "safety monitoring" },
       ],
     },
     {
@@ -39,11 +39,11 @@ export const constructionContent: ConstructionPageContent = {
       order: 2,
       label: "Integrates with the tools you run on",
       partners: [
-        { name: "Procore" },
-        { name: "Autodesk" },
-        { name: "Bluebeam" },
-        { name: "Newforma" },
-        { name: "Oracle Primavera" },
+        { order: 1, name: "Procore" },
+        { order: 2, name: "Autodesk" },
+        { order: 3, name: "Bluebeam" },
+        { order: 4, name: "Newforma" },
+        { order: 5, name: "Oracle Primavera" },
       ],
     },
     {

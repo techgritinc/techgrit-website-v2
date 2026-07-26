@@ -11,6 +11,7 @@ export interface SectionImage {
 }
 
 export interface HeroStat {
+  order: number;
   value: string;
   label: string;
 }
@@ -27,10 +28,11 @@ export interface HeroSection {
   secondaryCtaLabel: string;
   secondaryCtaLink: string;
   image: SectionImage | null;
-  stats: HeroStat[]; // exactly 3
+  stats: HeroStat[]; // exactly 3, each with a stable `order` for keying (Constitution Principle III)
 }
 
 export interface IntegrationPartner {
+  order: number;
   name: string;
 }
 

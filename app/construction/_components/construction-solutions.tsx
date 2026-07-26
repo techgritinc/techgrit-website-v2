@@ -65,33 +65,33 @@ export function ConstructionSolutions({ section }: { section: SolutionsSection }
   return (
     <section id="solutions" className="">
       <div className="tg-container">
-          <div className="mb-[40px] max-w-[760px]">
-            <SectionEyebrow tone="amber">{section.eyebrow}</SectionEyebrow>
-            <h2 className="leading-[1.08]" style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>{section.title}</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[22px]">
-            {section.solutions.map((solution) => (
-              <GlassCard
-                key={solution.order}
+        <div className="mb-[40px] max-w-[760px]">
+          <SectionEyebrow tone="amber">{section.eyebrow}</SectionEyebrow>
+          <h2 className="leading-[1.08]" style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>{section.title}</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[22px]">
+          {section.solutions.map((solution) => (
+            <GlassCard
+              key={solution.order}
+              variant="constructionSolution"
+              hoverBorderColor=""
+            >
+              <GlassCardIcon
                 variant="constructionSolution"
-                hoverBorderColor=""
+                wrapperClassName="border"
+                style={{
+                  background:
+                    "linear-gradient(140deg, color-mix(in srgb, var(--color-amber) 22%, transparent), color-mix(in srgb, var(--color-orange) 10%, transparent))",
+                  borderColor: "color-mix(in srgb, var(--color-amber) 30%, transparent)",
+                }}
               >
-                <GlassCardIcon
-                  variant="constructionSolution"
-                  wrapperClassName="border"
-                  style={{
-                    background:
-                      "linear-gradient(140deg, color-mix(in srgb, var(--color-amber) 22%, transparent), color-mix(in srgb, var(--color-orange) 10%, transparent))",
-                    borderColor: "color-mix(in srgb, var(--color-amber) 30%, transparent)",
-                  }}
-                >
-                  <SolutionIcon order={solution.order} />
-                </GlassCardIcon>
-                <GlassCardTitle className="leading-[normal] tracking-[normal]" variant="constructionSolution">{solution.title}</GlassCardTitle>
-                <GlassCardDescription variant="constructionSolution">{solution.description}</GlassCardDescription>
-              </GlassCard>
-            ))}
-          </div>
+                <SolutionIcon order={solution.order} />
+              </GlassCardIcon>
+              <GlassCardTitle className="leading-[normal] tracking-[normal]" variant="constructionSolution">{solution.title}</GlassCardTitle>
+              <GlassCardDescription variant="constructionSolution">{solution.description}</GlassCardDescription>
+            </GlassCard>
+          ))}
+        </div>
       </div>
     </section>
   );

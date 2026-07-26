@@ -60,7 +60,7 @@ export function ConstructionChallenges({ section }: { section: ChallengesSection
   return (
     <section className="section-lg" style={{ paddingTop: 80}}>
       <div className="tg-container">
-          <div className="mb-[38px] max-w-[760px]">
+        <div className="mb-[38px] max-w-[760px]">
           <div style={{ lineHeight: "normal" }}>
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
           </div>
