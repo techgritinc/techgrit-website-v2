@@ -34,8 +34,10 @@
   /* Semantic accents */
   --color-blue:         #0284C7;  /* Intelligence Blue — AI content, PRISM, data */
   --color-blue-light:   #38bdf8;  /* Blue light — icon strokes, list dots */
+  --color-blue-bright:  #388DF8;  /* Blue bright — icon strokes, list dots */
   --color-teal:         #0F766E;  /* Deep Teal — architecture, ORBIT, legacy-to-modern */
   --color-teal-light:   #2dd4bf;  /* Teal light — accent on teal sections */
+  --color-teal-bright:  #2DDFBF;  /* Teal bright — accent on teal sections */
   --color-green:        #34d399;  /* Success — live status, confirmation states */
   --color-error:        #FB7185;  /* Error / danger — form validation messages (Blog contact form) */
   --color-purple:       #A78BFA;  /* Blog category accent — "Engineering" / "AI" article tags (violet) */
@@ -48,13 +50,35 @@
    * 2. TEXT COLORS  (dark-surface defaults)
    * ---------------------------------------------------------- */
   --color-text-primary:   rgba(255, 255, 255, 1.00); /* Headings, strong UI text */
+  --color-text-strong:    rgba(255, 255, 255, 0.92); /* Hero eyebrow/badge label text */
   --color-text-secondary: rgba(255, 255, 255, 0.72); /* Body paragraph text */
   --color-text-muted:     rgba(255, 255, 255, 0.62); /* Supporting copy */
   --color-text-faint:     rgba(255, 255, 255, 0.58); /* Icon captions, sub-labels */
+  --color-text-dim:       rgba(255, 255, 255, 0.50); /* Stat labels, console captions (TMS-62) */
   --color-text-ghost:     rgba(255, 255, 255, 0.42); /* Section labels, eyebrow text */
-  --color-text-placeholder: rgba(255, 255, 255, 0.40); /* Form placeholder text */
+  --color-text-placeholder: rgba(255, 255, 255, 0.30); /* Form placeholder text */
   --color-text-nav:       rgba(255, 255, 255, 0.80); /* Nav links default */
   --color-text-nav-sub:   rgba(255, 255, 255, 0.82); /* Nav dropdown links */
+  --color-icon-stroke:    rgba(255, 255, 255, 0.85); /* Decorative SVG icon stroke (case study panels) */
+  --color-text-role:      rgba(255, 255, 255, 0.78); /* Team-panel role label text */
+  --color-text-bright:    rgba(255, 255, 255, 0.90); /* Architecture-diagram integration chip label */
+  --color-text-quiet:     rgba(255, 255, 255, 0.70); /* CTA banner paragraph copy */
+  --color-text-subtle:    rgba(255, 255, 255, 0.75); /* Case-study challenge pain-point text */
+  --color-text-dimmer:    rgba(255, 255, 255, 0.64); /* Featured case-study paragraph copy */
+  --color-text-soft:      rgba(255, 255, 255, 0.60); /* Case-study metric labels, card descriptions */
+  --color-text-faded:     rgba(255, 255, 255, 0.55); /* Case-study grid/related industry label */
+  --color-text-whisper:   rgba(255, 255, 255, 0.30); /* Architecture-diagram flow-down arrow */
+  --color-text-85:        rgba(255, 255, 255, 0.85); /* Methodology deliverable list items */
+  --color-text-75:        rgba(255, 255, 255, 0.75); /* Testimonials video-badge label */
+  --color-text-70:        rgba(255, 255, 255, 0.70); /* Methodology phase-node text — todo state */
+  --color-text-60:        rgba(255, 255, 255, 0.60);
+  --color-text-55:        rgba(255, 255, 255, 0.55);
+  --color-text-40:        rgba(255, 255, 255, 0.40);
+  --color-text-45:        rgba(255, 255, 255, 0.45); /* Blog newsletter helper text — default state */
+  --color-text-32:        rgba(255, 255, 255, 0.32);
+  --color-text-64:        rgba(255, 255, 255, 0.64); /* Case study card description text */
+  --color-text-13:        rgba(255, 255, 255, 0.13); /* Testimonials video-card initials watermark */
+  /* Methodology scroll-hint caption */
 
   /* ----------------------------------------------------------
    * 3. SURFACE COLORS — Light page sections (v1 light palette)
@@ -73,30 +97,76 @@
   --color-border-strong:  rgba(255, 255, 255, 0.16); /* Button ghost border */
   --color-border-orange:  rgba(232, 119, 34, 0.38);  /* Orange-tinted border (hero badge) */
   --color-border-orange-strong: rgba(232, 119, 34, 0.60); /* Input focus border */
+  --color-border-orange-hover:  rgba(232, 119, 34, 0.85); /* Hero badge border on hover */
+  --color-border-orange-medium: rgba(232, 119, 34, 0.50); /* Card hover border (orange accent, softer) */
+  --color-border-blue-strong: rgba(2, 132, 199, 0.60);   /* Card hover border (blue accent) */
+  --color-border-teal-strong: rgba(15, 118, 110, 0.70);  /* Card hover border (teal accent) */
   --color-border-image:   rgba(255, 255, 255, 0.10); /* Image card border (Careers) */
+  --color-border-18:      rgba(255, 255, 255, 0.18); /* Phase-node border — todo state (Methodology) */
+  --color-border-30:      rgba(255, 255, 255, 0.30); /* Phase-node border — done/active state (Methodology) */
+  --color-border-28:      rgba(255, 255, 255, 0.28); /* Testimonials video-badge pill border */
+  --color-border-22:      rgba(255, 255, 255, 0.22); /* Testimonials lightbox close-button border */
+  --color-border-14:      rgba(255, 255, 255, 0.14); /* Topic filter inactive chip border (Blog) */
+  --color-border-green-40: rgba(52, 211, 153, 0.40); /* Blog newsletter success-state border */
 
   --color-glass:          rgba(255, 255, 255, 0.05); /* Glass card fill */
+  --color-glass-hairline: rgba(255, 255, 255, 0.02); /* Architecture-diagram panel gradient stop */
+  --color-glass-4:        rgba(255, 255, 255, 0.04); /* Secondary glass fill */
   --color-glass-strong:   rgba(255, 255, 255, 0.06); /* Input fill */
   --color-glass-hover:    rgba(255, 255, 255, 0.08); /* Input fill on focus */
   --color-nav-glass:      rgba(10, 24, 34, 0.70);    /* Sticky nav background */
+  --color-nav-hover:      rgba(255, 255, 255, 0.07); /* Nav link hover background */
   --color-dd-bg:          rgba(13, 26, 37, 0.97);    /* Dropdown menu bg */
   --color-mobile-menu-bg: rgba(10, 24, 34, 0.97);    /* Mobile nav panel bg (darker than dd-bg) */
-  --color-header-scrolled-bg:     rgba(8, 16, 24, 0.86);   /* Homepage header once solid on scroll */
+  --color-header-scrolled-bg:rgba(8, 16, 24, 0.86);   /* Homepage header once solid on scroll */
   --color-border-header-scrolled: rgba(255, 255, 255, 0.08); /* Homepage header border once scrolled */
   --color-overlay-orange: rgba(232, 119, 34, 0.16);  /* Ambient orb / bg glow */
+  --color-overlay-orange-strong: rgba(232, 119, 34, 0.28); /* CTA panel glow blob */
   --color-overlay-blue:   rgba(2, 132, 199, 0.12);   /* Ambient orb / bg glow */
+  --color-overlay-blue-soft: rgba(2, 132, 199, 0.10); /* Ambient orb / bg glow */
+  --color-overlay-teal:   rgba(15, 118, 110, 0.12);  /* Ambient orb / bg glow */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
+  --color-overlay-orange-22: rgba(232, 119, 34, 0.22);/* Methodology numeral ambient glow */
+  --color-overlay-orange-18: rgba(232, 119, 34, 0.18);/* Blog newsletter panel decorative orb */
+  --color-overlay-green-12: rgba(52, 211, 153, 0.12); /* Blog newsletter success-state background */
+  --color-icon-bg-blue: rgba(2, 132, 199, 0.16);  /* Icon background tint — blue tone (differentiator/platform agent cards) */
+  --color-icon-bg-teal: rgba(15, 118, 110, 0.20); /* Icon background tint — teal tone (differentiator/platform agent cards) */
+
+  /* Specific UI Colors */
+  --color-console-bg: rgba(13, 24, 33, 0.72);
+  --color-glass-faint: rgba(255, 255, 255, 0.03);
+  --color-glass-8: rgba(255, 255, 255, 0.08);
+  --color-border-8: rgba(255, 255, 255, 0.08);
+  --color-mac-red: #ff5f57;
+  --color-mac-yellow: #febc2e;
+  --color-mac-green: #28c840;
+  --color-glass-10:       rgba(255, 255, 255, 0.10); /* Testimonials lightbox close-button fill */
+  --color-badge-ink-45:   rgba(7, 15, 22, 0.45);      /* Testimonials video-badge pill background */
+  --color-white-96:       rgba(255, 255, 255, 0.96);  /* Testimonials play-button circle fill */
+  --color-modal-backdrop: rgba(5, 10, 15, 0.88);      /* Testimonials lightbox modal backdrop */
+  --color-border-faint:   rgba(255, 255, 255, 0.10); /* Case-study glass card border */
+  --color-glass-faint:    rgba(255, 255, 255, 0.04); /* Case-study glass card fill */
+  --color-border-hairline: rgba(255, 255, 255, 0.14); /* Case-studies hero badge border */
+  --color-border-plain:   rgba(255, 255, 255, 0.28); /* Case-study grid card hover border */
+  --color-border-cover:   rgba(255, 255, 255, 0.08); /* Case-study grid cover divider */
+  --color-overlay-orange-soft: rgba(232, 119, 34, 0.18); /* CTA banner glow blob */
 
   /* ----------------------------------------------------------
    * 5. GRADIENTS
    * ---------------------------------------------------------- */
   --gradient-brand:      linear-gradient(135deg, #F59E0B, #E87722);
   --gradient-brand-text: linear-gradient(120deg, #F59E0B, #E87722); /* Use with background-clip: text */
+  --gradient-phase-node: linear-gradient(140deg, #F7B733, #E87722); /* Methodology phase-node — done/active background */
+  --gradient-testimonial-video:       linear-gradient(150deg, rgba(232, 119, 34, 0.92), rgba(154, 52, 18, 0.96)); /* Testimonials video-card background */
+  --gradient-testimonial-fade:        linear-gradient(180deg, transparent, rgba(7, 15, 22, 0.82)); /* Testimonials video-card bottom fade */
+  --gradient-testimonial-edge:        linear-gradient(90deg, rgba(8, 17, 26, 0) 0%, rgba(8, 17, 26, 0.92) 78%); /* Testimonials carousel right-edge fade */
+  --gradient-testimonial-placeholder: linear-gradient(150deg, rgba(232, 119, 34, 0.2), rgba(10, 24, 34, 0.5)); /* Testimonials lightbox placeholder background */
+  --gradient-blog-featured: linear-gradient(150deg, rgba(232, 119, 34, 0.20), rgba(2, 132, 199, 0.06)); /* Blog featured-post visual panel background */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY
    * ---------------------------------------------------------- */
-  --font-body:    "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-body: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-display: "Space Grotesk", "Manrope", sans-serif;
 
   /* Fluid type scale — uses clamp() for responsive sizing */
@@ -104,23 +174,22 @@
   --text-h2:    clamp(32px, 3.6vw, 46px);  /* Section heading */
   --text-h3:    clamp(22px, 2.4vw, 30px);  /* Sub-section heading */
   --text-h4:    clamp(18px, 1.8vw, 22px);  /* Card heading */
-  --text-lg:    clamp(18.5px, 1.4vw, 18.5px); /* Lead / hero body */
-  --text-lg-sm: clamp(16px, 1.4vw, 18px);   /* Lead / hero body — narrower variant */
+  --text-blog-hero: clamp(40px, 5.4vw, 58px); /* Blog hero headline — narrower clamp than --text-h1 */
+  --text-lg:    clamp(16px, 1.4vw, 18.5px); /* Lead / hero body */
   --text-base:  17px;                        /* Body default */
   --text-md-lg: 16.5px;                      /* Partner section description */
   --text-md:    16px;                        /* Closing statement / emphasis line */
   --text-sm:    15px;                        /* Secondary body, nav links */
   --text-xs:    14px;                        /* Captions, card meta */
   --text-2xs:   12.5px;                      /* Eyebrow, labels */
-  --text-2xs-lg: 13px;                       /* Eyebrow, labels — slightly larger variant */
+  --text-3xs: 10.5px;
+  --text-xs-alt: 11.5px;
+  --text-12: 12px;
+  --text-15-5: 15.5px;
+  --text-21: 21px;
+  --text-stat: 26px;
   --text-blog-card: clamp(26px, 2.9vw, 34px); /* Blog/Case Study card title */
-  --text-h2-sub:    clamp(30px, 3.6vw, 42px); /* About page sub-section heading (narrower than --text-h2) */
-  --text-h2-sub-sm: clamp(30px, 3.6vw, 40px); /* About page sub-section heading — narrower variant */
-  --text-h3-card:   22px;                     /* Process step card heading (static, not fluid) */
-  --text-h3-values: 19px;                     /* Values card title (static, not fluid) */
-  --text-h2-cta:    clamp(34px, 4.4vw, 48px); /* About page final CTA heading (larger than --text-h2) */
-  --text-btn-cta:   clamp(16px, 1.4vw, 17px); /* About page final CTA button label */
-  --text-btn-cta-icon: clamp(17px, 1.4vw, 18px); /* About page final CTA button arrow icon */
+  --text-blog-newsletter-heading: clamp(26px, 3vw, 36px); /* Blog newsletter panel heading — unmapped, arbitrary-value only */
 
   /* Font weights */
   --fw-regular:    400;
@@ -135,6 +204,7 @@
   --lh-normal: 1.32;   /* H3/H4 */
   --lh-body:   1.65;   /* Paragraphs */
   --lh-relaxed: 1.6;   /* Alternate body */
+  --lh-newsletter-heading: 1.1; /* Blog newsletter panel heading — unmapped, arbitrary-value only */
 
   /* Letter spacing */
   --ls-tight:    -0.04em;  /* H1 standard */
@@ -146,6 +216,11 @@
   --ls-widest:  0.16em;  /* Section labels uppercase */
   --ls-label:   0.12em;  /* Mobile nav section labels */
   --ls-stat:    0.13em;  /* Stat labels */
+  --ls-08:      0.08em;
+  --ls-04:      0.04em;  /* Testimonials drag-hint caption */
+  --ls-hint:    0.14em;  /* Methodology scroll-hint caption */
+  --ls-badge:   0.18em;  /* Methodology phase-corner label */
+  --ls-01:      0.01em;  /* Topic filter chip label spacing (Blog) */
 
   /* ----------------------------------------------------------
    * 7. SPACING
@@ -153,33 +228,39 @@
    * Named after the px value for clarity.
    * ---------------------------------------------------------- */
   --space-1:   4px;
+  --space-1a:  6px;
+  --space-1b:  7px; /* Methodology mobile phase-rail gap */
+  --space-1c:  5px;
   --space-2:   8px;
+  --space-0a:  3px;
   --space-3:   10px;
+  --space-3a:  11px;
   --space-4:   12px;
+  --space-4a:  13px;
   --space-5:   14px;
+  --space-5a:  15px;  /* Methodology phase-title margin-top */
   --space-6:   16px;
   --space-7:   18px;
   --space-8:   20px;
   --space-9:   22px;
+  --space-9a:  23px;
   --space-10:  24px;
   --space-11:  26px;
   --space-12:  28px;
   --space-13:  30px;
   --space-14:  34px;
-  --space-15:  36px;   /* Container horizontal padding */
+  --space-14a: 32px;
+  --space-15:  36px; /* Container horizontal padding */
   --space-16:  38px;
+  --space-16a: 40px; /* Methodology stage/panel vertical padding */
   --space-17:  44px;
   --space-18:  46px;
   --space-19:  48px;
+  --space-19a: 52px;
   --space-20:  56px;
   --space-21:  60px;
-  --space-22:  40px;   /* Glass-card horizontal padding (Achievements, Final CTA) */
-  --space-23:  76px;   /* Glass-card vertical padding (Final CTA) */
-  --space-24: 110px;   /* Final CTA section bottom padding */
-  --space-25:  50px;   /* Heading block bottom margin (Process, Values) */
-  --space-26:  32px;   /* Who You Are quote block padding */
-  --space-27:  70px;   /* Hero content block bottom padding */
-  --space-28:  96px;   /* Hero content block top padding */
+  --space-22:  84px; /* Blog hero top padding */
+  --space-23:  92px; /* Blog newsletter section bottom padding */
   --space-section-sm:  50px;  /* Section vertical padding (small) */
   --space-section-md: 60px;   /* Section vertical padding (medium) */
   --space-section-lg: 108px;  /* Section vertical padding (large) */
@@ -193,14 +274,18 @@
   --container-max-sm:   1020px;  /* Narrower container (subscribe band) */
   --container-padding:  36px;    /* Horizontal padding on all containers */
   --nav-height:         80px;    /* Desktop sticky nav height */
-  --nav-height-mobile:  74px;    /* Mobile nav height */
-
-  /* Centered content/copy widths — narrower than a full container, used to
-     keep headings and paragraphs from stretching full-width when centered. */
-  --content-max-xl: 1000px;  /* Centered hero/section heading block */
-  --content-max-lg:  680px;  /* Body copy under a centered heading */
-  --content-max-md:  640px;  /* Hero lead paragraph */
-  --content-max-sm:  600px;  /* CTA panel description */
+  --nav-height-mobile:  74px; /* Mobile nav height */
+  --size-82: 82px;
+  --measure-blog-lead: 640px; /* Blog hero lead paragraph max-width */
+  --measure-blog-hero: 900px; /* Blog hero container max-width */
+  --measure-blog-featured-desc: 520px; /* Blog featured-post description max-width */
+  --size-42: 42px;   /* Blog featured-post author avatar diameter */
+  --size-130: 130px; /* Blog featured-panel decorative network-icon square */
+  --size-180: 180px; /* Blog grid-card cover glow blob diameter */
+  --size-300: 300px; /* Blog featured-panel decorative visual-half column width */
+  --size-320: 320px; /* Blog featured-panel visual min-height */
+  --size-380: 380px; /* Blog newsletter panel decorative orb diameter */
+  --measure-blog-newsletter-copy: 460px; /* Blog newsletter copy max-width */
 
   /* Documented breakpoint contract (see globals.css breakpoints section).
      NOTE: also duplicated as literal values in globals.css's @theme inline
@@ -230,17 +315,25 @@
    * ---------------------------------------------------------- */
   --shadow-btn-primary:   0 14px 36px -10px rgba(232, 119, 34, 0.75); /* CTA button */
   --shadow-btn-hover:     0 18px 44px -10px rgba(232, 119, 34, 0.90); /* CTA button hover */
-  --shadow-nav-btn:       0  8px 24px  -8px rgba(232, 119, 34, 0.70); /* Nav CTA */
+  --shadow-btn-subscribe: 0 12px 30px -10px rgba(232, 119, 34, 0.80); /* Subscribe submit button (same on hover — reference only translates) */
+  --shadow-chip-active:   0 10px 26px -12px rgba(232, 119, 34, 0.80); /* Topic filter active chip shadow (Blog) */
+  --shadow-nav-btn:       0 8px 24px -8px rgba(232, 119, 34, 0.70); /* Nav CTA */
+  --shadow-nav-btn-hover: 0 14px 32px -8px rgba(232, 119, 34, 0.90); /* Nav CTA hover */
   --shadow-card:          0 14px 34px -14px rgba(0, 0, 0, 0.50);       /* Logo tile / card */
   --shadow-card-hover:    0 20px 44px -14px rgba(0, 0, 0, 0.65);       /* Card hover */
   --shadow-glass:         0 24px 60px -20px rgba(0, 0, 0, 0.60);       /* Glass panels */
+  --shadow-console-card:  0 40px 90px -34px rgba(0, 0, 0, 0.80);       /* OrbitAI console card (Platform section) */
   --shadow-dropdown:      0 26px 54px -16px rgba(0, 0, 0, 0.75);       /* Dropdown menus */
   --shadow-header-scrolled: 0 12px 34px -14px rgba(0, 0, 0, 0.75);     /* Homepage header once solid on scroll */
-  --shadow-glow-orange:   0  0  12px  2px rgba(232, 119, 34, 0.80);    /* Status dot glow */
-  --shadow-glow-blue:     0  0  16px  3px rgba(56,  189, 248, 0.70);   /* Blue orbit dot */
-  --shadow-glow-teal:     0  0  16px  3px rgba(45,  212, 191, 0.70);   /* Teal orbit dot */
-  --shadow-glow-amber:    0  0  16px  3px rgba(251, 191, 36,  0.75);   /* Amber orbit dot */
-  --shadow-orange-border: 0  0  0    1px rgba(232, 119, 34, 0.40);     /* Card orange outline on hover */
+  --shadow-glow-orange:   0 0 12px 2px rgba(232, 119, 34, 0.80);    /* Status dot glow */
+  --shadow-glow-blue:     0 0 16px 3px rgba(56, 189, 248, 0.70);      /* Blue orbit dot */
+  --shadow-glow-blue-sm:  0  0  12px  2px rgba(56,  189, 248, 0.70);   /* Small blue badge-dot glow */
+  --shadow-glow-teal:     0 0 16px 3px rgba(45, 212, 191, 0.70);  /* Teal orbit dot */
+  --shadow-glow-amber:    0 0 16px 3px rgba(251, 191, 36, 0.75);  /* Amber orbit dot */
+  --shadow-orange-border: 0 0 0 1px rgba(232, 119, 34, 0.40);  /* Card orange outline on hover */
+  --shadow-image-lift:    0 30px 70px -30px rgba(0, 0, 0, 0.80);       /* Detail-section image drop shadow */
+  --shadow-phase-ring:    0 0 0 7px var(--color-ink); /* Phase-node ring — todo/done state (Methodology) */
+  --shadow-phase-active:  0 0 0 7px var(--color-ink), 0 0 30px rgba(232, 119, 34, 0.70);   /* Phase-node ring+glow — active state (Methodology) */
 
   /* ----------------------------------------------------------
    * 11. TRANSITIONS
@@ -280,7 +373,12 @@
    * ---------------------------------------------------------- */
   --blur-sm:   6px;   /* Hero badge */
   --blur-md:   8px;   /* Agent floating cards */
+  --blur-cta:  12px;  /* Final CTA panel (TMS-62) */
   --blur-lg:   14px;  /* Glass cards */
   --blur-nav:  16px;  /* Sticky nav */
   --blur-header-scrolled: 18px; /* Homepage header once solid on scroll */
+  --blur-glow: 55px;  /* Methodology numeral ambient glow / Blog grid-card cover glow blob */
+  --blur-glow-lg: 90px; /* CTA panel / case study card ambient glow blob */
+  --blur-glow-md: 70px; /* Blog featured-panel cover glow blob */
+  --blur-glow-xl: 115px; /* Blog newsletter panel ambient glow blob */
 }

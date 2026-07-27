@@ -1,5 +1,62 @@
 <!--
 CONSTITUTION UPDATE REPORT (latest amendment)
+Generated: 2026-07-22 (v1.6.0) — review-triggered amendment from a PR #9 (TMS-69) code review
+finding
+
+VERSION CHANGE: 1.5.0 → 1.6.0
+Bump Type: MINOR
+Rationale: PR #9's review flagged `app/blog/_components/blog-post-grid.tsx` keying its rendered
+list on `post.title` — a display-text field with no uniqueness guarantee — because `BlogPost` had
+no `id`/`slug` field at all. Fixed the immediate instance (added `slug` to `BlogPost` in
+`app/blog/_data/types.ts`, populated it for all 9 posts in `app/blog/_data/blog-content.ts`, keyed
+`blog-post-grid.tsx` on `post.slug`) and, since this is a pattern that will recur anywhere a data
+list is rendered via `.map()`, codified the general rule as a new bullet under Principle III:
+repeated/list-rendered UI content must key on a stable, content-independent `id`/`slug` field,
+never on display text. No principle was removed or reversed — this adds enforceable detail to an
+existing principle, hence a MINOR bump.
+TEMPLATE UPDATES: none required.
+DEFERRED ITEMS: TODO(RATIFICATION_DATE) still unresolved, carried over unchanged.
+-->
+
+<!--
+CONSTITUTION UPDATE REPORT (previous amendment, kept for history)
+Generated: 2026-07-15 (v1.4.0) — implementation-triggered amendment from TMS-62 (fidelity audit
++ component-convention reconciliation)
+
+VERSION CHANGE: 1.3.0 → 1.4.0
+Bump Type: MINOR
+Rationale: One combined amendment covering three related fixes found and decided in the same
+session:
+(1) Principle I — a fidelity audit comparing the built homepage against TechGrit Homepage.dc.html
+found six mismatches (font sizes, letter-spacing, blur, hover-lift distance, gradient angle), all
+tracing back to one cause: globals.css's @theme inline block only registered a token into
+Tailwind's utility system when a component happened to need it, so a token that existed in
+tokens.css but was never registered left its matching bare utility class (text-sm, tracking-
+widest, blur-md) silently resolving to Tailwind's own shipped default instead. Added two bullets:
+every tokens.css value Tailwind can represent as a utility scale MUST have a matching @theme
+inline entry (checkable and enforceable, not just conventional); and headings may only override
+font-size/line-height via arbitrary values, never a keyword utility that would silently clobber
+the base tag rule's already-correct font-weight/letter-spacing/color.
+(2) Principle III — renamed "Centralized, Non-Duplicated Component Library" and reframed: the
+vanilla globals.css classes (.btn/.card/.badge/.field/...) are not a legacy default that
+components/ui/ is excepted from — both are legitimate, still-actively-consumed conventions (the
+vanilla classes remain in real use on About/Contact and MUST NOT be deleted), and a new explicit
+rule requires reusing whichever convention's existing shared primitive already fits, rather than
+reimplementing one per page.
+(3) Additional Constraints — reverted the components/home/ + components/<route>/ convention
+this file previously recorded, replacing it with the convention actually used across the app:
+components/ (layout/, ui/) holds only genuinely cross-route UI; route-local sections/data stay
+colocated inside app/ via Next.js's `_`-prefixed private folders (app/<route>/_components/ for
+named routes, app/_home-components/ for the root route, since app/home/ would create a real
+/home URL instead of keeping the homepage at /).
+No principle was removed or reversed by any of the three — all three add or correct enforceable
+detail on existing principles, hence one MINOR bump.
+TEMPLATE UPDATES: none required.
+DEFERRED ITEMS: TODO(RATIFICATION_DATE) still unresolved, carried over unchanged.
+-->
+
+<!--
+CONSTITUTION UPDATE REPORT (previous amendment, kept for history)
 Generated: 2026-07-14 (v1.3.0) — workflow amendment integrating the `frontend-design` skill
 into spec-driven development.
 
@@ -148,10 +205,29 @@ that duplicate an existing token.
   mockup screenshots).
 - New values (a new shadow, a new spacing step) get added to `tokens.css` first, in its existing
   numbered section (1. Brand Colors … 14. Backdrop Blur), before being consumed anywhere else.
+- **Complete `@theme inline` mapping (2026-07-15)**: every `tokens.css` value that Tailwind can
+  represent as a utility scale (color, font-size, letter-spacing, radius, shadow, blur) MUST have
+  a matching entry in `globals.css`'s `@theme inline` block. A token consumed only by a bare
+  Tailwind utility class with no such mapping (e.g. `text-sm`, `tracking-widest`, `blur-md`) is a
+  Principle I violation — the class doesn't error, it silently falls back to Tailwind's own
+  shipped default instead of the token, which is exactly as wrong as hardcoding the wrong value
+  directly. The fix is always to add the mapping, never to hardcode. Exception: tokens intended
+  only for the base heading tag rules (see the next bullet) are not required to be mapped as
+  utilities.
+- **Heading styling**: `h1`–`h6` get font-family, font-weight, color, and letter-spacing
+  automatically from the base tag rules in `globals.css`'s `@layer base` — no classes required. A
+  component MAY override font-size/line-height for a specific heading instance (reference files
+  frequently give individual headings their own size), but only via an arbitrary value
+  (`text-[46px]`) — never a keyword utility (`text-4xl`, `tracking-tight`, `font-bold`) that would
+  silently override a different, already-correct base property.
 
 **Rationale**: `tokens.css` states this rule verbatim in its own header comment ("DO NOT
 override these in component files"), and every sampled `raw-files/*.dc.html` reference file uses
-the identical color/radius/spacing values that already exist as tokens.
+the identical color/radius/spacing values that already exist as tokens. The `@theme inline`
+mapping and heading-styling bullets were added after a fidelity audit (TMS-62) found the built
+homepage drifting from the reference on font sizes, letter-spacing, and blur — every instance
+traced back to a token that existed in `tokens.css` but was never registered into Tailwind's
+theme, so the matching utility class silently used Tailwind's own default instead.
 
 ### II. Documented Breakpoint Contract
 
@@ -174,17 +250,46 @@ design files exactly" — new responsive work MUST reuse these thresholds via Ta
 **Rationale**: the majority (9/14) of reference files agree on 1140/960/560±small variance; the
 4 that diverge are all single-hero composition/variant files rather than full pages.
 
-### III. Centralized Utility-Class Component Library
+### III. Centralized, Non-Duplicated Component Library
 
-Reusable visual primitives are declared once in `app/globals.css` and reused by className, not
-re-implemented per page: `.btn` (`.btn-primary`, `.btn-ghost`, `.btn-outline`, `.btn-sm`,
-`.btn-lg`, `.btn-shine`), `.card` (`.card-solid`, `.card-image`), `.glass-card`, `.field`,
-`.eyebrow`, `.badge` (`.badge-orange`, `.badge-glass`, `.badge-blue`, `.badge-teal`),
-`.text-gradient` / `.text-gradient-flow`, `.divider`, `.status-dot` (`.status-live`,
-`.status-orange`), and the `.container` / `.section` family. All motion MUST come from the
-existing `tg*`-prefixed keyframes (`tgrise`, `tgfloat`, `tgpulse`, `tgshine`, `tgflow`, `tgreveal`,
-`tgblink`, `tgm1`–`tgm3`, `tgconic`, `tgdash`, `tgmarquee`, `tgbounce`, `tgshimmer`, `tgnudgex`,
-`tgkenburns`, `tgwaveflow`, `tgPhaseIn`, `tgheflo`) — new animations follow the same `tg` prefix.
+A reusable visual primitive is built **once** and reused everywhere it's needed — never
+re-implemented per page or per section. This project currently has two legitimate homes for a
+shared primitive, and which one applies depends on when the consuming page was built:
+
+- **Legacy vanilla classes in `app/globals.css`** — `.btn` (`.btn-primary`, `.btn-ghost`,
+  `.btn-outline`, `.btn-sm`, `.btn-lg`, `.btn-shine`), `.card` (`.card-solid`, `.card-image`),
+  `.glass-card`, `.field`, `.eyebrow`, `.badge` (`.badge-orange`, `.badge-glass`, `.badge-blue`,
+  `.badge-teal`), `.text-gradient` / `.text-gradient-flow`, `.divider`, `.status-dot`
+  (`.status-live`, `.status-orange`), and the `.container` / `.section` family. These are still
+  actively consumed by existing pages (e.g. About, Contact) — they are **not deprecated and MUST
+  NOT be deleted or treated as dead code.**
+- **Tailwind-first components in `components/ui/`** (`Button.tsx`, `Badge.tsx`, `FormField.tsx`,
+  `MediaSlot.tsx`, `icons.tsx`) — styled with Tailwind utility classes composed per-component,
+  sourced from `tokens.css` through `globals.css`'s `@theme inline` mapping (Principle I), not by
+  applying the vanilla classes above. This is the standard for new work going forward.
+
+**The non-negotiable rule, regardless of which convention a given page uses**: if a page or
+section needs a button/card/badge/form-field/icon (or any other visual pattern) that an existing
+shared primitive already covers — vanilla class or `components/ui/` component — it MUST reuse
+that primitive. A new one-off button/card implementation is only justified when no existing
+primitive (in either convention) actually fits; it is never justified by "this page happens to use
+the other convention." Do not port a page wholesale from one convention to the other without a
+specific reason to do so — the two are allowed to coexist page-by-page; what's not allowed is
+duplicating a primitive that already exists in either one.
+
+All motion MUST come from the existing `tg*`-prefixed keyframes (`tgrise`, `tgfloat`, `tgpulse`,
+`tgshine`, `tgflow`, `tgreveal`, `tgblink`, `tgm1`–`tgm3`, `tgconic`, `tgdash`, `tgmarquee`,
+`tgbounce`, `tgshimmer`, `tgnudgex`, `tgkenburns`, `tgwaveflow`, `tgPhaseIn`, `tgheflo`) — new
+animations follow the same `tg` prefix.
+
+**Stable identity for repeated content.** Whenever the same UI content is rendered more than once
+from a data list (e.g. a `.map()` over posts, cards, testimonials, or any other collection), each
+iteration's React `key` — and any other per-item identity, such as a detail-page route — MUST
+derive from a stable, content-independent field (an `id` or `slug` declared on the data shape),
+never from display text (`title`, `label`, `name`, excerpt, etc.) that a content edit could rename
+or a future entry could duplicate. If the data shape doesn't yet have such a field, add it to the
+type/interface and populate it in the data file before wiring the render — do not key on derived or
+display text as a stopgap.
 
 - Class naming is kebab-case, base + modifier (`card` → `card-solid`, `badge` → `badge-orange`) —
   the dominant, unambiguous pattern across every class in `globals.css`.
@@ -206,7 +311,11 @@ existing `tg*`-prefixed keyframes (`tgrise`, `tgfloat`, `tgpulse`, `tgshine`, `t
 1:1 onto an existing `globals.css` class; the classes that diverge are consistently the ones
 absent from `globals.css`, confirming which names are production utilities vs. design-tool
 scaffolding. The header/footer duplication was verified across full reads of all 11 full-page
-files, not a sample — every one matches.
+files, not a sample — every one matches. `components/ui/` was added (TMS-62) once a second,
+Tailwind-first convention was deliberately chosen for new work — evidence check (2026-07-15)
+found the vanilla classes still have real, current consumers (About, Contact) alongside
+`components/ui/`'s Tailwind-first primitives, so both are recorded as legitimate, coexisting
+conventions rather than one being framed as a deprecated exception to the other.
 
 ### IV. Design References Are Visual Truth, Not Copy-Paste Source
 
@@ -319,15 +428,35 @@ commands makes the rule survive across contributors and Claude sessions.
 ## Additional Constraints
 
 This repository is **one** Next.js App Router application rooted at `app/` —
-`app/layout.tsx`, `app/page.tsx`, `app/globals.css`, `app/tokens.css` — plus, as of the TMS-63
-Header/Footer feature, a root-level `components/` directory holding shared, cross-route UI:
-`components/layout/` (`Header.tsx`, `Footer.tsx`, `nav-config.ts`, `footer-config.ts`,
-`icons.tsx`), imported via the existing `@/*` → `./*` path alias in `tsconfig.json`. This is the
-deliberate, recorded introduction this constitution previously called for — `components/` is not
-a place to pre-scaffold speculative structure; new shared UI belongs there only when it is
-genuinely consumed by more than one route (per Principle III), and route-local/one-off code MUST
-still stay inside `app/` rather than migrating into `components/` by default. There is still no
-`lib/` or `types/` directory.
+`app/layout.tsx`, `app/page.tsx`, `app/globals.css`, `app/tokens.css`. Two kinds of UI location
+exist, and the distinction is genuinely-shared-across-routes vs. route-local:
+
+- **`components/` (top level)** holds only UI that's genuinely shared/cross-route:
+  - `components/layout/` (TMS-63): `Header.tsx`, `Footer.tsx`, `nav-config.ts`, `footer-config.ts`.
+  - `components/ui/` (TMS-62): generic, reusable primitives — `Button.tsx`, `Badge.tsx`,
+    `FormField.tsx`, `MediaSlot.tsx` (image-or-"Coming soon" fallback), and `icons.tsx` — **the
+    single consolidated SVG icon file for the whole app**; every icon used anywhere (header/footer,
+    homepage, or any other page) is added to this one file, never a per-route copy.
+- **Route-local sections/data stay colocated with the route, inside `app/`**, using Next.js's
+  `_`-prefixed private-folder convention (excluded from routing regardless of name): a named route
+  gets `app/<route>/_components/` (and, if needed, `app/<route>/_data/`) sitting next to that
+  route's own `page.tsx` — e.g. `app/about/_components/`, `app/(marketing)/contact/_components/`.
+  The root route has no folder segment of its own (it's `app/page.tsx` directly), so its private
+  folder is a distinctly-named one directly under `app/` — `app/_home-components/` — never
+  `app/home/...`, which would create a real `/home` URL segment instead of keeping the homepage at
+  `/`.
+
+Per Principle III, `components/ui/` and the vanilla `globals.css` classes are the only two
+approved homes for a *shared* primitive; per-route `_components/`/`_data/` folders hold that
+route's own sections, never a competing definition of something `components/ui/` or `globals.css`
+already provides (e.g. a per-route `icons.tsx` duplicating `components/ui/icons.tsx` is not
+allowed).
+
+All cross-route imports resolve via the existing `@/*` → `./*` path alias in `tsconfig.json`;
+route-local imports use relative paths within the route's own `_components/`/`_data/` folder.
+`components/` is still not a place to pre-scaffold speculative structure — nothing moves there
+until it's genuinely consumed by more than one route. There is still no `lib/` or `types/`
+directory.
 
 - Styling load order is fixed and MUST be preserved: `tokens.css` → `tailwindcss` →
   base/reset/component rules, exactly as `globals.css`'s own header comment states ("Import order
@@ -356,6 +485,15 @@ still stay inside `app/` rather than migrating into `components/` by default. Th
   pinned to exact versions in `package.json`; devDependencies use caret ranges. Preserve this
   split rather than normalizing to one style.
 
+### Manual Specification Protocol (speckit.specify)
+Because we track all work against TMS tickets (even when manually specifying features outside of the automated Jira integration), the default `001-` sequential naming convention is prohibited.
+
+When a user invokes `/speckit.specify` or asks to start a new feature:
+1. **Halt and Prompt:** The AI MUST immediately ask the user: *"What is the TMS ticket number for this feature?"* (Skip this if they already provided it in their initial prompt).
+2. **Format Enforcement:** Ensure the ID uses the `TMS-<number>` format. If the user just says "72", assume `TMS-72`.
+3. **Execute with Short-Name:** Pass the ticket ID to the underlying script using the `--short-name` flag.
+   - Example execution: `bash .specify/scripts/bash/create-new-feature.sh --short-name TMS-72 "Feature description"`
+
 ## Governance
 
 - **Amendment procedure**: propose changes via the same `/speckit.constitution` workflow used to
@@ -370,9 +508,9 @@ still stay inside `app/` rather than migrating into `components/` by default. Th
   and by `npm run lint` / `npm run build` (already gated by the Husky pre-commit hook) — not by
   automated style/unit tests.
 - **Known gaps carried forward, not silently resolved**: no test framework, no Prettier config,
-  and no `components/`/`lib/` split yet. Do not treat these as decisions to defend — they are
-  simply the current, unfinished state, recorded here so future amendments can address them
-  deliberately.
+  and no `lib/`/`types/` directory yet (as of TMS-62, `components/` itself is in active use —
+  `layout/`, `ui/`, `home/`). Do not treat these as decisions to defend — they are simply the
+  current, unfinished state, recorded here so future amendments can address them deliberately.
 
-**Version**: 1.3.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
-exists; this discovery run is the first codification | **Last Amended**: 2026-07-14
+**Version**: 1.6.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
+exists; this discovery run is the first codification | **Last Amended**: 2026-07-22
