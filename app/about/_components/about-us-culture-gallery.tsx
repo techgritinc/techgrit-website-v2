@@ -12,11 +12,11 @@ function layoutClass(layout: CulturePhoto["layout"]) {
 export function AboutUsCultureGallery({ section }: { section: CultureGallerySection }) {
   return (
     <section className="section">
-      <div className="tg-container">
+      <div className="tg-container" style={{ paddingInline: "var(--space-15)" }}>
         <RevealOnScroll>
           <div className="mx-auto mb-11 text-center content-max-lg">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "var(--text-h2-sub)" }}>{section.title}</h2>
+            <h2 style={{ fontSize: "var(--text-h2-sub-sm)" }}>{section.title}</h2>
             <p className="mt-4" style={{ color: "var(--color-text-muted)" }}>
               {section.subtitle}
             </p>

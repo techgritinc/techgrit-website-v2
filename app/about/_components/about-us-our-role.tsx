@@ -7,11 +7,11 @@ export function AboutUsOurRole({ section }: { section: OurRoleSection }) {
 
   return (
     <section className="section">
-      <div className="tg-container">
+      <div className="tg-container" style={{ paddingInline: "var(--space-15)" }}>
         <RevealOnScroll>
           <div className="mx-auto text-center content-max-xl">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "var(--text-h2-sub)", lineHeight: 1.1 }}>
+            <h2 style={{ fontSize: "var(--text-h2-sub-sm)", lineHeight: 1.1 }}>
               {before}
               <span className="text-gradient">{section.titleHighlight}</span>
               {after}

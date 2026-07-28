@@ -26,7 +26,7 @@ export function AboutUsShowcase({ section }: { section: ShowcaseSection }) {
                 alt={section.image.alternativeText}
                 width={section.image.width}
                 height={section.image.height}
-                preload
+                priority
                 sizes="100vw"
                 style={{ width: "100%", height: 460, objectFit: "cover", display: "block" }}
               />

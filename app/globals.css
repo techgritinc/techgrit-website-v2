@@ -483,8 +483,8 @@ button:focus-visible,
   /* Final CTA section — asymmetric top/bottom padding (extra bottom
    * breathing room before the footer). Usage: About page Final CTA. */
   .section-cta {
-    padding-top: var(--space-22);
-    padding-bottom: var(--space-24);
+    padding-top: var(--space-16a);
+    padding-bottom: var(--space-28);
   }
 
   /* ----------------------------------------------------------
@@ -1117,11 +1117,15 @@ button:focus-visible,
       font-size: 44px;
     }
 
+    :root {
+      --text-h2-sub-sm: 30px; /* About sub-section H2 — 40px desktop, 30px mobile/tablet */
+    }
+
     .section {
       padding-block: 60px;
     }
 
-    .glass-card {
+    .glass-card:not(.glass-card-md) {
       padding: 24px 28px;
     }
   }
@@ -1133,6 +1137,10 @@ button:focus-visible,
 
     .glass-card {
       padding: 20px 20px;
+    }
+
+    .glass-card-md {
+      padding: 16px 14px;
     }
 
     .btn-lg {

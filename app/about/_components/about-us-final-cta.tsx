@@ -1,5 +1,6 @@
 import type { FinalCtaSection } from "../_data/types";
 import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
+import Button from "@/components/ui/Button";
 
 export function AboutUsFinalCta({ section }: { section: FinalCtaSection }) {
   return (
@@ -8,7 +9,7 @@ export function AboutUsFinalCta({ section }: { section: FinalCtaSection }) {
         <RevealOnScroll>
           <div
             className="glass-card glass-card-lg mx-auto text-center"
-            style={{ position: "relative", overflow: "hidden" }}
+            style={{ position: "relative", overflow: "hidden",padding:"var(--space-27) var(--space-16a)" }}
           >
             <div
               aria-hidden="true"
@@ -41,18 +42,13 @@ export function AboutUsFinalCta({ section }: { section: FinalCtaSection }) {
                 {section.description}
               </p>
               <div style={{ marginTop: "var(--space-14)" }}>
-                <a
+                <Button
                   href={section.ctaLink}
-                  className="btn btn-primary btn-lg"
-                  style={{
-                    fontSize: "var(--text-btn-cta)",
-                    gap: "10px",
-                    padding: "17px 34px",
-                    borderRadius: 13,
-                  }}
+                  size="lg"
+                  className="!leading-[normal] !gap-[10px] !rounded-[13px] !px-[34px] !py-[17px] !text-base !whitespace-normal hover:!shadow-btn-primary"
                 >
                   {section.ctaLabel} <span aria-hidden="true" style={{ fontSize: "var(--text-btn-cta-icon)" }}>&#8594;</span>
-                </a>
+                </Button>
               </div>
             </div>
           </div>

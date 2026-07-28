@@ -109,6 +109,7 @@ export default function Header() {
                     aria-haspopup="menu"
                     aria-expanded={isOpen}
                     onClick={() => setOpenDropdown(isOpen ? null : item.label)}
+                    suppressHydrationWarning
                   >
                     {item.label}
                     <ChevronIcon className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />

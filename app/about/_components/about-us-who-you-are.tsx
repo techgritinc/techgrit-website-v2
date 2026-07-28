@@ -34,7 +34,7 @@ export function AboutUsWhoYouAre({ section }: { section: WhoYouAreSection }) {
             </div>
             <div
               className="card rounded-xl"
-              style={{ borderLeft: "3px solid var(--color-orange)", padding: "var(--space-14) var(--space-26)" }}
+              style={{ borderLeft: "3px solid var(--color-orange)", padding: "var(--space-14) var(--space-14a)" }}
             >
               <div
                 style={{

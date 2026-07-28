@@ -5,18 +5,18 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
 
   return (
     <section>
-      <div className="mx-auto text-center content-max-xl" style={{ padding: "var(--space-28) var(--space-15) var(--space-27)" }}>
+      <div className="mx-auto text-center" style={{ maxWidth: "var(--measure-hero)", paddingTop: "var(--space-24)", paddingInline: "var(--space-15)", paddingBottom: "var(--space-26)" }}>
         <div
           data-rise
           className="inline-flex items-center"
           style={{
             animationDelay: ".05s",
-            gap: 10,
+            gap: "var(--space-3)",
             background: "var(--color-glass)",
             border: "1px solid var(--color-border)",
-            padding: "8px 16px",
+            padding: "var(--space-2) var(--space-6)",
             borderRadius: "var(--radius-pill)",
-            marginBottom: 28,
+            marginBottom: "var(--space-12)",
             backdropFilter: "blur(var(--blur-sm))",
           }}
         >
@@ -25,8 +25,8 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
             style={{
               fontSize: "var(--text-2xs)",
               fontWeight: "var(--fw-bold)",
-              letterSpacing: "0.08em",
-              color: "rgba(255,255,255,0.92)",
+              letterSpacing: "var(--ls-08)",
+              color: "var(--color-text-strong)",
               textTransform: "uppercase",
             }}
           >
@@ -35,7 +35,7 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
         </div>
         <h1
           data-rise
-          className="text-[46px] leading-[1.02] tracking-[var(--ls-tight)] lg:text-[60px]"
+          className="text-[46px] leading-[1.02] tracking-[var(--ls-tight)] md:text-[60px]"
           style={{ animationDelay: ".12s" }}
         >
           {before}
@@ -44,12 +44,13 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
         </h1>
         <p
           data-rise
-          className="mx-auto content-max-md"
+          className="mx-auto"
           style={{
             animationDelay: ".2s",
             marginTop: "var(--space-11)",
-            fontSize: "var(--text-lg)",
-            lineHeight: 1.65,
+            maxWidth: "var(--measure-blog-lead)",
+            fontSize: "var(--text-lg-fixed)",
+            lineHeight: "var(--lh-body)",
             color: "var(--color-text-secondary)",
           }}
         >
@@ -63,11 +64,12 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
           <a
             href={section.primaryCtaLink}
             className="btn btn-primary btn-lg"
+            style={{ fontSize: "var(--text-md)" }}
           >
             {section.primaryCtaLabel} <span aria-hidden="true">&#8594;</span>
           </a>
           <a href={section.secondaryCtaLink} className="btn btn-ghost btn-lg"
-            style={{ padding: "var(--space-6) var(--space-11)" }}
+            style={{ padding: "var(--space-6) var(--space-11)", fontSize: "var(--text-md)" }}
           >
             {section.secondaryCtaLabel}
           </a>

@@ -42,14 +42,14 @@ function ValueIcon({ order }: { order: number }) {
 export function AboutUsValues({ section }: { section: ValuesSection }) {
   return (
     <section id="values" className="section">
-      <div className="tg-container">
+      <div className="tg-container" style={{ paddingInline: "var(--space-15)" }}>
         <RevealOnScroll>
           <div className="mx-auto mb-[var(--space-25)] text-center content-max-lg">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "var(--text-h2-sub)", lineHeight: 1.1 }}>{section.title}</h2>
+            <h2 style={{ fontSize: "var(--text-h2-sub-sm)", lineHeight: 1.1, marginBottom: "var(--space-section-sm)"}}>{section.title}</h2>
           </div>
           <div
-            className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16"
+            className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-16"
             style={{ borderBottom: "1px solid var(--color-border-subtle)" }}
           >
             {section.values.map((value) => (

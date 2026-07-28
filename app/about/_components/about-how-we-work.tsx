@@ -5,12 +5,12 @@ import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
 export function AboutHowWeWork({ section }: { section: ProcessSection }) {
   return (
     <section className="section">
-      <div className="tg-container">
+      <div className="tg-container" style={{ paddingInline: "var(--space-15)" }}>
         <RevealOnScroll>
           <div className="mx-auto text-center content-max-lg" style={{ marginBottom: "var(--space-25)" }}>
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "var(--text-h2-sub)" }}>{section.title}</h2>
-            <p className="mt-4" style={{ color: "var(--color-text-muted)" }}>
+            <h2 style={{ fontSize: "var(--text-h2-sub-sm)" }}>{section.title}</h2>
+            <p className="mt-4" style={{ color: "var(--color-text-muted)", marginTop: "var(--text-md)", marginBottom: "var(--space-15)" }}>
               {section.subtitle}
             </p>
           </div>
@@ -27,8 +27,8 @@ export function AboutHowWeWork({ section }: { section: ProcessSection }) {
                 >
                   {step.label}
                 </div>
-                <h3 style={{ marginTop: "var(--space-5)", fontSize: "var(--text-h3-card)" }}>{step.title}</h3>
-                <p className="mt-3" style={{ fontSize: "var(--text-sm)", color: "var(--color-text-faint)" }}>
+                <h3 style={{ marginTop: "var(--space-5)", fontSize: "var(--text-22)" }}>{step.title}</h3>
+                <p className="mt-3" style={{ fontSize: "var(--text-15-5)", color: "var(--color-text-faint)" }}>
                   {step.description}
                 </p>
               </div>
