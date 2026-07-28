@@ -74,7 +74,7 @@ export function FinalCta({
                     lineHeight: "normal",
                   }}
                 >
-                  <span className="text-final-cta-label">
+                  <span className="text-final-cta-secondary-label">
                     {section.ctaLabel}
                   </span>{" "}
                   <span aria-hidden="true" className="text-final-cta-arrow">

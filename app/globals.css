@@ -613,8 +613,8 @@ input:focus-visible,
   }
 
   .btn-lg {
-    font-size: 16px;
-    padding: 16px 28px;
+    font-size: var(--text-sm);
+    padding: 14px 22px;
     border-radius: var(--radius-card);
   }
 
@@ -688,7 +688,7 @@ input:focus-visible,
     backdrop-filter: blur(var(--blur-lg));
     -webkit-backdrop-filter: blur(var(--blur-lg));
     box-shadow: var(--shadow-glass);
-    padding: 38px 44px;
+    padding: 20px 20px;
   }
 
   /* Glass-card padding variants
@@ -696,7 +696,7 @@ input:focus-visible,
    *        <div class="glass-card glass-card-lg">…</div>  ← Final CTA panel
    */
   .glass-card-md {
-    padding: var(--space-17) var(--space-22); /* 44px 40px */
+    padding: 16px 14px;
   }
 
   .glass-card-lg {
@@ -1162,7 +1162,7 @@ input:focus-visible,
   }
 
   .text-final-cta-description {
-    font-size: var(--text-md);
+    font-size: var(--text-18);
   }
 
   .text-final-cta-label {
@@ -1173,8 +1173,22 @@ input:focus-visible,
     font-size: var(--text-base);
   }
 
+  .text-final-cta-secondary-label {
+    font-size: var(--text-base);
+  }
+
   .text-achievement-stat {
     font-size: var(--text-achievement-stat-base);
+  }
+
+  /* Final CTA button — its font-size/padding are set inline (always beat
+   * any class rule), so only non-inline properties can fix it here: cap
+   * its width to the card and let the label wrap instead of being clipped. */
+  .section-cta .btn-lg {
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
   }
 
   @media (min-width: 560px) {
@@ -1182,16 +1196,47 @@ input:focus-visible,
       font-size: var(--text-about-h2-sm);
     }
 
-    .text-final-cta-description {
-      font-size: var(--text-base);
-    }
-
     .text-final-cta-label {
       font-size: var(--text-md-lg);
     }
 
+    .text-final-cta-secondary-label {
+      font-size: var(--text-md);
+    }
+
     .text-achievement-stat {
-      font-size: var(--text-achievement-stat-sm);
+      font-size: var(--text-achievement-stat-base);
+    }
+
+    /* Who-You-Are title stays 30px through the tablet (560-960px) range;
+     * landscape tablet widths (960-1140px) use the shared 36.84px md step. */
+    @media (max-width: 959.98px) {
+      .text-who-you-are-h2 {
+        font-size: var(--text-about-h2-base) !important;
+      }
+    }
+
+    .glass-card {
+      padding: 38px 44px;
+    }
+
+    .glass-card-md {
+      padding: var(--space-17) var(--space-22); /* 44px 40px */
+    }
+
+    .btn-lg {
+      font-size: 16px;
+      padding: 16px 28px;
+    }
+
+    /* Final CTA button — its font-size/padding are set inline (always beat
+     * any class rule), so only non-inline properties can fix it here: cap
+     * its width to the card and let the label wrap instead of being clipped. */
+    .section-cta .btn-lg {
+      max-width: none;
+      white-space: nowrap;
+      text-align: left;
+      line-height: normal;
     }
   }
 
@@ -1200,8 +1245,9 @@ input:focus-visible,
       font-size: var(--text-about-h2-md);
     }
 
-    .text-final-cta-description {
-      font-size: var(--text-18);
+    /* Our-Role subtitle desktop override — 42px */
+    .text-our-role-subtitle {
+      font-size: var(--text-our-role-subtitle-xl) !important;
     }
 
     .text-final-cta-label {
@@ -1215,20 +1261,8 @@ input:focus-visible,
     .text-achievement-stat {
       font-size: var(--text-achievement-stat-md);
     }
-  }
 
-  @media (min-width: 1280px) {
-    .text-about-h2 {
-      font-size: var(--text-about-h2-xl);
-    }
-
-    .text-achievement-stat {
-      font-size: var(--text-achievement-stat-xl);
-    }
-  }
-
-  @media (max-width: 960px) {
-    h1 {
+     h1 {
       font-size: 44px;
     }
 
@@ -1241,33 +1275,19 @@ input:focus-visible,
     }
   }
 
-  @media (max-width: 560px) {
-    /* .tg-container {
-      padding-inline: 20px;
-    } */
-
-    .glass-card {
-      padding: 20px 20px;
+  @media (min-width: 1280px) {
+    .text-about-h2 {
+      font-size: var(--text-about-h2-xl);
     }
 
-    .glass-card-md {
-      padding: 16px 14px;
+    .text-achievement-stat {
+      font-size: var(--text-achievement-stat-xl);
     }
 
-    .btn-lg {
-      font-size: var(--text-sm);
-      padding: 14px 22px;
+    .text-values-h2 {
+      font-size: var(--text-values-h2-xl);
     }
 
-    /* Final CTA button — its font-size/padding are set inline (always beat
-     * any class rule), so only non-inline properties can fix it here: cap
-     * its width to the card and let the label wrap instead of being clipped. */
-    .section-cta .btn-lg {
-      max-width: 100%;
-      white-space: normal;
-      text-align: center;
-      line-height: 1.3;
-    }
   }
 
   /* ----------------------------------------------------------

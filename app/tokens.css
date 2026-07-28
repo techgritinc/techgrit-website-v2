@@ -232,10 +232,11 @@
   --text-about-h2-sm:   31px;
   --text-about-h2-md:   36.84px;
   --text-about-h2-xl:   40px;
+  --text-values-h2-xl:  42px;                /* Values section title, laptop/desktop */
+  --text-our-role-subtitle-xl: 42px; /* Our-Role subtitle — desktop/laptop (md+) override */
 
   --text-achievement-stat-base: 40px;
-  --text-achievement-stat-sm:   44px;
-  --text-achievement-stat-md:   50.4px;
+  --text-achievement-stat-md:   51px;
   --text-achievement-stat-xl:   56px;
 
   /* Font weights */
