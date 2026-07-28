@@ -1125,9 +1125,9 @@ input:focus-visible,
   }
 
   @media (max-width: 560px) {
-    .tg-container {
+    /* .tg-container {
       padding-inline: 20px;
-    }
+    } */
 
     .glass-card {
       padding: 20px 20px;
