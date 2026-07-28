@@ -8,7 +8,9 @@ export type GlassCardVariant =
   | "blogFeatured"
   | "constructionChallenge"
   | "constructionSolution"
-  | "constructionImpact";
+  | "constructionImpact"
+  | "webinarUpcoming"
+  | "webinarReleased";
 
 interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -25,6 +27,8 @@ const CARD_VARIANTS: Record<GlassCardVariant, string> = {
   constructionChallenge: "rounded-[16px] border-border-image bg-glass-4 px-5 py-[22px]",
   constructionSolution: "rounded-[18px] border-border-image bg-glass-4 px-7 py-[30px] hover:-translate-y-[6px]",
   constructionImpact: "rounded-[20px] border-border-image bg-glass-4 px-7 py-8 hover:-translate-y-[6px]",
+  webinarUpcoming: "rounded-3xl border-[var(--color-border-amber-30)] bg-[image:var(--gradient-webinar-upcoming)] px-9 py-[38px]",
+  webinarReleased: "rounded-2xl border-border-image bg-glass-4 overflow-hidden hover:-translate-y-[5px]",
 };
 
 export function GlassCard({ 
@@ -61,6 +65,8 @@ const ICON_VARIANTS: Record<GlassCardVariant, string> = {
   constructionChallenge: "mb-[14px] h-10 w-10 rounded-[10px]",
   constructionSolution: "mb-5 h-[50px] w-[50px] rounded-[13px]",
   constructionImpact: "mb-5.5 h-13 w-13 rounded-md",
+  webinarUpcoming: "mb-5.5 h-13 w-13 rounded-md",
+  webinarReleased: "mb-5.5 h-13 w-13 rounded-md",
 };
 
 export function GlassCardIcon({ children, wrapperClassName = "", variant = "default", ...props }: GlassCardIconProps) {
@@ -89,6 +95,8 @@ const TITLE_VARIANTS: Record<GlassCardVariant, string> = {
   constructionChallenge: "text-15-5 font-bold text-primary leading-[1.3]",
   constructionSolution: "text-[19px]",
   constructionImpact: "text-[18.5px]",
+  webinarUpcoming: "text-[clamp(22px,2.6vw,30px)] font-bold text-white leading-[1.15] tracking-[-0.02em]",
+  webinarReleased: "text-[18.5px] font-bold text-white leading-[1.3] tracking-normal",
 };
 
 export function GlassCardTitle({ children, className = "", variant = "default" }: GlassCardTitleProps) {
@@ -114,6 +122,8 @@ const DESC_VARIANTS: Record<GlassCardVariant, string> = {
   constructionChallenge: "mt-2 text-sm text-faint leading-[1.6]",
   constructionSolution: "mt-[10px] text-[14.5px] text-muted leading-[1.6]",
   constructionImpact: "mt-[10px] text-[14.5px] text-muted leading-[1.6]",
+  webinarUpcoming: "mt-3 text-15-5 leading-[1.6] text-[var(--color-text-66)]",
+  webinarReleased: "mt-2.5 text-[14.5px] leading-[1.6] text-muted",
 };
 
 export function GlassCardDescription({ children, className = "", variant = "default" }: GlassCardDescriptionProps) {

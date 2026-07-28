@@ -5,16 +5,18 @@ type FormFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "classN
   label: string;
   error?: string | null;
   containerClassName?: string;
+  inputClassName?: string;
 };
 
 const INPUT_BASE =
-  "w-full rounded-[10px] border bg-glass-strong px-4 py-3.5 text-sm leading-[normal] font-normal text-primary outline-none transition-colors placeholder:!font-light focus:bg-glass-hover";
+  "w-full rounded-[10px] border bg-glass-strong px-4 py-3.5 text-sm leading-[normal] font-normal text-primary transition-colors placeholder:!font-light focus:bg-glass-hover";
 
 /** Shared labeled input primitive (FR-015) for the subscribe form. */
 export default function FormField({
   label,
   error,
   containerClassName,
+  inputClassName,
   type = "text",
   ...rest
 }: FormFieldProps) {
@@ -31,7 +33,7 @@ export default function FormField({
         type={type}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
-        className={[INPUT_BASE, "border-border-strong"].join(" ")}
+        className={[INPUT_BASE, "border-border-strong", inputClassName].filter(Boolean).join(" ")}
         {...rest}
       />
       {error && (
