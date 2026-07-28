@@ -124,10 +124,10 @@ function ReleasedCardFull({ session }: { session: ReleasedSession }) {
     <GlassCard
       variant="webinarReleased"
       hoverBorderColor=""
-      className="flex flex-row items-center gap-7 p-2 tg-md:col-span-2"
+      className="flex flex-col gap-7 p-2 tg-md:col-span-2 tg-sm:flex-row tg-sm:items-center"
     >
       <div
-        className={`relative flex w-[var(--size-220)] shrink-0 items-center justify-center self-stretch rounded-lg ${RELEASED_ACCENT_COVER[session.accent]}`}
+        className={`relative flex w-full shrink-0 items-center justify-center self-stretch rounded-lg tg-sm:w-[var(--size-220)] ${RELEASED_ACCENT_COVER[session.accent]}`}
         style={{ minHeight: "var(--size-150)" }}
       >
         <Button size="sm" className="gap-2 !rounded-full !py-tg-3 !px-tg-7 !text-[13.5px] !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]">
@@ -135,7 +135,7 @@ function ReleasedCardFull({ session }: { session: ReleasedSession }) {
           <WatchNowGlyph compact />
         </Button>
       </div>
-      <div className="py-[18px] pr-[26px] pl-0">
+      <div className="px-[18px] pb-[18px] tg-sm:px-0 tg-sm:py-[18px] tg-sm:pr-[26px]">
         <span className="text-12 font-bold tracking-wider text-amber-light uppercase">
           {session.statusLabel}
         </span>
