@@ -9,7 +9,7 @@ import { AboutUsProcess } from "./_components/about-us-process";
 import { AboutUsAchievements } from "./_components/about-us-achievements";
 import { AboutUsPartner } from "./_components/about-us-partner";
 import { AboutUsCultureGallery } from "./_components/about-us-culture-gallery";
-import { AboutUsFinalCta } from "./_components/about-us-final-cta";
+import { FinalCta } from "@/reusable-components/final-cta";
 
 export const metadata: Metadata = {
   title: aboutUsContent.seo.metaTitle,
@@ -40,7 +40,18 @@ export default function AboutPage() {
           case "cultureGallery":
             return <AboutUsCultureGallery key={section.order} section={section} />;
           case "finalCta":
-            return <AboutUsFinalCta key={section.order} section={section} />;
+            return (
+              <FinalCta
+                key={section.order}
+                section={{
+                  eyebrow: section.eyebrow,
+                  title: section.title,
+                  description: section.description,
+                  ctaLabel: section.ctaLabel,
+                  ctaLink: section.ctaLink,
+                }}
+              />
+            );
           default:
             return null;
         }

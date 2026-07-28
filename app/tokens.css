@@ -102,6 +102,7 @@
   --color-border-blue-strong: rgba(2, 132, 199, 0.60);   /* Card hover border (blue accent) */
   --color-border-teal-strong: rgba(15, 118, 110, 0.70);  /* Card hover border (teal accent) */
   --color-border-image:   rgba(255, 255, 255, 0.10); /* Image card border (Careers) */
+  --color-border-amber-soft: rgba(245, 158, 11, 0.22); /* Amber-tinted image card border (Construction hero, TMS-67) */
   --color-border-18:      rgba(255, 255, 255, 0.18); /* Phase-node border — todo state (Methodology) */
   --color-border-30:      rgba(255, 255, 255, 0.30); /* Phase-node border — done/active state (Methodology) */
   --color-border-28:      rgba(255, 255, 255, 0.28); /* Testimonials video-badge pill border */
@@ -115,6 +116,7 @@
   --color-glass-strong:   rgba(255, 255, 255, 0.06); /* Input fill */
   --color-glass-hover:    rgba(255, 255, 255, 0.08); /* Input fill on focus */
   --color-nav-glass:      rgba(10, 24, 34, 0.70);    /* Sticky nav background */
+  --color-ink-glass-60:   rgba(10, 24, 34, 0.60);    /* Lifecycle diagram mobile-fallback node pill background (TMS-67) */
   --color-nav-hover:      rgba(255, 255, 255, 0.07); /* Nav link hover background */
   --color-dd-bg:          rgba(13, 26, 37, 0.97);    /* Dropdown menu bg */
   --color-mobile-menu-bg: rgba(10, 24, 34, 0.97);    /* Mobile nav panel bg (darker than dd-bg) */
@@ -122,10 +124,13 @@
   --color-border-header-scrolled: rgba(255, 255, 255, 0.08); /* Homepage header border once scrolled */
   --color-overlay-orange: rgba(232, 119, 34, 0.16);  /* Ambient orb / bg glow */
   --color-overlay-orange-strong: rgba(232, 119, 34, 0.28); /* CTA panel glow blob */
+  --color-overlay-amber-strong: rgba(245, 158, 11, 0.28); /* CTA panel glow blob — amber tone (Construction, TMS-67) */
   --color-overlay-blue:   rgba(2, 132, 199, 0.12);   /* Ambient orb / bg glow */
   --color-overlay-blue-soft: rgba(2, 132, 199, 0.10); /* Ambient orb / bg glow */
   --color-overlay-teal:   rgba(15, 118, 110, 0.12);  /* Ambient orb / bg glow */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
+  --color-overlay-amber-soft: rgba(245, 158, 11, 0.08); /* Ambient orb / bg glow — Construction page third orb (TMS-67) */
+  --color-overlay-amber-12: rgba(245, 158, 11, 0.12); /* Lifecycle diagram panel decorative glow blob (TMS-67) */
   --color-overlay-orange-22: rgba(232, 119, 34, 0.22);/* Methodology numeral ambient glow */
   --color-overlay-orange-18: rgba(232, 119, 34, 0.18);/* Blog newsletter panel decorative orb */
   --color-overlay-green-12: rgba(52, 211, 153, 0.12); /* Blog newsletter success-state background */
@@ -322,6 +327,7 @@
   --shadow-dropdown:      0 26px 54px -16px rgba(0, 0, 0, 0.75);       /* Dropdown menus */
   --shadow-header-scrolled: 0 12px 34px -14px rgba(0, 0, 0, 0.75);     /* Homepage header once solid on scroll */
   --shadow-glow-orange:   0 0 12px 2px rgba(232, 119, 34, 0.80);    /* Status dot glow */
+  --shadow-glow-yellow:   0 0 12px 2px rgba(245, 158, 11, 0.80);    /* Yellow status dot glow (Construction hero, TMS-67) */
   --shadow-glow-blue:     0 0 16px 3px rgba(56, 189, 248, 0.70);      /* Blue orbit dot */
   --shadow-glow-blue-sm:  0  0  12px  2px rgba(56,  189, 248, 0.70);   /* Small blue badge-dot glow */
   --shadow-glow-teal:     0 0 16px 3px rgba(45, 212, 191, 0.70);  /* Teal orbit dot */
