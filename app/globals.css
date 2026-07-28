@@ -1127,13 +1127,87 @@ button:focus-visible,
  * 1140/960/560 contract.
  * ---------------------------------------------------------- */
 
+  /* ----------------------------------------------------------
+   * Responsive step font-size classes — pair with the --text-*-base/
+   * -sm/-md/-xl tokens in tokens.css. Steps at 560/960/1280 (this repo's
+   * sm/md breakpoints, plus Tailwind's default xl) instead of scaling
+   * continuously with vw, so size only changes at a fixed width, not
+   * continuously with viewport (fixes portrait/landscape inconsistency
+   * at the same breakpoint).
+   * ---------------------------------------------------------- */
+  .text-about-h2 {
+    font-size: var(--text-about-h2-base);
+  }
+
+  .text-final-cta-description {
+    font-size: var(--text-md);
+  }
+
+  .text-final-cta-label {
+    font-size: var(--text-md);
+  }
+
+  .text-final-cta-arrow {
+    font-size: var(--text-base);
+  }
+
+  .text-achievement-stat {
+    font-size: var(--text-achievement-stat-base);
+  }
+
+  @media (min-width: 560px) {
+    .text-about-h2 {
+      font-size: var(--text-about-h2-sm);
+    }
+
+    .text-final-cta-description {
+      font-size: var(--text-base);
+    }
+
+    .text-final-cta-label {
+      font-size: var(--text-md-lg);
+    }
+
+    .text-achievement-stat {
+      font-size: var(--text-achievement-stat-sm);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .text-about-h2 {
+      font-size: var(--text-about-h2-md);
+    }
+
+    .text-final-cta-description {
+      font-size: var(--text-18);
+    }
+
+    .text-final-cta-label {
+      font-size: var(--text-base);
+    }
+
+    .text-final-cta-arrow {
+      font-size: var(--text-18);
+    }
+
+    .text-achievement-stat {
+      font-size: var(--text-achievement-stat-md);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .text-about-h2 {
+      font-size: var(--text-about-h2-xl);
+    }
+
+    .text-achievement-stat {
+      font-size: var(--text-achievement-stat-xl);
+    }
+  }
+
   @media (max-width: 960px) {
     h1 {
       font-size: 44px;
-    }
-
-    :root {
-      --text-h2-sub-sm: 30px; /* About sub-section H2 — 40px desktop, 30px mobile/tablet */
     }
 
     .section {

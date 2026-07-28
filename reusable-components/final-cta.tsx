@@ -56,7 +56,7 @@ export function FinalCta({
                 {section.eyebrow}
               </div>
               <h2 className="mt-4" style={{ fontSize: "clamp(34px, 4.4vw, 48px)", lineHeight: titleLineHeight }}>{section.title}</h2>
-              <p className="mx-auto mt-5" style={{ maxWidth: 600, color: "var(--color-text-secondary)", fontSize: "clamp(16px, 1.4vw, 18px)" }}>
+              <p className="text-final-cta-description mx-auto mt-5" style={{ maxWidth: 600, color: "var(--color-text-secondary)" }}>
                 {section.description}
               </p>
               <div
@@ -68,14 +68,18 @@ export function FinalCta({
                   variant="primary"
                   size="lg"
                   style={{
-                    fontSize: "clamp(16px, 1.4vw, 17px)",
                     gap: "10px",
                     padding: "17px 34px",
                     borderRadius: 13,
                     lineHeight: "normal",
                   }}
                 >
-                  {section.ctaLabel} <span aria-hidden="true" style={{ fontSize: "clamp(17px, 1.4vw, 18px)" }}>&#8594;</span>
+                  <span className="text-final-cta-label">
+                    {section.ctaLabel}
+                  </span>{" "}
+                  <span aria-hidden="true" className="text-final-cta-arrow">
+                    &#8594;
+                  </span>
                 </Button>
                 {section.secondaryCta && (
                   <Button

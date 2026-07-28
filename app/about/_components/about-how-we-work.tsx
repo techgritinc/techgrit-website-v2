@@ -9,7 +9,7 @@ export function AboutHowWeWork({ section }: { section: ProcessSection }) {
         <RevealOnScroll>
           <div className="mx-auto text-center content-max-lg" style={{ marginBottom: "var(--space-25)" }}>
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "var(--text-h2-sub-sm)" }}>{section.title}</h2>
+            <h2 className="text-about-h2">{section.title}</h2>
             <p className="mt-4" style={{ color: "var(--color-text-muted)", marginTop: "var(--text-md)", marginBottom: "var(--space-15)" }}>
               {section.subtitle}
             </p>

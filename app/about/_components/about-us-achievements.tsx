@@ -11,11 +11,10 @@ export function AboutUsAchievements({ section }: { section: AchievementsSection 
               {section.stats.map((stat, index) => (
                 <div key={index}>
                   <div
-                    className="text-gradient"
+                    className="text-gradient text-achievement-stat"
                     style={{
                       fontFamily: "var(--font-display)",
                       fontWeight: "var(--fw-bold)",
-                      fontSize: "clamp(40px, 5vw, 56px)",
                       letterSpacing: "var(--ls-snug)",
                       lineHeight: 1,
                     }}

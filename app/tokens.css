@@ -197,11 +197,26 @@
   --text-stat: 26px;
   --text-blog-card: clamp(26px, 2.9vw, 34px); /* Blog/Case Study card title */
   --text-blog-newsletter-heading: clamp(26px, 3vw, 36px); /* Blog newsletter panel heading — unmapped, arbitrary-value only */
-  --text-h2-sub-sm: clamp(30px, 3vw, 40px); /* About sub-section H2 (Partner/Who-you-are) — overridden to 30px at max-width:960px in globals.css */
   --text-2xs-lg: 13px;
   --text-h3-values: 19px;
   --text-h2-cta: 34px;
   --text-22: 22px;
+
+  /* Responsive step tokens (base/sm/md/lg/xl at the 560/960/1140/1280
+     breakpoint contract) — used by the .text-* step classes in globals.css
+     in place of clamp()/vw so sizing steps at fixed widths instead of
+     scaling continuously with viewport width (which produced inconsistent
+     sizes across portrait/landscape at the same breakpoint). */
+  --text-18: 18px; /* Final CTA description/arrow — md+ step */
+  --text-about-h2-base: 30px;
+  --text-about-h2-sm:   31px;
+  --text-about-h2-md:   36.84px;
+  --text-about-h2-xl:   40px;
+
+  --text-achievement-stat-base: 40px;
+  --text-achievement-stat-sm:   44px;
+  --text-achievement-stat-md:   50.4px;
+  --text-achievement-stat-xl:   56px;
 
   /* Font weights */
   --fw-regular:    400;

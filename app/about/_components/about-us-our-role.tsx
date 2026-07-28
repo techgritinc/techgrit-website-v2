@@ -11,7 +11,7 @@ export function AboutUsOurRole({ section }: { section: OurRoleSection }) {
         <RevealOnScroll>
           <div className="mx-auto text-center content-max-xl">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "var(--text-h2-sub-sm)", lineHeight: 1.1 }}>
+            <h2 className="text-about-h2" style={{ lineHeight: 1.1 }}>
               {before}
               <span className="text-gradient">{section.titleHighlight}</span>
               {after}
