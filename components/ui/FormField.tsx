@@ -5,6 +5,7 @@ type FormFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "classN
   label: string;
   error?: string | null;
   containerClassName?: string;
+  inputClassName?: string;
 };
 
 const INPUT_BASE =
@@ -15,6 +16,7 @@ export default function FormField({
   label,
   error,
   containerClassName,
+  inputClassName,
   type = "text",
   ...rest
 }: FormFieldProps) {
@@ -31,7 +33,7 @@ export default function FormField({
         type={type}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
-        className={[INPUT_BASE, "border-border-strong"].join(" ")}
+        className={[INPUT_BASE, "border-border-strong", inputClassName].filter(Boolean).join(" ")}
         {...rest}
       />
       {error && (

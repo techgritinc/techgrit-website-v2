@@ -78,3 +78,10 @@ Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored 
 
 ## Recent Changes
 - TMS-67: Re-planned the already-built Construction page (`app/construction/`) for pixel fidelity against `TechGrit Construction.dc.html` — rebuilding the lifecycle diagram's literal node geometry, correcting 9 mismatched icons, opting the page out of the shared `reusable-components/ambient-orbs.tsx` in favor of its own reference-exact orb set, and adding one new token (`--color-overlay-amber-soft`)
+
+## Active Technologies
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-73)
+- N/A — webinar-page content is a static local TypeScript content module, not persisted data (TMS-73)
+
+## Recent Changes
+- TMS-73: planning the Webinar Series page (`app/webinar/`) — hero with a 9-cell photo/decorative collage, a Sessions grid (one upcoming panel + released-session cards), and a Subscribe panel; extends `Badge`/`GlassCard` with new tone/variants instead of forking components, adds 20 new tokens to `tokens.css`/`globals.css`, and both "Register Now"/"Watch Now" are real `<button>` elements per an explicit clarification overriding the reference's own anchor-styled-as-button markup
