@@ -230,7 +230,7 @@ and fully interactive, per quickstart.md's Story 5 checklist.
 
 ### Implementation for User Story 5
 
-- [ ] T017 [US5] Audit `app/webinar/page.tsx`, `hero-section.tsx`, `sessions-section.tsx`, and
+- [X] T017 [US5] Audit `app/webinar/page.tsx`, `hero-section.tsx`, `sessions-section.tsx`, and
   `subscribe-panel.tsx` for correct use of the canonical `lg`/`md`/`sm` breakpoints
   (1140px/960px/560px) via this codebase's `tg-md:`/`tg-sm:`/`max-tg-sm:` prefix convention — **not**
   native Tailwind `lg:`/`md:`/`sm:`, which are never used for structural breakpoints anywhere in this
@@ -238,7 +238,7 @@ and fully interactive, per quickstart.md's Story 5 checklist.
   own 960px/560px values already coincide exactly with `md`/`sm` (research.md §7, no value mapping
   needed): hero stacks to one column and the collage reflows to 2 columns at `sm`, the Sessions grid
   collapses to one column at `md` (FR-014) (depends on T011, T013, T014, T016)
-- [ ] T018 [US5] Run the full responsive walkthrough from quickstart.md Story 5 at mobile/tablet/
+- [X] T018 [US5] Run the full responsive walkthrough from quickstart.md Story 5 at mobile/tablet/
   desktop widths; fix any component whose layout doesn't collapse correctly (depends on T017)
 
 **Checkpoint**: All five user stories independently functional; the full page is responsive
@@ -250,11 +250,11 @@ end-to-end
 
 **Purpose**: Final gates and edge-case verification affecting the whole feature
 
-- [ ] T019 Run `npm run lint` and `npm run build`; fix any issues found across `app/webinar/**`,
+- [X] T019 Run `npm run lint` and `npm run build`; fix any issues found across `app/webinar/**`,
   `app/tokens.css`, `app/globals.css`, and the `components/ui/GlassCard.tsx`/`Badge.tsx`/`icons.tsx`
   edits (matches the Husky pre-commit gate); confirm no other page's existing `GlassCard`/`Badge`
   usages are affected by the new variant/tone entries
-- [ ] T020 Run the remaining quickstart.md edge-case checks: reduced-motion fallback for reveal
+- [X] T020 Run the remaining quickstart.md edge-case checks: reduced-motion fallback for reveal
   animations, full keyboard-only navigation through the hero form/"Register Now"/every "Watch
   Now"/the Subscribe form with visible focus and accessible names (FR-013), confirm both
   "Register Now" and every "Watch Now" render as `<button>` elements in the DOM (FR-006, FR-007,
