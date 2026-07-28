@@ -49,6 +49,7 @@
   --radius-3xl:   var(--radius-3xl);
   --radius-4xl:   var(--radius-4xl);
   --radius-pill:  var(--radius-pill);
+  --radius-tile:  var(--radius-tile);
 
   /* Breakpoints — match the documented 1140/960/560 contract (see BREAKPOINTS
      comment below) so Tailwind's sm:/md:/lg: prefixes collapse at the exact
@@ -241,6 +242,8 @@
   --spacing-tg-300: var(--size-300);
   --spacing-tg-320: var(--size-320);
   --spacing-tg-380: var(--size-380);
+  --spacing-tg-220: var(--size-220);
+  --spacing-tg-150: var(--size-150);
 
   /* --------------------------------------------------------------------
    * Complete token → Tailwind mapping (2026-07-15, Constitution Principle I)
@@ -265,6 +268,7 @@
   --text-xs-alt: var(--text-xs-alt);
   --text-12: var(--text-12);
   --text-15-5: var(--text-15-5);
+  --text-14-5: var(--text-14-5);
   --text-21: var(--text-21);
   --text-stat: var(--text-stat);
 
@@ -291,6 +295,7 @@
   --blur-glow-lg: var(--blur-glow-lg);
   --blur-glow-md: var(--blur-glow-md);
   --blur-glow-xl: var(--blur-glow-xl);
+  --blur-glow-100: var(--blur-glow-100);
 
   /* Colors/shadows not yet consumed by name, mapped for completeness so
    * future work can't miss them the same way. */
@@ -313,6 +318,22 @@
   --shadow-orange-border: var(--shadow-orange-border);
   --shadow-phase-ring: var(--shadow-phase-ring);
   --shadow-phase-active: var(--shadow-phase-active);
+
+  /* Webinar page (app/webinar/, TMS-73) */
+  --color-overlay-orange-10: var(--color-overlay-orange-10);
+  --color-border-orange-soft: var(--color-border-orange-soft);
+  --color-overlay-orange-06: var(--color-overlay-orange-06);
+  --color-border-amber-medium: var(--color-border-amber-medium);
+  --color-overlay-amber-04: var(--color-overlay-amber-04);
+  --color-border-blue-light-soft: var(--color-border-blue-light-soft);
+  --color-overlay-blue-light-06: var(--color-overlay-blue-light-06);
+  --color-overlay-blue-light-18: var(--color-overlay-blue-light-18);
+  --color-border-amber-30: var(--color-border-amber-30);
+  --color-overlay-amber-16: var(--color-overlay-amber-16);
+  --color-text-66: var(--color-text-66);
+  --color-text-82: var(--color-text-82);
+  --color-text-68: var(--color-text-68);
+  --shadow-glow-amber-sm: var(--shadow-glow-amber-sm);
 }
 @layer base {
   /* ----------------------------------------------------------
@@ -413,6 +434,7 @@
  * ---------------------------------------------------------- */
 a:focus-visible,
 button:focus-visible,
+input:focus-visible,
 [tabindex]:focus-visible {
   outline: 2px solid var(--color-orange);
   outline-offset: 2px;
