@@ -10,7 +10,12 @@ export function AboutUsWhoYouAre({ section }: { section: WhoYouAreSection }) {
           <div className="grid grid-cols-1 items-center gap-9 md:grid-cols-[1fr_0.85fr] md:gap-15">
             <div>
               <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-              <h2 className="text-about-h2 text-who-you-are-h2" style={{ lineHeight: 1.08 }}>{section.title}</h2>
+              <h2
+                className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-about-h2-xl)]"
+                style={{ lineHeight: 1.08 }}
+              >
+                {section.title}
+              </h2>
               {section.paragraphs.map((paragraph, index) => {
                 const marginTop = index === 0 ? 20 : 16;
                 if (!paragraph.highlight) {

@@ -46,7 +46,12 @@ export function AboutUsValues({ section }: { section: ValuesSection }) {
         <RevealOnScroll>
           <div className="mx-auto mb-[var(--space-25)] text-center content-max-lg">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 className="text-about-h2 text-values-h2" style={{ lineHeight: 1.1, marginBottom: "var(--space-section-sm)"}}>{section.title}</h2>
+            <h2
+              className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-values-h2-xl)]"
+              style={{ lineHeight: 1.1, marginBottom: "var(--space-section-sm)" }}
+            >
+              {section.title}
+            </h2>
           </div>
           <div
             className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-16"

@@ -696,7 +696,7 @@ input:focus-visible,
    *        <div class="glass-card glass-card-lg">…</div>  ← Final CTA panel
    */
   .glass-card-md {
-    padding: 16px 14px;
+    padding: var(--space-17) var(--space-16a); /* 44px 40px */
   }
 
   .glass-card-lg {
@@ -1149,38 +1149,6 @@ input:focus-visible,
  * 1140/960/560 contract.
  * ---------------------------------------------------------- */
 
-  /* ----------------------------------------------------------
-   * Responsive step font-size classes — pair with the --text-*-base/
-   * -sm/-md/-xl tokens in tokens.css. Steps at 560/960/1280 (this repo's
-   * sm/md breakpoints, plus Tailwind's default xl) instead of scaling
-   * continuously with vw, so size only changes at a fixed width, not
-   * continuously with viewport (fixes portrait/landscape inconsistency
-   * at the same breakpoint).
-   * ---------------------------------------------------------- */
-  .text-about-h2 {
-    font-size: var(--text-about-h2-base);
-  }
-
-  .text-final-cta-description {
-    font-size: var(--text-18);
-  }
-
-  .text-final-cta-label {
-    font-size: var(--text-md);
-  }
-
-  .text-final-cta-arrow {
-    font-size: var(--text-base);
-  }
-
-  .text-final-cta-secondary-label {
-    font-size: var(--text-base);
-  }
-
-  .text-achievement-stat {
-    font-size: var(--text-achievement-stat-base);
-  }
-
   /* Final CTA button — its font-size/padding are set inline (always beat
    * any class rule), so only non-inline properties can fix it here: cap
    * its width to the card and let the label wrap instead of being clipped. */
@@ -1190,48 +1158,10 @@ input:focus-visible,
     text-align: center;
     line-height: 1.3;
   }
-  
-/* Mobile */
 
   @media (min-width: 560px) {
-    .text-about-h2 {
-      font-size: var(--text-about-h2-base);
-    }
-
-    .text-final-cta-label {
-      font-size: var(--text-md-lg);
-    }
-
-    .text-final-cta-secondary-label {
-      font-size: var(--text-base);
-    }
-
-    .text-achievement-stat {
-      font-size: var(--text-achievement-stat-base);
-    }
-
-    /* Who-You-Are title stays 30px through the tablet (560-960px) range;
-     * landscape tablet widths (960-1140px) use the shared 36.84px md step. */
-    @media (max-width: 959.98px) {
-      .text-who-you-are-h2 {
-        font-size: var(--text-about-h2-base) !important;
-      }
-    }
-
-    /* Mobile landscape (phones rotated, up to ~767px wide) gets the shared
-     * 31px sm step instead of the 30px tablet-portrait value above. */
-    @media (max-width: 767.98px) and (orientation: landscape) {
-      .text-who-you-are-h2 {
-        font-size: var(--text-about-h2-base) !important;
-      }
-    }
-
     .glass-card {
       padding: 38px 44px;
-    }
-
-    .glass-card-md {
-      padding: var(--space-17) var(--space-16a); /* 44px 40px */
     }
 
     .btn-lg {
@@ -1251,28 +1181,7 @@ input:focus-visible,
   }
 
   @media (min-width: 960px) {
-    .text-about-h2 {
-      font-size: var(--text-about-h2-md);
-    }
-
-    /* Our-Role subtitle desktop override — 42px */
-    .text-our-role-subtitle {
-      font-size: var(--text-our-role-subtitle-xl) !important;
-    }
-
-    .text-final-cta-label {
-      font-size: var(--text-base);
-    }
-
-    .text-final-cta-arrow {
-      font-size: var(--text-18);
-    }
-
-    .text-achievement-stat {
-      font-size: var(--text-achievement-stat-md);
-    }
-
-     h1 {
+    h1 {
       font-size: 44px;
     }
 
@@ -1283,29 +1192,6 @@ input:focus-visible,
     .glass-card:not(.glass-card-md) {
       padding: 24px 28px;
     }
-
-    .text-final-cta-secondary-label {
-      font-size: var(--text-base);
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .text-about-h2 {
-      font-size: var(--text-about-h2-xl);
-    }
-
-    .text-achievement-stat {
-      font-size: var(--text-achievement-stat-xl);
-    }
-
-    .text-values-h2 {
-      font-size: var(--text-values-h2-xl);
-    }
-
-    .text-final-cta-secondary-label {
-      font-size: var(--text-base);
-    }
-
   }
 
   /* ----------------------------------------------------------

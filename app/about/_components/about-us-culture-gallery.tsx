@@ -16,7 +16,9 @@ export function AboutUsCultureGallery({ section }: { section: CultureGallerySect
         <RevealOnScroll>
           <div className="mx-auto mb-11 text-center content-max-lg">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 className="text-about-h2 text-values-h2 text-who-you-are-h2">{section.title}</h2>
+            <h2 className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-values-h2-xl)]">
+              {section.title}
+            </h2>
             <p className="mt-4" style={{ color: "var(--color-text-muted)" }}>
               {section.subtitle}
             </p>

@@ -11,7 +11,7 @@ export function AboutUsAchievements({ section }: { section: AchievementsSection 
               {section.stats.map((stat, index) => (
                 <div key={index}>
                   <div
-                    className="text-gradient text-achievement-stat"
+                    className="text-gradient text-[length:var(--text-achievement-stat-base)] md:text-[length:var(--text-achievement-stat-md)] xl:text-[length:var(--text-achievement-stat-xl)]"
                     style={{
                       fontFamily: "var(--font-display)",
                       fontWeight: "var(--fw-bold)",

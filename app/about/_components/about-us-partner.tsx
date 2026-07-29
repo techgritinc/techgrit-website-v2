@@ -10,7 +10,12 @@ export function AboutUsPartner({ section }: { section: PartnerSection }) {
           <div className="grid grid-cols-1 items-center gap-9 md:grid-cols-[0.9fr_1.1fr] md:gap-15">
             <div>
               <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-              <h2 className="text-about-h2 text-who-you-are-h2" style={{ lineHeight: 1.1 }}>{section.title}</h2>
+              <h2
+                className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-about-h2-xl)]"
+                style={{ lineHeight: 1.1 }}
+              >
+                {section.title}
+              </h2>
               <p className="mt-5" style={{ color: "var(--color-text-muted)", fontSize: "var(--text-md-lg)", lineHeight: 1.7 }}>
                 {section.description}
               </p>
