@@ -70,4 +70,5 @@ Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored 
 - N/A — case-study content is a static local TypeScript content module, not persisted data (TMS-68)
 
 ## Recent Changes
+- TMS-74: building the static Careers page (hero collage, stats strip, benefit-card grid, filterable Open Roles, Life at TechGrit reuse, closing CTA) — adds a new `components/ui/Modal.tsx` primitive, extends `FormField`/`LifeGallery` via backward-compatible props, replaces `mailto:` Apply/resume links with a shared application dialog
 - TMS-68: Added TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4

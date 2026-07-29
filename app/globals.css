@@ -112,6 +112,7 @@
   --color-text-placeholder: var(--color-text-placeholder);
   --color-icon-stroke: var(--color-icon-stroke);
   --color-overlay-orange-22: var(--color-overlay-orange-22);
+  --color-overlay-orange-12: var(--color-overlay-orange-12);
 
   --shadow-dropdown: var(--shadow-dropdown);
   --shadow-header-scrolled: var(--shadow-header-scrolled);
@@ -143,6 +144,14 @@
   --color-border-orange: var(--color-border-orange);
   --color-border-orange-strong: var(--color-border-orange-strong);
   --color-border-orange-hover: var(--color-border-orange-hover);
+  --color-border-orange-45: var(--color-border-orange-45);
+  --color-border-orange-30: var(--color-border-orange-30);
+  --color-border-blue-light-30: var(--color-border-blue-light-30);
+  --color-border-teal-light-30: var(--color-border-teal-light-30);
+  --color-border-amber-30: var(--color-border-amber-30);
+  --color-overlay-teal-light-12: var(--color-overlay-teal-light-12);
+  --color-overlay-amber-12: var(--color-overlay-amber-12);
+  --color-overlay-orange-10: var(--color-overlay-orange-10);
   --color-error: var(--color-error);
   --color-badge-text: var(--color-badge-text);
   --color-ink-card: var(--color-ink-card);
@@ -195,9 +204,11 @@
   --color-overlay-orange-18: var(--color-overlay-orange-18);
   --color-overlay-green-12: var(--color-overlay-green-12);
 
+  /* Legacy text-text-* generated utilities used across the codebase */
   --color-text-85: var(--color-text-85);
   --color-text-75: var(--color-text-75);
   --color-text-70: var(--color-text-70);
+  --color-text-68: var(--color-text-68);
   --color-text-64: var(--color-text-64);
   --color-text-60: var(--color-text-60);
   --color-text-55: var(--color-text-55);
@@ -205,6 +216,19 @@
   --color-text-40: var(--color-text-40);
   --color-text-32: var(--color-text-32);
   --color-text-13: var(--color-text-13);
+
+  /* Clean text-* generated utilities */
+  --color-85: var(--color-text-85);
+  --color-75: var(--color-text-75);
+  --color-70: var(--color-text-70);
+  --color-68: var(--color-text-68);
+  --color-64: var(--color-text-64);
+  --color-60: var(--color-text-60);
+  --color-55: var(--color-text-55);
+  --color-45: var(--color-text-45);
+  --color-40: var(--color-text-40);
+  --color-32: var(--color-text-32);
+  --color-13: var(--color-text-13);
 
   /* Spacing */
   --spacing-tg-1: var(--space-1);
@@ -224,6 +248,7 @@
   --spacing-tg-9: var(--space-9);
   --spacing-tg-9a: var(--space-9a);
   --spacing-tg-11: var(--space-11);
+  --spacing-tg-12: var(--space-12);
   --spacing-tg-13: var(--space-13);
   --spacing-tg-14: var(--space-14);
   --spacing-tg-14a: var(--space-14a);
@@ -1120,6 +1145,25 @@ button:focus-visible,
   }
 
   [data-cases]::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+  }
+
+  /* Internal scrollbar for modals matching modal colors */
+  .modal-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  }
+  
+  .modal-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .modal-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .modal-scrollbar::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.18);
     border-radius: 6px;
   }

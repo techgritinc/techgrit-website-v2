@@ -25,7 +25,12 @@ export default function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isContact = pathname === "/contact";
-  const cta = isContact ? { label: "Start a project", href: "#form" } : NAV_CTA;
+  const isCareers = pathname === "/careers";
+  const cta = isContact
+    ? { label: "Start a project", href: "#form" }
+    : isCareers
+      ? { label: "View open roles", href: "#roles" }
+      : NAV_CTA;
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);

@@ -77,6 +77,7 @@
   --color-text-45:        rgba(255, 255, 255, 0.45); /* Blog newsletter helper text — default state */
   --color-text-32:        rgba(255, 255, 255, 0.32);
   --color-text-64:        rgba(255, 255, 255, 0.64); /* Case study card description text */
+  --color-text-68:        rgba(255, 255, 255, 0.68); /* Careers "Life at TechGrit" paragraph copy */
   --color-text-13:        rgba(255, 255, 255, 0.13); /* Testimonials video-card initials watermark */
   /* Methodology scroll-hint caption */
 
@@ -99,8 +100,13 @@
   --color-border-orange-strong: rgba(232, 119, 34, 0.60); /* Input focus border */
   --color-border-orange-hover:  rgba(232, 119, 34, 0.85); /* Hero badge border on hover */
   --color-border-orange-medium: rgba(232, 119, 34, 0.50); /* Card hover border (orange accent, softer) */
+  --color-border-orange-45: rgba(232, 119, 34, 0.45); /* Role card hover border (Careers) */
   --color-border-blue-strong: rgba(2, 132, 199, 0.60);   /* Card hover border (blue accent) */
   --color-border-teal-strong: rgba(15, 118, 110, 0.70);  /* Card hover border (teal accent) */
+  --color-border-orange-30: rgba(232, 119, 34, 0.30);  /* Why-Join benefit icon border — orange (Careers) */
+  --color-border-blue-light-30: rgba(56, 189, 248, 0.30); /* Why-Join benefit icon border — blue (Careers) */
+  --color-border-teal-light-30: rgba(45, 212, 191, 0.30); /* Why-Join benefit icon border — teal (Careers) */
+  --color-border-amber-30: rgba(245, 158, 11, 0.30);   /* Why-Join benefit icon border — amber (Careers) */
   --color-border-image:   rgba(255, 255, 255, 0.10); /* Image card border (Careers) */
   --color-border-18:      rgba(255, 255, 255, 0.18); /* Phase-node border — todo state (Methodology) */
   --color-border-30:      rgba(255, 255, 255, 0.30); /* Phase-node border — done/active state (Methodology) */
@@ -121,11 +127,15 @@
   --color-header-scrolled-bg:rgba(8, 16, 24, 0.86);   /* Homepage header once solid on scroll */
   --color-border-header-scrolled: rgba(255, 255, 255, 0.08); /* Homepage header border once scrolled */
   --color-overlay-orange: rgba(232, 119, 34, 0.16);  /* Ambient orb / bg glow */
+  --color-overlay-orange-12: rgba(232, 119, 34, 0.12); /* Apply button hover background (Careers) */
+  --color-overlay-orange-10: rgba(232, 119, 34, 0.10); /* Careers hero eyebrow badge background */
   --color-overlay-orange-strong: rgba(232, 119, 34, 0.28); /* CTA panel glow blob */
   --color-overlay-blue:   rgba(2, 132, 199, 0.12);   /* Ambient orb / bg glow */
   --color-overlay-blue-soft: rgba(2, 132, 199, 0.10); /* Ambient orb / bg glow */
   --color-overlay-teal:   rgba(15, 118, 110, 0.12);  /* Ambient orb / bg glow */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
+  --color-overlay-teal-light-12: rgba(45, 212, 191, 0.12); /* Why-Join benefit icon background — teal (Careers) */
+  --color-overlay-amber-12: rgba(245, 158, 11, 0.12);      /* Why-Join benefit icon background — amber (Careers) */
   --color-overlay-orange-22: rgba(232, 119, 34, 0.22);/* Methodology numeral ambient glow */
   --color-overlay-orange-18: rgba(232, 119, 34, 0.18);/* Blog newsletter panel decorative orb */
   --color-overlay-green-12: rgba(52, 211, 153, 0.12); /* Blog newsletter success-state background */
