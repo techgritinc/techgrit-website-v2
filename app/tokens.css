@@ -199,7 +199,11 @@
   --text-webinar-hero: clamp(40px, 5vw, 56px); /* Webinar hero headline (TMS-73) — heading-only, unmapped per Principle I exception */
   --text-webinar-h2: clamp(26px, 3vw, 34px); /* Webinar "Sessions" heading (TMS-73) — heading-only, unmapped per Principle I exception */
   --text-lg:    clamp(16px, 1.4vw, 18.5px); /* Lead / hero body */
+  --text-lg-fixed: 18.5px;                   /* Hero lead paragraph — fixed, does not shrink on mobile */
+  --text-lg-sm: clamp(18px, 1.3vw, 18px);    /* About sub-section lead paragraph (Our Role/Final CTA) */
   --text-base:  17px;                        /* Body default */
+  --text-md-lg: 16.5px;                      /* Partner section description */
+  --text-md:    16px;                        /* Closing statement / emphasis line */
   --text-sm:    15px;                        /* Secondary body, nav links */
   --text-xs:    14px;                        /* Captions, card meta */
   --text-2xs:   12.5px;                      /* Eyebrow, labels */
@@ -213,6 +217,27 @@
   --text-blog-card: clamp(26px, 2.9vw, 34px); /* Blog/Case Study card title */
   --text-blog-newsletter-heading: clamp(26px, 3vw, 36px); /* Blog newsletter panel heading — unmapped, arbitrary-value only */
   --text-webinar-newsletter-heading: clamp(26px, 3.2vw, 36px); /* Webinar newsletter panel heading — unmapped, arbitrary-value only */
+  --text-2xs-lg: 13px;
+  --text-h3-values: 19px;
+  --text-22: 22px;
+
+  /* Responsive step tokens (base/sm/md/lg/xl at the 560/960/1140/1280
+     breakpoint contract) — consumed directly via Tailwind arbitrary-value
+     responsive utilities (text-[length:var(--token)] sm:/md:/xl:) on each
+     heading, not through intermediate globals.css classes
+     in place of clamp()/vw so sizing steps at fixed widths instead of
+     scaling continuously with viewport width (which produced inconsistent
+     sizes across portrait/landscape at the same breakpoint). */
+  --text-18: 18px; /* Final CTA description/arrow — md+ step */
+  --text-about-h2-base: 30px;
+  --text-about-h2-sm:   31px;
+  --text-about-h2-md:   36.864px;
+  --text-about-h2-xl:   40px;
+  --text-values-h2-xl:  42px;                /* Values/Our-Role section titles, laptop/desktop */
+
+  --text-achievement-stat-base: 40px;
+  --text-achievement-stat-md:   51.2px;
+  --text-achievement-stat-xl:   56px;
 
   /* Font weights */
   --fw-regular:    400;
@@ -284,6 +309,11 @@
   --space-21:  60px;
   --space-22:  84px; /* Blog hero top padding */
   --space-23:  92px; /* Blog newsletter section bottom padding */
+  --space-24:  96px; /* Hero top padding (About/Services) */
+  --space-25:  50px; /* Centered header block bottom margin (About sub-sections) */
+  --space-26:  70px; /* About hero bottom padding */
+  --space-27: 76px;
+  --space-28: 110px; /* About Final CTA section bottom padding */
   --space-section-sm:  50px;  /* Section vertical padding (small) */
   --space-section-md: 60px;   /* Section vertical padding (medium) */
   --space-section-lg: 108px;  /* Section vertical padding (large) */
@@ -292,12 +322,15 @@
    * 8. LAYOUT
    * ---------------------------------------------------------- */
   --container-max:      1280px;
+  --container-max-lg:   1180px;  /* Narrower container (About page sections) */
+  --container-max-md:   1140px;  /* Narrower container (About page showcase image) */
   --container-max-sm:   1020px;  /* Narrower container (subscribe band) */
   --container-padding:  36px;    /* Horizontal padding on all containers */
   --nav-height:         80px;    /* Desktop sticky nav height */
   --nav-height-mobile:  74px; /* Mobile nav height */
   --size-82: 82px;
-  --measure-blog-lead: 640px; /* Blog hero lead paragraph max-width */
+  --measure-hero: 1000px; /* Hero container max-width (About/Services) */
+  --measure-blog-lead: 640px; /* Blog hero lead paragraph max-width — also reused as generic hero subtitle max-width */
   --measure-blog-hero: 900px; /* Blog hero container max-width */
   --measure-blog-featured-desc: 520px; /* Blog featured-post description max-width */
   --size-42: 42px;   /* Blog featured-post author avatar diameter */
@@ -309,6 +342,10 @@
   --measure-blog-newsletter-copy: 460px; /* Blog newsletter copy max-width */
   --size-220: 220px; /* Webinar wide released-session card thumbnail column width (TMS-73) */
   --size-150: 150px; /* Webinar wide released-session card minimum height (TMS-73) */
+  --content-max-xl: 928px;  /* Centered header block max-width (About/Our Role) — matches TechGrit About.dc.html's 1000px container minus 36px inline padding */
+  --content-max-lg: 680px;  /* Centered header block max-width (About sub-sections) */
+  --content-max-md: 640px;  /* Centered header block max-width (narrower variant) */
+  --content-max-sm: 600px;  /* Centered paragraph max-width (About Final CTA) */
 
   /* Documented breakpoint contract (see globals.css breakpoints section).
      NOTE: also duplicated as literal values in globals.css's @theme inline
