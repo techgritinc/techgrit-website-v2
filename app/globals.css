@@ -38,14 +38,6 @@
   --font-sans:    var(--font-body);
   --font-display: var(--font-display);
 
-  /* Breakpoints — remap Tailwind's sm:/md:/lg: to the documented contract.
-     Must be literal values (not var() indirection): Tailwind/Lightning CSS
-     inlines these into @media conditions at build time and cannot resolve a
-     CSS custom property there. Canonical values still live in tokens.css. */
-  --breakpoint-sm: 560px;
-  --breakpoint-md: 960px;
-  --breakpoint-lg: 1140px;
-
   /* Border radius */
   --radius-xs:    var(--radius-xs);
   --radius-sm:    var(--radius-sm);
@@ -57,6 +49,7 @@
   --radius-3xl:   var(--radius-3xl);
   --radius-4xl:   var(--radius-4xl);
   --radius-pill:  var(--radius-pill);
+  --radius-tile:  var(--radius-tile);
 
   /* Breakpoints — match the documented 1140/960/560 contract (see BREAKPOINTS
      comment below) so Tailwind's sm:/md:/lg: prefixes collapse at the exact
@@ -71,6 +64,7 @@
    * classes elsewhere in this file are unaffected and keep consuming var()
    * directly, per the scope decision to migrate only new work to Tailwind. */
   --color-nav-glass: var(--color-nav-glass);
+  --color-ink-glass-60: var(--color-ink-glass-60);
   --color-dd-bg: var(--color-dd-bg);
   --color-mobile-menu-bg: var(--color-mobile-menu-bg);
   --color-header-scrolled-bg: var(--color-header-scrolled-bg);
@@ -273,6 +267,8 @@
   --spacing-tg-300: var(--size-300);
   --spacing-tg-320: var(--size-320);
   --spacing-tg-380: var(--size-380);
+  --spacing-tg-220: var(--size-220);
+  --spacing-tg-150: var(--size-150);
 
   /* --------------------------------------------------------------------
    * Complete token → Tailwind mapping (2026-07-15, Constitution Principle I)
@@ -297,6 +293,7 @@
   --text-xs-alt: var(--text-xs-alt);
   --text-12: var(--text-12);
   --text-15-5: var(--text-15-5);
+  --text-14-5: var(--text-14-5);
   --text-21: var(--text-21);
   --text-stat: var(--text-stat);
 
@@ -323,23 +320,45 @@
   --blur-glow-lg: var(--blur-glow-lg);
   --blur-glow-md: var(--blur-glow-md);
   --blur-glow-xl: var(--blur-glow-xl);
+  --blur-glow-100: var(--blur-glow-100);
 
   /* Colors/shadows not yet consumed by name, mapped for completeness so
    * future work can't miss them the same way. */
   --color-purple: var(--color-purple);
   --color-overlay-blue: var(--color-overlay-blue);
   --color-overlay-amber: var(--color-overlay-amber);
+  --color-overlay-amber-soft: var(--color-overlay-amber-soft);
+  --color-overlay-amber-12: var(--color-overlay-amber-12);
   --color-overlay-orange-strong: var(--color-overlay-orange-strong);
+  --color-overlay-amber-strong: var(--color-overlay-amber-strong);
   --color-icon-bg-blue: var(--color-icon-bg-blue);
   --color-icon-bg-teal: var(--color-icon-bg-teal);
   --color-border-image: var(--color-border-image);
+  --color-border-amber-soft: var(--color-border-amber-soft);
   --shadow-glow-blue: var(--shadow-glow-blue);
   --shadow-glow-blue-sm: var(--shadow-glow-blue-sm);
   --shadow-glow-teal: var(--shadow-glow-teal);
   --shadow-glow-amber: var(--shadow-glow-amber);
+  --shadow-glow-yellow: var(--shadow-glow-yellow);
   --shadow-orange-border: var(--shadow-orange-border);
   --shadow-phase-ring: var(--shadow-phase-ring);
   --shadow-phase-active: var(--shadow-phase-active);
+
+  /* Webinar page (app/webinar/, TMS-73) */
+  --color-overlay-orange-10: var(--color-overlay-orange-10);
+  --color-border-orange-soft: var(--color-border-orange-soft);
+  --color-overlay-orange-06: var(--color-overlay-orange-06);
+  --color-border-amber-medium: var(--color-border-amber-medium);
+  --color-overlay-amber-04: var(--color-overlay-amber-04);
+  --color-border-blue-light-soft: var(--color-border-blue-light-soft);
+  --color-overlay-blue-light-06: var(--color-overlay-blue-light-06);
+  --color-overlay-blue-light-18: var(--color-overlay-blue-light-18);
+  --color-border-amber-30: var(--color-border-amber-30);
+  --color-overlay-amber-16: var(--color-overlay-amber-16);
+  --color-text-66: var(--color-text-66);
+  --color-text-82: var(--color-text-82);
+  --color-text-68: var(--color-text-68);
+  --shadow-glow-amber-sm: var(--shadow-glow-amber-sm);
 }
 @layer base {
   /* ----------------------------------------------------------
@@ -440,6 +459,7 @@
  * ---------------------------------------------------------- */
 a:focus-visible,
 button:focus-visible,
+input:focus-visible,
 [tabindex]:focus-visible {
   outline: 2px solid var(--color-orange);
   outline-offset: 2px;
@@ -802,6 +822,11 @@ button:focus-visible,
     box-shadow: var(--shadow-glow-orange);
   }
 
+  .status-yellow {
+    background: var(--color-yellow);
+    box-shadow: var(--shadow-glow-yellow);
+  }
+
   /* ----------------------------------------------------------
  * SCROLL MARGIN — accounts for sticky nav
  * ---------------------------------------------------------- */
@@ -910,7 +935,19 @@ button:focus-visible,
   /* SVG dash animation (orbit connector lines) */
   @keyframes tgdash {
     to {
-      stroke-dashoffset: -26;
+      stroke-dashoffset: -220;
+    }
+  }
+
+  /* Lifecycle diagram core pulse (TMS-67) */
+  @keyframes tgpulsecore {
+    0%, 100% {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.95;
+      transform: scale(1.06);
     }
   }
 
@@ -1113,9 +1150,9 @@ button:focus-visible,
   }
 
   @media (max-width: 560px) {
-    .tg-container {
+    /* .tg-container {
       padding-inline: 20px;
-    }
+    } */
 
     .glass-card {
       padding: 20px 20px;

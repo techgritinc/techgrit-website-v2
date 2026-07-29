@@ -8,6 +8,7 @@ type FormFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "classN
   containerClassName?: string;
   multiline?: boolean;
   rows?: TextareaHTMLAttributes<HTMLTextAreaElement>["rows"];
+  inputClassName?: string;
 };
 
 const INPUT_BASE =
@@ -19,6 +20,7 @@ export default function FormField({
   hideLabel = true,
   error,
   containerClassName,
+  inputClassName,
   type = "text",
   multiline = false,
   rows = 4,
@@ -47,7 +49,7 @@ export default function FormField({
           type={type}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
-          className={[INPUT_BASE, "border-border-strong"].join(" ")}
+          className={[INPUT_BASE, "border-border-strong", inputClassName].filter(Boolean).join(" ")}
           {...rest}
         />
       )}

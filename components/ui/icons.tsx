@@ -330,10 +330,14 @@ export function ConstructionIcon(props: IconProps) {
 }
 
 /** Video-testimonial play button and the "Don't Migrate. Re-Imagine." heading triangle. */
-export function PlayIcon(props: IconProps) {
+export function PlayIcon({
+  variant = "default",
+  ...props
+}: SVGProps<SVGSVGElement> & { variant?: "default" | "sharp" }) {
+  const path = variant === "sharp" ? "M5 3l14 9-14 9z" : "M8 5v14l11-7z";
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M8 5v14l11-7z" />
+      <path d={path} />
     </svg>
   );
 }
@@ -373,6 +377,29 @@ export function CheckIcon(props: IconProps) {
       {...props}
     >
       <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+// Webinar (app/webinar/_components/)
+
+/** Upcoming-session date/time row. */
+export function ClockIcon(props: IconProps) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
     </svg>
   );
 }
