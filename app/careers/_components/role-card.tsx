@@ -19,7 +19,7 @@ export function RoleCard({ role, onApply }: { role: OpenRole; onApply: (role: Op
               {role.location}
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <ClockIcon />
+              <ClockIcon width="14" height="14" />
               {role.type}
             </span>
           </div>
