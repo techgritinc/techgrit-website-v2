@@ -44,12 +44,11 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
         </h1>
         <p
           data-rise
-          className="mx-auto"
+          className="mx-auto text-[length:var(--text-lg-fixed)]"
           style={{
             animationDelay: ".2s",
             marginTop: "var(--space-11)",
             maxWidth: "var(--measure-blog-lead)",
-            fontSize: "var(--text-lg-fixed)",
             lineHeight: "var(--lh-body)",
             color: "var(--color-text-secondary)",
           }}

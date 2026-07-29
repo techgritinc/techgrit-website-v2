@@ -230,13 +230,13 @@
   --text-18: 18px; /* Final CTA description/arrow — md+ step */
   --text-about-h2-base: 30px;
   --text-about-h2-sm:   31px;
-  --text-about-h2-md:   36.84px;
+  --text-about-h2-md:   36.864px;
   --text-about-h2-xl:   40px;
   --text-values-h2-xl:  42px;                /* Values section title, laptop/desktop */
   --text-our-role-subtitle-xl: 42px; /* Our-Role subtitle — desktop/laptop (md+) override */
 
   --text-achievement-stat-base: 40px;
-  --text-achievement-stat-md:   51px;
+  --text-achievement-stat-md:   51.2px;
   --text-achievement-stat-xl:   56px;
 
   /* Font weights */
@@ -342,7 +342,7 @@
   --measure-blog-newsletter-copy: 460px; /* Blog newsletter copy max-width */
   --size-220: 220px; /* Webinar wide released-session card thumbnail column width (TMS-73) */
   --size-150: 150px; /* Webinar wide released-session card minimum height (TMS-73) */
-  --content-max-xl: 900px;  /* Centered header block max-width (About/Our Role) */
+  --content-max-xl: 928px;  /* Centered header block max-width (About/Our Role) — matches TechGrit About.dc.html's 1000px container minus 36px inline padding */
   --content-max-lg: 680px;  /* Centered header block max-width (About sub-sections) */
   --content-max-md: 640px;  /* Centered header block max-width (narrower variant) */
   --content-max-sm: 600px;  /* Centered paragraph max-width (About Final CTA) */

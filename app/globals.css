@@ -1190,10 +1190,12 @@ input:focus-visible,
     text-align: center;
     line-height: 1.3;
   }
+  
+/* Mobile */
 
   @media (min-width: 560px) {
     .text-about-h2 {
-      font-size: var(--text-about-h2-sm);
+      font-size: var(--text-about-h2-base);
     }
 
     .text-final-cta-label {
@@ -1201,7 +1203,7 @@ input:focus-visible,
     }
 
     .text-final-cta-secondary-label {
-      font-size: var(--text-md);
+      font-size: var(--text-base);
     }
 
     .text-achievement-stat {
@@ -1216,12 +1218,20 @@ input:focus-visible,
       }
     }
 
+    /* Mobile landscape (phones rotated, up to ~767px wide) gets the shared
+     * 31px sm step instead of the 30px tablet-portrait value above. */
+    @media (max-width: 767.98px) and (orientation: landscape) {
+      .text-who-you-are-h2 {
+        font-size: var(--text-about-h2-base) !important;
+      }
+    }
+
     .glass-card {
       padding: 38px 44px;
     }
 
     .glass-card-md {
-      padding: var(--space-17) var(--space-22); /* 44px 40px */
+      padding: var(--space-17) var(--space-16a); /* 44px 40px */
     }
 
     .btn-lg {
@@ -1273,6 +1283,10 @@ input:focus-visible,
     .glass-card:not(.glass-card-md) {
       padding: 24px 28px;
     }
+
+    .text-final-cta-secondary-label {
+      font-size: var(--text-base);
+    }
   }
 
   @media (min-width: 1280px) {
@@ -1286,6 +1300,10 @@ input:focus-visible,
 
     .text-values-h2 {
       font-size: var(--text-values-h2-xl);
+    }
+
+    .text-final-cta-secondary-label {
+      font-size: var(--text-base);
     }
 
   }
