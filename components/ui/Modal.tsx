@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import type { MouseEvent, ReactNode } from "react";
 import { CloseIcon } from "./icons";
 
@@ -12,8 +12,14 @@ type ModalProps = {
   labelledBy?: string;
 };
 
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 /** Shared overlay + glass panel primitive, styled after Header's `.nav-dd` dropdown. */
 export default function Modal({ isOpen, onClose, children, title, labelledBy }: ModalProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -21,8 +27,27 @@ export default function Modal({ isOpen, onClose, children, title, labelledBy }: 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     document.addEventListener("keydown", handleKeyDown);
@@ -45,13 +70,15 @@ export default function Modal({ isOpen, onClose, children, title, labelledBy }: 
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelledBy}
         onClick={stopPropagation}
-        className="relative flex max-h-[90vh] w-full max-w-[520px] flex-col overflow-hidden rounded-lg border border-white/12 bg-dd-bg shadow-dropdown backdrop-blur-nav"
+        className="relative flex max-h-[90vh] w-full max-w-[520px] flex-col overflow-hidden rounded-lg border border-border bg-dd-bg shadow-dropdown backdrop-blur-nav"
       >
         <button
+          ref={closeButtonRef}
           type="button"
           onClick={onClose}
           aria-label="Close dialog"
@@ -61,7 +88,7 @@ export default function Modal({ isOpen, onClose, children, title, labelledBy }: 
         </button>
 
         {title && (
-          <div className="shrink-0 border-b border-white/10 px-6 py-6 pr-14 sm:px-8">
+          <div className="shrink-0 border-b border-border-image px-6 py-6 pr-14 sm:px-8">
             {title}
           </div>
         )}

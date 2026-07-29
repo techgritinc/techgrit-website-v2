@@ -8,7 +8,7 @@ export function StatsStrip({ stats }: { stats: Stat[] }) {
           {stats.map((stat) => (
             <div key={stat.label}>
               <div className="font-display text-[36px] font-bold leading-[normal] text-amber-light">{stat.value}</div>
-              <div className="mt-1 text-[14px] leading-[normal] text-60">{stat.label}</div>
+              <div className="mt-1 text-[14px] leading-[normal] text-text-60">{stat.label}</div>
             </div>
           ))}
         </div>

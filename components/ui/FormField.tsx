@@ -31,7 +31,7 @@ export default function FormField({
 
   return (
     <div className={containerClassName}>
-      <label htmlFor={id} className={hideLabel ? "sr-only" : "mb-2 block text-[13.5px] font-bold text-60"}>
+      <label htmlFor={id} className={hideLabel ? "sr-only" : "mb-2 block text-[13.5px] font-bold text-text-60"}>
         {label}
       </label>
       {multiline ? (

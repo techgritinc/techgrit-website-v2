@@ -359,6 +359,12 @@
   --color-text-82: var(--color-text-82);
   --color-text-68: var(--color-text-68);
   --shadow-glow-amber-sm: var(--shadow-glow-amber-sm);
+
+  /* Careers page (app/careers/, TMS-74) */
+  --shadow-glow-role-orange: var(--shadow-glow-role-orange);
+  --shadow-glow-role-yellow: var(--shadow-glow-role-yellow);
+  --shadow-glow-role-teal: var(--shadow-glow-role-teal);
+  --shadow-glow-role-blue: var(--shadow-glow-role-blue);
 }
 @layer base {
   /* ----------------------------------------------------------

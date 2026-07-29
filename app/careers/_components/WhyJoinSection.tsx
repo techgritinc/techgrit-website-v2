@@ -41,7 +41,7 @@ export function WhyJoinSection({ heading, benefits }: { heading: string; benefit
                   <Icon className="h-[22px] w-[22px]" />
                 </div>
                 <h3 className="mt-4 text-[18.5px] font-bold leading-[normal] tracking-[0] text-primary">{benefit.title}</h3>
-                <p className="mt-[9px] text-[14.5px] leading-[1.6] text-60">{benefit.description}</p>
+                <p className="mt-[9px] text-[14.5px] leading-[1.6] text-text-60">{benefit.description}</p>
               </div>
             );
           })}

@@ -36,7 +36,7 @@ export function OpenRolesSection({ filters, roles }: { filters: DepartmentFilter
           {visibleRoles.length > 0 ? (
             visibleRoles.map((role) => <RoleCard key={role.slug} role={role} onApply={handleApply} />)
           ) : (
-            <p className="py-10 text-center text-[15px] text-60">No roles match this filter right now.</p>
+            <p className="py-10 text-center text-[15px] text-text-60">No roles match this filter right now.</p>
           )}
         </div>
       </div>

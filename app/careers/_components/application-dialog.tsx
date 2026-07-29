@@ -92,7 +92,7 @@ export function ApplicationDialog({
       onClose={onClose}
       labelledBy={TITLE_ID}
       title={
-        <h2 id={TITLE_ID} className="text-[13px] font-bold tracking-[0.04em] text-60 uppercase">
+        <h2 id={TITLE_ID} className="text-[13px] font-bold tracking-[0.04em] text-text-60 uppercase">
           {positionLabel}
         </h2>
       }
@@ -100,7 +100,7 @@ export function ApplicationDialog({
       {status === "submitted" ? (
         <div className="pt-6 text-center">
           <h3 className="text-2xl font-bold text-primary">Application sent.</h3>
-          <p className="mx-auto mt-2.5 max-w-[340px] text-[16px] leading-[1.6] text-70">
+          <p className="mx-auto mt-2.5 max-w-[340px] text-[16px] leading-[1.6] text-text-70">
             Thanks — we&apos;ve received your application and will be in touch soon.
           </p>
           <Button variant="ghost" size="md" onClick={onClose} className="mt-6">

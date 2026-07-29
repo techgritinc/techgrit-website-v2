@@ -365,6 +365,10 @@
   --shadow-glow-teal:     0 0 16px 3px rgba(45, 212, 191, 0.70);  /* Teal orbit dot */
   --shadow-glow-amber:    0 0 16px 3px rgba(251, 191, 36, 0.75);  /* Amber orbit dot */
   --shadow-glow-amber-sm: 0 0 10px 2px rgba(245, 158, 11, 0.80);  /* Webinar upcoming-session "live" status dot glow (TMS-73) */
+  --shadow-glow-role-orange: 0 0 10px 1px rgba(232, 119, 34, 0.53);  /* Open-roles card status dot glow — orange (Careers) */
+  --shadow-glow-role-yellow: 0 0 10px 1px rgba(251, 191, 36, 0.53);  /* Open-roles card status dot glow — yellow (Careers) */
+  --shadow-glow-role-teal:   0 0 10px 1px rgba(45, 212, 191, 0.53);  /* Open-roles card status dot glow — teal (Careers) */
+  --shadow-glow-role-blue:   0 0 10px 1px rgba(56, 189, 248, 0.53);  /* Open-roles card status dot glow — blue (Careers) */
   --shadow-orange-border: 0 0 0 1px rgba(232, 119, 34, 0.40);  /* Card orange outline on hover */
   --shadow-image-lift:    0 30px 70px -30px rgba(0, 0, 0, 0.80);       /* Detail-section image drop shadow */
   --shadow-phase-ring:    0 0 0 7px var(--color-ink); /* Phase-node ring — todo/done state (Methodology) */

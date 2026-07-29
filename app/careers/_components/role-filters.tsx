@@ -22,7 +22,7 @@ export function RoleFilters({
             className={
               active
                 ? "cursor-pointer rounded-full border border-border-orange-strong bg-overlay-orange px-[15px] py-[9px] text-[13.5px] font-bold leading-[normal] whitespace-nowrap text-primary transition-all duration-[180ms] ease-[ease]"
-                : "cursor-pointer rounded-full border border-border-14 bg-glass-4 px-[15px] py-[9px] text-[13.5px] font-bold leading-[normal] whitespace-nowrap text-70 transition-all duration-[180ms] ease-[ease]"
+                : "cursor-pointer rounded-full border border-border-14 bg-glass-4 px-[15px] py-[9px] text-[13.5px] font-bold leading-[normal] whitespace-nowrap text-text-70 transition-all duration-[180ms] ease-[ease]"
             }
           >
             {filter.label}

@@ -32,13 +32,15 @@ export interface DepartmentFilter {
   label: string;
 }
 
+export type AccentKey = "orange" | "yellow" | "teal" | "blue";
+
 export interface OpenRole {
   slug: string;
   title: string;
   department: string;
   location: string;
   type: string;
-  accent: string;
+  accent: AccentKey;
 }
 
 export interface LifeAtTechGritContent {
@@ -143,7 +145,7 @@ export const careersPageContent: CareersPageContent = {
       department: "engineering",
       location: "Remote",
       type: "Full-time",
-      accent: "#E87722",
+      accent: "orange",
     },
     {
       slug: "ai-agent-engineer",
@@ -151,7 +153,7 @@ export const careersPageContent: CareersPageContent = {
       department: "engineering",
       location: "Remote",
       type: "Full-time",
-      accent: "#E87722",
+      accent: "orange",
     },
     {
       slug: "frontend-engineer-react",
@@ -159,7 +161,7 @@ export const careersPageContent: CareersPageContent = {
       department: "engineering",
       location: "Remote",
       type: "Full-time",
-      accent: "#E87722",
+      accent: "orange",
     },
     {
       slug: "product-designer-uiux",
@@ -167,7 +169,7 @@ export const careersPageContent: CareersPageContent = {
       department: "design",
       location: "Remote",
       type: "Full-time",
-      accent: "#fbbf24",
+      accent: "yellow",
     },
     {
       slug: "qa-automation-engineer",
@@ -175,7 +177,7 @@ export const careersPageContent: CareersPageContent = {
       department: "quality",
       location: "Remote",
       type: "Full-time",
-      accent: "#2dd4bf",
+      accent: "teal",
     },
     {
       slug: "engineering-manager",
@@ -183,7 +185,7 @@ export const careersPageContent: CareersPageContent = {
       department: "engineering",
       location: "Remote",
       type: "Full-time",
-      accent: "#E87722",
+      accent: "orange",
     },
     {
       slug: "business-analyst",
@@ -191,7 +193,7 @@ export const careersPageContent: CareersPageContent = {
       department: "product",
       location: "Remote",
       type: "Full-time",
-      accent: "#38bdf8",
+      accent: "blue",
     },
   ],
   lifeAtTechGrit: {

@@ -55,7 +55,7 @@ export default function LifeGallery({
         ) : (
           <>
             <h2 className="text-[clamp(28px,3.4vw,40px)] font-bold leading-[normal] tracking-[-0.03em]">{heading}</h2>
-            <p className="mt-3 max-w-[560px] text-[16.5px] leading-[1.6] text-68">{description}</p>
+            <p className="mt-3 max-w-[560px] text-[16.5px] leading-[1.6] text-text-68">{description}</p>
           </>
         )}
 
