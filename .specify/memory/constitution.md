@@ -1,5 +1,32 @@
 <!--
 CONSTITUTION UPDATE REPORT (latest amendment)
+Generated: 2026-07-30 (v2.0.0) — implementation-triggered amendment from TMS-85-tokens-v2-migration
+(TMS token-layer v2 migration)
+
+VERSION CHANGE: 1.6.0 → 2.0.0
+Bump Type: MAJOR
+Rationale: The v2 design exports (all 12 `raw-files-v2/*.dc.html` files) specify a default surface
+of `#000000` and a single Calibri/Carlito type family for both body and display text — both
+directly contradicting Principle V's prior literals (`#0A1822` ink-navy; Manrope body + Space
+Grotesk display). Principle IV makes the reference files authoritative on visual truth, so
+honouring v2 necessarily reverses these two Principle V clauses rather than merely extending them.
+This is the exact "principle materially reversed" case Governance defines as MAJOR. Principle V's
+*intent* is preserved in full and NOT reversed: dark-first default, white-on-dark opacity ladder,
+single orange→amber accent never used as a full-surface fill, ALL-CAPS wide-tracked labels,
+OrbitAI™ naming, and the light-surface token set as a named exception all carry forward unchanged
+— only the two literal values (surface hex, font stack) are replaced. See
+`specs/TMS-85-tokens-v2-migration/plan.md`'s Complexity Tracking section for the full rejected-
+alternatives analysis.
+Same amendment also closes two now-stale references per T044: Development Workflow's "no separate
+Prettier config exists" and Governance → Known gaps' "no Prettier config" both predate this
+feature's `.prettierrc`/`.prettierignore` addition (Phase 5, tasks T038-T039) and are updated to
+reflect the config now exists and is not applied retroactively (Q9).
+TEMPLATE UPDATES: none required.
+DEFERRED ITEMS: TODO(RATIFICATION_DATE) still unresolved, carried over unchanged.
+-->
+
+<!--
+CONSTITUTION UPDATE REPORT (previous amendment, kept for history)
 Generated: 2026-07-22 (v1.6.0) — review-triggered amendment from a PR #9 (TMS-69) code review
 finding
 
@@ -352,11 +379,15 @@ one-off.
 
 ### V. Dark-First Brand System
 
-The default surface is the ink-navy family (`--color-ink` `#0A1822` and its `-deep`/`-mid`/`-card`
-variants), text is white-on-dark via the `--color-text-*` opacity ladder, and the single brand
-accent is the orange→amber gradient (`--gradient-brand`, `#F59E0B → #E87722`) — never used as a
-full-surface fill, only for CTAs, borders, and text accents. Typography is Manrope (body) +
-Space Grotesk (display), loaded via `next/font` in `app/layout.tsx`. Section labels and badges are
+The default surface is `--color-ink` `#000000` (v2; the family's `-deep`/`-mid`/`-card` variants
+migrated to the same black) and its ink-navy predecessor is retired, text is white-on-dark via
+the `--color-text-*` opacity ladder, and the single brand accent is the orange→amber gradient
+(`--gradient-brand`, `#F59E0B → #E87722`) — never used as a full-surface fill, only for CTAs,
+borders, and text accents. Typography is one family, Calibri (metrically-substituted by Carlito
+on non-Windows systems), for both body and display text — loaded via `next/font` in
+`app/layout.tsx`, exposed through the same `--font-body`/`--font-display` CSS variables as before
+(v1's Manrope/Space Grotesk split is retired; both variables now resolve to the same family per
+FR-009/FR-022 of TMS-85-tokens-v2-migration). Section labels and badges are
 ALL-CAPS with wide letter-spacing (`--ls-widest`/`--ls-wider`). The product is consistently named
 **OrbitAI™**, positioned as an "AI-First Software Engineering Partner" — this phrasing recurs
 verbatim in `app/layout.tsx`'s `<title>`/description and in multiple `.dc.html` hero headlines
@@ -473,9 +504,12 @@ directory.
 
 ## Development Workflow
 
-- ESLint 9 flat config (`eslint-config-next` core-web-vitals + typescript) is the only enforced
-  static-analysis gate; no separate Prettier config exists — formatting relies on ESLint plus
-  editor defaults.
+- ESLint 9 flat config (`eslint-config-next` core-web-vitals + typescript) is the enforced
+  static-analysis gate. A root-level `.prettierrc` (`tabWidth: 2`, `trailingComma: "all"`,
+  `printWidth: 100`) and `.prettierignore` also exist (TMS-85-tokens-v2-migration) but are **not**
+  applied retroactively — running `--write` across the existing tree would bury unrelated feature
+  work in a whitespace diff. New files are expected to already conform; existing files are
+  reformatted only when a feature deliberately elects to as part of its own scope.
 - Husky's `pre-commit` hook runs `npm run lint` then `npm run build` before every commit; both
   MUST stay green for a commit to land.
 - No test framework is configured anywhere in the repo today (no Vitest/Jest config, no
@@ -507,10 +541,12 @@ When a user invokes `/speckit.specify` or asks to start a new feature:
   compliance with Principles I–V is enforced by code review against the token/utility-class rules
   and by `npm run lint` / `npm run build` (already gated by the Husky pre-commit hook) — not by
   automated style/unit tests.
-- **Known gaps carried forward, not silently resolved**: no test framework, no Prettier config,
-  and no `lib/`/`types/` directory yet (as of TMS-62, `components/` itself is in active use —
-  `layout/`, `ui/`, `home/`). Do not treat these as decisions to defend — they are simply the
-  current, unfinished state, recorded here so future amendments can address them deliberately.
+- **Known gaps carried forward, not silently resolved**: no test framework, and no `lib/`/`types/`
+  directory yet (as of TMS-62, `components/` itself is in active use — `layout/`, `ui/`, `home/`).
+  A Prettier config now exists (TMS-85-tokens-v2-migration) but is explicitly not applied
+  retroactively — see Development Workflow, above. Do not treat these as decisions to defend —
+  they are simply the current, unfinished state, recorded here so future amendments can address
+  them deliberately.
 
-**Version**: 1.6.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
-exists; this discovery run is the first codification | **Last Amended**: 2026-07-22
+**Version**: 2.0.0 | **Ratified**: TODO(RATIFICATION_DATE) — no prior dated adoption record
+exists; this discovery run is the first codification | **Last Amended**: 2026-07-30

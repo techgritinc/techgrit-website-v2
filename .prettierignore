@@ -1,0 +1,5 @@
+raw-files/
+raw-files-v2/
+.next/
+node_modules/
+specs/

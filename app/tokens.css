@@ -15,12 +15,12 @@
    * ---------------------------------------------------------- */
 
   /* Primary anchor */
-  --color-ink:          #0A1822;  /* Page background (dark). All headings on dark. */
-  --color-ink-deep:     #05080d;  /* Hero section bg — deepest dark */
-  --color-ink-hero-crazy: #08121A; /* Hero Crazy variant bg */
-  --color-ink-hero-topo:  #070F16; /* Hero Topo / topographic variant bg */
-  --color-ink-mid:      #0D1F2D;  /* Nav on light, secondary dark surfaces */
-  --color-ink-card:     #0e1e2b;  /* Card/panel dark surface */
+  --color-ink:          #000000;  /* Page background (dark). All headings on dark. v2 black (name retains navy-era "ink"; see FR-004/FR-005/FR-023) */
+  --color-ink-deep:     #000000;  /* Hero section bg — deepest dark. v2 black (name retained, value migrated) */
+  --color-ink-hero-crazy: #08121A; /* Hero Crazy variant bg — retained-v1, no v2 hero-crazy equivalent exists */
+  --color-ink-hero-topo:  #070F16; /* Hero Topo / topographic variant bg — retained-v1, no v2 hero-topo equivalent exists */
+  --color-ink-mid:      #000000;  /* Nav on light, secondary dark surfaces. v2 black (name retained, value migrated) */
+  --color-ink-card:     #000000;  /* Card/panel dark surface. v2 black (name retained, value migrated) */
 
   /* Brand */
   --color-orange:       #E87722;  /* Signal Orange — CTAs, accents, borders. NEVER as a fill. */
@@ -41,7 +41,14 @@
   --color-green:        #34d399;  /* Success — live status, confirmation states */
   --color-error:        #FB7185;  /* Error / danger — form validation messages (Blog contact form) */
   --color-purple:       #A78BFA;  /* Blog category accent — "Engineering" / "AI" article tags (violet) */
-  --color-badge-text:   #08111F;  /* Text color ON orange gradient badges — near-black navy */
+  --color-badge-text:   #08111F;  /* Text color ON orange gradient badges — near-black navy. FR-006a sanctioned exception: v2 itself still uses this navy value — do not repoint to black */
+
+  /* v2 accent colours (additive, FR-007) — new avatar/mega-menu/error-state tints */
+  --color-violet:       #C084FC;  /* Nav mega-menu icon tint */
+  --color-avatar-violet: #8B5CF6; /* Homepage avatar circle */
+  --color-avatar-blue:  #3B82F6;  /* Homepage avatar circle */
+  --color-avatar-green: #10B981;  /* Homepage avatar circle */
+  --color-error-light:  #FCA5A5;  /* Careers error-state text */
 
   /* RETIRED: Navy Blue #1B3A5C — permanently retired. Never use. */
   /* DECORATIVE (not tokens): #FF5F57 / #FEBC2E / #28C840 = macOS window chrome in UI mockup screenshots only */
@@ -128,12 +135,12 @@
   --color-glass-4:        rgba(255, 255, 255, 0.04); /* Secondary glass fill */
   --color-glass-strong:   rgba(255, 255, 255, 0.06); /* Input fill */
   --color-glass-hover:    rgba(255, 255, 255, 0.08); /* Input fill on focus */
-  --color-nav-glass:      rgba(10, 24, 34, 0.70);    /* Sticky nav background */
-  --color-ink-glass-60:   rgba(10, 24, 34, 0.60);    /* Lifecycle diagram mobile-fallback node pill background (TMS-67) */
+  --color-nav-glass:      rgba(0, 0, 0, 0.70);    /* Sticky nav background. v2 black (name retained, value migrated) */
+  --color-ink-glass-60:   rgba(0, 0, 0, 0.60);    /* Lifecycle diagram mobile-fallback node pill background (TMS-67). v2 black (name retained, value migrated) */
   --color-nav-hover:      rgba(255, 255, 255, 0.07); /* Nav link hover background */
-  --color-dd-bg:          rgba(13, 26, 37, 0.97);    /* Dropdown menu bg */
-  --color-mobile-menu-bg: rgba(10, 24, 34, 0.97);    /* Mobile nav panel bg (darker than dd-bg) */
-  --color-header-scrolled-bg:rgba(8, 16, 24, 0.86);   /* Homepage header once solid on scroll */
+  --color-dd-bg:          rgba(0, 0, 0, 0.97);    /* Dropdown menu bg. v2 black (name retained, value migrated) */
+  --color-mobile-menu-bg: rgba(0, 0, 0, 0.97);    /* Mobile nav panel bg (darker than dd-bg). v2 black (name retained, value migrated) */
+  --color-header-scrolled-bg:rgba(0, 0, 0, 0.88);   /* Homepage header once solid on scroll. v2 black (name retained, value migrated) */
   --color-border-header-scrolled: rgba(255, 255, 255, 0.08); /* Homepage header border once scrolled */
   --color-overlay-orange: rgba(232, 119, 34, 0.16);  /* Ambient orb / bg glow */
   --color-overlay-orange-12: rgba(232, 119, 34, 0.12); /* Apply button hover background (Careers) */
@@ -159,8 +166,25 @@
   --color-icon-bg-blue: rgba(2, 132, 199, 0.16);  /* Icon background tint — blue tone (differentiator/platform agent cards) */
   --color-icon-bg-teal: rgba(15, 118, 110, 0.20); /* Icon background tint — teal tone (differentiator/platform agent cards) */
 
+  /* v2 accent translucents (additive, FR-007) — supporting the avatar/violet accents above */
+  --color-overlay-violet-14: rgba(147, 51, 234, 0.14);
+  --color-border-violet-35: rgba(192, 132, 252, 0.35);
+  --color-overlay-red-14: rgba(239, 68, 68, 0.14);
+  --color-overlay-red-40: rgba(239, 68, 68, 0.4);
+  --shadow-glow-violet-avatar: 0 0 0 -12px rgba(139, 92, 246, 0.35);
+  --shadow-glow-blue-avatar: 0 0 0 -12px rgba(59, 130, 246, 0.35);
+  --shadow-glow-green-avatar: 0 0 0 -12px rgba(16, 185, 129, 0.35);
+
+  /* v2 hover-state tokens (additive, FR-024) — orange fills/borders + white border census */
+  --color-hover-orange-fill-12: rgba(232, 119, 34, 0.12);
+  --color-hover-orange-fill-14: rgba(232, 119, 34, 0.14);
+  --color-hover-orange-fill-15: rgba(232, 119, 34, 0.15);
+  --color-hover-orange-border-40: rgba(232, 119, 34, 0.40);
+  --color-hover-orange-border-55: rgba(232, 119, 34, 0.55);
+  --color-hover-border-white-34: rgba(255, 255, 255, 0.34);
+
   /* Specific UI Colors */
-  --color-console-bg: rgba(13, 24, 33, 0.72);
+  --color-console-bg: rgba(13, 24, 33, 0.72); /* FR-006a sanctioned exception: v2 itself still uses this navy value for the OrbitAI console card — do not repoint to black */
   --color-glass-faint: rgba(255, 255, 255, 0.03);
   --color-glass-8: rgba(255, 255, 255, 0.08);
   --color-border-8: rgba(255, 255, 255, 0.08);
@@ -168,9 +192,9 @@
   --color-mac-yellow: #febc2e;
   --color-mac-green: #28c840;
   --color-glass-10:       rgba(255, 255, 255, 0.10); /* Testimonials lightbox close-button fill */
-  --color-badge-ink-45:   rgba(7, 15, 22, 0.45);      /* Testimonials video-badge pill background */
+  --color-badge-ink-45:   rgba(0, 0, 0, 0.45);      /* Testimonials video-badge pill background. v2 black (name retained, value migrated) */
   --color-white-96:       rgba(255, 255, 255, 0.96);  /* Testimonials play-button circle fill */
-  --color-modal-backdrop: rgba(5, 10, 15, 0.88);      /* Testimonials lightbox modal backdrop */
+  --color-modal-backdrop: rgba(5, 10, 15, 0.88);      /* Testimonials lightbox modal backdrop. FR-006a sanctioned exception: v2 itself still uses this navy value — do not repoint to black */
   --color-border-faint:   rgba(255, 255, 255, 0.10); /* Case-study glass card border */
   --color-glass-faint:    rgba(255, 255, 255, 0.04); /* Case-study glass card fill */
   --color-border-hairline: rgba(255, 255, 255, 0.14); /* Case-studies hero badge border */
@@ -185,28 +209,34 @@
   --gradient-brand-text: linear-gradient(120deg, #F59E0B, #E87722); /* Use with background-clip: text */
   --gradient-phase-node: linear-gradient(140deg, #F7B733, #E87722); /* Methodology phase-node — done/active background */
   --gradient-testimonial-video:       linear-gradient(150deg, rgba(232, 119, 34, 0.92), rgba(154, 52, 18, 0.96)); /* Testimonials video-card background */
-  --gradient-testimonial-fade:        linear-gradient(180deg, transparent, rgba(7, 15, 22, 0.82)); /* Testimonials video-card bottom fade */
-  --gradient-testimonial-edge:        linear-gradient(90deg, rgba(8, 17, 26, 0) 0%, rgba(8, 17, 26, 0.92) 78%); /* Testimonials carousel right-edge fade */
-  --gradient-testimonial-placeholder: linear-gradient(150deg, rgba(232, 119, 34, 0.2), rgba(10, 24, 34, 0.5)); /* Testimonials lightbox placeholder background */
+  --gradient-testimonial-fade:        linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.82)); /* Testimonials video-card bottom fade. v2 black (value migrated) */
+  --gradient-testimonial-edge:        linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.95) 82%); /* Testimonials carousel right-edge fade. v2 black + stop-position migrated */
+  --gradient-testimonial-placeholder: linear-gradient(150deg, rgba(232, 119, 34, 0.2), rgba(0, 0, 0, 0.5)); /* Testimonials lightbox placeholder background. v2 black (value migrated) */
   --gradient-blog-featured: linear-gradient(150deg, rgba(232, 119, 34, 0.20), rgba(2, 132, 199, 0.06)); /* Blog featured-post visual panel background */
   --gradient-webinar-upcoming: linear-gradient(150deg, rgba(245, 158, 11, 0.12), rgba(255, 255, 255, 0.03)); /* Webinar upcoming-session panel background (TMS-73) */
   --gradient-webinar-released-blue: linear-gradient(150deg, rgba(56, 189, 248, 0.18), rgba(15, 118, 110, 0.06)); /* Webinar released-session cover — blue accent (TMS-73) */
   --gradient-webinar-released-teal: linear-gradient(150deg, rgba(45, 212, 191, 0.18), rgba(56, 189, 248, 0.06)); /* Webinar released-session cover — teal accent (TMS-73) */
+  --gradient-hover-orange-amber: linear-gradient(135deg, rgba(232, 119, 34, 0.28), rgba(245, 158, 11, 0.18)); /* v2 hover-state gradient (additive, FR-024) */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY
    * ---------------------------------------------------------- */
-  --font-body: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-display: "Space Grotesk", "Manrope", sans-serif;
+  /* v2 collapses the body/display split into one family; both names retained per FR-022 */
+  --font-body: "Calibri", "Carlito", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: "Calibri", "Carlito", "Segoe UI", system-ui, -apple-system, sans-serif;
 
   /* Fluid type scale — uses clamp() for responsive sizing */
-  --text-h1:    clamp(44px, 5.5vw, 70px);  /* Hero headline */
+  /* v2 canonical hero cap 62px absorbs per-page deltas (Frameworks 64, About 60, Industries/Services/Careers/Case Studies/Blog 58) — consciously absorbed, not missed (FR-010, FR-032, FR-034) */
+  --text-h1:    clamp(44px, 5.5vw, 62px);  /* Hero headline */
   --text-h2:    clamp(32px, 3.6vw, 46px);  /* Section heading */
   --text-h3:    clamp(22px, 2.4vw, 30px);  /* Sub-section heading */
   --text-h4:    clamp(18px, 1.8vw, 22px);  /* Card heading */
   --text-blog-hero: clamp(40px, 5.4vw, 58px); /* Blog hero headline — narrower clamp than --text-h1 */
   --text-webinar-hero: clamp(40px, 5vw, 56px); /* Webinar hero headline (TMS-73) — heading-only, unmapped per Principle I exception */
   --text-webinar-h2: clamp(26px, 3vw, 34px); /* Webinar "Sessions" heading (TMS-73) — heading-only, unmapped per Principle I exception */
+  --text-construction-hero: 54px; /* Construction page hero headline — v2 per-page value (FR-022) — heading-only, unmapped per Principle I exception */
+  --text-contact-hero: clamp(38px, 4.8vw, 54px); /* Contact page hero headline — v2 per-page value (FR-022) — heading-only, unmapped per Principle I exception */
+  --text-case-study-hero: clamp(34px, 4.4vw, 52px); /* Case Study page hero headline — v2 per-page value (FR-022) — heading-only, unmapped per Principle I exception */
   --text-lg:    clamp(16px, 1.4vw, 18.5px); /* Lead / hero body */
   --text-lg-fixed: 18.5px;                   /* Hero lead paragraph — fixed, does not shrink on mobile */
   --text-lg-sm: clamp(18px, 1.3vw, 18px);    /* About sub-section lead paragraph (Our Role/Final CTA) */
@@ -256,15 +286,15 @@
   --fw-extrabold:  800;
 
   /* Line heights */
-  --lh-tight:  1.03;   /* H1 display */
+  --lh-tight:  1.02;   /* H1 display. v2 (FR-033) */
   --lh-snug:   1.13;   /* H2 */
   --lh-normal: 1.32;   /* H3/H4 */
-  --lh-body:   1.65;   /* Paragraphs */
+  --lh-body:   1.6;    /* Paragraphs. v2 dominant body leading (100 occurrences vs. 24 for 1.65) — repointed from 1.65 per research.md §5 */
   --lh-relaxed: 1.6;   /* Alternate body */
   --lh-newsletter-heading: 1.1; /* Blog newsletter panel heading — unmapped, arbitrary-value only */
 
   /* Letter spacing */
-  --ls-tight:    -0.04em;  /* H1 standard */
+  --ls-tight:    -0.03em;  /* H1 standard. v2 (FR-033) */
   --ls-tightest: -0.045em; /* H1 Hero Crazy variant — maximum compression */
   --ls-snug:    -0.03em; /* H2 */
   --ls-normal:  -0.02em; /* H3 */
@@ -277,7 +307,7 @@
   --ls-04:      0.04em;  /* Testimonials drag-hint caption */
   --ls-hint:    0.14em;  /* Methodology scroll-hint caption */
   --ls-badge:   0.18em;  /* Methodology phase-corner label */
-  --ls-01:      0.01em;  /* Topic filter chip label spacing (Blog) */
+  --ls-01:      0.01em;  /* Topic filter chip label spacing (Blog) — zero occurrences in v2 census; retained unchanged, name kept per FR-022 */
 
   /* ----------------------------------------------------------
    * 7. SPACING
@@ -380,6 +410,19 @@
   --radius-pill: 9999px;  /* Badge chips, stat pills, eyebrow tags */
   --radius-tile: 16px;    /* Webinar hero collage tile corners (TMS-73) */
 
+  /* v2 additive radii (FR-022) — not yet consumed by an existing surface */
+  --radius-3:  3px;
+  --radius-4:  4px;
+  --radius-6:  6px;
+  --radius-10: 10px;
+  --radius-13: 13px;
+  --radius-26: 26px;
+  --radius-28: 28px;
+  --radius-30: 30px;
+  --radius-40: 40px;
+  --radius-70: 70px;
+  --radius-80: 80px;
+
   /* ----------------------------------------------------------
    * 10. SHADOWS
    * ---------------------------------------------------------- */
@@ -410,6 +453,13 @@
   --shadow-image-lift:    0 30px 70px -30px rgba(0, 0, 0, 0.80);       /* Detail-section image drop shadow */
   --shadow-phase-ring:    0 0 0 7px var(--color-ink); /* Phase-node ring — todo/done state (Methodology) */
   --shadow-phase-active:  0 0 0 7px var(--color-ink), 0 0 30px rgba(232, 119, 34, 0.70);   /* Phase-node ring+glow — active state (Methodology) */
+  /* Ambient-orb radii (--blur-glow*, §14) and coloured status-dot glows (--shadow-glow-*, above) already form a coherent v2-covering group — confirmed, no gaps (FR-025) */
+
+  /* v2 hover-lift distances (additive, FR-024) */
+  --lift-hover-1: -1px;
+  --lift-hover-2: -2px;
+  --lift-hover-5: -5px;
+  --lift-hover-6: -6px;
 
   /* ----------------------------------------------------------
    * 11. TRANSITIONS
@@ -417,6 +467,8 @@
   --transition-fast:    0.15s ease;
   --transition-base:    0.20s ease;
   --transition-medium:  0.35s ease;  /* Nav scroll transition */
+  --transition-hover-fast: 0.22s ease; /* v2 additive (FR-022) */
+  --transition-hover-base: 0.25s ease; /* v2 additive (FR-022) */
 
   /* ----------------------------------------------------------
    * 12. Z-INDEX SCALE
@@ -458,4 +510,147 @@
   --blur-glow-md: 70px; /* Blog featured-panel cover glow blob */
   --blur-glow-xl: 115px; /* Blog newsletter panel ambient glow blob */
   --blur-glow-100: 100px; /* Webinar upcoming-session panel glow blob (TMS-73) */
+
+  /* v2 additive blur radii (FR-022) — 120-150px set is v2's larger ambient orbs */
+  --blur-10:  10px;
+  --blur-11:  11px;
+  --blur-34:  34px;
+  --blur-60:  60px;
+  --blur-80:  80px;
+  --blur-110: 110px;
+  --blur-120: 120px;
+  --blur-130: 130px;
+  --blur-140: 140px;
+  --blur-150: 150px;
+}
+
+/* ----------------------------------------------------------
+ * 15. RESPONSIVE BANDS (T028-T037, tokens-v2-migration US2)
+ *
+ * v2's own property census (12 exports × 9 thresholds) shows v2 specifies
+ * almost no responsive type or spacing scale itself (font-size overridden
+ * 7×, padding 0×) — what v2 changes at small widths is layout (columns,
+ * gaps, stacking), not the type/spacing tokens below. Every value in the
+ * `md`/`sm` blocks that follow is therefore a DESIGNED EXTENSION, not a
+ * value sourced from a v2 export, governed by one rule: tracking and
+ * leading move opposite to size (FR-016, SC-011). Do not "correct" these
+ * toward a literal v2 reference — none exists at this tier.
+ *
+ * SOURCE ORDER IS LOAD-BEARING (FR-013): both blocks target `:root` at
+ * equal specificity, so `sm` MUST be declared after `md`, or the mobile
+ * overrides lose to the tablet ones and every mobile band silently
+ * reverts to the tablet values. Do not reorder these for tidiness.
+ *
+ * Five v2 thresholds absorb into `md`/`sm` rather than getting their own
+ * tier (full analysis: spec.md "Responsive Threshold Consolidation").
+ * Recorded here so later per-page verification starts with a watch-list
+ * instead of cold (FR-020, SC-006):
+ *   - Footer stack 640px -> sm (560px): footer sub-link grid stays
+ *     two-column 40px longer than v2's own footer rule. Low risk, one
+ *     shared component.
+ *   - About/Industries/Services grid-collapse 920px -> md (960px):
+ *     content collapses 40px earlier than each page's own export. No
+ *     risk — earlier collapse is the safe direction.
+ *   - Blog grid-collapse 980px -> md (960px): 20px band difference.
+ *     Negligible.
+ *   - Frameworks grid-collapse 1024px -> md (960px): content collapses
+ *     later than designed; 960-1024px may feel tight. Low risk —
+ *     Frameworks has no route yet, resolve when that page is built.
+ *   - Frameworks minor-gap tweak 720px -> sm (560px): same page, same
+ *     deferred-until-built caveat.
+ *   - Homepage's duplicate 1024px nav rule is dropped as redundant with
+ *     the shared 1140px `lg` nav-collapse rule used by all 12 exports.
+ * ---------------------------------------------------------- */
+
+@media (max-width: 960px) {
+  :root {
+    /* Type — md */
+    --text-h1: 44px;    /* v2's own value; unbanded clamp yields 52.8px at 960 */
+    --text-h2: 34px;    /* Holds h1:h2 ratio near 1.3 */
+    --text-h3: 24px;
+    --text-h4: 19px;
+    --text-lg: 17px;
+    --lh-tight: 1.06;   /* 44px needs more leading than 62px */
+    --ls-tight: -0.035em; /* Tracking opens as size drops */
+    /* --text-base/--text-sm/--text-xs intentionally absent — reading size
+       is not a function of screen size (FR-018) */
+
+    /* Section padding — md, ≈0.78× lg */
+    --space-section-lg: 76px;
+    --space-section-md: 48px;
+    --space-section-sm: 42px;
+    --container-padding: 28px;
+
+    /* Banded spacing — md column (spec.md "Banded spacing values — enumerated").
+       Floored at 26px (the value of --space-11, which never bands) so the
+       scale can't invert at the boundary; floor is inactive from
+       --space-18 upward, where the nominal ≈0.8× ratio holds on its own. */
+    --space-12:  26px;
+    --space-13:  26px;
+    --space-14a: 26px;
+    --space-14:  28px;
+    --space-15:  28px;
+    --space-16:  30px;
+    --space-16a: 32px;
+    --space-17:  36px;
+    --space-18:  36px;
+    --space-19:  38px;
+    --space-19a: 42px;
+    --space-20:  44px;
+    --space-21:  48px;
+    --space-22:  68px;
+    --space-23:  74px;
+    /* Spacing tokens below 28px (--space-0a through --space-11) intentionally
+       absent — inner detail spacing is canvas-independent (FR-015) */
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    /* Type — sm */
+    --text-h1: 38px;    /* Has v2 precedent: Frameworks uses 38px at its own 640 band */
+    --lh-tight: 1.10;   /* At 38px, 1.03 lets descenders strike the next line's capitals */
+    --ls-tight: -0.03em;
+    --text-h2: 28px;
+    --lh-snug: 1.18;    /* Same inverse relationship as h1 */
+    --ls-snug: -0.02em;
+    --text-h3: 21px;    /* h4 is already at its floor */
+    --text-h4: 18px;
+    --text-lg: 16.5px;
+    --lh-body: 1.55;    /* ≈40 characters per line at this measure */
+    --text-2xs: 13px;   /* Increased — uppercase eyebrow labels at 62% opacity
+                           on near-black are first to fail in daylight */
+    --ls-widest: 0.12em; /* Reduced — wide tracking at small sizes on dark
+                            surfaces fragments word shapes */
+    --ls-wider: 0.08em;
+    --text-stat: 22px;
+    /* --text-base/--text-sm/--text-xs deliberately unchanged — mobile
+       reading conditions are worse, not better (FR-018) */
+
+    /* Section padding — sm */
+    --space-section-lg: 56px;
+    --space-section-md: 40px;
+    --space-section-sm: 32px;
+    --container-padding: 20px; /* Yields 350px of content at a 390px viewport */
+
+    /* Banded spacing — sm column, same 26px floor as md */
+    --space-12:  26px;
+    --space-13:  26px;
+    --space-14a: 26px;
+    --space-14:  26px;
+    --space-15:  26px;
+    --space-16:  26px;
+    --space-16a: 26px;
+    --space-17:  26px;
+    --space-18:  28px;
+    --space-19:  28px;
+    --space-19a: 32px;
+    --space-20:  34px;
+    --space-21:  36px;
+    --space-22:  50px;
+    --space-23:  56px;
+    /* Spacing tokens below 28px unchanged, same as md (FR-015). Button and
+       tap-target height tokens are never scaled below 44px in this band
+       (FR-019, SC-012) — none appear above because none are banded. */
+  }
 }
