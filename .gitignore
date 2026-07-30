@@ -8,6 +8,7 @@
 # (see .specify/memory/constitution.md Principle VI).
 !.claude/skills/
 raw-files
+raw-files-v2
 
 # dependencies
 /node_modules

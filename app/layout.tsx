@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
-import { Manrope, Space_Grotesk } from "next/font/google";
+import { Carlito } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { AmbientOrbs } from "@/reusable-components/ambient-orbs";
 import "./globals.css";
 
-const manrope = Manrope({
+// v2 collapses the body/display split into one family (Calibri, metrically-substituted
+// by Carlito on non-Windows systems); both CSS variables are still exposed per FR-009/FR-022
+const carlitoBody = Carlito({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const carlitoDisplay = Carlito({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -37,7 +41,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${manrope.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${carlitoBody.variable} ${carlitoDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <AmbientOrbs />

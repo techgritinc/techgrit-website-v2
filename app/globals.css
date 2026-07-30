@@ -334,6 +334,53 @@
   --color-text-82: var(--color-text-82);
   --color-text-68: var(--color-text-68);
   --shadow-glow-amber-sm: var(--shadow-glow-amber-sm);
+
+  /* --------------------------------------------------------------------
+   * tokens-v2-migration additive tokens (T007-T023) — new v2 colors,
+   * hover states, avatar glows, and the additive radius/blur scales.
+   * -------------------------------------------------------------------- */
+  --color-violet: var(--color-violet);
+  --color-avatar-violet: var(--color-avatar-violet);
+  --color-avatar-blue: var(--color-avatar-blue);
+  --color-avatar-green: var(--color-avatar-green);
+  --color-error-light: var(--color-error-light);
+  --color-overlay-violet-14: var(--color-overlay-violet-14);
+  --color-border-violet-35: var(--color-border-violet-35);
+  --color-overlay-red-14: var(--color-overlay-red-14);
+  --color-overlay-red-40: var(--color-overlay-red-40);
+  --color-hover-orange-fill-12: var(--color-hover-orange-fill-12);
+  --color-hover-orange-fill-14: var(--color-hover-orange-fill-14);
+  --color-hover-orange-fill-15: var(--color-hover-orange-fill-15);
+  --color-hover-orange-border-40: var(--color-hover-orange-border-40);
+  --color-hover-orange-border-55: var(--color-hover-orange-border-55);
+  --color-hover-border-white-34: var(--color-hover-border-white-34);
+
+  --shadow-glow-violet-avatar: var(--shadow-glow-violet-avatar);
+  --shadow-glow-blue-avatar: var(--shadow-glow-blue-avatar);
+  --shadow-glow-green-avatar: var(--shadow-glow-green-avatar);
+
+  --radius-3: var(--radius-3);
+  --radius-4: var(--radius-4);
+  --radius-6: var(--radius-6);
+  --radius-10: var(--radius-10);
+  --radius-13: var(--radius-13);
+  --radius-26: var(--radius-26);
+  --radius-28: var(--radius-28);
+  --radius-30: var(--radius-30);
+  --radius-40: var(--radius-40);
+  --radius-70: var(--radius-70);
+  --radius-80: var(--radius-80);
+
+  --blur-10: var(--blur-10);
+  --blur-11: var(--blur-11);
+  --blur-34: var(--blur-34);
+  --blur-60: var(--blur-60);
+  --blur-80: var(--blur-80);
+  --blur-110: var(--blur-110);
+  --blur-120: var(--blur-120);
+  --blur-130: var(--blur-130);
+  --blur-140: var(--blur-140);
+  --blur-150: var(--blur-150);
 }
 @layer base {
   /* ----------------------------------------------------------
