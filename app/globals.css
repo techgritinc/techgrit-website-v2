@@ -412,6 +412,14 @@
   --blur-130: var(--blur-130);
   --blur-140: var(--blur-140);
   --blur-150: var(--blur-150);
+
+  --gradient-hover-orange-amber: var(--gradient-hover-orange-amber);
+  --transition-hover-fast: var(--transition-hover-fast);
+  --transition-hover-base: var(--transition-hover-base);
+  --lift-hover-1: var(--lift-hover-1);
+  --lift-hover-2: var(--lift-hover-2);
+  --lift-hover-5: var(--lift-hover-5);
+  --lift-hover-6: var(--lift-hover-6);
 }
 @layer base {
   /* ----------------------------------------------------------
