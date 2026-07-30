@@ -7,18 +7,21 @@ export function AboutUsOurRole({ section }: { section: OurRoleSection }) {
 
   return (
     <section className="section">
-      <div className="tg-container">
+      <div className="tg-container" style={{ paddingInline: "var(--space-15)" }}>
         <RevealOnScroll>
-          <div className="mx-auto text-center" style={{ maxWidth: 1000 }}>
+          <div className="mx-auto text-center content-max-xl">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>
+            <h2
+              className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-values-h2-xl)]"
+              style={{ lineHeight: 1.1 }}
+            >
               {before}
               <span className="text-gradient">{section.titleHighlight}</span>
               {after}
             </h2>
             <p
-              className="mx-auto"
-              style={{ marginTop: 22, maxWidth: 680, fontSize: "clamp(16px, 1.4vw, 18px)", lineHeight: 1.7 }}
+              className="mx-auto content-max-lg"
+              style={{ marginTop: 22, fontSize: "var(--text-lg-sm)", lineHeight: 1.7 }}
             >
               {section.description}
             </p>

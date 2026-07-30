@@ -42,14 +42,19 @@ function ValueIcon({ order }: { order: number }) {
 export function AboutUsValues({ section }: { section: ValuesSection }) {
   return (
     <section id="values" className="section">
-      <div className="tg-container">
+      <div className="tg-container" style={{ paddingInline: "var(--space-15)" }}>
         <RevealOnScroll>
-          <div className="mx-auto mb-[50px] max-w-[680px] text-center">
+          <div className="mx-auto mb-[var(--space-25)] text-center content-max-lg">
             <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>{section.title}</h2>
+            <h2
+              className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-values-h2-xl)]"
+              style={{ lineHeight: 1.1, marginBottom: "var(--space-section-sm)" }}
+            >
+              {section.title}
+            </h2>
           </div>
           <div
-            className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16"
+            className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-16"
             style={{ borderBottom: "1px solid var(--color-border-subtle)" }}
           >
             {section.values.map((value) => (
@@ -79,7 +84,7 @@ export function AboutUsValues({ section }: { section: ValuesSection }) {
                 <div>
                   <div className="flex items-center gap-3">
                     <ValueIcon order={value.order} />
-                    <h3 style={{fontSize: "19px"}}>{value.title}</h3>
+                    <h3 style={{fontSize: "var(--text-h3-values)"}}>{value.title}</h3>
                   </div>
                   <p className="mt-2" style={{ fontSize: "var(--text-sm)", color: "var(--color-text-faint)" }}>
                     {value.description}

@@ -5,7 +5,7 @@ import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
 export function AboutUsShowcase({ section }: { section: ShowcaseSection }) {
   return (
     <section>
-      <div className="tg-container" style={{ maxWidth: 1140, paddingTop: 14, paddingBottom: 56 }}>
+      <div className="tg-container-md" style={{ paddingTop: "var(--space-5)", paddingBottom: "var(--space-20)" }}>
         <RevealOnScroll>
           <div
             className="relative overflow-hidden"
@@ -26,7 +26,7 @@ export function AboutUsShowcase({ section }: { section: ShowcaseSection }) {
                 alt={section.image.alternativeText}
                 width={section.image.width}
                 height={section.image.height}
-                preload
+                priority
                 sizes="100vw"
                 style={{ width: "100%", height: 460, objectFit: "cover", display: "block" }}
               />

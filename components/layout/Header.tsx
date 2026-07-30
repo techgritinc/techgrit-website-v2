@@ -25,9 +25,14 @@ export default function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isContact = pathname === "/contact";
+  const isCareers = pathname === "/careers";
   const isWebinar = pathname === "/webinar";
   const cta = isContact
+   
     ? { label: "Start a project", href: "#form" }
+    : isCareers
+      ? { label: "View open roles", href: "#roles" }
+     
     : isWebinar
       ? { label: "Subscribe", href: "#subscribe" }
       : NAV_CTA;
@@ -114,6 +119,7 @@ export default function Header() {
                     aria-haspopup="menu"
                     aria-expanded={isOpen}
                     onClick={() => setOpenDropdown(isOpen ? null : item.label)}
+                    suppressHydrationWarning
                   >
                     {item.label}
                     <ChevronIcon className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />

@@ -106,6 +106,7 @@
   --color-text-placeholder: var(--color-text-placeholder);
   --color-icon-stroke: var(--color-icon-stroke);
   --color-overlay-orange-22: var(--color-overlay-orange-22);
+  --color-overlay-orange-12: var(--color-overlay-orange-12);
 
   --shadow-dropdown: var(--shadow-dropdown);
   --shadow-header-scrolled: var(--shadow-header-scrolled);
@@ -137,6 +138,14 @@
   --color-border-orange: var(--color-border-orange);
   --color-border-orange-strong: var(--color-border-orange-strong);
   --color-border-orange-hover: var(--color-border-orange-hover);
+  --color-border-orange-45: var(--color-border-orange-45);
+  --color-border-orange-30: var(--color-border-orange-30);
+  --color-border-blue-light-30: var(--color-border-blue-light-30);
+  --color-border-teal-light-30: var(--color-border-teal-light-30);
+  --color-border-amber-30: var(--color-border-amber-30);
+  --color-overlay-teal-light-12: var(--color-overlay-teal-light-12);
+  --color-overlay-amber-12: var(--color-overlay-amber-12);
+  --color-overlay-orange-10: var(--color-overlay-orange-10);
   --color-error: var(--color-error);
   --color-badge-text: var(--color-badge-text);
   --color-ink-card: var(--color-ink-card);
@@ -189,9 +198,11 @@
   --color-overlay-orange-18: var(--color-overlay-orange-18);
   --color-overlay-green-12: var(--color-overlay-green-12);
 
+  /* Legacy text-text-* generated utilities used across the codebase */
   --color-text-85: var(--color-text-85);
   --color-text-75: var(--color-text-75);
   --color-text-70: var(--color-text-70);
+  --color-text-68: var(--color-text-68);
   --color-text-64: var(--color-text-64);
   --color-text-60: var(--color-text-60);
   --color-text-55: var(--color-text-55);
@@ -199,6 +210,19 @@
   --color-text-40: var(--color-text-40);
   --color-text-32: var(--color-text-32);
   --color-text-13: var(--color-text-13);
+
+  /* Clean text-* generated utilities */
+  --color-85: var(--color-text-85);
+  --color-75: var(--color-text-75);
+  --color-70: var(--color-text-70);
+  --color-68: var(--color-text-68);
+  --color-64: var(--color-text-64);
+  --color-60: var(--color-text-60);
+  --color-55: var(--color-text-55);
+  --color-45: var(--color-text-45);
+  --color-40: var(--color-text-40);
+  --color-32: var(--color-text-32);
+  --color-13: var(--color-text-13);
 
   /* Spacing */
   --spacing-tg-1: var(--space-1);
@@ -218,6 +242,7 @@
   --spacing-tg-9: var(--space-9);
   --spacing-tg-9a: var(--space-9a);
   --spacing-tg-11: var(--space-11);
+  --spacing-tg-12: var(--space-12);
   --spacing-tg-13: var(--space-13);
   --spacing-tg-14: var(--space-14);
   --spacing-tg-14a: var(--space-14a);
@@ -334,6 +359,12 @@
   --color-text-82: var(--color-text-82);
   --color-text-68: var(--color-text-68);
   --shadow-glow-amber-sm: var(--shadow-glow-amber-sm);
+
+  /* Careers page (app/careers/, TMS-74) */
+  --shadow-glow-role-orange: var(--shadow-glow-role-orange);
+  --shadow-glow-role-yellow: var(--shadow-glow-role-yellow);
+  --shadow-glow-role-teal: var(--shadow-glow-role-teal);
+  --shadow-glow-role-blue: var(--shadow-glow-role-blue);
 
   /* --------------------------------------------------------------------
    * tokens-v2-migration additive tokens (T007-T023) — new v2 colors,
@@ -505,12 +536,32 @@ input:focus-visible,
     padding-inline: var(--container-padding);
   }
 
+  .tg-container-lg {
+    width: 100%;
+    max-width: var(--container-max-lg);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
+  .tg-container-md {
+    width: 100%;
+    max-width: var(--container-max-md);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
   .tg-container-sm {
     width: 100%;
     max-width: var(--container-max-sm);
     margin-inline: auto;
     padding-inline: var(--container-padding);
   }
+
+  /* Centered content/copy widths — see tokens.css --content-max-* */
+  .content-max-xl { max-width: var(--content-max-xl); }
+  .content-max-lg { max-width: var(--content-max-lg); }
+  .content-max-md { max-width: var(--content-max-md); }
+  .content-max-sm { max-width: var(--content-max-sm); }
 
   /* ----------------------------------------------------------
  * Section padding
@@ -525,6 +576,13 @@ input:focus-visible,
 
   .section-lg {
     padding-block: var(--space-section-lg);
+  }
+
+  /* Final CTA section — asymmetric top/bottom padding (extra bottom
+   * breathing room before the footer). Usage: About page Final CTA. */
+  .section-cta {
+    padding-top: var(--space-16a);
+    padding-bottom: var(--space-28);
   }
 
   /* ----------------------------------------------------------
@@ -633,8 +691,8 @@ input:focus-visible,
   }
 
   .btn-lg {
-    font-size: 16px;
-    padding: 16px 28px;
+    font-size: var(--text-sm);
+    padding: 14px 22px;
     border-radius: var(--radius-card);
   }
 
@@ -708,7 +766,19 @@ input:focus-visible,
     backdrop-filter: blur(var(--blur-lg));
     -webkit-backdrop-filter: blur(var(--blur-lg));
     box-shadow: var(--shadow-glass);
-    padding: 38px 44px;
+    padding: 20px 20px;
+  }
+
+  /* Glass-card padding variants
+   * Usage: <div class="glass-card glass-card-md">…</div>  ← Achievements stats panel
+   *        <div class="glass-card glass-card-lg">…</div>  ← Final CTA panel
+   */
+  .glass-card-md {
+    padding: var(--space-17) var(--space-16a); /* 44px 40px */
+  }
+
+  .glass-card-lg {
+    padding: var(--space-23) var(--space-22); /* 76px 40px */
   }
 
   /* ----------------------------------------------------------
@@ -1157,7 +1227,38 @@ input:focus-visible,
  * 1140/960/560 contract.
  * ---------------------------------------------------------- */
 
-  @media (max-width: 960px) {
+  /* Final CTA button — its font-size/padding are set inline (always beat
+   * any class rule), so only non-inline properties can fix it here: cap
+   * its width to the card and let the label wrap instead of being clipped. */
+  .section-cta .btn-lg {
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 560px) {
+    .glass-card {
+      padding: 38px 44px;
+    }
+
+    .btn-lg {
+      font-size: 16px;
+      padding: 16px 28px;
+    }
+
+    /* Final CTA button — its font-size/padding are set inline (always beat
+     * any class rule), so only non-inline properties can fix it here: cap
+     * its width to the card and let the label wrap instead of being clipped. */
+    .section-cta .btn-lg {
+      max-width: none;
+      white-space: nowrap;
+      text-align: left;
+      line-height: normal;
+    }
+  }
+
+  @media (min-width: 960px) {
     h1 {
       font-size: 44px;
     }
@@ -1166,23 +1267,8 @@ input:focus-visible,
       padding-block: 60px;
     }
 
-    .glass-card {
+    .glass-card:not(.glass-card-md) {
       padding: 24px 28px;
-    }
-  }
-
-  @media (max-width: 560px) {
-    /* .tg-container {
-      padding-inline: 20px;
-    } */
-
-    .glass-card {
-      padding: 20px 20px;
-    }
-
-    .btn-lg {
-      font-size: var(--text-sm);
-      padding: 14px 22px;
     }
   }
 
@@ -1204,6 +1290,25 @@ input:focus-visible,
   }
 
   [data-cases]::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+  }
+
+  /* Internal scrollbar for modals matching modal colors */
+  .modal-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  }
+  
+  .modal-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .modal-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .modal-scrollbar::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.18);
     border-radius: 6px;
   }

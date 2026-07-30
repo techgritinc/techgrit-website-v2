@@ -336,13 +336,14 @@ export const CASE_STUDIES: CaseStudy[] = [
 // ---------------------------------------------------------------------------
 
 export type CultureGalleryImage = {
-  image: { src: string; alt: string } | null;
-  span: "tall" | "wide" | "default";
+  src: string;
+  alt: string;
+  span: "tall" | "wide" | "default" | "wide3";
 };
 
 export const CULTURE_GALLERY_IMAGES: CultureGalleryImage[] = [
-  { image: { src: "/assets/team/glasses.png", alt: "TechGrit team member" }, span: "tall" },
-  { image: { src: "/assets/team/rooftop.png", alt: "TechGrit office rooftop" }, span: "default" },
-  { image: { src: "/assets/team/painting.png", alt: "TechGrit culture moment" }, span: "default" },
-  { image: { src: "/assets/team/diwali.png", alt: "TechGrit team celebration" }, span: "wide" },
+  { src: "/assets/team/glasses.png", alt: "TechGrit team member", span: "tall" },
+  { src: "/assets/team/rooftop.png", alt: "TechGrit office rooftop", span: "default" },
+  { src: "/assets/team/painting.png", alt: "TechGrit culture moment", span: "default" },
+  { src: "/assets/team/diwali.png", alt: "TechGrit team celebration", span: "wide" },
 ];

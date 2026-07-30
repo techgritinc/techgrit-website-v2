@@ -4,18 +4,17 @@ import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
 export function AboutUsAchievements({ section }: { section: AchievementsSection }) {
   return (
     <section className="section-sm">
-      <div className="tg-container" style={{ maxWidth: 1180 }}>
+      <div className="tg-container-lg">
         <RevealOnScroll>
-          <div className="glass-card" style={{ borderRadius: "var(--radius-4xl)", padding: "44px 40px" }}>
+          <div className="glass-card glass-card-md" style={{ borderRadius: "var(--radius-4xl)" }}>
             <div className="grid grid-cols-2 gap-5 text-center sm:grid-cols-4">
               {section.stats.map((stat, index) => (
                 <div key={index}>
                   <div
-                    className="text-gradient"
+                    className="text-gradient text-[length:var(--text-achievement-stat-base)] md:text-[length:var(--text-achievement-stat-md)] xl:text-[length:var(--text-achievement-stat-xl)]"
                     style={{
                       fontFamily: "var(--font-display)",
                       fontWeight: "var(--fw-bold)",
-                      fontSize: "clamp(40px, 5vw, 56px)",
                       letterSpacing: "var(--ls-snug)",
                       lineHeight: 1,
                     }}

@@ -26,8 +26,8 @@ export function FinalCta({
     <section>
       <div className="tg-container" style={{ maxWidth: 1180, paddingTop: paddingTop, paddingBottom: 110 }}>
           <div
-            className="glass-card mx-auto text-center"
-            style={{ padding: "76px 40px", position: "relative", overflow: "hidden" }}
+            className="glass-card glass-card-lg mx-auto text-center"
+            style={{ position: "relative", overflow: "hidden",padding:"var(--space-27) var(--space-16a)" }}
           >
             <div
               aria-hidden="true"
@@ -56,7 +56,10 @@ export function FinalCta({
                 {section.eyebrow}
               </div>
               <h2 className="mt-4" style={{ fontSize: "clamp(34px, 4.4vw, 48px)", lineHeight: titleLineHeight }}>{section.title}</h2>
-              <p className="mx-auto mt-5" style={{ maxWidth: 600, color: "var(--color-text-secondary)", fontSize: "clamp(16px, 1.4vw, 18px)" }}>
+              <p
+                className="mx-auto mt-5 text-[length:var(--text-18)]"
+                style={{ maxWidth: 600, color: "var(--color-text-secondary)" }}
+              >
                 {section.description}
               </p>
               <div
@@ -68,14 +71,21 @@ export function FinalCta({
                   variant="primary"
                   size="lg"
                   style={{
-                    fontSize: "clamp(16px, 1.4vw, 17px)",
                     gap: "10px",
                     padding: "17px 34px",
                     borderRadius: 13,
                     lineHeight: "normal",
                   }}
                 >
-                  {section.ctaLabel} <span aria-hidden="true" style={{ fontSize: "clamp(17px, 1.4vw, 18px)" }}>&#8594;</span>
+                  <span className="text-[length:var(--text-base)]">
+                    {section.ctaLabel}
+                  </span>{" "}
+                  <span
+                    aria-hidden="true"
+                    className="text-[length:var(--text-base)] md:text-[length:var(--text-18)]"
+                  >
+                    &#8594;
+                  </span>
                 </Button>
                 {section.secondaryCta && (
                   <Button

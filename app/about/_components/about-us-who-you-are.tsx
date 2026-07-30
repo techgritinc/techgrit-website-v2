@@ -5,12 +5,17 @@ import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
 export function AboutUsWhoYouAre({ section }: { section: WhoYouAreSection }) {
   return (
     <section className="section">
-      <div className="tg-container" style={{ maxWidth: 1180 }}>
+      <div className="tg-container-lg">
         <RevealOnScroll>
           <div className="grid grid-cols-1 items-center gap-9 md:grid-cols-[1fr_0.85fr] md:gap-15">
             <div>
               <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-              <h2 style={{ fontSize: "clamp(30px, 3.6vw, 40px)", lineHeight: 1.08 }}>{section.title}</h2>
+              <h2
+                className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-about-h2-xl)]"
+                style={{ lineHeight: 1.08 }}
+              >
+                {section.title}
+              </h2>
               {section.paragraphs.map((paragraph, index) => {
                 const marginTop = index === 0 ? 20 : 16;
                 if (!paragraph.highlight) {
@@ -34,12 +39,12 @@ export function AboutUsWhoYouAre({ section }: { section: WhoYouAreSection }) {
             </div>
             <div
               className="card rounded-xl"
-              style={{ borderLeft: "3px solid var(--color-orange)", padding: "34px 32px" }}
+              style={{ borderLeft: "3px solid var(--color-orange)", padding: "var(--space-14) var(--space-14a)" }}
             >
               <div
                 style={{
-                  marginBottom: 18,
-                  fontSize: "13px",
+                  marginBottom: "var(--space-7)",
+                  fontSize: "var(--text-2xs-lg)",
                   fontWeight: "var(--fw-bold)",
                   letterSpacing: "var(--ls-widest)",
                   textTransform: "uppercase",
@@ -75,7 +80,7 @@ export function AboutUsWhoYouAre({ section }: { section: WhoYouAreSection }) {
                 style={{
                   borderTop: "1px solid var(--color-border)",
                   color: "var(--color-text-primary)",
-                  fontSize: "16px",
+                  fontSize: "var(--text-md)",
                 }}
               >
                 {section.concernsCard.closingStatement}
