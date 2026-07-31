@@ -132,7 +132,7 @@ export default function Header() {
                 </Link>
                 <div
                   role="menu"
-                  className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid w-[min(940px,calc(100vw-40px))] -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-220 ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
+                  className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid w-[min(940px,calc(100vw-40px))] -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
                     } ${GRID_COLS_CLASS[group.columns]}`}
                 >
                   {group.items.map((item) => {
@@ -211,7 +211,7 @@ export default function Header() {
       >
         {MEGA_GROUPS.map((group) => (
           <div key={group.label}>
-            <div className="border-t border-border-subtle px-9 pt-3.5 pb-3.5 text-4 font-bold text-[rgba(255,255,255,0.85)]">
+            <div className="border-t border-border-subtle px-9 pt-3.5 pb-3.5 font-bold text-text-85">
               {group.label}
             </div>
             <div>
@@ -221,7 +221,7 @@ export default function Header() {
                   href={item.href}
                   onClick={closeMenus}
                   className={[
-                    "block py-2.5 pr-9 pl-13 text-[14.5px] font-semibold text-[rgba(255,255,255,0.62)] transition-colors hover:text-white",
+                    "block py-2.5 pr-9 pl-13 text-[14.5px] font-semibold text-muted transition-colors hover:text-white",
                     item.href === pathname && "text-white",
                   ]
                     .filter(Boolean)
