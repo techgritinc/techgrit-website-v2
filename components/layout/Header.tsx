@@ -6,36 +6,29 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Button from "@/components/ui/Button";
 import { ChevronIcon, HamburgerIcon } from "@/components/ui/icons";
-import { NAV_CTA, NAV_ITEMS, type NavItem } from "./nav-config";
+import { MEGA_GROUPS, NAV_CTA, PLAIN_LINKS, type MegaGroup } from "./nav-config";
 
-function isItemActive(item: NavItem, pathname: string): boolean {
-  if (item.children) {
-    return item.children.some((child) => child.href === pathname);
-  }
-  if (item.matchPaths) {
-    return item.matchPaths.includes(pathname);
-  }
-  return item.href === pathname;
+function isGroupActive(group: MegaGroup, pathname: string): boolean {
+  return group.matchPaths.includes(pathname);
 }
 
 const NAV_LINK_BASE =
   "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-3.5 py-[9px] text-sm font-semibold text-nav leading-[normal] transition-colors hover:bg-nav-hover hover:text-white aria-expanded:bg-nav-hover aria-expanded:text-white";
 
+const GRID_COLS_CLASS: Record<MegaGroup["columns"], string> = {
+  2: "grid-cols-2",
+  3: "grid-cols-3",
+  4: "grid-cols-4",
+};
+
 export default function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  // Header CTA is identical everywhere (FR-022): "Talk to Us" -> /contact, except on the
+  // Contact page itself, which targets its own in-page form section instead of navigating to
+  // itself (the one reference-confirmed exception; no other page relabels/retargets the CTA).
   const isContact = pathname === "/contact";
-  const isCareers = pathname === "/careers";
-  const isWebinar = pathname === "/webinar";
-  const cta = isContact
-   
-    ? { label: "Start a project", href: "#form" }
-    : isCareers
-      ? { label: "View open roles", href: "#roles" }
-     
-    : isWebinar
-      ? { label: "Subscribe", href: "#subscribe" }
-      : NAV_CTA;
+  const cta = isContact ? { label: NAV_CTA.label, href: "#form" } : NAV_CTA;
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -58,7 +51,7 @@ export default function Header() {
     setOpenDropdown(null);
   };
 
-  // Close an open dropdown on outside click or Escape (FR-010).
+  // Close an open mega-menu on outside click or Escape (FR-010/FR-014).
   useEffect(() => {
     if (!openDropdown) return;
     const onPointerDown = (e: PointerEvent) => {
@@ -77,7 +70,6 @@ export default function Header() {
     };
   }, [openDropdown]);
 
-
   const scrolledAttr = isHome && scrolled ? "true" : "false";
 
   const headerClasses = isHome
@@ -86,7 +78,7 @@ export default function Header() {
 
   const innerClasses = isHome
     ? "h-nav transition-[height] duration-300 ease-out data-[scrolled=true]:h-[70px]"
-    : "h-[78px]";
+    : "h-nav";
 
   return (
     <header className={`${headerClasses} leading-[normal]`} data-scrolled={scrolledAttr}>
@@ -95,70 +87,102 @@ export default function Header() {
         data-scrolled={scrolledAttr}
         className={`mx-auto flex max-w-(--container-max) items-center justify-between gap-6 px-9 ${innerClasses}`}
       >
-        <Link href="/" aria-label="TechGrit home" onClick={closeMenus} className="flex shrink-0 items-center gap-[12px]">
+        <Link href="/" aria-label="TechGrit home" onClick={closeMenus} className="flex shrink-0 items-center gap-3">
           <Image
             src="/logos/techgrit-logo-white.png"
             alt="TechGrit"
-            width={114}
-            height={34}
+            width={148}
+            height={44}
             priority
-            className={isHome ? "h-[34px] w-auto" : "h-[32px] w-auto"}
+            unoptimized
+            className="h-11 w-auto block"
           />
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-1 tg-lg:flex">
-          {NAV_ITEMS.map((item) => {
-            const active = isItemActive(item, pathname);
-            if (item.children) {
-              const isOpen = openDropdown === item.label;
-              return (
-                <div className="relative" key={item.label}>
-                  <button
-                    type="button"
-                    className={[NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ")}
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                    onClick={() => setOpenDropdown(isOpen ? null : item.label)}
-                    suppressHydrationWarning
-                  >
-                    {item.label}
-                    <ChevronIcon className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
-                  </button>
-                  {isOpen && (
-                    <div
-                      role="menu"
-                      className="absolute top-[calc(100%+11px)] left-0 z-[var(--z-dropdown)] min-w-[216px] rounded-lg border border-border bg-dd-bg p-2 shadow-dropdown backdrop-blur-nav"
+          {MEGA_GROUPS.map((group) => {
+            const active = isGroupActive(group, pathname);
+            const isOpen = openDropdown === group.label;
+            return (
+              <div
+                key={group.label}
+                onMouseEnter={() => setOpenDropdown(group.label)}
+                onMouseLeave={() =>
+                  setOpenDropdown((current) => (current === group.label ? null : current))
+                }
+              >
+                <Link
+                  href={group.href}
+                  className={[NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ")}
+                  aria-haspopup="menu"
+                  aria-expanded={isOpen}
+                  onClick={(e) => {
+                    // Mouse click navigates to the group's own page (FR-019a), matching the
+                    // reference's real <a href>. Touch (no hover preview) and keyboard (Enter)
+                    // open the panel first instead, per FR-019/FR-014.
+                    const pointerType = (e.nativeEvent as PointerEvent).pointerType;
+                    if (pointerType !== "mouse") {
+                      e.preventDefault();
+                      setOpenDropdown((current) => (current === group.label ? null : group.label));
+                    }
+                  }}
+                  suppressHydrationWarning
+                >
+                  {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
+                </Link>
+                <div
+                  role="menu"
+                  className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid w-[min(940px,calc(100vw-40px))] -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
+                    } ${GRID_COLS_CLASS[group.columns]}`}
+                >
+                  {group.items.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.title}
+                        href={item.href}
+                        role="menuitem"
+                        tabIndex={isOpen ? 0 : -1}
+                        onClick={closeMenus}
+                        className="flex min-h-16 items-start gap-3 rounded-sm p-3 transition-[background-color,transform] duration-200 ease-out hover:-translate-y-px hover:bg-overlay-orange-12"
+                      >
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border-orange-soft bg-hover-orange-fill-14 text-amber-light">
+                          <Icon className="h-4.5 w-4.5" />
+                        </span>
+                        <span className="flex flex-col min-w-0 mt-px">
+                          <span className="text-[14px] leading-[1.4] font-bold text-white">{item.title}</span>
+                          <span className="mt-0.75 text-[11.5px] leading-[1.4] text-text-55 line-clamp-2">{item.description}</span>
+                        </span>
+                      </Link>
+                    );
+                  })}
+                  {group.cta && (
+                    <Link
+                      href={group.cta.href}
+                      tabIndex={isOpen ? 0 : -1}
+                      onClick={closeMenus}
+                      className="group col-span-full mt-1.5 flex items-center justify-between rounded-card border border-hover-orange-border-40 px-4.5 py-5.5 text-[12.5px] font-extrabold uppercase tracking-[0.08em] bg-[image:var(--gradient-mega-cta)] transition-[background-image,transform] duration-200 ease-out hover:-translate-y-px hover:bg-[image:var(--gradient-hover-orange-amber)]"
                     >
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.href}
-                          role="menuitem"
-                          onClick={closeMenus}
-                          className={[
-                            "flex items-center gap-[11px] whitespace-nowrap rounded-sm px-[13px] py-[11px] text-[14.5px] font-semibold text-nav-sub transition-colors hover:bg-overlay-orange hover:text-primary",
-                            child.href === pathname && "bg-overlay-orange text-primary",
-                          ]
-                            .filter(Boolean)
-                            .join(" ")}
-                        >
-                          <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: `var(${child.dotColorVar})` }} />
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
+                      <span className="text-white">{group.cta.label}</span>
+                      <span aria-hidden="true" className="text-amber-light text-[15px] transition-transform duration-200 ease-out group-hover:translate-x-[4px]">
+                        &rarr;
+                      </span>
+                    </Link>
                   )}
                 </div>
-              );
-            }
+              </div>
+            );
+          })}
+          {PLAIN_LINKS.map((link) => {
+            const active = link.href === pathname;
             return (
               <Link
-                key={item.label}
-                href={item.href ?? "#"}
+                key={link.label}
+                href={link.href}
                 onClick={closeMenus}
                 className={[NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ")}
               >
-                {item.label}
+                {link.label}
               </Link>
             );
           })}
@@ -177,7 +201,7 @@ export default function Header() {
           onClick={() => setMobileOpen((open) => !open)}
           className="flex cursor-pointer items-center justify-center p-2 text-white tg-lg:hidden"
         >
-          <HamburgerIcon className="h-[26px] w-[26px]" />
+          <HamburgerIcon className="h-6.5 w-6.5" />
         </button>
       </div>
 
@@ -185,56 +209,60 @@ export default function Header() {
         inert={!mobileOpen}
         className={`overflow-y-auto bg-mobile-menu-bg transition-[max-height] duration-300 ease-out ${mobileOpen ? "max-h-[80vh]" : "max-h-0"}`}
       >
-        {NAV_ITEMS.map((item) => {
-          if (item.children) {
+        {MEGA_GROUPS.map((group) => (
+          <div key={group.label}>
+            <div className="border-t border-border-subtle px-9 pt-3.5 pb-3.5 font-bold text-text-85">
+              {group.label}
+            </div>
+            <div>
+              {group.items.map((item) => (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  onClick={closeMenus}
+                  className={[
+                    "block py-2.5 pr-9 pl-13 text-[14.5px] font-semibold text-muted transition-colors hover:text-white",
+                    item.href === pathname && "text-white",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                >
+                  {item.title}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+        {PLAIN_LINKS.map((link, index) => {
+          const isFinalRow = index === PLAIN_LINKS.length - 1;
+          if (isFinalRow) {
             return (
-              <div key={item.label}>
-                <div className="border-t border-border-subtle px-9 pt-3.5 pb-2 text-[12px] font-bold tracking-[0.12em] text-[rgba(255,255,255,0.4)] uppercase">
-                  {item.label}
-                </div>
-                <div>
-                  {item.children.map((child) => (
-                    <Link
-                      key={child.label}
-                      href={child.href}
-                      onClick={closeMenus}
-                      className={[
-                        "block py-2.5 pr-9 pl-13 text-[14.5px] font-semibold text-[rgba(255,255,255,0.62)] hover:text-white transition-colors",
-                        child.href === pathname && "text-white",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={closeMenus}
+                className="block border-t border-border-subtle px-9 py-4 text-[16px] font-bold text-orange"
+              >
+                {link.label}
+              </Link>
             );
           }
           return (
             <Link
-              key={item.label}
-              href={item.href ?? "#"}
+              key={link.label}
+              href={link.href}
               onClick={closeMenus}
               className={[
                 "block border-t border-border-subtle px-9 py-3.5 text-[16px] font-semibold text-[rgba(255,255,255,0.85)]",
-                item.href === pathname && "text-white",
+                link.href === pathname && "text-white",
               ]
                 .filter(Boolean)
                 .join(" ")}
             >
-              {item.label}
+              {link.label}
             </Link>
           );
         })}
-        <Link
-          href={cta.href}
-          onClick={closeMenus}
-          className="block border-t border-border-subtle px-9 py-4 text-[16px] font-bold text-orange"
-        >
-          {cta.label} <span aria-hidden="true">&rarr;</span>
-        </Link>
       </div>
     </header>
   );

@@ -109,6 +109,7 @@
   --color-overlay-orange-12: var(--color-overlay-orange-12);
 
   --shadow-dropdown: var(--shadow-dropdown);
+  --shadow-mega: var(--shadow-mega);
   --shadow-header-scrolled: var(--shadow-header-scrolled);
   --shadow-nav-btn: var(--shadow-nav-btn);
   --shadow-nav-btn-hover: var(--shadow-nav-btn-hover);
@@ -424,6 +425,7 @@
   --blur-150: var(--blur-150);
 
   --gradient-hover-orange-amber: var(--gradient-hover-orange-amber);
+  --gradient-mega-cta: var(--gradient-mega-cta);
   --transition-hover-fast: var(--transition-hover-fast);
   --transition-hover-base: var(--transition-hover-base);
   --lift-hover-1: var(--lift-hover-1);
@@ -472,17 +474,34 @@
   /* ----------------------------------------------------------
    * Base Typography
    * ---------------------------------------------------------- */
-  h1, h2, h3, h4, h5, h6 {     
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     font-weight: var(--fw-bold);
     color: var(--color-text-primary);
     line-height: var(--lh-tight);
   }
 
-  h1 { font-size: var(--text-h1); letter-spacing: var(--ls-tight); }
-  h2 { font-size: var(--text-h2); letter-spacing: var(--ls-snug);  line-height: var(--lh-snug); }
-  h3 { font-size: var(--text-h3); letter-spacing: var(--ls-normal); line-height: var(--lh-normal); }
-  h4 { font-size: var(--text-h4); letter-spacing: var(--ls-normal); }
+  h1 {
+    font-size: var(--text-h1);
+    letter-spacing: var(--ls-tight);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    letter-spacing: var(--ls-snug);
+    line-height: var(--lh-snug);
+  }
+
+  h3 {
+    font-size: var(--text-h3);
+    letter-spacing: var(--ls-normal);
+    line-height: var(--lh-normal);
+  }
+
+  h4 {
+    font-size: var(--text-h4);
+    letter-spacing: var(--ls-normal);
+  }
 
   p {
     font-size: var(--text-base);
@@ -495,7 +514,10 @@
     color: inherit;
   }
 
-  input, textarea, select, button {
+  input,
+  textarea,
+  select,
+  button {
     font-family: inherit;
   }
 
@@ -528,19 +550,19 @@
  * ---------------------------------------------------------- */
 @layer components {
 
-/* ----------------------------------------------------------
+  /* ----------------------------------------------------------
  * FOCUS VISIBILITY
  * Every interactive element (links, buttons, inputs) gets a
  * clearly visible, on-brand focus ring for keyboard users.
  * ---------------------------------------------------------- */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-[tabindex]:focus-visible {
-  outline: 2px solid var(--color-orange);
-  outline-offset: 2px;
-  border-radius: var(--radius-xs);
-}
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-orange);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
 
   /* ----------------------------------------------------------
    * Container
@@ -581,10 +603,21 @@ input:focus-visible,
   }
 
   /* Centered content/copy widths — see tokens.css --content-max-* */
-  .content-max-xl { max-width: var(--content-max-xl); }
-  .content-max-lg { max-width: var(--content-max-lg); }
-  .content-max-md { max-width: var(--content-max-md); }
-  .content-max-sm { max-width: var(--content-max-sm); }
+  .content-max-xl {
+    max-width: var(--content-max-xl);
+  }
+
+  .content-max-lg {
+    max-width: var(--content-max-lg);
+  }
+
+  .content-max-md {
+    max-width: var(--content-max-md);
+  }
+
+  .content-max-sm {
+    max-width: var(--content-max-sm);
+  }
 
   /* ----------------------------------------------------------
  * Section padding
@@ -1056,7 +1089,8 @@ input:focus-visible,
 
   /* Lifecycle diagram core pulse (TMS-67) */
   @keyframes tgpulsecore {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 0.5;
       transform: scale(1);
     }

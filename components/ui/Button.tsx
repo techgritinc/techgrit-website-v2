@@ -35,11 +35,14 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
 // dedicated --shadow-nav-btn token plus its own hover intensity (matching the
 // reference's header CTA on every page); the larger sizes keep the bigger
 // --shadow-btn-primary/-hover pair used by hero/final-CTA buttons.
+// `nav`'s hover uses --shadow-nav-btn-hover (TMS-63 v2) — previously repeated the default
+// shadow on hover, which is the "CTA hover divergence" spec.md's V2 Update unifies across every
+// page (`footer` is unchanged, out of this feature's header-only scope).
 const PRIMARY_SHADOW_CLASSES: Record<ButtonSize, string> = {
   sm: "shadow-btn-primary hover:shadow-btn-hover active:shadow-btn-primary",
   md: "shadow-btn-primary hover:shadow-btn-hover active:shadow-btn-primary",
   lg: "shadow-btn-primary hover:shadow-btn-hover active:shadow-btn-primary",
-  nav: "shadow-nav-btn hover:shadow-nav-btn active:shadow-nav-btn",
+  nav: "shadow-nav-btn hover:shadow-nav-btn-hover active:shadow-nav-btn",
   footer: "shadow-nav-btn hover:shadow-nav-btn active:shadow-nav-btn",
   hero: "shadow-btn-primary active:shadow-btn-primary",
 };
