@@ -202,6 +202,10 @@
   --color-border-cover:   rgba(255, 255, 255, 0.08); /* Case-study grid cover divider */
   --color-overlay-orange-soft: rgba(232, 119, 34, 0.18); /* CTA banner glow blob */
 
+  /* Footer (TMS-63, Footer-only update 2026-07-30) */
+  --color-overlay-amber-light-06: rgba(247, 183, 51, 0.06); /* Footer bottom-left decorative glow */
+  --color-ink-glass-35: rgba(0, 0, 0, 0.35);                /* Footer utility-bar background */
+
   /* ----------------------------------------------------------
    * 5. GRADIENTS
    * ---------------------------------------------------------- */
@@ -217,6 +221,8 @@
   --gradient-webinar-released-blue: linear-gradient(150deg, rgba(56, 189, 248, 0.18), rgba(15, 118, 110, 0.06)); /* Webinar released-session cover — blue accent (TMS-73) */
   --gradient-webinar-released-teal: linear-gradient(150deg, rgba(45, 212, 191, 0.18), rgba(56, 189, 248, 0.06)); /* Webinar released-session cover — teal accent (TMS-73) */
   --gradient-hover-orange-amber: linear-gradient(135deg, rgba(232, 119, 34, 0.28), rgba(245, 158, 11, 0.18)); /* v2 hover-state gradient (additive, FR-024) */
+  --gradient-footer-wordmark: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0)); /* Footer decorative "TechGrit" wordmark fill (TMS-63) */
+  --gradient-footer-follow-line: linear-gradient(90deg, rgba(232, 119, 34, 0.70), rgba(232, 119, 34, 0)); /* Footer "Follow us" label accent line (TMS-63) */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY
@@ -237,6 +243,7 @@
   --text-construction-hero: 54px; /* Construction page hero headline — v2 per-page value (FR-022) — heading-only, unmapped per Principle I exception */
   --text-contact-hero: clamp(38px, 4.8vw, 54px); /* Contact page hero headline — v2 per-page value (FR-022) — heading-only, unmapped per Principle I exception */
   --text-case-study-hero: clamp(34px, 4.4vw, 52px); /* Case Study page hero headline — v2 per-page value (FR-022) — heading-only, unmapped per Principle I exception */
+  --text-footer-wordmark: clamp(74px, 17vw, 232px); /* Footer decorative "TechGrit" wordmark (TMS-63) — heading-only, unmapped per Principle I exception */
   --text-lg:    clamp(16px, 1.4vw, 18.5px); /* Lead / hero body */
   --text-lg-fixed: 18.5px;                   /* Hero lead paragraph — fixed, does not shrink on mobile */
   --text-lg-sm: clamp(18px, 1.3vw, 18px);    /* About sub-section lead paragraph (Our Role/Final CTA) */
@@ -249,6 +256,9 @@
   --text-3xs: 10.5px;
   --text-xs-alt: 11.5px;
   --text-12: 12px;
+  --text-11: 11px; /* Footer contact-block sublabel (TMS-63) */
+  --text-13: 13px; /* Footer CTA button label (TMS-63) */
+  --text-13-5: 13.5px; /* Footer site-map link text (TMS-63) */
   --text-15-5: 15.5px;
   --text-14-5: 14.5px; /* Webinar upcoming-session date/time text (TMS-73) */
   --text-21: 21px;
@@ -292,6 +302,7 @@
   --lh-body:   1.6;    /* Paragraphs. v2 dominant body leading (100 occurrences vs. 24 for 1.65) — repointed from 1.65 per research.md §5 */
   --lh-relaxed: 1.6;   /* Alternate body */
   --lh-newsletter-heading: 1.1; /* Blog newsletter panel heading — unmapped, arbitrary-value only */
+  --lh-footer-wordmark: 0.74; /* Footer decorative "TechGrit" wordmark (TMS-63) */
 
   /* Letter spacing */
   --ls-tight:    -0.03em;  /* H1 standard. v2 (FR-033) */
@@ -353,6 +364,7 @@
   --space-26:  70px; /* About hero bottom padding */
   --space-27: 76px;
   --space-28: 110px; /* About Final CTA section bottom padding */
+  --space-9b: 52px; /* Footer brand/contact row bottom padding (TMS-63) — intentionally excluded from the responsive bands below: this value has no reference override at any breakpoint and must stay fixed */
   --space-section-sm:  50px;  /* Section vertical padding (small) */
   --space-section-md: 60px;   /* Section vertical padding (medium) */
   --space-section-lg: 108px;  /* Section vertical padding (large) */
@@ -432,6 +444,8 @@
   --shadow-chip-active:   0 10px 26px -12px rgba(232, 119, 34, 0.80); /* Topic filter active chip shadow (Blog) */
   --shadow-nav-btn:       0 8px 24px -8px rgba(232, 119, 34, 0.70); /* Nav CTA */
   --shadow-nav-btn-hover: 0 14px 32px -8px rgba(232, 119, 34, 0.90); /* Nav CTA hover */
+  --shadow-footer-cta:       0 12px 28px -10px rgba(232, 119, 34, 0.70); /* Footer "Start a conversation" CTA (TMS-63) */
+  --shadow-footer-cta-hover: 0 18px 36px -10px rgba(232, 119, 34, 0.90); /* Footer CTA hover (TMS-63) */
   --shadow-card:          0 14px 34px -14px rgba(0, 0, 0, 0.50);       /* Logo tile / card */
   --shadow-card-hover:    0 20px 44px -14px rgba(0, 0, 0, 0.65);       /* Card hover */
   --shadow-glass:         0 24px 60px -20px rgba(0, 0, 0, 0.60);       /* Glass panels */
@@ -469,6 +483,7 @@
   --transition-medium:  0.35s ease;  /* Nav scroll transition */
   --transition-hover-fast: 0.22s ease; /* v2 additive (FR-022) */
   --transition-hover-base: 0.25s ease; /* v2 additive (FR-022) */
+  --transition-18: 0.18s ease; /* Footer site-map link hover color (TMS-63) */
 
   /* ----------------------------------------------------------
    * 12. Z-INDEX SCALE

@@ -129,6 +129,13 @@
   --breakpoint-tg-md: 960px;
   --breakpoint-tg-sm: 560px;
 
+  /* Footer-only breakpoints (TMS-63, Footer-only update 2026-07-30) — the
+   * reference's own footer media queries fire at 1080px/640px, distinct from
+   * the shared 1140/960/560 contract above. Literal values for the same
+   * reason as tg-lg/md/sm. */
+  --breakpoint-tg-1080: 1080px;
+  --breakpoint-tg-640: 640px;
+
   /* Homepage (components/ui/, components/home/) — same approach as Header/
    * Footer above: only tokens actually consumed by this feature's Tailwind-
    * first components are mapped here. Pre-existing .btn/.card/.badge/.field
@@ -292,6 +299,9 @@
   --text-3xs: var(--text-3xs);
   --text-xs-alt: var(--text-xs-alt);
   --text-12: var(--text-12);
+  --text-11: var(--text-11);
+  --text-13: var(--text-13);
+  --text-13-5: var(--text-13-5);
   --text-15-5: var(--text-15-5);
   --text-14-5: var(--text-14-5);
   --text-21: var(--text-21);
@@ -502,6 +512,11 @@
   @media (prefers-reduced-motion: reduce) {
     .bg-ambient-orbs span {
       animation: none;
+    }
+
+    [data-lift-hover]:hover,
+    [data-lift-hover]:focus-visible {
+      transform: none;
     }
   }
 }

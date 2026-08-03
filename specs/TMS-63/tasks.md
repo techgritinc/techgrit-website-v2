@@ -116,25 +116,90 @@ every page, with the homepage's variant behaving correctly.
 
 ## Phase 5: User Story 3 - Consistent footer with contact and legal info (Priority: P2)
 
-**Goal**: Every page's footer shows the same brand block, social links, get-in-touch block, and
-legal row, with only the quick-link group's content varying by page.
+**Goal (Footer-only update, 2026-07-30)**: Every page's footer shows the fully identical brand
+block, contact block, five-group site-map link grid, "Follow us" social row, decorative wordmark,
+and legal utility bar — pixel-matched to `TechGrit Homepage.dc.html` per spec.md FR-012–FR-018 —
+with **zero page-to-page variation** (supersedes the earlier "quick-link group varies by page"
+goal; see spec.md FR-008).
 
-**Independent Test**: Load any page, scroll to the bottom; confirm brand block, social links
-(LinkedIn/YouTube/email), a contact method, and Privacy/Terms links are present; confirm the
-quick-link group's content differs sensibly between, e.g., `/` and another route while everything
-else stays the same; confirm no dead links.
+**Independent Test (Footer-only update, 2026-07-30)**: Load any page, scroll to the bottom; confirm
+the brand+contact row, the five-group link grid (What We Do, How We Work, Industries, Insights,
+Company), the "Follow us" row (LinkedIn/YouTube/Spotify), the wordmark, and the utility bar
+(copyright + Privacy Policy/Terms of Service/Cookie Preferences) are present and byte-for-byte
+identical on every page; confirm no dead links, including anchor-fragment links to not-yet-built
+page sections (spec.md Edge Cases, SC-008).
 
-- [X] T013 [P] [US3] Define `components/layout/footer-config.ts`: social links (LinkedIn, YouTube,
-  email), legal links (Privacy Policy, Terms & Conditions), contact details, and a route→quick-link
-  -group lookup table with at least a default group and a `/`-specific group (FR-007, FR-008)
-- [X] T014 [US3] Implement the full `components/layout/Footer.tsx` structure: brand block, social
-  links row, the quick-link group selected via `usePathname()` against `footer-config.ts`,
-  get-in-touch block, and legal row (FR-007, FR-008) (depends on T013, T004)
-- [X] T015 [P] [US3] Add footer utility classes (link columns, legal row, social icon row) to
-  `app/globals.css`, built only from existing `tokens.css` values
+- [X] T013 [P] [US3] Rewrite `components/layout/footer-config.ts` (Footer-only update, 2026-07-30
+  — supersedes the original route-keyed lookup table) as a flat, page-invariant config exporting:
+  the five-group site-map link grid content exactly as enumerated in spec.md FR-015 (What We Do: 7
+  links; How We Work: 3; Industries: 4 — HealthTech/FinTech/ConstructionTech/HiTech; Insights: 3;
+  Company: 4), social links (LinkedIn, YouTube, Spotify), legal links (Privacy Policy → `/privacy`,
+  Terms of Service → `/terms`, Cookie Preferences → `/`), and the General/Careers contact details
+  (FR-014, FR-015, FR-017; spec.md Clarifications Q1, Q4, Q5)
+- [X] T014 [US3] Rebuild `components/layout/Footer.tsx`'s brand+contact top row (Footer-only
+  update, 2026-07-30): brand block (logo, one-line description, gradient-fill pill "Start a
+  conversation" CTA linking to the Contact page) beside the two-column General/Careers contact
+  block, separated from the link grid below by a hairline bottom border (FR-014) (depends on T013)
+- [X] T015 [P] [US3] Rewrite footer utility classes in `app/globals.css` (Footer-only update,
+  2026-07-30) for the link-grid columns, "Follow us" row, and utility bar, built only from existing
+  or newly-added `tokens.css` values (depends on T023)
 
 **Checkpoint**: User Story 3 is independently testable — footer is consistent and correct on every
 page.
+
+### Phase 5 continued — Footer pixel-fidelity enhancement (Footer-only update, 2026-07-30)
+
+**Purpose**: Bring the already-scaffolded Footer up to the pixel/color/spacing/interaction detail
+newly captured in spec.md FR-012–FR-018, using `TechGrit Homepage.dc.html` as sole source of truth.
+Appended with new task IDs (rather than renumbering T016+) to avoid touching any Header-owned task
+numbering.
+
+- [X] T023 [P] [US3] Cross-check every FR-012–FR-018 raw value (gradient bar stops, glow
+  colors/blur radii, the fixed 36px padding, wordmark `clamp()`/letter-spacing/opacity-fade values)
+  against `app/tokens.css`; add any value with no existing match to its matching numbered section
+  and expose it via `@theme inline` in `app/globals.css` (Constitution Principle I; research.md's
+  token cross-check decision)
+- [X] T024 [US3] Implement the footer's decorative outer chrome in `components/layout/Footer.tsx`
+  and `app/globals.css`: `overflow:hidden` region with a hairline top border, a 3px full-width
+  gradient bar (`#0284C7 → #0F766E → #F59E0B → #E87722`), and two absolutely-positioned, blurred
+  520×520px glow circles — all `aria-hidden`, non-interactive, and clipped so they never cause
+  horizontal scroll (FR-012) (depends on T023)
+- [X] T025 [US3] Implement the footer's fixed-36px-padding, 1280px-max-width shell in
+  `app/globals.css` as a documented, footer-scoped exception to the shared `.container` utility
+  (does not modify `.container` itself) (FR-013; research.md's fixed-padding decision) (depends on
+  T023)
+- [X] T026 [P] [US3] Implement the site-map link grid layout in `components/layout/Footer.tsx`
+  (narrow "What We Do" single column + wide 4-column "How We Work"/"Industries"/"Insights"/"Company"
+  sub-grid) and the "Follow us" icon row beneath it, driven entirely by the rewritten
+  `footer-config.ts` (FR-015) (depends on T013)
+- [X] T027 [US3] Add a Spotify inline SVG icon to `components/layout/icons.tsx` alongside the
+  existing LinkedIn/YouTube marks (the mail icon originally scoped for footer social use is no
+  longer needed there — email is covered by the General/Careers contact block) (FR-015;
+  research.md's icon decision)
+- [X] T028 [US3] Implement the decorative, center-aligned "TechGrit" wordmark below the link grid
+  in `components/layout/Footer.tsx`/`app/globals.css`: `margin-top:36px`, fluid
+  `clamp(74px, 17vw, 232px)` size, `line-height:0.74`, `font-weight:700`,
+  `letter-spacing:-0.045em`, `white-space:nowrap`, top-to-bottom gradient-fade fill, `aria-hidden`,
+  `user-select:none` (FR-016)
+- [X] T029 [US3] Rebuild the utility bar in `components/layout/Footer.tsx`: darker background band
+  with its own hairline top border, centered row with the copyright notice followed by Privacy
+  Policy, Terms of Service, and Cookie Preferences (replacing the prior 2-link Privacy/Terms-only
+  version) (FR-017) (depends on T013)
+- [X] T030 [US3] Implement footer hover/focus micro-interactions in `app/globals.css` — CTA lift +
+  stronger shadow, link brightening to full white, social-icon background/border tint + slight
+  lift — plus a `prefers-reduced-motion: reduce` override, additive to (not replacing) the existing
+  reduced-motion rule scoped to `.bg-ambient-orbs span`, that suppresses only each rule's
+  `translateY` while leaving color/shadow transitions intact (FR-014, FR-015; spec.md
+  Clarifications Q3) (depends on T014, T026)
+- [X] T031 [US3] Implement the footer's two dedicated responsive breakpoints in `app/globals.css`
+  — replacing the prior generic 960px/560px assumption: at ≤1080px, stack the brand/contact row and
+  stack "What We Do" above the right region (whose sub-grid becomes 2 columns); at ≤640px, collapse
+  the sub-grid to a single column, stack the "Follow us" label above its icons, and switch the
+  utility bar to a left-aligned stacked column; no intermediate breakpoint between them (FR-018)
+  (depends on T026, T029)
+
+**Checkpoint**: Footer matches `TechGrit Homepage.dc.html` pixel-for-pixel per SC-007, with zero
+page-to-page content variation per SC-002/FR-008, at every documented breakpoint.
 
 ---
 
@@ -153,8 +218,11 @@ the CTA with nothing clipped; footer columns stack into one column with no overl
   T008, T009)
 - [X] T017 [US4] Render Industries/Resources sub-items as grouped, labeled links inside the mobile
   panel (FR-006) (depends on T016)
-- [X] T018 [US4] Verify/adjust responsive column stacking for `components/layout/Footer.tsx` at the
-  existing `md`/`sm` breakpoints (960px/560px) in `app/globals.css` (FR-011) (depends on T014)
+- [X] T018 [US4] Verify responsive column stacking for `components/layout/Footer.tsx` (Footer-only
+  update, 2026-07-30 — supersedes the original 960px/560px assumption; the footer's actual
+  breakpoints are its own dedicated 1080px/640px thresholds, implemented in T031 in Phase 5) —
+  confirm no overlap, clipping, or horizontal scroll at any width between and around those two
+  breakpoints (FR-011, FR-018) (depends on T031)
 
 **Checkpoint**: All four user stories are independently functional — feature is complete for
 manual verification.
@@ -171,13 +239,20 @@ manual verification.
   names (FR-009, SC-004)
 - [X] T020 [P] Run `npm run lint` and `npm run build`; fix any errors (existing Husky pre-commit
   gate per constitution's Development Workflow) — both pass clean
-- [ ] T021 Manual verification pass against `specs/TMS-63/quickstart.md` (desktop, scroll, mobile,
+- [X] T021 Manual verification pass against `specs/TMS-63/quickstart.md` (desktop, scroll, mobile,
   keyboard, touch). **Partially done**: confirmed via curl against the running dev server that
   Header/Footer render server-side with no runtime errors (logo, nav labels, footer contact/legal
   links all present in the HTML). Visual/interactive checks (scroll transparency, dropdown
   open/close, mobile-width collapse, touch tap, keyboard tab-through) were NOT verified in an
   actual browser — no browser is available in this environment. Recommend running through
-  quickstart.md's 9 steps manually before merging.
+  quickstart.md's 9 steps manually before merging. **Footer-only addendum (2026-07-31)**: rebuilt
+  Footer.tsx against `TechGrit Homepage.dc.html`'s exact footer markup (lines 900-1015); re-ran
+  `npm run lint` and `npm run build` (both pass clean) and confirmed via curl against the dev
+  server that the brand/contact block, five-group link grid, Follow-us row, wordmark, and utility
+  bar all render byte-for-byte identically on `/` and `/contact` (Steps 5-6's content-parity
+  requirement). Steps 5-6's visual pixel-fidelity, hover-lift, and
+  `prefers-reduced-motion: reduce` checks still require a real browser and were not run here —
+  recommend a manual pass before merging.
 - [X] T022 Amend `.specify/memory/constitution.md`'s "Additional Constraints" section to record
   that `components/` now holds real code (`components/layout/`) — the follow-up flagged in
   plan.md's Constitution Check. Bumped constitution to v1.2.0.
@@ -195,8 +270,8 @@ manual verification.
   same file
 - **User Story 3 (Phase 5)**: Depends on Foundational only — independent of US1/US2 (different
   component, different files)
-- **User Story 4 (Phase 6)**: Depends on US1 (T008/T009) for the header half, and US3 (T014) for
-  the footer half
+- **User Story 4 (Phase 6)**: Depends on US1 (T008/T009) for the header half, and US3 (T031,
+  Footer-only update 2026-07-30 — was T014) for the footer half
 - **Polish (Phase 7)**: Depends on all four user stories being complete
 
 ### User Story Dependencies
@@ -214,7 +289,9 @@ manual verification.
 
 - T002, T003, T004 (Foundational) — different files, no cross-dependency
 - T006 and T010 (US1) — different files (config vs. CSS)
-- T013 and T015 (US3) — different files (config vs. CSS)
+- T013 and T023 (US3) — different files (config vs. tokens), both startable immediately
+  (Footer-only update, 2026-07-30 — supersedes "T013 and T015" now that T015 depends on T023)
+- T026 and T027 (US3) — different files (Footer.tsx layout vs. icons.tsx), once T013 lands
 - US3 (Phase 5) can proceed in parallel with US1/US2 (Phases 3–4) once Foundational is done, since
   Header and Footer are separate files with no shared state
 - T019 and T020 (Polish) — independent checks
