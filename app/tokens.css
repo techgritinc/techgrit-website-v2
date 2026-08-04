@@ -210,6 +210,12 @@
   --color-border-ghost:       rgba(255, 255, 255, 0.42); /* Ghost button border */
   --color-border-ghost-hover: rgba(255, 255, 255, 0.70); /* Ghost button hover border */
 
+   /* Hero Live-Webinar badge + Trusted-Clients section (v2.2 Phase 2) */
+   --color-border-green-85: rgba(52, 211, 153, 0.85);
+   /* Live-Webinar badge ripple ring */
+   --color-border-hairline-08: rgba(255, 255, 255, 0.08);
+   /* Trusted-Clients section top divider */
+
   /* ----------------------------------------------------------
    * 5. GRADIENTS
    * ---------------------------------------------------------- */
@@ -230,6 +236,7 @@
   --gradient-mega-cta: linear-gradient(135deg, rgba(232, 119, 34, 0.22), rgba(245, 158, 11, 0.10)); /* Nav mega-menu "see all" CTA row resting background (TMS-63 v2) */
   --gradient-ghost:       linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12)); /* Ghost button fill (v2.2 Phase 1) */
   --gradient-ghost-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.40), rgba(255, 255, 255, 0.20)); /* Ghost button hover fill (v2.2 Phase 1) */
+  --gradient-live-badge: linear-gradient(135deg, rgba(232, 119, 34, 0.12), rgba(245, 158, 11, 0.06));   /* Hero Live-Webinar badge outer fill (v2.2 Phase 2) */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY
@@ -276,6 +283,7 @@
   --text-2xs-lg: 13px;
   --text-h3-values: 19px;
   --text-22: 22px;
+  --text-stat-count: 44px;  /* Hero delivery-stat digit size (v2.2 Phase 2) */
 
   /* Responsive step tokens (base/sm/md/lg/xl at the 560/960/1140/1280
      breakpoint contract) — consumed directly via Tailwind arbitrary-value
@@ -326,6 +334,8 @@
   --ls-hint:    0.14em;  /* Methodology scroll-hint caption */
   --ls-badge:   0.18em;  /* Methodology phase-corner label */
   --ls-01:      0.01em;  /* Topic filter chip label spacing (Blog) — zero occurrences in v2 census; retained unchanged, name kept per FR-022 */
+  --ls-stat-count: -0.035em;  /* Hero delivery-stat digit tracking (v2.2 Phase 2) */
+  --ls-24: 0.24em;  /* Trusted-Clients section label tracking (v2.2 Phase 2) */
 
   /* ----------------------------------------------------------
    * 7. SPACING
@@ -477,6 +487,9 @@
   --shadow-phase-active:  0 0 0 7px var(--color-ink), 0 0 30px rgba(232, 119, 34, 0.70);   /* Phase-node ring+glow — active state (Methodology) */
   --shadow-btn-ghost: 0 8px 24px -10px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.22); /* Ghost button (v2.2 Phase 1) */
   /* Ambient-orb radii (--blur-glow*, §14) and coloured status-dot glows (--shadow-glow-*, above) already form a coherent v2-covering group — confirmed, no gaps (FR-025) */
+  --shadow-live-badge: 0 18px 46px -14px rgba(232, 119, 34, 0.70), 0 4px 16px -6px rgba(232, 119, 34, 0.40);   /* Hero Live-Webinar badge outer shadow (v2.2 Phase 2) */
+  --shadow-live-badge-chip: 0 6px 18px -4px rgba(245, 158, 11, 0.60);   /* Hero Live-Webinar badge inner chip shadow (v2.2 Phase 2) */
+  --shadow-glow-green: 0 0 12px 3px rgba(52, 211, 153, 0.90);   /* Hero Live-Webinar badge dot glow (v2.2 Phase 2) */
 
   /* v2 hover-lift distances (additive, FR-024) */
   --lift-hover-1: -1px;
