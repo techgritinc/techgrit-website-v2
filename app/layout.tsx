@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Carlito } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { AmbientOrbs } from "@/reusable-components/ambient-orbs";
+import { AmbientOrbs } from "@/components/ui/ambient-orbs";
 import "./globals.css";
 
 // v2 collapses the body/display split into one family (Calibri, metrically-substituted

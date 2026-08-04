@@ -50,7 +50,7 @@ A prospective client visiting `/services` sees background ambient orbs and a her
 
 ### User Story 3 - Industries (`/construction`) page reference alignment (Priority: P2)
 
-A visitor who clicks "Industries" in the nav still lands on the existing `/construction` page (no new route), and now sees a hero with an updated ghost button and metrics panel background, a "Challenge" section without a stray dash in its eyebrow, evenly spaced "What We Build" content, a "Why TechGrit" section without an eyebrow symbol, equal-height "Proven Impact" cards, and a widened closing CTA with two updated action buttons and ghost-button styling.
+A visitor who clicks "Industries" in the nav still lands on the existing `/construction` page (no new route), and now sees a hero with an updated ghost button and metrics panel background, a "Challenge" section without its eyebrow's leading accent symbol, evenly spaced "What We Build" content, a "Why TechGrit" section without its eyebrow's leading accent symbol, equal-height "Proven Impact" cards, and a widened closing CTA with two updated action buttons and ghost-button styling.
 
 **Why this priority**: Industry positioning directly supports sales conversations; scoped after the two pages with the widest surface area.
 
@@ -59,8 +59,8 @@ A visitor who clicks "Industries" in the nav still lands on the existing `/const
 **Acceptance Scenarios**:
 
 1. **Given** a visitor who clicks "Industries" in the nav, **When** the app navigates, **Then** it opens the existing `/construction` page (no new route is introduced), and the hero's ghost button and metrics panel background match the reference.
-2. **Given** a visitor viewing the Challenge section, **When** the eyebrow renders, **Then** it shows no leading dash character.
-3. **Given** a visitor viewing "Why TechGrit", **When** the eyebrow renders, **Then** it shows no symbol/glyph prefix.
+2. **Given** a visitor viewing the Challenge section, **When** the eyebrow renders, **Then** it shows no leading accent symbol.
+3. **Given** a visitor viewing "Why TechGrit", **When** the eyebrow renders, **Then** it shows no leading accent symbol.
 4. **Given** a visitor viewing "Proven Impact", **When** the cards render in a row, **Then** every card in the row is the same height regardless of its content length, and no card is individually wrapped in a link (the per-card CTA link is removed).
 5. **Given** a visitor at the closing CTA, **When** it renders, **Then** the card is wider than before and both action buttons (including the ghost button) match the reference styling.
 
@@ -119,7 +119,7 @@ A visitor lands on the webinar page and sees the upcoming webinar presented insi
 
 ### User Story 7 - About Us page reference alignment (Priority: P4)
 
-A visitor on the About page sees badges without a dot indicator, eyebrows without a symbol prefix throughout the page, and an updated image grid layout.
+A visitor on the About page sees badges without a dot indicator, eyebrows without their leading accent symbol throughout the page, and an updated image grid layout.
 
 **Why this priority**: Small, self-contained styling changes with no new interactions.
 
@@ -128,7 +128,7 @@ A visitor on the About page sees badges without a dot indicator, eyebrows withou
 **Acceptance Scenarios**:
 
 1. **Given** a visitor on `/about`, **When** any badge renders, **Then** it shows no dot indicator.
-2. **Given** a visitor scrolling the page, **When** any eyebrow renders, **Then** it shows no leading symbol/glyph.
+2. **Given** a visitor scrolling the page, **When** any eyebrow renders, **Then** it shows no leading accent symbol.
 3. **Given** a visitor viewing the imagery section, **When** it renders, **Then** the grid layout matches the reference.
 
 ---
@@ -198,7 +198,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 - **FR-003**: The hero's ghost (secondary) button and the metrics display MUST use the updated reference styling.
 - **FR-004**: The "Trusted by our clients" logo strip MUST render as its own section positioned after the hero, not nested inside the hero component, with spacing matching the reference. When the combined width of the logos exceeds the available container width, the strip MUST become horizontally scrollable (manual scroll/drag/keyboard — no automatic marquee animation); when the logos fit within the container, they MUST display statically with no scrolling.
 - **FR-005**: The subscribe band MUST use the reference's overall width, input styling, and button styling; it does NOT scroll horizontally — its input and button wrap/stack per normal responsive behavior at narrow widths.
-- **FR-006**: The "How We Deliver" section MUST be implemented as a component reusable by other pages; its eyebrow MUST render without its current leading symbol/dash; the top step markers MUST show icons in place of the bare numerals; and the phase-detail card below the timeline MUST be widened and MUST show, in place of its current numeral, the same icon used for that phase in the top timeline (not a separate/distinct icon).
+- **FR-006**: The "How We Deliver" section MUST be implemented as a component reusable by other pages; its eyebrow MUST render without its leading accent symbol (the same `SectionEyebrow` toggle as FR-017/FR-019/FR-033); the top step markers MUST show icons in place of the bare numerals; and the phase-detail card below the timeline MUST be widened and MUST show, in place of its current numeral, the same icon used for that phase in the top timeline (not a separate/distinct icon).
 - **FR-007**: The "Don't Migrate / Re-Imagine" card grid (4 cards) MUST use one common icon across cards (except the last), MUST show a hover background color, MUST include imagery, and its last card MUST use the TechGrit icon.
 - **FR-008**: The existing standalone Construction page ("Construction Section" in the request) MUST use the updated ghost button styling, replace its current icon set, remove its hero background image, and remove the per-card link currently wrapping its Proven Impact cards (see also FR-020) so those cards are no longer individually clickable — the page's one final CTA section retains its own link/buttons.
 - **FR-009**: The Testimonials section MUST left-align its eyebrow and title, MUST show a metrics card in the top-right, MUST update card hover background/typography/duration-badge styling, MUST show a star rating, an avatar, an animated play affordance, a verified badge, and quotation-mark icons on each testimonial.
@@ -218,9 +218,9 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 - **FR-016**: The "Industries" nav item MUST continue to open the existing `/construction` page; no new `/industries` route is introduced, and paths implied by the reference's other industry tabs (FinTech, Healthcare) are not routed in this feature.
 - **FR-016a**: The `/construction` hero MUST present the reference's ghost button and metrics-panel background.
-- **FR-017**: The Challenge section's eyebrow MUST render without a leading dash character.
+- **FR-017**: The Challenge section's eyebrow MUST render without its leading accent symbol (the same `SectionEyebrow` toggle as FR-006/FR-019/FR-033 — not a literal text character to trim).
 - **FR-018**: Spacing between "What We Build" subsections MUST match the reference.
-- **FR-019**: The "Why TechGrit" eyebrow MUST render without a symbol/glyph prefix.
+- **FR-019**: The "Why TechGrit" eyebrow MUST render without its leading accent symbol (same toggle as FR-006/FR-017/FR-033).
 - **FR-020**: "Proven Impact" cards MUST render at equal height within each row regardless of content length.
 - **FR-021**: The closing CTA MUST use an increased width, updated styling for both action buttons, and updated ghost-button styling.
 
@@ -246,7 +246,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 **About Us Page**
 
 - **FR-032**: Badges MUST render without a dot indicator anywhere on the page.
-- **FR-033**: Eyebrows MUST render without a leading symbol/glyph anywhere on the page.
+- **FR-033**: Eyebrows MUST render without their leading accent symbol anywhere on the page (same toggle as FR-006/FR-017/FR-019).
 - **FR-034**: The imagery/showcase section MUST use the reference's grid layout.
 
 **Careers Page**

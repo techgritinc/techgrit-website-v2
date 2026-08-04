@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { CaseStudy } from "../_data/types";
 import { ACCENT_VAR, accentFeaturedPanelGradient, accentMix } from "../_data/accent";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 export function FeaturedCaseStudy({ caseStudy }: { caseStudy: CaseStudy }) {
   const accentColor = ACCENT_VAR[caseStudy.accent];

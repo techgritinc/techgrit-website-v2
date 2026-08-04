@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { OverviewSection, ServiceAccent } from "../_data/types";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 const LABEL_COLOR: Record<ServiceAccent, string> = {
   blue: "var(--color-blue-light)",

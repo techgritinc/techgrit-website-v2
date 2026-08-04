@@ -1,6 +1,6 @@
 import type { NarrativeSection } from "../_data/types";
 import { ArchitectureDiagram } from "./architecture-diagram";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 function NarrativeHeading({ id, children }: { id: string; children: React.ReactNode }) {
   return (

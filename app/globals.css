@@ -432,6 +432,14 @@
   --lift-hover-2: var(--lift-hover-2);
   --lift-hover-5: var(--lift-hover-5);
   --lift-hover-6: var(--lift-hover-6);
+
+  /* Ghost button (v2.2 Phase 1 — components/ui/Button.tsx) */
+  --gradient-ghost: var(--gradient-ghost);
+  --gradient-ghost-hover: var(--gradient-ghost-hover);
+  --color-border-ghost: var(--color-border-ghost);
+  --color-border-ghost-hover: var(--color-border-ghost-hover);
+  --shadow-btn-ghost: var(--shadow-btn-ghost);
+  --blur-ghost: var(--blur-ghost);
 }
 @layer base {
   /* ----------------------------------------------------------

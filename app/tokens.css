@@ -206,6 +206,10 @@
   --color-overlay-amber-light-06: rgba(247, 183, 51, 0.06); /* Footer bottom-left decorative glow */
   --color-ink-glass-35: rgba(0, 0, 0, 0.35);                /* Footer utility-bar background */
 
+  /* Ghost button (v2.2 Phase 1 — components/ui/Button.tsx) */
+  --color-border-ghost:       rgba(255, 255, 255, 0.42); /* Ghost button border */
+  --color-border-ghost-hover: rgba(255, 255, 255, 0.70); /* Ghost button hover border */
+
   /* ----------------------------------------------------------
    * 5. GRADIENTS
    * ---------------------------------------------------------- */
@@ -224,6 +228,8 @@
   --gradient-footer-wordmark: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0)); /* Footer decorative "TechGrit" wordmark fill (TMS-63) */
   --gradient-footer-follow-line: linear-gradient(90deg, rgba(232, 119, 34, 0.70), rgba(232, 119, 34, 0)); /* Footer "Follow us" label accent line (TMS-63) */
   --gradient-mega-cta: linear-gradient(135deg, rgba(232, 119, 34, 0.22), rgba(245, 158, 11, 0.10)); /* Nav mega-menu "see all" CTA row resting background (TMS-63 v2) */
+  --gradient-ghost:       linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12)); /* Ghost button fill (v2.2 Phase 1) */
+  --gradient-ghost-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.40), rgba(255, 255, 255, 0.20)); /* Ghost button hover fill (v2.2 Phase 1) */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY
@@ -469,6 +475,7 @@
   --shadow-image-lift:    0 30px 70px -30px rgba(0, 0, 0, 0.80);       /* Detail-section image drop shadow */
   --shadow-phase-ring:    0 0 0 7px var(--color-ink); /* Phase-node ring — todo/done state (Methodology) */
   --shadow-phase-active:  0 0 0 7px var(--color-ink), 0 0 30px rgba(232, 119, 34, 0.70);   /* Phase-node ring+glow — active state (Methodology) */
+  --shadow-btn-ghost: 0 8px 24px -10px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.22); /* Ghost button (v2.2 Phase 1) */
   /* Ambient-orb radii (--blur-glow*, §14) and coloured status-dot glows (--shadow-glow-*, above) already form a coherent v2-covering group — confirmed, no gaps (FR-025) */
 
   /* v2 hover-lift distances (additive, FR-024) */
@@ -527,6 +534,7 @@
   --blur-glow-md: 70px; /* Blog featured-panel cover glow blob */
   --blur-glow-xl: 115px; /* Blog newsletter panel ambient glow blob */
   --blur-glow-100: 100px; /* Webinar upcoming-session panel glow blob (TMS-73) */
+  --blur-ghost: 12px; /* Ghost button (v2.2 Phase 1) */
 
   /* v2 additive blur radii (FR-022) — 120-150px set is v2's larger ambient orbs */
   --blur-10:  10px;

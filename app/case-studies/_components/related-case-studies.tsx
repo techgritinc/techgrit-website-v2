@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { CaseStudy } from "../_data/types";
 import { CASE_STUDIES } from "../_data/case-studies-content";
 import { ACCENT_VAR } from "../_data/accent";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 export function RelatedCaseStudies({ currentSlug }: { currentSlug: string }) {
   const related: CaseStudy[] = CASE_STUDIES.filter((caseStudy) => caseStudy.slug !== currentSlug).slice(0, 3);

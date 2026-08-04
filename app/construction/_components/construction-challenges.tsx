@@ -1,4 +1,4 @@
-import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { GlassCard, GlassCardIcon, GlassCardTitle } from "@/components/ui/GlassCard";
 import type { ChallengesSection } from "../_data/types";
 

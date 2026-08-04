@@ -49,7 +49,7 @@ const PRIMARY_SHADOW_CLASSES: Record<ButtonSize, string> = {
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary: "bg-[image:var(--gradient-brand)] text-white hover:-translate-y-[2px] active:translate-y-0",
-  ghost: "bg-glass border border-border-strong text-primary backdrop-blur-sm",
+  ghost: "bg-[image:var(--gradient-ghost)] border border-border-ghost text-primary shadow-btn-ghost backdrop-blur-ghost hover:-translate-y-[2px] active:translate-y-0",
   outline: "bg-transparent border border-border text-primary hover:border-orange hover:bg-glass",
 };
 

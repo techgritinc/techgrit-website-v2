@@ -9,7 +9,7 @@ import { AboutHowWeWork } from "./_components/about-how-we-work";
 import { AboutUsAchievements } from "./_components/about-us-achievements";
 import { AboutUsPartner } from "./_components/about-us-partner";
 import { AboutUsCultureGallery } from "./_components/about-us-culture-gallery";
-import { FinalCta } from "@/reusable-components/final-cta";
+import { FinalCta } from "@/components/ui/final-cta";
 
 export const metadata: Metadata = {
   title: aboutUsContent.seo.metaTitle,

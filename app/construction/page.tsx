@@ -7,7 +7,7 @@ import { ConstructionSolutions } from "./_components/construction-solutions";
 import { ConstructionLifecycleDiagram } from "./_components/construction-lifecycle-diagram";
 import { ConstructionAdvantage } from "./_components/construction-advantage";
 import { ConstructionImpact } from "./_components/construction-impact";
-import { FinalCta } from "@/reusable-components/final-cta";
+import { FinalCta } from "@/components/ui/final-cta";
 
 export const metadata: Metadata = {
   title: constructionContent.seo.metaTitle,
