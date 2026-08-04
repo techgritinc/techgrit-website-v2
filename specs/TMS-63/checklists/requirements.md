@@ -44,3 +44,27 @@
      404 until each page ships; out of scope for this feature to guarantee (Edge Cases,
      Assumptions).
 - No further clarification needed before `/speckit.plan`.
+
+### Re-validation (2026-07-30) — Footer-only update
+
+- Scope: Footer requirements were re-derived from
+  `raw-files-v2/TechGrit Website V2.2/TechGrit Homepage.dc.html` (sole source of truth for this
+  pass) and merged into User Story 3, the relevant Acceptance Scenario in User Story 4, FR-007/
+  FR-008, new FR-012–FR-018 ("Footer Detailed Visual & Responsive Requirements"), Key Entities,
+  SC-002 and new SC-007/SC-008, Assumptions, and a new "Decisions confirmed with stakeholder
+  (2026-07-30)" entry. All Header-related content (User Story 1, User Story 2, FR-001–FR-006,
+  Key Entity "Navigation Item", SC-001, SC-003/SC-004, the 2026-07-13 decisions) was left
+  byte-for-byte unchanged, per explicit instruction to split Header/Footer ownership between two
+  developers.
+- Re-ran the full checklist against the updated spec: all Content Quality, Requirement
+  Completeness, and Feature Readiness items still pass. The added pixel/color/spacing detail in
+  FR-012–FR-018 is design reference data (raw values from the source file), not a framework/API/
+  language implementation detail, so it does not violate "No implementation details" — it was
+  added deliberately, per this update's explicit brief, so the Footer can be built without
+  reopening the reference HTML.
+- No [NEEDS CLARIFICATION] markers were introduced. One scope conflict was found between the
+  2026-07-13 "footer link group varies per page" decision and the new reference (which shows a
+  complete, page-invariant site-map grid) — resolved in favor of the newer reference per this
+  update's "HTML is the only source of truth" directive, and recorded as a superseding decision
+  rather than a new open question.
+- No further clarification needed before `/speckit.plan`.
