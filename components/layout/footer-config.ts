@@ -1,5 +1,5 @@
 export type FooterLink = { label: string; href: string };
-export type FooterLinkGroup = { heading: string; links: FooterLink[] };
+export type FooterLinkGroup = { id: string; heading: string; links: FooterLink[] };
 export type SocialLink = { platform: "linkedin" | "youtube" | "spotify"; href: string; label: string };
 export type ContactDetail = { heading: string; value: string; href: string; sublabel: string };
 export type LegalLink = { label: string; href: string };
@@ -14,6 +14,7 @@ export type LegalLink = { label: string; href: string };
  */
 export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
   {
+    id: "what-we-do",
     heading: "What We Do",
     links: [
       { label: "AI-Accelerated Modernization", href: "/services#svc-modernization" },
@@ -26,6 +27,7 @@ export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
     ],
   },
   {
+    id: "how-we-work",
     heading: "How We Work",
     links: [
       { label: "Orbit AI Framework", href: "/frameworks#orbit-ai" },
@@ -34,6 +36,7 @@ export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
     ],
   },
   {
+    id: "industries",
     heading: "Industries",
     links: [
       { label: "HealthTech", href: "/#industries" },
@@ -43,6 +46,7 @@ export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
     ],
   },
   {
+    id: "insights",
     heading: "Insights",
     links: [
       { label: "Case Studies", href: "/case-studies" },
@@ -51,6 +55,7 @@ export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
     ],
   },
   {
+    id: "company",
     heading: "Company",
     links: [
       { label: "Our Story", href: "/about#our-story" },
