@@ -142,3 +142,50 @@ is manual, plus `npm run lint`/`npm run build`.
 2. Diff should touch only: `app/_home-components/SubscribeBand.tsx`. No token file
    (`app/tokens.css`, `app/globals.css`), no other homepage section, no other page, and no shared
    component (`Button.tsx`, `FormField.tsx`) changes.
+
+## 12. Methodology / "How We Deliver" (`app/_home-components/MethodologySection.tsx`) — Phase 2 addendum, FR-006
+
+Scope: only `app/_home-components/MethodologySection.tsx` and 4 new exports in
+`components/ui/icons.tsx`. No test framework exists in this repo — this is manual, plus
+`npm run lint`/`npm run build`.
+
+1. Open `/` at desktop width (≥1140px) and scroll to "How We Deliver."
+2. Confirm the eyebrow ("How we deliver") shows no leading dash/symbol.
+3. Confirm each of the 4 top-rail step markers shows a distinct icon (not a numeral) — Architect,
+   Agentic Build, Industrialize, and Impact each look visually different from one another, inside
+   the existing 58px circle.
+4. Confirm the phase-detail panel's large visual (right column) shows a circular gradient badge with
+   an icon inside it — not a giant numeral — and that the icon matches the icon shown in the
+   currently-active top-rail step exactly (scroll to change the active phase and confirm the icon
+   changes to match each time).
+5. Confirm the "Phase 0{n}" label in the bottom-right corner of that visual panel is still present
+   and unchanged.
+6. Confirm the phase title ("Architect", "Agentic Build", etc.) and week label ("Week 1", "Weeks 2
+   to 4", etc.) render in the site's normal display font — not a visibly different font (Arial) from
+   the rest of the page.
+7. Confirm the section's overall content column is visibly as wide as the Trusted Clients/Subscribe
+   Band sections above it (all now `1280px` max-width).
+8. Shrink the browser to a tablet/mobile width (≤960px) and confirm the phase-detail panel's
+   two-column layout (description text + visual) collapses to a single stacked column instead of
+   staying artificially squeezed side-by-side.
+9. Confirm the scroll-pinned behavior itself (the section pins while scrolling through it, the phase
+   rail's progress fill animates, the active phase's description/deliverables swap) is unchanged from
+   before this pass.
+10. Confirm the homepage still renders identically to before this refactor — `MethodologySection` now
+    receives `phases`/`eyebrow`/`heading` as props from `app/page.tsx` instead of importing
+    `home-data.ts` internally (each phase in `phases` now also carries its own `icon` field, read as
+    `phase.icon`/`active.icon` — no separate icon lookup), but this is an internal wiring change only;
+    there should be zero visual or behavioral difference caused by the refactor itself (verify via
+    `git diff` that `app/page.tsx` passes the exact same `METHODOLOGY_PHASES` data through, unchanged).
+
+## 13. Gate check (Methodology)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `components/ui/icons.tsx` (4 new icon exports),
+   `app/_home-components/home-data.ts` (`MethodologyPhase` gains a required `icon: IconComponent`
+   field, populated per phase — no other field changes), `app/_home-components/
+   MethodologySection.tsx` (icon/eyebrow/width/collapse/font fixes, plus the props refactor reading
+   `phase.icon`/`active.icon`), and `app/page.tsx` (passes `phases`/`eyebrow`/`heading` props into
+   `<MethodologySection>`). No token file (`app/tokens.css`, `app/globals.css`), no other homepage
+   section, no other page. No `/frameworks` route, page, or nav change — that
+   page remains out of scope (spec.md Assumptions).

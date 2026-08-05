@@ -533,3 +533,178 @@ stay visually unchanged (Principle III: extend, don't fork or globally mutate a 
 one caller's need). `inputClassName` merges additively onto `INPUT_BASE`'s class list, so only
 `SubscribeBand.tsx`'s two inputs pick up the `15px 18px`/`52px` override; every other `FormField`
 consumer is untouched.
+
+## 12. "How We Deliver" methodology section fidelity (FR-006)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Methodology / 'How We Deliver'
+(FR-006)" | **Spec**: [spec.md](./spec.md), FR-006, Clarifications Session 2026-08-05
+
+Scope: only `app/_home-components/MethodologySection.tsx` and 4 new exports in
+`components/ui/icons.tsx`. §§5-11 above are unaffected.
+
+**Decision**: `TechGrit Homepage.dc.html` (lines 449-504, plus the JS-computed `phaseTabs`/`active`
+render data at lines 1372-1384) and the current `MethodologySection.tsx` diverge on five confirmed
+points:
+
+| Property | Current | Reference | Fix |
+|---|---|---|---|
+| Top-rail node content | bare numeral `{phase.n}` in a 58px circle | one of 4 distinct SVG icons per phase (lines 463-466), same 58px circle | swap numeral for the matching new icon component, switched on `phase.n` |
+| Phase-detail visual panel | 170px-font-size gradient-text numeral (`{active.n}`) | 170px-diameter circular `linear-gradient(140deg,#F7B733,#E87722)` badge containing the same phase's icon at 82px (lines 491-496) | replace the numeral treatment with the circular icon badge; "Phase 0{n}" corner label (line 497) already present in current code, unchanged |
+| Phase title/week `fontFamily` | hardcoded `"Arial, sans-serif"` (2 occurrences) | none set — inherits body font (lines 1378-1379: `titleStyle`/`weekStyle` carry no `font-family`) | remove both hardcoded overrides |
+| Content column width | `max-w-[1100px]` | `max-width:1280px` (line 452) | `max-w-[1280px]` |
+| Phase-detail panel responsive collapse | none (`grid-cols-[1.25fr_0.75fr]` fixed at every width) | intended `grid-template-columns:1fr` at ≤960px, but the reference's own selector (`[data-phase-card]`/`[data-step-panel]`, line 131-132) doesn't match the actual `data-phase-panel` element — dead/broken in the reference itself | add `max-tg-md:grid-cols-1` anyway (spec.md Clarifications: treat as a preview-tool typo, not intentional) |
+
+**Icon source and reuse (Principle III/IV)**: each phase's icon is extracted verbatim from the
+reference's hardcoded `isP1`-`isP4` conditionals (top rail, 26px) — there is no per-phase `icon` field
+in `this.phases` in the reference; the icon choice is positional (index 0-3), not data-driven. The
+same 4 shapes reappear at 82px in the phase-detail panel via the reference's own separate
+`hpIsP1`-`hpIsP4` conditionals — confirmed byte-identical `<path>`/`<polyline>`/`<circle>` data to
+their 26px counterparts, just larger. Because `home-data.ts`'s `MethodologyPhase` type already
+carries a stable `n: number` (1-4) field, no new data field is needed — `MethodologySection.tsx`
+switches on `phase.n`/`active.n` directly. The 4 new components (`PhaseArchitectIcon`,
+`PhaseAgenticBuildIcon`, `PhaseIndustrializeIcon`, `PhaseImpactIcon`) go in
+`components/ui/icons.tsx` — the constitution's single consolidated icon file — following its existing
+`IconProps`/`{...props}`-last convention, so the same component renders at both `26px` (top rail,
+default) and `82px` (phase-detail panel, via a `width`/`height` override), satisfying FR-006's "the
+same icon used for that phase in the top timeline (not a separate/distinct icon)" literally: one
+component, two call sites, per phase.
+
+**Confirmed defect, not a design choice (Arial override)**: the reference's `titleStyle`/`weekStyle`
+objects set `marginTop`/`fontSize`/`fontWeight`/`color`/etc. but no `fontFamily` at all — meaning
+these labels inherit the page's body font in the reference. The current code's
+`style={{ fontFamily: "Arial, sans-serif" }}` on both labels has no reference backing and
+contradicts the app's own brand system (`--font-body`/`--font-display`, both Calibri/Carlito, never
+Arial). Removing it is a bug fix, not a value change — both labels already have every other property
+(`--text-sm`=15px, `--space-5a`=15px margin-top, `--text-xs-alt`=11.5px) correctly token-matched
+today; only the stray inline `fontFamily` needs deleting.
+
+**Width fix**: `max-w-[1100px]` → `max-w-[1280px]` is a one-word Tailwind arbitrary-value change,
+consistent with every other homepage section already using `max-w-[1280px]` (Trusted Clients,
+Subscribe Band above).
+
+**Eyebrow migration to `SectionEyebrow`**: FR-006's existing text already names "the same
+`SectionEyebrow` toggle as FR-017/FR-019/FR-033" as the intended mechanism — this was never
+ambiguous, simply not yet implemented. Today the eyebrow is bespoke markup:
+`<span className="inline-flex items-center gap-[9px] ..."><span aria-hidden="true" className="h-[2px]
+w-6 bg-orange" />How we deliver</span>`, wrapped in a `<div className="mb-3.5 text-center">`. Migrating
+to `<SectionEyebrow showAccent={false}>How we deliver</SectionEyebrow>` (Principle III: extend the
+existing primitive, don't re-fork bespoke dash markup per section) drops the leading dash correctly,
+but `SectionEyebrow`'s own wrapper already carries `mb-4` (16px) — the outer `<div>`'s `mb-3.5` (14px,
+matching the reference's own `margin-bottom:14px`, line 453) becomes redundant and is removed in
+favor of the shared component's built-in spacing. **Accepted 2px delta**: `SectionEyebrow` is already
+consumed with this exact built-in spacing on every other page using `showAccent={false}` (Industries,
+About) — introducing a one-off spacing override for this single call site would fork the primitive's
+behavior for a 2px difference, the same category of sub-visible delta this feature has already
+declined to chase elsewhere (e.g. the Hero stat-divider border, research.md §7).
+
+**Not changed**: the scroll-pin mechanics (420vh track, `position:fixed` stage-pinning,
+scroll-driven `activeIndex`), the phase-rail progress-fill clip-path animation, the deliverables
+checklist (`CheckIcon` in an amber circle), and the headline's gradient-clip treatment all already
+match the reference exactly and are untouched by this addendum.
+
+**No new `tokens.css` entries needed**: the circular badge's gradient (`linear-gradient(140deg,
+#F7B733,#E87722)`) is a new literal not currently in `tokens.css` under this exact angle/stop
+order — checked against `--gradient-brand` (`135deg`) and `--gradient-phase-node` (already used for
+the top-rail node's filled state); confirms `--gradient-phase-node`'s existing value is this same
+`140deg,#F7B733,#E87722` gradient already, reused as-is via `var(--gradient-phase-node)` for the
+circular badge background — no new token, no duplicate.
+
+**Reusable-component refactor (resolves `/speckit.analyze` finding C1)**: `/speckit.analyze`
+(2026-08-05) flagged that FR-006's "reusable by other pages" clause had zero task coverage and
+conflicted with the constitution's own anti-speculative-structure rule (`.specify/memory/
+constitution.md` lines 488-489: "nothing moves to `components/ui/` until it's genuinely consumed by
+more than one route"). Investigation found a real, evidenced candidate second consumer:
+`TechGrit Frameworks.dc.html`'s "UNIFIED FRAMEWORK PORTFOLIO" section (`id="showcase"`) uses the
+identical scroll-pinned phase-panel/rail mechanic — its own source comment reads "scroll-driven
+pinned phase panel — same technique as homepage Sprint-to-Scale" — and `nav-config.ts`'s "How We
+Work" nav item already links to `/frameworks` (`matchPaths: ["/frameworks"]`), a route that doesn't
+exist yet (currently 404s).
+
+**Decision (spec.md Clarifications, Session 2026-08-05)**: building `/frameworks` is **not** brought
+into this feature's scope (too large a scope reversal from spec.md's existing Assumption that this
+reference file is out of scope). Instead, `MethodologySection.tsx` is refactored to accept its
+content via props — the minimal set needed to decouple it from `home-data.ts` and satisfy "reusable"
+honestly:
+
+```ts
+type MethodologySectionProps = {
+  phases: MethodologyPhase[];  // MethodologyPhase now carries a required `icon: IconComponent` field
+  eyebrow: string;
+  heading: ReactNode;
+};
+```
+
+`app/page.tsx` passes `METHODOLOGY_PHASES` (from `home-data.ts`), `"How we deliver"`, and the existing
+gradient-clip heading JSX. This is the smallest change that makes the component's *content* genuinely
+swappable, matching the clarification's "minimal props" answer — not the fuller shape Frameworks
+would eventually need (per-phase `accentColor`, a 2-column features+"Best for"+CTA content mode),
+since no consumer exists yet to justify that additional surface area.
+
+**Revised (`/speckit.analyze` finding I1)**: the original draft of this decision planned a separate
+`getIcon: (n: number) => ComponentType<SVGProps<SVGSVGElement>>` lookup-function prop, switched on
+`phase.n`. A follow-up `/speckit.analyze` pass flagged this as an unnecessary, less-idiomatic shape:
+`home-data.ts` already defines `export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>`
+(line 14) and uses it as a **direct per-item data field** — `icon: IconComponent` — in
+`PlatformCapability` (lines 68-69) and two other adjacent types in the same file, all populated the
+same way (`icon: AutonomousAgentIcon`, etc.). There is no reason `MethodologyPhase` should be the one
+type in this file that sources its icon through an index-based callback instead of a data field.
+`MethodologyPhase` gains the same `icon: IconComponent` field, populated per phase in
+`METHODOLOGY_PHASES` with the 4 new icons from item 1 (`icon: PhaseArchitectIcon`, etc.) —
+`MethodologySection.tsx` then reads `phase.icon`/`active.icon` directly, with no lookup indirection
+and no `getIcon` prop at all. This is a **superset-compatible simplification**, not a scope change:
+the props list shrinks by one, and `home-data.ts` picks up one new field on an existing type.
+
+**Why file location doesn't change**: FR-006 says "reusable by other pages," not "relocated to
+`components/ui/`." The constitution's rule gates the *location* change on genuine multi-route
+consumption, which this feature deliberately doesn't create. `MethodologySection.tsx` stays in
+`app/_home-components/`, now prop-driven internally but still only imported by `app/page.tsx` — this
+resolves the C1 tension without violating the anti-speculative-structure rule in either direction (no
+premature move, no unfulfillable requirement).
+
+**What changes in `home-data.ts` (revised per finding I1)**: `MethodologyPhase` gains one required
+field, `icon: IconComponent` (the same type already imported for `PlatformCapability` et al.), and
+each of the 4 `METHODOLOGY_PHASES` entries gets its matching icon from item 1. No other field changes
+— `n`, `week`, `title`, `description`, `deliverables` are untouched. No new file, no new shared
+primitive beyond the 4 icons already planned in item 1.
+
+**Discovered during implementation — RSC server/client props boundary**: `npm run build` failed with
+`Error: Functions cannot be passed directly to Client Components` when `app/page.tsx` (a Server
+Component — no `"use client"`) passed `METHODOLOGY_PHASES` (each phase carrying `icon: IconComponent`,
+a function) directly into `<MethodologySection>` (`"use client"`). Next.js's App Router only allows
+serializable values — plain data and already-rendered React elements — across a Server→Client props
+boundary; a raw component *reference* is a function and cannot cross it, regardless of whether it's
+passed as a data field (this addendum's original plan) or as a lookup-callback prop (the pre-I1
+design) — both fail identically, since the restriction is about the value being a function at all,
+not about which shape carries it.
+
+**Fix**: `MethodologySection`'s prop type does not reuse `home-data.ts`'s `MethodologyPhase` directly.
+It defines its own `MethodologyPhaseContent` (exported from the component) where `icon`/`badgeIcon`
+are `ReactNode`, not `IconComponent`. `app/page.tsx` — still a Server Component, still the only place
+that imports the icon components — pre-renders each phase's icon at both sizes before crossing the
+boundary:
+
+```tsx
+phases={METHODOLOGY_PHASES.map((phase) => ({
+  ...phase,
+  icon: <phase.icon />,              // 26px, top-rail node (default size)
+  badgeIcon: <phase.icon width={82} height={82} />,  // 82px, phase-detail badge
+}))}
+```
+
+This is not merely an RSC workaround — it is arguably the more correct reusable-component API
+regardless of the server/client boundary: it mirrors the same `ReactNode`-slot pattern already used
+for the `heading` prop (the caller fully owns what renders, `MethodologySection` just places it), and
+it removes the section's only remaining dependency on knowing *how* to instantiate an icon component
+(size, props) — a future consumer supplies finished nodes, not a component reference it has to know
+how to call correctly. `home-data.ts`'s `MethodologyPhase.icon: IconComponent` field (T024a) is
+unaffected by this — it's still the single source of truth for which icon belongs to which phase;
+only the last step (turning that reference into a node) moved to the Server Component boundary where
+it's actually safe to do so.
+
+**New token found missing during implementation**: the phase-detail badge's box-shadow
+(`0 0 80px rgba(232,119,34,0.55), inset 0 3px 20px rgba(255,255,255,0.35)`, `TechGrit Homepage.dc.html`
+line 491) had no existing token — this addendum's original token check only confirmed the gradient
+background, not the shadow. Added `--shadow-phase-badge-glow` to `tokens.css`'s SHADOWS section
+(next to the existing `--shadow-phase-ring`/`--shadow-phase-active` Methodology tokens), consumed via
+`shadow-[var(--shadow-phase-badge-glow)]` — the same arbitrary-property pattern already used for
+`--shadow-live-badge` in `Hero.tsx`, no `@theme inline` mapping needed.
