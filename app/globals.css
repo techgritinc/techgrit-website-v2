@@ -107,12 +107,16 @@
   --color-icon-stroke: var(--color-icon-stroke);
   --color-overlay-orange-22: var(--color-overlay-orange-22);
   --color-overlay-orange-12: var(--color-overlay-orange-12);
+  --color-overlay-amber-light-06: var(--color-overlay-amber-light-06);
+  --color-ink-glass-35: var(--color-ink-glass-35);
 
   --shadow-dropdown: var(--shadow-dropdown);
   --shadow-mega: var(--shadow-mega);
   --shadow-header-scrolled: var(--shadow-header-scrolled);
   --shadow-nav-btn: var(--shadow-nav-btn);
   --shadow-nav-btn-hover: var(--shadow-nav-btn-hover);
+  --shadow-footer-cta: var(--shadow-footer-cta);
+  --shadow-footer-cta-hover: var(--shadow-footer-cta-hover);
 
   --blur-nav: var(--blur-nav);
   --blur-header-scrolled: var(--blur-header-scrolled);
@@ -538,7 +542,10 @@
 
     [data-lift-hover]:hover,
     [data-lift-hover]:focus-visible {
-      transform: none;
+      /* !important: this rule lives in @layer base, which Tailwind's utility-layer
+       * hover:-translate-y-* classes always outrank by layer order alone — importance
+       * is the only lever that beats a later layer regardless of specificity. */
+      transform: none !important;
     }
   }
 }

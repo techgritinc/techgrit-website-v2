@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 
 export type ButtonVariant = "primary" | "ghost" | "outline";
-export type ButtonSize = "sm" | "md" | "lg" | "nav" | "footer" | "hero";
+export type ButtonSize = "sm" | "md" | "lg" | "nav" | "footer" | "footer-cta" | "hero";
 
 type SharedProps = {
   variant?: ButtonVariant;
@@ -28,6 +28,9 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
   lg: "gap-[9px] rounded-card px-7 py-4 text-base",
   nav: "gap-2 rounded-[11px] px-[22px] py-[12px] text-[15px] leading-[normal]",
   footer: "gap-[8px] rounded-[11px] px-[20px] py-[12px] text-[14.5px] leading-[normal]",
+  // Pill-shaped footer "Start a conversation" CTA (spec.md FR-025) — uppercase small-caps label,
+  // distinct radius/padding/tracking from every other size.
+  "footer-cta": "gap-[10px] rounded-[40px] pl-[22px] pr-[20px] py-[12px] text-[13px] font-extrabold uppercase tracking-[0.08em] leading-[normal]",
   hero: "gap-[9px] rounded-card px-7 py-4 text-[16px]",
 };
 
@@ -44,6 +47,7 @@ const PRIMARY_SHADOW_CLASSES: Record<ButtonSize, string> = {
   lg: "shadow-btn-primary hover:shadow-btn-hover active:shadow-btn-primary",
   nav: "shadow-nav-btn hover:shadow-nav-btn-hover active:shadow-nav-btn",
   footer: "shadow-nav-btn hover:shadow-nav-btn active:shadow-nav-btn",
+  "footer-cta": "shadow-footer-cta hover:shadow-footer-cta-hover active:shadow-footer-cta",
   hero: "shadow-btn-primary active:shadow-btn-primary",
 };
 
