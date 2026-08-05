@@ -7,6 +7,10 @@ import {
   FinTechIcon,
   HealthcareIcon,
   InfiniteScalabilityIcon,
+  PhaseAgenticBuildIcon,
+  PhaseArchitectIcon,
+  PhaseImpactIcon,
+  PhaseIndustrializeIcon,
   PromptToProductionIcon,
   SelfHealingIcon,
 } from "@/components/ui/icons";
@@ -105,6 +109,7 @@ export type MethodologyPhase = {
   title: string;
   description: string;
   deliverables: string[];
+  icon: IconComponent;
 };
 
 export const METHODOLOGY_PHASES: MethodologyPhase[] = [
@@ -115,6 +120,7 @@ export const METHODOLOGY_PHASES: MethodologyPhase[] = [
     description:
       "We architect the vision before a line of code is written, defining the technical blueprint, the AI agent workflows, and the success criteria we will be measured against.",
     deliverables: ["Technical architecture blueprint", "Defined AI agent workflows", "Shared success criteria"],
+    icon: PhaseArchitectIcon,
   },
   {
     n: 2,
@@ -123,6 +129,7 @@ export const METHODOLOGY_PHASES: MethodologyPhase[] = [
     description:
       "OrbitAI agents build in parallel across the UI, business logic, and data layers, while our engineers review every pull request and steer the system at each gate.",
     deliverables: ["Parallel UI, logic and data build", "OrbitAI agent orchestration", "Engineer oversight on every PR"],
+    icon: PhaseAgenticBuildIcon,
   },
   {
     n: 3,
@@ -131,6 +138,7 @@ export const METHODOLOGY_PHASES: MethodologyPhase[] = [
     description:
       "We harden the system for the real world, validating security, load-testing at scale, and clearing every enterprise-readiness gate. Nothing ships until it passes.",
     deliverables: ["Security validation", "Load and scale testing", "Enterprise-readiness gates"],
+    icon: PhaseIndustrializeIcon,
   },
   {
     n: 4,
@@ -139,6 +147,7 @@ export const METHODOLOGY_PHASES: MethodologyPhase[] = [
     description:
       "We deploy to production with real users and real data, and hand over a system your team can own, complete with runbooks and architecture documentation.",
     deliverables: ["Live production deployment", "Runbooks and architecture docs", "Full support transition"],
+    icon: PhaseImpactIcon,
   },
 ];
 

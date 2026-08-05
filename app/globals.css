@@ -359,6 +359,9 @@
   --color-overlay-amber-12: var(--color-overlay-amber-12);
   --color-overlay-orange-strong: var(--color-overlay-orange-strong);
   --color-overlay-amber-strong: var(--color-overlay-amber-strong);
+  --color-overlay-orange-11: var(--color-overlay-orange-11);
+  --color-overlay-orange-13: var(--color-overlay-orange-13);
+  --color-overlay-amber-light-10: var(--color-overlay-amber-light-10);
   --color-icon-bg-blue: var(--color-icon-bg-blue);
   --color-icon-bg-teal: var(--color-icon-bg-teal);
   --color-border-image: var(--color-border-image);
@@ -558,7 +561,11 @@
 
   @media (prefers-reduced-motion: reduce) {
     .bg-ambient-orbs span {
-      animation: none;
+      /* !important: animation now comes from a Tailwind `animate-[...]` utility
+       * class (@layer utilities), which outranks this @layer base rule by layer
+       * order alone regardless of selector specificity — same reason
+       * [data-lift-hover] below needs it. */
+      animation: none !important;
     }
 
     [data-lift-hover]:hover,

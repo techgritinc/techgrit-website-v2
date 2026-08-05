@@ -365,3 +365,119 @@ unchanged); every corrected value is read directly from `TechGrit Homepage.dc.ht
 no new surface fill (removing the extra background tint moves the surface closer to the reference's
 plain dark background). **Anchor file**: `app/_home-components/SubscribeBand.tsx` (only file
 touched — no new tokens, no `globals.css` edit, no `data-model.md`/`contracts/`).
+
+## Homepage Methodology / "How We Deliver" (FR-006)
+
+**Date**: 2026-08-05. Extends this Phase 2 addendum to also cover the "How We Deliver" section and
+the homepage's own ambient-orb background (FR-006, FR-006a, FR-006b), per spec.md Clarifications
+Session 2026-08-05. Hero, Trusted Clients, and Subscribe Band above are unaffected; "Don't
+Migrate/Re-Imagine", the Construction card, Testimonials, the Blog teaser, Life at TechGrit, and the
+final CTA remain unplanned.
+
+1. **`components/ui/icons.tsx`** — add 4 new named icon exports, one per phase, extracted verbatim
+   from the reference's 4 distinct top-rail SVGs (`TechGrit Homepage.dc.html` lines 463-466):
+   `PhaseArchitectIcon` (circle + pennant/flag), `PhaseAgenticBuildIcon` (code-bracket `</>` + slash),
+   `PhaseIndustrializeIcon` (shield + checkmark), `PhaseImpactIcon` (sprouting-leaf shape) — following
+   the file's existing `IconProps`/`{...props}`-last convention so the same component renders at the
+   top rail's `26px` and the phase-detail panel's `82px` via a `width`/`height` override, not two
+   separate components (FR-006's "the same icon used for that phase," not a separate/distinct one).
+2. **New `components/ui/PhaseShowcase.tsx`** (FR-006, resolves `/speckit.analyze` finding C1) — the
+   generic scroll-pinned phase-showcase engine (420vh track, `position:fixed` stage, scroll-driven
+   `activeIndex`, progress-fill rail, phase-detail panel), extracted here rather than left inside
+   `app/_home-components/` — a deliberate, explicitly-recorded exception to the constitution's
+   anti-speculative-structure rule (spec.md Clarifications, Session 2026-08-05, reversing the
+   file-location half of the original C1 answer). Accepts `phases: MethodologyPhaseContent[]` (each
+   item carrying required `icon`/`badgeIcon: ReactNode` fields — a direct data field per finding I1,
+   matching `PlatformCapability`'s existing convention in `home-data.ts`, not an index-based lookup
+   prop; typed as pre-rendered `ReactNode`, not `IconComponent`, per T031's already-implemented fix —
+   `PhaseShowcase` is `"use client"`, and a raw component reference can't cross the Server→Client
+   props boundary that separates it from `MethodologySection`), `eyebrow` (string), and `heading`
+   (`ReactNode`) as props. Owns: the top-rail node (rendering `phase.icon` in place of the bare
+   numeral — already a `ReactNode`, just placed, not called), the phase-detail panel (widened to
+   `1280px`, `max-tg-md:grid-cols-1` collapse for the reference's own dead/broken collapse selector,
+   and the enlarged 170px circular `linear-gradient(140deg,#F7B733,#E87722)` badge containing
+   `active.badgeIcon` — already sized to 82px by the caller, not resized here — with the existing
+   "Phase 0{n}" corner label), and the eyebrow — via `<SectionEyebrow showAccent={false}
+   className="mb-3.5">` (FR-006a's new `className` prop, correcting the margin-bottom to the
+   reference's `14px` via Tailwind's canonical `3.5` step — matching the exact class the original
+   bespoke eyebrow markup already used before migration — rather than an arbitrary `mb-[14px]`, and
+   closing the previously-accepted 16px delta). The phase title/week labels no
+   longer carry the hardcoded `fontFamily: "Arial, sans-serif"` overrides (a confirmed bug, not
+   reference-backed) — both inherit the shared `--font-body`/`--font-display` stack.
+   **Deliberately not added**: a per-phase `accentColor` prop, an alternate 2-column
+   features+"Best for"+CTA content mode, or any other shape informed by `TechGrit Frameworks.dc.html`'s
+   "Framework Portfolio" section — no current consumer needs them, and building `/frameworks` itself
+   remains out of scope (spec.md Assumptions).
+3. **`app/_home-components/MethodologySection.tsx`** — becomes a thin homepage-specific wrapper: it
+   alone imports `METHODOLOGY_PHASES` from `./home-data`, pre-renders each phase's icon (`<phase.icon
+   />` at 26px, `<phase.icon width={82} height={82} />` for the badge) since `PhaseShowcase` is `"use
+   client"` and a raw component reference can't cross a Server→Client props boundary, and renders
+   `<PhaseShowcase phases={...} eyebrow="How we deliver" heading={...} />`. No scroll-pin/rail/panel
+   markup lives in this file anymore. Because this wrapper does the pre-rendering itself, `app/page.tsx`
+   needs no changes for this section — it keeps the plain `<MethodologySection />` it already has.
+4. **`components/ui/section-eyebrow.tsx`** (FR-006a) — add an optional `className` prop that merges
+   onto the outer wrapper `<div>` (additive, the same convention `Button`/`Badge` already use). No
+   other existing consumer's rendered output changes (the prop is optional and unused elsewhere).
+5. **Homepage ambient orbs** (FR-006b, revised) — `components/ui/ambient-orbs.tsx` gains a
+   `pathname === "/"` branch (exact match, not `startsWith`) rendering the homepage's own
+   reference-exact 4-orb, all-warm-toned set (positions, sizes, opacities, blur radii, animation
+   timings from `TechGrit Homepage.dc.html` lines 148-158) in place of the component's default 3-orb
+   set (which includes a blue orb this reference avoids). No route-exclusion entry and no separate
+   `app/_home-components/` orb file — the homepage stays on the same shared, globally-wired component,
+   just a different branch of it. Both this new branch and the existing default 3-orb branch are
+   rewritten with Tailwind utility classes end to end — arbitrary-value classes for position/size/blur/
+   animation timing, canonical `bg-overlay-*` classes for color — following the no-inline-style
+   convention `app/case-studies/[slug]/page.tsx` already established for exactly this pattern
+   (`className="absolute top-[-160px] right-[-120px] w-[560px] h-[560px] rounded-full bg-overlay-teal
+   blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]"`), not Construction's inline-`style`
+   precedent. The default 3-orb set's 3 colors already match existing tokens exactly (no new tokens);
+   the homepage's 4-orb set needs 3 new `tokens.css` entries for values with no existing exact match
+   (`rgba(232,119,34,0.11)`, `rgba(232,119,34,0.13)`, `rgba(247,183,51,0.10)`) plus their `@theme
+   inline` mappings in `globals.css`, per Principle I — the 4th color (`rgba(232,119,34,0.18)`) already
+   exists as `--color-overlay-orange-18`. Converting the animation from inline `style` to a Tailwind
+   `animate-[...]` class also surfaces a latent bug: the existing `@media (prefers-reduced-motion:
+   reduce) { .bg-ambient-orbs span { animation: none } }` rule in `globals.css` has no `!important`,
+   so a later-cascading utility class's `animation` will silently outrank it — the exact
+   already-documented reason `[data-lift-hover]`'s reduced-motion override needed `!important` a few
+   lines below it in the same file. Add `!important` to this rule in the same pass.
+
+Nothing else changes. The deliverables checklist and the headline's gradient-clip treatment already
+match the reference and are untouched.
+
+**UI Design Approach (Methodology + orbs)**: `frontend-design` skill consulted for the 3 new/changed
+craft surfaces in this addendum — the 4 phase icons, the enlarged circular badge, and the homepage's
+4-orb palette. Takeaways applied: **icons** — each stays a simple 2-stroke glyph legible at both the
+top rail's 26px and the phase-detail panel's 82px, so one component serves both sizes without a
+separate simplified variant; **badge** — the existing `--gradient-phase-node`/
+`--shadow-phase-badge-glow` tokens already give the 170px circle enough visual weight, so no further
+border/glow embellishment is added; **orbs** — the homepage's 4 warm-toned orbs stay at the
+reference's low opacity (0.10-0.18) with long (16-24s) animation durations, the same "quiet ambient
+depth, not a distraction" quality the shared component's existing default 3-orb set already
+establishes elsewhere in the app.
+
+**Constitution check** — PASS on all six principles: the 4 new icons are added to
+`components/ui/icons.tsx`, the constitution's single consolidated icon file (Principle III — never a
+per-route copy), following its existing naming/props convention exactly, not forked; the
+Arial-removal and dead-selector-collapse fixes are confirmed defects relative to both the reference
+and the app's own brand system, not new design choices (Principle IV — reference is visual truth, not
+copy-paste source: a broken preview-tool selector is not intentional design); no new literal value
+duplicates an existing token (the `1280px` width and `960px` collapse breakpoint reuse the app's
+existing `max-w-[1280px]`/`md` conventions; the homepage orbs' 3 new colors are added to `tokens.css`
+first per Principle I, and its 4th color plus the default set's 3 colors all reuse existing tokens
+verbatim); no new surface fill (the circular badge reuses the existing `--gradient-brand`-equivalent
+gradient already used for the rail nodes).
+**Principle III / C1 resolution (revised)**: extracting the engine into `components/ui/PhaseShowcase.tsx`
+is a knowing, explicitly-recorded exception to the anti-speculative-structure rule — made here by
+direct instruction rather than left as silent drift — since only the homepage consumes it in this
+feature; `/frameworks` remains a future feature's work (spec.md Assumptions). `SectionEyebrow`'s new
+`className` prop extends the existing primitive rather than forking it, matching how `Button`/`Badge`
+already expose the same escape hatch.
+**Anchor files**: `components/ui/icons.tsx` (4 new exports), `components/ui/PhaseShowcase.tsx` (new),
+`components/ui/section-eyebrow.tsx` (new `className` prop), `components/ui/ambient-orbs.tsx`
+(rewritten to Tailwind classes throughout, plus a new `pathname === "/"` branch for the homepage's
+4-orb set — no route-exclusion-check change), `app/_home-components/MethodologySection.tsx` (now a
+thin wrapper), `app/_home-components/home-data.ts` (`MethodologyPhase` gains a required
+`icon: IconComponent` field, populated per phase with the 4 new icons), `app/tokens.css` (3 new
+`--color-overlay-*` entries for the homepage orbs), and `app/globals.css` (their `@theme inline`
+mappings, plus an `!important` addition to the existing reduced-motion orb rule) — no `app/page.tsx`
+change, no `data-model.md`/`contracts/`.

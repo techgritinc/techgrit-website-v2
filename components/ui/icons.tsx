@@ -389,6 +389,98 @@ export function CheckIcon(props: IconProps) {
   );
 }
 
+// Homepage "How We Deliver" methodology phases (app/_home-components/MethodologySection.tsx)
+// One distinct icon per phase, reused at both the top-rail node (26px) and the enlarged
+// phase-detail circle (82px) via a width/height override — shapes re-authored from
+// TechGrit Homepage.dc.html's isP1-isP4 conditionals per Constitution Principle IV.
+
+/** Phase 1 — Architect: circle + pennant/flag. */
+export function PhaseArchitectIcon(props: IconProps) {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <circle cx="12" cy="12" r="9" />
+      <polygon points="16 8 12 14 8 16 12 10 16 8" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+/** Phase 2 — Agentic Build: code-bracket "</>" + slash. */
+export function PhaseAgenticBuildIcon(props: IconProps) {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+      <line x1="14" y1="4" x2="10" y2="20" />
+    </svg>
+  );
+}
+
+/** Phase 3 — Industrialize: shield + checkmark. */
+export function PhaseIndustrializeIcon(props: IconProps) {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M12 2 L4 6 v6 c0 5 3.5 8 8 10 c4.5-2 8-5 8-10 V6 z" />
+      <polyline points="9 12 11 14 15 10" />
+    </svg>
+  );
+}
+
+/** Phase 4 — Impact: sprouting-leaf shape. */
+export function PhaseImpactIcon(props: IconProps) {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M5 15c0-6 4-11 9-12 1 5-4 9-9 12z" />
+      <path d="M14 6c3 0 4 1 4 4 -3 0 -4 -1 -4 -4z" />
+      <path d="M9 13c0 3 1 4 4 4 0-3-1-4-4-4z" />
+      <path d="M5 15c-2 1-2 3-2 5 2 0 4 0 5-2" />
+    </svg>
+  );
+}
+
 // Webinar (app/webinar/_components/)
 
 /** Upcoming-session date/time row. */
