@@ -481,3 +481,55 @@ Already-existing tokens reused without any new addition (confirmed exact value m
 research pass): `--color-border-orange-strong` (0.60 — badge border), `--blur-10` (badge blur),
 `--gradient-brand` (inner chip background), `--color-badge-text` (inner chip text), `--ls-widest`
 (inner chip letter-spacing), `--color-amber-light` (suffix/arrow color).
+
+## 11. Subscribe band container, background, inputs, and button fidelity (FR-005)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Subscribe Band (FR-005)" | **Spec**:
+[spec.md](./spec.md), FR-005, Clarifications Session 2026-08-05
+
+Scope: only `app/_home-components/SubscribeBand.tsx`. §§5-10 above (Hero, Trusted Clients) are
+unaffected.
+
+**Decision**: `TechGrit Homepage.dc.html` (lines 366-386) and the current `SubscribeBand.tsx`
+diverge on four points, all confirmed during spec.md's clarification session (2026-08-05):
+
+| Property | Current (`SubscribeBand.tsx`) | Reference (line) | Fix |
+|---|---|---|---|
+| Container max-width | `max-w-[1020px]` | `max-width:1280px` (368) | `max-w-[1280px]` — matches the sibling `TrustedClients.tsx` section's own container exactly |
+| Container vertical padding | `py-[88px]` | `padding:80px 36px 80px` (368) | `py-20` (80px) — horizontal `px-9` (36px) already matched, unchanged |
+| Outer `<section>` background/border | `bg-[rgba(255,255,255,0.015)]` + `border-t border-border-subtle` | none declared (367) | removed entirely — the page's black background shows through unmodified |
+| Name/Email input widths | fixed `w-[150px]` / `w-[180px]` | `flex:1 1 0` / `flex:2 1 0`, `min-width:0` (383-384) | `flex-1 min-w-0` / `flex-[2] min-w-0` |
+| Form row | `flex flex-wrap items-center gap-2.5` (10px) | `display:flex; gap:12px; flex-wrap:nowrap; width:100%` (382) | `flex flex-nowrap items-center gap-3 w-full` (12px) — the gap correction is a direct corollary of matching the reference's own full-width, no-wrap row, not a separately-raised item |
+| Input padding/height | `px-4 py-3.5` (16px/14px), no min-height | `padding:15px 18px`, `min-height:52px` (383-384) | via `FormField`'s existing `inputClassName` prop (not `INPUT_BASE`) — see below |
+| Button padding/height | `!py-3` (12px), no min-height | `padding:15px 24px`, `min-height:52px` (385) | `!py-[15px]` + `!min-h-[52px]` (horizontal `!px-[24px]` already matched, unchanged) |
+
+**Not changed (confirmed already reference-exact)**: the card itself (`glass-card px-11 py-[38px]`)
+— `--color-border` (0.12), `--radius-3xl` (22px), `--shadow-glass`
+(`0 24px 60px -20px rgba(0,0,0,0.6)`), and `--blur-lg` (14px) are all confirmed exact-value matches
+to the reference's card styling (line 369) already, with no fix needed. The input background/border
+(`--color-glass-strong` = `rgba(255,255,255,0.06)`, `--color-border-strong` = `rgba(255,255,255,
+0.16)`) and the button's gradient (`--gradient-brand` = `linear-gradient(135deg,#F59E0B,#E87722)`)
+are likewise already exact matches — this addendum's button/input fixes are sizing-only, not color.
+
+**Not changed (deliberately out of scope)**: the outer text/form grid — reference uses
+`grid-template-columns:0.8fr 1.4fr; gap:40px` (370); current code uses `grid-cols-[1fr_auto]
+gap-9` (36px). This 4px gap delta and the differing column-proportion approach were not raised in
+this session's clarification (which covered container width, input width, section background, and
+button only) — left as a recorded, out-of-scope discrepancy, not touched by this addendum.
+
+**No new `tokens.css` entries needed**: `py-20` (80px) and `gap-3` (12px) are Tailwind's own
+default spacing-scale utilities, the same convention already used sitewide for round spacing values
+(`px-9`=36px, `py-14`=56px, `gap-9`=36px elsewhere in this same file/its sibling) rather than bespoke
+custom-property tokens — Tailwind's default scale itself is the "token" for standard round values;
+`tokens.css` is reserved for values the default scale doesn't cover. The input/button padding-height
+fixes (`15px`/`18px`/`52px`) are applied as per-instance arbitrary-value overrides — `FormField`'s
+`inputClassName` prop for the two inputs (already part of its public API, unused by this file until
+now) and `Button`'s own `className` override (this exact call site already uses `!px-[24px] !py-3`
+today) — the same escape-hatch pattern this feature already relies on elsewhere, not a new one.
+
+**Why `inputClassName`, not `INPUT_BASE`**: `FormField`'s shared `INPUT_BASE` (`px-4 py-3.5`, no
+min-height) is consumed by every other page's form — Contact and Careers' Apply dialog — which must
+stay visually unchanged (Principle III: extend, don't fork or globally mutate a shared primitive for
+one caller's need). `inputClassName` merges additively onto `INPUT_BASE`'s class list, so only
+`SubscribeBand.tsx`'s two inputs pick up the `15px 18px`/`52px` override; every other `FormField`
+consumer is untouched.

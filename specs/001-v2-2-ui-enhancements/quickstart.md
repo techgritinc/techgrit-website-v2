@@ -108,3 +108,37 @@ framework exists in this repo — this is manual, plus `npm run lint`/`npm run b
    change in this addendum, made mandatory by direct instruction; verify it's non-breaking for every
    other `Badge` consumer). No other homepage section, no other page, and no other shared component
    (`Button.tsx`, `MediaSlot.tsx`) changes.
+
+## 10. Subscribe Band (`app/_home-components/SubscribeBand.tsx`) — Phase 2 addendum, FR-005
+
+Scope: only `app/_home-components/SubscribeBand.tsx`. No test framework exists in this repo — this
+is manual, plus `npm run lint`/`npm run build`.
+
+1. Open `/` at desktop width (≥1140px) and scroll to the subscribe band (below Trusted Clients).
+2. Confirm the section's container is visibly as wide as the Trusted-Clients section directly above
+   it (both now `1280px` max-width) — no longer visibly narrower.
+3. Confirm there is no subtle background tint or thin top border on the subscribe band's outer
+   section — the same black page background from the Trusted-Clients section continues underneath
+   it, uninterrupted.
+4. Confirm the glass card itself (background, border, rounded corners, blur, shadow) is unchanged
+   from before this pass — only its container's width/padding around it changed.
+5. Confirm the Name input and Business Email input sit on one row that spans the full width of the
+   card's right column, with the Email input visibly about twice as wide as the Name input (not two
+   fixed-width boxes with a gap after them) — resize the browser narrower and confirm both inputs
+   shrink together rather than one hitting a fixed width first.
+6. Confirm both inputs and the Submit button are visually the same height (previously the button read
+   shorter than the inputs).
+7. Confirm the Submit button's gradient background, text, and arrow icon are unchanged from before
+   this pass — only its padding/height changed.
+8. At a narrow (mobile) width, confirm the input/button row wraps or stacks normally per existing
+   responsive behavior, and the section still does not scroll horizontally.
+9. Submit the form with an empty name, then an invalid email, then valid values — confirm the
+   existing client-side error/success behavior (unchanged by this pass) still works exactly as
+   before.
+
+## 11. Gate check (Subscribe Band)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/_home-components/SubscribeBand.tsx`. No token file
+   (`app/tokens.css`, `app/globals.css`), no other homepage section, no other page, and no shared
+   component (`Button.tsx`, `FormField.tsx`) changes.

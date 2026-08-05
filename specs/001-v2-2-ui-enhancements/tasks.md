@@ -238,3 +238,75 @@ MVP/phased rollout within this slice, since FR-001–FR-004/FR-002a/FR-003a are 
 change to one page section). Complete T008-T018, then T019 to verify, then stop. The remaining
 pieces of User Story 1 (subscribe row, How We Deliver, Re-Imagine grid, etc.) and User Stories 2-9
 remain a future `/speckit.plan` pass each.
+
+## Phase 6: Homepage Subscribe Band (Phase 2 addendum, User Story 1 slice)
+
+**Input**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Subscribe Band (FR-005)",
+[research.md](./research.md) §11, [quickstart.md](./quickstart.md) §10-11
+**Scope**: only the subscribe band — the FR-005 slice of User Story 1 (spec.md), extending Phase 2
+(Hero & Trusted Clients, T007a-T019) rather than a new phase. No other US1 sub-area is in scope. No
+new tokens are needed (research.md §11), so there is no separate Foundational sub-phase.
+
+**Goal**: FR-005 — the subscribe band's container matches the reference's `1280px`/`80px` width and
+padding with no extraneous background/border, its inputs use the reference's flexible proportional
+widths, and its inputs/button share the reference's `52px` height, per research.md §11.
+
+**Independent Test**: Load `/` at desktop, tablet, and mobile widths; confirm the subscribe band's
+container is as wide as the Trusted-Clients section above it, shows no extra background tint or top
+border, its Name/Email inputs sit on one full-width row in a roughly 1:2 proportion that shrinks
+together at narrow widths, and both inputs and the Submit button read as the same height — with no
+other homepage section visually affected and the existing submit/validation behavior unchanged.
+
+- [x] T020 [US1] In `app/_home-components/SubscribeBand.tsx`: widen the outer container from
+  `max-w-[1020px]` to `max-w-[1280px]`, correct its vertical padding from `py-[88px]` to `py-20`
+  (80px; horizontal `px-9` unchanged), and remove the outer `<section>`'s
+  `bg-[rgba(255,255,255,0.015)]` tint and `border-t border-border-subtle` (FR-005, research.md §11) — depends on nothing. **Done.**
+- [x] T021 [US1] In the same file: change the form row from `flex flex-wrap items-center gap-2.5` to
+  `flex flex-nowrap items-center gap-3 w-full`; change the Name `FormField`'s `containerClassName`
+  from `w-[150px]` to `flex-1 min-w-0` and the Email `FormField`'s from `w-[180px]` to `flex-[2]
+  min-w-0`; add `inputClassName="!px-[18px] !py-[15px] !min-h-[52px]"` to both `FormField`s (do not
+  edit `FormField.tsx`'s shared `INPUT_BASE`) (FR-005, research.md §11) — same file
+  as T020, do sequentially. **Done.**
+- [x] T022 [US1] In the same file: change the Submit `Button`'s `className` override from `!py-3` to
+  `!py-[15px]` and add `!min-h-[52px]` (FR-005, research.md §11) — same file as
+  T020-T021, do sequentially, last edit to this file. **Done.**
+
+**Checkpoint**: subscribe band container/background/input/button sizing all match the reference; the
+card's own background/border/radius/blur/shadow and the outer text/form grid proportions are
+unchanged (confirmed already reference-exact / deliberately out of scope, research.md §11); no other file touched.
+
+---
+
+## Phase 7: Polish (Subscribe Band verification)
+
+- [x] T023 Run quickstart.md §10-11's verification steps (isolated render checks + `npm run lint` +
+  `npm run build`). **Done.** `npm run lint` and `npm run build` both green. Browser-verified via
+  computed styles against the running dev server: container `max-width:1280px`/`padding-top:80px`
+  (was 1020px/88px), outer `<section>` background `rgba(0,0,0,0)` with `0px` top border (was a
+  tinted background + border), form `display:flex; flex-wrap:nowrap; gap:12px` spanning the row,
+  Name/Email inputs at `flex-grow:1`/`flex-grow:2` (measured widths 125.3px/250.7px — an exact 1:2
+  ratio), both inputs and the Submit button at `padding:15px 18px`/`15px 24px` and
+  `min-height:52px`/height `52px`. Confirmed unchanged: the card's background/border/radius/
+  padding/shadow (`rgba(255,255,255,0.05)`, `rgba(255,255,255,0.12)`, `22px`, `38px 44px`, exact
+  shadow match). At 375px width, `document.documentElement.scrollWidth === window.innerWidth`
+  (375 = 375) — no horizontal overflow introduced. Existing client-side validation (empty-name
+  error, invalid-email error, success state) all still fire correctly — unchanged by this pass.
+
+---
+
+## Dependencies (Subscribe Band)
+
+- T020 → T021 → T022: same file (`SubscribeBand.tsx`), sequential edits.
+- T023 runs last, after T020-T022.
+
+## Parallel Example (Subscribe Band)
+
+None — all 3 tasks edit the same file and must run sequentially.
+
+## Implementation Strategy (Subscribe Band)
+
+Single increment — all 4 tasks (T020-T023) together are this Phase 2 addition's only deliverable (no
+MVP/phased rollout within this slice, since FR-005 is one cohesive sizing/spacing fix to one
+component). Complete T020-T022, then T023 to verify, then stop. The remaining pieces of User Story 1
+("How We Deliver", "Don't Migrate/Re-Imagine", Construction card, Testimonials, Blog teaser, Life at
+TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass each.

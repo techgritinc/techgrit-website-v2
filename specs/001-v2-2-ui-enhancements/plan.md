@@ -325,3 +325,43 @@ reference's favor (no more centering deviation), confirmed the Live-Webinar badg
 several of which already existed as exact-value matches and are reused rather than duplicated — and
 replaced the Trusted-Clients breakpoint-proxy scroll with genuine runtime overflow detection, before
 any file changed. No new violations. Gate: PASS.
+
+## Homepage Subscribe Band (FR-005)
+
+**Date**: 2026-08-05. Extends this Phase 2 addendum to also cover `app/_home-components/
+SubscribeBand.tsx` (FR-005), per spec.md Clarifications Session 2026-08-05. Hero and Trusted Clients
+above are unaffected; "How We Deliver", "Don't Migrate/Re-Imagine", the Construction card,
+Testimonials, the Blog teaser, Life at TechGrit, and the final CTA remain unplanned.
+
+1. **`app/_home-components/SubscribeBand.tsx`** — widen the outer container from `max-w-[1020px]`
+   to the reference's `max-w-[1280px]` (matching the sibling `TrustedClients.tsx` section's own
+   container width) and correct its vertical padding from `py-[88px]` to `py-20` (80px; horizontal
+   `px-9`/36px already matched the reference and is unchanged). Remove the outer `<section>`'s extra
+   `bg-[rgba(255,255,255,0.015)]` tint and `border-t border-border-subtle` — the reference declares
+   neither, so the page's black background now shows through unmodified. Switch the Name/Email
+   inputs from fixed pixel-width containers (`w-[150px]`/`w-[180px]`) to the reference's flexible
+   proportional widths (`flex-1`/`flex-[2]`, `min-w-0`) inside a full-width, non-wrapping form row
+   (`flex-nowrap w-full gap-3`, correcting the row gap from 10px to the reference's 12px as a direct
+   corollary of going full-width/no-wrap). Correct each input's own padding/height via `FormField`'s
+   existing `inputClassName` override (not a change to `FormField`'s shared `INPUT_BASE`, which every
+   other page's form also consumes) to the reference's `15px 18px` padding and explicit
+   `min-height:52px`. Correct the Submit button's vertical padding (`py-3`/12px → the reference's
+   `15px`) and add an explicit `min-height:52px` so it aligns with the 52px-tall input fields.
+
+Nothing else changes. The card itself (`glass-card px-11 py-[38px]`) already matches the reference's
+background/border/radius/blur/shadow/padding exactly and is untouched; the outer text/form grid
+(`grid-cols-[1fr_auto] gap-9`) is a known, deliberately out-of-scope 4px gap delta versus the
+reference's `0.8fr 1.4fr`/`gap:40px` — not raised in this session's clarification, so not touched
+here (see research.md §11). No other homepage section, page, or shared component (`Button`,
+`FormField`, `globals.css`) changes.
+
+**Constitution check** — PASS on all six principles: no new literal value duplicates an existing
+token (`py-20`/`gap-3` reuse Tailwind's own default spacing scale, the same convention already used
+sitewide for round values; the input/button sizing fixes reuse `FormField`'s existing
+`inputClassName` prop and `Button`'s existing per-instance override convention — both already used
+elsewhere in this same file, not a new pattern); no component is forked (`FormField`'s shared
+`INPUT_BASE` is untouched, so every other consumer — Contact, Careers Apply — stays visually
+unchanged); every corrected value is read directly from `TechGrit Homepage.dc.html` (lines 367-386);
+no new surface fill (removing the extra background tint moves the surface closer to the reference's
+plain dark background). **Anchor file**: `app/_home-components/SubscribeBand.tsx` (only file
+touched — no new tokens, no `globals.css` edit, no `data-model.md`/`contracts/`).
