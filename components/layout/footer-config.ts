@@ -1,4 +1,4 @@
-export type FooterLink = { label: string; href: string };
+export type FooterLink = { slug: string; label: string; href: string };
 export type FooterLinkGroup = { id: string; heading: string; links: FooterLink[] };
 export type SocialLink = { platform: "linkedin" | "youtube" | "spotify"; href: string; label: string };
 export type ContactDetail = { heading: string; value: string; href: string; sublabel: string };
@@ -17,51 +17,51 @@ export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
     id: "what-we-do",
     heading: "What We Do",
     links: [
-      { label: "AI-Accelerated Modernization", href: "/services#svc-modernization" },
-      { label: "Software Product Engineering", href: "/services#svc-product" },
-      { label: "Data & AI Engineering", href: "/services#svc-data-ai" },
-      { label: "Platform Engineering", href: "/services#svc-platform" },
-      { label: "Managed Services", href: "/services#svc-managed" },
-      { label: "AI Strategy & Roadmap", href: "/services#svc-strategy" },
-      { label: "Startups", href: "/services#svc-startups" },
+      { slug: "svc-modernization", label: "AI-Accelerated Modernization", href: "/services#svc-modernization" },
+      { slug: "svc-product", label: "Software Product Engineering", href: "/services#svc-product" },
+      { slug: "svc-data-ai", label: "Data & AI Engineering", href: "/services#svc-data-ai" },
+      { slug: "svc-platform", label: "Platform Engineering", href: "/services#svc-platform" },
+      { slug: "svc-managed", label: "Managed Services", href: "/services#svc-managed" },
+      { slug: "svc-strategy", label: "AI Strategy & Roadmap", href: "/services#svc-strategy" },
+      { slug: "svc-startups", label: "Startups", href: "/services#svc-startups" },
     ],
   },
   {
     id: "how-we-work",
     heading: "How We Work",
     links: [
-      { label: "Orbit AI Framework", href: "/frameworks#orbit-ai" },
-      { label: "Engagement Models", href: "/frameworks#engagement" },
-      { label: "Discovery Sprints", href: "/frameworks#discovery" },
+      { slug: "orbit-ai", label: "Orbit AI Framework", href: "/frameworks#orbit-ai" },
+      { slug: "engagement", label: "Engagement Models", href: "/frameworks#engagement" },
+      { slug: "discovery", label: "Discovery Sprints", href: "/frameworks#discovery" },
     ],
   },
   {
     id: "industries",
     heading: "Industries",
     links: [
-      { label: "HealthTech", href: "/#industries" },
-      { label: "FinTech", href: "/#industries" },
-      { label: "ConstructionTech", href: "/construction" },
-      { label: "HiTech", href: "/#industries" },
+      { slug: "ind-healthtech", label: "HealthTech", href: "/#industries" },
+      { slug: "ind-fintech", label: "FinTech", href: "/#industries" },
+      { slug: "ind-constructiontech", label: "ConstructionTech", href: "/construction" },
+      { slug: "ind-hitech", label: "HiTech", href: "/#industries" },
     ],
   },
   {
     id: "insights",
     heading: "Insights",
     links: [
-      { label: "Case Studies", href: "/case-studies" },
-      { label: "Blog", href: "/blog" },
-      { label: "Webinar", href: "/webinar" },
+      { slug: "case-studies", label: "Case Studies", href: "/case-studies" },
+      { slug: "blog", label: "Blog", href: "/blog" },
+      { slug: "webinar", label: "Webinar", href: "/webinar" },
     ],
   },
   {
     id: "company",
     heading: "Company",
     links: [
-      { label: "Our Story", href: "/about#our-story" },
-      { label: "Leadership & Advisory", href: "/about#leadership" },
-      { label: "Careers", href: "/careers" },
-      { label: "Contact", href: "/contact" },
+      { slug: "our-story", label: "Our Story", href: "/about#our-story" },
+      { slug: "leadership", label: "Leadership & Advisory", href: "/about#leadership" },
+      { slug: "careers", label: "Careers", href: "/careers" },
+      { slug: "contact", label: "Contact", href: "/contact" },
     ],
   },
 ];

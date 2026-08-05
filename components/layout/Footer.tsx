@@ -74,7 +74,7 @@ export default function Footer() {
             <div className="mb-[16px] block text-[11px] font-[800] tracking-[0.14em] text-ghost uppercase">{primaryGroup.heading}</div>
             <ul className="m-0 flex list-none flex-col gap-[10px] p-0">
               {primaryGroup.links.map((link) => (
-                <li key={link.label}>
+                <li key={link.slug}>
                   <Link href={link.href} className="text-[13.5px] text-muted [transition:color_var(--transition-18)] hover:text-white">
                     {link.label}
                   </Link>
@@ -90,7 +90,7 @@ export default function Footer() {
                   <div className="mb-[16px] block text-[11px] font-[800] tracking-[0.14em] text-ghost uppercase">{group.heading}</div>
                   <ul className="m-0 flex list-none flex-col gap-[10px] p-0">
                     {group.links.map((link) => (
-                      <li key={link.label}>
+                      <li key={link.slug}>
                         <Link href={link.href} className="text-[13.5px] text-muted [transition:color_var(--transition-18)] hover:text-white">
                           {link.label}
                         </Link>
