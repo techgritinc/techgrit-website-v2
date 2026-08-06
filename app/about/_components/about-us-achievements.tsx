@@ -1,5 +1,5 @@
 import type { AchievementsSection } from "../_data/types";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 export function AboutUsAchievements({ section }: { section: AchievementsSection }) {
   return (

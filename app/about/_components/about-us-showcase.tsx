@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { ShowcaseSection } from "../_data/types";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 export function AboutUsShowcase({ section }: { section: ShowcaseSection }) {
   return (

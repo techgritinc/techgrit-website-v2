@@ -36,10 +36,10 @@ export default function SubscribeBand() {
   }
 
   return (
-    <section id="webinars" className="relative z-overlay scroll-mt-[90px] border-t border-border-subtle bg-[rgba(255,255,255,0.015)]">
-      <div className="mx-auto max-w-[1020px] px-9 py-[88px]">
+    <section id="webinars" className="relative z-overlay scroll-mt-[90px]">
+      <div className="mx-auto max-w-[1280px] px-9 py-20">
         <div className="glass-card px-11 py-[38px]">
-          <div className="grid grid-cols-[1fr_auto] items-center gap-9 max-tg-md:grid-cols-1 max-tg-md:gap-11">
+          <div className="grid grid-cols-[0.8fr_1.4fr] items-center gap-10 max-tg-md:grid-cols-1 max-tg-md:gap-11">
             <div>
               <h3 className="text-[25px] leading-[1.2]">Stay ahead of the legacy.</h3>
               <p className="mt-2 text-[16px] leading-[1.5] text-muted">
@@ -48,33 +48,44 @@ export default function SubscribeBand() {
             </div>
 
             {status === "success" ? (
-              <div className="min-w-[300px] rounded-card border border-teal bg-[rgba(15,118,110,0.18)] px-[30px] py-5 text-center">
+              <div className="w-full tg-sm:w-auto tg-sm:min-w-[300px] rounded-card border border-teal bg-[rgba(15,118,110,0.18)] px-[30px] py-5 text-center">
                 <div className="text-2xl text-green">&#10003;</div>
                 <div className="mt-1 text-[16px] leading-[normal] font-bold text-primary">Thanks for submitting!</div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-2.5">
-                <FormField label="Name" name="name" type="text" placeholder="Name" containerClassName="w-[150px]" />
+              <form onSubmit={handleSubmit} noValidate className="flex flex-col tg-sm:flex-row tg-sm:items-center gap-3 w-full">
+                <FormField
+                  label="Name"
+                  name="name"
+                  type="text"
+                  placeholder="Name"
+                  containerClassName="flex-1 tg-sm:flex-[1_1_0px] min-w-0 w-full"
+                  inputClassName="!px-[18px] !py-[15px] !min-h-[52px]"
+                />
                 <FormField
                   label="Business Email"
                   name="email"
                   type="email"
                   placeholder="Business Email"
-                  containerClassName="w-[180px]"
+                  containerClassName="flex-1 tg-sm:flex-[2_1_0px] min-w-0 w-full"
+                  inputClassName="!px-[18px] !py-[15px] !min-h-[52px]"
                 />
                 <Button
                   type="submit"
-                  className="!px-[24px] !py-3 gap-[7px] rounded-[10px] leading-[normal] shadow-nav-btn hover:shadow-nav-btn active:shadow-nav-btn"
+                  className="shrink-0 w-full tg-sm:w-auto !px-[24px] !py-[15px] !min-h-[52px] !gap-[7px] !rounded-[10px] !shadow-nav-btn"
                 >
-                  Submit <span aria-hidden="true" className="inline-block leading-none">&rarr;</span>
+                  Submit <span aria-hidden="true" className="inline-block leading-none">&#8594;</span>
                 </Button>
               </form>
             )}
           </div>
           {status === "error" && errorMessage && (
-            <p role="alert" className="mt-3 text-sm font-semibold text-error">
+            <div
+              role="alert"
+              className="mt-[14px] text-white bg-overlay-orange border border-orange rounded-[8px] px-[13px] py-2.5 text-[14px] leading-[normal] font-semibold"
+            >
               {errorMessage}
-            </p>
+            </div>
           )}
         </div>
       </div>

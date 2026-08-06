@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { ServiceDetailSection as ServiceDetailSectionData, ServiceAccent } from "../_data/types";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
-import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
 const ACCENT_VAR: Record<ServiceAccent, string> = {
   blue: "var(--color-blue-light)",

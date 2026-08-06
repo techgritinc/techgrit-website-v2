@@ -1,5 +1,5 @@
 import type { FinalCtaSection } from "../_data/types";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 export function ServicesFinalCta({ section }: { section: FinalCtaSection }) {
   return (

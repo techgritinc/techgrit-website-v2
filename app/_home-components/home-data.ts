@@ -18,31 +18,47 @@ export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 // ---------------------------------------------------------------------------
 
 export type DeliveryStat = {
+  id: string;
   label: string;
   /** Present only for stats that count up on scroll-into-view (matches the
    * reference's data-count elements); absent for the static "zero" stat. */
   count?: number;
   suffix?: string;
+  suffixClassName?: string;
   staticValue?: string;
   /** Whether the value uses the brand gradient text-clip treatment. */
   gradient?: boolean;
 };
 
 export const DELIVERY_STATS: DeliveryStat[] = [
-  { count: 10, suffix: "X", label: "Delivery Speed" },
-  { count: 6, suffix: " weeks", label: "Sprint to Scale", gradient: true },
-  { staticValue: "zero", label: "Legacy Debt" },
+  { id: "delivery-speed", count: 10, suffix: "X", suffixClassName: "text-amber-light", label: "Delivery Speed" },
+  {
+    id: "sprint-to-scale",
+    count: 6,
+    suffix: " weeks",
+    suffixClassName: "text-amber-light text-stat",
+    label: "Sprint to Scale",
+    gradient: true,
+  },
+  { id: "legacy-debt", staticValue: "zero", label: "Legacy Debt" },
 ];
 
-export type TrustedClientLogo = { src: string | null; alt: string; height: number };
+export type TrustedClientLogo = {
+  /** Stable, content-independent identity for list rendering (Principle III) —
+   * never derive the `.map()` key from `alt`, which is display text. */
+  id: string;
+  src: string | null;
+  alt: string;
+  height: number;
+};
 
 export const TRUSTED_CLIENT_LOGOS: TrustedClientLogo[] = [
-  { src: "/logos/client-evolve.png", alt: "Evolve", height: 28 },
-  { src: "/logos/client-sunnyday.png", alt: "Sunny Day Fund", height: 44 },
-  { src: "/logos/client-bcbs.png", alt: "BlueCross BlueShield", height: 36 },
-  { src: "/logos/client-aqua.png", alt: "AquA Finance", height: 44 },
-  { src: "/logos/client-commsai.png", alt: "CommsAI", height: 40 },
-  { src: "/logos/client-turnqey.png", alt: "Turnqey", height: 28 },
+  { id: "evolve", src: "/logos/client-evolve.png", alt: "Evolve", height: 28 },
+  { id: "sunnyday", src: "/logos/client-sunnyday.png", alt: "Sunny Day Fund", height: 44 },
+  { id: "bcbs", src: "/logos/client-bcbs.png", alt: "BlueCross BlueShield", height: 36 },
+  { id: "aqua", src: "/logos/client-aqua.png", alt: "AquA Finance", height: 44 },
+  { id: "commsai", src: "/logos/client-commsai.png", alt: "CommsAI", height: 40 },
+  { id: "turnqey", src: "/logos/client-turnqey.png", alt: "Turnqey", height: 28 },
 ];
 
 // ---------------------------------------------------------------------------

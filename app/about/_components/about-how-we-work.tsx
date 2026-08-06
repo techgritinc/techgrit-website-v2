@@ -1,6 +1,6 @@
 import type { ProcessSection } from "../_data/types";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
-import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
 export function AboutHowWeWork({ section }: { section: ProcessSection }) {
   return (

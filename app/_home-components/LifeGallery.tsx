@@ -1,3 +1,5 @@
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
 import MediaSlot from "@/components/ui/MediaSlot";
 import { CULTURE_GALLERY_IMAGES } from "./home-data";
 
@@ -54,6 +56,9 @@ export default function LifeGallery({
           </div>
         ) : (
           <>
+            <Badge tone="orange" className="mb-4">
+              Inside TechGrit
+            </Badge>
             <h2 className="text-[clamp(28px,3.4vw,40px)] font-bold leading-[normal] tracking-[-0.03em]">{heading}</h2>
             <p className="mt-3 max-w-[560px] text-[16.5px] leading-[1.6] text-text-68">{description}</p>
           </>
@@ -82,6 +87,17 @@ export default function LifeGallery({
             );
           })}
         </div>
+
+        {variant === "home" && (
+          <div className="mt-11 flex flex-wrap items-center justify-center gap-4">
+            <Button href="/careers" size="md">
+              Explore Careers <span aria-hidden="true">&rarr;</span>
+            </Button>
+            <Button href="/about" variant="ghost" size="md">
+              Meet the team <span aria-hidden="true" className="text-orange">&rarr;</span>
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

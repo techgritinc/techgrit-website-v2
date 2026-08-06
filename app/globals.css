@@ -5,6 +5,14 @@
 @import "./tokens.css";
 @import "tailwindcss";
 
+/* Exclude non-source docs from Tailwind's automatic class-candidate scan —
+ * spec-kit markdown under specs/ and docs/ documents Tailwind arbitrary-value
+ * syntax as prose (e.g. `bg-[image:var(...)]` shorthand), which Turbopack's
+ * scanner otherwise treats as a real candidate class and fails to compile. */
+@source not "../specs";
+@source not "../docs";
+@source not "../.specify";
+
 /* ----------------------------------------------------------
  * Tailwind @theme — maps tokens into Tailwind utility classes
  * e.g. bg-ink, text-orange, font-display, rounded-card, etc.
@@ -90,6 +98,8 @@
   --color-overlay-blue-soft: var(--color-overlay-blue-soft);
   --color-border-faint: var(--color-border-faint);
   --color-border-hairline: var(--color-border-hairline);
+  --color-border-hairline-08: var(--color-border-hairline-08);
+  --color-border-green-85: var(--color-border-green-85);
   --color-border-plain: var(--color-border-plain);
   --color-border-cover: var(--color-border-cover);
   --color-glass-faint: var(--color-glass-faint);
@@ -311,6 +321,7 @@
   --text-14-5: var(--text-14-5);
   --text-21: var(--text-21);
   --text-stat: var(--text-stat);
+  --text-stat-count: var(--text-stat-count);
 
   /* Letter-spacing — fixes tracking-wide/wider/widest resolving to
    * Tailwind's own 0.025/0.05/0.1em instead of our 0.06/0.10/0.16em.
@@ -326,6 +337,8 @@
   --tracking-01: var(--ls-01);
   --tracking-hint: var(--ls-hint);
   --tracking-badge: var(--ls-badge);
+  --tracking-stat-count: var(--ls-stat-count);
+  --tracking-24: var(--ls-24);
 
   /* Blur — fixes the 8-spot "too hazy" bug (blur-md was never registered,
    * so components fell back to blur-lg) plus the Final CTA panel. */
@@ -436,6 +449,14 @@
   --lift-hover-2: var(--lift-hover-2);
   --lift-hover-5: var(--lift-hover-5);
   --lift-hover-6: var(--lift-hover-6);
+
+  /* Ghost button (v2.2 Phase 1 — components/ui/Button.tsx) */
+  --gradient-ghost: var(--gradient-ghost);
+  --gradient-ghost-hover: var(--gradient-ghost-hover);
+  --color-border-ghost: var(--color-border-ghost);
+  --color-border-ghost-hover: var(--color-border-ghost-hover);
+  --shadow-btn-ghost: var(--shadow-btn-ghost);
+  --blur-ghost: var(--blur-ghost);
 }
 @layer base {
   /* ----------------------------------------------------------
@@ -1146,6 +1167,19 @@
     }
   }
 
+  /* Live-status ripple ring (Hero Live-Webinar badge dot, v2.2 Phase 2) */
+  @keyframes tgLiveRipple {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(3.2);
+      opacity: 0;
+    }
+  }
+
   /* Shimmer sweep (skeleton / loading) */
   @keyframes tgshimmer {
     0% {
@@ -1323,10 +1357,6 @@
   }
 
   @media (min-width: 960px) {
-    h1 {
-      font-size: 44px;
-    }
-
     .section {
       padding-block: 60px;
     }

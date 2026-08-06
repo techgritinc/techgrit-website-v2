@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { CultureGallerySection, CulturePhoto } from "../_data/types";
-import { RevealOnScroll } from "@/reusable-components/reveal-on-scroll";
-import { SectionEyebrow } from "@/reusable-components/section-eyebrow";
+import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
 function layoutClass(layout: CulturePhoto["layout"]) {
   if (layout === "tall") return "sm:row-span-2";

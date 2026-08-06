@@ -8,11 +8,13 @@ import PlatformSection from "@/app/_home-components/PlatformSection";
 import ReImagineSection from "@/app/_home-components/ReImagineSection";
 import SubscribeBand from "@/app/_home-components/SubscribeBand";
 import TestimonialsSection from "@/app/_home-components/TestimonialsSection";
+import TrustedClients from "@/app/_home-components/TrustedClients";
 
 export default function Home() {
   return (
     <main>
       <Hero />
+      <TrustedClients />
       <SubscribeBand />
       <PlatformSection />
       <MethodologySection />
