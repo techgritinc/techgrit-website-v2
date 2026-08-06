@@ -1054,3 +1054,189 @@ left as a gap between planning and implementation. 2 further findings (M1, M2) c
 count mismatches within this document itself (2→3 pre-existing deltas; 6→7 new tokens); 1 finding (L1)
 pre-emptively specified stable `id`-keying for the new metrics-card array before it was ever
 implemented. No new violations beyond what's now fixed above. Gate: PASS.
+
+## Homepage Blog Teaser Section (FR-010)
+
+**Date**: 2026-08-06. Extends this Phase 2 addendum to also cover the new homepage Blog teaser
+section, per spec.md FR-010 and Clarifications Session 2026-08-06. Hero, Trusted Clients, Subscribe
+Band, Methodology, Re-Imagine, Industries, and Testimonials above are unaffected; Life at TechGrit and
+the final CTA remain unplanned. `frontend-design` skill consulted for this addendum's craft surfaces
+(the 3 decorative icons and the per-card gradient/glow treatment) — see UI Design Approach below.
+
+This section does not exist today — no `app/_home-components/BlogSection.tsx`, no render call in
+`app/page.tsx`. Per spec.md Clarifications (Session 2026-08-06), its 3 cards use
+`TechGrit Homepage.dc.html`'s own literal, reference-authored content (lines 785-821) verbatim — topic
+label, title, excerpt, read-time, decorative icon, and per-card gradient-tint background — rather than a
+dynamic pull from the 9 real posts in `app/blog/_data/blog-content.ts` (which has no icon field, no
+featured/top-3 concept, and only placeholder `"#"` hrefs). Both the ghost button and every card's "Read
+more" link go to `/blog`.
+
+1. **`components/ui/icons.tsx`** — add 3 new named icon exports, extracted verbatim from the
+   reference's 3 decorative header icons (lines 789/801/813), following the file's existing
+   `IconProps`/`{...props}`-last convention: `BlogConstellationIcon` (circle + 8 radiating strokes, card
+   1 — "AI-First SDLC"), `BlogCodeBracketIcon` (two opposing chevrons, `</>`, card 2 — "Engineering"),
+   `BlogPackageIcon` (3D box outline + seam lines, card 3 — "Quality"). Unlike the file's existing
+   colored-circle-badge icons (`IndustryFinTechIcon` et al., which hardcode `stroke="#fff"`), these
+   hardcode `stroke="var(--color-icon-stroke)"` — the existing, exact-match token for "decorative SVG
+   icon stroke" (already used by the Case Studies panels), reused here rather than duplicating its
+   `rgba(255,255,255,0.85)` value as a second literal.
+2. **`app/tokens.css`** — add 15 new tokens, none of which exist today at these exact values, each in
+   its existing numbered section:
+   - **§5 Gradients**: `--gradient-blog-teaser-orange: linear-gradient(150deg, rgba(232, 119, 34, 0.28),
+     rgba(154, 52, 18, 0.50));`, `--gradient-blog-teaser-blue: linear-gradient(150deg, rgba(2, 132, 199,
+     0.28), rgba(3, 60, 90, 0.50));`, `--gradient-blog-teaser-teal: linear-gradient(150deg, rgba(15, 118,
+     110, 0.30), rgba(6, 52, 48, 0.50));` — each card's header-block background (lines 787/799/811). Per
+     this codebase's established gradient-token convention (`--gradient-testimonial-video`,
+     `--gradient-phase-node`), each is one composite literal-value token, not decomposed into separately
+     referenced stop tokens — card 1's first stop happens to numerically equal the existing
+     `--color-overlay-orange-strong` (0.28), which is not a Principle I conflict, since the codebase's
+     gradient tokens are already written as literal composites, never `var()`-nested stops.
+   - **§4 Borders & Glass**: `--color-glow-white-18: rgba(255, 255, 255, 0.18);` (the radial highlight
+     overlay shared by all 3 card headers, lines 788/800/812 — a distinct semantic job from the
+     value-identical `--color-border-18`, which is annotated "Phase-node border — todo state", the same
+     single-job concern `/speckit.analyze` already raised for `--text-industry-title`/`--radius-16`);
+     `--color-border-blue-55: rgba(2, 132, 199, 0.55);` (card 2 hover border, line 798 — distinct from
+     the existing `--color-border-blue-strong` at 0.60); `--color-border-teal-60: rgba(15, 118, 110,
+     0.60);` (card 3 hover border, line 810 — distinct from the existing `--color-border-teal-strong` at
+     0.70). Card 1's hover border (`rgba(232, 119, 34, 0.55)`, line 786) is an exact match for the
+     existing `--color-hover-orange-border-55` and is reused verbatim — no new token.
+   - **§2 Text Colors**: `--color-text-35: rgba(255, 255, 255, 0.35);` (the topic/read-time meta row's
+     dot separator, lines 792/804/816 — no existing text-color token sits at exactly 0.35; the
+     read-time text itself, `rgba(255,255,255,0.55)`, is an exact match for the existing
+     `--color-text-55` and is reused verbatim).
+   - **§6 Typography**: `--text-blog-meta: 12px;` (the topic/read-time label size — deliberately not a
+     reuse of the value-close-but-not-exact `--text-2xs` at 12.5px, a genuine 0.5px miss this session's
+     pixel-perfectness direction does not accept) and `--ls-blog-meta: 0.14em;` (the same label's
+     tracking — deliberately not a reuse of the value-identical `--ls-hint`, annotated "Methodology
+     scroll-hint caption", the same single-job-token precedent as `--text-industry-title` vs.
+     `--text-stat` and `--radius-16` vs. `--radius-tile` elsewhere in this feature).
+   - **§10 Shadows**: `--shadow-blog-teaser-orange`/`-blue`/`-teal: 0 0 40px -8px rgba(<card-color>,
+     0.15);` (each card's resting-state shadow, lines 786/798/810) and
+     `--shadow-blog-teaser-orange-hover`/`-blue-hover`/`-teal-hover: 0 0 60px -6px rgba(<card-color>,
+     0.35);` (each card's hover shadow, same lines) — 6 tokens, 2 distinct shapes (`40px -8px`/`0.15` vs.
+     `60px -6px`/`0.35`), 3 colors each; none matches any existing shadow token's shape+value pair
+     (the closest, `--shadow-reimagine-glow`/`-soft`, is a different shape, `0 0 60px -10px`).
+   - **No new token needed** for the card's base chrome: the reference's `20px` radius, `rgba(255,255,255,0.04)`
+     background, `rgba(255,255,255,0.1)` border, and `8px` backdrop-blur are exact matches for the
+     existing `--radius-2xl`, `--color-glass-4`, `--color-border-image`, and `--blur-md` — all reused
+     verbatim (the last two already power every other `GlassCard` variant's shared base classes).
+3. **`app/globals.css`** — map T-item-2's 15 new tokens into `@theme inline` (the 3 gradients via the
+   existing arbitrary-property pattern already used for `--gradient-testimonial-*`, no bare-utility
+   equivalent; the rest as canonical utilities: `bg-glow-white-18`, `border-border-blue-55`,
+   `border-border-teal-60`, `text-35`, `text-blog-meta`, `tracking-blog-meta`,
+   `shadow-blog-teaser-orange`/`-blue`/`-teal`, `hover:shadow-blog-teaser-orange-hover`/`-blue-hover`/
+   `-teal-hover`). **Also add** two missing spacing mappings this section's own markup needs and that
+   `tokens.css` already defines but `globals.css` never mapped — `--spacing-tg-6: var(--space-6);` (16px,
+   needed for the "Read more" row's `margin-top`) and `--spacing-tg-10: var(--space-10);` (24px, needed
+   for the card body's top padding) — exactly the "token exists, no `@theme inline` entry" bug class this
+   session's own CLAUDE.md calls out explicitly; both existing tokens were simply never given a canonical
+   utility before now, since no prior section happened to need 16px/24px via this specific `tg-` naming
+   scheme.
+4. **`components/ui/GlassCard.tsx`** — add `"blogTeaser"` as a new member of the `GlassCardVariant` union
+   (a required prerequisite, since all 4 `Record<GlassCardVariant, string>`s below only type-check once
+   it exists in that union), then add a matching entry to each: `CARD_VARIANTS.blogTeaser` —
+   `"flex flex-col overflow-hidden rounded-2xl border-border-image bg-glass-4 hover:-translate-y-[6px]"`
+   (matching the reference's `translateY(-6px)` hover lift, line 786, distinct from every other variant's
+   `-5px`); `ICON_VARIANTS.blogTeaser` — `"h-18 w-18"` (72px, Tailwind's own canonical default scale step
+   — no dedicated size token needed, unlike this feature's other one-off arbitrary sizes); `TITLE_VARIANTS.blogTeaser`
+   — `"mt-tg-4 text-[19px] font-bold text-white leading-[1.32]"` (12px top margin via the existing
+   `--space-4`/`tg-4` mapping, already canonical); `DESC_VARIANTS.blogTeaser` —
+   `"mt-tg-3 text-[14.5px] leading-[1.6] text-muted"` (`text-muted` added explicitly, per the same
+   silent-inheritance lesson `/speckit.analyze` already flagged for the Industries variant's description
+   color). This is a new, distinct variant from the existing `"blogCard"`/`"blogFeatured"` (different
+   shape — a full 190px icon-centered header block, not a 140px topic-badge-overlay header with an
+   author-avatar footer) — not a fork of either, and neither existing variant's `Record` entries change.
+5. **New `app/_home-components/BlogSection.tsx`** — a local `BLOG_TEASER_POSTS` array of 3 entries (each
+   carrying its own `id` field from the start, per this feature's established Principle III
+   stable-identity convention — `TestimonialsSection`'s metrics cells, `Hero`'s `DeliveryStat`s, and
+   `TrustedClients`' logos all did the same rather than keying on display text), holding the reference's
+   literal `topic`/`title`/`excerpt`/`readTime`/`icon`/per-card gradient-class/hover-border-class/
+   hover-shadow-class/resting-shadow-class/topic-text-color-class fields — this array lives in this file,
+   not `home-data.ts`, since (like the Testimonials metrics array) no other section consumes it, and
+   adding it to the shared data module now would be speculative structure. The section's own outer
+   `<section>` wrapper uses `max-w-(--container-max) px-9 pt-tg-21 pb-20` (matching the reference's
+   `max-width:1280px; padding:60px 36px 80px`, line 777 — `--space-21`/`px-9`/`pb-20` are all already-
+   canonical, no new token needed), the same container convention `IndustriesSection`/`TestimonialsSection`
+   already use. The section renders:
+   - A left-aligned header (hand-rolled eyebrow — `"From the blog"`, `text-2xs font-bold tracking-widest
+     text-orange uppercase`, matching `TestimonialsSection`'s own bespoke-markup eyebrow convention, not
+     the `SectionEyebrow` component, since neither sibling section on this page uses it and FR-010 does
+     not call for dash removal — plus an `h2` — `"Perspectives on AI-first delivery."`,
+     `text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.06] tracking-[-0.03em] text-white max-w-[560px]`,
+     the identical clamp `LifeGallery.tsx` already uses elsewhere on this same page) alongside a
+     right-aligned ghost `<Button href="/blog" variant="ghost">` (`"Visit the blog"` + a
+     `text-orange` arrow span, matching `IndustriesSection`'s own ghost-button-with-arrow convention
+     exactly), both inside the same `flex flex-wrap items-end justify-between gap-6 mb-tg-15` row
+     `IndustriesSection`'s own header already establishes. The button's own `className` override —
+     `"px-tg-9! py-tg-5a! min-h-tg-19a!"` — corrects `Button`'s shared `md` default (`26px`/`14px`) to the
+     reference's own `22px`/`15px`/`52px` (lines 783, canonical `tg-9`/`tg-5a`/`tg-19a` classes, all
+     already-mapped exact matches — not a new arbitrary-value override).
+   - A 3-card grid (`grid grid-cols-3 gap-6 max-tg-md:grid-cols-1`) over `BLOG_TEASER_POSTS`, each card an
+     `<a href="/blog" style={{ display: "contents" }}>` (matching `/blog`'s own `blog-post-grid.tsx` and
+     `IndustriesSection`'s established whole-card-link convention) wrapping a
+     `<GlassCard variant="blogTeaser" hoverBorderColor={post.hoverBorderClass} className={post.shadowClasses}>`
+     containing: a `relative flex h-[190px] items-center justify-center overflow-hidden` header block
+     with `bg-[image:var(--gradient-blog-teaser-*)]` (per-card), an `absolute inset-0` radial-highlight
+     div (`bg-glow-white-18`, per-card `[background-position]` matching the reference's 30%/70%/50%
+     positions) and a centered `<GlassCardIcon variant="blogTeaser"><post.icon
+     className="text-icon-stroke" /></GlassCardIcon>`; then a body (`pt-tg-10 px-tg-11 pb-tg-12`) holding
+     a meta row (`flex items-center gap-tg-3 text-blog-meta font-bold tracking-blog-meta uppercase` —
+     topic in `post.topicColorClass`, a `text-35` dot, read-time in `text-55`), a
+     `<GlassCardTitle variant="blogTeaser">`, a `<GlassCardDescription variant="blogTeaser">`, and a
+     `"Read more"` + arrow row (`mt-tg-6 inline-flex items-center gap-tg-1b text-sm font-bold`, in the
+     card's own `post.topicColorClass`).
+6. **`app/page.tsx`** — render `<BlogSection />` between `<CaseStudiesSection />` and `<LifeGallery />`,
+   matching the reference's own document order (Testimonials → Case Studies → home-blogs → Inside
+   TechGrit, lines 606-825).
+
+Nothing else changes. Hero, Trusted Clients, Subscribe Band, Methodology, Re-Imagine, Industries,
+Testimonials, and Case Studies are untouched; Life at TechGrit and the final CTA remain unplanned.
+
+**UI Design Approach (Blog teaser)**: `frontend-design` skill consulted for this addendum's 2 craft
+surfaces. **Decorative icons** — each stays a simple 2-stroke glyph at a low, semi-transparent opacity
+via `--color-icon-stroke` (already the codebase's exact convention for "icon as texture, not focal
+point" elsewhere), so the icon reads as ambient card decoration behind/within its gradient header rather
+than competing with the card's title below it — matching the reference's own treatment exactly, not
+inventing a bolder icon-forward look. **Per-card gradient/glow identity** — the 3 cards' orange/blue/teal
+palette reuses hues already established elsewhere on this exact page (Industries' badge colors,
+Testimonials' avatar-ring colors), so the Blog section reads as "one more voice in an already-consistent
+color system," not a fourth, unrelated palette introduced solely for this section.
+
+**Constitution check** — PASS on all six principles: all 15 new literal values are added to
+`tokens.css` first, in their existing numbered sections, before any component consumes them (Principle
+I) — including 2 deliberately-dedicated tokens (`--text-blog-meta`, `--ls-blog-meta`) rather than reusing
+value-close-or-value-identical-but-differently-scoped tokens (`--text-2xs`, `--ls-hint`), following this
+feature's own established precedent (`--text-industry-title`, `--radius-16`); no component is forked —
+`blogTeaser` is a new, additive `GlassCard` variant, following the exact same `Record`-entry pattern
+every prior variant in this feature used, and the 3 new icons join the constitution's single
+consolidated icon file (Principle III); every value (colors, gradients, icon shapes, card content,
+button padding, document order) is read directly from `TechGrit Homepage.dc.html` lines 776-825, not
+invented — including the deliberate choice to keep the 3 cards' content static/reference-exact rather
+than dynamically sourced from `/blog`'s real post data, per spec.md's own Clarifications (Principle IV);
+no new surface fill — the per-card gradients stay confined to a 190px header block within an otherwise
+translucent glass card, never a full-bleed page surface (Principle V). Canonical Tailwind classes are
+used throughout in preference to arbitrary-value syntax wherever a token exists or is newly mapped
+(`rounded-2xl`, `bg-glass-4`, `border-border-image`, `h-18`, `w-18`, `mt-tg-4`, `mt-tg-3`, `mt-tg-6`,
+`gap-tg-3`, `gap-tg-1b`, `gap-6`, `mb-tg-15`, `pt-tg-10`, `px-tg-11`, `pb-tg-12`, `px-tg-9!`, `py-tg-5a!`,
+`min-h-tg-19a!`, `text-blog-meta`, `tracking-blog-meta`, `text-35`, `text-55`, `text-amber-light`,
+`text-blue-light`, `text-teal-light`, `text-orange`, `bg-glow-white-18`, `border-border-blue-55`,
+`border-border-teal-60`, `shadow-blog-teaser-orange`/`-blue`/`-teal`,
+`hover:shadow-blog-teaser-orange-hover`/`-blue-hover`/`-teal-hover`) — the only remaining arbitrary-value
+classes are the single-usage `h-[190px]` header height and the `text-[19px]`/`leading-[1.32]`/
+`text-[14.5px]` typography values, none of which has an existing or newly-warranted token (consistent
+with this feature's own precedent for one-off values, e.g. the Re-Imagine grid's `h-[180px]` image slot).
+
+**Anchor files**: `components/ui/icons.tsx` (3 new exports: `BlogConstellationIcon`,
+`BlogCodeBracketIcon`, `BlogPackageIcon`), `app/tokens.css` (15 new tokens across §2/§4/§5/§6/§10),
+`app/globals.css` (their `@theme inline` mappings, plus the 2 missing `--spacing-tg-6`/`--spacing-tg-10`
+mappings), `components/ui/GlassCard.tsx` (new `"blogTeaser"` variant across all 4 `Record`s), new
+`app/_home-components/BlogSection.tsx`, and `app/page.tsx` (`<BlogSection />` render call) — no
+`data-model.md`/`contracts/` change (presentation-only, same as every prior addendum in this plan), no
+other homepage section or page touched.
+
+## Post-Design Constitution Re-Check (Blog Teaser addendum)
+
+Research (Phase 0 of this addendum) confirmed every new token value against the reference directly, and
+confirmed 2 pre-existing `tokens.css` entries (`--space-6`, `--space-10`) had never been given an
+`@theme inline` mapping before now — the same missing-mapping bug class this session's CLAUDE.md calls
+out — before any file changed. No new violations. Gate: PASS.

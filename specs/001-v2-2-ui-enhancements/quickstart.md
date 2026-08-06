@@ -320,3 +320,45 @@ test framework exists in this repo — this is manual, plus `npm run lint`/`npm 
    — including the video card's previously-missing star rating [finding C1] — edge fades, drag
    handlers). No other homepage section, no other page — confirm `--color-badge-ink-50`'s only consumer
    is this file (the rename must not silently affect any other component).
+
+## 20. Homepage Blog teaser section (new `app/_home-components/BlogSection.tsx`) — Phase 2 addendum, FR-010
+
+Scope: new `BlogSection.tsx`, plus `components/ui/icons.tsx` (3 new exports), `components/ui/GlassCard.tsx`
+(1 new variant), `app/tokens.css`/`globals.css`, and `app/page.tsx`'s render order. No other homepage
+section, no other page, no change to `app/blog/_data/blog-content.ts` or `/blog` itself. No test
+framework exists in this repo — this is manual, plus `npm run lint`/`npm run build`.
+
+1. Open `/` at desktop width (≥1140px) and scroll past the homepage's Case Studies preview section to
+   the new "From the blog" section.
+2. Confirm the eyebrow ("From the blog") and heading ("Perspectives on AI-first delivery.") are
+   left-aligned, and a ghost button ("Visit the blog →") is right-aligned in the same row, wrapping
+   below the text on narrow widths.
+3. Confirm exactly 3 cards render, each with: a colored gradient header block (orange/blue/teal) with a
+   centered decorative icon (constellation / code-bracket / package), a topic label + dot + read-time
+   meta row, a title, a description, and a "Read more →" link in the card's own topic color.
+4. Confirm the 3 cards' content — topic ("AI-First SDLC"/"Engineering"/"Quality"), titles, excerpts, and
+   read-times — matches `TechGrit Homepage.dc.html` (lines 785-821) exactly, and does **not** match any
+   of the 9 real posts' titles/topics on `/blog` (confirming the content is static/reference-exact, not a
+   dynamic pull).
+5. Hover each card — confirm it lifts (`-6px`), its border tints to its own color (orange/blue/teal), and
+   its glow shadow widens/brightens (distinct from its resting-state shadow).
+6. Click anywhere on a card (not just its "Read more" text) — confirm it navigates to `/blog`. Click the
+   "Visit the blog" ghost button — confirm it also navigates to `/blog`.
+7. Narrow the viewport to tablet/mobile (`md`/`sm`) — confirm the 3-card grid collapses to a single
+   column and the header row's ghost button wraps below the eyebrow/heading without overlapping.
+8. Confirm the section renders between the homepage's Case Studies preview section and "Life at
+   TechGrit," and that no other homepage section shifted position or content.
+
+## 21. Gate check (Blog Teaser Section)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/tokens.css` (15 new tokens across Text Colors/Borders & Glass/Gradients/
+   Typography/Shadows — see research.md §16 for the full list), `app/globals.css` (their `@theme inline`
+   mappings, plus 2 previously-missing spacing mappings, `--spacing-tg-6`/`--spacing-tg-10`, for
+   pre-existing tokens that had no canonical utility before now), `components/ui/icons.tsx` (3 new
+   exports: `BlogConstellationIcon`, `BlogCodeBracketIcon`, `BlogPackageIcon`), `components/ui/GlassCard.tsx`
+   (1 new `"blogTeaser"` variant added across all 4 `Record`s — the existing `"blogCard"`/`"blogFeatured"`
+   variants and their consumers on `/blog` are untouched), new `app/_home-components/BlogSection.tsx`, and
+   `app/page.tsx` (`<BlogSection />` render call). No other homepage section, no other page —
+   `app/blog/_data/blog-content.ts`, `app/blog/_components/blog-post-grid.tsx`, and every other `/blog`
+   file must be pixel- and byte-unchanged.

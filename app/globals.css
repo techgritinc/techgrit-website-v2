@@ -223,6 +223,9 @@
   --color-modal-backdrop: var(--color-modal-backdrop);
   --color-overlay-orange-18: var(--color-overlay-orange-18);
   --color-overlay-green-12: var(--color-overlay-green-12);
+  --color-border-blue-55: var(--color-border-blue-55);
+  --color-border-teal-60: var(--color-border-teal-60);
+  --color-glow-white-18: var(--color-glow-white-18);
 
   /* Legacy text-text-* generated utilities used across the codebase */
   --color-text-85: var(--color-text-85);
@@ -236,6 +239,7 @@
   --color-text-40: var(--color-text-40);
   --color-text-32: var(--color-text-32);
   --color-text-13: var(--color-text-13);
+  --color-text-35: var(--color-text-35);
 
   /* Clean text-* generated utilities */
   --color-85: var(--color-text-85);
@@ -249,6 +253,7 @@
   --color-40: var(--color-text-40);
   --color-32: var(--color-text-32);
   --color-13: var(--color-text-13);
+  --color-35: var(--color-text-35);
 
   /* Spacing */
   --spacing-tg-1: var(--space-1);
@@ -263,10 +268,12 @@
   --spacing-tg-4a: var(--space-4a);
   --spacing-tg-5: var(--space-5);
   --spacing-tg-5a: var(--space-5a);
+  --spacing-tg-6: var(--space-6);
   --spacing-tg-7: var(--space-7);
   --spacing-tg-8: var(--space-8);
   --spacing-tg-9: var(--space-9);
   --spacing-tg-9a: var(--space-9a);
+  --spacing-tg-10: var(--space-10);
   --spacing-tg-11: var(--space-11);
   --spacing-tg-12: var(--space-12);
   --spacing-tg-13: var(--space-13);
@@ -326,6 +333,7 @@
   --text-21: var(--text-21);
   --text-stat: var(--text-stat);
   --text-stat-count: var(--text-stat-count);
+  --text-blog-meta: var(--text-blog-meta);
 
   /* Letter-spacing — fixes tracking-wide/wider/widest resolving to
    * Tailwind's own 0.025/0.05/0.1em instead of our 0.06/0.10/0.16em.
@@ -343,6 +351,7 @@
   --tracking-badge: var(--ls-badge);
   --tracking-stat-count: var(--ls-stat-count);
   --tracking-24: var(--ls-24);
+  --tracking-blog-meta: var(--ls-blog-meta);
 
   /* Blur — fixes the 8-spot "too hazy" bug (blur-md was never registered,
    * so components fell back to blur-lg) plus the Final CTA panel. */
@@ -477,6 +486,15 @@
   --shadow-testimonial-hover-video: var(--shadow-testimonial-hover-video);
   --shadow-testimonial-hover-text: var(--shadow-testimonial-hover-text);
   --shadow-testimonial-avatar: var(--shadow-testimonial-avatar);
+
+  /* Homepage Blog teaser section (v2.2 FR-010) */
+  --shadow-blog-teaser-orange: var(--shadow-blog-teaser-orange);
+  --shadow-blog-teaser-blue: var(--shadow-blog-teaser-blue);
+  --shadow-blog-teaser-teal: var(--shadow-blog-teaser-teal);
+  --shadow-blog-teaser-orange-hover: var(--shadow-blog-teaser-orange-hover);
+  --shadow-blog-teaser-blue-hover: var(--shadow-blog-teaser-blue-hover);
+  --shadow-blog-teaser-teal-hover: var(--shadow-blog-teaser-teal-hover);
+
   --text-industry-title: var(--text-industry-title);
   --text-testimonial-stat: var(--text-testimonial-stat);
   --tracking-title-tight: var(--ls-title-tight);

@@ -92,7 +92,7 @@ export default function TestimonialsSection() {
         </div>
       </div>
 
-      <div data-reveal className="relative pb-22.5 overflow-hidden">
+      <div data-reveal className="relative pb-15 overflow-hidden">
         <div
           ref={trackRef}
           onPointerDown={onPointerDown}

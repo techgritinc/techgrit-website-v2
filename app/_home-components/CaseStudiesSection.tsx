@@ -9,10 +9,10 @@ export default function CaseStudiesSection() {
 
   return (
     <section id="insights" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 pt-15 pb-25">
+      <div className="mx-auto max-w-(--container-max) px-9 py-20">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase">See how we help teams win</div>
+            <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">See how we help teams win</div>
             <h2 className="mt-3.5 font-display text-[44px] font-bold leading-[1.04] tracking-[-0.03em] text-white">Case Studies &amp; Insights.</h2>
           </div>
           <Button href="/case-studies" variant="ghost" size="nav" className="!px-[22px] !py-[13px] !text-[14.5px]">
@@ -27,9 +27,17 @@ export default function CaseStudiesSection() {
               hoverBorderColor=""
               className="group relative flex min-h-[400px] w-full items-stretch overflow-hidden !rounded-3xl !p-[42px]"
             >
-              {/* Blue bg glow (top-left tint and top-right orb) */}
-              <div aria-hidden="true" className="absolute inset-0 z-0 opacity-[0.14]" style={{ background: `radial-gradient(circle at top left, ${featured.accentColor}, transparent 75%)` }} />
-              <div aria-hidden="true" className="absolute -top-[20%] -right-[15%] z-0 h-[70%] w-[50%] rounded-full blur-glow-lg" style={{ background: featured.accentColor, opacity: 0.16 }} />
+              {/* Accent bg glow (top-left tint and top-right orb) */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 z-0 pointer-events-none"
+                style={{ background: `linear-gradient(150deg, color-mix(in srgb, ${featured.accentColor} 13%, transparent), transparent 58%)` }}
+              />
+              <div
+                aria-hidden="true"
+                className="absolute -top-[60px] -right-[40px] z-0 h-[260px] w-[260px] rounded-full blur-[70px] pointer-events-none"
+                style={{ background: `color-mix(in srgb, ${featured.accentColor} 22%, transparent)` }}
+              />
 
               <div className="relative z-10 flex w-full flex-col justify-center gap-4">
                 <span
@@ -85,9 +93,9 @@ export default function CaseStudiesSection() {
                     </span>
                     <span className="shrink-0 text-[18px] leading-[normal] text-amber-light transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
                   </div>
-                  <h3 className="font-display text-[16.5px] font-bold leading-[21.45px] tracking-normal text-white">{study.title}</h3>
+                  <h3 className="font-display text-[16.5px] font-bold leading-[21.45px] tracking-[normal] text-white">{study.title}</h3>
                   <div className="flex items-baseline gap-[9px]">
-                    <span className="font-display text-[22px] font-bold leading-[normal] tracking-normal" style={{ color: study.accentColor }}>
+                    <span className="font-display text-[22px] font-bold leading-[normal] tracking-normal" style={ { color: study.accentColor }}>
                       {study.metric}
                     </span>
                     <span className="text-[13px] leading-[normal] text-dim">{study.metricLabel}</span>

@@ -819,3 +819,105 @@ Complete T056-T057/T057a (independent, parallelizable), then T058 (depends on T0
 sequential T059-T062 chain (all touch the same file), then T063 to verify. The remaining pieces of User
 Story 1 (Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan`
 pass each. `/construction`'s own FR-016–FR-021 work is unaffected and unplanned by this phase.
+
+## Phase 13: Homepage Blog Teaser Section (Phase 2 addendum, User Story 1 slice)
+
+Scope: new `app/_home-components/BlogSection.tsx`, `components/ui/icons.tsx`, `components/ui/GlassCard.tsx`,
+`app/tokens.css`/`globals.css`, `app/page.tsx` (FR-010) — NOT any other homepage section, NOT
+`app/blog/_data/blog-content.ts` or any other `/blog` file, NOT any other page.
+
+- [X] T064 [P] **Revised during implementation**: no new icons needed. `components/ui/icons.tsx`
+  already has `CopilotToAgenticIcon`, `EradicateDebtIcon`, and `InfiniteScalabilityIcon` — added for
+  the Re-Imagine grid, unused since FR-007 replaced them with a shared sparkle icon — and their SVG
+  paths are byte-identical to the reference's 3 Blog-card decorative icons (`TechGrit Homepage.dc.html`
+  lines 789/801/813). Adding 3 new `Blog*Icon` exports would have duplicated these shapes verbatim, a
+  Principle III violation. `BlogSection.tsx` (T068) imports and reuses all 3 as-is, overriding
+  `width`/`height` to 72 and `stroke` to `var(--color-icon-stroke)` via prop spread (matching the
+  hardcoded-stroke convention already used by `case-study-detail-hero.tsx`/`featured-case-study.tsx`).
+  **Done.**
+- [X] T065 [P] Add 15 new tokens to `app/tokens.css`, each in its existing numbered section (see
+  research.md §16 for the full list and reference line numbers): `--gradient-blog-teaser-orange`/`-blue`/
+  `-teal` (§ Gradients), `--color-glow-white-18`, `--color-border-blue-55`, `--color-border-teal-60`
+  (§ Borders & Glass), `--color-text-35` (§ Text Colors), `--text-blog-meta`, `--ls-blog-meta`
+  (§ Typography — both deliberately dedicated, not reusing the value-close `--text-2xs` or the
+  single-job-annotated `--ls-hint`), and `--shadow-blog-teaser-orange`/`-blue`/`-teal` +
+  `-orange-hover`/`-blue-hover`/`-teal-hover` (§ Shadows). Card 1's hover border
+  (`--color-hover-orange-border-55`) and its header-gradient first stop's numeric coincidence with
+  `--color-overlay-orange-strong` need no new token — reused/noted, not duplicated.
+- [X] T066 Map T065's 15 new tokens into `app/globals.css`'s `@theme inline` block (the 3 gradients via
+  the existing arbitrary-property pattern already used for `--gradient-testimonial-*`; the rest as
+  canonical utilities — `bg-glow-white-18`, `border-border-blue-55`, `border-border-teal-60`, `text-35`,
+  `text-blog-meta`, `tracking-blog-meta`, `shadow-blog-teaser-orange`/`-blue`/`-teal`,
+  `hover:shadow-blog-teaser-orange-hover`/`-blue-hover`/`-teal-hover`). **Also add** 2 previously-missing
+  mappings for pre-existing, unrelated tokens this section's own markup needs —
+  `--spacing-tg-6: var(--space-6);` (16px) and `--spacing-tg-10: var(--space-10);` (24px) — neither had a
+  canonical `@theme inline` entry before now (research.md §16). Depends on T065 (same file, sequential).
+- [X] T067 [P] Add a new `"blogTeaser"` member to `GlassCard.tsx`'s `GlassCardVariant` union and a
+  matching entry in each of its 4 `Record`s: `CARD_VARIANTS.blogTeaser` (`"flex flex-col overflow-hidden
+  rounded-2xl border-border-image bg-glass-4 hover:-translate-y-[6px]"` — `bg-glass-4`/`border-border-image`
+  are exact-match reused tokens), `ICON_VARIANTS.blogTeaser` (`"h-18 w-18"` — Tailwind's own canonical
+  72px default, no new token needed), `TITLE_VARIANTS.blogTeaser` (`"mt-tg-4 text-[19px] font-bold
+  text-white leading-[1.32]"`), `DESC_VARIANTS.blogTeaser` (`"mt-tg-3 text-[14.5px] leading-[1.6]
+  text-muted"` — `text-muted` added explicitly, per the same silent-inheritance lesson already applied to
+  the Industries variant). Distinct from the existing `"blogCard"`/`"blogFeatured"` variants (different
+  shape, not a fork of either — neither's own `Record` entries change). Independent of T064/T065/T066
+  (different file).
+- [X] T068 [US1] Create new `app/_home-components/BlogSection.tsx`: a local `BLOG_TEASER_POSTS` array of
+  3 entries (each with its own `id` field from the start, per this feature's established Principle III
+  stable-identity convention), holding the reference's literal topic/title/excerpt/read-time/icon/
+  per-card-color-class fields verbatim (research.md §16 — content is static/reference-exact, not a
+  dynamic pull from `app/blog/_data/blog-content.ts`). The outer `<section>` wrapper uses
+  `max-w-(--container-max) px-9 pt-tg-21 pb-20` (matching the reference's `max-width:1280px;
+  padding:60px 36px 80px` — all already-canonical classes, no new token needed), the same container
+  convention `IndustriesSection`/`TestimonialsSection` already use. Renders a left-aligned hand-rolled
+  eyebrow ("From the blog") + `h2` ("Perspectives on AI-first delivery.", using `LifeGallery.tsx`'s existing
+  `text-[clamp(30px,3.6vw,42px)]` clamp) alongside a right-aligned ghost `<Button href="/blog"
+  variant="ghost">` ("Visit the blog" + arrow), in the same header row shape `IndustriesSection.tsx`
+  already establishes; below, a 3-card grid (`grid-cols-3 gap-6 max-tg-md:grid-cols-1`), each card a
+  plain `<a href="/blog">` (matching `IndustriesSection.tsx`'s own whole-card-link convention exactly —
+  no `style={{ display: "contents" }}` needed, since the `<a>` is itself the direct grid child here)
+  wrapping a `<GlassCard variant="blogTeaser">` (T067) with a 190px gradient/icon header block, a
+  radial-highlight overlay, and a body (topic/dot/read-time meta row, title, description, "Read more →"
+  link) — see plan.md's "Homepage Blog Teaser Section (FR-010)" for the full per-element class
+  breakdown. Depends on T064 (icons — revised to reuse `CopilotToAgenticIcon`/`EradicateDebtIcon`/
+  `InfiniteScalabilityIcon`), T066 (tokens/mappings), and T067 (GlassCard variant). **Done.**
+- [X] T069 [US1] Render `<BlogSection />` in `app/page.tsx` between `<CaseStudiesSection />` and
+  `<LifeGallery />`, matching the reference's own document order (Testimonials → Case Studies →
+  home-blogs → Inside TechGrit). Depends on T068. **Done.**
+- [X] T070 Run `npm run lint` + `npm run build`; browser-verify the section's left-aligned eyebrow/heading,
+  the right-aligned ghost button (22px/15px padding, 52px min-height) linking to `/blog`, all 3 cards'
+  per-card gradient header/icon/topic-color/hover-border/hover-shadow, that clicking anywhere on a card
+  (not just its "Read more" text) navigates to `/blog`, that the 3 cards' content matches the reference
+  verbatim (not any of the 9 real `/blog` posts), and that the section sits between the homepage's Case
+  Studies preview and Life at TechGrit with no other section shifted. Confirm `app/blog/_data/blog-content.ts`
+  and every `/blog` file are unchanged.
+
+## Dependencies (Blog Teaser Section)
+
+- T064 (icons.tsx) and T065 (tokens.css) are mutually independent (different files) but each blocks later
+  tasks: T064 blocks T068 (imports the 3 new icons); T065 blocks T066 (maps its new tokens).
+- T066 depends on T065, and in turn blocks T068 (which consumes T066's canonical classes, not
+  `tokens.css`'s raw custom properties directly).
+- T067 is independent of T064/T065/T066 (different file) but blocks T068 (consumes the new `"blogTeaser"`
+  variant).
+- T068 depends on T064, T066, and T067.
+- T069 depends on T068.
+- T070 runs last, after T064-T069.
+
+## Parallel Example (Blog Teaser Section)
+
+```bash
+# T064 (icons.tsx), T065 (tokens.css), and T067 (GlassCard.tsx) can all run together — different files:
+Task: "Add 3 new decorative icons to components/ui/icons.tsx (T064)"
+Task: "Add 15 new tokens to app/tokens.css (T065)"
+Task: "Add new blogTeaser variant to components/ui/GlassCard.tsx (T067)"
+# Then T066 (globals.css, depends on T065), then the sequential chain:
+Task: "Map new tokens + 2 missing spacing mappings into globals.css @theme inline (T066)"
+Task: "Create BlogSection.tsx (T068) -> render in page.tsx (T069) -> verify (T070)"
+```
+
+## Implementation Strategy (Blog Teaser Section)
+
+Complete T064/T065/T067 (independent, parallelizable), then T066 (depends on T065), then T068 (depends
+on T064/T066/T067), then T069 (depends on T068), then T070 to verify. The remaining pieces of User
+Story 1 (Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass each.

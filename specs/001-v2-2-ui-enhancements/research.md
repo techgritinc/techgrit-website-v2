@@ -992,3 +992,97 @@ correct.
 
 **Not changed**: the video-lightbox modal markup, the "Drag to explore more stories" hint row, and the
 track's existing `scroll-snap-type`/gap/padding values are already reference-correct.
+
+## 16. Homepage Blog Teaser Section fidelity (FR-010)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Blog Teaser Section (FR-010)" |
+**Spec**: [spec.md](./spec.md), FR-010, Clarifications Session 2026-08-06
+
+Scope: a new `app/_home-components/BlogSection.tsx`, plus `components/ui/icons.tsx`,
+`components/ui/GlassCard.tsx`, `app/tokens.css`, `app/globals.css`, and `app/page.tsx`'s render order.
+§§1-15 above are unaffected.
+
+**Decision (content sourcing)**: FR-010's original text said the section's content "MUST be sourced
+from the existing blog content used on `/blog`." Investigation of `app/blog/_data/blog-content.ts`
+found its 9 real `BlogPost` entries have no icon field (only a `topic` string and an `accent` color
+token), no featured/top-3 concept, and every entry's `href` is a placeholder `"#"` — no `/blog/[slug]`
+detail route exists. `TechGrit Homepage.dc.html` (lines 785-821) instead shows 3 fully-authored cards
+(own title/topic/excerpt/read-time/icon/gradient-tint) that don't correspond to any of the 9 real posts.
+Per spec.md Clarifications (Session 2026-08-06), the 3 homepage cards use the reference's own literal
+content verbatim — a static, homepage-local data set — not a dynamic pull from `blog-content.ts`. FR-010
+itself was corrected to match.
+
+**Decision (icon sourcing)**: since `BlogPost` has no icon field at all, and the reference's 3 icons
+(constellation, code-bracket, package/box) are purely decorative and unrelated to any real post's
+content, the icons are reused as-is, one per fixed card position — not derived from a
+topic-to-icon lookup, since no such mapping is needed once the content itself is static.
+
+**Decision ("Read More" target)**: since every real post's `href` is a placeholder and no post detail
+route exists, every card's "Read more" affordance — and the section's own "Visit the blog" ghost button
+— link to `/blog`, matching the reference's own `href="TechGrit Blog.dc.html"` on every one of these
+elements (lines 783/786/798/810).
+
+**Tokens needed** — 15 total, none of which exist today at these exact values:
+- `--gradient-blog-teaser-orange`/`-blue`/`-teal` (§ Gradients) — each card's header-block background
+  (lines 787/799/811), a 2-stop `150deg` composite literal, following this codebase's existing
+  gradient-token convention (`--gradient-testimonial-video`, `--gradient-phase-node`) of one composite
+  token per treatment, not decomposed stop-by-stop. Card 1's first stop (`rgba(232,119,34,0.28)`)
+  happens to numerically equal the existing `--color-overlay-orange-strong`; this is not a Principle I
+  conflict since gradient tokens in this file are never built from `var()`-nested stops.
+- `--color-glow-white-18` (§ Borders & Glass) — the radial highlight shared by all 3 card headers (lines
+  788/800/812). The value-identical `--color-border-18` exists but is annotated "Phase-node border — todo
+  state," a distinct semantic job — the same single-job-token concern already raised for
+  `--text-industry-title`/`--radius-16` earlier in this feature, applied proactively here rather than
+  reusing a mismatched-purpose token.
+- `--color-border-blue-55` (card 2 hover border, `rgba(2,132,199,0.55)`, line 798) and
+  `--color-border-teal-60` (card 3 hover border, `rgba(15,118,110,0.60)`, line 810) — both distinct from
+  the existing `--color-border-blue-strong`/`--color-border-teal-strong` (0.60/0.70), different values,
+  not duplicates. Card 1's own hover border (`rgba(232,119,34,0.55)`, line 786) is an exact match for the
+  existing `--color-hover-orange-border-55` and needs no new token.
+- `--color-text-35` (§ Text Colors) — the topic/read-time meta row's dot separator (lines 792/804/816,
+  `rgba(255,255,255,0.35)`); no existing text-color token sits at exactly this value. The read-time text
+  itself (`rgba(255,255,255,0.55)`) is an exact match for the existing `--color-text-55`.
+- `--text-blog-meta: 12px` and `--ls-blog-meta: 0.14em` (§ Typography) — the same meta row's font-size
+  and letter-spacing. Deliberately not reused from the value-close `--text-2xs` (12.5px, a genuine
+  0.5px miss) or the value-identical `--ls-hint` (annotated "Methodology scroll-hint caption," a
+  different single-job token) — same precedent as `--text-industry-title` vs. `--text-stat`.
+- `--shadow-blog-teaser-orange`/`-blue`/`-teal` (resting, `0 0 40px -8px`, `0.15` opacity, lines
+  786/798/810) and `--shadow-blog-teaser-orange-hover`/`-blue-hover`/`-teal-hover` (hover, `0 0 60px
+  -6px`, `0.35` opacity, same lines) — 6 tokens, 2 distinct shapes, 3 colors each; the closest existing
+  shadow, `--shadow-reimagine-glow`/`-soft`, is a different shape (`0 0 60px -10px`).
+
+**Tokens reused, not duplicated** — all exact matches: `--color-hover-orange-border-55` (card 1 hover
+border), `--color-text-55` (read-time text), `--color-amber-light`/`--color-blue-light`/`--color-teal-light`
+(per-card topic label color, already-mapped `text-amber-light`/`-blue-light`/`-teal-light` classes),
+`--color-orange` (ghost button arrow, `text-orange`, matching `IndustriesSection`'s own ghost-button
+convention), `--color-icon-stroke` (all 3 decorative icons' stroke — already annotated "Decorative SVG
+icon stroke (case study panels)," reused rather than duplicating its `rgba(255,255,255,0.85)` value),
+`--radius-2xl`/`--color-glass-4`/`--color-border-image`/`--blur-md` (card base chrome — radius,
+background, border, backdrop-blur, all exact matches for the reference's `20px`/`0.04`/`0.10`/`8px`),
+`--space-4`/`--space-3`/`--space-9`/`--space-5a`/`--space-19a`/`--space-11`/`--space-12`/`--space-15`/
+`--space-1b` (title margin-top, description margin-top, ghost-button padding/min-height, card body
+padding, header row margin-bottom, "Read more" row gap — all already-mapped `tg-` spacing classes).
+
+**Discovered while researching (missing `@theme inline` mappings)**: `tokens.css` already defines
+`--space-6` (16px) and `--space-10` (24px) — both pre-existing, unrelated to this addendum — but
+`globals.css` never mapped either to a `--spacing-tg-6`/`--spacing-tg-10` entry, so no canonical
+`mt-tg-6`/`pt-tg-10` utility exists today. This section's own markup needs both (the "Read more" row's
+16px top margin, the card body's 24px top padding) and would otherwise have to fall back to an
+arbitrary-value class for a value that already has a token — precisely the bug class this session's
+CLAUDE.md calls out by name ("A token that exists in `tokens.css` but has no matching `@theme inline`
+entry is a real bug, not a style nit"). Both mappings are added as part of this addendum's `globals.css`
+task, not deferred.
+
+**Icon shapes** (verbatim from the reference, `TechGrit Homepage.dc.html`):
+- Card 1 (`BlogConstellationIcon`, line 789): `<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2
+  12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>`
+- Card 2 (`BlogCodeBracketIcon`, line 801): `<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2
+  12 8 18"/>`
+- Card 3 (`BlogPackageIcon`, line 813): `<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7
+  4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96
+  12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>`
+
+**Not changed**: no other homepage section, no `data-model.md`/`contracts/` (presentation-only, same as
+every prior addendum), `app/blog/_data/blog-content.ts` and `/blog`'s own rendering (`blog-post-grid.tsx`)
+are untouched — this addendum reads their shape only to confirm why a dynamic pull isn't viable, it does
+not modify either file.

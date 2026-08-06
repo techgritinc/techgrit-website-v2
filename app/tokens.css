@@ -83,6 +83,7 @@
   --color-text-40:        rgba(255, 255, 255, 0.40);
   --color-text-45:        rgba(255, 255, 255, 0.45); /* Blog newsletter helper text — default state */
   --color-text-32:        rgba(255, 255, 255, 0.32);
+  --color-text-35:        rgba(255, 255, 255, 0.35); /* Homepage Blog teaser card meta dot separator (v2.2 FR-010) */
   --color-text-64:        rgba(255, 255, 255, 0.64); /* Case study card description text */
   --color-text-68:        rgba(255, 255, 255, 0.68); /* Careers "Life at TechGrit" paragraph copy */
   --color-text-13:        rgba(255, 255, 255, 0.13); /* Testimonials video-card initials watermark */
@@ -113,6 +114,9 @@
   --color-border-orange-45: rgba(232, 119, 34, 0.45); /* Role card hover border (Careers) */
   --color-border-blue-strong: rgba(2, 132, 199, 0.60);   /* Card hover border (blue accent) */
   --color-border-teal-strong: rgba(15, 118, 110, 0.70);  /* Card hover border (teal accent) */
+  --color-border-blue-55: rgba(2, 132, 199, 0.55);   /* Homepage Blog teaser card 2 hover border (v2.2 FR-010) */
+  --color-border-teal-60: rgba(15, 118, 110, 0.60);  /* Homepage Blog teaser card 3 hover border (v2.2 FR-010) */
+  --color-glow-white-18: rgba(255, 255, 255, 0.18);  /* Homepage Blog teaser card-header radial highlight (v2.2 FR-010) — distinct job from --color-border-18's same value */
   --color-border-orange-30: rgba(232, 119, 34, 0.30);  /* Why-Join benefit icon border — orange (Careers) */
   --color-border-blue-light-30: rgba(56, 189, 248, 0.30); /* Why-Join benefit icon border — blue (Careers) */
   --color-border-teal-light-30: rgba(45, 212, 191, 0.30); /* Why-Join benefit icon border — teal (Careers) */
@@ -245,6 +249,9 @@
   --gradient-ghost:       linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12)); /* Ghost button fill (v2.2 Phase 1) */
   --gradient-ghost-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.40), rgba(255, 255, 255, 0.20)); /* Ghost button hover fill (v2.2 Phase 1) */
   --gradient-live-badge: linear-gradient(135deg, rgba(232, 119, 34, 0.12), rgba(245, 158, 11, 0.06));   /* Hero Live-Webinar badge outer fill (v2.2 Phase 2) */
+  --gradient-blog-teaser-orange: linear-gradient(150deg, rgba(232, 119, 34, 0.28), rgba(154, 52, 18, 0.50)); /* Homepage Blog teaser card 1 header background (v2.2 FR-010) */
+  --gradient-blog-teaser-blue:   linear-gradient(150deg, rgba(2, 132, 199, 0.28), rgba(3, 60, 90, 0.50));    /* Homepage Blog teaser card 2 header background (v2.2 FR-010) */
+  --gradient-blog-teaser-teal:   linear-gradient(150deg, rgba(15, 118, 110, 0.30), rgba(6, 52, 48, 0.50));   /* Homepage Blog teaser card 3 header background (v2.2 FR-010) */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY
@@ -294,6 +301,7 @@
   --text-h3-values: 19px;
   --text-22: 22px;
   --text-stat-count: 44px;  /* Hero delivery-stat digit size (v2.2 Phase 2) */
+  --text-blog-meta: 12px; /* Homepage Blog teaser card topic/read-time meta row (v2.2 FR-010) — deliberately not a reuse of the value-close --text-2xs (12.5px) */
 
   /* Responsive step tokens (base/sm/md/lg/xl at the 560/960/1140/1280
      breakpoint contract) — consumed directly via Tailwind arbitrary-value
@@ -345,6 +353,7 @@
   --ls-badge:   0.18em;  /* Methodology phase-corner label */
   --ls-01:      0.01em;  /* Topic filter chip label spacing (Blog) — zero occurrences in v2 census; retained unchanged, name kept per FR-022 */
   --ls-stat-count: -0.035em;  /* Hero delivery-stat digit tracking (v2.2 Phase 2) */
+  --ls-blog-meta: 0.14em; /* Homepage Blog teaser card topic/read-time meta row (v2.2 FR-010) — deliberately not a reuse of the value-identical, single-job-annotated --ls-hint */
   --ls-24: 0.24em;  /* Trusted-Clients section label tracking (v2.2 Phase 2) */
   --ls-title-tight: -0.01em;  /* Homepage Industries card title tracking (v2.2 FR-008) — named to avoid confusion with the unrelated, positive --ls-01 */
 
@@ -511,6 +520,12 @@
   --shadow-live-badge: 0 18px 46px -14px rgba(232, 119, 34, 0.70), 0 4px 16px -6px rgba(232, 119, 34, 0.40);   /* Hero Live-Webinar badge outer shadow (v2.2 Phase 2) */
   --shadow-live-badge-chip: 0 6px 18px -4px rgba(245, 158, 11, 0.60);   /* Hero Live-Webinar badge inner chip shadow (v2.2 Phase 2) */
   --shadow-glow-green: 0 0 12px 3px rgba(52, 211, 153, 0.90);   /* Hero Live-Webinar badge dot glow (v2.2 Phase 2) */
+  --shadow-blog-teaser-orange: 0 0 40px -8px rgba(232, 119, 34, 0.15); /* Homepage Blog teaser card 1 resting shadow (v2.2 FR-010) */
+  --shadow-blog-teaser-blue: 0 0 40px -8px rgba(56, 189, 248, 0.15); /* Homepage Blog teaser card 2 resting shadow (v2.2 FR-010) */
+  --shadow-blog-teaser-teal: 0 0 40px -8px rgba(45, 212, 191, 0.15); /* Homepage Blog teaser card 3 resting shadow (v2.2 FR-010) */
+  --shadow-blog-teaser-orange-hover: 0 0 60px -6px rgba(232, 119, 34, 0.35); /* Homepage Blog teaser card 1 hover glow (v2.2 FR-010) */
+  --shadow-blog-teaser-blue-hover: 0 0 60px -6px rgba(56, 189, 248, 0.35); /* Homepage Blog teaser card 2 hover glow (v2.2 FR-010) */
+  --shadow-blog-teaser-teal-hover: 0 0 60px -6px rgba(45, 212, 191, 0.35); /* Homepage Blog teaser card 3 hover glow (v2.2 FR-010) */
 
   /* v2 hover-lift distances (additive, FR-024) */
   --lift-hover-1: -1px;
