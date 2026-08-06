@@ -217,7 +217,8 @@
   --color-mac-yellow: var(--color-mac-yellow);
   --color-mac-green: var(--color-mac-green);
   --color-glass-10: var(--color-glass-10);
-  --color-badge-ink-45: var(--color-badge-ink-45);
+  --color-badge-ink-50: var(--color-badge-ink-50);
+  --color-badge-ink-40: var(--color-badge-ink-40);
   --color-white-96: var(--color-white-96);
   --color-modal-backdrop: var(--color-modal-backdrop);
   --color-overlay-orange-18: var(--color-overlay-orange-18);
@@ -435,6 +436,7 @@
   --radius-40: var(--radius-40);
   --radius-70: var(--radius-70);
   --radius-80: var(--radius-80);
+  --radius-16: var(--radius-16);
 
   --blur-10: var(--blur-10);
   --blur-11: var(--blur-11);
@@ -472,7 +474,11 @@
   --shadow-industry-glow-violet: var(--shadow-industry-glow-violet);
   --shadow-industry-glow-green: var(--shadow-industry-glow-green);
   --shadow-industry-glow-blue: var(--shadow-industry-glow-blue);
+  --shadow-testimonial-hover-video: var(--shadow-testimonial-hover-video);
+  --shadow-testimonial-hover-text: var(--shadow-testimonial-hover-text);
+  --shadow-testimonial-avatar: var(--shadow-testimonial-avatar);
   --text-industry-title: var(--text-industry-title);
+  --text-testimonial-stat: var(--text-testimonial-stat);
   --tracking-title-tight: var(--ls-title-tight);
 }
 @layer base {

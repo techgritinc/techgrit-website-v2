@@ -499,6 +499,16 @@ export function CheckIcon(props: IconProps) {
   );
 }
 
+/** Testimonials — decorative quotation-mark watermark (v2.2 FR-009), reused at two
+ * sizes/opacities/colors per card type via prop overrides. */
+export function QuoteIcon(props: IconProps) {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M9 6C4.5 6 2 10 2 15v11h11V15H6.5c0-3 1.5-5 4.5-5V6zm18 0c-4.5 0-7 4-7 9v11h11V15h-6.5c0-3 1.5-5 4.5-5V6z" />
+    </svg>
+  );
+}
+
 // Homepage "How We Deliver" methodology phases (app/_home-components/MethodologySection.tsx)
 // One distinct icon per phase, reused at both the top-rail node (26px) and the enlarged
 // phase-detail circle (82px) via a width/height override — shapes re-authored from

@@ -265,3 +265,58 @@ pass. No test framework exists in this repo — this is manual, plus `npm run li
    nav-config.ts` and its rendered mega-menu must be pixel-unchanged, `Button.tsx`'s shared `md` size
    must be untouched (verify other `md`-sized buttons sitewide are unaffected), and `/construction`'s
    own hero/challenges/impact/CTA sections (FR-016–FR-021) must be unaffected.
+
+## 18. Homepage Testimonials section (`app/_home-components/TestimonialsSection.tsx`) — Phase 2 addendum, FR-009/FR-009a
+
+Scope: only `TestimonialsSection.tsx`, `home-data.ts` (`Testimonial.id` retrofit), `components/ui/
+icons.tsx` (1 new export), and `tokens.css`/`globals.css`. No other homepage section, no other page. No
+test framework exists in this repo — this is manual, plus `npm run lint`/`npm run build`.
+
+1. Open `/` at desktop width (≥1140px) and scroll to "Trusted by forward-thinking teams."
+2. Confirm the eyebrow, title, and supporting paragraph are all left-aligned inside one shared column
+   (not centered) — including the paragraph, which was centered before this pass.
+3. Confirm a trust-metrics card (500+ Projects delivered / 100% Would refer / 6wk Avg. time to value,
+   separated by 2 vertical dividers) renders to the right of that text column, in the same row —
+   narrow the viewport and confirm it wraps to stack below the text column rather than overlapping it
+   or staying absolutely pinned to a corner.
+4. Hover a **video** testimonial card — confirm it lifts, and confirm its box-shadow is the wider/
+   stronger shape (`0 24px 60px -20px`, 60% orange opacity) distinct from the text card's hover shadow
+   (next step). Confirm the card shows a duration badge (`⏱ 2:14`) next to its VIDEO label, a 5-star
+   rating (previously entirely absent from this card — `/speckit.analyze` finding C1), and a large faint
+   quotation-mark watermark behind its quote text. Confirm it does **not** show a verified badge
+   anywhere.
+5. Hover a **text** testimonial card — confirm it lifts, its border color shifts to a visible orange
+   tint, and its box-shadow is the narrower/softer shape (`0 24px 54px -20px`, 28% orange opacity).
+   Confirm the card shows a green "Verified" badge with a checkmark, positioned in the same row as the
+   5-star rating, and a smaller faint quotation-mark watermark behind its quote text. Confirm it does
+   **not** show a duration badge or play affordance anywhere.
+6. Confirm the text card's avatar circle (initials, gradient background) now has a visible drop shadow
+   beneath it, distinct from the flat/shadowless avatar before this pass.
+7. Confirm the track shows edge fades on **both** sides now (previously right-side only) — the left
+   fade should read visibly lighter/narrower than the right fade, not symmetric.
+8. Press and hold the mouse button on the track and drag — confirm the cursor changes from an open
+   hand (`grab`) to a closed hand (`grabbing`) for the duration of the hold, and reverts to the open
+   hand on release. Confirm cards don't snap/jump mid-drag (scroll-snap is suspended while held) but do
+   snap to the nearest card once released.
+9. Confirm the "Drag to explore more stories" hint row and the video lightbox modal (click a video
+   card, confirm it opens; click the close button or the backdrop, confirm it closes) are unchanged
+   from before this pass.
+10. Inspect React DevTools (or the rendered DOM's diffing behavior) and confirm both `TESTIMONIALS`
+    render sites key on `testimonial.id`, not `testimonial.name` (`/speckit.analyze` finding C2).
+
+## 19. Gate check (Testimonials Section)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/tokens.css` (7 new tokens — `--gradient-testimonial-card`,
+   `--gradient-testimonial-edge-left`, `--shadow-testimonial-hover-video`,
+   `--shadow-testimonial-hover-text`, `--shadow-testimonial-avatar`, `--color-badge-ink-40`, and
+   `--radius-16` — plus 1 value correction, `--gradient-testimonial-video`'s first stop `0.92` → `0.88`
+   [`/speckit.analyze` finding H1], and 1 rename, `--color-badge-ink-45` → `--color-badge-ink-50` with
+   its value corrected `0.45` → `0.50`), `app/globals.css` (matching `@theme inline` mappings, including
+   the renamed key), `components/ui/icons.tsx` (1 new export: `QuoteIcon` — `ClockIcon`/`CheckIcon`
+   reused as-is, not modified), `app/_home-components/home-data.ts` (`Testimonial` gains a required
+   `id` field, `/speckit.analyze` finding C2), and `app/_home-components/TestimonialsSection.tsx`
+   (header restructure, both `.map()` sites re-keyed on `testimonial.id`, both card types' new elements
+   — including the video card's previously-missing star rating [finding C1] — edge fades, drag
+   handlers). No other homepage section, no other page — confirm `--color-badge-ink-50`'s only consumer
+   is this file (the rename must not silently affect any other component).

@@ -794,3 +794,263 @@ and `app/_home-components/IndustriesSection.tsx` (icon-badge rendering, photo re
 Construction-only whole-card link, ghost-button padding correction) — no `app/page.tsx` change, no
 `data-model.md`/`contracts/` change, `Button.tsx`'s shared `md` size and `components/layout/
 nav-config.ts`'s mega-menu icons unaffected, `/construction`'s own FR-016–FR-021 work unaffected.
+
+## Homepage Testimonials Section (FR-009, FR-009a)
+
+**Date**: 2026-08-06. Extends this Phase 2 addendum to also cover the Testimonials section
+(`app/_home-components/TestimonialsSection.tsx`), per spec.md FR-009/FR-009a and Clarifications
+Session 2026-08-06. Hero, Trusted Clients, Subscribe Band, Methodology, Re-Imagine, and Industries
+above are unaffected; the Blog teaser, Life at TechGrit, and the final CTA remain unplanned.
+`frontend-design` skill consulted for this addendum's craft surfaces (the quotation-mark glyph, the
+trust-metrics card, and the drag affordance) — see UI Design Approach below.
+
+Today, the section centers its eyebrow/title/paragraph (`text-center`), has no metrics card, and its
+two card types are missing several reference elements entirely: neither shows a quotation-mark icon;
+the video card has no duration badge and no hover border-color/shadow-shape change beyond
+transform; the text card has no verified badge and no hover border-color change at all; the track has
+only a right-side edge fade (no left-side fade); and the drag interaction neither swaps the cursor
+between `grab`/`grabbing` nor temporarily disables scroll-snap during the gesture. This diverges from
+`TechGrit Homepage.dc.html` lines 606-703 and its `_setupTestiDrag` script (lines 1208-1221) in each
+of these respects.
+
+1. **`app/_home-components/home-data.ts`** (`/speckit.analyze` finding C2) — add a required `id:
+   string` field to the `Testimonial` type, populated for all 6 `TESTIMONIALS` entries (e.g. `"daniel-shore"`,
+   `"jonas-berg"`, …, derived from each entry's name, not re-derived from display text at render time).
+   This closes a pre-existing Principle III ("Stable identity for repeated content") gap: both of
+   `TestimonialsSection.tsx`'s `.map()` render sites key on `testimonial.name` today, with no `id`/`slug`
+   field to key on instead — the exact gap this same feature already fixed twice elsewhere for this
+   reason (`DeliveryStat.id`, `TrustedClientLogo.id`, both in the Hero/Trusted-Clients addendum above).
+   Since FR-009 already rewrites this exact file and array-consuming component, the fix belongs in this
+   pass rather than deferred further.
+2. **`app/_home-components/TestimonialsSection.tsx`** — restructure the header from a single centered
+   block into the reference's flex row: a left-aligned text column (eyebrow, `h2`, paragraph, all
+   inside a shared `max-w-[640px]` wrapper — the paragraph loses its current `text-center mx-auto
+   max-w-[520px]` treatment) on the left, and a new trust-metrics card on the right
+   (`display:flex; justify-content:space-between; align-items:flex-end`, wrapping to stack below the
+   text column only when the row can't fit — no absolute positioning). The metrics card itself is 3
+   stat cells (500+ Projects delivered / 100% Would refer / 6wk Avg. time to value), each carrying its
+   own `id` field (`/speckit.analyze` finding L1 — a preventive fix: this is a new `.map()`-rendered
+   list, so it's keyed on `id` from the start rather than its label text), separated by 2 vertical
+   hairline dividers, defined as a small local array inside this file (not `home-data.ts` — no other
+   section needs this content, unlike Hero's `DeliveryStat`s). Both `.map()` call sites over
+   `TESTIMONIALS` switch from `key={testimonial.name}` to `key={testimonial.id}` (item 1 above). Per
+   card type:
+   - **Video cards**: add a duration badge (clock icon + `2:14`, reusing the existing `ClockIcon` at
+     `width={10} height={10} strokeWidth={2.5}` next to the VIDEO label pill), a 5-star rating row
+     (`/speckit.analyze` finding C1 — missing from today's video card entirely; the reference always
+     renders 5 static white stars with a subtle `text-shadow` here, lines 659, independent of the
+     `rating` field, which video entries don't set), and a decorative quotation-mark icon (new
+     `QuoteIcon`, positioned/sized/colored per the reference); correct the VIDEO label pill's background
+     token (see tokens below) and the card's border color to the reference's exact values; add the
+     reference's hover shadow (`hover:shadow-testimonial-hover-video`, new token) alongside the existing
+     `hover:-translate-y-1.5`. No verified badge is added (per the per-card-type split resolved in
+     spec.md Clarifications).
+   - **Text cards**: add a verified badge (reusing the existing `CheckIcon` at `width={11} height={11}`
+     + a "Verified" label in `text-green`) positioned in the same row as the star rating
+     (`justify-between`), and a decorative quotation-mark icon (the same new `QuoteIcon`, reference's
+     text-card position/size/opacity/color); add the reference's hover border-color
+     (`hover:border-border-orange-medium`, an existing exact-match token, currently unused by this
+     card) and hover shadow (`hover:shadow-testimonial-hover-text`, new token) alongside the existing
+     `hover:-translate-y-1.5`; add the avatar circle's box-shadow (`shadow-testimonial-avatar`, new
+     token — the avatar's existing `--gradient-phase-node` background is already an exact match and is
+     unchanged). No duration badge or play affordance is added (per the same per-card-type split).
+   - **Track edge fades**: add a new left-side fade (`--gradient-testimonial-edge-left`, new token,
+     80px/70% black) alongside the existing right-side fade (`--gradient-testimonial-edge`, already an
+     exact 140px/95%-black match to the reference — unchanged).
+   - **Drag/hold behavior**: the pointer handlers gain the reference's cursor and scroll-snap toggling —
+     `onPointerDown` sets the track's cursor to `grabbing` and its `scrollSnapType` to `"none"`;
+     `endDrag` (on pointer-up/leave) reverts both to `grab`/`"x proximity"` — matching
+     `_setupTestiDrag` exactly, in addition to the drag-scroll logic already present.
+3. **`components/ui/icons.tsx`** — add one new named icon export, `QuoteIcon` (the reference's
+   quotation-mark path, lines 646/673: `M9 6C4.5 6 2 10 2 15v11h11V15H6.5c0-3 1.5-5 4.5-5V6zm18
+   0c-4.5 0-7 4-7 9v11h11V15h-6.5c0-3 1.5-5 4.5-5V6z`), following the file's existing
+   `IconProps`/`{...props}`-last convention. Rendered at two different sizes/opacities/colors per card
+   type via prop overrides (video card: `76px`, `opacity-14`, `fill-white`; text card: `110px`,
+   `opacity-06`, `fill-orange`) — one component, not two, matching the same "shared shape, per-instance
+   sizing" convention `PhaseArchitectIcon`'s siblings already established. `ClockIcon` and `CheckIcon`
+   (both already exist, added in earlier phases of this feature) are reused as-is via prop overrides —
+   no new duration or verified-check icon is added.
+4. **`app/tokens.css`** — add 7 new tokens (no existing token matches these values), correct 1 existing
+   token's value, and rename 1 existing token whose name no longer matches its corrected value:
+   - **Correct** `--gradient-testimonial-video`'s first color stop from `rgba(232, 119, 34, 0.92)` to
+     the reference's exact `rgba(232, 119, 34, 0.88)` (`TechGrit Homepage.dc.html` line 640,
+     `/speckit.analyze` finding H1 — this value correction belongs here, in the tokens task, not inside
+     the `TestimonialsSection.tsx` edit in item 2 above, since Principle I values change in `tokens.css`
+     first). This token's sole consumer (the video card's own background) is otherwise unaffected — the
+     second stop (`rgba(154, 52, 18, 0.96)`) already matches the reference exactly.
+   - `--gradient-testimonial-card: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));`
+     (§ Gradients) — the text card's resting-state background; distinct from the flat `--color-glass-4`
+     (0.04) it uses today, since the reference is a two-stop gradient, not a flat fill.
+   - `--gradient-testimonial-edge-left: linear-gradient(-90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.70) 82%);`
+     (§ Gradients) — the track's new left-side fade (80px wide via the consuming element's own width,
+     matching the reference's asymmetric treatment; the existing `--gradient-testimonial-edge` already
+     matches the reference's 140px/95%-black right-side fade exactly and needs no change).
+   - `--shadow-testimonial-hover-video: 0 24px 60px -20px rgba(232, 119, 34, 0.60);` (§ Shadows) — video
+     card hover shadow (line 640).
+   - `--shadow-testimonial-hover-text: 0 24px 54px -20px rgba(232, 119, 34, 0.28);` (§ Shadows) — text
+     card hover shadow (line 671); distinct shape (`54px`/`0.28`) from the video card's (`60px`/`0.60`),
+     not a shared token.
+   - `--shadow-testimonial-avatar: 0 6px 16px -4px rgba(232, 119, 34, 0.55);` (§ Shadows) — text card
+     avatar circle's shadow (line 683), currently missing entirely.
+   - `--color-badge-ink-40: rgba(0, 0, 0, 0.40);` (§ Ink-scale) — the video card's duration-badge pill
+     background (line 650); distinct from the VIDEO-label pill's own background below.
+   - **Rename**: `--color-badge-ink-45` (`rgba(0, 0, 0, 0.45)`) → `--color-badge-ink-50: rgba(0, 0, 0, 0.50);`.
+     Its sole existing consumer (this same file's VIDEO-label pill, line 649 of the reference) was built
+     against an incorrect `0.45` value; the reference's actual value is `0.50`. Since this token has
+     exactly one consumer (confirmed via search) and its old name no longer describes its corrected
+     value, it is renamed in place rather than left as a misleadingly-named `-45` token now holding
+     `0.50`, or duplicated as a second near-identical token.
+   - `--radius-16: 16px;` (§ Radii, numbered tier alongside `--radius-3`/`-4`/`-6`/…) for the metrics
+     card's border-radius — deliberately **not** a reuse of the existing `--radius-tile` (also 16px),
+     which is explicitly annotated "Webinar hero collage tile corners" (a single-job token, same
+     `/speckit.analyze`-flagged pattern as `--text-industry-title` vs. `--text-stat` in §14 above).
+   - **Tokens reused, not duplicated** (all exact matches): `--color-border-orange-45` (0.45, video card
+     border — corrects the current `border-border-orange`/0.38 mismatch), `--color-border-orange-medium`
+     (0.50, text card hover border — already mapped, reused from §13), `--color-green` (`#34d399`,
+     verified-badge text color), `--color-text-bright` (0.90, duration-badge text color), `--ls-wider`
+     (0.10em, verified-badge tracking), `--text-3xs` (10.5px, verified-badge/duration-badge font-size),
+     `--color-border-8`/`--color-glass-3`/`--blur-md`/`--space-8`/`--space-11` (metrics card
+     border/background/blur/padding, all exact), `--color-border-14` (0.14, metrics card divider),
+     `--gradient-phase-node` (avatar background, already correct today).
+5. **`app/globals.css`** — map the 7 new/renamed tokens into `@theme inline` (alongside the existing
+   gradient/shadow/ink-scale/radius mapping blocks), giving canonical `bg-[image:--gradient-testimonial-card]`
+   (arbitrary-property, matching the existing `--gradient-testimonial-*` consumption pattern — these
+   gradients have no bare Tailwind utility equivalent), `hover:shadow-testimonial-hover-video`/`-text`,
+   `shadow-testimonial-avatar`, `bg-badge-ink-40`, `bg-badge-ink-50` (replacing the `-45` mapping key),
+   and `rounded-16` classes. The renamed token's mapping line moves from `--color-badge-ink-45:
+   var(--color-badge-ink-45);` to `--color-badge-ink-50: var(--color-badge-ink-50);`. The corrected
+   `--gradient-testimonial-video` value flows through automatically — its existing mapping/consumption
+   is unchanged, only the token's own value in `tokens.css` changes (item 4 above).
+
+Nothing else changes. The lightbox/video-modal markup, the "Drag to explore more stories" hint row,
+and the section's overall track/scroll-snap mechanics (aside from the cursor/snap-toggle addition
+above) are already reference-correct and untouched.
+
+## Technical Context (Testimonials addendum)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (manual verification, see
+`quickstart.md`) · **Target Platform**: Web · **Project Type**: single Next.js App Router app ·
+**Performance Goals**: N/A (CSS/markup-only changes plus native pointer-event handlers already in
+place) · **Constraints**: no new libraries; zero visual change to any homepage section other than
+Testimonials · **Scale/Scope**: 2 existing files edited (`TestimonialsSection.tsx`, `home-data.ts` —
+`Testimonial.id` retrofit, `/speckit.analyze` finding C2) + 1 new icon export
+(`components/ui/icons.tsx`) + `tokens.css`/`globals.css` additions (7 new tokens, 1 value correction,
+1 rename).
+
+## UI Design Approach (Testimonials)
+
+**`frontend-design` skill invocation**: consulted for this addendum's 3 craft surfaces. **Quotation-mark
+glyph** — kept as a single flat-fill decorative watermark at very low opacity (6%/14%, matching the
+reference exactly) behind the card content, so it reads as a subtle textural cue ("this is a quote")
+rather than competing with the quote text itself — one shape reused at two scales/opacities/colors
+rather than two bespoke marks. **Trust-metrics card** — the glass-chip treatment
+(`border-border-8`/`bg-glass-3`/`blur-md`) matches the same restrained, low-contrast glass language
+already used for other secondary chrome in this codebase (filter bars, badges), so the metrics card
+reads as "supporting proof," not a competing hero element next to the section title. **Drag
+affordance** — the `grab`→`grabbing` cursor swap plus the temporary scroll-snap release makes the drag
+gesture feel physically continuous (nothing fighting the user's own scroll position mid-drag), matching
+the reference's own intent that this is a hand-draggable filmstrip, not a stepped carousel.
+
+**Reconciliation with Principles I–V**: none needed — every value above is read directly from the
+reference (Principle IV) and expressed via tokens, never a raw literal (Principle I); no new surface
+fill is introduced (Principle V) — the metrics card and both hover shadows stay within the existing
+glass/orange-glow vocabulary.
+
+**Anchor files**: `app/_home-components/TestimonialsSection.tsx`, `app/_home-components/home-data.ts`
+(`Testimonial` gains a required `id` field), `components/ui/icons.tsx` (1 new export: `QuoteIcon`),
+`app/tokens.css` (7 new tokens, 1 value correction, 1 rename), `app/globals.css` (their `@theme inline`
+mappings, including the renamed key).
+
+## Project Structure (Testimonials addendum)
+
+```text
+app/_home-components/
+├── TestimonialsSection.tsx  # header restructured to flex row (left text column + right metrics
+│                             # card); paragraph left-aligned inside 640px column; new metrics-card
+│                             # markup (own id-keyed local array); video card gains duration badge +
+│                             # star rating + quote icon + corrected border/hover-shadow; text card
+│                             # gains verified badge + quote icon + hover border-color/shadow + avatar
+│                             # shadow; track gains left-edge fade; drag handlers gain cursor
+│                             # grab/grabbing + scroll-snap toggle; both .map() sites re-key on
+│                             # testimonial.id instead of testimonial.name
+└── home-data.ts              # Testimonial gains a required id field, populated for all 6 entries
+                               # (/speckit.analyze finding C2)
+
+components/ui/
+└── icons.tsx                 # + QuoteIcon (new); ClockIcon/CheckIcon reused as-is
+
+app/tokens.css                # + --gradient-testimonial-card, --gradient-testimonial-edge-left,
+                               #   --shadow-testimonial-hover-video, --shadow-testimonial-hover-text,
+                               #   --shadow-testimonial-avatar, --color-badge-ink-40, --radius-16
+                               # − --color-badge-ink-45 → renamed --color-badge-ink-50 (0.45 → 0.50)
+                               # ~ --gradient-testimonial-video first stop corrected 0.92 → 0.88
+                               #   (/speckit.analyze finding H1)
+app/globals.css                # + matching @theme inline entries; renamed badge-ink mapping key
+```
+
+No `data-model.md`/`contracts/` (presentation-only, same as prior addenda). No other file is touched.
+
+**Structure Decision**: existing single-project structure. The metrics-card content stays as a local
+array inside `TestimonialsSection.tsx` rather than `home-data.ts`, since (unlike `DeliveryStat`) no
+other section consumes it — adding it to the shared data module now would be speculative structure the
+constitution's own anti-speculative-structure rule advises against; it is, however, still keyed on its
+own local `id` field, not label text, since Principle III's stable-identity rule applies regardless of
+which file the array lives in. `Testimonial.id` (item 1) is added to `home-data.ts` itself since
+`TESTIMONIALS` already lives there — this is a field addition to existing shared content, not new
+speculative structure.
+
+## Complexity Tracking (Testimonials addendum)
+
+*Empty — no violations.*
+
+## Constitution Check (Testimonials addendum)
+
+- **I (Token-Only Styling)** — PASS. All 7 new literal values are added to `tokens.css` first, in
+  their existing numbered sections, before any markup consumes them; the 1 renamed token corrects a
+  name/value mismatch discovered while reading the reference exactly (Principle I's naming-matches-value
+  intent), rather than leaving a `-45`-named token holding `0.50`; a dedicated `--radius-16` is added
+  instead of reusing the value-identical-but-single-job-annotated `--radius-tile`, following the same
+  precedent as `--text-industry-title` vs. `--text-stat` in §14. The `--gradient-testimonial-video`
+  opacity correction (`/speckit.analyze` finding H1) is made in this same tokens task, not inside the
+  component edit — keeping the value-change and the component-consumption changes in their correct,
+  separate tasks.
+- **II (Breakpoints)** — PASS, not applicable (the metrics-card wrap behavior uses the header row's own
+  `flex-wrap`, not a new breakpoint).
+- **III (Component Library)** — PASS, with 1 pre-existing gap corrected. No component is forked;
+  `QuoteIcon` is added to the constitution's single consolidated icon file following its existing
+  convention, and `ClockIcon`/`CheckIcon` are reused via prop overrides exactly as `PhaseArchitectIcon`'s
+  siblings already demonstrate for multi-size icon reuse. The cards themselves stay bespoke markup (not
+  migrated to `GlassCard`) — no requirement in FR-009/FR-009a calls for that migration, and doing so
+  unprompted would be scope creep beyond this addendum's ask. **Stable identity for repeated content**
+  (`/speckit.analyze` finding C2): `TESTIMONIALS`' `.map()` render sites keyed on `testimonial.name` —
+  display text, not a stable identity field — a pre-existing gap now fixed by adding `Testimonial.id`
+  and re-keying both call sites on it, the same fix this feature already applied to `DeliveryStat` and
+  `TrustedClientLogo` for the identical reason. The new local metrics-card array is keyed on its own
+  `id` field from the start, for the same reason (finding L1).
+- **IV (References Are Visual Truth)** — PASS. Every corrected value (border/gradient opacities, hover
+  shadow shapes, badge background, per-card-type element split — including the video card's previously
+  entirely-missing star rating, `/speckit.analyze` finding C1 — drag cursor/snap behavior) is read
+  directly from `TechGrit Homepage.dc.html` (markup lines 606-703, script lines 1208-1221), including
+  correcting 3 pre-existing deltas from the reference that predate this feature (video card border
+  0.38→0.45, VIDEO-label pill background 0.45→0.50, video-card gradient first stop 0.92→0.88 —
+  `/speckit.analyze` finding M1 corrects this count from an earlier draft that only listed 2 of the 3).
+- **V (Dark-First Brand)** — PASS. No new surface fill; both new hover shadows and the metrics-card
+  glass chip stay within the existing translucent/glow vocabulary, orange accent stays confined to
+  glows/borders/icons, never a fill.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach above.
+- No violations — Complexity Tracking is empty.
+
+## Post-Design Constitution Re-Check (Testimonials addendum)
+
+Research (Phase 0 of this addendum) confirmed every new token value and the single-consumer rename
+before any file changed, and confirmed the per-card-type element split against the reference's actual
+markup (not the spec's original, since-corrected acceptance-scenario wording). **Revised after
+`/speckit.analyze`**: 3 findings (C1, C2, H1) surfaced gaps this addendum's first draft missed — the
+video card's entirely-absent star rating (C1), the pre-existing `testimonial.name`-keyed `.map()`
+violating Principle III's stable-identity rule (C2), and a token-value correction specified inside the
+wrong task (H1) — all now folded into this addendum's Summary/Constitution Check above, rather than
+left as a gap between planning and implementation. 2 further findings (M1, M2) corrected internal
+count mismatches within this document itself (2→3 pre-existing deltas; 6→7 new tokens); 1 finding (L1)
+pre-emptively specified stable `id`-keying for the new metrics-card array before it was ever
+implemented. No new violations beyond what's now fixed above. Gate: PASS.

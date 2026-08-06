@@ -239,6 +239,7 @@ export const INDUSTRY_CARDS: IndustryCard[] = [
 // ---------------------------------------------------------------------------
 
 export type Testimonial = {
+  id: string;
   type: "text" | "video";
   quote: string;
   name: string;
@@ -250,6 +251,7 @@ export type Testimonial = {
 
 export const TESTIMONIALS: Testimonial[] = [
   {
+    id: "daniel-shore",
     type: "video",
     quote: "From prototype to production in six weeks.",
     name: "Daniel Shore",
@@ -258,6 +260,7 @@ export const TESTIMONIALS: Testimonial[] = [
     videoUrl: null,
   },
   {
+    id: "jonas-berg",
     type: "text",
     quote:
       "Their design-thinking mindset combined with deep AI knowledge helped us go from prototype to production fast, without the usual handoffs.",
@@ -267,6 +270,7 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
   },
   {
+    id: "priya-nair",
     type: "text",
     quote: "Simple, thoughtful changes doubled activation, and it only took weeks. The OrbitAI workflow is the real deal.",
     name: "Priya Nair",
@@ -275,6 +279,7 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
   },
   {
+    id: "marcus-lee",
     type: "text",
     quote: "TechGrit owned the outcome end to end. We shipped a modernized platform without ever taking the product down.",
     name: "Marcus Lee",
@@ -283,6 +288,7 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
   },
   {
+    id: "sara-whitman",
     type: "video",
     quote: "AI agents, with real engineer oversight.",
     name: "Sara Whitman",
@@ -291,6 +297,7 @@ export const TESTIMONIALS: Testimonial[] = [
     videoUrl: null,
   },
   {
+    id: "devin-park",
     type: "text",
     quote:
       "Real users, real data, real ROI in six weeks. Their agentic build process changed how our team ships software.",

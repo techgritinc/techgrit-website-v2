@@ -700,4 +700,122 @@ Task: "Rewrite IndustriesSection.tsx: icon badges, no photo, Construction-only l
 Complete T049-T050 (independent, parallelizable), then T051/T052 (each depends on one of the first
 group), then T053, then T054, then T055 to verify. The remaining pieces of User Story 1 (Testimonials,
 Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass
-each. `/construction`'s own FR-016–FR-021 work is unaffected and unplanned by this phase.
+each — unless already covered below.
+
+## Phase 12: Homepage Testimonials Section (Phase 2 addendum, User Story 1 slice)
+
+Scope: only `app/_home-components/TestimonialsSection.tsx`, `app/_home-components/home-data.ts`
+(FR-009, FR-009a) — NOT any other homepage section, NOT any other page.
+
+- [ ] T056 [P] Add `QuoteIcon` to `components/ui/icons.tsx` (the reference's quotation-mark path,
+  `TechGrit Homepage.dc.html` lines 646/673: `M9 6C4.5 6 2 10 2 15v11h11V15H6.5c0-3 1.5-5 4.5-5V6zm18
+  0c-4.5 0-7 4-7 9v11h11V15h-6.5c0-3 1.5-5 4.5-5V6z`), following the file's existing
+  `IconProps`/`{...props}`-last convention — `ClockIcon`/`CheckIcon` (both already exist) are reused via
+  prop overrides, not modified.
+- [ ] T057 [P] Add 7 new tokens to `app/tokens.css`, each in its existing numbered section:
+  `--gradient-testimonial-card` (§ Gradients, text-card resting background), `--gradient-testimonial-edge-left`
+  (§ Gradients, track's new left-side fade), `--shadow-testimonial-hover-video` and
+  `--shadow-testimonial-hover-text` (§ Shadows, per-card-type hover shadow shapes),
+  `--shadow-testimonial-avatar` (§ Shadows, text-card avatar shadow), `--color-badge-ink-40`
+  (§ Ink-scale, duration-badge pill background), and `--radius-16: 16px` (§ Radii, numbered tier —
+  deliberately not a reuse of the single-job-annotated `--radius-tile`). **Also correct** the existing
+  `--gradient-testimonial-video`'s first color stop from `rgba(232,119,34,0.92)` to the reference's
+  exact `rgba(232,119,34,0.88)` (`/speckit.analyze` finding
+  H1 — this value change belongs here, in the tokens task, not inside T060's component edit; its second
+  stop already matches and is unchanged). **Also rename** the existing `--color-badge-ink-45` to
+  `--color-badge-ink-50`, correcting its value from `rgba(0,0,0,0.45)` to the reference's actual
+  `rgba(0,0,0,0.50)` (its sole consumer is corrected in T060).
+- [ ] T057a [P] Add a required `id` field to `Testimonial` in `app/_home-components/home-data.ts`,
+  populated for all 6 `TESTIMONIALS` entries (`/speckit.analyze` finding C2 — Constitution Principle
+  III, "Stable identity for repeated content": both of `TestimonialsSection.tsx`'s `.map()` render sites
+  currently key on `testimonial.name`, display text, with no `id`/`slug` field to key on instead — the
+  same gap this feature already fixed for `DeliveryStat`/`TrustedClientLogo` via `T007a`). Independent of
+  T056/T057 (different file); T059 depends on it to re-key both call sites.
+- [ ] T058 Map T057's 7 new/corrected tokens plus the renamed `--color-badge-ink-50` into
+  `app/globals.css`'s `@theme inline` block (removing the stale `--color-badge-ink-45` mapping key), so
+  `bg-badge-ink-40`/`bg-badge-ink-50`, `hover:shadow-testimonial-hover-video`/`-text`,
+  `shadow-testimonial-avatar`, and `rounded-16` all become canonical Tailwind utilities; the 2 gradient
+  tokens are consumed via the existing arbitrary-property pattern already used for
+  `--gradient-testimonial-video`/`-fade`/`-edge`/`-placeholder` (no bare utility equivalent for a
+  gradient value) — the corrected `--gradient-testimonial-video` value flows through its existing
+  mapping unchanged.
+- [ ] T059 In `app/_home-components/TestimonialsSection.tsx`, restructure the header: replace the single
+  centered block with a flex row — a left-aligned text column (eyebrow, `h2`, paragraph, all inside a
+  shared `max-w-[640px]` wrapper, dropping the paragraph's current `text-center mx-auto max-w-[520px]`)
+  on the left, and a new trust-metrics card on the right (3 stat cells — 500+ Projects delivered / 100%
+  Would refer / 6wk Avg. time to value — separated by 2 vertical dividers, defined as a local array in
+  this file with its own `id` field per cell (`/speckit.analyze` finding L1 — keyed on `id`, not label
+  text, from the start, since this is a new `.map()`-rendered list), using
+  `border-border-8`/`bg-glass-3`/`blur-md`/`rounded-16`/`space-8`/`space-11` and the `border-border-14`
+  divider, all exact-match reused tokens), wrapping below the text column via normal `flex-wrap` at
+  narrow widths (no absolute positioning). Also re-key both of this file's `TESTIMONIALS.map()` render
+  sites from `key={testimonial.name}` to `key={testimonial.id}` (T057a).
+- [ ] T060 [P] [US1] In the same file's **video card**, add a duration badge (reusing `ClockIcon` at
+  `width={10} height={10} strokeWidth={2.5}` + "2:14" text in `text-bright`/`text-3xs`, on a
+  `bg-badge-ink-40` pill) next to the existing VIDEO label; add a 5-star rating row (`/speckit.analyze`
+  finding C1 — this card has **no** star-rating markup today, unlike the text card; render 5 static
+  white stars with the reference's subtle `text-shadow`, independent of the `rating` field, which video
+  entries don't set); correct the VIDEO label pill's background class from `bg-badge-ink-45` to
+  `bg-badge-ink-50` (T057's rename); correct the card's border class from `border-border-orange` (0.38)
+  to `border-border-orange-45` (0.45, exact reference match) — the video-gradient background's opacity
+  correction is already handled by T057, this task only consumes the corrected token; add
+  `hover:shadow-testimonial-hover-video` alongside the existing `hover:-translate-y-1.5`; add a decorative
+  `QuoteIcon` (T056) at the reference's video-card size/position/opacity/color (76px, `fill-white`,
+  `opacity-14`). No verified badge is added to this card.
+- [ ] T061 [P] [US1] In the same file's **text card**, add a verified badge (reusing `CheckIcon` at
+  `width={11} height={11}` + "Verified" label in `text-green`/`text-3xs`/`tracking-wider`, positioned in
+  the same row as the existing star rating via `justify-between`); add `hover:border-border-orange-medium`
+  and `hover:shadow-testimonial-hover-text` alongside the existing `hover:-translate-y-1.5`; add
+  `shadow-testimonial-avatar` to the avatar circle (background gradient unchanged — already correct);
+  correct the card's background from flat `bg-glass-4` to the new `bg-[image:var(--gradient-testimonial-card)]`
+  gradient (T057); add a decorative `QuoteIcon` (T056) at the reference's text-card size/position/opacity/
+  color (110px, `fill-orange`, `opacity-06`). No duration badge or play affordance is added to this card.
+- [ ] T062 [US1] In the same file, add the new `--gradient-testimonial-edge-left` fade as a second edge
+  overlay (left side, alongside the existing unchanged right-side `--gradient-testimonial-edge` fade);
+  update the drag pointer handlers — `onPointerDown` now also sets the track's cursor to `grabbing` and
+  `scrollSnapType` to `"none"`; `endDrag` (pointer-up/leave) now also reverts both to `grab`/`"x proximity"` —
+  matching the reference's `_setupTestiDrag` exactly, in addition to the existing `scrollLeft`-based drag
+  logic.
+- [ ] T063 Run `npm run lint` + `npm run build`; browser-verify the header's left-alignment (including the
+  paragraph) and the metrics card's position/wrap behavior, each card type's new elements per the
+  reference-exact per-card-type split (video: duration badge + star rating + quote icon, no verified
+  badge; text: verified badge + quote icon, no duration badge), each card type's distinct hover shadow,
+  the avatar's new shadow, both edge fades (confirm the left one reads visibly lighter/narrower than the
+  right), and the drag cursor/scroll-snap-toggle behavior (grab→grabbing while held, snap suspended
+  mid-drag, restored on release). Confirm `--color-badge-ink-50`'s only consumer is this file, and that
+  both `.map()` sites over `TESTIMONIALS` now key on `testimonial.id`, not `testimonial.name`.
+
+## Dependencies (Testimonials Section)
+
+- T056 (icons.tsx), T057 (tokens.css), and T057a (home-data.ts) are mutually independent (different
+  files) but each blocks later tasks: T056 blocks T060/T061 (import `QuoteIcon`); T057 blocks T058 (maps
+  its new/renamed/corrected tokens) and T059-T062 (consume the new canonical classes); T057a blocks T059
+  (re-keys the `.map()` sites on `testimonial.id`).
+- T058 depends on T057.
+- T059 depends on T057/T058 (consumes `border-border-8`/`bg-glass-3`/`blur-md`/`rounded-16`/etc.) and
+  T057a (re-keying).
+- T060 and T061 are independent of each other (different card-type branches in the same file's `.map()`
+  callback) but both depend on T056 (icon import) and T058 (canonical classes) — run sequentially against
+  the same file to avoid edit conflicts, not truly parallel despite touching different JSX branches.
+- T062 depends on T057/T058 (the new left-edge gradient class) and is otherwise independent of T060/T061's
+  card-level changes.
+- T063 runs last, after T056-T062 (and T057a).
+
+## Parallel Example (Testimonials Section)
+
+```bash
+# T056 (icons.tsx), T057 (tokens.css), and T057a (home-data.ts) can all run together — different files:
+Task: "Add QuoteIcon to components/ui/icons.tsx (T056)"
+Task: "Add 7 new tokens + 1 value correction + 1 rename to app/tokens.css (T057)"
+Task: "Add required id field to Testimonial in home-data.ts (T057a)"
+# Then T058 (globals.css), then the TestimonialsSection.tsx edit chain runs sequentially:
+Task: "Map new/renamed tokens into globals.css @theme inline (T058)"
+Task: "TestimonialsSection.tsx edit chain: T059 -> T060 -> T061 -> T062"
+```
+
+## Implementation Strategy (Testimonials Section)
+
+Complete T056-T057/T057a (independent, parallelizable), then T058 (depends on T057), then the
+sequential T059-T062 chain (all touch the same file), then T063 to verify. The remaining pieces of User
+Story 1 (Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan`
+pass each. `/construction`'s own FR-016–FR-021 work is unaffected and unplanned by this phase.
