@@ -242,8 +242,8 @@
    * 6. TYPOGRAPHY
    * ---------------------------------------------------------- */
   /* v2 collapses the body/display split into one family; both names retained per FR-022 */
-  --font-body: "Calibri", "Carlito", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-display: "Calibri", "Carlito", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-body: "Calibri", var(--font-calibri-body, "Carlito"), "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: "Calibri", var(--font-calibri-display, "Carlito"), "Segoe UI", system-ui, -apple-system, sans-serif;
 
   /* Fluid type scale — uses clamp() for responsive sizing */
   /* v2 canonical hero cap 62px absorbs per-page deltas (Frameworks 64, About 60, Industries/Services/Careers/Case Studies/Blog 58) — consciously absorbed, not missed (FR-010, FR-032, FR-034) */

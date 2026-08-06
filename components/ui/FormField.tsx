@@ -1,18 +1,19 @@
 import { useId } from "react";
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type { ReactNode, InputHTMLAttributes, TextareaHTMLAttributes } from "react";
 
 type FormFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "className"> & {
-  label: string;
+  label: ReactNode;
   hideLabel?: boolean;
   error?: string | null;
   containerClassName?: string;
+  labelClassName?: string;
   multiline?: boolean;
   rows?: TextareaHTMLAttributes<HTMLTextAreaElement>["rows"];
   inputClassName?: string;
 };
 
 const INPUT_BASE =
-  "w-full rounded-[10px] border bg-glass-strong px-4 py-3.5 text-sm leading-[normal] font-normal text-primary outline-none transition-colors placeholder:!font-light focus:bg-glass-hover focus:border-border-orange-strong";
+  "w-full rounded-[10px] border bg-glass-strong px-4 py-3.5 text-base sm:text-sm leading-[normal] font-normal text-primary outline-none transition-colors placeholder:!font-light focus:bg-glass-hover focus:border-border-orange-strong";
 
 /** Shared labeled input primitive (FR-015) for the subscribe form; `multiline` renders a textarea instead. */
 export default function FormField({
@@ -20,6 +21,7 @@ export default function FormField({
   hideLabel = true,
   error,
   containerClassName,
+  labelClassName,
   inputClassName,
   type = "text",
   multiline = false,
@@ -31,7 +33,14 @@ export default function FormField({
 
   return (
     <div className={containerClassName}>
-      <label htmlFor={id} className={hideLabel ? "sr-only" : "mb-2 block text-[13.5px] font-bold text-text-60"}>
+      <label
+        htmlFor={id}
+        className={
+          hideLabel
+            ? "sr-only"
+            : labelClassName || "mb-2 block text-[13.5px] font-bold text-text-60"
+        }
+      >
         {label}
       </label>
       {multiline ? (
@@ -40,7 +49,7 @@ export default function FormField({
           rows={rows}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
-          className={[INPUT_BASE, "border-border-strong resize-none"].join(" ")}
+          className={[INPUT_BASE, "border-border-strong resize-none", inputClassName].filter(Boolean).join(" ")}
           {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)}
         />
       ) : (

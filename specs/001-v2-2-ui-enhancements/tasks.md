@@ -4,6 +4,21 @@
 **Scope**: exactly 4 deliverables. No consumer `.tsx` migration, no `globals.css` vanilla-class
 edits, no other page-specific v2.2 work. There is no Setup phase — no project init is needed.
 
+**Task-numbering convention (added 2026-08-05)**: each page/section below is an independent
+implementation phase owned by its own developer, worked on in parallel. Task IDs are **local to
+their `# <Page>` heading**, intentionally restarting at `T001` for every section — `T001` under
+`# Careers` and a future `T001` under `# Homepage` are unrelated tasks, each owned by whoever is
+working that section, and neither numbering sequence depends on the other. **This duplication is
+deliberate, not an oversight — do not renumber any section to make IDs globally unique.** The
+Shared Foundation phase immediately below predates this convention and keeps its original
+`T000-T023` numbering as its own local sequence (already complete).
+
+Because task IDs are no longer globally unique, **every reference to a task ID outside its own
+section — in this file's own text, or in `plan.md`/`research.md`/`data-model.md` — MUST be
+qualified with its section name**, e.g. `Shared Foundation – T003` or `Careers – T003`. A bare
+`T003` with no section qualifier is ambiguous the moment a second section reuses that number, and
+MUST NOT be written without one going forward.
+
 ## Phase 1: Foundational (Shared Primitive Updates)
 
 **Purpose**: the 4 shared-primitive changes every future page-specific story (US1–US9) will
@@ -310,3 +325,277 @@ MVP/phased rollout within this slice, since FR-005 is one cohesive sizing/spacin
 component). Complete T020-T022, then T023 to verify, then stop. The remaining pieces of User Story 1
 ("How We Deliver", "Don't Migrate/Re-Imagine", Construction card, Testimonials, Blog teaser, Life at
 TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass each.
+
+---
+
+# Careers
+
+**Page**: `/careers` (User Story 8, spec.md). **Task IDs below restart at `T001`**, scoped to this
+`# Careers` heading only — see the numbering-convention note at the top of this file. Everything
+above this heading (Shared Foundation, Homepage) keeps its own original numbering and is unaffected.
+
+## Phase 1: Apply-Modal Field Alignment (User Story 8 slice)
+
+**Input**: [plan.md](./plan.md) "Careers Apply-Modal Field Alignment (User Story 8 —
+FR-037a/FR-037b)", [research.md](./research.md) §12, [data-model.md](./data-model.md)
+**Scope**: only the Apply modal's field set, file-upload validation, and success copy — the
+FR-037a/FR-037b slice of User Story 8 (spec.md). No other Careers section (hero, stats, Open Roles
+filters, Life at TechGrit, closing CTA layout/copy) and no other user story is in scope. There is no
+Setup/Foundational sub-phase — research.md §12 confirmed no new tokens are needed.
+
+**Already satisfied, no task needed**: the modal's open trigger (`RoleCard.tsx` → `open-roles-
+section.tsx` → `ApplicationDialog`, plus `CareersCta.tsx`'s general entry point), its dismiss
+behavior (`components/ui/Modal.tsx`'s existing overlay-click/close-button/Escape/focus-trap), and its
+reset-on-reopen behavior (`application-dialog.tsx`'s existing `prevIsOpen` effect) already match
+FR-037a/FR-037b exactly (research.md §12) — none of those files need a task in this phase.
+
+**Goal**: FR-037a, FR-037b — the Apply modal's fields, resume-upload control (with immediate 5MB
+validation), and success confirmation copy match `TechGrit Careers.dc.html` exactly.
+
+**Independent Test**: Open the Apply modal via a role card's "Apply" button; confirm it shows Full
+name / Email / LinkedIn-or-portfolio-URL / Resume-upload / optional "Why TechGrit?" fields (no Phone
+field). Select a resume file over 5MB and confirm an immediate error message with the selection
+cleared. Submit with a required field empty and confirm a validation error that keeps the modal open.
+Fill every required field and submit, confirming a name-aware success confirmation with no network
+request fired. Close the modal and reopen it — for the same role, a different role, and the general
+"Send your resume" CTA — confirming every field and any prior error resets to blank each time.
+
+- [x] T001 [P] [US8] Add `UploadIcon` to `components/ui/icons.tsx`, copying the reference's exact SVG
+  path data (`TechGrit Careers.dc.html` line 431: box outline + up-arrow, `viewBox="0 0 24 24"`,
+  `stroke-width="2"`, round caps/joins) per research.md §12 — depends on nothing; different file from
+  T002-T006, safe to do in parallel with T002.
+- [x] T002 [US8] In `app/careers/_components/application-dialog.tsx`: replace the `firstName`/
+  `lastName` fields with a single required `fullName` field, drop the `phone` field entirely (no
+  reference equivalent), and add an optional `linkedInOrPortfolioUrl: string` field rendered via
+  `FormField` with `type="url"` (FR-037a, research.md §12) — depends on nothing.
+- [x] T003 [US8] In the same file: add `resumeFile: File | null` to `ApplicationFormValues`'s initial
+  state, and add a new resume-upload control — a `<label>` wrapping a visually-hidden
+  `<input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,
+  application/vnd.openxmlformats-officedocument.wordprocessingml.document">` plus a visible icon
+  (T001's `UploadIcon`) + filename/placeholder + sub-label row, matching the reference's structure
+  (`TechGrit Careers.dc.html` lines 428-437) — depends on T001 (needs `UploadIcon`); same file as
+  T002, do sequentially after it.
+- [x] T004 [US8] In the same file: add the resume input's `onChange` handler — if the selected file's
+  size exceeds 5MB, immediately set a specific over-size error message, clear `resumeFile`, and clear
+  the input's own value; otherwise clear any prior error and store the file (FR-037b, research.md
+  §12) — same file as T002-T003, do sequentially, depends on T003 (needs the upload control to
+  exist).
+- [x] T005 [US8] In the same file: make the message field (renamed from `fitStatement` to
+  `message`, labeled "Why TechGrit?") optional — remove `required`, update its placeholder to match
+  the reference's copy — and update `handleSubmit`'s required-field check to validate `fullName`,
+  `email`, and `resumeFile` only (drop the `phone`/message checks) (FR-037a, research.md §12) — same
+  file as T002-T004, do sequentially.
+- [x] T006 [US8] In the same file: update the success-state copy to the reference's name-aware
+  pattern ("Thanks, {first token of `fullName`} — a hiring lead is going to read your note and get
+  back within 2 business days.", falling back to the reference's own no-name phrasing when `fullName`
+  is empty) (FR-037a, research.md §12) — same file as T002-T005, do sequentially, last edit to this
+  file.
+
+**Checkpoint**: the Apply modal's fields, upload/validation, and success copy match
+`TechGrit Careers.dc.html` exactly for both entry points (per-role Apply buttons and the general
+"Send your resume" CTA, since both share `application-dialog.tsx`); trigger/dismiss/reset (already
+correct, verified in research.md §12, no task) remain unaffected — `RoleCard.tsx`, `open-roles-
+section.tsx`, `CareersCta.tsx`, and `Modal.tsx` are untouched.
+
+---
+
+## Phase 2: Polish (Apply-Modal verification)
+
+- [x] T007 `npm run lint` and `npm run build` both green (a real `tsc` type error was caught and
+  fixed in passing — `LifeAtTechGritContent.images` was still typed `CollageImage[]`, which has no
+  `captionLabel`/`caption` fields; retyped to `LifeGalleryImage[]`). Server-rendered `/careers` HTML
+  confirmed via `curl`: the Apply button's compiled `className` now reads
+  `bg-[image:var(--gradient-ghost)] border border-border-ghost ... !rounded-[12px] !px-[22px]
+  !py-3 !text-[14.5px]` with no `!bg-glass-strong`/`hover:!border-orange` remnants (T013 confirmed
+  live, not just in source). **Not verified interactively in this pass** — the Browser-pane tool
+  could not render/screenshot in this environment (pane not displayed; navigation to localhost was
+  denied), so the modal's actual open/close click flow, the oversized-file/validation/success states,
+  and the reset-on-reopen behavior were verified by code inspection only, not by driving the UI.
+  Recommend a manual pass in a real browser before merging.
+
+---
+
+## Dependencies (Apply-Modal)
+
+- T001 is independent of T002-T006 (different file, `icons.tsx`) but T003 depends on T001 (needs
+  `UploadIcon` to exist before it's referenced).
+- T002 → T003 → T004 → T005 → T006: same file (`application-dialog.tsx`), sequential edits.
+- T007 runs last, after T001-T006.
+
+## Parallel Example (Apply-Modal)
+
+```bash
+# T001 and T002 touch different files and can run together:
+Task: "Add UploadIcon to components/ui/icons.tsx (T001)"
+Task: "Merge firstName/lastName into fullName, drop phone, add LinkedIn field (T002)"
+# T003 must wait for T001 to land before it can reference UploadIcon.
+```
+
+## Implementation Strategy (Apply-Modal)
+
+Single increment — all 6 tasks (T001-T006) together are this slice's only deliverable (one cohesive
+field/validation/copy rework to one shared dialog component, per FR-037a/FR-037b). Complete
+T001-T006, then T007 to verify, then stop.
+
+---
+
+## Phase 3: Open Roles Filter Bar (User Story 8 slice)
+
+**Input**: [plan.md](./plan.md) "Careers Page — Full User Story 8 Coverage" addendum,
+[research.md](./research.md) §14
+**Scope**: only the Open Roles filter row — FR-036. FR-035 (hero) needs no task, having been audited
+as already reference-exact (research.md §13). No Setup/Foundational sub-phase — no new tokens are
+needed (research.md §14's token-reuse table).
+
+**Goal**: FR-036 — the Open Roles filter row sticks below the nav with the reference's dark/blurred
+background, top+bottom border, and "Filter" label, with the "Open roles" heading in its own block
+above it (not sharing a row with the filters).
+
+**Independent Test**: Load `/careers`, scroll to Open Roles, and confirm the "Open roles" heading
+renders on its own line above the filter row; continue scrolling and confirm the filter row (with a
+visible "Filter" label) sticks to the top of the viewport with a dark, blurred background and a
+border on both its top and bottom edges; confirm filtering still works with no other Careers section
+affected.
+
+- [x] T008 [US8] In `app/careers/_components/open-roles-section.tsx`: split the current single flex
+  row (`<h2>` + `<RoleFilters/>`, currently sharing one `pt-[50px] pb-[30px]` container) into the
+  `<h2>`'s own block using the reference's `padding:50px 36px 12px` (`TechGrit Careers.dc.html`
+  line 298), followed by `<FilterBar label="Filter"><RoleFilters .../></FilterBar>` rendered below
+  it with a `20px` top margin before the bar (reference line 302's `margin-top:20px`), and the roles
+  list's own container keeping the reference's `padding:24px 36px 30px` (line 311) (FR-036,
+  research.md §14) — depends on nothing.
+- [x] T009 [P] [US8] In `components/ui/FilterBar.tsx`: add `border-t border-border-subtle` alongside
+  the existing `border-b border-border-subtle` (FR-036, research.md §14) — different file from T008,
+  independent; safe to do in parallel.
+
+**Checkpoint**: Open Roles' heading/filter-bar structure, stickiness, and border treatment match the
+reference; `role-filters.tsx`'s chip styling is unchanged (already reference-matched).
+
+---
+
+## Phase 4: Life at TechGrit Content & Layout (User Story 8 slice)
+
+**Input**: [plan.md](./plan.md) "Careers Page — Full User Story 8 Coverage" addendum,
+[research.md](./research.md) §15, [data-model.md](./data-model.md) (`LifeGalleryImage`,
+`LifeAtTechGritContent`)
+**Scope**: only the Life at TechGrit section's supporting copy and image layout — FR-038's remaining
+gap (the "Inside TechGrit" `Badge` itself is already done, Shared Foundation – T005). No
+Setup/Foundational sub-phase — no new tokens are needed.
+
+**Goal**: FR-038 — Life at TechGrit's heading/description match the reference's copy, its
+eyebrow/heading/paragraph block is centered at the reference's sizing, and its 4 image tiles are
+equal-size with a hover-reveal category/caption overlay — all scoped to the `careers` variant only,
+with the `home` variant's own layout untouched.
+
+**Independent Test**: Load `/careers`, scroll to Life at TechGrit, and confirm the heading reads
+"Life at TechGrit." with the reference's description text, the eyebrow/heading/paragraph block is
+centered, all 4 image tiles are equal-size, and hovering each tile reveals a category label + caption
+matching the reference; then load `/` and confirm the Homepage's own Life at TechGrit gallery is
+visually unchanged (no spans, captions, or alignment altered there).
+
+- [x] T010 [P] [US8] In `app/_home-components/LifeGallery.tsx`: add optional `captionLabel?: string`
+  and `caption?: string` to the `LifeGalleryImage` type; add a hover-reveal caption overlay
+  (gradient scrim + `captionLabel` + `caption`, `opacity-0` → `opacity-100` with a slight upward
+  translate on hover) rendered only when `variant === "careers"` and the image has both fields set;
+  center the `careers` branch's eyebrow/heading/paragraph block (`text-align:center`,
+  `max-width:720px`, `margin:0 auto`) and correct its heading/paragraph sizing to
+  `clamp(30px,3.6vw,42px)`/`17px` (FR-038, research.md §15) — the `home` branch's own markup is
+  untouched; independent of Phase 3 (different file).
+- [x] T011 [US8] In `app/careers/_data/careers-data.ts`: update `lifeAtTechGrit.heading` to
+  `"Life at TechGrit."` and `description` to `"The people and the culture behind the engineering."`;
+  change every image's `span` to `"default"`; add each image's `captionLabel`/`caption` per the
+  reference (glasses → "The team" / "Builders and designers behind the engineering."; rooftop →
+  "The office" / "Rooftop breaks, real conversations."; painting → "Craft" / "We take craft
+  seriously — inside & outside code."; diwali → "Together" / "We celebrate wins — and Diwali —
+  together.") (FR-038, research.md §15, data-model.md) — depends on T010 (the `LifeGalleryImage`
+  type must carry the new fields before this data can type-check).
+
+**Checkpoint**: Life at TechGrit's copy, centered heading block, equal-size tiles, and hover captions
+match the reference for `/careers`; `/`'s own Life at TechGrit gallery renders with zero visual
+change.
+
+---
+
+## Phase 5: Polish (Filter Bar & Life at TechGrit verification)
+
+- [x] T012 `npm run lint` and `npm run build` both green (all 18 routes, including `/` and
+  `/careers`, prerender successfully). Server-rendered HTML confirmed via `curl`: `/careers`
+  contains "Open roles" in its own block, the `FilterBar` wrapper's compiled class list includes
+  `border-t border-b border-border-subtle bg-nav-glass backdrop-blur-nav mt-5` with a "Filter" label
+  present, and the Life at TechGrit copy reads "Life at TechGrit." / "The people and the culture
+  behind the engineering." with the reference's per-tile captions ("The team" / "Builders and
+  designers behind the engineering.", etc.) present in the DOM. **Not verified interactively** — the
+  Browser-pane tool could not render/screenshot in this environment (see T007's note), so the
+  sticky-scroll behavior, the heading/filter visual alignment, the hover-caption reveal animation,
+  and a side-by-side check that `/`'s own Life at TechGrit gallery is visually unchanged were
+  confirmed by code/markup inspection only, not by driving the UI. Recommend a manual pass in a real
+  browser before merging.
+
+---
+
+## Dependencies (Filter Bar & Life at TechGrit)
+
+- T008 and T009 are independent (different files: `open-roles-section.tsx` vs. `FilterBar.tsx`).
+- T010 and T008/T009 are independent (different files/sections — Open Roles vs. Life at TechGrit).
+- T011 depends on T010 (needs `LifeGalleryImage`'s new fields to exist first).
+- T012 runs last, after T008-T011.
+
+## Parallel Example (Filter Bar & Life at TechGrit)
+
+```bash
+# T008, T009, and T010 touch 3 different files and can all run together:
+Task: "Restructure open-roles-section.tsx to wrap RoleFilters in FilterBar (T008)"
+Task: "Add border-t to components/ui/FilterBar.tsx (T009)"
+Task: "Add caption fields/overlay + centered heading block to LifeGallery.tsx (T010)"
+# T011 must wait for T010 to land before careers-data.ts can use the new fields.
+```
+
+## Implementation Strategy (Filter Bar & Life at TechGrit)
+
+Single increment — all 4 tasks (T008-T011) together are this slice's only deliverable (FR-036 and
+FR-038 are two independent, self-contained fixes bundled here since both were surfaced by the same
+planning pass). Complete T008-T011, then T012 to verify, then stop. This completes every FR-035/036/
+037a/037b/038 requirement of User Story 8; User Stories 2-7 and 9 remain out of scope.
+
+---
+
+## Phase 6: Open Roles Apply-Button Ghost-Styling Fix (documented gap — not yet implemented)
+
+**Input**: `/speckit.analyze` finding C1 (2026-08-05), FR-037
+**Scope**: only `app/careers/_components/role-card.tsx`'s Apply button styling. This phase records
+a real, code-verified gap surfaced by analysis — no application code has been changed to add this
+task; the fix itself is still pending.
+
+**Finding**: `role-card.tsx`'s Apply button currently overrides `Button.tsx`'s already
+reference-matched `ghost` variant with `!bg-glass-strong hover:!border-orange
+hover:!bg-overlay-orange-12` — replacing the reference's gradient background and lift-only hover
+(no color change, per research.md §1's explicit "hover stays lift-only" decision) with a flat
+background and an orange hover tint that exists nowhere in `TechGrit Careers.dc.html` (line 326:
+`background:linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.12))`, hover only
+brightens the same white gradient and border, no color shift). `CareersHero.tsx`'s own "Life at
+TechGrit" ghost button (Phase 1 above) already renders correctly with no such override — this is
+the one Careers ghost button that diverges. FR-037's "ghost Apply button MUST use the reference's
+styling" clause had zero task coverage until this phase.
+
+**Goal**: FR-037 — the per-role "Apply" button renders via `Button.tsx`'s unmodified `ghost`
+variant, matching the reference and `CareersHero.tsx`'s already-correct ghost button.
+
+- [x] T013 [US8] In `app/careers/_components/role-card.tsx`: remove the `!bg-glass-strong`,
+  `hover:!border-orange`, and `hover:!bg-overlay-orange-12` overrides from the Apply button's
+  `className` so it inherits `Button.tsx`'s `ghost` variant untouched; keep only sizing overrides
+  that still measure closer to the reference than the variant's own defaults (reference line 326:
+  `border-radius:12px; padding:12px 22px`) (FR-037) — depends on nothing.
+
+**Checkpoint**: RoleCard's Apply button matches the reference's ghost styling (gradient background,
+white-brighten-only hover, no color shift) exactly, consistent with `CareersHero.tsx`'s ghost
+button.
+
+## Dependencies (Ghost-Styling Fix)
+
+- T013 has no dependencies and does not depend on or block any other Careers task (T001-T012).
+
+## Implementation Strategy (Ghost-Styling Fix)
+
+Single task — T013 is a standalone styling correction to one file, independent of every other
+phase in this section. No polish task is added here; verify visually alongside Phase 2's (T007) or
+Phase 5's (T012) manual checks once implemented.

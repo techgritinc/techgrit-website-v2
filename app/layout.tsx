@@ -8,7 +8,7 @@ import "./globals.css";
 // v2 collapses the body/display split into one family (Calibri, metrically-substituted
 // by Carlito on non-Windows systems); both CSS variables are still exposed per FR-009/FR-022
 const carlitoBody = Carlito({
-  variable: "--font-body",
+  variable: "--font-calibri-body",
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
@@ -16,7 +16,7 @@ const carlitoBody = Carlito({
 });
 
 const carlitoDisplay = Carlito({
-  variable: "--font-display",
+  variable: "--font-calibri-display",
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
@@ -30,6 +30,12 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icons/favicon.png",
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
