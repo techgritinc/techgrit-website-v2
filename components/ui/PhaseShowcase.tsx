@@ -101,7 +101,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
       <div ref={trackRef} className="relative" style={{ height: "420vh" }}>
         <div
           ref={stageRef}
-          className="flex min-h-screen flex-col items-center justify-center overflow-hidden px-tg-15 max-tg-md:px-tg-17"
+          className="flex min-h-screen flex-col items-center justify-center overflow-hidden py-10 px-tg-15 max-tg-md:px-tg-17"
           style={{ position: "absolute", top: 0, left: 0, right: 0 }}
         >
           <div className="mx-auto w-full max-w-[1280px] px-tg-15 max-tg-md:px-tg-17">
