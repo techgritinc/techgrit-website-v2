@@ -35,7 +35,7 @@ export default function LifeGallery({
   return (
     <section id={id} className="relative scroll-mt-[96px]">
       <div
-        className={`mx-auto max-w-[1280px] px-[36px] leading-normal ${
+        className={`mx-auto max-w-(--container-max) px-9 leading-normal ${
           variant === "careers" ? "pt-[80px] pb-[80px]" : "pt-[60px] pb-[80px]"
         }`}
         data-reveal
@@ -70,7 +70,7 @@ export default function LifeGallery({
             {images.map((item) => (
               <figure
                 key={item.id}
-                className="group relative m-0 aspect-[3/4] overflow-hidden rounded-[18px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] transition-[transform,border-color] duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:-translate-y-[4px] hover:border-[rgba(232,119,34,0.4)]"
+                className="group relative m-0 aspect-[3/4] overflow-hidden rounded-xl border border-border-8 bg-glass-3 transition-[transform,border-color] duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:-translate-y-[4px] hover:border-hover-orange-border-40"
               >
                 <MediaSlot
                   src={item.src}
@@ -100,7 +100,7 @@ export default function LifeGallery({
               return (
                 <figure
                   key={`${item.src}-${index}`}
-                  className="group relative m-0 block aspect-[3/4] overflow-hidden rounded-[18px] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] transition-[transform] duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] [transition-property:transform,border-color] hover:-translate-y-[4px]"
+                  className="group relative m-0 block aspect-[3/4] overflow-hidden rounded-xl border border-border-8 bg-glass-3 transition-[transform] duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] [transition-property:transform,border-color] hover:-translate-y-[4px]"
                 >
                   <MediaSlot src={item.src} alt={item.alt} fill sizes={sizes} />
                   {item.captionLabel && item.caption && (
@@ -124,10 +124,10 @@ export default function LifeGallery({
 
         {variant === "home" && (
           <div className="mt-11 flex flex-wrap items-center justify-center gap-4">
-            <Button href="/careers" size="md" className="leading-[normal] text-[15.5px] py-[15px] !w-[175.562px] !h-[52px]">
+            <Button href="/careers" size="md" className="leading-[normal] text-[15.5px] px-[27px] py-[16px]">
               Explore Careers <span aria-hidden="true">&rarr;</span>
             </Button>
-            <Button href="/about" variant="ghost" size="md" className="leading-[normal] text-[16px] py-[16px] !w-[176.766px]">
+            <Button href="/about" variant="ghost" size="md" className="leading-[normal] text-[16px] px-[27px] py-[15.5px]">
               Meet the team{" "}
               <span aria-hidden="true" className="text-orange">
                 &rarr;

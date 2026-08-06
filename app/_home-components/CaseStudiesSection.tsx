@@ -95,7 +95,7 @@ export default function CaseStudiesSection() {
                   </div>
                   <h3 className="font-display text-[16.5px] font-bold leading-[21.45px] tracking-[normal] text-white">{study.title}</h3>
                   <div className="flex items-baseline gap-[9px]">
-                    <span className="font-display text-[22px] font-bold leading-[normal] tracking-normal" style={ { color: study.accentColor }}>
+                    <span className="font-display text-[22px] font-bold leading-[normal] tracking-normal" style={{ color: study.accentColor }}>
                       {study.metric}
                     </span>
                     <span className="text-[13px] leading-[normal] text-dim">{study.metricLabel}</span>

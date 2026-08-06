@@ -75,7 +75,7 @@ export default function TestimonialsSection() {
             </p>
           </div>
 
-          <div className="flex items-center gap-8 rounded-16 border border-border-8 bg-glass-3 px-tg-11 py-tg-8 backdrop-blur-md">
+          <div className="flex items-center gap-8 max-tg-sm:gap-4 rounded-16 border border-border-8 bg-glass-3 px-tg-11 py-tg-8 max-tg-sm:px-4 max-tg-sm:py-3.5 backdrop-blur-md max-tg-sm:mx-auto">
             {TESTIMONIAL_METRICS.map((metric, index) => (
               <Fragment key={metric.id}>
                 {index > 0 && <div aria-hidden="true" className="h-9 w-px bg-border-14" />}
@@ -130,7 +130,7 @@ export default function TestimonialsSection() {
                       <span className="h-[7px] w-[7px] rounded-full bg-white" />
                       VIDEO
                     </div>
-                    <div 
+                    <div
                       className="inline-flex items-center gap-tg-1c rounded-2xl bg-badge-ink-40 py-[5px] px-[11px] text-[11px] font-bold text-bright backdrop-blur-sm leading-[normal]"
                       style={{ fontFamily: "Arial" }}
                     >
