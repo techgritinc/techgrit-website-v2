@@ -1049,3 +1049,71 @@ independent of each other), then T075 (depends on all three prior tasks), then T
 particular attention to confirming `/careers` shows no visual change, since T071 touches the same file
 `/careers` consumes. Only the homepage's final CTA remains unplanned within User Story 1; User Stories
 2-9 remain a future `/speckit.plan` pass each.
+
+## Phase 15: Homepage Final CTA Section (Phase 2 addendum, User Story 1 slice)
+
+**Input**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Final CTA Section (FR-012)", [spec.md](./spec.md)
+FR-012, Clarifications Session 2026-08-06. [research.md](./research.md) §18 has the full token
+reuse/no-new-token accounting.
+
+**Scope**: `app/_home-components/FinalCta.tsx`'s outer container and secondary link only, plus 1 new
+token in `app/tokens.css`/`globals.css` (FR-012) — NOT the card's background/border/radius/blur, NOT the
+eyebrow/heading/paragraph, NOT the primary "Schedule an OrbitAI Demo" button, NOT any other homepage
+section, NOT `app/page.tsx`.
+
+**Goal**: FR-012 — the outer container widens to the reference's `1280px`, and the secondary link matches
+the reference's full typographic treatment (size, resting color, hover brighten, underline opacity) and
+literal copy.
+
+- [X] T077 [P] Add 1 new token to `app/tokens.css`, in its existing numbered section (research.md §18):
+  `--color-text-cta-link: rgba(255, 255, 255, 0.70);` (§ Text Colors — deliberately dedicated, not a
+  reuse of the value-identical but differently-annotated `--color-text-quiet`/`--color-text-70`).
+  Independent of T079. **Done.**
+- [X] T078 Map T077's new token into `app/globals.css`'s `@theme inline` block (`--color-text-cta-link:
+  var(--color-text-cta-link);`, alongside the existing text-color mapping block), giving a canonical
+  `text-text-cta-link` utility. Depends on T077 (same file, sequential). **Done.**
+- [X] T079 [US1] Edit `app/_home-components/FinalCta.tsx`: change the outer container's `max-w-[1180px]`
+  to `max-w-(--container-max)` (this feature's established sitewide idiom for the reference's `1280px`
+  width, not a raw `max-w-[1280px]` literal); change the secondary link's classes from `text-15-5
+  font-semibold text-primary` to `text-14-5 font-semibold text-text-cta-link transition-colors
+  duration-200 hover:text-primary` (size correction, dimmer resting color, hover-to-white brighten reusing
+  the already-existing `text-primary` class — no new token for the hover state); change its underline
+  class from `border-border-orange-strong` to `border-border-orange-medium` (both exact-match existing
+  tokens, the latter already added in this feature's Re-Imagine Grid addendum); change its text content
+  from "Explore how our 6-week framework can accelerate your next big bet" to the reference's literal "Or
+  explore our 6-week framework". The arrow span and its `text-orange` color are unchanged. Depends on
+  T078 (consumes the canonical `text-text-cta-link` class). **Done.**
+- [X] T080 Run `npm run lint` + `npm run build`; browser-verify the final CTA's outer container measures
+  `1280px` (not `1180px`), the card itself is visually unchanged, the secondary link reads "Or explore our
+  6-week framework →" at `14.5px` with a dimmer resting color that brightens to solid white on hover with
+  a smooth transition, and its underline is visibly softer than before. Confirm the primary button and
+  every other homepage section are unaffected. **Done** — `npm run lint` and `npm run build` both green;
+  the compiled production CSS confirms `.text-text-cta-link{color:var(--color-text-cta-link)}` exists.
+  DOM inspection on `/` confirmed the outer container's `max-width` is `1280px`, the link's text reads
+  exactly "Or explore our 6-week framework →", `font-size:14.5px`, `font-weight:600`, and
+  `border-bottom-color:rgba(232,119,34,0.5)` — all reference-exact. The resting-color check against the
+  live dev server showed stale solid-white output for the brand-new `text-text-cta-link` utility (a
+  dev-server HMR staleness artifact for newly-added `@theme` tokens, not a code defect — the utility is
+  confirmed correct in the actual compiled production CSS above); a dev-server restart would pick it up.
+
+## Dependencies (Final CTA Section)
+
+- T077 (tokens.css) and T079 (FinalCta.tsx's container-width edit) are independent in principle, but T079
+  as a whole depends on T078 (it also consumes the new `text-text-cta-link` class for the link edit).
+- T078 depends on T077, and in turn blocks T079.
+- T080 runs last, after T077-T079.
+
+## Parallel Example (Final CTA Section)
+
+```bash
+# T077 (tokens.css) has no same-phase dependency and can start immediately:
+Task: "Add 1 new token to app/tokens.css (T077)"
+# Then the sequential tail:
+Task: "Map new token into globals.css @theme inline (T078) -> edit FinalCta.tsx (T079) -> verify (T080)"
+```
+
+## Implementation Strategy (Final CTA Section)
+
+Complete T077 first, then T078 (depends on T077), then T079 (depends on T078), then T080 to verify. This
+closes out every FR in User Story 1 (spec.md) planned via `/speckit.plan` so far; User Stories 2-9 remain
+a future pass each.

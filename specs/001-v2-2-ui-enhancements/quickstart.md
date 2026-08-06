@@ -401,3 +401,36 @@ consumes it) does not change in this pass. No test framework exists in this repo
    file, `components/ui/section-eyebrow.tsx` itself, `app/page.tsx`, and every other homepage section or
    page must be pixel- and byte-unchanged — confirm `/careers` in particular shows no visual diff (step
    22.7 above).
+
+## 24. Homepage Final CTA section (`app/_home-components/FinalCta.tsx`) — Phase 2 addendum, FR-012
+
+Scope: `FinalCta.tsx`'s outer container and secondary link only, plus 1 new token in
+`app/tokens.css`/`globals.css`. No other homepage section, no other page. No test framework exists in
+this repo — this is manual, plus `npm run lint`/`npm run build`.
+
+1. Open `/` at desktop width (≥1140px) and scroll to the final "Ready to build at the speed of thought?"
+   CTA card.
+2. Measure (via devtools) the outer wrapper around the card — confirm its `max-width` is now `1280px`
+   (previously `1180px`), matching the width of every other homepage section's container.
+3. Confirm the card itself (background, border, radius, blur, the bottom orange glow, the eyebrow,
+   heading, paragraph, and the "Schedule an OrbitAI Demo" gradient button) looks unchanged from before
+   this pass — only the outer container width and the secondary link below the button are affected.
+4. Inspect the secondary link ("Or explore our 6-week framework →") at rest — confirm its font-size is
+   `14.5px` (previously `15.5px`) and its text color is a dimmed white, not solid white as before.
+5. Hover the link — confirm its text color brightens to solid white, with a smooth transition (not an
+   instant snap), and confirm its underline is present at a visibly softer orange tint than before this
+   pass.
+6. Confirm the link's text reads exactly "Or explore our 6-week framework →" (previously "Explore how
+   our 6-week framework can accelerate your next big bet →").
+7. Narrow the viewport to tablet/mobile widths — confirm the card and both CTAs still center correctly
+   and wrap/stack without overlap, matching their pre-existing responsive behavior (unchanged by this
+   pass).
+
+## 25. Gate check (Final CTA Section)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/tokens.css` (1 new token — `--color-text-cta-link`), `app/globals.css`
+   (its `@theme inline` mapping), and `app/_home-components/FinalCta.tsx` (outer container width, the
+   secondary link's typography/hover/underline classes, and its text content). No other homepage
+   section, no other page — the card's own background/border/radius/blur, the eyebrow/heading/paragraph,
+   and the primary button must be pixel- and byte-unchanged.

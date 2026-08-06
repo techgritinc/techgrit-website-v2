@@ -78,6 +78,7 @@
   --color-text-85:        rgba(255, 255, 255, 0.85); /* Methodology deliverable list items */
   --color-text-75:        rgba(255, 255, 255, 0.75); /* Testimonials video-badge label */
   --color-text-70:        rgba(255, 255, 255, 0.70); /* Methodology phase-node text — todo state */
+  --color-text-cta-link:  rgba(255, 255, 255, 0.70); /* Homepage Final CTA secondary link resting color (v2.2 FR-012) */
   --color-text-60:        rgba(255, 255, 255, 0.60);
   --color-text-55:        rgba(255, 255, 255, 0.55);
   --color-text-40:        rgba(255, 255, 255, 0.40);

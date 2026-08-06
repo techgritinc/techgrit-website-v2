@@ -1191,3 +1191,61 @@ own tile radius (`rounded-[20px]`, from the teammate's unmerged code) doesn't ma
 Careers.dc.html`/`TechGrit About.dc.html`'s own reference value (`18px`) — a pre-existing mismatch,
 correctly out of this addendum's FR-011 scope. Recorded here, not silently dropped, so a future
 Careers-page pass can pick it up once the teammate's branch merges.
+
+## 18. Homepage Final CTA Section fidelity (FR-012)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Final CTA Section (FR-012)" |
+**Spec**: [spec.md](./spec.md), FR-012, Clarifications Session 2026-08-06
+
+Scope: `app/_home-components/FinalCta.tsx`, `app/tokens.css`, `app/globals.css`. §§1-17 above are
+unaffected.
+
+**Decision (card width)**: `TechGrit Homepage.dc.html`'s final-CTA wrapper (line 888) is
+`max-width:1280px`, matching every other homepage section's container in this feature — today's
+`FinalCta.tsx` is an outlier at `max-w-[1180px]`. Rather than a raw `max-w-[1280px]` literal, the fix
+uses this feature's own established sitewide idiom for the `--container-max` token —
+`max-w-(--container-max)` — already used by `Hero.tsx`, `IndustriesSection.tsx`, `ReImagineSection.tsx`,
+`BlogSection.tsx`, and others.
+
+**Decision (link typography)**: per spec.md Clarifications (Session 2026-08-06), FR-012's "clickable-text
+typography" covers the secondary link's full treatment — size, resting color, hover color, and underline
+opacity — not just font-size. The reference (line 897) gives this link `font-size:14.5px;
+font-weight:600; color:rgba(255,255,255,0.7)`, brightening to `#fff` only on `:hover` (via `style-hover`),
+with a `border-bottom:1px solid rgba(232,119,34,0.5)` underline. Today's implementation is
+`15.5px`/`text-primary` (already solid white, no hover state) with a `0.60`-opacity underline — flattening
+the reference's own resting/dimmer vs. hover/bright distinction entirely.
+
+**Decision (link copy)**: per spec.md Clarifications (Session 2026-08-06), the link's text content also
+updates from today's paraphrase ("Explore how our 6-week framework can accelerate your next big bet") to
+the reference's literal wording ("Or explore our 6-week framework") — FR-012 was extended to cover this
+alongside the typography correction.
+
+**Tokens needed** — 1 total, which doesn't exist today at this exact value with a matching semantic job:
+- `--color-text-cta-link: rgba(255, 255, 255, 0.70)` (§ Text Colors) — the link's resting color (line
+  897). Value-identical to both the existing `--color-text-quiet` ("CTA banner paragraph copy" — this
+  same CTA banner, but the paragraph, not this link) and `--color-text-70` ("Methodology phase-node text
+  — todo state," an unrelated component). Neither annotation actually describes this element, so a
+  dedicated token is added rather than repurposing either — the same precedent as `--text-industry-title`
+  vs. `--text-stat`, `--radius-16` vs. `--radius-tile`, and `--ls-life-cap` vs. `--ls-hint`/`--ls-blog-meta`
+  earlier in this feature.
+
+**Tokens reused, not duplicated** — all exact matches, confirmed by direct comparison against
+`tokens.css`:
+- `--container-max` (`1280px`) — already the sitewide token for this exact width; consumed via the
+  established `max-w-(--container-max)` idiom, not a new literal.
+- `--text-14-5` (`14.5px`) — already exists (`text-14-5`, "Webinar upcoming-session date/time text"), a
+  general-purpose font-size value; reused verbatim for this link's size correction.
+- `--color-text-primary` (`rgba(255,255,255,1.00)`, already the canonical `text-primary` class) — reused
+  as-is for the link's hover target color; no new token needed since the app already expresses "solid
+  white" this way everywhere else.
+- `--color-border-orange-medium` (`0.50`) — already added/mapped in this feature's Re-Imagine Grid
+  addendum (§13); reused verbatim for the underline correction, not redefined.
+
+**Not a new token**: the underline's `padding-bottom:3px` (reference line 897) has no matching spacing
+token (`--space-3` is `10px`, a different value) — it predates this addendum as `pb-[3px]` and is left
+as the same one-off arbitrary value, consistent with this feature's precedent for genuinely one-off
+pixel values with no token match.
+
+**Not changed**: the card's background/border/radius/blur, the bottom overlay glow, the eyebrow/heading/
+paragraph, and the primary "Schedule an OrbitAI Demo" button are already reference-correct and untouched
+— FR-012 names only the outer container width and the secondary link's typography/copy.

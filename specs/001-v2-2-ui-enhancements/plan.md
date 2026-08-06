@@ -1418,3 +1418,92 @@ carried forward unchanged (M1, now corrected) — all folded into this addendum'
 Check above. 1 further finding (L1) recorded the recreated `careers` branch's own pre-existing
 20px-vs-18px radius delta as a known, deliberately-deferred item for a future pass, not a gap in this
 addendum. No new violations beyond what's now fixed above. Gate: PASS.
+
+## Homepage Final CTA Section (FR-012)
+
+**Date**: 2026-08-06. Extends this Phase 2 addendum to also cover the homepage's closing CTA section
+(`app/_home-components/FinalCta.tsx`), per spec.md FR-012 and Clarifications Session 2026-08-06. Hero,
+Trusted Clients, Subscribe Band, Methodology, Re-Imagine, Industries, Testimonials, the Blog teaser, and
+Life at TechGrit above are unaffected — this is the last unplanned piece of User Story 1.
+`frontend-design` skill consulted for this addendum's one craft surface (the secondary link's
+resting/hover distinction) — see UI Design Approach below.
+
+Today's implementation (`FinalCta.tsx`) diverges from `TechGrit Homepage.dc.html` (lines 886-902) in
+exactly the two ways FR-012 names: the outer container is `max-w-[1180px]` against the reference's
+`max-width:1280px` (the same width every other homepage section in this feature already uses); and the
+secondary "explore the framework" link is `15.5px`/`text-primary` (solid white, no hover state) with a
+`0.60`-opacity underline, against the reference's `14.5px`/`600`-weight/`rgba(255,255,255,0.70)` resting
+color that brightens to solid white only on hover, with a `0.50`-opacity underline. Per Clarifications,
+the link's copy also updates to the reference's literal wording.
+
+1. **`app/tokens.css`** — add 1 new token, in its existing numbered section (research.md §18): `--color-
+   text-cta-link: rgba(255, 255, 255, 0.70);` (§ Text Colors — the secondary link's resting color, line
+   897). The value is an exact numeric match for both the existing `--color-text-quiet` ("CTA banner
+   paragraph copy") and `--color-text-70` ("Methodology phase-node text — todo state") — both
+   single-job-annotated for a different element, the same concern already raised for `--text-industry-
+   title`/`--radius-16`/`--ls-life-cap` earlier in this feature. A dedicated token is added rather than
+   repurposing either.
+2. **`app/globals.css`** — map the new token into `@theme inline` (`--color-text-cta-link: var(--color-
+   text-cta-link);`, alongside the existing text-color mapping block), giving a canonical `text-text-
+   cta-link` utility.
+3. **`app/_home-components/FinalCta.tsx`**:
+   - The outer container's `max-w-[1180px]` becomes `max-w-(--container-max)` — the canonical
+     CSS-variable-arbitrary-value syntax this feature already uses sitewide for the reference's `1280px`
+     width (`Hero.tsx`, `IndustriesSection.tsx`, `ReImagineSection.tsx`, `BlogSection.tsx`, …), not a raw
+     `max-w-[1280px]` literal. The inner card's own padding/radius/blur (already reference-correct) are
+     unchanged.
+   - The secondary link's classes change from `text-15-5 font-semibold text-primary` to `text-14-5
+     font-semibold text-text-cta-link transition-colors duration-200 hover:text-primary` — `text-14-5`
+     (exact match, already canonical) corrects the size; `text-text-cta-link` (item 1) supplies the
+     dimmer resting color; `hover:text-primary` reuses the already-existing, already-canonical
+     `text-primary` class (solid white) as the hover target — no new token needed for the hover state,
+     since it's the same value the app already expresses elsewhere; `transition-colors duration-200`
+     (both plain Tailwind utilities, no token) animates the resting→hover shift, matching the reference's
+     `transition:color .2s ease`.
+   - The underline's `border-border-orange-strong` (0.60) becomes `border-border-orange-medium` (0.50) —
+     an exact-match token already added/mapped in this feature's Re-Imagine Grid addendum (§13); reused
+     verbatim, not redefined.
+   - The link's text content changes from "Explore how our 6-week framework can accelerate your next big
+     bet" to the reference's literal "Or explore our 6-week framework" (Clarifications, Session
+     2026-08-06) — the arrow span and its `text-orange` color are unchanged.
+
+Nothing else changes. The card's background/border/radius/blur, the overlay glow, the eyebrow/heading/
+paragraph, and the primary "Schedule an OrbitAI Demo" button are already reference-correct and untouched.
+
+## UI Design Approach (Final CTA)
+
+**`frontend-design` skill invocation**: consulted for this addendum's one craft surface — the secondary
+link's resting/hover distinction. Today's implementation renders this link at full-white opacity with no
+hover state at all, which flattens the reference's own two-tier visual hierarchy (a quieter secondary
+path, easy to reach, that only "lights up" to full attention on direct interest — vs. the primary gradient
+button's constant, un-missable presence above it). Restoring the dimmer resting color and the
+hover-to-white brighten reinstates that hierarchy exactly as the reference intends, rather than leaving
+both CTAs competing at the same visual weight.
+
+**Reconciliation with Principles I–V**: none needed — the new token is added to `tokens.css` first
+(Principle I); the hover state reuses the existing `text-primary` primitive rather than introducing a
+new one (Principle III); every corrected value is read directly from the reference (Principle IV); no
+new surface fill (Principle V).
+
+**Anchor files**: `app/_home-components/FinalCta.tsx`, `app/tokens.css` (1 new token: `--color-text-cta-
+link`), `app/globals.css` (its `@theme inline` mapping) — no `app/page.tsx` change, no
+`data-model.md`/`contracts/` change, every other homepage section unaffected.
+
+**Constitution check** — PASS on all six principles: the new literal value is added to `tokens.css`
+first, as a dedicated single-job token rather than reusing 2 value-identical-but-differently-scoped
+tokens, following this feature's own established precedent (Principle I); no component is forked — the
+hover state reuses the existing `text-primary` class, and the underline reuses an already-existing token
+from an earlier addendum in this same plan (Principle III); the container width, link typography, and
+link copy are all read directly from `TechGrit Homepage.dc.html` lines 886-897, not invented (Principle
+IV); no new surface fill, no light-surface token introduced (Principle V). Canonical Tailwind classes are
+used throughout in preference to arbitrary-value syntax wherever a token exists (`max-w-(--container-
+max)`, `text-14-5`, `text-text-cta-link`, `text-primary`, `border-border-orange-medium`,
+`transition-colors`, `duration-200`) — the only remaining arbitrary-value class is the pre-existing
+`pb-[3px]` underline offset, which has no matching spacing token (`--space-3` is `10px`, a different
+value) and predates this addendum.
+
+## Post-Design Constitution Re-Check (Final CTA addendum)
+
+Research (Phase 0 of this addendum) confirmed the new token value against the reference directly, and
+confirmed the sitewide `max-w-(--container-max)` idiom as the correct replacement for the literal
+`max-w-[1180px]`, before any file changed. No new violations. Gate: PASS.
