@@ -1,4 +1,3 @@
-import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import MediaSlot from "@/components/ui/MediaSlot";
 import { CULTURE_GALLERY_IMAGES } from "./home-data";

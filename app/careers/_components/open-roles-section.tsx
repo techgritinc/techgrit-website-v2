@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import FilterBar from "@/components/ui/FilterBar";
 import { RoleFilters } from "./role-filters";
 import { RoleCard } from "./role-card";
 import { ApplicationDialog } from "./application-dialog";
