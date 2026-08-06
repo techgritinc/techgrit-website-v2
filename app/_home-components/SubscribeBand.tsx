@@ -48,18 +48,18 @@ export default function SubscribeBand() {
             </div>
 
             {status === "success" ? (
-              <div className="w-full tg-md:w-auto tg-md:min-w-[300px] rounded-card border border-teal bg-[rgba(15,118,110,0.18)] px-[30px] py-5 text-center">
+              <div className="w-full tg-sm:w-auto tg-sm:min-w-[300px] rounded-card border border-teal bg-[rgba(15,118,110,0.18)] px-[30px] py-5 text-center">
                 <div className="text-2xl text-green">&#10003;</div>
                 <div className="mt-1 text-[16px] leading-[normal] font-bold text-primary">Thanks for submitting!</div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate className="flex flex-col tg-md:flex-row tg-md:items-center gap-3 w-full">
+              <form onSubmit={handleSubmit} noValidate className="flex flex-col tg-sm:flex-row tg-sm:items-center gap-3 w-full">
                 <FormField
                   label="Name"
                   name="name"
                   type="text"
                   placeholder="Name"
-                  containerClassName="flex-1 tg-md:flex-[1_1_0px] min-w-0 w-full"
+                  containerClassName="flex-1 tg-sm:flex-[1_1_0px] min-w-0 w-full"
                   inputClassName="!px-[18px] !py-[15px] !min-h-[52px]"
                 />
                 <FormField
@@ -67,12 +67,12 @@ export default function SubscribeBand() {
                   name="email"
                   type="email"
                   placeholder="Business Email"
-                  containerClassName="flex-1 tg-md:flex-[2_1_0px] min-w-0 w-full"
+                  containerClassName="flex-1 tg-sm:flex-[2_1_0px] min-w-0 w-full"
                   inputClassName="!px-[18px] !py-[15px] !min-h-[52px]"
                 />
                 <Button
                   type="submit"
-                  className="shrink-0 w-full tg-md:w-auto !px-[24px] !py-[15px] !min-h-[52px] !gap-[7px] !rounded-[10px] !shadow-nav-btn"
+                  className="shrink-0 w-full tg-sm:w-auto !px-[24px] !py-[15px] !min-h-[52px] !gap-[7px] !rounded-[10px] !shadow-nav-btn"
                 >
                   Submit <span aria-hidden="true" className="inline-block leading-none">&#8594;</span>
                 </Button>
