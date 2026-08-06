@@ -12,7 +12,7 @@ const HOVER_GLOW: Record<IndustryCard["id"], string> = {
 export default function IndustriesSection() {
   return (
     <section id="industries" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 pt-15 pb-25">
+      <div className="mx-auto max-w-(--container-max) px-9 py-20">
         <div className="flex flex-wrap items-end justify-between gap-7.5">
           <div>
             <h2 className="max-w-140 text-[44px] leading-[46.64px]">
