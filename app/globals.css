@@ -205,6 +205,9 @@
   --color-glass-4: var(--color-glass-4);
   --color-glass-8: var(--color-glass-8);
   --color-border-8: var(--color-border-8);
+  --color-border-9: var(--color-border-9);
+  --color-glass-3: var(--color-glass-3);
+  --color-border-orange-medium: var(--color-border-orange-medium);
   --color-border-image: var(--color-border-image);
   --color-border-28: var(--color-border-28);
   --color-border-22: var(--color-border-22);
@@ -460,6 +463,10 @@
   --color-border-ghost-hover: var(--color-border-ghost-hover);
   --shadow-btn-ghost: var(--shadow-btn-ghost);
   --blur-ghost: var(--blur-ghost);
+
+  /* Re-Imagine grid (v2.2 FR-007) */
+  --shadow-reimagine-glow: var(--shadow-reimagine-glow);
+  --shadow-reimagine-glow-soft: var(--shadow-reimagine-glow-soft);
 }
 @layer base {
   /* ----------------------------------------------------------

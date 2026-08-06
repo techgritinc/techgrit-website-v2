@@ -609,6 +609,38 @@ the top-rail node's filled state); confirms `--gradient-phase-node`'s existing v
 `140deg,#F7B733,#E87722` gradient already, reused as-is via `var(--gradient-phase-node)` for the
 circular badge background — no new token, no duplicate.
 
+## 13. "Don't Migrate / Re-Imagine" grid fidelity (FR-007)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Re-Imagine Grid (FR-007)" |
+**Spec**: [spec.md](./spec.md), FR-007
+
+Scope: only `app/_home-components/ReImagineSection.tsx`, `components/ui/GlassCard.tsx`,
+`components/ui/icons.tsx`, `app/_home-components/home-data.ts`, `app/tokens.css`, `app/globals.css`.
+§§1-12 above are unaffected.
+
+**Decision**: `TechGrit Homepage.dc.html` (lines 508-573) and the current `ReImagineSection.tsx`
+diverge on four confirmed points:
+
+| Property | Current | Reference | Fix |
+|---|---|---|---|
+| Top 3 cards' icon | 3 distinct icons, one per card | one identical star-burst icon on all 3 (lines 521/533/545) | new shared `ReimagineSparkleIcon`, used on all 3 |
+| Top 3 cards' imagery | none | an `image-slot` per card (180px tall) | `MediaSlot` per card, wired to the real assets already present at `public/samples/dm-copilot.png`/`dm-tech-debt.png`/`dm-scalability.png` (confirmed via `Bash` search) — no "Coming soon" fallback expected |
+| Top 3 cards' hover | lift + border-color only | (not present in reference; added per FR-007's own text, not the reference) | add `hover:bg-hover-orange-fill-14` on top of the existing lift/border/glow |
+| 4th "card" (comparison panel) | plain `<div>`, `LightningIcon`, no hover | plain `<div>`, no hover (lines 558-572) | becomes a `GlassCard` (FR-007's unification ask) with `TechGritMarkIcon`, hover explicitly disabled to stay reference-exact |
+
+**Tokens needed**: `--color-border-9` (0.09 border), `--color-glass-3` (0.03 background), and two
+hover-glow shadows (`--shadow-reimagine-glow`/`-soft`, `0 0 60px -10px rgba(232,119,34,0.40/0.35)`) —
+none of these exact values exist in `tokens.css` today. Radius (22px), gap (22px), padding (26px), and
+section padding (80px) all already have exact canonical classes (`rounded-3xl`, `gap-tg-9`, `p-tg-11`,
+`p-20`) — confirmed via `tokens.css`/`globals.css`, no new tokens needed for those four.
+**Note**: `--color-glass-3` is a new, distinct token — `tokens.css` already has an unrelated,
+pre-existing duplicate `--color-glass-faint` key (0.03, silently shadowed by a later 0.04
+redeclaration for Case-Study cards); `--color-glass-3` does not fix that bug and must not be confused
+with or merged into it.
+
+**Not changed**: the comparison bars' percentages, labels, and scroll-reveal animation already match
+the reference and are untouched by this addendum.
+
 **Reusable-component refactor (resolves `/speckit.analyze` finding C1)**: `/speckit.analyze`
 (2026-08-05) flagged that FR-006's "reusable by other pages" clause had zero task coverage and
 conflicted with the constitution's own anti-speculative-structure rule (`.specify/memory/

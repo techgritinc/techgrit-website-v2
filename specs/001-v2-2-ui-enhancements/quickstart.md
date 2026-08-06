@@ -189,3 +189,27 @@ Scope: only `app/_home-components/MethodologySection.tsx` and 4 new exports in
    `<MethodologySection>`). No token file (`app/tokens.css`, `app/globals.css`), no other homepage
    section, no other page. No `/frameworks` route, page, or nav change — that
    page remains out of scope (spec.md Assumptions).
+
+## 14. "Don't Migrate / Re-Imagine" grid (`app/_home-components/ReImagineSection.tsx`) — Phase 2 addendum, FR-007
+
+1. Open `/` at desktop width and scroll to "Don't Migrate. Re-Imagine."
+2. Confirm all 3 top cards show the exact same icon (not 3 different icons as before).
+3. Confirm each of the 3 top cards shows its real image (Copilot→Agentic, Tech Debt, Scalability
+   respectively, sourced from `public/samples/`) — not a "Coming soon" placeholder.
+4. Hover each of the 3 top cards — confirm a subtle orange background tint appears, in addition to
+   the existing lift/border/glow.
+5. Confirm the 4th "card" (the "Why AI-First Matters" panel) shows the TechGrit mark icon in place of
+   the lightning-bolt icon, and that hovering it does nothing at all (no lift, no border change, no
+   background tint) — unlike the 3 cards above it.
+6. Confirm the comparison bars (Traditional Development vs. OrbitAI™ Delivery) are unchanged.
+
+## 15. Gate check (Re-Imagine Grid)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/tokens.css` (4 new tokens), `app/globals.css` (their `@theme inline`
+   mappings, plus the drive-by mapping of `--color-border-orange-medium`), `components/ui/icons.tsx`
+   (2 new icon exports), `components/ui/GlassCard.tsx` (2 new variants), `app/_home-components/
+   home-data.ts` (`DifferentiatorPoint` field changes), and `app/_home-components/
+   ReImagineSection.tsx`. No other homepage section, no other page —
+   `app/_home-components/CaseStudiesSection.tsx` (a `GlassCard variant="reimagine"` consumer) must
+   render unchanged.

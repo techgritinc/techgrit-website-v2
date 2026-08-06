@@ -492,7 +492,7 @@ shared component (`Button`, `Badge`, `FormField`) changes.
   `md` breakpoint) the phase-detail panel's `grid-template-columns` collapses to a single track. The
   scroll-pin mechanics, deliverables checklist, and headline gradient were not touched by this pass
   and remain visually unchanged.
-- [ ] T039 Run a fresh browser/build verification pass covering T033-T038: `npm run lint` +
+- [x] T039 Run a fresh browser/build verification pass covering T033-T038: `npm run lint` +
   `npm run build`; confirm the homepage renders identically to T032's checks above (zero visual
   regression from *moving* the code into `PhaseShowcase.tsx`, not just from having added it); confirm
   the eyebrow's computed `margin-bottom` is `14px`; confirm the homepage's ambient-orb background
@@ -545,3 +545,72 @@ Testimonials, Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 rem
 `/speckit.plan` pass each. Building `/frameworks` itself (the candidate second consumer that
 motivated the reusable-component extraction) remains explicitly out of scope — a future feature's
 work, not this one's (spec.md Assumptions).
+
+## Phase 10: Homepage Re-Imagine Grid (Phase 2 addendum, User Story 1 slice)
+
+- [x] T040 [P] Add `--color-border-9`, `--color-glass-3`, `--shadow-reimagine-glow`, and
+  `--shadow-reimagine-glow-soft` to `app/tokens.css`, each in its existing numbered section (Borders /
+  Glass fills / Shadows).
+- [x] T041 Map T040's 4 new tokens into `app/globals.css`'s `@theme inline` block, plus the
+  pre-existing-but-unmapped `--color-border-orange-medium`, so `border-border-9`, `bg-glass-3`,
+  `shadow-reimagine-glow(-soft)`, and `border-border-orange-medium` all become canonical Tailwind
+  utilities.
+- [x] T042 [P] Add `ReimagineSparkleIcon` and `TechGritMarkIcon` to `components/ui/icons.tsx`,
+  following the file's existing `IconProps`/`{...props}`-last convention.
+- [x] T043 Add `"reimagineDiff"`/`"reimagineWhy"` to `GlassCardVariant`'s union type first (required —
+  the `Record`s below don't type-check without it), then add matching `reimagineDiff`/`reimagineWhy`
+  entries to `components/ui/GlassCard.tsx`'s `CARD_VARIANTS`, `ICON_VARIANTS`, `TITLE_VARIANTS`, and
+  `DESC_VARIANTS` `Record`s (the existing `reimagine` variant and its consumer,
+  `CaseStudiesSection.tsx`, are left untouched).
+- [x] T044 [P] In `app/_home-components/home-data.ts`, remove `DifferentiatorPoint`'s `icon`/`tone`
+  fields and add a required `image: string` field; populate the 3 existing `DIFFERENTIATORS` entries
+  with `/samples/dm-copilot.png`, `/samples/dm-tech-debt.png`, and `/samples/dm-scalability.png`
+  respectively (all 3 assets confirmed present in `public/samples/`).
+- [x] T045 Rewrite `app/_home-components/ReImagineSection.tsx`'s 3-card row: switch each card to
+  `GlassCard variant="reimagineDiff"` rendering the shared `ReimagineSparkleIcon`, correct the row gap
+  (`gap-6` → `gap-tg-9`) and the grid's own top margin (`mt-14` → `mt-tg-19`), and add each card's
+  `MediaSlot` image region (180px tall, bottom-pinned via `mt-auto`).
+- [x] T046 In the same file, correct the section's outer vertical padding (`pt-15 pb-25` →
+  `pt-20 pb-20`).
+- [x] T047 In the same file, convert the "Why AI-First Matters" panel from a plain `<div>` to
+  `GlassCard variant="reimagineWhy"` (no hover classes, `hoverBorderColor=""`), swapping its icon from
+  `LightningIcon` to `TechGritMarkIcon` and removing the icon's now-reference-incorrect
+  `bg-overlay-orange` background chip.
+- [x] T048 Run `npm run lint` + `npm run build`; browser-verify the 3-card row's computed
+  `border-radius`/`gap`/padding/hover background/hover shadow/border-color against
+  `TechGrit Homepage.dc.html` lines 508-573, confirm each card renders its real image
+  (`dm-copilot.png`/`dm-tech-debt.png`/`dm-scalability.png` via `MediaSlot`, not the "Coming soon"
+  fallback), and confirm the "Why AI-First Matters" panel shows zero hover effect (no translate, no
+  border-color change, no background fill) while its icon renders `TechGritMarkIcon`.
+
+## Dependencies (Re-Imagine Grid)
+
+- T040 is independent (different file, `tokens.css`) but blocks T041, which maps its new tokens.
+- T042 is independent (different file, `icons.tsx`) but blocks T043 (which references the icons only
+  by name in comments, not by import) and T047 (which imports `TechGritMarkIcon`).
+- T041 and T043 both block T045-T047, which consume the new canonical classes and `GlassCard`
+  variants.
+- T044 is independent (different file, `home-data.ts`) but blocks T045 (which reads `item.image`).
+- T045 → T046 → T047: same file (`ReImagineSection.tsx`), sequential edits.
+- T048 runs last, after T040-T047.
+
+## Parallel Example (Re-Imagine Grid)
+
+```bash
+# T040 (tokens.css), T042 (icons.tsx), and T044 (home-data.ts) can run together — different files:
+Task: "Add 4 new border/glass/shadow tokens to app/tokens.css (T040)"
+Task: "Add ReimagineSparkleIcon + TechGritMarkIcon to components/ui/icons.tsx (T042)"
+Task: "Update DifferentiatorPoint shape in home-data.ts (T044)"
+# Then T041 (globals.css) and T043 (GlassCard.tsx) can run together — different files:
+Task: "Map new tokens into globals.css @theme inline (T041)"
+Task: "Add reimagineDiff/reimagineWhy variants to GlassCard.tsx (T043)"
+# Then the ReImagineSection.tsx edit chain runs sequentially:
+Task: "ReImagineSection.tsx edit chain: T045 -> T046 -> T047"
+```
+
+## Implementation Strategy (Re-Imagine Grid)
+
+Complete T040-T044 (independent, parallelizable), then T041/T043 (each depends on one of the first
+group), then the sequential T045-T047 chain, then T048 to verify. The remaining pieces of User Story 1
+(Construction card, Testimonials, Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9
+remain a future `/speckit.plan` pass each.

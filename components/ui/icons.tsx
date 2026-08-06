@@ -256,6 +256,43 @@ export function InfiniteScalabilityIcon(props: IconProps) {
   );
 }
 
+/** Re-Imagine grid — shared star-burst icon for cards 1-3 (v2.2 FR-007), extracted verbatim from
+ * `TechGrit Homepage.dc.html`'s identical icon on all 3 of its differentiator cards. */
+export function ReimagineSparkleIcon(props: IconProps) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" />
+    </svg>
+  );
+}
+
+/** TechGrit brand mark — recreates `public/icons/favicon.png`'s 5x5 grid as a scalable SVG
+ * (v2.2 FR-007, Re-Imagine grid card 4). */
+export function TechGritMarkIcon(props: IconProps) {
+  return (
+    <svg
+      width="30"
+      height="30"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      fill="none"
+      {...props}
+    >
+      <g fill="currentColor">
+        <rect x="3" y="3" width="4" height="4" rx="1" />
+        <rect x="10" y="3" width="4" height="4" rx="1" />
+        <rect x="17" y="3" width="4" height="4" rx="1" />
+        <rect x="3" y="10" width="4" height="4" rx="1" />
+        <rect x="10" y="10" width="4" height="4" rx="1" />
+        <rect x="17" y="10" width="4" height="4" rx="1" />
+        <rect x="3" y="17" width="4" height="4" rx="1" />
+        <rect x="10" y="17" width="4" height="4" rx="1" />
+        <rect x="17" y="17" width="4" height="4" rx="1" />
+      </g>
+    </svg>
+  );
+}
+
 /** "Why AI-First Matters" panel icon (lightning bolt). */
 export function LightningIcon(props: IconProps) {
   return (
