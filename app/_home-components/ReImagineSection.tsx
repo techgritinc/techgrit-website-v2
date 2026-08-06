@@ -46,7 +46,7 @@ export default function ReImagineSection() {
         <div className="mt-tg-19 grid grid-cols-3 gap-tg-9 max-tg-md:grid-cols-1">
           {DIFFERENTIATORS.map((item, index) => (
             <GlassCard
-              key={item.title}
+              key={item.id}
               variant="reimagineDiff"
               hoverBorderColor=""
               className={CARD_GLOW[index]}
@@ -71,7 +71,7 @@ export default function ReImagineSection() {
           hoverBorderColor=""
           className="mt-6 grid grid-cols-[0.8fr_1.2fr] items-center gap-12 max-tg-md:grid-cols-1"
         >
-          <div className="flex items-start gap-4.5">
+          <div className="flex items-start gap-4.5 max-tg-md:flex-col">
             <GlassCardIcon variant="reimagineWhy">
               <TechGritMarkIcon className="text-orange" width={30} height={30} />
             </GlassCardIcon>

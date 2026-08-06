@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import Button from "@/components/ui/Button";
 import { GlassCard, GlassCardDescription, GlassCardIcon, GlassCardTitle } from "@/components/ui/GlassCard";
-import { INDUSTRY_CARDS } from "./home-data";
+import { INDUSTRY_CARDS, type IndustryCard } from "./home-data";
 
-const HOVER_GLOW: Record<string, string> = {
+const HOVER_GLOW: Record<IndustryCard["id"], string> = {
   fintech: "hover:shadow-industry-glow-violet",
   healthcare: "hover:shadow-industry-glow-green",
   construction: "hover:shadow-industry-glow-blue",
