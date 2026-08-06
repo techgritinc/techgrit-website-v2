@@ -374,6 +374,79 @@ export function ConstructionIcon(props: IconProps) {
   );
 }
 
+/** Homepage Industries-section card icon — FinTech (v2.2 FR-008). Distinct from the shared
+ * `FinTechIcon` above, which the nav mega-menu still uses; this shape is extracted verbatim from
+ * `TechGrit Homepage.dc.html` line 588, always rendered white on a solid color-fill circle. */
+export function IndustryFinTechIcon(props: IconProps) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#fff"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <rect x="2" y="6" width="20" height="14" rx="2" />
+      <path d="M2 10h20" />
+      <path d="M6 15h4" />
+    </svg>
+  );
+}
+
+/** Homepage Industries-section card icon — Healthcare (v2.2 FR-008). Distinct from the shared
+ * `HealthcareIcon` above, which the nav mega-menu still uses; extracted verbatim from
+ * `TechGrit Homepage.dc.html` line 593, always rendered white on a solid color-fill circle. */
+export function IndustryHealthcareIcon(props: IconProps) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#fff"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M6 3h12l-1 4H7z" />
+      <rect x="5" y="7" width="14" height="14" rx="2" />
+      <path d="M12 11v6M9 14h6" />
+    </svg>
+  );
+}
+
+/** Homepage Industries-section card icon — Construction (v2.2 FR-008). Distinct from the shared
+ * `ConstructionIcon` above, which the nav mega-menu still uses; extracted verbatim from
+ * `TechGrit Homepage.dc.html` line 598, always rendered white on a solid color-fill circle. */
+export function IndustryConstructionIcon(props: IconProps) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#fff"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M3 20h18" />
+      <path d="M6 20V10l6-3v13" />
+      <path d="M12 8l8 3v9" />
+      <path d="M9 20v-4h3v4" />
+    </svg>
+  );
+}
+
 /** Video-testimonial play button and the "Don't Migrate. Re-Imagine." heading triangle. */
 export function PlayIcon({
   variant = "default",

@@ -632,3 +632,165 @@ variants: `reimagineDiff`, `reimagineWhy`, across all 4 `Record`s), `app/_home-c
 `app/_home-components/ReImagineSection.tsx` (rewritten 3-card row + panel, both as `GlassCard`) — no
 `app/page.tsx` change, no `data-model.md`/`contracts/` change, `components/ui/CaseStudiesSection.tsx`
 and every other `GlassCard` consumer unaffected (their own variants are untouched).
+
+## Homepage Industries Section (FR-008)
+
+**Date**: 2026-08-06. Extends this Phase 2 addendum to also cover the homepage's Industries
+section (`app/_home-components/IndustriesSection.tsx`, rendered directly after "Don't Migrate /
+Re-Imagine"), per spec.md Clarifications Session 2026-08-06, FR-008. This is **not** the standalone
+`/construction` page — that page's own requirements (FR-016 through FR-021) are unaffected and
+unplanned by this section. Hero, Trusted Clients, Subscribe Band, Methodology, and Re-Imagine above
+are unaffected; Testimonials, the Blog teaser, Life at TechGrit, and the final CTA remain unplanned.
+`frontend-design` skill consulted for this addendum's craft surfaces (the 3 colored icon badges and
+the card's clickability affordance) — see UI Design Approach below.
+
+Today, `IndustriesSection.tsx`'s 3 cards (`GlassCard variant="industry"`) each render a `MediaSlot`
+photo with a small bordered icon badge overlaid at the photo's bottom-left corner, using the shared
+`FinTechIcon`/`HealthcareIcon`/`ConstructionIcon` from `components/ui/icons.tsx` — the same 3 icons
+`components/layout/nav-config.ts` imports for the nav's "Industries" mega-menu (`HealthcareIcon`,
+`ConstructionIcon` directly; FinTech already has its own nav-only `NavFinTechIcon`, added previously
+for exactly this reason). Only the Construction card carries an `href` (`/construction`), rendered as
+an inline "Explore Construction →" text link inside the card, not a whole-card link. This diverges
+from `TechGrit Homepage.dc.html` (lines 586-602), which shows no photo at all — each card is a
+`data-card` anchor wrapping a large 56px colored circular icon badge (white stroke icon on a solid
+color fill: `#8B5CF6` FinTech, `#10B981` Healthcare, `#3B82F6` Construction), a title, and a
+description.
+
+1. **`components/ui/icons.tsx`** — add 3 new named icon exports, extracted verbatim from the
+   reference's homepage-section icons (lines 588/593/598 — distinct from the nav mega-menu's own
+   icon shapes at lines 193/194/196, which are unaffected): `IndustryFinTechIcon` (card/rect +
+   horizontal + vertical strokes), `IndustryHealthcareIcon` (rounded rect + cross), `IndustryConstructionIcon`
+   (crane/building silhouette), following the file's existing `IconProps`/`{...props}`-last
+   convention, each rendered with a white stroke (`stroke="#fff"`) regardless of caller color, since
+   the reference always pairs these with a solid colored circle background, never a colored stroke on
+   a dark surface (unlike the existing shared `FinTechIcon`/`HealthcareIcon`/`ConstructionIcon`, which
+   stay exactly as they are today for the nav mega-menu).
+2. **`app/_home-components/home-data.ts`** — `IndustryCard.icon` is repointed from
+   `FinTechIcon`/`HealthcareIcon`/`ConstructionIcon` to the 3 new `Industry*Icon` exports from item 1.
+   The `image: { src: string; alt: string } | null` field is removed (no photo renders in this section
+   any longer); `href` stays `string | null`, unchanged in shape — only Construction keeps a non-null
+   value (`/construction`), FinTech and Healthcare stay `null`. A new required `iconBg: string` field
+   is added (Tailwind class per card: `bg-avatar-violet`, `bg-avatar-green`, `bg-avatar-blue` — all 3
+   already exact-match, already-mapped canonical tokens/utilities from the Testimonials avatar work,
+   reused verbatim, not duplicated).
+3. **`app/tokens.css`** — add 3 new border tokens (§ Borders) for the reference's per-card hover
+   border colors, none of which exist today at these exact values: `--color-border-violet-50: rgba(139, 92, 246, 0.50);`,
+   `--color-border-green-55: rgba(16, 185, 129, 0.55);`, `--color-border-blue-55: rgba(59, 130, 246, 0.55);`
+   (distinct from the existing `--color-border-blue-strong`/`-teal-strong`, which are different hues at
+   different opacities for unrelated cards). Add 3 new shadow tokens (§ Shadows) for the reference's
+   per-card hover glow (`0 0 50px -12px rgba(...,0.35)`, lines 587/592/597): `--shadow-industry-glow-violet`,
+   `--shadow-industry-glow-green`, `--shadow-industry-glow-blue` — distinct from the existing
+   `--shadow-glow-*-avatar` tokens (those are a different shadow shape, `0 0 0 -12px`, for the
+   Testimonials avatar ring, not a card hover glow). Add one new letter-spacing token,
+   `--ls-title-tight: -0.01em;` (§ Typography — named to avoid collision with the existing, unrelated
+   `--ls-01: 0.01em`, a *positive* Blog topic-filter-chip tracking value; `/speckit.analyze` flagged the
+   originally-planned `--ls-tight-01` name as too easy to confuse with it) — no existing token matches
+   this exact value (closest is `--ls-normal` at `-0.02em`, a different value, not a duplicate). Add
+   one new font-size token, `--text-industry-title: 26px;` (§ Typography) for the card title — the
+   value happens to equal `--text-stat`'s 26px, but `/speckit.analyze` correctly flagged reusing
+   `--text-stat` here as a Principle I violation ("each token has exactly one semantic job"; `--text-stat`
+   is explicitly annotated "Hero delivery-stat digit size" and reusing it for an unrelated card title
+   would repurpose it), so a dedicated token is added instead, even though the literal pixel value is
+   the same. No new radius token: the reference's 20px card radius already has an exact match,
+   `--radius-2xl` (`rounded-2xl`); no new padding/margin token: the reference's `30px 30px 34px` card
+   padding and `44px` icon-to-title gap already have exact matches, `--space-13`/`--space-14`
+   (`p-tg-13`/`pb-tg-14`) and `--space-17` (`mb-tg-17`); the description's 15px/rgba(255,255,255,0.6)
+   already has exact matches, `--text-sm`/`--color-text-60` (`text-sm`/`text-60`) — both general-purpose,
+   many-consumer tokens, not a single-job token like `--text-stat`, so reusing them is not a Principle I
+   concern.
+4. **`app/globals.css`** — map the 3 new border tokens, 3 new shadow tokens, `--ls-title-tight`, and
+   `--text-industry-title` into `@theme inline` (alongside the existing border/shadow/typography
+   mapping blocks), giving canonical `border-border-violet-50`/`-green-55`/`-blue-55`,
+   `hover:shadow-industry-glow-violet`/`-green`/`-blue`, `tracking-title-tight`, and
+   `text-industry-title` classes.
+5. **`components/ui/GlassCard.tsx`** — `industry`'s existing `CARD_VARIANTS` entry (the sole consumer,
+   confirmed via search — safe to modify in place rather than fork) changes from
+   `"rounded-[20px] border-border-image bg-glass-4 overflow-hidden hover:-translate-y-[5px]"` to
+   `"rounded-2xl border-border-9 bg-glass-3 p-tg-13 pb-tg-14 hover:-translate-y-[5px]"` (canonical
+   radius/border/background/padding classes, matching the reference's `20px`/`0.09`/`0.03`/
+   `30px 30px 34px` values, dropping `overflow-hidden` since there is no photo to clip anymore). Each
+   card passes its own `hoverBorderColor` (`hover:border-border-violet-50`, etc.) and `className`
+   (`hover:shadow-industry-glow-violet`, etc.) per instance — the same per-card-override convention
+   `ReImagineSection.tsx` already established for `reimagineDiff` (item 4/FR-007 above), not a 5th
+   `Record` entry per color. `ICON_VARIANTS.industry` changes from `"mb-5.5 h-13 w-13 rounded-md"`
+   (the old bordered-badge-over-photo treatment) to `"mb-tg-17 h-14 w-14 rounded-full"` (56px circle,
+   44px gap to the title). `TITLE_VARIANTS.industry` changes from `"text-[23px]"` to
+   `"text-industry-title tracking-title-tight"` — `/speckit.analyze` (H1) found the original plan never
+   actually corrected the title's font-size from its current 23px to the reference's 26px (only the
+   tracking addition was specified), which would have shipped a visibly-wrong title size; this is now
+   an explicit class swap, not an addition alongside the stale `text-[23px]`. `DESC_VARIANTS.industry`
+   changes from `"mt-2.5 text-[15px] leading-[1.6]"` to `"mt-2.5 text-sm leading-[1.6] text-60"` —
+   `/speckit.analyze` (H2) found this variant carries no color class today, so it was silently
+   inheriting the base `<p>` tag rule's `--color-text-secondary` (0.72 opacity, `globals.css:544`), not
+   the reference's 0.6; `text-sm` also replaces the arbitrary `text-[15px]` with its canonical
+   equivalent (same 15px value), consistent with this session's "Tailwind must use canonical classes"
+   direction (M1).
+6. **`app/_home-components/IndustriesSection.tsx`** — each card's icon wrapper becomes
+   `<GlassCardIcon variant="industry" className={industry.iconBg}><Icon className="text-white" /></GlassCardIcon>`
+   (colored circle, white icon — replacing the `ICON_BORDER`/`ICON_COLOR` maps and the bordered
+   overlay-on-photo treatment, both of which are removed); the `MediaSlot`/photo block and its
+   `relative h-[178px]` wrapper are deleted entirely; the inline "Explore Construction →" text link is
+   removed. Only the Construction card (`industry.id === "construction"`, i.e. `industry.href` is
+   non-null) is wrapped in a whole-card `<a href={industry.href}>` (matching the reference's
+   `data-card` pattern); FinTech and Healthcare render their `GlassCard` directly, with no wrapping
+   element and no click affordance, since `industry.href` is `null` for both. The "Explore Industry
+   Solutions" `<Button variant="ghost">` call's own `className="px-6!"` override is corrected to
+   `className="py-4!"` — `/speckit.analyze` (M2) found this override was not, as originally assumed,
+   a no-op preserving an already-correct value: `Button.tsx`'s `md`-size default (`px-[26px] py-3.5`,
+   i.e. 26px/14px) already matches the reference's horizontal `26px` exactly, so `px-6!` (24px,
+   `!important`) was actively *worsening* fidelity by forcing it 2px narrower; the reference's vertical
+   `16px` (line 584) was the actual gap, uncorrected by either the original or the overridden class.
+   The fix removes the incorrect horizontal override and adds the missing vertical one, scoped to this
+   one button instance only — `Button.tsx`'s shared `md` size (used by other buttons sitewide) is not
+   touched.
+
+Nothing else changes. The section's own heading/paragraph are already reference-correct.
+`app/page.tsx`'s render order and every other homepage section are untouched.
+
+**UI Design Approach (Industries section)**: `frontend-design` skill consulted for this addendum's 2
+craft surfaces. **Colored icon badges** — each icon stays a simple 2-stroke white glyph on a solid
+(not gradient) color fill, matching the reference's flat `#8B5CF6`/`#10B981`/`#3B82F6` circles; a
+gradient fill here would compete with the section's single-accent (orange/amber) brand rule (Principle
+V) more than the reference's own flat colors do, so the flat treatment is also the more
+constitution-aligned choice, not just a literal copy. **Clickability asymmetry** — leaving FinTech/
+Healthcare non-interactive (no hover lift, no cursor change) while Construction alone lifts, glows,
+and shows a pointer cursor reads as an intentional "this one goes somewhere, these two don't" signal
+rather than a broken/inconsistent card, provided the 3 cards' hover treatments are otherwise visually
+matched (icon/title/description position, spacing) — asymmetric interactivity on visually-uniform
+cards is a defensible pattern precisely because the two non-interactive cards don't attempt a hover
+treatment that then does nothing.
+
+**Constitution check** — PASS on all six principles: every new literal value (3 border colors, 3
+glow shadows, 1 tracking value, 1 font-size value) is added to `tokens.css` first, in its existing
+numbered section, before use (Principle I) — including a dedicated `--text-industry-title` token
+rather than reusing the value-identical-but-differently-scoped `--text-stat`, per `/speckit.analyze`
+finding C1: Principle I requires each token to have exactly one semantic job, and `--text-stat` is
+already annotated for the Hero delivery-stat digit, not this card title; the 3 new icons are added to
+`components/ui/icons.tsx`, the constitution's single consolidated icon file, following its existing
+naming/props convention, and deliberately kept separate from the shared
+`FinTechIcon`/`HealthcareIcon`/`ConstructionIcon` so the nav mega-menu (a different consumer, out of
+this addendum's scope) renders unchanged — the same "add a second, differently-named icon rather than
+mutate a shared one" precedent `NavFinTechIcon` already set (Principle III); `GlassCard`'s `industry`
+variant is modified in place, not forked, since it has exactly one consumer (confirmed via search) —
+Principle III's "don't fork, don't duplicate" is satisfied either way here, but editing in place
+avoids a same-shaped near-duplicate variant; the icon badge design, per-card hover colors, and
+construction-only clickability are all read directly from the reference (Principle IV), not invented;
+no new surface fill — the 3 icon-badge colors are the only non-brand-accent colors introduced,
+confined to small 56px circles, not surfaces (Principle V). Canonical Tailwind classes are used
+throughout in preference to arbitrary-value syntax wherever a token exists (`rounded-2xl`, `p-tg-13`,
+`pb-tg-14`, `mb-tg-17`, `h-14`, `w-14`, `rounded-full`, `text-industry-title`, `text-sm`, `text-60`,
+`tracking-title-tight`, `border-border-9`, `bg-glass-3`, `bg-avatar-violet`/`-green`/`-blue`,
+`border-border-violet-50`/`-green-55`/`-blue-55`, `hover:shadow-industry-glow-violet`/`-green`/`-blue`,
+`py-4!`) — the only remaining arbitrary-value class is `max-tg-md:grid-cols-1` on the outer grid,
+whose underlying breakpoint is already canonical.
+
+**Anchor files**: `components/ui/icons.tsx` (3 new exports: `IndustryFinTechIcon`,
+`IndustryHealthcareIcon`, `IndustryConstructionIcon`), `app/_home-components/home-data.ts`
+(`IndustryCard` loses `image`, gains `iconBg`, `icon` repointed to the 3 new exports),
+`app/tokens.css` (3 new border tokens, 3 new shadow tokens, 1 new tracking token, 1 new font-size
+token), `app/globals.css` (their `@theme inline` mappings), `components/ui/GlassCard.tsx` (`industry`
+variant's `CARD_VARIANTS`/`ICON_VARIANTS`/`TITLE_VARIANTS`/`DESC_VARIANTS` entries edited in place),
+and `app/_home-components/IndustriesSection.tsx` (icon-badge rendering, photo removal,
+Construction-only whole-card link, ghost-button padding correction) — no `app/page.tsx` change, no
+`data-model.md`/`contracts/` change, `Button.tsx`'s shared `md` size and `components/layout/
+nav-config.ts`'s mega-menu icons unaffected, `/construction`'s own FR-016–FR-021 work unaffected.

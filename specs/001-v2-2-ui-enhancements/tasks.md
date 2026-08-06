@@ -614,3 +614,90 @@ Complete T040-T044 (independent, parallelizable), then T041/T043 (each depends o
 group), then the sequential T045-T047 chain, then T048 to verify. The remaining pieces of User Story 1
 (Construction card, Testimonials, Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9
 remain a future `/speckit.plan` pass each.
+
+## Phase 11: Homepage Industries Section (Phase 2 addendum, User Story 1 slice)
+
+Scope: only the homepage's `IndustriesSection.tsx` (FR-008) — NOT the standalone `/construction`
+page, whose own requirements (FR-016–FR-021) are unaffected and out of scope for this phase.
+
+- [x] T049 [P] Add `IndustryFinTechIcon`, `IndustryHealthcareIcon`, and `IndustryConstructionIcon` to
+  `components/ui/icons.tsx`, extracted verbatim from `TechGrit Homepage.dc.html` lines 588/593/598,
+  following the file's existing `IconProps`/`{...props}`-last convention, each with `stroke="#fff"` —
+  the existing `FinTechIcon`/`HealthcareIcon`/`ConstructionIcon` exports (also used by
+  `components/layout/nav-config.ts`'s mega-menu) are left untouched.
+- [x] T050 [P] Add `--color-border-violet-50`, `--color-border-green-55`, `--color-border-blue-55`
+  (§ Borders), `--shadow-industry-glow-violet`, `--shadow-industry-glow-green`,
+  `--shadow-industry-glow-blue` (§ Shadows), `--ls-title-tight: -0.01em` (§ Typography — named to
+  avoid confusion with the existing, unrelated `--ls-01: 0.01em`, per `/speckit.analyze` finding M3),
+  and `--text-industry-title: 26px` (§ Typography — a dedicated token, not a reuse of the
+  single-job-annotated `--text-stat`, per `/speckit.analyze` finding C1) to `app/tokens.css`, each in
+  its existing numbered section.
+- [x] T051 Map T050's 8 new tokens into `app/globals.css`'s `@theme inline` block, so
+  `border-border-violet-50`/`-green-55`/`-blue-55`, `hover:shadow-industry-glow-violet`/`-green`/
+  `-blue`, `tracking-title-tight`, and `text-industry-title` all become canonical Tailwind utilities.
+- [x] T052 [P] In `app/_home-components/home-data.ts`: repoint each `IndustryCard.icon` to its new
+  `Industry*Icon` export (T049), remove the `image` field from the `IndustryCard` type and all 3
+  `INDUSTRY_CARDS` entries, and add a required `iconBg: string` field populated with
+  `bg-avatar-violet`/`bg-avatar-green`/`bg-avatar-blue` (FinTech/Healthcare/Construction respectively —
+  all 3 already exact-match, already-mapped tokens from the Testimonials avatar work, reused as-is).
+- [x] T053 In `components/ui/GlassCard.tsx`, edit the `industry` entry (its sole consumer, confirmed
+  via search — safe to modify in place) in `CARD_VARIANTS` (→
+  `"rounded-2xl border-border-9 bg-glass-3 p-tg-13 pb-tg-14 hover:-translate-y-[5px]"`, dropping
+  `overflow-hidden`), `ICON_VARIANTS` (→ `"mb-tg-17 h-14 w-14 rounded-full"`), `TITLE_VARIANTS` (→
+  `"text-industry-title tracking-title-tight"`, replacing the stale `"text-[23px]"` — `/speckit.analyze`
+  finding H1: the original task only planned to *add* tracking, never correcting the 23px→26px
+  font-size gap), and `DESC_VARIANTS` (→ `"mt-2.5 text-sm leading-[1.6] text-60"`, replacing
+  `"mt-2.5 text-[15px] leading-[1.6]"` — `/speckit.analyze` finding H2: this variant had no color class
+  and was silently inheriting the base `<p>` rule's 0.72-opacity text color instead of the reference's
+  0.6; `text-sm` also replaces the arbitrary `text-[15px]` with its canonical equivalent, per M1).
+- [x] T054 Rewrite `app/_home-components/IndustriesSection.tsx`: remove the `MediaSlot`/photo block and
+  its `ICON_BORDER`/`ICON_COLOR` maps entirely; render each card's icon as
+  `<GlassCardIcon variant="industry" className={industry.iconBg}><Icon className="text-white" /></GlassCardIcon>`;
+  remove the inline "Explore Construction →" text link; wrap only the Construction card (where
+  `industry.href` is non-null) in a whole-card `<a href={industry.href}>` — FinTech and Healthcare
+  render their `GlassCard` unwrapped, with no click affordance. Also correct the "Explore Industry
+  Solutions" `<Button variant="ghost">` call's `className` from `"px-6!"` to `"py-4!"` —
+  `/speckit.analyze` finding M2: `Button.tsx`'s `md`-size default already provides the reference's
+  correct 26px horizontal padding, so `px-6!` (24px) was an unnecessary, fidelity-*regressing*
+  override; the reference's actual gap was vertical padding (14px vs. the needed 16px), which neither
+  the original nor the overridden class corrected.
+- [ ] T055 Run `npm run lint` + `npm run build`; browser-verify each card's computed
+  `border-radius`/`background`/`padding`/icon-to-title gap against `TechGrit Homepage.dc.html` lines
+  586-602, confirm the title renders at 26px (not the stale 23px) and the description at
+  `rgba(255,255,255,0.6)` (not the inherited 0.72), confirm only the Construction card is clickable
+  (whole-card, to `/construction`) with a distinct hover lift/border/glow, confirm FinTech/Healthcare
+  show no hover or click affordance, confirm the ghost button's computed padding is `16px` vertical /
+  `26px` horizontal, and confirm `components/layout/nav-config.ts`'s mega-menu icons render
+  pixel-unchanged.
+
+## Dependencies (Industries Section)
+
+- T049 (icons.tsx) and T050 (tokens.css) are independent (different files) but each blocks a later
+  task: T049 blocks T052 (imports the new icons); T050 blocks T051 (maps its new tokens).
+- T051 and T049 both block T053 (which consumes the new canonical classes) and T054 (which imports the
+  new icons via T052).
+- T052 depends on T049 (icon imports) and is independent of T050/T051/T053 otherwise.
+- T053 depends on T051 (canonical classes must exist first).
+- T054 depends on T052 (repointed `home-data.ts`) and T053 (updated `GlassCard` variant).
+- T055 runs last, after T049-T054.
+
+## Parallel Example (Industries Section)
+
+```bash
+# T049 (icons.tsx) and T050 (tokens.css) can run together — different files:
+Task: "Add 3 new Industry*Icon exports to components/ui/icons.tsx (T049)"
+Task: "Add 3 border tokens + 3 shadow tokens + 1 tracking token + 1 font-size token to app/tokens.css (T050)"
+# Then T051 (globals.css) and T052 (home-data.ts) can run together — different files:
+Task: "Map new tokens into globals.css @theme inline (T051)"
+Task: "Repoint IndustryCard icons, drop image field, add iconBg (T052)"
+# Then T053 (GlassCard.tsx), then T054 (IndustriesSection.tsx) — each depends on the prior:
+Task: "Edit industry variant's CARD_VARIANTS/ICON_VARIANTS/TITLE_VARIANTS/DESC_VARIANTS (T053)"
+Task: "Rewrite IndustriesSection.tsx: icon badges, no photo, Construction-only link, ghost-button padding fix (T054)"
+```
+
+## Implementation Strategy (Industries Section)
+
+Complete T049-T050 (independent, parallelizable), then T051/T052 (each depends on one of the first
+group), then T053, then T054, then T055 to verify. The remaining pieces of User Story 1 (Testimonials,
+Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass
+each. `/construction`'s own FR-016–FR-021 work is unaffected and unplanned by this phase.
