@@ -37,7 +37,7 @@ export default function Hero() {
               Live Webinar
             </Badge>
             <span className="text-[17px] tracking-[-0.085px] font-semibold text-bright">Orchestrating the AI-First SDLC</span>
-            <span aria-hidden="true" className="shrink-0 text-[20px] font-bold leading- text-amber-light">
+            <span aria-hidden="true" className="shrink-0 text-[20px] font-bold text-amber-light">
               &rarr;
             </span>
           </a>
