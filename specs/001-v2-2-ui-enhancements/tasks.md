@@ -921,3 +921,131 @@ Task: "Create BlogSection.tsx (T068) -> render in page.tsx (T069) -> verify (T07
 Complete T064/T065/T067 (independent, parallelizable), then T066 (depends on T065), then T068 (depends
 on T064/T066/T067), then T069 (depends on T068), then T070 to verify. The remaining pieces of User
 Story 1 (Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass each.
+
+## Phase 14: Homepage Life at TechGrit Section (Phase 2 addendum, User Story 1 slice)
+
+**Input**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Life at TechGrit Section (FR-011)",
+[spec.md](./spec.md) FR-011/FR-044, Clarifications Session 2026-08-06. [research.md](./research.md) §17
+has the full token reuse/no-new-token accounting.
+
+**Scope**: `app/_home-components/LifeGallery.tsx`'s `home` branch only, `app/_home-components/
+home-data.ts` (`CULTURE_GALLERY_IMAGES` caption content), and 2 new tokens in `app/tokens.css`/
+`globals.css` (FR-011) — NOT the `careers` branch of the same file, NOT `/careers` (which must render
+with zero visual change), NOT `components/ui/section-eyebrow.tsx` itself, NOT any other homepage
+section, NOT `app/page.tsx`.
+
+**Goal**: FR-011 — the "Inside TechGrit" eyebrow renders with no leading accent line, the photo grid
+matches the reference's uniform 4-column bordered/captioned layout, and the two action buttons (already
+correct from Phase 1) are confirmed unchanged.
+
+- [X] T071 [P] [US1] Recreate `app/_home-components/LifeGallery.tsx` byte-for-byte from the teammate's
+  supplied unmerged-branch structure — the `variant`/`columns`-based component, `LifeGalleryImage` gaining
+  optional `captionLabel`/`caption` fields, the `careers` branch's aspect-`3/4` bordered tile shell with
+  its caption-rendering block left commented out exactly as supplied, and `scroll-mt-[96px]` on the
+  `<section>` — establishing the merge-conflict-free baseline this addendum's own edits (T075) layer on
+  top of (spec.md Clarifications, Session 2026-08-06; plan.md "Homepage Life at TechGrit Section
+  (FR-011)"). Independent of T072/T074 (different files) — blocks T074 and T075. **Revised during
+  implementation** (direct instruction, discovered mid-recreation): the teammate's pasted `careers`
+  eyebrow hardcoded a raw `text-[#E87722]` hex and a `text-[rgba(255,255,255,0.66)]` literal — both
+  duplicate existing tokens (`--color-orange`, `--color-text-66`) and would have been a fresh Principle I
+  violation. Recreated using the canonical `text-orange`/`text-text-66` classes instead (same resolved
+  color, zero visual difference) — every other byte of the `careers` branch is unchanged from the
+  supplied structure. **Done.**
+- [X] T072 [P] Add 2 new tokens to `app/tokens.css`, each in its existing numbered section (research.md
+  §17): `--gradient-life-cap: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.82));` (§ Gradients —
+  deliberately dedicated, not a reuse of the value-identical but differently-annotated
+  `--gradient-testimonial-fade`) and `--ls-life-cap: 0.14em;` (§ Typography — likewise dedicated, not a
+  reuse of the value-identical `--ls-hint`/`--ls-blog-meta`, both already single-job-annotated). Independent
+  of T071. **Done.**
+- [X] T073 Map T072's 2 new tokens into `app/globals.css`'s `@theme inline` block: `--gradient-life-cap`
+  via the existing arbitrary-property pattern already used for `--gradient-testimonial-*`/`--gradient-
+  blog-teaser-*` (`bg-[image:var(--gradient-life-cap)]`), `--ls-life-cap` as a canonical `tracking-life-cap`
+  utility. Depends on T072 (same file, sequential). **Revised during implementation**: `--gradient-life-cap`
+  itself needs no `@theme inline` entry — confirmed `--gradient-testimonial-fade`/`--gradient-blog-teaser-*`
+  have none either, since composite gradients are consumed directly via `bg-[image:var(--token)]`, not a
+  bare utility; only `--tracking-life-cap: var(--ls-life-cap);` was added. **Done.**
+- [X] T074 [P] [US1] Populate the (post-T071) `captionLabel`/`caption` fields on all 4
+  `CULTURE_GALLERY_IMAGES` entries in `app/_home-components/home-data.ts` with the reference's literal
+  per-tile text (research.md §17): `glasses.png` → `"The team"` / `"Builders and designers behind the
+  engineering."`; `rooftop.png` → `"The office"` / `"Rooftop breaks, real conversations."`; `painting.png`
+  → `"Craft"` / `"We take craft seriously — inside & outside code."`; `diwali.png` → `"Together"` /
+  `"We celebrate wins — and Diwali — together."`. The `span` field is left in place, unused by the
+  rewritten `home` branch (T075) but still read by the untouched `careers` branch. **Also**
+  (`/speckit.analyze` finding C1) — add a required `id: string` field to `CultureGalleryImage` and
+  populate it for all 4 entries (`"glasses"`, `"rooftop"`, `"painting"`, `"diwali"`), closing a
+  pre-existing Principle III stable-identity gap (today's `.map()` keys on `` `${item.src}-${index}` ``,
+  a derived stopgap) at the exact point T075 re-wires this render — the same fix this feature already
+  applied to `DeliveryStat`, `TrustedClientLogo`, and `Testimonial`. **Also** (`/speckit.analyze` finding
+  M1) — correct the `LifeGalleryImage` interface's 2 doc comments inherited from T071's recreation
+  ("Careers-only... Left `undefined` for `home`"), which become stale once `home` populates and renders
+  these fields; reworded to describe both fields as populated for both variants. Depends on T071 (the
+  `captionLabel`/`caption`/`id` fields must exist on the type first); independent of T072/T073 (different
+  file). **Done.**
+- [X] T075 [US1] Rewrite `LifeGallery.tsx`'s `home` branch only (`careers` branch, its `SPAN_CLASSES` map,
+  and every other code path from T071's baseline stay untouched): replace the hand-rolled eyebrow markup
+  (accent-line `<span>` + text `<span>`) with `<SectionEyebrow showAccent={false}>Inside
+  TechGrit</SectionEyebrow>`; replace `gridColsClass`/`auto-rows-[200px]`/span-driven tiles with
+  `grid grid-cols-4 gap-tg-6 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1`; rewrite each tile as
+  `<figure className="group relative m-0 aspect-3/4 overflow-hidden rounded-xl border-border-8 bg-glass-3
+  transition-transform duration-300 hover:-translate-y-1">` containing `MediaSlot` (sizes:
+  `"(max-width: 960px) 50vw, 25vw"`) plus a `<figcaption>` caption overlay
+  (`bg-[image:var(--gradient-life-cap)]`, `px-tg-7 pt-tg-9 pb-tg-7`, `opacity-0 group-hover:opacity-100`,
+  `translate-y-1.5 group-hover:translate-y-0`) rendering `item.captionLabel` (`text-11 tracking-life-cap
+  text-amber-light uppercase`) and `item.caption` (`text-xs leading-[1.35] text-white`) — see plan.md's
+  "Homepage Life at TechGrit Section (FR-011)" for the full per-element class breakdown. The `.map()`
+  call itself keys on `item.id` (T074's new field, `/speckit.analyze` finding C1), not
+  `` `${item.src}-${index}` ``. Depends on T071 (baseline), T073 (tokens mapped into `globals.css`), and
+  T074 (caption content + `id` field populated). **Revised during implementation**: since both variants
+  now render a fixed grid shape (no more `columns`-driven column count or span-based sizing for `home`),
+  `gridColsClass`, `cellRadiusClass`, and the module-level `SPAN_CLASSES` map became dead code and were
+  removed; `columns` stays in `LifeGalleryProps` (undestructured) purely for backward compatibility with
+  `careers/page.tsx`'s existing `columns={4}` call. **Done.**
+- [X] T076 Run `npm run lint` + `npm run build`; browser-verify the "Inside TechGrit" eyebrow shows no
+  leading accent line, the grid shows a uniform 4-tile row (2 cols at `md`, 1 col at `sm`) with each tile
+  bordered/aspect-locked, hovering a tile reveals its category label + caption with a lift, the two action
+  buttons are unchanged, and — critically — `/careers`'s own Life at TechGrit section renders with zero
+  visible difference from before this phase (its `careers` branch was only byte-recreated in T071, never
+  edited). Confirm React DevTools (or the rendered DOM) shows both `CULTURE_GALLERY_IMAGES` tiles keyed on
+  `item.id`, not `` `${item.src}-${index}` `` (`/speckit.analyze` finding C1). **Done** — `npm run lint`
+  and `npm run build` both green; DOM inspection on `/` confirmed 4 equal `286.25px` columns/`16px` gap,
+  each tile `18px` radius/`3:4` aspect-ratio/`rgba(255,255,255,0.08)` border/`rgba(255,255,255,0.03)`
+  background, the eyebrow rendering as plain `.eyebrow`-styled text with no accent-line element, and all 4
+  captions' label/text content present with `opacity-0`/`group-hover:opacity-100` wiring intact; DOM
+  inspection on `/careers` confirmed its own gallery (4 tiles, `18px` radius, `3:4` aspect-ratio, hand-rolled
+  eyebrow, no `<figcaption>` element) is byte-identical to before this phase.
+
+**Known, deliberately-deferred delta** (`/speckit.analyze` finding L1, not a task in this phase): the
+recreated `careers` branch's own tile radius (`rounded-[20px]`) doesn't match the reference's `18px` — a
+pre-existing mismatch in the teammate's unmerged code, correctly out of this phase's FR-011 scope.
+Recorded here for a future Careers-page pass, not silently dropped.
+
+## Dependencies (Life at TechGrit Section)
+
+- T071 (baseline recreation) and T072 (tokens.css) are mutually independent (different files), but T071
+  blocks T074 and T075; T072 blocks T073.
+- T073 depends on T072, and in turn blocks T075 (which consumes the canonical `tracking-life-cap`/
+  `bg-[image:var(--gradient-life-cap)]` classes).
+- T074 depends on T071; independent of T072/T073.
+- T075 depends on T071, T073, and T074.
+- T076 runs last, after T071-T075.
+
+## Parallel Example (Life at TechGrit Section)
+
+```bash
+# T071 (LifeGallery.tsx baseline recreation) and T072 (tokens.css) can run together — different files:
+Task: "Recreate LifeGallery.tsx from the teammate's supplied structure (T071)"
+Task: "Add 2 new tokens to app/tokens.css (T072)"
+# Then T073 (globals.css, depends on T072) and T074 (home-data.ts captions, depends on T071) can run together:
+Task: "Map new tokens into globals.css @theme inline (T073)"
+Task: "Populate captionLabel/caption on CULTURE_GALLERY_IMAGES (T074)"
+# Then the sequential tail:
+Task: "Rewrite LifeGallery.tsx's home branch (T075) -> verify, including /careers zero-diff check (T076)"
+```
+
+## Implementation Strategy (Life at TechGrit Section)
+
+Complete T071/T072 (independent, parallelizable), then T073/T074 (each depends on one of the first pair,
+independent of each other), then T075 (depends on all three prior tasks), then T076 to verify — paying
+particular attention to confirming `/careers` shows no visual change, since T071 touches the same file
+`/careers` consumes. Only the homepage's final CTA remains unplanned within User Story 1; User Stories
+2-9 remain a future `/speckit.plan` pass each.

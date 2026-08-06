@@ -362,3 +362,42 @@ framework exists in this repo — this is manual, plus `npm run lint`/`npm run b
    `app/page.tsx` (`<BlogSection />` render call). No other homepage section, no other page —
    `app/blog/_data/blog-content.ts`, `app/blog/_components/blog-post-grid.tsx`, and every other `/blog`
    file must be pixel- and byte-unchanged.
+
+## 22. Homepage Life at TechGrit section (`app/_home-components/LifeGallery.tsx`, `home` branch) — Phase 2 addendum, FR-011
+
+Scope: `LifeGallery.tsx`'s `home` branch only, plus caption content in `app/_home-components/home-data.ts`
+and 2 new tokens in `app/tokens.css`/`globals.css`. The recreated `careers` branch (and `/careers`, which
+consumes it) does not change in this pass. No test framework exists in this repo — this is manual, plus
+`npm run lint`/`npm run build`.
+
+1. Open `/` at desktop width (≥1140px) and scroll to the "Inside TechGrit" / "Life at TechGrit." section.
+2. Confirm the eyebrow ("Inside TechGrit") renders as plain uppercase orange text with **no** leading
+   accent line/dash before it (previously a small `2px`-tall orange line preceded the text).
+3. Confirm the photo grid shows exactly 4 tiles in a single uniform row (not 3 columns of mixed
+   widths/heights), each the same size, each with rounded corners and a faint visible border.
+4. Hover each tile in turn — confirm a caption reveals at the tile's bottom over a dark fade: an amber
+   category label ("The team" / "The office" / "Craft" / "Together", matching each tile's photo) above a
+   white caption sentence, and confirm the tile lifts slightly (`-4px`) while hovered. Confirm the caption
+   is invisible before hover and disappears again on mouse-leave.
+5. Confirm the two buttons below the grid — "Explore Careers" (solid gradient, links to `/careers`) and
+   "Meet the team" (ghost/glass, links to `/about`) — are present and unchanged from before this pass.
+6. Narrow the viewport to tablet width (`md`, <960px) — confirm the grid collapses to 2 columns; narrow
+   further to mobile width (`sm`, <560px) — confirm it collapses to a single column. At both widths,
+   confirm captions still reveal correctly on tap/hover and tiles keep their aspect ratio (no stretching
+   or squashing).
+7. Open `/careers` and scroll to its own "Life at TechGrit" section — confirm it renders exactly as
+   before this pass (4-column grid, its own tile radius, no captions revealing on hover) — this section
+   must show **zero** visible change as a result of this addendum.
+
+## 23. Gate check (Life at TechGrit Section)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/tokens.css` (2 new tokens — `--gradient-life-cap`, `--ls-life-cap`),
+   `app/globals.css` (their `@theme inline` mappings), `app/_home-components/home-data.ts`
+   (`CULTURE_GALLERY_IMAGES` gains populated `captionLabel`/`caption` values on all 4 entries — the
+   fields themselves already exist from the baseline recreation), and `app/_home-components/
+   LifeGallery.tsx`'s `home` branch (eyebrow migrated to `SectionEyebrow`, grid rewritten to a uniform
+   4-column shape, tiles gain the bordered/captioned treatment). The `careers` branch inside the same
+   file, `components/ui/section-eyebrow.tsx` itself, `app/page.tsx`, and every other homepage section or
+   page must be pixel- and byte-unchanged — confirm `/careers` in particular shows no visual diff (step
+   22.7 above).

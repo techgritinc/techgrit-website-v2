@@ -352,6 +352,7 @@
   --tracking-stat-count: var(--ls-stat-count);
   --tracking-24: var(--ls-24);
   --tracking-blog-meta: var(--ls-blog-meta);
+  --tracking-life-cap: var(--ls-life-cap);
 
   /* Blur — fixes the 8-spot "too hazy" bug (blur-md was never registered,
    * so components fell back to blur-lg) plus the Final CTA panel. */

@@ -1086,3 +1086,108 @@ task, not deferred.
 every prior addendum), `app/blog/_data/blog-content.ts` and `/blog`'s own rendering (`blog-post-grid.tsx`)
 are untouched — this addendum reads their shape only to confirm why a dynamic pull isn't viable, it does
 not modify either file.
+
+## 17. Homepage Life at TechGrit Section fidelity (FR-011)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Life at TechGrit Section (FR-011)" |
+**Spec**: [spec.md](./spec.md), FR-011, FR-044, Clarifications Session 2026-08-06
+
+Scope: `app/_home-components/LifeGallery.tsx` (`home` branch only), `app/_home-components/home-data.ts`
+(`CULTURE_GALLERY_IMAGES` caption content), `app/tokens.css`, `app/globals.css`. §§1-16 above are
+unaffected. `components/ui/section-eyebrow.tsx` is read but not edited — this addendum is its 5th
+consumer, not a change to its own code.
+
+**Decision (baseline)**: a teammate's unmerged branch already refactored `LifeGallery.tsx` into the
+`variant`/`columns`-based shared component this addendum builds on — investigation confirmed its
+`careers` branch already carries the exact tile shell (`aspect-3/4`, bordered, backed, hover-lift) and
+`captionLabel`/`caption` fields this addendum's `home` branch needs, with the `careers` branch's own
+caption-rendering block left commented out in the supplied code. Since that branch can't be pulled
+without conflicts, this feature's branch recreates the file byte-for-byte first (spec.md Clarifications,
+Session 2026-08-06), so only FR-011's own `home`-branch changes diverge from what will eventually merge.
+The `careers` branch's commented-out caption block is deliberately left commented out — enabling it is a
+`careers`/Careers-page decision, out of this addendum's FR-011 scope, not a byproduct of recreating the
+baseline.
+
+**Decision (grid shape)**: `TechGrit Homepage.dc.html` (lines 826-878) shows a uniform 4-column grid
+(`repeat(4,1fr)`, `16px` gap, `aspect-ratio:3/4` per tile) with no span concept — a structural break from
+the current `home` branch's 3-column asymmetric grid (`grid-cols-[1.4fr_1fr_1fr]`, `auto-rows-[200px]`,
+`tall`/`wide`/`wide3` spans). The `home` branch's rendering is rewritten to the reference's uniform shape
+rather than reconciled with the old span system — there is no reference value to preserve for `span` on
+`home`, and the field stays on `CultureGalleryImage`/`LifeGalleryImage` only because the `careers` branch
+(out of scope here) still reads it via its own `SPAN_CLASSES` lookup for `careersPageContent
+.lifeAtTechGrit.images`.
+
+**Decision (captions)**: the reference's 4 tiles each show a category label + caption on hover (lines
+844/852/860/868) — content that maps 1:1 onto `CULTURE_GALLERY_IMAGES`' existing 4 entries by asset
+(`glasses.png`→"The team", `rooftop.png`→"The office", `painting.png`→"Craft", `diwali.png`→"Together"),
+confirming these are the same 4 photos the reference itself uses, just previously uncaptioned in this
+codebase. Populating the already-existing (post-recreation) `captionLabel`/`caption` fields is therefore
+a content fix, not a new field/type addition. **Also** (`/speckit.analyze` finding M1) — the 2 doc
+comments the baseline recreation carries over verbatim ("Careers-only hover-caption category label...
+Left `undefined` for `home`") become stale the moment `home` populates and renders these same fields;
+corrected in the same edit to describe both fields as populated for both variants.
+
+**Decision (stable identity)** (`/speckit.analyze` finding C1): `CULTURE_GALLERY_IMAGES`' `.map()` render
+site is keyed on `` `${item.src}-${index}` `` today — a derived stopgap, not a stable field, the exact
+Principle III gap this feature already fixed 3 times elsewhere (`DeliveryStat.id`, `TrustedClientLogo.id`,
+`Testimonial.id`). Since this addendum's `home`-branch rewrite is the moment this render is re-wired, a
+required `CultureGalleryImage.id` field is added and populated (`"glasses"`, `"rooftop"`, `"painting"`,
+`"diwali"`), and the `.map()` re-keys on `item.id`.
+
+**Decision (eyebrow)**: per spec.md Clarifications (Session 2026-08-06), the hand-rolled accent-line +
+text eyebrow migrates to `<SectionEyebrow showAccent={false}>` rather than a narrow inline delete of just
+the `<span>` — closing FR-044's gap (Life at TechGrit was missing from its eyebrow-symbol-removal
+consistency list) rather than leaving a second one-off eyebrow implementation in this file.
+
+**Tokens needed** — 2 total, neither of which exists today at these exact values with a matching
+semantic job:
+- `--gradient-life-cap` (§ Gradients) — the caption overlay's bottom fade (`linear-gradient(180deg,
+  transparent, rgba(0,0,0,0.82))`, line 843). The value is an exact numeric match for the existing
+  `--gradient-testimonial-fade`, but that token is annotated "Testimonials video-card bottom fade" — a
+  distinct single job, the same concern already raised for `--text-industry-title` vs. `--text-stat` and
+  `--radius-16` vs. `--radius-tile` earlier in this feature. A dedicated token is added rather than
+  reused.
+- `--ls-life-cap: 0.14em` (§ Typography) — the caption label's letter-spacing (line 844). Value-identical
+  to both the existing `--ls-hint` ("Methodology scroll-hint caption") and this same feature's own
+  `--ls-blog-meta` ("Blog teaser meta row") — both already single-job-annotated for other components, so
+  a third dedicated token follows the same established precedent rather than repurposing either.
+
+**Tokens reused, not duplicated** — all exact matches, confirmed by direct comparison against
+`tokens.css`:
+- `--radius-xl` (`18px`) — already annotated "Image cards (Careers gallery)," the exact semantic job this
+  addendum's tile radius needs; reused verbatim, not redefined, despite now also serving `home`.
+- `--color-border-8` (`rgba(255,255,255,0.08)`, tile border, line 841) and `--color-glass-3`
+  (`rgba(255,255,255,0.03)`, tile background, line 841) — both already added/mapped in §13 (Re-Imagine
+  grid); reused verbatim here, not redefined.
+- `--color-amber-light` (`#F7B733`, caption label color, line 844).
+- `--text-11` (`11px`, caption label font-size, line 844).
+- `--text-xs` (`14px`, figcaption font-size, line 845) — already annotated "Captions, card meta," a
+  general-purpose, many-consumer token whose existing annotation already describes this exact use, unlike
+  the single-job tokens above.
+- `--space-6`/`gap-tg-6` (`16px`, grid gap, line 839) — already mapped in the Blog Teaser addendum (§16)
+  for an unrelated section; reused verbatim here, the intended cross-section reuse a general-purpose
+  spacing token is for.
+- `--space-9`/`--space-7` (`22px`/`18px`, caption padding `22px 18px 18px`, line 843) — both already
+  canonical (`pt-tg-9`, `px-tg-7`, `pb-tg-7`).
+- `--color-orange` (`#E87722`, `SectionEyebrow`'s default `tone="orange"`) and `--ls-widest`/`--text-2xs`
+  (`.eyebrow`'s tracking/font-size, both already resolve to the reference's `0.16em`/`12.5px` exactly) —
+  all already correct in `SectionEyebrow`/`.eyebrow`; the migration changes which markup renders them, not
+  their values.
+
+**Not a new token**: the tile hover-lift (`transform:translateY(-4px)`, line 874) is expressed as
+`hover:-translate-y-1` — Tailwind's own canonical 4px spacing step, not an arbitrary `-[4px]` value, per
+this session's "Tailwind must use canonical classes" direction. This corrects the pattern only for the
+new `home`-branch markup; the recreated `careers` branch's own `hover:-translate-y-[4px]` (from the
+teammate's supplied code) is left exactly as recreated, since editing it is outside FR-011's scope.
+
+**Not changed**: the two action buttons below the grid (`Explore Careers` gradient button, `Meet the
+team` ghost button) are already reference-correct from the baseline recreation and Phase 1's
+`Button.tsx` ghost-variant work (research.md §1) — no further token or markup change needed for FR-011's
+"two action buttons" clause. The `careers` branch, `app/page.tsx`'s render order, and every other
+homepage section are untouched.
+
+**Known, deliberately-deferred delta** (`/speckit.analyze` finding L1): the recreated `careers` branch's
+own tile radius (`rounded-[20px]`, from the teammate's unmerged code) doesn't match `TechGrit
+Careers.dc.html`/`TechGrit About.dc.html`'s own reference value (`18px`) — a pre-existing mismatch,
+correctly out of this addendum's FR-011 scope. Recorded here, not silently dropped, so a future
+Careers-page pass can pick it up once the teammate's branch merges.
