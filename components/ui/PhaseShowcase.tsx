@@ -149,7 +149,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
                       </div>
                       <div
                         className={`mt-tg-5a leading-[normal] font-bold transition-colors duration-300 ${isActive ? "text-primary" : "text-text-60"}`} 
-                        style={{ fontSize: "var(--phase-title-size, 15px)"   }}
+                        style={{ fontSize: "var(--phase-title-size, 15px)", fontFamily: "arial" }}
                       >
                         {phase.title}
                       </div>
@@ -157,7 +157,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
                         className={`mt-1 font-bold leading-[normal] tracking-[1.15px] whitespace-nowrap uppercase transition-colors duration-300 ${
                           isActive ? "text-amber-light" : "text-text-40"
                         }`} 
-                        style={{ fontSize: "var(--phase-week-size, 11.5px)" }}
+                        style={{ fontSize: "var(--phase-week-size, 11.5px)", fontFamily: "arial" }}
                       >
                         {phase.week}
                       </div>
@@ -194,7 +194,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
                 >
                   {active.badgeIcon}
                 </div>
-                <div className="absolute right-6.5 bottom-6.5 z-10 text-xs-alt max-tg-sm:text-3xs font-bold tracking-[0.18em] leading-[normal] text-text-40 uppercase">
+                <div className="absolute right-6.5 bottom-5.5 z-10 text-xs-alt max-tg-sm:text-3xs font-bold tracking-[0.18em] leading-[normal] text-text-40 uppercase">
                   Phase 0{active.n}
                 </div>
               </div>
