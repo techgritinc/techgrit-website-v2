@@ -62,13 +62,13 @@ export default function LifeGallery({
           </div>
         ) : (
           <div className="mx-auto mb-[44px] max-w-[720px] text-center">
-            <div className="mb-[14px] text-[12.5px] font-bold tracking-[0.16em] text-[#E87722] uppercase">
+            <div className="mb-[14px] text-[12.5px] font-bold tracking-[0.16em] text-orange uppercase">
               Inside TechGrit
             </div>
             <h2 className="font-body text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
               {heading}
             </h2>
-            <p className="mx-auto mt-[16px] text-[17px] leading-[1.6] text-[rgba(255,255,255,0.66)]">
+            <p className="mx-auto mt-[16px] text-[17px] leading-[1.6] text-text-66">
               {description}
             </p>
           </div>

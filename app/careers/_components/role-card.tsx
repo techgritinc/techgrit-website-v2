@@ -34,7 +34,7 @@ export function RoleCard({ role, onApply }: { role: OpenRole; onApply: (role: Op
       <Button
         variant="ghost"
         onClick={() => onApply(role)}
-        className="!shrink-0 !rounded-[12px] !px-[22px] !py-[12px] !text-[14.5px] !text-white leading-[normal] hover:!border-border-ghost-hover hover:!bg-[image:var(--gradient-ghost-hover)] !text-[16px]"
+        className="!shrink-0 !rounded-[12px] !px-[22px] !py-[12px] !text-[16px] !text-white leading-[normal] hover:!border-border-ghost-hover hover:!bg-[image:var(--gradient-ghost-hover)]"
       >
         Apply <span className="text-[15px] text-amber-light">&#8594;</span>
       </Button>

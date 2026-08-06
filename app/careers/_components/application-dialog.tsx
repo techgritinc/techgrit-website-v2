@@ -79,7 +79,8 @@ export function ApplicationDialog({
       setError(null);
       return;
     }
-    const extension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+    const dotIndex = file.name.lastIndexOf(".");
+    const extension = dotIndex === -1 ? "" : file.name.slice(dotIndex).toLowerCase();
     if (!ALLOWED_RESUME_TYPES.has(file.type) && !ALLOWED_RESUME_EXTENSIONS.includes(extension)) {
       setError("Only PDF, DOC, and DOCX files are accepted. Please upload a valid file.");
       setResumeFile(null);
@@ -143,6 +144,10 @@ export function ApplicationDialog({
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
       if (e.key === "Tab" && dialogNode && focusableElements.length > 0) {
         const firstElement = focusableElements[0];
         const lastElement = focusableElements[focusableElements.length - 1];
@@ -167,7 +172,7 @@ export function ApplicationDialog({
       document.body.style.paddingRight = originalPaddingRight;
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, status, onClose]);
 
   if (!isOpen) return null;
 
@@ -179,11 +184,11 @@ export function ApplicationDialog({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/[0.72] backdrop-blur-[8px]"
+      className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-[var(--color-overlay-scrim-72)] backdrop-blur-md"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-[560px] max-h-[92vh] flex flex-col rounded-[20px] border border-white/[0.14] bg-[linear-gradient(180deg,rgba(20,20,20,0.98),rgba(0,0,0,0.98))] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.85),0_0_60px_-20px_rgba(232,119,34,0.35)] overflow-hidden"
+        className="relative w-full max-w-[560px] max-h-[92vh] flex flex-col rounded-[20px] border border-border-14 bg-[image:var(--gradient-dialog-panel)] shadow-[var(--shadow-dialog-apply)] overflow-hidden"
         onClick={stopPropagation}
         role="dialog"
         aria-labelledby={TITLE_ID}
@@ -191,42 +196,43 @@ export function ApplicationDialog({
       >
         <div
           ref={dialogRef}
-          className="overflow-y-auto w-full [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/20 hover:[&::-webkit-scrollbar-thumb]:bg-white/30"
+          className="overflow-y-auto w-full [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[var(--color-scrollbar-thumb)] hover:[&::-webkit-scrollbar-thumb]:bg-[var(--color-scrollbar-thumb-hover)]"
         >
         {status === "submitted" ? (
           <div className="px-10 py-12 text-center">
-            <div className="mx-auto flex h-[76px] w-[76px] items-center justify-center rounded-full border border-emerald-400/45 bg-emerald-400/15">
+            <div className="mx-auto flex h-[76px] w-[76px] items-center justify-center rounded-full border border-[var(--color-border-green-45)] bg-[var(--color-overlay-green-15)]">
               <svg
                 width="34"
                 height="34"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#34d399"
+                stroke="currentColor"
                 strokeWidth="2.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="text-[var(--color-green)]"
               >
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <h3 className="mt-[22px] text-[24px] font-bold tracking-[-0.01em] text-white">
+            <h3 id={TITLE_ID} className="mt-[22px] text-[24px] font-bold tracking-[-0.01em] text-white">
               Application received.
             </h3>
-            <p className="mx-auto mt-3 max-w-[360px] text-[15.5px] leading-[1.55] text-white/70">
+            <p className="mx-auto mt-3 max-w-[360px] text-[15.5px] leading-[1.55] text-text-70">
               {thanksLine} &mdash; a hiring lead is going to read your note and get back within{" "}
               <strong>2 business days</strong>.
             </p>
             <Button
               variant="outline"
               onClick={onClose}
-              className="mt-[26px] !inline-flex !items-center !gap-2 !rounded-[11px] !border !border-white/15 !bg-white/5 !px-[22px] !py-3 !text-[14.5px] !font-bold !text-white !transition-colors hover:!border-white/15 hover:!bg-white/10 hover:!-translate-y-0 active:!translate-y-0"
+              className="mt-[26px] !inline-flex !items-center !gap-2 !rounded-[11px] !border !border-[var(--color-border-15)] !bg-glass !px-[22px] !py-3 !text-[14.5px] !font-bold !text-white !transition-colors hover:!border-[var(--color-border-15)] hover:!bg-glass-10 hover:!-translate-y-0 active:!translate-y-0"
             >
               Close
             </Button>
           </div>
         ) : (
           <div>
-            <div className="flex items-start justify-between gap-5 border-b border-white/[0.08] px-8 pb-5 pt-7">
+            <div className="flex items-start justify-between gap-5 border-b border-border-8 px-8 pb-5 pt-7">
               <div>
                 <div className="text-[11.5px] font-bold tracking-[0.14em] text-amber-light uppercase">
                   Apply
@@ -237,7 +243,7 @@ export function ApplicationDialog({
                 >
                   {positionLabel}
                 </h3>
-                <p className="mt-1 text-[13.5px] text-white/55">
+                <p className="mt-1 text-[13.5px] text-text-55">
                   A real person on our team reviews every application &mdash; usually within 2
                   business days.
                 </p>
@@ -246,7 +252,7 @@ export function ApplicationDialog({
                 variant="outline"
                 onClick={onClose}
                 aria-label="Close"
-                className="!flex !h-[38px] !w-[38px] !shrink-0 !items-center !justify-center !rounded-[10px] !border !border-white/[0.14] !bg-white/5 !p-0 !text-white !transition-colors hover:!border-orange hover:!bg-white/5 hover:!-translate-y-0 active:!translate-y-0"
+                className="!flex !h-[38px] !w-[38px] !shrink-0 !items-center !justify-center !rounded-[10px] !border !border-border-14 !bg-glass !p-0 !text-white !transition-colors hover:!border-orange hover:!bg-glass hover:!-translate-y-0 active:!translate-y-0"
               >
                 <svg
                   width="18"
@@ -273,7 +279,7 @@ export function ApplicationDialog({
                       Full name <span className="text-orange">*</span>
                     </>
                   }
-                  labelClassName="mb-1.5 block text-[12.5px] font-semibold text-white/70"
+                  labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
                   hideLabel={false}
                   required
                   type="text"
@@ -281,7 +287,7 @@ export function ApplicationDialog({
                   placeholder="Jane Doe"
                   value={values.fullName}
                   onChange={handleChange("fullName")}
-                  inputClassName="!w-full !rounded-[10px] !border !border-white/[0.16] !bg-white/5 !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-white/35 focus:!border-orange focus:!bg-white/5"
+                  inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
                 />
                 <FormField
                   label={
@@ -289,7 +295,7 @@ export function ApplicationDialog({
                       Email <span className="text-orange">*</span>
                     </>
                   }
-                  labelClassName="mb-1.5 block text-[12.5px] font-semibold text-white/70"
+                  labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
                   hideLabel={false}
                   required
                   type="email"
@@ -297,28 +303,28 @@ export function ApplicationDialog({
                   placeholder="jane@email.com"
                   value={values.email}
                   onChange={handleChange("email")}
-                  inputClassName="!w-full !rounded-[10px] !border !border-white/[0.16] !bg-white/5 !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-white/35 focus:!border-orange focus:!bg-white/5"
+                  inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
                 />
               </div>
 
               <FormField
                 label="LinkedIn or portfolio URL"
-                labelClassName="mb-1.5 block text-[12.5px] font-semibold text-white/70"
+                labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
                 hideLabel={false}
                 type="url"
                 name="linkedInOrPortfolioUrl"
                 placeholder="https://linkedin.com/in/..."
                 value={values.linkedInOrPortfolioUrl}
                 onChange={handleChange("linkedInOrPortfolioUrl")}
-                inputClassName="!w-full !rounded-[10px] !border !border-white/[0.16] !bg-white/5 !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-white/35 focus:!border-orange focus:!bg-white/5"
+                inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
               />
 
               <div>
-                <label className="mb-1.5 block text-[12.5px] font-semibold text-white/70">
+                <label className="mb-1.5 block text-[12.5px] font-semibold text-text-70">
                   Resume <span className="text-orange">*</span>{" "}
-                  <span className="font-medium text-white/40">- PDF, DOC, DOCX (max 5MB)</span>
+                  <span className="font-medium text-text-40">- PDF, DOC, DOCX (max 5MB)</span>
                 </label>
-                <label className="relative flex cursor-pointer items-center gap-[12px] rounded-[12px] border border-dashed border-white/[0.24] bg-white/[0.04] px-4 py-3.5 transition-colors hover:border-white/40 hover:bg-white/10">
+                <label className="relative flex cursor-pointer items-center gap-[12px] rounded-[12px] border border-dashed border-[var(--color-border-24)] bg-glass-4 px-4 py-3.5 transition-colors hover:border-[var(--color-border-40)] hover:bg-glass-10">
                   <input
                     required
                     type="file"
@@ -326,14 +332,14 @@ export function ApplicationDialog({
                     onChange={handleResumeChange}
                     className="absolute h-px w-px overflow-hidden opacity-0"
                   />
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-orange/35 bg-orange/[0.14] text-amber-light">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-[var(--color-border-orange-35)] bg-[var(--color-overlay-orange-14)] text-amber-light">
                     <UploadIcon className="h-[18px] w-[18px]" />
                   </span>
                   <span>
                     <span className="block text-[14px] font-bold text-white">
                       {resumeFile ? resumeFile.name : "Click to upload your resume"}
                     </span>
-                    <span className="block text-[12px] text-white/55">
+                    <span className="block text-[12px] text-text-55">
                       {resumeFile ? "Click to replace file" : "PDF, DOC, or DOCX"}
                     </span>
                   </span>
@@ -343,10 +349,10 @@ export function ApplicationDialog({
               <FormField
                 label={
                   <>
-                    Why TechGrit? <span className="font-medium text-white/40">- optional</span>
+                    Why TechGrit? <span className="font-medium text-text-40">- optional</span>
                   </>
                 }
-                labelClassName="mb-1.5 block text-[12.5px] font-semibold text-white/70"
+                labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
                 hideLabel={false}
                 multiline
                 name="message"
@@ -354,11 +360,11 @@ export function ApplicationDialog({
                 rows={3}
                 value={values.message}
                 onChange={handleChange("message")}
-                inputClassName="!min-h-[88px] !w-full !resize-y !rounded-[10px] !border !border-white/[0.16] !bg-white/5 !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-white/35 focus:!border-orange focus:!bg-white/5"
+                inputClassName="!min-h-[88px] !w-full !resize-y !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
               />
 
               {error && (
-                <div className="rounded-lg border border-red-500/40 bg-red-500/15 px-3 py-2.5 text-[13px] font-semibold text-red-300">
+                <div className="rounded-lg border border-overlay-red-40 bg-[var(--color-overlay-red-15)] px-3 py-2.5 text-[13px] font-semibold text-error-light">
                   {error}
                 </div>
               )}
@@ -370,7 +376,7 @@ export function ApplicationDialog({
               >
                 Send application <span className="text-[16px]">&#8594;</span>
               </Button>
-              <p className="text-center text-[12px] text-white/40">
+              <p className="text-center text-[12px] text-text-40">
                 We only use your details to review your application &mdash; nothing else.
               </p>
             </form>
