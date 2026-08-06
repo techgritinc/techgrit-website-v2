@@ -243,6 +243,10 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 - Q: The reference's second CTA link ("Or explore our 6-week framework →") is `14.5px`/`600`/`rgba(255,255,255,0.7)` with its underline at `rgba(232,119,34,0.5)`, brightening to solid white only on hover. Today's implementation is `15.5px`/`text-primary` (solid white already, no hover state) with a `0.60`-opacity underline. Does FR-012's "clickable-text typography" cover this full treatment, or just the font-size? → A: Full treatment, reference-exact — corrected size, resting color (dimmer, not full white), a hover-to-white brighten (not present today), and the underline's opacity, matching the reference's own resting/hover distinction.
 - Q: The reference's literal link copy is "Or explore our 6-week framework →"; today's implementation uses different wording ("Explore how our 6-week framework can accelerate your next big bet →"). FR-012 only mentions typography, not copy. Should the link's text content also change to match the reference? → A: Yes — update the copy to the reference's exact wording, "Or explore our 6-week framework →", alongside the typography correction.
 
+### Session 2026-08-07
+
+- Q: FR-016a/FR-017/FR-018 sit inside User Story 3's Independent Test, which cites both `TechGrit Industries.dc.html` and `TechGrit Construction.dc.html` as references, but `TechGrit Industries.dc.html` describes the unbuilt multi-industry hub (Session 2026-08-03 already ruled it out of scope). Which file is authoritative for FR-016a, FR-017, and FR-018 specifically? → A: `raw-files-v2/TechGrit Website V2.2/TechGrit Construction.dc.html` exclusively — the real, existing `/construction` page's own hero, "The challenge," and "What we build" markup. Scoped strictly to these three requirements; no other FR or narrative text in User Story 3 changes as a result of this answer.
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
@@ -284,9 +288,9 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 **Industries (`/construction`) Page** — no new route
 
 - **FR-016**: The "Industries" nav item MUST continue to open the existing `/construction` page; no new `/industries` route is introduced, and paths implied by the reference's other industry tabs (FinTech, Healthcare) are not routed in this feature.
-- **FR-016a**: The `/construction` hero MUST present the reference's ghost button and metrics-panel background.
-- **FR-017**: The Challenge section's eyebrow MUST render without its leading accent symbol (the same `SectionEyebrow` toggle as FR-006/FR-019/FR-033 — not a literal text character to trim).
-- **FR-018**: Spacing between "What We Build" subsections MUST match the reference.
+- **FR-016a**: The `/construction` hero MUST present `TechGrit Construction.dc.html`'s ghost (secondary) button treatment on its "See Solutions" CTA and its metrics-panel background on the hero image's 3-stat overlay, matching that file exactly (not `TechGrit Industries.dc.html`).
+- **FR-017**: The Challenge section's eyebrow MUST render without its leading accent symbol (the same `SectionEyebrow` toggle as FR-006/FR-019/FR-033 — not a literal text character to trim), matching `TechGrit Construction.dc.html`'s own "The challenge" eyebrow.
+- **FR-018**: Spacing between "What We Build" subsections MUST match `TechGrit Construction.dc.html`'s own section/header/grid spacing values (literal measurements worked out in the technical plan, per the convention already established by FR-007).
 - **FR-019**: The "Why TechGrit" eyebrow MUST render without its leading accent symbol (same toggle as FR-006/FR-017/FR-033).
 - **FR-020**: "Proven Impact" cards MUST render at equal height within each row regardless of content length.
 - **FR-021**: The closing CTA MUST use an increased width, updated styling for both action buttons, and updated ghost-button styling.

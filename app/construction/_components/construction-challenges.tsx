@@ -58,11 +58,11 @@ function ChallengeIcon({ order }: { order: number }) {
 
 export function ConstructionChallenges({ section }: { section: ChallengesSection }) {
   return (
-    <section className="section-lg" style={{ paddingTop: 80}}>
-      <div className="tg-container">
+    <section className="relative">
+      <div className="mx-auto max-w-[1280px] px-9 pt-[30px] pb-[60px]" data-reveal>
         <div className="mb-[38px] max-w-[760px]">
           <div style={{ lineHeight: "normal" }}>
-            <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
+            <SectionEyebrow showAccent={false}>{section.eyebrow}</SectionEyebrow>
           </div>
             <h2 className="leading-[1.08]" style={{ fontSize: "clamp(30px, 3.6vw, 42px)" }}>{section.title}</h2>
             <p className="mt-4" style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-base)" }}>

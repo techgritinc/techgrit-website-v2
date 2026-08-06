@@ -63,11 +63,11 @@ function SolutionIcon({ order }: { order: number }) {
 
 export function ConstructionSolutions({ section }: { section: SolutionsSection }) {
   return (
-    <section id="solutions" className="">
-      <div className="tg-container">
-        <div className="mb-[40px] max-w-[760px]">
-          <SectionEyebrow tone="amber">{section.eyebrow}</SectionEyebrow>
-          <h2 className="leading-[1.08]" style={{ fontSize: "clamp(30px, 3.6vw, 42px)", lineHeight: 1.1 }}>{section.title}</h2>
+    <section id="solutions" className="relative">
+      <div className="mx-auto max-w-[1280px] px-9 pt-[50px] pb-[30px]" data-reveal>
+        <div className="mb-[40px] max-w-[760px] mt-[-9px]">
+          <SectionEyebrow tone="amber" className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
+          <h2 className="leading-[45.36px] text-[42px] leading-[-1.26px]">{section.title}</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[22px]">
           {section.solutions.map((solution) => (

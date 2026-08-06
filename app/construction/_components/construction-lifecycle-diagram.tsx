@@ -1,7 +1,7 @@
 import type { LifecycleDiagramSection } from "../_data/types";
 
 const NODE_POSITIONS: React.CSSProperties[] = [
-  { left: "2%", top: "9%" },
+  { left: "1%", top: "8%" },
   { left: "28%", top: "2%" },
   { right: "28%", top: "2%" },
   { right: "2%", top: "9%" },
@@ -24,8 +24,8 @@ const CONNECTOR_PATHS = [
 
 export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDiagramSection }) {
   return (
-    <section className="section" style={{paddingTop: 80, paddingBottom: 40}}>
-      <div className="tg-container">
+    <section className="relative">
+      <div className="mx-auto max-w-[1280px] px-9 pt-[40px] pb-[60px]">
         <div
           className="relative overflow-hidden rounded-[24px] border border-border-faint"
           style={{

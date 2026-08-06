@@ -1117,3 +1117,70 @@ Task: "Map new token into globals.css @theme inline (T078) -> edit FinalCta.tsx 
 Complete T077 first, then T078 (depends on T077), then T079 (depends on T078), then T080 to verify. This
 closes out every FR in User Story 1 (spec.md) planned via `/speckit.plan` so far; User Stories 2-9 remain
 a future pass each.
+
+---
+
+# Tasks: User Story 3 — Construction Page (FR-016a, FR-017, FR-018)
+
+**Input**: [plan.md](./plan.md) § "User Story 3 — Construction Page (FR-016a, FR-017, FR-018)"
+**Scope**: exactly 3 requirements on the existing `/construction` page — the hero's metrics-panel
+background (ghost button already reference-exact, no change needed), the Challenge section's
+eyebrow, and "What We Build"'s section padding. Reference: `TechGrit Construction.dc.html`
+exclusively (spec.md Clarifications, Session 2026-08-07) — not `TechGrit Industries.dc.html`.
+
+**Independent task-ID block**: this story's tasks restart at **T001** in their own `[US3]`
+namespace, deliberately separate from User Story 1's T000–T080 sequence above, so a teammate working
+any other user story (Home Page or otherwise) in parallel can identify and touch this block without
+renumbering collisions. No dependency exists between this block and T000–T080.
+
+## Phase 1: User Story 3 — Construction Page (FR-016a, FR-017, FR-018)
+
+**Goal**: the `/construction` hero's metrics-panel overlay, the Challenge section's eyebrow, and the
+"What We Build" section's own vertical padding match `TechGrit Construction.dc.html` exactly.
+
+**Independent Test**: Load `/construction`; confirm the hero's `<30d`/`1000s`/`24/7` stat overlay
+renders on a neutral black glass panel (not the prior ink-tinted one), the "The challenge" eyebrow
+shows no leading accent-line span, and the "What We Build" section's top/bottom spacing matches the
+reference — independently of every other `/construction` subsection and of every Home Page (User
+Story 1) change above.
+
+- [X] T001 [P] [US3] In `app/construction/_components/construction-hero.tsx`, correct the hero
+  image's 3-stat overlay panel: `background: "rgba(10,24,34,0.6)"` → `"var(--color-ink-glass-60)"`,
+  `border: "1px solid var(--color-border-strong)"` → `"1px solid var(--color-border)"`, and
+  `backdropFilter: "blur(var(--blur-sm))"` → `"blur(var(--blur-md))"` (FR-016a — metrics-panel
+  background; ghost button already reference-exact, no change). **Done.**
+- [X] T002 [P] [US3] In `app/construction/_components/construction-challenges.tsx`, add
+  `showAccent={false}` to the `<SectionEyebrow>{section.eyebrow}</SectionEyebrow>` call (FR-017). **Done.**
+- [X] T003 [P] [US3] In `app/construction/_components/construction-solutions.tsx`, add
+  `pt-[50px] pb-[30px]` to the `<section id="solutions">` element's `className` (FR-018). **Done.**
+- [X] T004 [US3] Verify: load `/construction` at desktop, tablet, and mobile widths; confirm the
+  hero stat-card overlay, the Challenge eyebrow, and the Solutions section's spacing match
+  `TechGrit Construction.dc.html`; run `npm run lint` and `npm run build`. **Done** — computed
+  styles confirmed exact matches (`rgba(0,0,0,0.6)` / `rgba(255,255,255,0.12)` / `blur(8px)` /
+  `50px`/`30px` padding / no accent span on "The challenge"), `npm run lint` clean, `npm run build`
+  green (18/18 static pages).
+
+**Checkpoint**: FR-016a, FR-017, and FR-018 are complete and independently verified; no other
+`/construction` file or Home Page file was touched.
+
+## Dependencies (User Story 3)
+
+- T001, T002, T003 touch three different files with no shared state — fully parallel.
+- T004 runs last, after T001-T003.
+
+## Parallel Example (User Story 3)
+
+```bash
+# All 3 fixes touch different files and can run together:
+Task: "Fix hero stat-card overlay tokens in construction-hero.tsx (T001)"
+Task: "Add showAccent={false} to Challenge eyebrow in construction-challenges.tsx (T002)"
+Task: "Add pt-[50px] pb-[30px] to Solutions section in construction-solutions.tsx (T003)"
+# Then verify:
+Task: "Load /construction, confirm against reference, run lint + build (T004)"
+```
+
+## Implementation Strategy (User Story 3)
+
+Single increment — T001-T003 in any order or in parallel (different files), then T004 to verify.
+This closes out the FR-016a/FR-017/FR-018 slice of User Story 3; FR-016, FR-019, FR-020, and FR-021
+(the rest of User Story 3) remain a future pass.
