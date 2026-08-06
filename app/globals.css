@@ -467,6 +467,13 @@
   /* Re-Imagine grid (v2.2 FR-007) */
   --shadow-reimagine-glow: var(--shadow-reimagine-glow);
   --shadow-reimagine-glow-soft: var(--shadow-reimagine-glow-soft);
+
+  /* Industries section (v2.2 FR-008) */
+  --shadow-industry-glow-violet: var(--shadow-industry-glow-violet);
+  --shadow-industry-glow-green: var(--shadow-industry-glow-green);
+  --shadow-industry-glow-blue: var(--shadow-industry-glow-blue);
+  --text-industry-title: var(--text-industry-title);
+  --tracking-title-tight: var(--ls-title-tight);
 }
 @layer base {
   /* ----------------------------------------------------------

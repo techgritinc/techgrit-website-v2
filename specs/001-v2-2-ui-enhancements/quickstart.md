@@ -213,3 +213,55 @@ Scope: only `app/_home-components/MethodologySection.tsx` and 4 new exports in
    ReImagineSection.tsx`. No other homepage section, no other page —
    `app/_home-components/CaseStudiesSection.tsx` (a `GlassCard variant="reimagine"` consumer) must
    render unchanged.
+
+## 16. Homepage Industries section (`app/_home-components/IndustriesSection.tsx`) — Phase 2 addendum, FR-008
+
+Scope: only `IndustriesSection.tsx`, its `industry` variant of `GlassCard.tsx`, and `home-data.ts`'s
+`INDUSTRY_CARDS`. This is **not** `/construction` — verify that page separately, unaffected by this
+pass. No test framework exists in this repo — this is manual, plus `npm run lint`/`npm run build`.
+
+1. Open `/` at desktop width (≥1140px) and scroll to the Industries section (directly after "Don't
+   Migrate. Re-Imagine.").
+2. Confirm the "Explore Industry Solutions" ghost button's computed padding is `16px` vertical /
+   `26px` horizontal (`/speckit.analyze` finding M2: the button's own `className` override changed from
+   `px-6!`/24px, which was silently 2px narrower than correct, to `py-4!`/16px — verify both dimensions,
+   not just that the button "looks the same as before").
+3. Confirm none of the 3 cards (FinTech, Healthcare, Construction) shows a photo any longer — each
+   card shows only a large colored circular icon badge (violet/FinTech, green/Healthcare, blue/
+   Construction), a title, and a description.
+4. Confirm each icon badge's icon is a distinct shape from the other two, rendered in white on its
+   colored circle — not the same icon shape used in the site's nav "Industries" mega-menu (open the
+   nav mega-menu separately and confirm its icons are unchanged from before this pass).
+5. Confirm each card's title renders at 26px, not the pre-fix 23px (`/speckit.analyze` finding H1 —
+   measure via computed styles, not just visual impression, since a ~3px delta is easy to miss by eye).
+6. Confirm each card's description renders at `rgba(255,255,255,0.6)`, not the pre-fix inherited
+   `rgba(255,255,255,0.72)` (`/speckit.analyze` finding H2 — again, measure via computed color, since
+   a 0.12 opacity delta is subtle on dark text).
+7. Hover the FinTech and Healthcare cards — confirm neither lifts, shows a border-color change, nor
+   shows a pointer cursor (no click affordance).
+8. Hover the Construction card — confirm it lifts, shows a blue border-color and glow, shows a
+   pointer cursor, and clicking anywhere on the card (not just its old inline text link) navigates to
+   `/construction`.
+9. Confirm the card's border-radius, background, padding, and icon-to-title spacing match
+   `TechGrit Homepage.dc.html` lines 586-602 (20px radius, ~0.09 border, ~0.03 background fill, 30px/
+   34px padding, 44px icon-to-title gap).
+10. Confirm the section's heading and intro paragraph above the cards are unchanged from before this
+    pass.
+
+## 17. Gate check (Industries Section)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/tokens.css` (3 new border tokens, 3 new shadow tokens, 1 new tracking
+   token — `--ls-title-tight`, deliberately not `--ls-tight-01`, to avoid confusion with the existing
+   `--ls-01` — and 1 new font-size token, `--text-industry-title`, deliberately not a reuse of
+   `--text-stat`), `app/globals.css` (their `@theme inline` mappings), `components/ui/icons.tsx` (3 new
+   icon exports: `IndustryFinTechIcon`, `IndustryHealthcareIcon`, `IndustryConstructionIcon` — the
+   existing `FinTechIcon`/`HealthcareIcon`/`ConstructionIcon` exports are untouched), `components/ui/
+   GlassCard.tsx` (`industry` variant's 4 `Record` entries edited in place — `CARD_VARIANTS`,
+   `ICON_VARIANTS`, `TITLE_VARIANTS`, and `DESC_VARIANTS`), `app/_home-components/home-data.ts`
+   (`IndustryCard` loses `image`, gains `iconBg`, `icon` repointed), and `app/_home-components/
+   IndustriesSection.tsx` (icon-badge rendering, photo removal, Construction-only link, ghost-button
+   `className` correction). No other homepage section, no other page — `components/layout/
+   nav-config.ts` and its rendered mega-menu must be pixel-unchanged, `Button.tsx`'s shared `md` size
+   must be untouched (verify other `md`-sized buttons sitewide are unaffected), and `/construction`'s
+   own hero/challenges/impact/CTA sections (FR-016–FR-021) must be unaffected.

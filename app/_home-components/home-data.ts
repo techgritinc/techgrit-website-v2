@@ -1,9 +1,9 @@
 import type { ComponentType, SVGProps } from "react";
 import {
   AutonomousAgentIcon,
-  ConstructionIcon,
-  FinTechIcon,
-  HealthcareIcon,
+  IndustryConstructionIcon,
+  IndustryFinTechIcon,
+  IndustryHealthcareIcon,
   PhaseAgenticBuildIcon,
   PhaseArchitectIcon,
   PhaseImpactIcon,
@@ -192,38 +192,38 @@ export const COMPARISON_METRICS: ComparisonMetric[] = [
 export type IndustryCard = {
   id: "fintech" | "healthcare" | "construction";
   icon: IconComponent;
+  iconBg: string;
   title: string;
   description: string;
-  image: { src: string; alt: string } | null;
   href: string | null;
 };
 
 export const INDUSTRY_CARDS: IndustryCard[] = [
   {
     id: "fintech",
-    icon: FinTechIcon,
+    icon: IndustryFinTechIcon,
+    iconBg: "bg-avatar-violet",
     title: "FinTech",
     description:
-      "Secure, scalable financial platforms, from digital payments and investment systems to AI-driven financial analytics.",
-    image: { src: "/samples/ind-fintech.png", alt: "FinTech platform interface" },
+      "Build secure and scalable financial platforms—from digital payments and investment systems to AI-driven financial analytics.",
     href: null,
   },
   {
     id: "healthcare",
-    icon: HealthcareIcon,
+    icon: IndustryHealthcareIcon,
+    iconBg: "bg-avatar-green",
     title: "Healthcare",
     description:
-      "Intelligent healthcare platforms that improve patient experiences, streamline workflows, and power data-driven care.",
-    image: { src: "/samples/ind-healthcare.png", alt: "Healthcare platform interface" },
+      "Design intelligent healthcare platforms that improve patient experiences, streamline workflows, and power data-driven care.",
     href: null,
   },
   {
     id: "construction",
-    icon: ConstructionIcon,
+    icon: IndustryConstructionIcon,
+    iconBg: "bg-avatar-blue",
     title: "Construction",
     description:
-      "Smart construction management platforms that optimize planning, project tracking, and operational efficiency.",
-    image: { src: "/samples/ind-construction.png", alt: "Construction management platform interface" },
+      "Develop smart construction management platforms that optimize planning, project tracking, and operational efficiency.",
     href: "/construction",
   },
 ];

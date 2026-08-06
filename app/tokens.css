@@ -282,6 +282,7 @@
   --text-14-5: 14.5px; /* Webinar upcoming-session date/time text (TMS-73) */
   --text-21: 21px;
   --text-stat: 26px;
+  --text-industry-title: 26px; /* Homepage Industries card title (v2.2 FR-008) — a dedicated token, deliberately not a reuse of --text-stat (single-job token for the Hero delivery-stat digit) */
   --text-blog-card: clamp(26px, 2.9vw, 34px); /* Blog/Case Study card title */
   --text-blog-newsletter-heading: clamp(26px, 3vw, 36px); /* Blog newsletter panel heading — unmapped, arbitrary-value only */
   --text-webinar-newsletter-heading: clamp(26px, 3.2vw, 36px); /* Webinar newsletter panel heading — unmapped, arbitrary-value only */
@@ -341,6 +342,7 @@
   --ls-01:      0.01em;  /* Topic filter chip label spacing (Blog) — zero occurrences in v2 census; retained unchanged, name kept per FR-022 */
   --ls-stat-count: -0.035em;  /* Hero delivery-stat digit tracking (v2.2 Phase 2) */
   --ls-24: 0.24em;  /* Trusted-Clients section label tracking (v2.2 Phase 2) */
+  --ls-title-tight: -0.01em;  /* Homepage Industries card title tracking (v2.2 FR-008) — named to avoid confusion with the unrelated, positive --ls-01 */
 
   /* ----------------------------------------------------------
    * 7. SPACING
@@ -494,6 +496,9 @@
   --shadow-btn-ghost: 0 8px 24px -10px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.22); /* Ghost button (v2.2 Phase 1) */
   --shadow-reimagine-glow: 0 0 60px -10px rgba(232, 119, 34, 0.40); /* Re-Imagine grid card 1 hover glow (v2.2 FR-007) */
   --shadow-reimagine-glow-soft: 0 0 60px -10px rgba(232, 119, 34, 0.35); /* Re-Imagine grid cards 2-3 hover glow (v2.2 FR-007) */
+  --shadow-industry-glow-violet: 0 0 50px -12px rgba(139, 92, 246, 0.35); /* Homepage Industries card hover glow — FinTech (v2.2 FR-008) */
+  --shadow-industry-glow-green: 0 0 50px -12px rgba(16, 185, 129, 0.35); /* Homepage Industries card hover glow — Healthcare (v2.2 FR-008) */
+  --shadow-industry-glow-blue: 0 0 50px -12px rgba(59, 130, 246, 0.35); /* Homepage Industries card hover glow — Construction (v2.2 FR-008) */
   /* Ambient-orb radii (--blur-glow*, §14) and coloured status-dot glows (--shadow-glow-*, above) already form a coherent v2-covering group — confirmed, no gaps (FR-025) */
   --shadow-live-badge: 0 18px 46px -14px rgba(232, 119, 34, 0.70), 0 4px 16px -6px rgba(232, 119, 34, 0.40);   /* Hero Live-Webinar badge outer shadow (v2.2 Phase 2) */
   --shadow-live-badge-chip: 0 6px 18px -4px rgba(245, 158, 11, 0.60);   /* Hero Live-Webinar badge inner chip shadow (v2.2 Phase 2) */
