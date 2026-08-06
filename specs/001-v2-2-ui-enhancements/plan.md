@@ -481,3 +481,154 @@ thin wrapper), `app/_home-components/home-data.ts` (`MethodologyPhase` gains a r
 `--color-overlay-*` entries for the homepage orbs), and `app/globals.css` (their `@theme inline`
 mappings, plus an `!important` addition to the existing reduced-motion orb rule) — no `app/page.tsx`
 change, no `data-model.md`/`contracts/`.
+
+## Homepage Re-Imagine Grid (FR-007)
+
+**Date**: 2026-08-06. Extends this Phase 2 addendum to also cover the "Don't Migrate / Re-Imagine"
+section (FR-007), per spec.md Clarifications recorded directly in FR-007's own text (no separate
+`## Clarifications` entries, per explicit instruction). Hero, Trusted Clients, Subscribe Band, and
+Methodology above are unaffected; the Construction card, Testimonials, the Blog teaser, Life at
+TechGrit, and the final CTA remain unplanned. `frontend-design` skill consulted for this addendum's
+craft surfaces (the shared card icon, the TechGrit-mark icon, and the hover treatment) — see UI
+Design Approach below.
+
+Today, cards 1-3 (`app/_home-components/ReImagineSection.tsx`) already use `GlassCard
+variant="reimagine"` with three distinct per-item icons and orange/blue/teal tones; the "Why AI-First
+Matters" panel below them is a plain `<div>`, not a `GlassCard`. Both deviate from
+`TechGrit Homepage.dc.html` lines 508-573 (3 cards sharing one identical star-burst icon, each with
+an `image-slot`; a 4th, un-hovered panel) and from FR-007's now-4-card requirement.
+
+1. **`app/tokens.css`** — add 3 tokens with no existing exact match, in their respective existing
+   numbered sections: `--color-border-9: rgba(255, 255, 255, 0.09);` (§ Borders, filling the gap in
+   the existing `--color-border-8`/`-14`/`-18`/`-22`/`-28`/`-30` sequence — the reference's card
+   border, line 520), `--color-glass-3: rgba(255, 255, 255, 0.03);` (§ Glass fills, between
+   `--color-glass-hairline` (0.02) and `--color-glass-4` (0.04) — the reference's card/panel
+   background — **deliberately a distinct token from the existing `--color-glass-faint`**, which is
+   declared twice in `tokens.css` today (0.03, then silently shadowed by a second 0.04 declaration
+   for Case-Study cards); `--color-glass-3` is not a fix for that pre-existing duplicate and must not
+   be merged into it), and `--shadow-reimagine-glow: 0 0 60px -10px rgba(232, 119, 34, 0.40);` (§ Shadows —
+   card 1's hover glow, line 520; cards 2-3 use the same glow at `0.35`, so a second token
+   `--shadow-reimagine-glow-soft: 0 0 60px -10px rgba(232, 119, 34, 0.35);` is added alongside it,
+   lines 532/544). The card border-radius (22px), inter-card gap (22px), card padding (26px), and
+   section vertical padding (80px) all already have exact canonical Tailwind classes today
+   (`rounded-3xl`, `gap-tg-9`, `p-tg-11`, `p-20`) — no new tokens needed for those. The hover
+   border-color (`rgba(232,119,34,0.5)`) and hover background-fill already exist too
+   (`--color-border-orange-medium`, `--color-hover-orange-fill-14` — the latter per FR-007's own
+   clarification) and are reused verbatim, not redefined.
+2. **`app/globals.css`** — map the 2 new color tokens into `@theme inline`
+   (`--color-border-9: var(--color-border-9);` / `--color-glass-3: var(--color-glass-3);`, alongside
+   the existing border/glass mapping blocks) so `border-border-9`/`bg-glass-3` become real canonical
+   Tailwind utilities, not arbitrary-value classes. Also map the two new shadow tokens the same way
+   (`--shadow-reimagine-glow: var(--shadow-reimagine-glow);` / `-soft` sibling), giving canonical
+   `hover:shadow-reimagine-glow`/`hover:shadow-reimagine-glow-soft` classes. Additionally map the
+   already-existing-but-unmapped `--color-border-orange-medium` the same way
+   (`--color-border-orange-medium: var(--color-border-orange-medium);`), so its consumers (this
+   section, and Careers' role cards, which today reach it only via `border-[var(--color-border-orange-medium)]`)
+   can use the canonical `border-border-orange-medium` class per this session's "Tailwind must use
+   canonical classes" direction — Careers' own call site is corrected as a small drive-by, since
+   leaving it on the arbitrary form while adding the canonical mapping right next to it would be an
+   inconsistency in the same file.
+3. **`components/ui/icons.tsx`** — add 2 new named icon exports, following the file's existing
+   `IconProps`/`{...props}`-last convention: `ReimagineSparkleIcon` (the star-burst path
+   `M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z`, extracted verbatim from
+   `TechGrit Homepage.dc.html` lines 521/533/545 — identical on all three of the reference's
+   differentiator cards, satisfying FR-007's "one common icon" requirement directly rather than by
+   convention), and `TechGritMarkIcon` (a 5-column/5-row grid of rounded squares fading from the
+   brand orange to amber, recreating `public/icons/favicon.png`'s mark as a scalable SVG — reusing
+   `--gradient-brand`'s color stops via an inline `<linearGradient>` fill, per Principle I, rather
+   than duplicating raw hex values). Existing `CopilotToAgenticIcon`/`EradicateDebtIcon`/
+   `InfiniteScalabilityIcon` are **not deleted** — they become unused by this section once cards 1-3
+   share `ReimagineSparkleIcon`, but are left in `icons.tsx` since removing them is a separate
+   dead-code concern outside FR-007's scope (none of the three is currently imported elsewhere,
+   confirmed via search, but their removal is not requested here).
+4. **`components/ui/GlassCard.tsx`** — add `"reimagineDiff"` and `"reimagineWhy"` as 2 new members of
+   the `GlassCardVariant` union type itself (lines 3-13) — a required prerequisite edit, since the 4
+   `Record<GlassCardVariant, string>`s below only type-check once these 2 literals exist in that
+   union — then add a matching entry for each to all 4 `Record`s the file already keys by variant:
+   `reimagineDiff` (cards 1-3) —
+   `"rounded-3xl border-border-9 bg-glass-3 p-tg-11 backdrop-blur-md hover:-translate-y-[5px]
+   hover:bg-hover-orange-fill-14"`, paired with a per-card `hoverBorderColor`/`shadow` override passed
+   from `ReImagineSection.tsx` itself (card 1 gets `hover:shadow-reimagine-glow`, cards 2-3 get
+   `hover:shadow-reimagine-glow-soft` — the file's existing `className`-merge already supports this
+   without a 5th Record entry per card); and `reimagineWhy` (card 4) —
+   `"rounded-3xl border-border-9 bg-glass-3 p-9"` with **no** hover classes at all and
+   `hoverBorderColor=""` passed explicitly, per FR-007's "opt out of GlassCard's default hover
+   entirely" clause. `ICON_VARIANTS`/`TITLE_VARIANTS`/`DESC_VARIANTS` gain matching `reimagineDiff`/
+   `reimagineWhy` entries sized to this section's existing typography (`text-lg font-medium` title,
+   `mt-2.5 text-[15.5px] leading-[1.6]` description — copied from today's `reimagine` variant, since
+   FR-007 does not change type sizing). The existing `reimagine` variant is **left unchanged** — it
+   still backs `CaseStudiesSection.tsx`'s cards, which are out of this addendum's scope.
+5. **`app/_home-components/home-data.ts`** — `DifferentiatorPoint`'s `icon: IconComponent` and
+   `tone: "orange" | "blue" | "teal"` fields are removed (the icon is now shared and rendered directly
+   by `ReImagineSection.tsx`, not stored per item; the tone-based icon-background coloring FR-007
+   replaces has no remaining purpose). A new `image: string` field (required, not optional — the
+   asset exists for all 3 entries, confirmed at `public/samples/dm-copilot.png`,
+   `public/samples/dm-tech-debt.png`, `public/samples/dm-scalability.png`) is added and populated with
+   each entry's matching path. `MediaSlot` (`components/ui/MediaSlot.tsx`) is still the rendering
+   primitive for consistency with every other image slot in this codebase, but its "Coming soon"
+   fallback branch is not expected to trigger for this section since a real `src` is always supplied.
+6. **`app/_home-components/ReImagineSection.tsx`** — rewritten as a 4-item grid:
+   - The 3-card row: `grid-cols-3 gap-tg-9 max-tg-md:grid-cols-1` (unchanged grid shape; `gap-6`
+     corrected to `gap-tg-9`, matching the reference's `22px`, not `24px`), each card now
+     `<GlassCard variant="reimagineDiff" hoverBorderColor="hover:border-border-orange-medium"
+     className={index === 0 ? "hover:shadow-reimagine-glow" : "hover:shadow-reimagine-glow-soft"}>`,
+     rendering `<GlassCardIcon variant="reimagineDiff"><ReimagineSparkleIcon width={26} height={26}
+     className="text-orange" /></GlassCardIcon>`, the existing title/description, and a new
+     `<div className="mt-auto pt-5"><MediaSlot src={item.image} alt={item.title} fill className="h-[180px] rounded-14" /></div>`
+     image slot (180px tall per the reference, `flex flex-col` added to the card so `mt-auto` pins the
+     slot to the card's bottom, matching the reference's `margin-top:auto` on its own image wrapper).
+   - The container's own top margin corrects from `mt-14` (56px) to `mt-tg-19` (48px), matching the
+     reference's `margin-top:48px` exactly; the section's own vertical padding corrects from
+     `pt-15 pb-25` (60px/100px) to `pt-20 pb-20` (80px/80px, Tailwind's own default scale — matching
+     the reference's uniform `padding:80px ... 80px`).
+   - The "Why AI-First Matters" panel becomes `<GlassCard variant="reimagineWhy" hoverBorderColor="">`,
+     keeping its existing internal `grid-cols-[0.8fr_1.2fr]` content (icon+title+description on the
+     left, the two comparison bars on the right) unchanged — only its outer wrapper changes from a
+     plain `<div>` to `GlassCard`. Its icon wrapper swaps `<LightningIcon className="text-orange" />`
+     for `<TechGritMarkIcon width={30} height={30} />`, and its `bg-overlay-orange` icon-background
+     wrapper is removed (the reference's own icon slot here has no background chip — confirmed at
+     line 560 — so the swap corrects an existing, unrelated delta as a direct consequence of touching
+     this icon).
+
+Nothing else in the section changes. The comparison bars' scroll-reveal animation, percentages, and
+labels already match the reference and are untouched.
+
+**UI Design Approach (Re-Imagine grid)**: `frontend-design` skill consulted for this addendum's 2
+craft surfaces. **Shared card icon** — `ReimagineSparkleIcon` stays a simple single-color glyph (no
+gradient fill, matching the reference's flat `fill="#E87722"`) so it reads clearly at the small 26px
+size shared across 3 cards without competing with each card's own imagery below it. **TechGrit-mark
+icon** — rendered at 30px (this card's existing icon-wrapper size, unchanged from today's
+`LightningIcon`), using the brand gradient rather than the favicon's flat-orange squares, so it reads
+as "the brand mark, subtly present" rather than a literal shrunk-down favicon competing with the
+grid's other cards. **Hover treatment** — the background-fill (`hover-orange-fill-14`) is deliberately
+the *lightest* of the three available fill tokens (12/14/15) so cards 1-3's title/description text
+and new imagery stay legible on hover, consistent with how every other hover-background card in this
+codebase (Services, Case Studies) favors a subtle tint over a strong one.
+
+**Constitution check** — PASS on all six principles: every new literal value (`0.09` border, `0.03`
+background, the two `60px -10px` glows) is added to `tokens.css` first, in its existing numbered
+section, before use (Principle I); no component is forked — `GlassCard`/`GlassCardIcon`/
+`GlassCardTitle`/`GlassCardDescription` gain 2 new Record entries each, the same pattern every prior
+variant (`industry`, `blogCard`, `constructionImpact`, ...) already used, and `MediaSlot` is reused
+verbatim, not re-implemented (Principle III); the star-burst icon and the panel's dropped icon-chip
+background are read directly from the reference, not invented (Principle IV — a preview-tool
+authoring choice, the identical icon on 3 cards, is treated as intentional design here, unlike the
+broken collapse-selector case in the Methodology addendum above, since nothing about it is
+self-contradictory or non-functional); no light-surface tokens introduced (Principle V). Canonical
+Tailwind classes are used throughout in preference to arbitrary-value syntax wherever a token exists
+or is newly added (`rounded-3xl`, `gap-tg-9`, `p-tg-11`, `p-20`, `mt-tg-19`, `border-border-9`,
+`bg-glass-3`, `hover:bg-hover-orange-fill-14`, `hover:border-border-orange-medium`,
+`hover:shadow-reimagine-glow(-soft)`) — the only remaining arbitrary-value classes in this section
+are ones with no canonical equivalent possible (`max-tg-md:grid-cols-1`'s underlying breakpoint is
+already canonical; the image slot's `h-[180px]` has no existing 180px spacing token, and adding one
+solely for this single usage was judged unwarranted scope creep beyond FR-007's own ask).
+
+**Anchor files**: `app/tokens.css` (3 new tokens: `--color-border-9`, `--color-glass-3`,
+`--shadow-reimagine-glow`/`-soft`), `app/globals.css` (their `@theme inline` mappings, plus the
+drive-by mapping of the pre-existing `--color-border-orange-medium`), `components/ui/icons.tsx` (2
+new exports: `ReimagineSparkleIcon`, `TechGritMarkIcon`), `components/ui/GlassCard.tsx` (2 new
+variants: `reimagineDiff`, `reimagineWhy`, across all 4 `Record`s), `app/_home-components/home-data.ts`
+(`DifferentiatorPoint` loses `icon`/`tone`, gains optional `image`), and
+`app/_home-components/ReImagineSection.tsx` (rewritten 3-card row + panel, both as `GlassCard`) — no
+`app/page.tsx` change, no `data-model.md`/`contracts/` change, `components/ui/CaseStudiesSection.tsx`
+and every other `GlassCard` consumer unaffected (their own variants are untouched).

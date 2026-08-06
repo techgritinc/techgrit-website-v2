@@ -191,6 +191,8 @@
   --color-glass-faint: rgba(255, 255, 255, 0.03);
   --color-glass-8: rgba(255, 255, 255, 0.08);
   --color-border-8: rgba(255, 255, 255, 0.08);
+  --color-border-9: rgba(255, 255, 255, 0.09); /* Re-Imagine grid card border (v2.2 FR-007) — distinct from --color-glass-faint below */
+  --color-glass-3: rgba(255, 255, 255, 0.03); /* Re-Imagine grid card/panel fill (v2.2 FR-007) — deliberately distinct from --color-glass-faint's shadowed 0.03/0.04 duplicate */
   --color-mac-red: #ff5f57;
   --color-mac-yellow: #febc2e;
   --color-mac-green: #28c840;
@@ -490,6 +492,8 @@
   --shadow-phase-active:  0 0 0 7px var(--color-ink), 0 0 30px rgba(232, 119, 34, 0.70);   /* Phase-node ring+glow — active state (Methodology) */
   --shadow-phase-badge-glow: 0 0 80px rgba(232, 119, 34, 0.55), inset 0 3px 20px rgba(255, 255, 255, 0.35);   /* Phase-detail circular icon badge glow (v2.2 Phase 2, FR-006) */
   --shadow-btn-ghost: 0 8px 24px -10px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.22); /* Ghost button (v2.2 Phase 1) */
+  --shadow-reimagine-glow: 0 0 60px -10px rgba(232, 119, 34, 0.40); /* Re-Imagine grid card 1 hover glow (v2.2 FR-007) */
+  --shadow-reimagine-glow-soft: 0 0 60px -10px rgba(232, 119, 34, 0.35); /* Re-Imagine grid cards 2-3 hover glow (v2.2 FR-007) */
   /* Ambient-orb radii (--blur-glow*, §14) and coloured status-dot glows (--shadow-glow-*, above) already form a coherent v2-covering group — confirmed, no gaps (FR-025) */
   --shadow-live-badge: 0 18px 46px -14px rgba(232, 119, 34, 0.70), 0 4px 16px -6px rgba(232, 119, 34, 0.40);   /* Hero Live-Webinar badge outer shadow (v2.2 Phase 2) */
   --shadow-live-badge-chip: 0 6px 18px -4px rgba(245, 158, 11, 0.60);   /* Hero Live-Webinar badge inner chip shadow (v2.2 Phase 2) */
