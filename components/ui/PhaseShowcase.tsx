@@ -101,12 +101,12 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
       <div ref={trackRef} className="relative" style={{ height: "420vh" }}>
         <div
           ref={stageRef}
-          className="flex min-h-screen flex-col items-center justify-center overflow-hidden py-10 px-tg-15 max-tg-md:px-tg-17"
+          className="flex min-h-screen flex-col items-center justify-center max-tg-sm:justify-start overflow-hidden py-10 max-tg-sm:pt-21 max-tg-sm:pb-5 px-tg-15 max-tg-md:px-tg-17"
           style={{ position: "absolute", top: 0, left: 0, right: 0 }}
         >
           <div className="mx-auto w-full max-w-[1280px] px-tg-15 max-tg-md:px-tg-17">
             <div className="text-center">
-              <SectionEyebrow showAccent={false} className="mb-3.5! max-tg-sm:mb-1.5! leading-[normal]">
+              <SectionEyebrow showAccent={false} className="mb-3.5! max-tg-sm:mb-2! leading-[normal]">
                 {eyebrow}
               </SectionEyebrow>
             </div>
@@ -114,14 +114,14 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
               {heading}
             </h2>
 
-            <div className="relative mt-10">
+            <div className="relative mt-10 max-tg-sm:mt-4">
               <div
                 aria-hidden="true"
-                className="absolute top-7.25 max-tg-sm:top-6 right-[12.5%] left-[12.5%] h-0.75 rounded-full bg-[rgba(255,255,255,0.1)]"
+                className="absolute top-7.25 max-tg-sm:top-5 right-[12.5%] left-[12.5%] h-0.75 rounded-full bg-[rgba(255,255,255,0.1)]"
               />
               <div
                 aria-hidden="true"
-                className="absolute top-7.25 max-tg-sm:top-6 left-[12.5%] h-0.75 w-[75%] rounded-full transition-[clip-path] duration-500"
+                className="absolute top-7.25 max-tg-sm:top-5 left-[12.5%] h-0.75 w-[75%] rounded-full transition-[clip-path] duration-500"
                 style={{
                   background: "var(--gradient-brand)",
                   clipPath: `inset(0 ${100 - railFillPercent}% 0 0)`,
@@ -140,7 +140,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
                       className="flex cursor-pointer flex-col items-center border-none bg-transparent p-0 text-center"
                     >
                       <div
-                        className={`flex h-14.5 w-14.5 max-tg-sm:h-12 max-tg-sm:w-12 items-center justify-center rounded-full border transition-all duration-300 ${
+                        className={`flex h-14.5 w-14.5 max-tg-sm:h-10 max-tg-sm:w-10 items-center justify-center rounded-full border transition-all duration-300 ${
                           isTodo ? "border-border-18 bg-black text-text-70" : "border-border-30 text-primary"
                         } ${isActive ? "scale-[1.08] shadow-phase-active" : "scale-100 shadow-phase-ring"}`}
                         style={isTodo ? undefined : { background: "var(--gradient-phase-node)" }}
@@ -171,11 +171,11 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
               key={active.n}
               className="mt-8 grid grid-cols-[1.25fr_0.75fr] max-tg-sm:grid-cols-1 overflow-hidden rounded-3xl border border-[rgba(255,255,255,0.1)] bg-glass-4 shadow-glass backdrop-blur-md motion-safe:animate-[tgPhaseIn_0.45s_cubic-bezier(.2,.7,.2,1)]"
             >
-              <div className="py-tg-16a px-tg-17">
+              <div className="py-tg-16a px-tg-17 tg-sm:py-10 tg-sm:px-11 max-tg-sm:py-5 max-tg-sm:px-5">
                 <div className="text-12 max-tg-sm:text-3xs font-bold tracking-hint text-amber-light uppercase">{active.week}</div>
-                <h3 className="mt-2 text-[clamp(26px,3vw,32px)] max-tg-sm:text-[24px] leading-[normal] font-bold tracking-[-0.02em] text-white">{active.title}</h3>
-                <p className="mt-3.5 text-[16px] max-tg-sm:text-xs leading-[1.65] text-text-70">{active.description}</p>
-                <div className="mt-6 flex flex-col gap-3">
+                <h3 className="mt-2 max-tg-sm:mt-1 text-[clamp(26px,3vw,32px)] max-tg-sm:text-[24px] leading-[normal] font-bold tracking-[-0.02em] text-white">{active.title}</h3>
+                <p className="mt-3.5 max-tg-sm:mt-2 text-[16px] max-tg-sm:text-xs leading-[1.65] text-text-70">{active.description}</p>
+                <div className="mt-6 max-tg-sm:mt-3 flex flex-col gap-3 max-tg-sm:gap-2">
                   {active.deliverables.map((item) => (
                     <div key={item} className="flex items-center gap-3">
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-overlay-orange">
@@ -186,10 +186,10 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
                   ))}
                 </div>
               </div>
-              <div className="relative flex min-h-75 items-center justify-center overflow-hidden border-l border-border-subtle bg-[linear-gradient(150deg,rgba(232,119,34,0.18),rgba(10,24,34,0.15))] max-tg-sm:min-h-45">
-                <div aria-hidden="true" className="absolute h-60 w-60 rounded-full bg-overlay-orange-22 blur-glow" />
+              <div className="relative flex min-h-75 items-center justify-center overflow-hidden border-l border-border-subtle bg-[linear-gradient(150deg,rgba(232,119,34,0.18),rgba(10,24,34,0.15))] max-tg-sm:min-h-30">
+                <div aria-hidden="true" className="absolute h-60 w-60 max-tg-sm:h-36 max-tg-sm:w-36 rounded-full bg-overlay-orange-22 blur-glow" />
                 <div
-                  className="relative z-10 flex h-42.5 w-42.5 items-center justify-center rounded-full text-white shadow-[var(--shadow-phase-badge-glow)]"
+                  className="relative z-10 flex h-42.5 w-42.5 max-tg-sm:h-22 max-tg-sm:w-22 [&>svg]:max-tg-sm:h-11 [&>svg]:max-tg-sm:w-11 items-center justify-center rounded-full text-white shadow-[var(--shadow-phase-badge-glow)]"
                   style={{ background: "var(--gradient-phase-node)" }}
                 >
                   {active.badgeIcon}
