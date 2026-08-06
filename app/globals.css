@@ -1191,12 +1191,12 @@
   /* Live-status ripple ring (Hero Live-Webinar badge dot, v2.2 Phase 2) */
   @keyframes tgLiveRipple {
     0% {
-      transform: scale(0.8);
-      opacity: 0.9;
+      transform: scale(1);
+      opacity: 1;
     }
 
     100% {
-      transform: scale(1.6);
+      transform: scale(3.2);
       opacity: 0;
     }
   }
