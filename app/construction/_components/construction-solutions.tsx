@@ -67,7 +67,7 @@ export function ConstructionSolutions({ section }: { section: SolutionsSection }
       <div className="mx-auto max-w-[1280px] px-9 pt-[50px] pb-[30px]" data-reveal>
         <div className="mb-[40px] max-w-[760px] mt-[-9px]">
           <SectionEyebrow tone="amber" className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
-          <h2 className="leading-[45.36px] text-[42px] leading-[-1.26px]">{section.title}</h2>
+          <h2 className="leading-[45.36px] text-[42px] tracking-[-1.26px]">{section.title}</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[22px]">
           {section.solutions.map((solution) => (
