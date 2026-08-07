@@ -2167,3 +2167,211 @@ Research (Phase 0 of this slice) confirmed the orb branch's first orb was alread
 the reference and the second needed only a position correction (no new tokens), and confirmed the
 Arial instruction's conflict with both the reference and the brand system before implementing it
 anyway, per direct instruction. No new violations beyond the one recorded FR-031a exception. Gate: PASS.
+
+## Story 5 — Blog Page (FR-027, FR-028, FR-029)
+
+**Date**: 2026-08-07 | **Spec**: [spec.md](./spec.md), User Story 5 (Insights: Blog page reference
+alignment), scoped to **only** FR-027, FR-028, and FR-029, per the Clarifications, "Story 5 — Blog
+Page (Session 2026-08-07)" answers.
+
+**Reference**: `raw-files-v2/TechGrit Website V2.2/TechGrit Blog.dc.html` exclusively.
+
+**Scope note**: this is an independent slice, unrelated to Home Page (User Story 1), Construction
+(User Story 3), or Webinar (User Story 6) above — tracked as its own block precisely so a teammate can
+work any other user story in parallel without touching this section or its files. It covers **only**
+the 3 FRs named above. No Home Page, Construction, Case Studies, Webinar, About, Careers, or Contact
+file is touched.
+
+### Summary
+
+Reading `TechGrit Blog.dc.html` directly against today's `/blog` implementation:
+
+1. **`app/blog/_components/blog-hero.tsx`** (FR-027) — the top eyebrow badge already renders a dot
+   indicator (`<span className="h-2 w-2 shrink-0 rounded-full bg-orange shadow-glow-orange" aria-
+   hidden="true" />`, line 11-14) that the reference's own badge (line 218-220) does not have — a
+   literal `<span>` with only the uppercase label text, no dot. The `<span>` is removed; the badge's
+   outer pill/border/background is otherwise already reference-correct and untouched.
+2. **New `app/blog/_components/blog-filter-bar.tsx`** (FR-028) — per the Clarifications' first two
+   Story 5 answers, this wires the existing, currently-unwired shared `components/ui/FilterBar.tsx`
+   primitive (Blog becomes its first real consumer) around the existing `TopicFilter` chip component
+   (chip pill styling is already reference-correct and untouched). The "shared parent" the
+   Clarifications call for is a **new client wrapper**, `app/blog/_components/blog-filterable-
+   section.tsx` (`"use client"`), which owns `activeTopic` state and the `filteredPosts` memo, and
+   renders `<BlogFilterBar>` and `<BlogPostGrid>` as its own two direct children — matching the
+   reference's DOM order (`data-blog-filter-bar` sits between the Featured section and the Grid
+   section, not nested inside either) without requiring `app/blog/page.tsx` itself to become a client
+   component. This follows the same pattern already established by `app/services/page.tsx` and
+   `app/careers/page.tsx` (both keep `page.tsx` a server component and push client state into a
+   dedicated section component) and avoids foreclosing a future `export const metadata` on `/blog`,
+   which a client `page.tsx` cannot have. `app/blog/_components/blog-post-grid.tsx` (FR-028, continued)
+   drops its own `useState`/`useMemo`/`TopicFilter` ownership entirely — it becomes a presentational
+   component receiving already-filtered `posts` plus an `onReset` callback, used only by its new
+   zero-results control (see item 4).
+3. **`components/ui/FilterBar.tsx`** (FR-028) — its own doc comment ("Not yet wired into any page in
+   this slice") confirms its label typography was placeholder, not reference-verified. Auditing its
+   current default classes (`text-xs font-bold tracking-widest text-secondary uppercase` → 14px/700/
+   0.16em/`rgba(255,255,255,0.72)`) against the reference's literal filter-label styling (line 252:
+   `font-size:11.5px; font-weight:700; letter-spacing:0.14em; color:rgba(255,255,255,0.42)`) shows
+   every value diverges. Corrected in place (on the shared component's own default, not a per-
+   instance override on Blog's usage) to `text-xs-alt font-bold tracking-filter-label text-ghost
+   uppercase` — `--text-xs-alt` (11.5px) and `--color-text-ghost` (`rgba(255,255,255,0.42)`, exposed as
+   `text-ghost`) are both existing exact-match tokens; `tracking-filter-label` is new (see item 5).
+   Fixing the shared default now (with zero current consumers) benefits Blog immediately and leaves
+   Case Studies' own future FR-024 slice reference-correct on day one, rather than needing a second
+   correction later — consistent with FR-044's "one consistent treatment" mandate. Its sticky
+   positioning (`top-nav`, i.e. `top: var(--nav-height)` = 80px) and background (`bg-nav-glass`,
+   `rgba(0,0,0,0.70)`) already match the reference's `top:80px`/`rgba(0,0,0,0.72)` closely enough to
+   be an already-accepted sub-2%-opacity delta (the same class of delta already accepted elsewhere in
+   this plan, e.g. the webinar announcement strip's status-dot glow) — no change needed there. Its
+   `z-raised` (value `1`) z-index — semantically wrong for a sticky-positioned bar, describing
+   hover-lift elevation instead — is swapped for `z-[var(--z-sticky)]` (value `10`), the arbitrary-
+   value form, not a bare `z-sticky` utility: `--z-sticky` has no `@theme inline` mapping in
+   `globals.css` (unlike `--z-raised`/`--z-modal`/`--z-overlay`, which are mapped), so a bare
+   `z-sticky` class would silently resolve to no z-index at all, per Constitution Principle I's
+   explicit warning about unmapped tokens. This mirrors the codebase's own existing precedent for
+   this exact situation — `components/layout/Header.tsx:76-77` already uses `z-[var(--z-nav)]`
+   rather than a bare `z-nav` class, since `--z-nav` is likewise unmapped. `10` still stays well
+   under the sticky nav's own `z-nav` (`100`), preserving the reference's own "filter bar (60) below
+   nav (100)" stacking order.
+4. **`app/blog/_components/blog-post-grid.tsx`** (FR-028, continued) — the existing zero-results
+   message ("No posts match this topic yet — check back soon.") has no control to clear/reset the
+   filter, which FR-028 explicitly requires. A "Reset filter" text-button is added beneath the message,
+   calling the new `onReset` prop (which `page.tsx` wires to `() => setActiveTopic("All")`) — reusing
+   this app's existing clickable-text-link convention (e.g. the homepage Final CTA's secondary link)
+   rather than introducing a new control pattern.
+5. **`app/tokens.css`** (FR-028) — adds one new token with no existing exact match: `--ls-filter-
+   label: 0.14em;` (§ Typography), deliberately not a reuse of the value-identical `--ls-hint`/
+   `--ls-blog-meta`/`--ls-life-cap`/`--ls-announce-label`, per this file's own established "one job,
+   one token" convention (the same reasoning already applied to each of those four). Mapped via
+   `--tracking-filter-label: var(--ls-filter-label);` in `app/globals.css`'s `@theme inline` block
+   (matching the sibling `--tracking-hint`/`--tracking-blog-meta`/`--tracking-life-cap`/`--tracking-
+   announce-label` mappings already there), becoming the canonical `tracking-filter-label` utility.
+6. **`app/blog/_components/newsletter-panel.tsx`** (FR-029) — its outer panel's `bg-ink-mid`
+   (`#000000`, line 31) is swapped for `bg-glass-4` (`--color-glass-4`, `rgba(255,255,255,0.04)`) — a
+   byte-identical existing token to the reference's literal newsletter-card background (line 288),
+   already reused elsewhere in the app (e.g. the inactive filter chip, Re-Imagine grid cards). No new
+   token, per the Clarifications' third Story 5 answer and FR-041/SC-006.
+
+Nothing else changes. `BlogHero`'s heading/lead copy, `FeaturedPost`, `TopicFilter`'s own chip pill
+styling, and `NewsletterPanel`'s form/success-state markup are untouched.
+
+### Technical Context (Story 5 slice)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo; manual
+verification, see Implementation Strategy below) · **Target Platform**: Web · **Project Type**: single
+Next.js App Router app · **Performance Goals**: N/A (markup relocation + a state lift + 2 token
+additions) · **Constraints**: no new libraries; `BlogPost`/`BlogHeroContent`/`NewsletterPanelContent`
+data types are reused verbatim (no data-model change); `app/blog/page.tsx` stays a server component
+(state ownership lives in a new client wrapper instead), matching the existing Services/Careers
+pattern · **Scale/Scope**: 2 new files created (`blog-filter-bar.tsx`, `blog-filterable-section.tsx`),
+3 existing files edited (`page.tsx`, `blog-post-grid.tsx`, `newsletter-panel.tsx`), plus
+`components/ui/FilterBar.tsx`, 1 new token added to `tokens.css` (+ its `@theme inline` mapping in
+`globals.css`), 0 new libraries.
+
+### Constitution Check (Story 5 slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS. The one new literal value (`0.14em` letter-spacing) is added to
+  `tokens.css` first, in its existing § Typography section, before `FilterBar.tsx` consumes it. Every
+  other value used (`--text-xs-alt`, `--color-text-ghost`/`text-ghost`, `--color-glass-4`/`bg-glass-4`,
+  `--nav-height`/`top-nav`, `--color-nav-glass`/`bg-nav-glass`, `--z-sticky`/`z-[var(--z-sticky)]`) is an existing
+  exact-match token, reused verbatim — no hardcoded hex/rgba/px literal is introduced anywhere.
+- **II (Breakpoints)** — PASS, not applicable — no new breakpoint-specific behavior in this slice.
+- **III (Component Library)** — PASS. FR-028 is itself a Component Library conformance fix: Blog
+  becomes the first real consumer of the `components/ui/FilterBar.tsx` primitive that was purpose-built
+  for exactly this treatment, rather than retrofitting bespoke sticky/dark/label styling onto
+  `TopicFilter` (which would itself violate FR-044). `TopicFilter`'s existing chip-button markup is
+  reused as-is, nested inside the shared shell, not forked.
+- **IV (References Are Visual Truth)** — PASS. Every structural and value decision (badge-dot removal,
+  filter-bar DOM position/background/label/sticky offset, newsletter background) is read directly from
+  `TechGrit Blog.dc.html`. The zero-results "Reset filter" control has no reference markup to copy
+  (the reference's own preview-tool data binding never renders a zero-result state) — it's built to
+  match this app's existing clickable-text-link convention instead, the same class of "no reference
+  markup exists, reuse an existing in-app pattern" decision this plan has already made elsewhere (e.g.
+  the Case Studies/Blog zero-results control decided in spec.md's Session 2026-08-03 Clarifications).
+- **V (Dark-First Brand)** — PASS. No new surface fill; `bg-glass-4` and `bg-nav-glass` are both
+  existing translucent dark-glass tokens already used elsewhere, not a new solid fill.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- No violations — Complexity Tracking is empty.
+
+### UI Design Approach (Story 5 slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's two visible craft surfaces — the
+filter bar's label/chip contrast and the zero-results control. Since this slice is reference-exact
+matching work (not new creative direction), the skill's generic aesthetic guidance is superseded by
+this repo's own repo-specific rules per AGENTS.md/CLAUDE.md wherever the two conflict (Principles I–V
+win); its guidance is otherwise consulted for craft judgment where the reference and repo rules are
+silent. Takeaways applied: **label contrast** — correcting the label to the reference's dimmer
+`rgba(255,255,255,0.42)`/11.5px keeps it reading as a quiet, secondary "Filter" caption rather than
+competing with the chips themselves for attention, consistent with this app's existing eyebrow/label
+hierarchy elsewhere (How We Deliver, Industries, About). **Zero-results control** — styled as a plain
+clickable-text link (not a filled button) so it reads as a low-emphasis recovery action, matching the
+existing Final CTA secondary-link's resting/hover treatment (dimmer resting color, brightening on
+hover) rather than introducing a new, heavier control pattern for a rare empty-state case.
+
+**Reconciliation with Principles I–V**: none needed — the skill's guidance confirmed Principle V's
+sparing-accent convention and Principle III's reuse mandate without surfacing any further conflict.
+
+**Anchor files**: `app/blog/_components/blog-hero.tsx` (dot span removed), `app/blog/_components/
+blog-filter-bar.tsx` (new — wraps `FilterBar` + `TopicFilter`), `app/blog/_components/blog-filterable-
+section.tsx` (new — `"use client"`, owns `activeTopic` state, renders filter bar and grid as siblings),
+`app/blog/page.tsx` (unchanged as a server component, renders `<BlogFilterableSection>`),
+`app/blog/_components/blog-post-grid.tsx` (drops state ownership, adds `onReset` control),
+`components/ui/FilterBar.tsx` (default label typography corrected, `z-raised` → `z-[var(--z-sticky)]`),
+`app/blog/_components/newsletter-panel.tsx` (`bg-ink-mid` → `bg-glass-4`), `app/tokens.css` +
+`app/globals.css` (`--ls-filter-label` / `tracking-filter-label`).
+
+### Project Structure (Story 5 slice)
+
+```text
+app/blog/_components/
+├── blog-hero.tsx              # dot <span> removed from the eyebrow badge
+├── blog-filter-bar.tsx        # NEW — wraps components/ui/FilterBar.tsx (label="Filter") around
+│                                # the existing TopicFilter chips
+├── blog-filterable-section.tsx # NEW — "use client"; owns activeTopic state and the filteredPosts
+│                                # memo; renders <BlogFilterBar> and <BlogPostGrid> as siblings
+├── blog-post-grid.tsx         # activeTopic state + TopicFilter rendering removed; now presentational
+│                                # (receives filtered posts), zero-results branch gains a "Reset filter"
+│                                # control calling the new onReset prop
+└── newsletter-panel.tsx       # bg-ink-mid → bg-glass-4
+
+app/blog/page.tsx           # stays a server component; renders <BlogHero>, <FeaturedPost>,
+                             # <BlogFilterableSection>, <NewsletterPanel>
+
+components/ui/FilterBar.tsx  # default label classes corrected to text-xs-alt/tracking-filter-label/
+                              # text-ghost; z-raised → z-[var(--z-sticky)] (arbitrary value, matching
+                              # Header.tsx's own z-[var(--z-nav)] precedent — --z-sticky is unmapped)
+
+app/tokens.css               # + --ls-filter-label (§ Typography)
+app/globals.css              # + --tracking-filter-label mapping in @theme inline
+```
+
+No `data-model.md`/`contracts/` change (presentation-only, same as every other slice in this plan).
+`app/blog/_data/types.ts` is unchanged — `BlogPost`/`BlogHeroContent`/`NewsletterPanelContent` are
+reused verbatim, no new field.
+
+**Structure Decision**: existing single-project structure. `blog-filter-bar.tsx` and `blog-filterable-
+section.tsx` stay route-local (`app/blog/_components/`), matching their sibling section files — both
+are consumed by the Blog page only, while the generic `FilterBar` shell `blog-filter-bar.tsx` wraps
+stays in `components/ui/` for Case Studies' own future FR-024 slice to reuse unchanged. `FilterBar`
+wraps its `children` in its own `flex flex-wrap items-center gap-2.5` div, and `TopicFilter`
+independently renders an identical `flex flex-wrap items-center gap-2.5" role="group"` div around its
+chips — nesting them inside `blog-filter-bar.tsx` produces two redundant, visually-identical, harmless
+flex wrappers. This is an accepted, intentional redundancy, not a defect requiring `TopicFilter`'s
+public shape to change for its only current consumer.
+
+### Complexity Tracking (Story 5 slice)
+
+*Empty — no unjustified complexity or deviation from the constitution in this slice.*
+
+### Post-Design Constitution Re-Check (Story 5 slice)
+
+Research (Phase 0 of this slice) confirmed the shared `FilterBar.tsx` primitive's sticky positioning
+and background were already reference-correct (only its label typography and z-index token needed
+correction), and confirmed every other value change (badge dot, newsletter background) resolves to an
+existing exact-match token with zero new hardcoded literals beyond the one new letter-spacing token.
+No violations. Gate: PASS.

@@ -28,7 +28,7 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
   return (
     <section>
       <div className="mx-auto max-w-(--container-max) px-9 pt-tg-3 pb-tg-23">
-        <div className="relative overflow-hidden rounded-4xl border border-border-image bg-ink-mid py-tg-19a px-tg-19">
+        <div className="relative overflow-hidden rounded-4xl border border-border-image bg-glass-4 py-tg-19a px-tg-19">
           <div
             aria-hidden="true"
             className="absolute -top-[110px] right-[4%] size-tg-380 rounded-full bg-overlay-orange-18 blur-glow-xl"
@@ -59,11 +59,12 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
                       type="email"
                       placeholder="Your work email"
                       error={status === "error" ? content.errorText : undefined}
-                      containerClassName="flex-1 min-w-[200px] flex flex-col [&_input]:!flex-1 [&_input]:!rounded-[12px] [&_input]:!px-[18px] [&_input]:!py-[15px] [&_input]:!text-[15px] [&_input::placeholder]:!font-normal max-sm:[&_p]:sr-only"
+                      containerClassName="flex-1 min-w-[200px] flex flex-col [&_input]:!flex-1 [&_input]:!rounded-[12px] [&_input]:!px-[18px] [&_input]:!py-[15.5px] [&_input]:!text-[15px] [&_input::placeholder]:!font-normal max-sm:[&_p]:sr-only"
                     />
                     <Button
+                      style={{fontFamily: "Arial"}}
                       type="submit"
-                      className="!leading-[normal] gap-[9px] !py-tg-4a sm:!py-tg-5a !px-tg-11 !text-15-5 !shadow-btn-subscribe !rounded-[12px] active:!shadow-btn-subscribe"
+                      className="!leading-[normal] gap-[9px] !py-tg-4a sm:!py-[16px] !px-tg-11 !text-15-5 !shadow-btn-subscribe !rounded-[12px] active:!shadow-btn-subscribe"
                     >
                       {content.ctaLabel} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
                     </Button>
@@ -74,7 +75,7 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
                     )}
                   </form>
                   {status !== "error" && (
-                    <p className="mt-tg-3a text-2xs text-text-45">{content.helperText}</p>
+                    <p className="mt-tg-3a text-2xs leading-[normal] text-text-45">{content.helperText}</p>
                   )}
                 </>
               )}

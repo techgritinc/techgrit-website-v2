@@ -354,6 +354,7 @@
   --tracking-24: var(--ls-24);
   --tracking-blog-meta: var(--ls-blog-meta);
   --tracking-life-cap: var(--ls-life-cap);
+  --tracking-filter-label: var(--ls-filter-label);
 
   /* Blur — fixes the 8-spot "too hazy" bug (blur-md was never registered,
    * so components fell back to blur-lg) plus the Final CTA panel. */
@@ -1417,12 +1418,14 @@
  * SCROLLBAR styling (testimonial / case study tracks)
  * ---------------------------------------------------------- */
   [data-testi-track],
-  [data-cases] {
+  [data-cases],
+  .scrollbar-none {
     scrollbar-width: none;
   }
 
   [data-testi-track]::-webkit-scrollbar,
-  [data-cases]::-webkit-scrollbar {
+  [data-cases]::-webkit-scrollbar,
+  .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
 

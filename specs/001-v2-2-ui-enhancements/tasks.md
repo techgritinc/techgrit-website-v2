@@ -1442,3 +1442,121 @@ Task: "Load /webinar + other routes, confirm against reference, run lint + build
 
 T006-T008 in parallel (different files), then T009 to verify. This completes every FR in User Story 6
 (spec.md); User Stories 2, 4, 5, and 7-9 remain a future pass each.
+
+## Story 5 — Blog Page (FR-027, FR-028, FR-029)
+
+**Input**: [plan.md](./plan.md) § "Story 5 — Blog Page (FR-027, FR-028, FR-029)"
+**Scope**: 3 FRs only — the hero badge's dot indicator (FR-027), the topic filter bar becoming a
+sticky/dark/labeled bar via the existing shared `components/ui/FilterBar.tsx` primitive plus a
+zero-results reset control (FR-028), and the newsletter panel's background token (FR-029). Tracked as
+its own block, independent of every other user story above, so a teammate can work Home Page,
+Construction, Webinar, or any other story in parallel without touching this section or its files.
+Starts its own task numbering at **T001**, distinct from every other story's numbering in this file.
+
+**Goal**: `/blog`'s hero badge shows no dot; the topic filter becomes a dark, sticky, labeled bar
+(wired to the shared `FilterBar` primitive) positioned between the featured post and the grid, with a
+working reset-to-"All" control when a topic matches zero posts; the newsletter panel's background
+matches the reference's `rgba(255,255,255,0.04)`.
+
+**Independent Test**: Load `/blog` at desktop, tablet, and mobile widths; confirm the hero badge shows
+no dot; confirm the filter bar renders as its own sticky element (dark background, visible "Filter"
+label) between the featured post and the grid, and stays stuck to the top of the viewport on scroll;
+select a topic with zero matching posts and confirm a "no results" message plus a working reset
+control appears while the filter bar remains usable; confirm the newsletter panel's background matches
+the reference — independently of every other page's state.
+
+- [X] T001 [US5] In `app/tokens.css`, add one new token in its existing § Typography section:
+  `--ls-filter-label: 0.14em;` (matching `TechGrit Blog.dc.html`'s literal filter-label letter-spacing,
+  line 252 — deliberately not a reuse of the value-identical `--ls-hint`/`--ls-blog-meta`/`--ls-life-
+  cap`/`--ls-announce-label`, per this file's own "one job, one token" convention). In `app/globals.css`'s
+  `@theme inline` block, add `--tracking-filter-label: var(--ls-filter-label);` alongside the sibling
+  `--tracking-hint`/`--tracking-blog-meta`/`--tracking-life-cap`/`--tracking-announce-label` mappings,
+  producing the canonical `tracking-filter-label` utility (FR-028).
+- [X] T002 [P] [US5] In `app/blog/_components/blog-hero.tsx`, remove the dot `<span className="h-2 w-2
+  shrink-0 rounded-full bg-orange shadow-glow-orange" aria-hidden="true" />` from the eyebrow badge
+  (lines 11-14), leaving only the badge's outer pill and label text — matching `TechGrit Blog.dc.html`'s
+  reference badge (line 218-220), which has no dot (FR-027).
+- [X] T003 [P] [US5] In `components/ui/FilterBar.tsx`, correct the label's default classes from
+  `text-xs font-bold tracking-widest text-secondary uppercase` to `text-xs-alt font-bold tracking-
+  filter-label text-ghost uppercase` (11.5px/700/0.14em/`rgba(255,255,255,0.42)`, matching the
+  reference's literal filter-label styling exactly), and change the wrapper's `z-raised` to the
+  arbitrary-value `z-[var(--z-sticky)]` — NOT a bare `z-sticky` class, since `--z-sticky` has no
+  `@theme inline` mapping in `globals.css` and would silently resolve to no z-index at all
+  (Constitution Principle I); this matches `components/layout/Header.tsx:76-77`'s own
+  `z-[var(--z-nav)]` precedent for the same unmapped-token situation. `10` still stays under the
+  sticky nav's own `z-nav` (`100`) — depends on T001 for the new tracking utility (FR-028).
+- [X] T004 [P] [US5] In `app/blog/_components/newsletter-panel.tsx`, change the panel's outer container
+  class from `bg-ink-mid` to `bg-glass-4` (line 31), matching `TechGrit Blog.dc.html`'s literal
+  newsletter-card background (`rgba(255,255,255,0.04)`, an existing exact-match token) (FR-029).
+- [X] T005 [US5] Create `app/blog/_components/blog-filter-bar.tsx` — a client component accepting
+  `{ topics, activeTopic, onSelect }`, rendering `<FilterBar label="Filter"><TopicFilter topics=
+  {topics} activeTopic={activeTopic} onSelect={onSelect} /></FilterBar>` (importing the shared
+  `components/ui/FilterBar.tsx` and the existing `./topic-filter`) — depends on T003 for the corrected
+  shared-component styling (FR-028). Note: `FilterBar` wraps its `children` in its own `flex flex-wrap
+  items-center gap-2.5` div, and `TopicFilter` independently renders an identical wrapper div around
+  its chips — the resulting nested flex wrappers are visually identical and harmless; this is an
+  accepted, intentional redundancy, not a defect to fix by changing `TopicFilter`'s public shape.
+- [X] T006 [US5] In `app/blog/_components/blog-post-grid.tsx`: remove the `activeTopic` `useState`, the
+  `filteredPosts` `useMemo`, the `<TopicFilter>` render call, and the `topics`/`activeTopic`/`onSelect`
+  handling entirely — the component now accepts `{ posts, onReset }` (already-filtered `posts`, plus a
+  reset callback) and is purely presentational; add a "Reset filter" clickable-text control (matching
+  this app's existing secondary-link styling, e.g. the homepage Final CTA's secondary link) beneath the
+  existing "No posts match this topic yet — check back soon." message, calling `onReset` when clicked
+  — depends on T005 (filter bar takes over topic-selection ownership) (FR-028).
+- [X] T007 [US5] Create `app/blog/_components/blog-filterable-section.tsx` — a client component
+  (`"use client"`) accepting `{ topics, posts }`; owns `activeTopic` state and a `filteredPosts` memo
+  (`activeTopic === "All" ? posts : posts.filter((post) => post.topic === activeTopic)`); renders
+  `<BlogFilterBar topics={topics} activeTopic={activeTopic} onSelect={setActiveTopic} />` and
+  `<BlogPostGrid posts={filteredPosts} onReset={() => setActiveTopic("All")} />` as its own two direct
+  children — depends on T005 (`BlogFilterBar` must exist) and T006 (`BlogPostGrid`'s new prop shape)
+  (FR-028).
+- [X] T008 [US5] In `app/blog/page.tsx` (stays a server component — no `"use client"`, matching the
+  existing `app/services/page.tsx`/`app/careers/page.tsx` pattern of keeping `page.tsx` server-only and
+  pushing client state into a dedicated section component): render `<BlogHero>`, `<FeaturedPost>`,
+  `<BlogFilterableSection topics={BLOG_CONTENT.topics} posts={BLOG_CONTENT.posts} />`, and
+  `<NewsletterPanel>` as direct siblings, in that order — matching `TechGrit Blog.dc.html`'s own DOM
+  order (the filter bar sits between the Featured section and the Grid section) — depends on T007
+  (FR-028).
+- [X] T009 [US5] Verify: load `/blog` at desktop, tablet, and mobile widths; confirm the hero badge
+  shows no dot; confirm the filter bar renders as its own sticky element (dark `bg-nav-glass`
+  background, visible "Filter" label at 11.5px/`rgba(255,255,255,0.42)`) positioned between the
+  featured post and the grid, sticking to `top: var(--nav-height)` on scroll independent of the grid's
+  own scroll position; confirm `app/blog/page.tsx` remains a server component with no `"use client"`
+  directive; select a topic matching zero posts and confirm the "no results" message plus the "Reset
+  filter" control appear, and that clicking it restores "All" and the full grid, with the filter bar
+  remaining usable throughout; confirm the newsletter panel's background matches
+  `rgba(255,255,255,0.04)`; run `npm run lint` and `npm run build`.
+
+**Checkpoint**: FR-027, FR-028, and FR-029 are complete and independently verified; no other `/blog`
+file, Home Page file, Construction file, Webinar file, or Case Studies file was touched (Case Studies'
+own FR-024 remains a future slice, now able to reuse the same corrected `FilterBar.tsx` unchanged).
+
+## Dependencies (Story 5)
+
+- T001 blocks T003 (new tracking utility must exist before `FilterBar.tsx` consumes it).
+- T002 and T004 are independent of everything else in this story — different files, no shared state.
+- T003 blocks T005 (filter bar wraps the corrected shared component).
+- T005 blocks T006 (grid's new presentational prop shape depends on the filter bar taking over topic
+  selection) and T007 (`blog-filterable-section.tsx` renders `BlogFilterBar`).
+- T006 blocks T007 (`blog-filterable-section.tsx` renders `BlogPostGrid`'s new prop shape).
+- T007 blocks T008 (`page.tsx` renders `BlogFilterableSection`).
+- T009 runs last, after T001-T008.
+
+## Parallel Example (Story 5)
+
+```bash
+# T002 and T004 touch different files with no shared state and can run immediately:
+Task: "Remove the dot span from blog-hero.tsx's eyebrow badge (T002)"
+Task: "Swap newsletter-panel.tsx's bg-ink-mid to bg-glass-4 (T004)"
+# T001 must land first, then T003 can run:
+Task: "Add --ls-filter-label token + tracking-filter-label mapping (T001)"
+Task: "Correct FilterBar.tsx's label typography and z-index (T003)"
+# Then, in order: T005 → T006 → T007 → T008 → T009
+```
+
+## Implementation Strategy (Story 5)
+
+T001 first (new token), then T002/T003/T004 in parallel (T003 depends only on T001), then T005 (new
+`BlogFilterBar`), then T006 (grid becomes presentational), then T007 (new `BlogFilterableSection`
+client wrapper owning filter state), then T008 (`page.tsx` — stays a server component, renders the new
+wrapper), then T009 to verify. This completes every FR in User Story 5 (spec.md).
