@@ -48,7 +48,6 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
             className="!py-tg-2 !px-4 !text-2xs !font-bold !gap-tg-3 motion-reduce:!opacity-100 leading-[normal]"
             style={{ animationDelay: ".05s", marginBottom: 24 }}
           >
-            <span className="status-dot status-orange" />
             {content.badgeLabel}
           </Badge>
           <h1
@@ -81,17 +80,18 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
               required
               placeholder={content.formPlaceholder}
               containerClassName="min-w-[220px] flex-1"
-              inputClassName="!rounded-card !py-tg-5a !px-tg-7 placeholder:!font-normal"
+              inputClassName="!rounded-card !py-tg-5a !px-tg-7 placeholder:!font-normal !h-[52px]"
             />
             <Button
               type="submit"
-              className="!py-tg-5a !px-tg-11 !text-15-5 !shadow-btn-subscribe"
+              style={{ fontFamily: "Arial, sans-serif" }}
+              className="!py-tg-5a !px-tg-11 !text-[15.5px] !shadow-btn-subscribe !h-[52px]"
             >
               {status === "success" ? "Subscribed ✓" : content.formCtaLabel}
             </Button>
           </form>
           {status === "success" && (
-            <p className="mt-3.5 text-sm font-semibold text-teal-light">{content.successText}</p>
+            <p className="mt-3.5 text-xs font-semibold text-teal-light leading-[normal]">{content.successText}</p>
           )}
           {status === "error" && errorMessage && (
             <p role="alert" className="mt-3 text-sm font-semibold text-error">

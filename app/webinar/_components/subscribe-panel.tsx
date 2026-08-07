@@ -60,7 +60,8 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
             />
             <Button
               type="submit"
-              className="w-full font-bold !text-[16px] !rounded-card !shadow-btn-subscribe leading-[normal]"
+              style={{ fontFamily: "Arial, sans-serif" }}
+              className="w-full font-bold !text-[16px] !rounded-card !shadow-btn-subscribe leading-[normal] py-4!"
             >
               {status === "success" ? "Subscribed ✓" : content.ctaLabel}
             </Button>

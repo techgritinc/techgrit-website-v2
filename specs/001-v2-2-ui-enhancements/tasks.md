@@ -1266,3 +1266,179 @@ Task: "Load /construction + /about + /case-studies + /services, confirm against 
 
 T005-T007 in parallel (different files), then T008 (depends on T007), then T009 to verify. This
 completes every FR in User Story 3 (spec.md); User Stories 2 and 4-9 remain a future pass each.
+
+---
+
+# Tasks: User Story 6 — Webinar Page (FR-030, FR-031)
+
+**Input**: [plan.md](./plan.md) § "User Story 6 — Webinar Page (FR-030, FR-031)"
+**Scope**: exactly 2 requirements on the existing `/webinar` page — moving the upcoming webinar's
+details out of the sessions grid's `UpcomingPanel` into a new full-width announcement strip
+positioned above the hero (FR-030), and removing that "Upcoming Live" panel from the sessions list
+while correcting the one released-card color value that wasn't already reference-exact (FR-031).
+Reference: `TechGrit Webinar.dc.html` exclusively (spec.md Clarifications, Session 2026-08-07, Story
+6 block).
+
+**Independent task-ID block**: this story's tasks restart at **T001** in their own `[US6]` namespace,
+deliberately separate from every other user story's task sequence above, so a teammate working Home
+Page, Construction, or any other user story in parallel can identify and touch this block without
+renumbering collisions. No dependency exists between this block and any other story's tasks.
+
+## Story 6 — Webinar Page (FR-030, FR-031)
+
+**Goal**: the upcoming webinar's details render in a new announcement strip above the hero (not
+inside the hero's own two-column grid, and no longer as a separate "Upcoming Live" panel in the
+sessions grid), and the "Sessions" heading plus every released-session card match
+`TechGrit Webinar.dc.html`'s colors and typography exactly.
+
+**Independent Test**: Load `/webinar` at desktop, tablet, and mobile widths; confirm the announcement
+strip renders above the hero (status label, session title/date, a Register control that scrolls to
+`#subscribe`), stacks to a single column at the `sm` breakpoint, that the sessions grid no longer
+shows a separate "Upcoming Live" panel, and that the first released card's cover gradient matches the
+reference's orange accent exactly — independently of every other page's state.
+
+- [X] T001 [US6] In `app/tokens.css`, add 4 new tokens in their respective existing numbered
+  sections: `--gradient-webinar-announce: linear-gradient(90deg, rgba(245, 158, 11, 0.14), rgba(232,
+  119, 34, 0.05));` (§ Gradients), `--color-border-amber-35: rgba(245, 158, 11, 0.35);` and
+  `--color-border-amber-70: rgba(245, 158, 11, 0.70);` (§ Borders), `--shadow-webinar-announce: 0 12px
+  40px -18px rgba(232, 119, 34, 0.5);` (§ Shadows), and `--gradient-webinar-released-orange: linear-
+  gradient(150deg, rgba(232, 119, 34, 0.18), rgba(2, 132, 199, 0.06));` (§ Gradients) (FR-030, FR-031).
+  **Done. Correction (discovered during implementation)**: the strip's status label needed a 5th new
+  token not identified during planning — `--ls-announce-label: 0.14em;` (§ Typography), matching
+  `TechGrit Webinar.dc.html`'s literal `letter-spacing:0.14em` on this label (deliberately not a reuse
+  of the value-identical `--ls-hint`/`--ls-blog-meta`/`--ls-life-cap`, per this file's own established
+  per-job-token convention) — plus its `@theme inline` mapping (`--tracking-announce-label`) in
+  `app/globals.css`, so `tracking-announce-label` becomes a canonical Tailwind utility. The label's
+  font-size (`11.5px`) and font-weight (`800`) and the session-detail text's color (`rgba(255,255,255,
+  0.92)`) all turned out to already have exact-match tokens (`--text-xs-alt`, `--fw-extrabold`,
+  `--color-text-strong`) — reused verbatim via their canonical classes (`text-xs-alt`,
+  `font-extrabold`, `text-strong`), no further new tokens needed.
+- [X] T002 [P] [US6] Create `app/webinar/_components/announcement-strip.tsx` — a full-width strip
+  accepting `{ session: UpcomingSession }`, rendered as a `grid grid-cols-[auto_1fr_auto]
+  items-center gap-[22px] max-tg-sm:grid-cols-1 max-tg-sm:gap-3` row inside a `rounded-[16px]
+  border-[var(--color-border-amber-35)] hover:border-[var(--color-border-amber-70)]
+  bg-[image:var(--gradient-webinar-announce)] shadow-[var(--shadow-webinar-announce)]
+  backdrop-blur-cta` wrapper: a status label (`"Upcoming · Live"`-style span with a
+  `status-dot bg-yellow shadow-glow-amber-sm animate-[tgblink_1.8s_ease-in-out_infinite]
+  motion-reduce:animate-none` dot), the session's title + date/time on one line, and a "Register"
+  `<button>` that calls `document.getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" })`
+  — depends on T001 for the new tokens (FR-030). **Done.**
+- [X] T003 [P] [US6] In `app/webinar/_components/sessions-section.tsx`: remove the `UpcomingPanel`
+  function and its `<UpcomingPanel session={upcomingSession} />` render call from `SessionsSection`;
+  remove `upcomingSession` from `SessionsSection`'s prop type and destructuring; change
+  `RELEASED_ACCENT_COVER.orange` from `"bg-[image:var(--gradient-blog-featured)]"` to
+  `"bg-[image:var(--gradient-webinar-released-orange)]"` — depends on T001 for the new gradient token
+  (FR-031). **Done** — `ClockIcon` and `UpcomingSession` imports removed as a direct consequence
+  (both became unused once `UpcomingPanel` was deleted); `Button`, `GlassCardTitle`,
+  `GlassCardDescription`, and `PlayIcon` remain in use by the released-card renderers.
+- [] T004 [US6] In `app/webinar/page.tsx`, render `<AnnouncementStrip session={webinarPageContent.
+  upcomingSession} />` between `<HeroSection>` and `<SessionsSection>`, and remove the
+  `upcomingSession={webinarPageContent.upcomingSession}` prop from the `<SessionsSection>` call —
+  depends on T002 (component must exist) and T003 (prop must be removed from `SessionsSection`) (FR-030).
+  **Done** — `<AnnouncementStrip>` renders first, before `<HeroSection>`, matching the reference's own
+  DOM order (the strip sits above the hero `<section>`, not inside it).
+- [X] T005 [US6] Verify: load `/webinar` at desktop, tablet, and mobile widths; confirm the
+  announcement strip renders above the hero with correct status-dot blink, title/date line, and
+  working Register scroll-to-subscribe; confirm it stacks to one column at the `sm` breakpoint;
+  confirm the sessions grid shows no "Upcoming Live" panel; confirm the first released card's cover
+  gradient matches the reference's `rgba(232,119,34,0.18)…` exactly (not the prior `0.20` Blog-borrowed
+  value); run `npm run lint` and `npm run build`.
+
+**Checkpoint**: FR-030 and FR-031 are complete and independently verified; no other `/webinar` file,
+Home Page file, or Construction file was touched.
+
+## Dependencies (User Story 6)
+
+- T001 has no dependency — runs first.
+- T002 and T003 both depend on T001 (new tokens) but touch different files — parallel once T001 lands.
+- T004 depends on both T002 and T003.
+- T005 runs last, after T001-T004.
+
+## Parallel Example (User Story 6)
+
+```bash
+# T001 runs first (new tokens, no dependency):
+Task: "Add 4 new tokens to app/tokens.css (T001)"
+# Then T002 and T003 run together (different files, both depend on T001 only):
+Task: "Create announcement-strip.tsx (T002)"
+Task: "Remove UpcomingPanel + swap orange gradient token in sessions-section.tsx (T003)"
+# Then, once T002 and T003 land:
+Task: "Wire <AnnouncementStrip> into page.tsx, remove upcomingSession prop from <SessionsSection> (T004)"
+# Then verify:
+Task: "Load /webinar, confirm against reference at 3 breakpoints, run lint + build (T005)"
+```
+
+## Implementation Strategy (User Story 6)
+
+T001 first (new tokens), then T002/T003 in parallel (different files, both depend only on T001), then
+T004 (depends on both), then T005 to verify. This completes every FR in User Story 6 (spec.md); User
+Stories 2, 4, 5, and 7-9 remain a future pass each.
+
+---
+
+## Story 6 (continued) — Webinar Page Polish (FR-030a, FR-030b, FR-031a)
+
+**Input**: [plan.md](./plan.md) § "User Story 6 (continued) — Webinar Page Polish (FR-030a, FR-030b,
+FR-031a)"
+**Scope**: 3 direct-instruction items on top of the completed FR-030/FR-031 slice above — the
+announcement strip's Register control moving onto the shared `Button` primitive (FR-030a), `/webinar`'s
+background ambient orbs matching the reference's own 2-orb set (FR-030b), and the sessions grid's
+"Watch Now" buttons rendering with `font-family: Arial` (FR-031a, a deliberate exception to both the
+reference and this app's brand system — see plan.md's Constitution Check for the recorded rationale).
+Continues this same story's task numbering — **T006** onward, same `[US6]` label — rather than a new
+T001 block, since it's the same user story.
+
+**Goal**: FR-030a, FR-030b, FR-031a — the Register control is a `<Button>`, `/webinar`'s background
+shows exactly 2 orbs matching the reference (no 3rd amber orb), and both "Watch Now" buttons render in
+Arial.
+
+**Independent Test**: Load `/webinar`; confirm the announcement strip's Register control is rendered
+by the shared `Button` component (inspect DOM/computed styles) with no visual change from before;
+confirm the page background shows exactly 2 ambient orbs (orange top-right, blue bottom-left at
+`top:1200px`) with no 3rd amber orb; confirm both "Watch Now" buttons compute `font-family: Arial` —
+then load `/`, `/services`, `/about`, `/careers`, `/blog` and confirm each still shows its own
+unaffected orb set (homepage's 4-orb branch, or the shared default 3-orb set elsewhere).
+
+- [X] T006 [P] [US6] In `app/webinar/_components/announcement-strip.tsx`, replace the Register
+  control's bespoke `<button onClick={handleRegisterClick}>` with `<Button onClick=
+  {handleRegisterClick} size="sm" className="...">`, carrying the same `!rounded-[10px] !py-[9px]
+  !px-[18px] !text-[13.5px]` overrides needed to keep its rendered output pixel-identical to before
+  (FR-030a). **Done.**
+- [X] T007 [P] [US6] In `components/ui/ambient-orbs.tsx`, add a `pathname === "/webinar"` branch
+  rendering exactly 2 orbs: the existing default branch's first orb unchanged (`-top-40 -right-30
+  h-140 w-140 bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]`) and its second
+  orb with the vertical offset corrected from `top-225` to `top-300` (`bg-overlay-blue-soft h-130
+  w-130 blur-[130px] animate-[tgorb_20s_ease-in-out_infinite_reverse]`) — the 3rd (amber) orb is not
+  carried over, since the reference has none (FR-030b). **Done.**
+- [X] T008 [P] [US6] In `app/webinar/_components/sessions-section.tsx`, add `style={{ fontFamily:
+  "Arial, sans-serif" }}` to both `ReleasedCardHalf`'s and `ReleasedCardFull`'s "Watch Now" `<Button>`
+  calls (FR-031a). **Done.**
+- [X] T009 [US6] Verify: load `/webinar`; confirm the Register control renders via the shared `Button`
+  component with unchanged visual output; confirm exactly 2 background orbs render (no 3rd amber
+  orb), with the blue orb at the corrected `top:1200px` position; confirm both "Watch Now" buttons
+  compute `font-family: Arial`; load `/`, `/services`, `/about`, `/careers`, and `/blog` and confirm
+  each still renders its own unaffected orb set; run `npm run lint` and `npm run build`.
+
+**Checkpoint**: FR-030a, FR-030b, and FR-031a are complete; FR-030 and FR-031 (above) remain
+unaffected and complete. User Story 6 (spec.md) is now fully implemented.
+
+## Dependencies (Story 6 continued)
+
+- T006, T007, and T008 touch three different files with no shared state — fully parallel.
+- T009 runs last, after T006-T008.
+
+## Parallel Example (Story 6 continued)
+
+```bash
+# T006, T007, and T008 touch different files and can run together:
+Task: "Swap Register control to shared Button in announcement-strip.tsx (T006)"
+Task: "Add /webinar's 2-orb branch to ambient-orbs.tsx (T007)"
+Task: "Add Arial style override to both Watch Now Button calls in sessions-section.tsx (T008)"
+# Then verify:
+Task: "Load /webinar + other routes, confirm against reference, run lint + build (T009)"
+```
+
+## Implementation Strategy (Story 6 continued)
+
+T006-T008 in parallel (different files), then T009 to verify. This completes every FR in User Story 6
+(spec.md); User Stories 2, 4, 5, and 7-9 remain a future pass each.
