@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
   basePath: "/techgrit-website-v2",
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    loader: "custom",
+    loaderFile: "./image-loader.ts",
   },
 };
 
