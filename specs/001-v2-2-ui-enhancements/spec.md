@@ -166,6 +166,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 1. **Given** a visitor on `/contact`, **When** the page renders, **Then** a "Skip the Form" card is visible near the existing form with a gradient background matching the reference.
 2. **Given** a visitor submitting the existing contact form, **When** they submit, **Then** the existing client-side success behavior is unchanged.
+3. **Given** a visitor viewing the "Skip the Form" card, **When** they activate its "Book a call" action, **Then** no external Calendly widget is loaded and no live booking flow is triggered — the action is a static/placeholder target only.
 
 ---
 
@@ -217,6 +218,10 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 - Q: Does successfully submitting the Careers Apply modal send/persist the application data anywhere (email, backend, ATS), or is the success confirmation a client-side-only state transition with no data persistence? → A: Client-side only, no persistence — matches the reference's own JS (a `setState` call with no `fetch`/network call) and this repo's existing Contact-form pattern (FR-040); no new backend or integration is introduced.
 - Q: When a visitor selects an Apply-modal resume file over 5MB, what should happen? → A: Immediately (on selection, not at submit time) show a specific "file is over 5MB" error message and clear the selected file, keeping the modal open — matching the reference's `onChange` handler exactly.
 - Q: When the Apply modal is reopened (same role or a different one), should the form fields reset to blank? → A: Yes — every open, regardless of which role's Apply button triggered it, clears name/email/link/message/file and any prior error, matching the reference's `openApplyFor` reset behavior.
+
+### Session 2026-08-07
+
+- Q: The reference's "Skip the Form" card wires its "Book a call" button to a real Calendly widget (loads Calendly's external `widget.js`/`widget.css` and calls `Calendly.initPopupWidget({url:'https://calendly.com/techgrit/30min'})`). Should this feature embed that real widget, wire a real external link, or ship a static/placeholder action? → A: Static/placeholder — the button/link MUST NOT embed Calendly's external widget script or otherwise introduce a new third-party dependency; it uses a placeholder target (e.g. `href="#"`), matching the existing "Book on Calendly" precedent already used on the Construction page (`app/construction/_data/construction-content.ts`'s `primaryCtaLink: "#"`). No live booking integration is introduced by this feature.
 
 ## Requirements *(mandatory)*
 
@@ -293,7 +298,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 **Contact Us Page**
 
-- **FR-039**: A new "Skip the Form" card MUST be added near the existing contact form, offering a direct scheduling path, using the reference's gradient background.
+- **FR-039**: A new "Skip the Form" card MUST be added near the existing contact form, offering a direct scheduling path, using the reference's gradient background. Its "Book a call" action MUST be a static/placeholder action (e.g. a non-navigating `href="#"`) and MUST NOT embed Calendly's external widget script or link out to a live Calendly booking URL — no new third-party dependency or live scheduling integration is introduced, consistent with the placeholder precedent already used by the Construction page's "Book on Calendly" CTA.
 - **FR-040**: The existing contact form's current client-side submission behavior MUST remain unchanged.
 
 **Cross-Cutting**

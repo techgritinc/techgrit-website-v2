@@ -756,3 +756,58 @@ addendum records the gap and its exact fix (tasks.md `Careers – T013`) without
 ## New tokens summary (Ghost-Styling Gap)
 
 None — the fix removes overrides; it adds no new styling.
+
+---
+
+# Phase 0 Research Addendum — Contact "Skip the Form" Card (User Story 9)
+
+**Companion to**: [tasks.md](./tasks.md), `# Contact` section | **Spec**: [spec.md](./spec.md),
+FR-039, FR-040, Clarifications Session 2026-08-07
+
+Scope: only the new "Skip the Form" card added to `app/(marketing)/contact/_components/
+contact-hero-form.tsx`'s left column, per `TechGrit Contact.dc.html` lines 248-258. No other Contact
+element (hero copy, contact-info rows, the form card itself, "What happens next") is affected.
+
+## 17. Skip-the-form card — token reuse and the Calendly-placeholder decision (FR-039)
+
+**Calendly decision**: the reference wires "Book a call" to a real Calendly widget
+(`Calendly.initPopupWidget({url:'https://calendly.com/techgrit/30min'})`, loading Calendly's external
+`widget.js`/`widget.css`). Per spec.md Clarifications (Session 2026-08-07), this is explicitly **not**
+carried over — introducing that widget would add a new third-party script this feature's own
+constraints (no new libraries) rule out. Instead the button is a static placeholder
+(`href="#"`), matching the existing "Book on Calendly" precedent already shipped on the Construction
+page (`app/construction/_data/construction-content.ts` line 190, `primaryCtaLink: "#"`).
+
+**Token/value fidelity, field by field**:
+
+| Element | Reference value | Implementation | Match? |
+|---|---|---|---|
+| Card background | `linear-gradient(150deg, rgba(232,119,34,0.14), rgba(255,255,255,0.02))` | new `--gradient-skip-form` token (exact value — no existing gradient token matches, so a new one was added per FR-041) | Exact |
+| Card border | `rgba(232,119,34,0.28)` | `border-overlay-orange-strong` (`--color-overlay-orange-strong: rgba(232,119,34,0.28)` — already exists, exact match, reused rather than duplicated) | Exact |
+| Card blur | `blur(8px)` | `backdrop-blur-md` (`--blur-md: 8px` — already exists, exact match) | Exact |
+| Icon-chip background/border | `rgba(232,119,34,0.2)` / `rgba(232,119,34,0.4)` | `bg-orange/20 border-orange/40` — Tailwind's opacity modifier on the existing base `--color-orange` token, the same pattern this file's own `CONTACT_INFO` rows already use (`bg-orange/10 border-orange/30`); no new token needed since the base color already exists | Exact |
+| Eyebrow letter-spacing | `0.08em` | `tracking-08` (`--ls-08: 0.08em` — already exists, exact match) | Exact |
+| Eyebrow/label color | `#F7B733` | `text-[var(--color-amber-light)]` (`--color-amber-light: #F7B733` — already exists, same token this file's contact-info icons already use) | Exact |
+| "Book a call" button fill | `linear-gradient(135deg,#F59E0B,#E87722)` | `Button variant="primary"` (`--gradient-brand`, same value) | Exact |
+| Button radius/padding-y | `border-radius:11px; padding:12px 20px` | `Button size="nav"` (`rounded-[11px] px-[22px] py-[12px]`) | Radius/padding-y exact; padding-x 2px delta, font-size 15px vs. 14.5px — reused as-is rather than adding a near-duplicate size, consistent with this plan's own established sub-2px-delta reuse precedent (e.g. research.md §14's `FilterBar` blur/border reuse) |
+| Button shadow | `0 12px 28px -10px rgba(232,119,34,0.75)` | `--shadow-nav-btn` (`0 8px 24px -8px rgba(232,119,34,0.70)`, bundled automatically by `size="nav"`) | Close, not exact — same reuse-over-duplication rationale as the sizing row above |
+
+**Decision — reuse the shared `Button` primitive, not a bespoke `<button>`**: per Principle III, the
+placeholder CTA renders as `<Button href="#" variant="primary" size="nav">`, matching how the
+Construction page's own "Book on Calendly" placeholder already renders through a shared button
+component rather than one-off markup.
+
+**Icon**: the reference's calendar icon (box outline + top tabs + header divider line) has no
+existing match in either the route-local `app/(marketing)/contact/_components/icons.tsx` or the
+consolidated `components/ui/icons.tsx`. A new `CalendarIcon` was added to the **route-local** file,
+consistent with that file's own pre-existing convention (it already defines its own
+`MailIcon`/`ClockIcon` rather than importing the consolidated versions) — not a new violation
+introduced by this pass, just following the file's established local pattern.
+
+## New tokens summary (Contact — Skip the Form)
+
+- `--gradient-skip-form` (tokens.css §5 GRADIENTS) — the card's diagonal background fill; no
+  existing gradient token matched this exact two-stop value.
+- No other new tokens. The icon-chip fill/border, eyebrow tracking/color, card border, card blur,
+  and button gradient all reuse exact-match existing tokens or the base `--color-orange` token via
+  Tailwind's opacity-modifier syntax (see table above).

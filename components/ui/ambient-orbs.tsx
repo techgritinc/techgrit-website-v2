@@ -9,6 +9,43 @@ export function AmbientOrbs() {
   const pathname = usePathname();
   if (pathname?.startsWith("/case-studies") || pathname?.startsWith("/construction")) return null;
 
+  if (pathname?.startsWith("/contact")) {
+    return (
+      <div
+        aria-hidden="true"
+        className="bg-ambient-orbs-contact"
+        style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            top: -160,
+            right: -120,
+            width: 560,
+            height: 560,
+            borderRadius: "50%",
+            background: "rgba(232, 119, 34, 0.13)",
+            filter: "blur(120px)",
+            animation: "tgorb 16s ease-in-out infinite",
+          }}
+        />
+        <span
+          style={{
+            position: "absolute",
+            bottom: -200,
+            left: -180,
+            width: 560,
+            height: 560,
+            borderRadius: "50%",
+            background: "rgba(247, 183, 51, 0.10)",
+            filter: "blur(140px)",
+            animation: "tgorb 20s ease-in-out infinite reverse",
+          }}
+        />
+      </div>
+    );
+  }
+
   if (pathname?.startsWith("/careers")) {
     return (
       <div

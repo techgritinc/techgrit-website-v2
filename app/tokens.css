@@ -252,6 +252,7 @@
   --gradient-ghost-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.40), rgba(255, 255, 255, 0.20)); /* Ghost button hover fill (v2.2 Phase 1) */
   --gradient-live-badge: linear-gradient(135deg, rgba(232, 119, 34, 0.12), rgba(245, 158, 11, 0.06));   /* Hero Live-Webinar badge outer fill (v2.2 Phase 2) */
   --gradient-dialog-panel: linear-gradient(180deg, rgba(20, 20, 20, 0.98), rgba(0, 0, 0, 0.98)); /* Careers Apply-modal panel fill */
+  --gradient-skip-form: linear-gradient(150deg, rgba(232, 119, 34, 0.14), rgba(255, 255, 255, 0.02)); /* Contact "Skip the Form" card background (v2.2, User Story 9) */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY

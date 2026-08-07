@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
-import { MailIcon, ClockIcon, GlobeIcon, CheckCircleIcon } from "./icons";
+import Button from "@/components/ui/Button";
+import { MailIcon, ClockIcon, GlobeIcon, CalendarIcon, CheckCircleIcon } from "./icons";
 
 const TOPICS = ["New project", "Partnership", "Hiring TechGrit", "Support"] as const;
 
@@ -38,16 +39,14 @@ const CONTACT_INFO: ContactInfoItem[] = [
 function ContactInfoRow({ label, value, href, iconWrapperClass, icon }: ContactInfoItem) {
   const content = (
     <>
-      <span className={`w-[46px] h-[46px] rounded-[12px] flex items-center justify-center shrink-0 border ${iconWrapperClass}`}>
+      <span
+        className={`w-[46px] h-[46px] rounded-[12px] flex items-center justify-center shrink-0 border ${iconWrapperClass}`}
+      >
         {icon}
       </span>
       <span>
-        <span className="block text-[12.5px] text-white/50 font-semibold">
-          {label}
-        </span>
-        <span className="block text-[16px] text-white font-bold">
-          {value}
-        </span>
+        <span className="block text-[12.5px] text-white/50 font-semibold">{label}</span>
+        <span className="block text-[16px] text-white font-bold">{value}</span>
       </span>
     </>
   );
@@ -63,8 +62,13 @@ function ContactInfoRow({ label, value, href, iconWrapperClass, icon }: ContactI
   return <div className="flex items-center gap-[14px]">{content}</div>;
 }
 
-const fldClass = "w-full bg-[var(--color-glass)] border border-[var(--color-border)] rounded-[12px] px-4 py-[14px] text-[15px] text-white outline-none transition-colors focus:border-[var(--color-border-orange-strong)] focus:bg-[var(--color-glass-hover)] placeholder:text-[var(--color-text-placeholder)] font-[inherit]";
-const labelClass = "block text-[13px] font-semibold text-white/70 mb-[7px]";
+import FormField from "@/components/ui/FormField";
+
+/* Contact-form-specific field styling — passed to FormField via inputBaseClassName
+   so it fully replaces the default INPUT_BASE (different radius, bg, font, placeholder). */
+const CONTACT_INPUT_BASE =
+  "w-full bg-[var(--color-glass)] border border-[var(--color-border)] rounded-[12px] px-4 py-[14px] text-[15px] text-white outline-none transition-colors focus:border-[var(--color-border-orange-strong)] focus:bg-[var(--color-glass-hover)] placeholder:text-[var(--color-text-placeholder)] font-[inherit]";
+const CONTACT_LABEL = "block text-[13px] font-semibold text-white/70 mb-[7px]";
 
 export default function ContactHeroForm() {
   const [topic, setTopic] = useState<(typeof TOPICS)[number]>(TOPICS[0]);
@@ -96,10 +100,11 @@ export default function ContactHeroForm() {
         <div
           data-rise
           style={{ animationDelay: ".05s" }}
-          className="inline-flex items-center gap-2.5 bg-[var(--color-overlay-orange)] border border-[var(--color-border-orange)] px-4 py-2 rounded-full mb-6"
+          className="inline-flex items-center gap-2.5 bg-[var(--color-overlay-orange-12)] border border-[var(--color-border-orange)] px-4 py-2 rounded-full mb-6"
         >
-          <span className="status-dot status-orange" />
-          <span className="text-[12.5px] font-bold tracking-[0.1em] text-white/[.92] uppercase">Contact Us</span>
+          <span className="text-[12.5px] font-bold tracking-[0.1em] text-white/[.92] uppercase">
+            Contact Us
+          </span>
         </div>
 
         <h1
@@ -107,8 +112,7 @@ export default function ContactHeroForm() {
           style={{ animationDelay: ".12s" }}
           className="text-[clamp(38px,4.8vw,54px)] leading-[1.05] font-bold tracking-[-0.035em] text-white"
         >
-          Let&apos;s build something{" "}
-          <span className="text-gradient">remarkable.</span>
+          Let&apos;s build something <span className="text-gradient">remarkable.</span>
         </h1>
 
         <p
@@ -116,8 +120,8 @@ export default function ContactHeroForm() {
           style={{ animationDelay: ".2s" }}
           className="mt-5 max-w-[440px] text-[18px] leading-[1.65] text-[var(--color-text-secondary)]"
         >
-          Tell us about your product, your timeline, and what success looks
-          like. We&apos;ll get back within one business day.
+          Tell us about your product, your timeline, and what success looks like. We&apos;ll get
+          back within one business day.
         </p>
 
         <div
@@ -129,6 +133,32 @@ export default function ContactHeroForm() {
             <ContactInfoRow key={item.label} {...item} />
           ))}
         </div>
+
+        {/* Skip the form — direct scheduling path (US9, FR-039). Placeholder target only:
+            no Calendly widget/script is embedded (spec.md Clarifications, Session 2026-08-07). */}
+        <div
+          data-rise
+          style={{ animationDelay: ".34s" }}
+          className="mt-[30px] flex items-center gap-3.5 flex-wrap rounded-2xl border border-overlay-orange-strong bg-[image:var(--gradient-skip-form)] backdrop-blur-md px-6 py-[22px]"
+        >
+          <span className="w-11 h-11 rounded-[12px] bg-orange/20 border border-orange/40 inline-flex items-center justify-center shrink-0">
+            <CalendarIcon className="text-[var(--color-amber-light)]" />
+          </span>
+          <div className="flex-1 min-w-[180px]">
+            <div className="text-[12.5px] font-bold tracking-08 uppercase text-[var(--color-amber-light)]">
+              Skip the form
+            </div>
+            <div className="mt-[3px] text-[15px] font-semibold text-white leading-[1.35]">
+              Book a 30-min discovery call now.
+            </div>
+          </div>
+          <Button href="#" variant="primary" size="nav" className="h-[44px] w-[139.552px]">
+            Book a call{" "}
+            <span aria-hidden="true" className="text-[15px]">
+              &#8594;
+            </span>
+          </Button>
+        </div>
       </div>
 
       {/* Form card */}
@@ -137,7 +167,10 @@ export default function ContactHeroForm() {
         style={{ animationDelay: ".2s" }}
         className="relative rounded-[24px] border border-[var(--color-border)] bg-[var(--color-glass)] backdrop-blur-[10px] px-[34px] py-[36px] shadow-[var(--shadow-glass)]"
       >
-        <div aria-hidden className="absolute -top-px left-[30px] right-[30px] h-0.5 bg-gradient-to-r from-transparent via-orange/70 to-transparent" />
+        <div
+          aria-hidden
+          className="absolute -top-px left-[30px] right-[30px] h-0.5 bg-gradient-to-r from-transparent via-orange/70 to-transparent"
+        />
 
         {sent ? (
           <div className="p-[30px_6px_10px]">
@@ -146,16 +179,18 @@ export default function ContactHeroForm() {
             </div>
             <h3 className="text-2xl font-bold text-white text-center">Message sent.</h3>
             <p className="mt-2.5 text-[16px] leading-[1.6] text-white/70 text-center max-w-[340px] mx-auto">
-              Thanks{firstName ? `, ${firstName}` : ""} — we&apos;ve received
-              your note and will reply within one business day.
+              Thanks{firstName ? `, ${firstName}` : ""} — we&apos;ve received your note and will
+              reply within one business day.
             </p>
-            <button
+            <Button
               type="button"
               onClick={handleReset}
-              className="mt-[22px] mx-auto block bg-[var(--color-glass-strong)] border border-[var(--color-border-strong)] text-white text-[14.5px] font-bold py-3 px-[22px] rounded-[11px] cursor-pointer hover:bg-[var(--color-glass-hover)] transition-colors"
+              variant="outline"
+              size="md"
+              className="mt-[22px] mx-auto flex"
             >
               Send another
-            </button>
+            </Button>
           </div>
         ) : (
           <div>
@@ -184,80 +219,56 @@ export default function ContactHeroForm() {
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="grid grid-cols-1 tg-sm:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className={labelClass}
-                  >
-                    Full name
-                  </label>
-                  <input
-                    id="name"
-                    className={fldClass}
-                    type="text"
-                    required
-                    placeholder="Jane Doe"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className={labelClass}
-                  >
-                    Work email
-                  </label>
-                  <input
-                    id="email"
-                    className={fldClass}
-                    type="email"
-                    required
-                    placeholder="jane@company.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="company"
-                  className={labelClass}
-                >
-                  Company
-                </label>
-                <input
-                  id="company"
-                  className={fldClass}
-                  type="text"
-                  placeholder="Company name"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="message"
-                  className={labelClass}
-                >
-                  Tell us about your project
-                </label>
-                <textarea
-                  id="message"
-                  className={`${fldClass} resize-y min-h-[108px]`}
-                  rows={4}
+                <FormField
+                  label="Full name"
+                  hideLabel={false}
+                  labelClassName={CONTACT_LABEL}
+                  inputBaseClassName={CONTACT_INPUT_BASE}
                   required
-                  placeholder="What are you building, and what's the goal?"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Jane Doe"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <FormField
+                  label="Work email"
+                  hideLabel={false}
+                  labelClassName={CONTACT_LABEL}
+                  inputBaseClassName={CONTACT_INPUT_BASE}
+                  type="email"
+                  required
+                  placeholder="jane@company.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
-              <button type="submit" className="mt-1 inline-flex items-center justify-center gap-[9px] bg-gradient-to-br from-amber to-orange text-white text-[16px] font-bold px-4 h-[51.1328px] border-none rounded-[12px] cursor-pointer shadow-[var(--shadow-btn-primary)] hover:-translate-y-0.5 transition-transform w-full">
+              <FormField
+                label="Company"
+                hideLabel={false}
+                labelClassName={CONTACT_LABEL}
+                inputBaseClassName={CONTACT_INPUT_BASE}
+                placeholder="Company name"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+              />
+
+              <FormField
+                label="Tell us about your project"
+                hideLabel={false}
+                labelClassName={CONTACT_LABEL}
+                inputBaseClassName={CONTACT_INPUT_BASE}
+                multiline
+                rows={4}
+                required
+                placeholder="What are you building, and what's the goal?"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                inputClassName="resize-y min-h-[108px]"
+              />
+
+              <Button type="submit" variant="primary" size="hero" className="w-full mt-1">
                 Send message <span className="text-[17px]">&#8594;</span>
-              </button>
+              </Button>
               <p className="text-[12.5px] text-white/45 text-center leading-[1.5]">
                 By submitting, you agree to our privacy policy. We never share your details.
               </p>
