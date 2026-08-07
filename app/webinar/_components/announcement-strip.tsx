@@ -22,7 +22,7 @@ export function AnnouncementStrip({ session }: { session: UpcomingSession }) {
           <Button
             size="sm"
             onClick={handleRegisterClick}
-            className="!gap-2 !rounded-[10px] !px-[18px] !py-[8px] !text-[13.5px] max-tg-sm:!w-full max-tg-sm:!justify-center shadow-none! hover:-translate-y-[0px]!"
+            className="!gap-2 !rounded-[10px] !py-[8px] !text-[13.5px] max-tg-sm:!w-full max-tg-sm:!justify-center shadow-nav-btn! hover:-translate-y-0!"
           >
             {session.ctaLabel} <span className="text-[14px]">&#8594;</span>
           </Button>

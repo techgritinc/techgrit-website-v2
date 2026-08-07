@@ -135,8 +135,6 @@
   --color-border-blue-light-soft: rgba(56, 189, 248, 0.30); /* Webinar hero collage pulse-dot tile border (TMS-73) */
   --color-border-amber-30: rgba(245, 158, 11, 0.30); /* Webinar upcoming-session panel border (TMS-73) */
   --color-border-amber-35: rgba(245, 158, 11, 0.35); /* Webinar announcement-strip resting border (v2.2 FR-030) */
-  --color-border-amber-70: rgba(245, 158, 11, 0.70); /* Webinar announcement-strip hover border (v2.2 FR-030) */
-
   --color-glass:          rgba(255, 255, 255, 0.05); /* Glass card fill */
   --color-glass-hairline: rgba(255, 255, 255, 0.02); /* Architecture-diagram panel gradient stop */
   --color-glass-4:        rgba(255, 255, 255, 0.04); /* Secondary glass fill */
