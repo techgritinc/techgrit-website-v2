@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main id="top">
-      <section id="form" className="relative scroll-mt-24">
+      <section id="form" className="relative">
         <div className="max-w-[1280px] mx-auto px-9 pt-[74px] pb-[50px]">
           <ContactHeroForm />
         </div>

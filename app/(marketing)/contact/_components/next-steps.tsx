@@ -18,23 +18,21 @@ const STEPS = [
 
 export default function NextSteps() {
   return (
-    <div className="border-t border-white/10 pt-[44px] leading-[normal]">
-      <h2 className="text-[clamp(24px,2.8vw,32px)] font-bold tracking-[-0.03em] text-white text-center leading-[normal] font-['Calibri',_'Carlito',_'Segoe_UI',_system-ui,_-apple-system,_sans-serif]">
+    <div className="border-t border-border-subtle pt-[44px] leading-[normal]">
+      <h2 className="text-[clamp(24px,2.8vw,32px)] tracking-[-0.03em] text-center leading-[normal]">
         What happens next
       </h2>
       <div className="grid grid-cols-1 tg-md:grid-cols-[repeat(3,1fr)] mt-[34px] gap-[24px]">
         {STEPS.map((step) => (
           <div
             key={step.number}
-            className="relative bg-white/[0.04] border border-white/10 rounded-[18px] px-[26px] py-[28px] leading-[normal]"
+            className="relative bg-glass border border-border rounded-[18px] px-[26px] py-[28px] leading-[normal]"
           >
-            <span className="disp text-[15px] font-bold text-[#F7B733] leading-[normal] tracking-normal font-['Calibri',_'Carlito',_'Segoe_UI',_system-ui,_-apple-system,_sans-serif]">
+            <span className="text-[15px] font-bold text-amber-light leading-[normal] tracking-normal">
               {step.number}
             </span>
-            <h3 className="mt-3 text-[18px] font-bold text-white leading-[normal] tracking-normal font-['Calibri',_'Carlito',_'Segoe_UI',_system-ui,_-apple-system,_sans-serif]">
-              {step.title}
-            </h3>
-            <p className="mt-2 text-[14.5px] leading-[1.6] text-white/[0.62] tracking-normal font-['Calibri',_'Carlito',_'Segoe_UI',_system-ui,_-apple-system,_sans-serif]">
+            <h3 className="mt-3 text-[18px] leading-[normal] tracking-normal">{step.title}</h3>
+            <p className="mt-2 text-[14.5px] leading-[1.6] text-white/[0.62] tracking-normal">
               {step.body}
             </p>
           </div>

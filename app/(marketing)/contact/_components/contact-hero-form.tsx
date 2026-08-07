@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent, type ReactNode } from "react";
 import Button from "@/components/ui/Button";
+import FormField from "@/components/ui/FormField";
 import { MailIcon, ClockIcon, GlobeIcon, CalendarIcon, CheckCircleIcon } from "./icons";
 
 const TOPICS = ["New project", "Partnership", "Hiring TechGrit", "Support"] as const;
@@ -62,8 +63,6 @@ function ContactInfoRow({ label, value, href, iconWrapperClass, icon }: ContactI
   return <div className="flex items-center gap-[14px]">{content}</div>;
 }
 
-import FormField from "@/components/ui/FormField";
-
 /* Contact-form-specific field styling — passed to FormField via inputBaseClassName
    so it fully replaces the default INPUT_BASE (different radius, bg, font, placeholder). */
 const CONTACT_INPUT_BASE =
@@ -100,7 +99,7 @@ export default function ContactHeroForm() {
         <div
           data-rise
           style={{ animationDelay: ".05s" }}
-          className="inline-flex items-center gap-2.5 bg-[var(--color-overlay-orange-12)] border border-[var(--color-border-orange)] px-4 py-2 rounded-full mb-6"
+          className="inline-flex items-center gap-2.5 bg-overlay-orange-10 border border-[var(--color-border-orange)] px-4 py-2 rounded-full mb-6"
         >
           <span className="text-[12.5px] font-bold tracking-[0.1em] text-white/[.92] uppercase">
             Contact Us
@@ -152,7 +151,7 @@ export default function ContactHeroForm() {
               Book a 30-min discovery call now.
             </div>
           </div>
-          <Button href="#" variant="primary" size="nav" className="h-[44px] w-[139.552px]">
+          <Button href="#" variant="primary" size="nav">
             Book a call{" "}
             <span aria-hidden="true" className="text-[15px]">
               &#8594;
@@ -173,12 +172,12 @@ export default function ContactHeroForm() {
         />
 
         {sent ? (
-          <div className="p-[30px_6px_10px]">
-            <div className="w-16 h-16 rounded-full bg-teal-light/15 border border-teal-light/40 flex items-center justify-center mx-auto mb-5">
+          <div className="flex flex-col items-center text-center p-[30px_6px_10px]">
+            <div className="w-16 h-16 rounded-full bg-teal-light/15 border border-teal-light/40 flex items-center justify-center mb-5">
               <CheckCircleIcon className="text-teal-light" />
             </div>
-            <h3 className="text-2xl font-bold text-white text-center">Message sent.</h3>
-            <p className="mt-2.5 text-[16px] leading-[1.6] text-white/70 text-center max-w-[340px] mx-auto">
+            <h3 className="text-2xl font-bold text-white">Message sent.</h3>
+            <p className="mt-2.5 text-[16px] leading-[1.6] text-white/70 max-w-[340px]">
               Thanks{firstName ? `, ${firstName}` : ""} — we&apos;ve received your note and will
               reply within one business day.
             </p>
@@ -187,7 +186,7 @@ export default function ContactHeroForm() {
               onClick={handleReset}
               variant="outline"
               size="md"
-              className="mt-[22px] mx-auto flex"
+              className="mt-[22px] !bg-glass-strong !border-border-strong hover:!bg-glass-hover hover:!border-border-strong"
             >
               Send another
             </Button>
