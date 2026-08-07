@@ -1184,3 +1184,85 @@ Task: "Load /construction, confirm against reference, run lint + build (T004)"
 Single increment — T001-T003 in any order or in parallel (different files), then T004 to verify.
 This closes out the FR-016a/FR-017/FR-018 slice of User Story 3; FR-016, FR-019, FR-020, and FR-021
 (the rest of User Story 3) remain a future pass.
+
+---
+
+## Phase 2: User Story 3 (continued) — Construction Page (FR-019, FR-020, FR-021)
+
+**Input**: [plan.md](./plan.md) § "User Story 3 (continued) — Construction Page (FR-019, FR-020,
+FR-021)"
+**Scope**: the remaining 3 requirements of User Story 3 — the "Why TechGrit" eyebrow, "Proven
+Impact" equal-height + per-card-link removal, and the closing CTA's width (via a new opt-in prop on
+the shared `final-cta.tsx`, defaulting to today's value so About is unaffected — Case Studies and
+Services each use their own separate, route-local final-CTA component and never touch this file).
+Reference: `TechGrit Construction.dc.html` exclusively (spec.md Clarifications, Session 2026-08-07).
+Continues this same story's task numbering — **T005** onward, same `[US3]` label — rather than a
+new T001 block, since it's the same user story, not a new independent one.
+
+**Goal**: FR-019, FR-020, FR-021 — the "Why TechGrit" eyebrow shows no leading accent, Proven Impact
+cards render at equal height with no per-card link, and the closing CTA renders at the reference's
+wider `1280px` container with no change to About.
+
+**Independent Test**: Load `/construction`; confirm the "Why TechGrit" eyebrow shows no leading
+accent-line span, the 3 Proven Impact cards render at equal height in their row regardless of
+description length and are no longer individually clickable (no `<a>` wrapper, hover lift still
+present), and the closing CTA renders at `1280px` — then load `/about` and confirm its closing CTA
+still renders at `1180px`, unchanged (Case Studies and Services need no check — they never consume
+`components/ui/final-cta.tsx`).
+
+- [X] T005 [P] [US3] In `app/construction/_components/construction-advantage.tsx`, add
+  `showAccent={false}` to the `<SectionEyebrow>{section.eyebrow}</SectionEyebrow>` call (FR-019). **Done.**
+- [X] T006 [P] [US3] In `app/construction/_components/construction-impact.tsx`, remove the
+  `<a key={caseStudy.order} href={caseStudy.link} className="block">...</a>` wrapper around each
+  Proven Impact card; `<GlassCard key={caseStudy.order} variant="constructionImpact"
+  hoverBorderColor="">` becomes the direct child of the grid (FR-020 — this also resolves
+  equal-height for free via the grid's own default `align-items: stretch` once `GlassCard` is the
+  direct grid item; no new class needed). The "Read case study →" `<span>` inside each card is kept
+  as-is, now non-interactive decorative text. **Done.**
+- [X] T007 [P] [US3] In `components/ui/final-cta.tsx`, add an optional `maxWidth?: number` prop
+  (default `1180`) to the component's props type, and consume it in the `tg-container`'s
+  `style={{ maxWidth: maxWidth, ... }}` in place of the current hardcoded `1180` (FR-021, width
+  only — additive, non-breaking; every existing consumer keeps rendering at `1180px` unchanged). **Done.**
+- [X] T008 [US3] In `app/construction/page.tsx`, add `maxWidth={1280}` to the page's `<FinalCta>`
+  call — depends on T007 (the prop must exist first) (FR-021). **Done.**
+- [X] T009 [US3] Verify: load `/construction` at desktop, tablet, and mobile widths; confirm the
+  "Why TechGrit" eyebrow, Proven Impact cards (equal height, no per-card link, hover lift intact),
+  and the closing CTA's `1280px` width. Load `/about`, `/case-studies`, and `/services` and confirm
+  each still renders its closing CTA at `1180px`, unchanged. Run `npm run lint` and `npm run build`.
+  **Done** — computed styles confirmed: "Why TechGrit" has no accent span, "Proven impact" keeps its
+  accent (out of scope, unchanged), all 3 impact cards measure identical heights (293.97px each),
+  0 anchors inside the Proven Impact grid, `/construction`'s closing CTA measures `1280px`,
+  `/about`/`/case-studies`/`/services` all measure `1180px` unchanged. `npm run lint` clean.
+  **Correction**: initial blast-radius analysis (plan.md) wrongly listed Case Studies and Services
+  as sharing `components/ui/final-cta.tsx` (a substring-grep false positive on `final-cta"` matching
+  their own separate `case-studies-final-cta.tsx`/`services-final-cta.tsx`) — corrected in spec.md
+  and plan.md; the implementation itself (opt-in prop, About-only default concern) was already
+  correct regardless.
+
+**Checkpoint**: FR-019, FR-020, and FR-021 are complete; FR-016 needs no implementation (already
+true — no `/industries` route exists); User Story 3 (spec.md) is now fully implemented. About's
+closing CTA is unaffected; Case Studies and Services never touch the shared component at all.
+
+## Dependencies (User Story 3, FR-019/20/21)
+
+- T005, T006, T007 touch three different files with no shared state — fully parallel.
+- T007 → T008 (the `maxWidth` prop must exist before `construction/page.tsx` can pass it).
+- T009 runs last, after T005-T008.
+
+## Parallel Example (User Story 3, FR-019/20/21)
+
+```bash
+# T005, T006, and T007 touch different files and can run together:
+Task: "Add showAccent={false} to Why TechGrit eyebrow in construction-advantage.tsx (T005)"
+Task: "Remove per-card <a> wrapper in construction-impact.tsx (T006)"
+Task: "Add optional maxWidth prop to components/ui/final-cta.tsx (T007)"
+# Then, once T007 lands:
+Task: "Pass maxWidth={1280} in construction/page.tsx's <FinalCta> call (T008)"
+# Then verify:
+Task: "Load /construction + /about + /case-studies + /services, confirm against reference, run lint + build (T009)"
+```
+
+## Implementation Strategy (User Story 3, FR-019/20/21)
+
+T005-T007 in parallel (different files), then T008 (depends on T007), then T009 to verify. This
+completes every FR in User Story 3 (spec.md); User Stories 2 and 4-9 remain a future pass each.

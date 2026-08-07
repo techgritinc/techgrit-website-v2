@@ -50,8 +50,10 @@ export default function ConstructionPage() {
               <FinalCta
                 key={section.order}
                 tone="amber"
-                paddingTop={20}
+                paddingTop={56}
+                paddingBottom={100}
                 titleLineHeight={1.06}
+                maxWidth={1280}
                 section={{
                   eyebrow: section.eyebrow,
                   title: section.title,

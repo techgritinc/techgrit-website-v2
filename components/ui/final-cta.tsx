@@ -14,17 +14,21 @@ export function FinalCta({
   tone = "orange",
   paddingTop = 40,
   titleLineHeight,
+  maxWidth = 1180,
+  paddingBottom = 110,
 }: {
   section: FinalCtaContent;
   tone?: "orange" | "amber";
   paddingTop?: number | string;
   titleLineHeight?: number | string;
+  maxWidth?: number;
+  paddingBottom?: number | string;
 }) {
   const glow = tone === "amber" ? "var(--color-overlay-amber-strong)" : "var(--color-overlay-orange-strong)";
   const eyebrowColor = tone === "amber" ? "var(--color-amber-light)" : "var(--color-orange)";
   return (
     <section>
-      <div className="tg-container" style={{ maxWidth: 1180, paddingTop: paddingTop, paddingBottom: 110 }}>
+      <div className="mx-auto px-9 w-full" style={{ maxWidth: maxWidth, paddingTop: paddingTop, paddingBottom: paddingBottom }}>
           <div
             className="glass-card glass-card-lg mx-auto text-center"
             style={{ position: "relative", overflow: "hidden",padding:"var(--space-27) var(--space-16a)" }}
@@ -51,6 +55,7 @@ export function FinalCta({
                   letterSpacing: "var(--ls-widest)",
                   textTransform: "uppercase",
                   color: eyebrowColor,
+                  lineHeight: "normal",
                 }}
               >
                 {section.eyebrow}

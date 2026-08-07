@@ -1,7 +1,7 @@
 import type { LifecycleDiagramSection } from "../_data/types";
 
 const NODE_POSITIONS: React.CSSProperties[] = [
-  { left: "1%", top: "8%" },
+  { left: "2%", top: "9%" },
   { left: "28%", top: "2%" },
   { right: "28%", top: "2%" },
   { right: "2%", top: "9%" },
@@ -50,7 +50,7 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
             <span className="eyebrow" style={{ color: "var(--color-amber-light)", lineHeight: "normal" }}>
               {section.eyebrow}
             </span>
-            <h2 className="mt-[14px]" style={{ fontSize: "clamp(26px, 3.2vw, 36px)", lineHeight: 1.1 }}>
+            <h2 className="mt-[14px]" style={{ fontSize: "clamp(26px, 3.2vw, 36px)", lineHeight: "normal" }}>
               {section.title}
             </h2>
           </div>
