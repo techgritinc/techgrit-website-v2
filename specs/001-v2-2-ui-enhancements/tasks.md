@@ -701,3 +701,151 @@ Single increment — all 3 tasks (T001-T003) together are this slice's only deli
 self-contained additive card, per FR-039). Complete T001-T003, then T004 to verify, then stop. This
 completes User Story 9 in full (FR-039 and FR-040, the latter needing no code change); no other user
 story is affected.
+
+---
+
+# About
+
+**Page**: `/about` (User Story 7, spec.md). **Task IDs below restart at `T001`**, scoped to this
+`# About` heading only — see the numbering-convention note at the top of this file. Everything above
+this heading (Shared Foundation, Homepage, Careers, Contact) keeps its own original numbering and is
+unaffected.
+
+## Phase 1: Badge, Eyebrow & Culture-Gallery Grid Alignment (User Story 7 slice)
+
+**Input**: [plan.md](./plan.md) "About Us Page — Badge, Eyebrow & Culture-Gallery Grid Alignment
+(User Story 7)", [research.md](./research.md) §18-19, [data-model.md](./data-model.md)
+**Scope**: only the hero badge's dot, the page's eyebrow accent symbols, and the culture-photo
+gallery's grid — FR-032, FR-033, FR-034. No other About section (hero copy/CTAs, showcase image, Who
+You Are, Our Role, Values, 3-Step Plan, Achievements, If We Partner, closing CTA) and no other user
+story is in scope. No Setup/Foundational sub-phase — research.md §18-19 found no new tokens are
+needed (the culture gallery reuses `LifeGallery.tsx`'s already-shipped `careers` variant as-is).
+
+**Goal**: FR-032, FR-033, FR-034 — the hero badge shows no dot, every eyebrow on the page shows no
+leading accent symbol, and the culture-photo gallery renders via the shared `LifeGallery.tsx`
+component with its reference-exact uniform grid, matching `TechGrit About.dc.html`.
+
+**Independent Test**: Load `/about` and confirm the hero's "About TechGrit" badge shows no dot;
+confirm every eyebrow on the page ("Who you are", "Our role", "What we stand for", "How we work", "If
+we partner together") shows no leading dash; scroll to "Life at TechGrit" and confirm it renders 4
+equal-size photo tiles in a 4-column grid (collapsing to 2 then 1 at narrower widths) with no
+`tall`/`wide` mosaic spans, each tile showing a hover-reveal caption — independent of any other page.
+
+- [x] T001 [P] [US7] In `app/about/_components/about-us-hero.tsx`: remove the `<span
+  className="status-dot status-orange" />` from the "About TechGrit" badge (line 23) — the reference
+  badge has no dot at all (FR-032, research.md §18) — depends on nothing; different file from
+  T002-T006, safe to do in parallel. **Done.**
+- [x] T002 [P] [US7] Add `showAccent={false}` to the `<SectionEyebrow>` call in 5 files:
+  `about-how-we-work.tsx` (line 11), `about-us-our-role.tsx` (line 13), `about-us-partner.tsx` (line
+  12), `about-us-values.tsx` (line 48), `about-us-who-you-are.tsx` (line 12) (FR-033, research.md
+  §18) — depends on nothing; different files from T001/T003-T006, safe to do in parallel.
+  `about-us-culture-gallery.tsx`'s own `<SectionEyebrow>` call is excluded — T006 replaces that
+  section's entire eyebrow/heading markup. **Done.**
+- [x] T003 [P] [US7] In `app/_home-components/LifeGallery.tsx`: widen the `LifeGalleryImage` interface
+  field `src: string` to `src: string | null` (`MediaSlot` already renders a placeholder for a
+  null/undefined `src` — the type just hadn't caught up) (FR-034, research.md §19, data-model.md) —
+  depends on nothing; different file from T001/T002/T004-T005; must land before T006 references the
+  widened type. **Done. Also, found during implementation (not in the original task description)**:
+  the `careers`-variant caption overlay's label/figcaption elements were wrapped in JSX comments
+  (`{/* ... */}`), so `captionLabel`/`caption` never actually rendered on-screen for *any* consumer —
+  including Careers, which has carried this dormant gap since Careers Phase 4 (tasks.md). The overlay
+  wrapper `<div>` also had no `group-hover:opacity-100` (so it could never become visible) and no
+  background scrim (the reference's `linear-gradient(180deg, transparent, rgba(0,0,0,0.82))`).
+  Uncommented both elements, added `group-hover:opacity-100`, and added
+  `bg-[image:var(--gradient-testimonial-fade)]` — an exact-value existing token
+  (`--gradient-testimonial-fade`, `app/tokens.css` line 240), reused rather than duplicated — plus
+  `text-amber-light` in place of the commented code's hardcoded `text-[#F7B733]` (an exact-match
+  existing token, Principle I). This fix was necessary for About's culture gallery (which newly
+  depends on this code path) to render hover captions at all, matching
+  `TechGrit About.dc.html`/`TechGrit Careers.dc.html` exactly; it also fixes the same dormant gap on
+  `/careers`, which was previously verified by code-reading only, not live rendering (tasks.md
+  Careers Phase 2/5 notes). No visual change to `/`'s `home` variant (never sets `captionLabel`/
+  `caption`, so this block never rendered there either way).
+- [x] T004 [P] [US7] In `app/about/_data/types.ts`: on `CulturePhoto`, remove the `layout: "tall" |
+  "square" | "wide"` field and add two optional fields, `captionLabel?: string` and `caption?:
+  string` (FR-034, research.md §19, data-model.md) — depends on nothing; different file from
+  T001-T003; must land before T005 can populate the new fields. **Done.**
+- [x] T005 [US7] In `app/about/_data/about-us-content.ts`: update the `cultureGallery` section's 4
+  `photos` entries — replace every `image: null` with the same real images Careers' own
+  `LifeAtTechGritContent` already uses (`/assets/team/glasses.png`, `rooftop.png`, `painting.png`,
+  `diwali.png`) and add each photo's `captionLabel`/`caption` per the reference (glasses → "The team"
+  / "Builders and designers behind the engineering."; rooftop → "The office" / "Rooftop breaks, real
+  conversations."; painting → "Craft" / "We take craft seriously — inside & outside code."; diwali →
+  "Together" / "We celebrate wins — and Diwali — together.") (FR-034, research.md §19, data-model.md)
+  — depends on T004 (the `CulturePhoto` type must carry the new fields before this data can
+  type-check). **Done.** Real pixel dimensions read directly from each PNG's header (glasses
+  960×1280, rooftop 1024×768, painting 2048×1153, diwali 2048×1536) for `SectionImage.width/height`.
+- [x] T006 [US7] Rewrite `app/about/_components/about-us-culture-gallery.tsx`: remove its bespoke
+  eyebrow/heading/asymmetric-`1.4fr/1fr/1fr`-mosaic markup; map `section.photos` into
+  `LifeGalleryImage[]` (`src: photo.image?.url ?? null`, `alt: photo.image?.alternativeText ?? ""`,
+  `span: "default"`, `captionLabel: photo.captionLabel`, `caption: photo.caption`); render
+  `<LifeGallery variant="careers" heading={section.title} description={section.subtitle}
+  images={...} />` in place of the removed markup (FR-034, research.md §19, data-model.md) — depends
+  on T003 (needs the widened `src` type) and T005 (needs the updated content data); last edit in this
+  phase. **Done.**
+
+**Checkpoint**: the hero badge, every eyebrow, and the culture-photo gallery all match
+`TechGrit About.dc.html` exactly; every other About section is unchanged.
+
+---
+
+## Phase 2: Polish (About verification)
+
+- [x] T007 Run `npm run lint` and `npm run build` (both must stay green); confirm the server-rendered
+  `/about` HTML no longer contains a `status-dot` element inside the hero badge, that the 5 corrected
+  `SectionEyebrow` call sites render with no leading dash `<span>`, and that the culture-gallery
+  section's compiled markup matches `LifeGallery.tsx`'s `careers`-variant grid (`grid-cols-4` at
+  desktop) with 4 populated (non-placeholder) image tiles and per-tile captions present in the DOM.
+  Manually verify in a browser: the badge/eyebrow changes are visually silent (no layout shift), the
+  gallery grid collapses to 2 columns then 1 at the `tg-md`/`tg-sm` breakpoints with no leftover
+  tall/wide tiles, hovering each tile reveals its caption, and `/` and `/careers`'s own Life at
+  TechGrit galleries remain visually unchanged (confirming the `LifeGallery.tsx` widening introduced
+  no regression). **Done.** `npm run lint` and `npm run build` both green (all 18 routes, including
+  `/`, `/about`, `/careers`, prerender successfully). Server-rendered HTML confirmed via `curl` against
+  the running dev server: `/about` contains zero `status-dot` occurrences (was 1); zero remaining
+  `width:24px;height:2px` eyebrow accent-bar spans; zero `"Coming soon"` placeholder occurrences (all
+  4 gallery images are real); the gallery's compiled class list includes `grid-cols-4`,
+  `max-tg-md:grid-cols-2`, `max-tg-sm:grid-cols-1`, and `aspect-[3/4]`, with no leftover `1.4fr`
+  mosaic pattern (the page's only remaining `1.4fr` match is the unrelated shared Footer's
+  `data-foot-brand` grid); all 4 per-tile captions ("Builders and designers behind the engineering.",
+  etc.) present in the DOM after the §20 `LifeGallery.tsx` fix; no "Explore Careers"/"Meet the team"
+  buttons leak onto `/about` (`home`-variant-only). Cross-checked `/` and `/careers`: both still
+  render their own Life-at-TechGrit galleries correctly (`/`'s two action buttons still present;
+  `/careers`' captions now *also* render correctly, a side-effect fix — see §20) — zero regression
+  from the `LifeGalleryImage.src` widening or the caption-overlay fix. **Not verified interactively in
+  a real browser** — the Browser-pane tool could not navigate to the local dev server in this
+  environment (navigation denied), consistent with this same limitation noted throughout this file's
+  Careers/Contact polish tasks; verification here is via server-rendered markup, computed class-list
+  inspection, and a clean production build/type-check, not a driven UI/visual diff. Recommend a manual
+  pixel-diff pass against `TechGrit About.dc.html` in a real browser before merging, given this task's
+  explicit exact-parity requirement.
+
+---
+
+## Dependencies (About)
+
+- T001, T002, T003, T004 are mutually independent (four different files, no shared state) and can all
+  start immediately.
+- T005 depends on T004 (needs `CulturePhoto`'s new fields to exist before `about-us-content.ts` can
+  populate them).
+- T006 depends on T003 (needs the widened `LifeGalleryImage.src` type) and T005 (needs the updated
+  content data) — same file as no other task, last edit in this phase.
+- T007 runs last, after T001-T006.
+
+## Parallel Example (About)
+
+```bash
+# T001, T002, T003, and T004 touch 4 different files and can all run together:
+Task: "Remove status-dot span from about-us-hero.tsx (T001)"
+Task: "Add showAccent={false} to 5 SectionEyebrow call sites (T002)"
+Task: "Widen LifeGalleryImage.src to string | null (T003)"
+Task: "Remove CulturePhoto.layout, add captionLabel/caption (T004)"
+# T005 must wait for T004; T006 must wait for both T003 and T005.
+```
+
+## Implementation Strategy (About)
+
+Single increment — all 6 tasks (T001-T006) together are this slice's only deliverable (FR-032,
+FR-033, and FR-034 are three small, independent-but-bundled fixes surfaced by the same
+`/speckit.clarify` + `/speckit.plan` pass for User Story 7). Complete T001-T006, then T007 to verify,
+then stop. This completes User Story 7 in full; User Stories 2-6 remain out of scope.

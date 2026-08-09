@@ -123,13 +123,13 @@ A visitor on the About page sees badges without a dot indicator, eyebrows withou
 
 **Why this priority**: Small, self-contained styling changes with no new interactions.
 
-**Independent Test**: Load `/about` and confirm badge/eyebrow treatment and the image grid independently of any other page.
+**Independent Test**: Load `/about` and confirm badge/eyebrow treatment and the "Life at TechGrit" gallery grid independently of any other page.
 
 **Acceptance Scenarios**:
 
 1. **Given** a visitor on `/about`, **When** any badge renders, **Then** it shows no dot indicator.
 2. **Given** a visitor scrolling the page, **When** any eyebrow renders, **Then** it shows no leading accent symbol.
-3. **Given** a visitor viewing the imagery section, **When** it renders, **Then** the grid layout matches the reference.
+3. **Given** a visitor viewing the "Life at TechGrit" culture-photo gallery, **When** it renders, **Then** it uses the shared `LifeGallery.tsx` component with the reference's uniform equal-column grid (no `tall`/`wide`/`square` per-photo span variation), matching `TechGrit About.dc.html` exactly.
 
 ---
 
@@ -222,6 +222,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 ### Session 2026-08-07
 
 - Q: The reference's "Skip the Form" card wires its "Book a call" button to a real Calendly widget (loads Calendly's external `widget.js`/`widget.css` and calls `Calendly.initPopupWidget({url:'https://calendly.com/techgrit/30min'})`). Should this feature embed that real widget, wire a real external link, or ship a static/placeholder action? → A: Static/placeholder — the button/link MUST NOT embed Calendly's external widget script or otherwise introduce a new third-party dependency; it uses a placeholder target (e.g. `href="#"`), matching the existing "Book on Calendly" precedent already used on the Construction page (`app/construction/_data/construction-content.ts`'s `primaryCtaLink: "#"`). No live booking integration is introduced by this feature.
+- Q: For User Story 7's FR-034 ("The imagery/showcase section MUST use the reference's grid layout"), which About Us section does "imagery/showcase section" refer to — the single hero showcase image (`about-us-showcase.tsx`, which `TechGrit About.dc.html` itself renders as one full-width image with no grid at all) or the "Life at TechGrit" culture-photo gallery (`about-us-culture-gallery.tsx`)? → A: The "Life at TechGrit" culture-photo gallery. It MUST reuse the shared `LifeGallery.tsx` component already used by Home and Careers, replacing the page's current page-local asymmetric mosaic (`1.4fr/1fr/1fr` grid with `tall`/`wide`/`square` per-photo spans) with the reference's uniform equal-column grid — 4 columns, collapsing to 2 at ≤920px and 1 at ≤560px, with equal 3:4-aspect tiles and no per-photo span variation. The hero showcase image section is unaffected by FR-034.
 
 ## Requirements *(mandatory)*
 
@@ -285,7 +286,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 - **FR-032**: Badges MUST render without a dot indicator anywhere on the page.
 - **FR-033**: Eyebrows MUST render without their leading accent symbol anywhere on the page (same toggle as FR-006/FR-017/FR-019).
-- **FR-034**: The imagery/showcase section MUST use the reference's grid layout.
+- **FR-034**: The "Life at TechGrit" culture-photo gallery section (not the single-image hero showcase, which the reference renders without a grid) MUST reuse the shared `LifeGallery.tsx` component already used by Home and Careers, replacing the page's current page-local asymmetric mosaic (`tall`/`wide`/`square` per-photo spans) with the reference's uniform equal-column grid — 4 columns, collapsing to 2 at ≤920px and 1 at ≤560px, with equal 3:4-aspect tiles and no per-photo span variation.
 
 **Careers Page**
 

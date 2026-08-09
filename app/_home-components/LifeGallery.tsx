@@ -3,7 +3,7 @@ import MediaSlot from "@/components/ui/MediaSlot";
 import { CULTURE_GALLERY_IMAGES } from "./home-data";
 
 export interface LifeGalleryImage {
-  src: string;
+  src: string | null;
   alt: string;
   span: "tall" | "wide" | "default" | "wide3";
   /** Careers-only hover-caption category label (e.g. "The team"). Left `undefined` for `home`. */
@@ -42,7 +42,7 @@ export default function LifeGallery({
   return (
     <section id={id} className="relative scroll-mt-[96px]">
       <div
-        className={`mx-auto max-w-[1280px] px-[36px] leading-normal ${
+        className={`mx-auto max-w-[1280px] px-[36px] leading-[normal] ${
           variant === "careers" ? "pt-[80px] pb-[80px]" : "pt-7.5 pb-22.5 "
         }`}
         data-reveal
@@ -100,14 +100,14 @@ export default function LifeGallery({
                 {variant === "careers" && item.captionLabel && item.caption && (
                   <div
                     aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 translate-y-[6px] px-[18px] pt-[22px] pb-[18px] opacity-0 transition-[opacity,transform] duration-300 ease-[ease] group-hover:translate-y-0"
+                    className="absolute inset-x-0 bottom-0 translate-y-[6px] bg-[image:var(--gradient-testimonial-fade)] px-[18px] pt-[22px] pb-[18px] opacity-0 transition-[opacity,transform] duration-300 ease-[ease] group-hover:translate-y-0 group-hover:opacity-100"
                   >
-                    {/* <div className="mb-[4px] text-[11px] font-bold tracking-[0.14em] text-[#F7B733] uppercase">
+                    <div className="mb-[4px] text-[11px] font-bold tracking-[0.14em] text-amber-light uppercase">
                       {item.captionLabel}
-                    </div> */}
-                    {/* <figcaption className="text-[14px] font-semibold leading-[1.35] text-white">
+                    </div>
+                    <figcaption className="text-[14px] font-semibold leading-[1.35] text-white">
                       {item.caption}
-                    </figcaption> */}
+                    </figcaption>
                   </div>
                 )}
               </figure>

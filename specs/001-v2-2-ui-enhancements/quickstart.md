@@ -176,3 +176,45 @@ plus `npm run lint`/`npm run build`.
    token, no `globals.css` entry needed). No other Contact file, no other page, and no shared
    component beyond consuming the existing `components/ui/Button` primitive as-is (no edit to
    `Button.tsx` itself).
+
+---
+
+# Quickstart Addendum: Verifying About Us Page — Badge, Eyebrow & Culture-Gallery Grid Alignment (User Story 7)
+
+Scope: only the hero badge's dot, the page's `SectionEyebrow` accent symbols, and the culture-photo
+gallery's grid (`about-us-culture-gallery.tsx`, delegating to `LifeGallery.tsx`). No test framework
+exists in this repo — this is manual, plus `npm run lint`/`npm run build`.
+
+## 14. Badge, eyebrows, and culture gallery (`/about`)
+
+1. Open `/about` at desktop width and confirm the "About TechGrit" hero badge shows no dot — just the
+   uppercase label text.
+2. Scroll through the page and confirm every eyebrow ("Who you are", "Our role", "What we stand
+   for", "How we work", "If we partner together") shows no leading dash before the label.
+3. Scroll to "Life at TechGrit" and confirm the eyebrow reads "Inside TechGrit" with no leading dash,
+   and the heading/description match `TechGrit About.dc.html` ("Life at TechGrit." / "The people and
+   the culture behind the engineering.").
+4. Confirm the gallery shows 4 equal-size photo tiles in a 4-column grid — no tile spans 2 columns or
+   2 rows (the previous `tall`/`wide` mosaic is gone) — and every tile shows a real photo, not a
+   "Coming soon" placeholder.
+5. Hover each tile and confirm a caption reveals (e.g. "The team" / "Builders and designers behind
+   the engineering.") — matching the same captions already shown on `/careers`'s Life at TechGrit
+   section.
+6. Resize to tablet width (~768-920px) and confirm the grid collapses to 2 columns; resize to mobile
+   width (≤560px) and confirm it collapses to 1 column — no horizontal overflow at either width.
+7. Confirm no "Explore Careers" / "Meet the team" buttons render below this gallery on `/about` (those
+   are `home`-variant-only).
+8. Open `/` and `/careers` and confirm their own Life at TechGrit galleries are visually unchanged —
+   the `LifeGallery.tsx` `src`-type widening introduced no regression on either.
+
+## 15. Gate check (About)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/about/_components/about-us-hero.tsx`, `app/about/_components/
+   about-how-we-work.tsx`, `app/about/_components/about-us-our-role.tsx`, `app/about/_components/
+   about-us-partner.tsx`, `app/about/_components/about-us-values.tsx`, `app/about/_components/
+   about-us-who-you-are.tsx`, `app/about/_components/about-us-culture-gallery.tsx`,
+   `app/about/_data/about-us-content.ts`, `app/about/_data/types.ts`, and
+   `app/_home-components/LifeGallery.tsx` (the `src` type widening only — no visual change to its
+   `home`/`careers` variants). No `tokens.css`/`globals.css` edit, no other About file, no other
+   page, and no other shared component touched.

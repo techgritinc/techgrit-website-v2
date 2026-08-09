@@ -3,34 +3,17 @@ import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 export function AboutUsAchievements({ section }: { section: AchievementsSection }) {
   return (
-    <section className="section-sm">
-      <div className="tg-container-lg">
+    <section className="relative">
+      <div className="mx-auto max-w-[1180px] px-[36px] py-[50px]">
         <RevealOnScroll>
-          <div className="glass-card glass-card-md" style={{ borderRadius: "var(--radius-4xl)" }}>
-            <div className="grid grid-cols-2 gap-5 text-center sm:grid-cols-4">
+          <div className="rounded-[24px] border border-white/10 bg-white/4 px-[40px] py-[44px] backdrop-blur-[8px]">
+            <div className="grid grid-cols-4 gap-[20px] max-[560px]:grid-cols-2 text-center">
               {section.stats.map((stat, index) => (
                 <div key={index}>
-                  <div
-                    className="text-gradient text-[length:var(--text-achievement-stat-base)] md:text-[length:var(--text-achievement-stat-md)] xl:text-[length:var(--text-achievement-stat-xl)]"
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontWeight: "var(--fw-bold)",
-                      letterSpacing: "var(--ls-snug)",
-                      lineHeight: 1,
-                    }}
-                  >
+                  <div className="bg-gradient-to-br from-amber-light to-orange bg-clip-text text-[clamp(40px,5vw,56px)] font-bold leading-none tracking-[-0.03em] text-transparent">
                     {stat.value}
                   </div>
-                  <div
-                    className="mt-2"
-                    style={{
-                      fontSize: "var(--text-xs)",
-                      fontWeight: "var(--fw-bold)",
-                      letterSpacing: "var(--ls-wider)",
-                      textTransform: "uppercase",
-                      color: "var(--color-text-muted)",
-                    }}
-                  >
+                  <div className="mt-2 text-[14px] font-bold uppercase tracking-[0.08em] text-white/55">
                     {stat.label}
                   </div>
                 </div>

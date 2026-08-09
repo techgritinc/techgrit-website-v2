@@ -4,21 +4,13 @@ import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 export function AboutUsShowcase({ section }: { section: ShowcaseSection }) {
   return (
-    <section>
-      <div className="tg-container-md" style={{ paddingTop: "var(--space-5)", paddingBottom: "var(--space-20)" }}>
+    <section className="relative">
+      <div className="mx-auto max-w-[1140px] px-[36px] pb-[56px] pt-[14px]">
         <RevealOnScroll>
-          <div
-            className="relative overflow-hidden"
-            style={{
-              borderRadius: 24,
-              border: "1px solid var(--color-border)",
-              boxShadow: "0 40px 90px -34px rgba(0,0,0,0.8)",
-            }}
-          >
+          <div className="relative overflow-hidden rounded-[24px] border border-white/[0.12] shadow-[0_40px_90px_-34px_rgba(0,0,0,0.8)]">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0"
-              style={{ zIndex: 2, boxShadow: "inset 0 -80px 120px -60px rgba(10,24,34,0.85)" }}
+              className="pointer-events-none absolute inset-0 z-[2] shadow-[inset_0_-80px_120px_-60px_rgba(0,0,0,0.85)]"
             />
             {section.image ? (
               <Image
@@ -28,20 +20,10 @@ export function AboutUsShowcase({ section }: { section: ShowcaseSection }) {
                 height={section.image.height}
                 priority
                 sizes="100vw"
-                style={{ width: "100%", height: 460, objectFit: "cover", display: "block" }}
+                className="block h-[460px] w-full object-cover"
               />
             ) : (
-              <div
-                className="flex items-center justify-center text-center"
-                style={{
-                  height: 460,
-                  padding: "var(--space-14)",
-                  background:
-                    "radial-gradient(circle at 30% 100%, var(--color-overlay-orange), transparent 60%), var(--color-glass)",
-                  color: "var(--color-text-faint)",
-                  fontSize: "var(--text-sm)",
-                }}
-              >
+              <div className="flex h-[460px] items-center justify-center bg-glass bg-[radial-gradient(circle_at_30%_100%,var(--color-overlay-orange),transparent_60%)] p-[var(--space-14)] text-center text-[length:var(--text-sm)] text-faint">
                 Drop a hero image — your team, office, or workspace
               </div>
             )}

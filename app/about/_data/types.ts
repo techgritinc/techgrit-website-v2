@@ -113,8 +113,9 @@ export interface PartnerSection {
 }
 
 export interface CulturePhoto {
-  layout: "tall" | "square" | "wide";
   image: SectionImage | null;
+  captionLabel?: string;
+  caption?: string;
 }
 
 export interface CultureGallerySection {
