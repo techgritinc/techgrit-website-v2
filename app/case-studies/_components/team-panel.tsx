@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Button from "@/components/ui/Button";
 import type { TeamRole } from "../_data/types";
 
 export function TeamPanel({ team }: { team: TeamRole[] }) {
@@ -10,7 +10,7 @@ export function TeamPanel({ team }: { team: TeamRole[] }) {
         <div className="text-[12px] font-bold tracking-[var(--ls-label)] uppercase text-[var(--color-text-dim)] mb-[16px] leading-[normal]">
           The team &middot; {teamSize} at peak
         </div>
-        <div className="flex flex-col gap-[9px]">
+        <div className="flex flex-col gap-[9px] leading-[normal]">
           {team.map((role) => (
             <div key={role.role} className="flex items-center justify-between text-[14px] leading-[normal]">
               <span className="text-text-role">{role.role}</span>
@@ -20,13 +20,15 @@ export function TeamPanel({ team }: { team: TeamRole[] }) {
             </div>
           ))}
         </div>
-        <Link
-          href="/contact"
-          className="flex items-center justify-center mt-[20px] gap-[8px] text-[14.5px] font-bold p-[13px] rounded-md leading-[normal] text-primary"
-          style={{ background: "var(--gradient-brand)" }}
-        >
-          Start a project<span aria-hidden="true">&#8594;</span>
-        </Link>
+        <Button
+  href="/contact"
+  variant="primary"
+  size="footer"
+  className="mt-[20px] w-full h-[44px]"
+>
+  Start a project <span aria-hidden="true">&#8594;</span>
+</Button>
+
       </div>
     </aside>
   );

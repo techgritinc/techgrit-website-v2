@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { CASE_STUDIES } from "./_data/case-studies-content";
+import { CASE_STUDIES, CASE_STUDY_CATEGORIES } from "./_data/case-studies-content";
 import { CaseStudiesHero } from "./_components/case-studies-hero";
 import { FeaturedCaseStudy } from "./_components/featured-case-study";
-import { CaseStudiesGrid } from "./_components/case-studies-grid";
+import { CaseStudiesFilterSection } from "./_components/case-studies-filter-section";
 import { CaseStudiesFinalCta } from "./_components/case-studies-final-cta";
 
 export const metadata: Metadata = {
@@ -17,17 +17,23 @@ export default function CaseStudiesPage() {
 
   return (
     <main>
-      <div
-        aria-hidden="true"
-        style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}
-      >
-        <div style={{ position: "absolute", top: -160, right: -120, width: 560, height: 560, borderRadius: "50%", background: "color-mix(in srgb, var(--color-blue) 13%, transparent)", filter: "blur(120px)", animation: "tgorb 16s ease-in-out infinite" }} />
-        <div style={{ position: "absolute", top: 1100, left: -180, width: 520, height: 520, borderRadius: "50%", background: "color-mix(in srgb, var(--color-orange) 10%, transparent)", filter: "blur(130px)", animation: "tgorb 20s ease-in-out infinite reverse" }} />
-        <div style={{ position: "absolute", bottom: -160, left: "40%", width: 600, height: 600, borderRadius: "50%", background: "color-mix(in srgb, var(--color-teal) 8%, transparent)", filter: "blur(140px)", animation: "tgorb 22s ease-in-out infinite" }} />
+      <div aria-hidden="true" className="fixed inset-0 pointer-events-none z-0">
+        <div
+          className="absolute top-[-160px] right-[-120px] w-[560px] h-[560px] rounded-full blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]"
+          style={{ background: "color-mix(in srgb, var(--color-orange) 16%, transparent)" }}
+        />
+        <div
+          className="absolute top-[1100px] left-[-180px] w-[520px] h-[520px] rounded-full blur-[130px] animate-[tgorb_20s_ease-in-out_infinite_reverse]"
+          style={{ background: "color-mix(in srgb, var(--color-orange) 10%, transparent)" }}
+        />
+        <div
+          className="absolute bottom-[-160px] left-[40%] w-[600px] h-[600px] rounded-full blur-[140px] animate-[tgorb_22s_ease-in-out_infinite]"
+          style={{ background: "color-mix(in srgb, var(--color-teal) 8%, transparent)" }}
+        />
       </div>
       <CaseStudiesHero />
       {featured ? <FeaturedCaseStudy caseStudy={featured} /> : null}
-      <CaseStudiesGrid caseStudies={grid} />
+      <CaseStudiesFilterSection caseStudies={grid} categories={CASE_STUDY_CATEGORIES} />
       <CaseStudiesFinalCta />
     </main>
   );

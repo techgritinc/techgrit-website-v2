@@ -11,7 +11,7 @@ type FilterBarProps = {
  * page-section container width every other section already uses. */
 export default function FilterBar({ label, children, className }: FilterBarProps) {
   const classes = [
-    "sticky top-nav z-raised border-t border-b border-border-subtle bg-nav-glass backdrop-blur-nav",
+    "sticky top-nav z-[var(--z-sticky)] border-t border-b border-border-subtle bg-nav-glass backdrop-blur-nav",
     className,
   ]
     .filter(Boolean)
