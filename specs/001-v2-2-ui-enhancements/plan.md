@@ -572,3 +572,201 @@ Audited FR-035 field-by-field before concluding no change was needed, avoiding a
 have duplicated already-correct values; confirmed `FilterBar`'s and `LifeGallery`'s existing
 structure could be extended rather than forked before planning any new markup. No new violations.
 Gate: PASS.
+
+---
+
+## Contact Page — "Skip the Form" Card (User Story 9 — FR-039)
+
+**Date**: 2026-08-07. Extends this plan to cover `app/(marketing)/contact/_components/
+contact-hero-form.tsx`, per spec.md's User Story 9 (FR-039, FR-040) and its Clarifications Session
+2026-08-07. No other Contact element (hero copy, contact-info rows, the form card itself, "What
+happens next") and no other user story is affected.
+
+### Summary
+
+1. **`app/(marketing)/contact/_components/contact-hero-form.tsx`** — add a new "Skip the Form" card
+   to the left column, directly below the existing `CONTACT_INFO` block and above the closing of that
+   column's wrapper `<div>`, matching `TechGrit Contact.dc.html` lines 248-258: an icon chip (new
+   calendar icon), an amber "Skip the form" eyebrow, a "Book a 30-min discovery call now." line, and
+   a "Book a call →" CTA. The CTA renders via the shared `components/ui/Button` primitive
+   (`variant="primary" size="nav"`, `href="#"`) rather than bespoke markup, per Principle III and
+   consistent with how the Construction page's own "Book on Calendly" placeholder already renders
+   through a shared button component (`app/construction/_data/construction-content.ts` line 190).
+2. **Calendly explicitly not integrated**: per spec.md's Clarifications (Session 2026-08-07), the
+   "Book a call" action is a static placeholder (`href="#"`) — it MUST NOT embed Calendly's external
+   `widget.js`/`widget.css` or call `Calendly.initPopupWidget()` as the reference does, since that
+   would introduce a new third-party dependency this feature's scope rules out. This mirrors the
+   Construction page's existing "Book on Calendly" precedent (`primaryCtaLink: "#"`), not a new
+   pattern.
+3. **`app/(marketing)/contact/_components/icons.tsx`** — add a new `CalendarIcon`, following this
+   file's own existing convention of defining its icons locally (it already has route-local
+   `MailIcon`/`ClockIcon`/`GlobeIcon` rather than importing `components/ui/icons.tsx`'s versions) —
+   not a new violation introduced by this pass, just following the file's established pattern.
+4. **`app/tokens.css`** — add exactly one new token, `--gradient-skip-form` (section 5, GRADIENTS),
+   for the card's `linear-gradient(150deg, rgba(232,119,34,0.14), rgba(255,255,255,0.02))`
+   background — no existing gradient token matches this two-stop value (research.md §17). Every
+   other value the card needs (border, blur, icon-chip fill/border, eyebrow tracking/color, button
+   gradient) reuses an existing exact-match token or the base `--color-orange` token via Tailwind's
+   opacity-modifier syntax (`bg-orange/20 border-orange/40`), the same pattern this file's own
+   `CONTACT_INFO` rows already use — see research.md §17's field-by-field table. No `globals.css`
+   `@theme inline` entry is needed for the new gradient token, consistent with how every other
+   gradient token in this file is consumed (via `bg-[image:var(--...)]`, not a bare utility class).
+
+Nothing else changes. The existing contact form's fields, validation, and client-side
+submit/success/reset behavior (FR-040) are untouched — no code in this addendum touches
+`handleSubmit`/`handleReset` or any form field.
+
+### Constitution check (addendum)
+
+- **I (Token-Only Styling)** — PASS. The one new literal value with no existing token
+  (`--gradient-skip-form`) is added to `tokens.css` first, per its existing numbered section, before
+  any component consumes it; every other value reuses an existing exact-match token or the base
+  `--color-orange` token via Tailwind's opacity modifier — no hardcoded literal duplicates an
+  existing token.
+- **II (Breakpoints)** — PASS, not applicable (the card wraps via the existing `flex-wrap` behavior
+  already used by this same component's contact-info rows; no new breakpoint is introduced).
+- **III (Component Library)** — PASS. The "Book a call" CTA renders via the existing
+  `components/ui/Button` primitive (`variant="primary" size="nav"`), not a bespoke `<button>` —
+  consistent with how this file's form already uses shared primitives and how Construction's own
+  Calendly-placeholder CTA already renders through a shared button component.
+- **IV (References Are Visual Truth)** — PASS with one recorded, spec.md-approved deviation: every
+  visual value (gradient, border, blur, icon-chip fill, eyebrow tracking/color) is read directly from
+  `TechGrit Contact.dc.html` lines 248-258; the one intentional divergence is the CTA's *behavior*
+  (static placeholder instead of a real Calendly widget), per Clarifications Session 2026-08-07 —
+  not an oversight.
+- **V (Dark-First Brand)** — PASS. The card's gradient background stays a low-opacity accent tint
+  (0.14/0.02 stops), not a full-surface fill; the orange accent stays confined to the icon chip,
+  eyebrow text, and CTA button, consistent with existing sparing-accent usage elsewhere in this file.
+- **VI (frontend-design skill)** — not re-invoked for this addendum; every visual value is a direct,
+  literal read from the reference (research.md §17), with no new visual pattern requiring craft
+  judgment beyond what the reference already specifies.
+- No violations — Complexity Tracking unchanged.
+
+**Anchor files**: `app/(marketing)/contact/_components/contact-hero-form.tsx`,
+`app/(marketing)/contact/_components/icons.tsx` (+1 icon), `app/tokens.css` (+1 gradient token). No
+`globals.css` edit, no `data-model.md`/`contracts/` change (presentation-only, same as the rest of
+this plan). No other Contact file, page, or shared component is touched.
+
+### Post-Design Constitution Re-Check (Contact addendum)
+
+Research (this addendum, §17) confirmed every needed value against `TechGrit Contact.dc.html` and
+resolved the Calendly-integration question (spec.md Clarifications, Session 2026-08-07) before any
+file changes were planned. No new violations. Gate: PASS.
+
+---
+
+## About Us Page — Badge, Eyebrow & Culture-Gallery Grid Alignment (User Story 7)
+
+**Date**: 2026-08-07. Extends this plan to cover User Story 7 (spec.md): FR-032 (badge dot removal),
+FR-033 (eyebrow accent-symbol removal), and FR-034 (culture-photo gallery grid), per spec.md
+Clarifications Session 2026-08-07's resolution of FR-034's "imagery/showcase section" ambiguity — it
+targets the "Life at TechGrit" culture-photo gallery, not the single-image hero showcase. No other
+About Us section (hero copy/CTAs, showcase image, Who You Are, Our Role, Values, 3-Step Plan,
+Achievements, If We Partner, closing CTA) and no other user story is affected.
+
+### Summary
+
+1. **`app/about/_components/about-us-hero.tsx`** — remove the `<span className="status-dot
+   status-orange" />` from the hero's "About TechGrit" badge (FR-032) — `TechGrit About.dc.html`'s
+   own badge (line 229) is plain text with no dot at all, and this is the page's only badge.
+2. **Five `<SectionEyebrow>` call sites** — add `showAccent={false}` to disable the leading dash,
+   matching the already-established toggle (Shared Foundation – T003) and the reference's own
+   plain-text eyebrows throughout (`TechGrit About.dc.html` lines 255, 275, 285, 339, 381) (FR-033):
+   `about-how-we-work.tsx`, `about-us-our-role.tsx`, `about-us-partner.tsx`, `about-us-values.tsx`,
+   `about-us-who-you-are.tsx`. **Excluded**: `about-us-culture-gallery.tsx`'s own `<SectionEyebrow>`
+   call — item 6 below replaces that section's entire eyebrow/heading markup with `LifeGallery.tsx`'s
+   own accent-free eyebrow, so no `showAccent` prop is needed there.
+3. **`app/_home-components/LifeGallery.tsx`** — widen `LifeGalleryImage.src` from `string` to
+   `string | null`. `MediaSlot` (which this component already renders images through) already
+   accepts and placeholder-renders a `null`/`undefined` `src`; the type just hadn't caught up. Purely
+   additive — `Home`/`Careers`' existing data always supplies a real string, so neither variant's
+   output changes.
+4. **`app/about/_data/types.ts`** — on `CulturePhoto`: drop the `layout: "tall" | "square" | "wide"`
+   field (its asymmetric-mosaic spans have no equivalent once item 6 switches to `LifeGallery`'s
+   uniform `careers`-variant grid, which ignores per-image span data entirely) and add two optional
+   fields, `captionLabel?: string` and `caption?: string`, mirroring `LifeGalleryImage`'s own
+   Careers-variant caption fields (data-model.md).
+5. **`app/about/_data/about-us-content.ts`** — update the `cultureGallery` section's 4 `photos`
+   entries from placeholder `image: null` to the same 4 real images `LifeAtTechGritContent` already
+   uses on Careers (`/assets/team/glasses.png`, `rooftop.png`, `painting.png`, `diwali.png` — already
+   present in `public/assets/team/`), with the reference's exact per-tile captions (`TechGrit
+   About.dc.html` lines 403-430, byte-identical to Careers' own): glasses → "The team" / "Builders
+   and designers behind the engineering."; rooftop → "The office" / "Rooftop breaks, real
+   conversations."; painting → "Craft" / "We take craft seriously — inside & outside code."; diwali →
+   "Together" / "We celebrate wins — and Diwali — together." The reference's own HTML comment marks
+   this section `<!-- LIFE AT TECHGRIT (shared component — matches Homepage & Careers) -->`,
+   confirming identical content across all three pages is the intended design, not a coincidence.
+6. **`app/about/_components/about-us-culture-gallery.tsx`** — replace the section's bespoke
+   eyebrow/heading/asymmetric-`1.4fr/1fr/1fr`-mosaic markup with a thin adapter that maps
+   `section.photos` into `LifeGalleryImage[]` (`src: photo.image?.url ?? null`, `alt:
+   photo.image?.alternativeText ?? ""`, `span: "default"`, `captionLabel`, `caption`) and renders
+   `<LifeGallery variant="careers" heading={section.title} description={section.subtitle}
+   images={...} />` (FR-034). This keeps the page's structured-content architecture intact (base
+   about-us-page spec, FR-015 — `page.tsx`'s `cultureGallery` case still receives a typed `section`
+   prop and still owns rendering the section) while reusing the shared primitive rather than
+   maintaining a diverging mosaic.
+
+Nothing else changes. `about-us-showcase.tsx` (the single-image hero showcase) is explicitly
+unaffected by FR-034 — the reference itself renders that section as one full-width image with no
+grid — and every other About section/file is untouched.
+
+### Technical Context (addendum)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo; manual
+verification, see `quickstart.md` addendum) · **Target Platform**: Web · **Project Type**: single
+Next.js App Router app · **Performance Goals**: N/A (presentation-only) · **Constraints**: no new
+libraries; the `careers` variant of `LifeGallery.tsx` is reused byte-for-byte (no new variant, no new
+breakpoint) — its existing `960px`/`560px` collapse points are a sub-5%, already-established-tolerance
+match for the reference's own `920px`/`560px` gallery breakpoints (`TechGrit About.dc.html` lines
+98/105), consistent with this plan's own precedent for sub-2-5%-delta reuse (research.md §14) ·
+**Scale/Scope**: 4 existing files edited (`about-us-hero.tsx`, 5 `SectionEyebrow` call sites across
+5 files, `about-us-content.ts`, `about-us-culture-gallery.tsx`) + 2 shared-file additive widenings
+(`LifeGallery.tsx`'s `src` type, `types.ts`'s `CulturePhoto` shape). No new file created, no
+`tokens.css`/`globals.css` change (every value this slice needs already exists via the reused
+`careers` variant).
+
+### Constitution Check (addendum)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this addendum.*
+
+- **I (Token-Only Styling)** — PASS. No new literal styling value is introduced anywhere in this
+  slice — the culture gallery's entire visual treatment comes from `LifeGallery.tsx`'s existing
+  `careers` variant, already token-driven; the `src`/`CulturePhoto` type changes are data-shape only.
+- **II (Breakpoints)** — PASS. No new breakpoint is introduced; the `careers` variant's existing
+  `tg-md`/`tg-sm` (960px/560px) collapse points are reused as-is (see Technical Context above for the
+  sub-5%-delta tolerance rationale, consistent with research.md §14's precedent).
+- **III (Component Library)** — PASS, and this is the point of the slice: the culture gallery stops
+  maintaining its own one-off asymmetric-mosaic grid and instead reuses `LifeGallery.tsx` — the same
+  primitive Home and Careers already consume — exactly the "reuse whatever primitive already covers
+  the need" rule this principle states. `LifeGallery.tsx` itself is extended (widened `src` type),
+  not forked; `Home`'s and `Careers`' existing output is unchanged (verified: both variants' data
+  always supplies non-null strings today).
+- **IV (References Are Visual Truth)** — PASS. The badge-dot removal, eyebrow-accent removal, and
+  gallery-grid reuse are read directly from `TechGrit About.dc.html` (lines 229, 255/275/285/339/381,
+  394-431); the reference's own "shared component" comment on the Life-at-TechGrit section is direct
+  textual confirmation that reusing the same component/content as Home and Careers is correct, not an
+  assumption.
+- **V (Dark-First Brand)** — PASS. No new surface fill or accent usage is introduced; the culture
+  gallery's visual treatment is unchanged from what `LifeGallery.tsx`'s `careers` variant already
+  renders on Careers today.
+- **VI (frontend-design skill)** — not re-invoked for this addendum; every visual value already
+  exists in the already-shipped `careers` variant (no new visual pattern requiring fresh craft
+  judgment).
+- No violations — Complexity Tracking unchanged.
+
+**Anchor files**: `app/about/_components/about-us-hero.tsx`, `app/about/_components/
+about-how-we-work.tsx`, `app/about/_components/about-us-our-role.tsx`, `app/about/_components/
+about-us-partner.tsx`, `app/about/_components/about-us-values.tsx`, `app/about/_components/
+about-us-who-you-are.tsx`, `app/about/_components/about-us-culture-gallery.tsx`, `app/about/_data/
+about-us-content.ts`, `app/about/_data/types.ts`, `app/_home-components/LifeGallery.tsx` (`src` type
+widening only). No `tokens.css`/`globals.css` edit. `data-model.md` gains one new section
+(`CulturePhoto`/`LifeGalleryImage.src`); no `contracts/` change (presentation-only, same as the rest
+of this plan). No other About file, page, or shared component is touched.
+
+### Post-Design Constitution Re-Check (About addendum)
+
+Research (this addendum, §18) confirmed FR-034's target section (the culture gallery, not the hero
+showcase — already settled in spec.md Clarifications, Session 2026-08-07) and the `careers` variant's
+exact fit (breakpoints, padding, absence of the `home`-only action buttons) before any file changed.
+No new violations. Gate: PASS.

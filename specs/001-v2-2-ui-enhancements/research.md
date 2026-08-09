@@ -756,3 +756,174 @@ addendum records the gap and its exact fix (tasks.md `Careers – T013`) without
 ## New tokens summary (Ghost-Styling Gap)
 
 None — the fix removes overrides; it adds no new styling.
+
+---
+
+# Phase 0 Research Addendum — Contact "Skip the Form" Card (User Story 9)
+
+**Companion to**: [tasks.md](./tasks.md), `# Contact` section | **Spec**: [spec.md](./spec.md),
+FR-039, FR-040, Clarifications Session 2026-08-07
+
+Scope: only the new "Skip the Form" card added to `app/(marketing)/contact/_components/
+contact-hero-form.tsx`'s left column, per `TechGrit Contact.dc.html` lines 248-258. No other Contact
+element (hero copy, contact-info rows, the form card itself, "What happens next") is affected.
+
+## 17. Skip-the-form card — token reuse and the Calendly-placeholder decision (FR-039)
+
+**Calendly decision**: the reference wires "Book a call" to a real Calendly widget
+(`Calendly.initPopupWidget({url:'https://calendly.com/techgrit/30min'})`, loading Calendly's external
+`widget.js`/`widget.css`). Per spec.md Clarifications (Session 2026-08-07), this is explicitly **not**
+carried over — introducing that widget would add a new third-party script this feature's own
+constraints (no new libraries) rule out. Instead the button is a static placeholder
+(`href="#"`), matching the existing "Book on Calendly" precedent already shipped on the Construction
+page (`app/construction/_data/construction-content.ts` line 190, `primaryCtaLink: "#"`).
+
+**Token/value fidelity, field by field**:
+
+| Element | Reference value | Implementation | Match? |
+|---|---|---|---|
+| Card background | `linear-gradient(150deg, rgba(232,119,34,0.14), rgba(255,255,255,0.02))` | new `--gradient-skip-form` token (exact value — no existing gradient token matches, so a new one was added per FR-041) | Exact |
+| Card border | `rgba(232,119,34,0.28)` | `border-overlay-orange-strong` (`--color-overlay-orange-strong: rgba(232,119,34,0.28)` — already exists, exact match, reused rather than duplicated) | Exact |
+| Card blur | `blur(8px)` | `backdrop-blur-md` (`--blur-md: 8px` — already exists, exact match) | Exact |
+| Icon-chip background/border | `rgba(232,119,34,0.2)` / `rgba(232,119,34,0.4)` | `bg-orange/20 border-orange/40` — Tailwind's opacity modifier on the existing base `--color-orange` token, the same pattern this file's own `CONTACT_INFO` rows already use (`bg-orange/10 border-orange/30`); no new token needed since the base color already exists | Exact |
+| Eyebrow letter-spacing | `0.08em` | `tracking-08` (`--ls-08: 0.08em` — already exists, exact match) | Exact |
+| Eyebrow/label color | `#F7B733` | `text-[var(--color-amber-light)]` (`--color-amber-light: #F7B733` — already exists, same token this file's contact-info icons already use) | Exact |
+| "Book a call" button fill | `linear-gradient(135deg,#F59E0B,#E87722)` | `Button variant="primary"` (`--gradient-brand`, same value) | Exact |
+| Button radius/padding-y | `border-radius:11px; padding:12px 20px` | `Button size="nav"` (`rounded-[11px] px-[22px] py-[12px]`) | Radius/padding-y exact; padding-x 2px delta, font-size 15px vs. 14.5px — reused as-is rather than adding a near-duplicate size, consistent with this plan's own established sub-2px-delta reuse precedent (e.g. research.md §14's `FilterBar` blur/border reuse) |
+| Button shadow | `0 12px 28px -10px rgba(232,119,34,0.75)` | `--shadow-nav-btn` (`0 8px 24px -8px rgba(232,119,34,0.70)`, bundled automatically by `size="nav"`) | Close, not exact — same reuse-over-duplication rationale as the sizing row above |
+
+**Decision — reuse the shared `Button` primitive, not a bespoke `<button>`**: per Principle III, the
+placeholder CTA renders as `<Button href="#" variant="primary" size="nav">`, matching how the
+Construction page's own "Book on Calendly" placeholder already renders through a shared button
+component rather than one-off markup.
+
+**Icon**: the reference's calendar icon (box outline + top tabs + header divider line) has no
+existing match in either the route-local `app/(marketing)/contact/_components/icons.tsx` or the
+consolidated `components/ui/icons.tsx`. A new `CalendarIcon` was added to the **route-local** file,
+consistent with that file's own pre-existing convention (it already defines its own
+`MailIcon`/`ClockIcon` rather than importing the consolidated versions) — not a new violation
+introduced by this pass, just following the file's established local pattern.
+
+## New tokens summary (Contact — Skip the Form)
+
+- `--gradient-skip-form` (tokens.css §5 GRADIENTS) — the card's diagonal background fill; no
+  existing gradient token matched this exact two-stop value.
+- No other new tokens. The icon-chip fill/border, eyebrow tracking/color, card border, card blur,
+  and button gradient all reuse exact-match existing tokens or the base `--color-orange` token via
+  Tailwind's opacity-modifier syntax (see table above).
+
+---
+
+# Phase 0 Research Addendum — About Us Page (User Story 7)
+
+**Companion to**: [plan.md](./plan.md), "About Us Page — Badge, Eyebrow & Culture-Gallery Grid
+Alignment (User Story 7)" | **Spec**: [spec.md](./spec.md), User Story 7, FR-032, FR-033, FR-034,
+Clarifications Session 2026-08-07
+
+Scope: only `app/about/`'s badge, eyebrow, and culture-photo-gallery treatment, per `TechGrit
+About.dc.html`. No other About section is affected.
+
+## 18. Badge dot and eyebrow accent — single, already-solved gaps (FR-032, FR-033)
+
+**Badge (FR-032)**: grepped the entire `app/about/` tree for `status-dot`/`Badge` — exactly one
+match: `about-us-hero.tsx`'s hero badge (`<span className="status-dot status-orange" />`). The
+reference's own hero badge (`TechGrit About.dc.html` line 229-231) is a plain text pill with no dot
+element at all. **Decision**: delete the span; no other badge exists on this page to audit.
+
+**Eyebrow (FR-033)**: `components/ui/section-eyebrow.tsx` already carries the `showAccent?: boolean`
+toggle (default `true`) added in Shared Foundation – T003, used elsewhere (Industries' "Why
+TechGrit"/"Challenge" eyebrows). Six About files call `<SectionEyebrow>` with no `showAccent` prop:
+`about-how-we-work.tsx`, `about-us-culture-gallery.tsx`, `about-us-our-role.tsx`,
+`about-us-partner.tsx`, `about-us-values.tsx`, `about-us-who-you-are.tsx`. The reference's own
+eyebrows throughout the page (`Who you are` line 255, `Our role` line 275, `What we stand for` line
+285, `How we work` line 339, `If we partner together` line 381, `Inside TechGrit` line 398) are all
+plain uppercase text with no leading dash/symbol. **Decision**: add `showAccent={false}` to 5 of the
+6 call sites. The 6th (`about-us-culture-gallery.tsx`) is excluded — §19 below replaces that section's
+entire eyebrow/heading markup with `LifeGallery.tsx`'s own already-accent-free eyebrow, so the prop
+is moot there.
+
+## 19. Culture-photo gallery — which section FR-034 targets, and the `LifeGallery` reuse decision (FR-034)
+
+**Which section**: already resolved in spec.md Clarifications (Session 2026-08-07) — FR-034 targets
+the "Life at TechGrit" culture-photo gallery (`about-us-culture-gallery.tsx`), not the single-image
+hero showcase (`about-us-showcase.tsx`), which the reference renders as one 460px-tall image with no
+grid at all (`TechGrit About.dc.html` lines 242-249). This section documents the resulting
+implementation decision.
+
+**Reuse decision**: `TechGrit About.dc.html`'s Life-at-TechGrit section carries its own HTML comment,
+`<!-- ===== LIFE AT TECHGRIT (shared component — matches Homepage & Careers) ===== -->` (line 394) —
+direct confirmation from the design reference itself that this section is meant to be identical
+across Home, Careers, and About, not independently designed per page. `app/_home-components/
+LifeGallery.tsx` already implements this section for Home (`variant="home"`) and Careers
+(`variant="careers"`); the `careers` variant is the correct fit for About:
+
+| Property | Reference (`About.dc.html`) | `LifeGallery` `careers` variant | Match? |
+|---|---|---|---|
+| Section padding | `padding:80px 36px 80px` (line 396) | `pt-[80px] pb-[80px]` | Exact |
+| Grid columns (desktop) | `repeat(4, 1fr)` (implicit 4-up via `[data-gallery]`) | `grid-cols-4` | Exact |
+| Grid columns (≤ collapse 1) | `1fr 1fr` at `max-width:920px` (line 98) | `grid-cols-2` at `tg-md` (960px) | 40px/~4% breakpoint delta — within this plan's established sub-5% reuse tolerance (research.md §14) |
+| Grid columns (≤ collapse 2) | `1fr` at `max-width:560px` (line 108) | `grid-cols-1` at `tg-sm` (560px) | Exact |
+| Tile aspect ratio | implicit via fixed `height:200px` md/`sm` overrides, no explicit ratio at desktop — but every tile in the reference markup shares one size | `aspect-[3/4]` uniform, no per-tile span | Exact fit — no `tall`/`wide` span in the reference at all |
+| Action buttons below grid | none | only rendered when `variant === "home"` — `careers` renders none | Exact |
+| Eyebrow style | plain uppercase text, no leading dash (line 398) | `careers` branch's eyebrow is already plain text, no accent bar | Exact |
+
+No property required a new `LifeGallery.tsx` visual change — every value the reference needs already
+exists in the shipped `careers` variant.
+
+**`src` type gap (the one real code change needed)**: `LifeGalleryImage.src` is typed `string`
+(non-nullable), but `MediaSlot` (which `LifeGallery.tsx` renders every image through) already accepts
+`string | null | undefined` and renders a "Coming soon" placeholder when absent — the type simply
+hadn't caught up to what the component already supports. **Decision**: widen `LifeGalleryImage.src`
+to `string | null`. Purely additive: `Home`'s `CULTURE_GALLERY_IMAGES` and Careers'
+`LifeAtTechGritContent.images` both always supply a real string today, so neither variant's rendered
+output changes.
+
+**Real images, not `null` placeholders**: `about-us-content.ts`'s `cultureGallery` section currently
+sets `image: null` on all 4 photos (comment: "No real team photos exist yet"). But the reference's 4
+tiles (`life1`-`life4`, lines 403-430) point at `assets/team/glasses.png`/`rooftop.png`/
+`painting.png`/`diwali.png` with specific per-tile captions — and these are the **exact same** 4
+files (already present in `public/assets/team/`) and **exact same** captions Careers already added
+to its own `LifeAtTechGritContent` (tasks.md, Careers Phase 4 – T011). **Decision**: populate About's
+4 photos with these same real images and captions rather than leaving them `null` — consistent with
+the reference's own "shared component" framing, and avoiding the alternative of shipping a page with
+4 placeholder tiles when the real assets and copy already exist and are already used identically two
+pages over. `CulturePhoto.image` stays typed `SectionImage | null` (the base about-us-page spec's
+general placeholder capability, FR-013, is preserved for any future content gap) — only this
+dataset's *values* change from `null` to real images.
+
+**`CulturePhoto.layout` removal**: the base about-us-page spec's Key Entities section defines
+`Culture Photo` as "an image and an optional descriptive caption/alt text" — it does not mention a
+layout/span field; `layout: "tall" | "square" | "wide"` was an implementation-only addition driving
+the now-replaced asymmetric mosaic. Once the section renders via `LifeGallery`'s `careers` variant
+(which ignores per-image span data entirely — every tile is `aspect-[3/4]`, uniform), `layout` has no
+consumer. **Decision**: drop it from `CulturePhoto`, replacing it with the two optional caption
+fields the reference's per-tile captions need (`captionLabel`, `caption`), mirroring
+`LifeGalleryImage`'s own Careers-variant fields (data-model.md).
+
+## 20. Caption-overlay dormant bug, found during implementation (FR-034)
+
+Implementing T006 and rendering `/about` for the first time revealed that `LifeGallery.tsx`'s
+`careers`-variant caption overlay never actually displayed any text: the `captionLabel`/`caption`
+elements added in Careers Phase 4 (tasks.md) were left wrapped in JSX comments (`{/* ... */}`), so
+they compiled out of the output entirely, and the wrapper `<div>` had no `group-hover:opacity-100`
+counterpart to its `opacity-0` base (so the overlay could never become visible even if its children
+had rendered) and no background scrim (the reference's `linear-gradient(180deg, transparent,
+rgba(0,0,0,0.82))`). This affected `/careers` identically — it had simply never been caught, since
+that page's own verification (tasks.md, Careers Phase 2/5) was code-inspection-only, not
+live-rendered (the Browser-pane tool was unavailable in that pass too).
+
+**Decision — fix directly, not just document**: this dormant gap sits squarely in the code path
+About's culture gallery now depends on, and leaving it broken would fail this task's own exact-parity
+requirement against `TechGrit About.dc.html`'s hover-caption behavior. Fixed in `LifeGallery.tsx`:
+uncommented the `captionLabel`/`caption` elements, added `group-hover:opacity-100`, and added
+`bg-[image:var(--gradient-testimonial-fade)]` (`app/tokens.css` line 240 — an exact-value existing
+token, originally added for Testimonials' video-card bottom fade, reused rather than duplicated) plus
+`text-amber-light` in place of the dead code's hardcoded `text-[#F7B733]` (also an exact-match
+existing token). Verified via server-rendered HTML: the caption text now appears in both `/about`'s
+and `/careers`' output; `/`'s `home` variant is unaffected (it never sets `captionLabel`/`caption`).
+
+## New tokens summary (About)
+
+None — every value this slice needs already exists via the reused `careers` variant of
+`LifeGallery.tsx`, including the caption-overlay fix in §20 above (both new classes reuse existing
+exact-match tokens); no `tokens.css`/`globals.css` change.

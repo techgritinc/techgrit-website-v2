@@ -142,3 +142,79 @@ is manual, plus `npm run lint`/`npm run build`.
 2. Diff should touch only: `app/_home-components/SubscribeBand.tsx`. No token file
    (`app/tokens.css`, `app/globals.css`), no other homepage section, no other page, and no shared
    component (`Button.tsx`, `FormField.tsx`) changes.
+
+---
+
+# Quickstart Addendum: Verifying "Skip the Form" Card (Contact, User Story 9)
+
+Scope: only the new card in `app/(marketing)/contact/_components/contact-hero-form.tsx`'s left
+column, plus its supporting icon and token. No test framework exists in this repo — this is manual,
+plus `npm run lint`/`npm run build`.
+
+## 12. "Skip the Form" card (`contact-hero-form.tsx`)
+
+1. Open `/contact` at desktop width and confirm a new card renders in the left column, directly
+   below the "Where we work" contact-info row.
+2. Confirm the card shows: a calendar-icon chip, an amber uppercase "Skip the form" label, "Book a
+   30-min discovery call now." body copy, and a "Book a call" button with a gradient background
+   matching the existing "Send message"/CTA buttons elsewhere on the page.
+3. Confirm the card's own background is a subtle diagonal orange-to-transparent gradient (not a flat
+   fill), matching `TechGrit Contact.dc.html` lines 249-258.
+4. Click "Book a call" and confirm **no** Calendly widget/popup opens and no network request to
+   `calendly.com` fires (check the Network tab) — the button is a static placeholder, per spec.md
+   Clarifications Session 2026-08-07.
+5. Confirm the existing contact form (topic chips, Full name/Work email/Company/message fields,
+   Send message button, and the sent/success state) is visually and behaviorally unchanged.
+6. Resize to tablet and mobile widths and confirm the card wraps/stacks normally with no horizontal
+   overflow, consistent with the rest of the left column.
+
+## 13. Gate check (Contact — Skip the Form)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/(marketing)/contact/_components/contact-hero-form.tsx`,
+   `app/(marketing)/contact/_components/icons.tsx` (+1 icon), and `app/tokens.css` (+1 gradient
+   token, no `globals.css` entry needed). No other Contact file, no other page, and no shared
+   component beyond consuming the existing `components/ui/Button` primitive as-is (no edit to
+   `Button.tsx` itself).
+
+---
+
+# Quickstart Addendum: Verifying About Us Page — Badge, Eyebrow & Culture-Gallery Grid Alignment (User Story 7)
+
+Scope: only the hero badge's dot, the page's `SectionEyebrow` accent symbols, and the culture-photo
+gallery's grid (`about-us-culture-gallery.tsx`, delegating to `LifeGallery.tsx`). No test framework
+exists in this repo — this is manual, plus `npm run lint`/`npm run build`.
+
+## 14. Badge, eyebrows, and culture gallery (`/about`)
+
+1. Open `/about` at desktop width and confirm the "About TechGrit" hero badge shows no dot — just the
+   uppercase label text.
+2. Scroll through the page and confirm every eyebrow ("Who you are", "Our role", "What we stand
+   for", "How we work", "If we partner together") shows no leading dash before the label.
+3. Scroll to "Life at TechGrit" and confirm the eyebrow reads "Inside TechGrit" with no leading dash,
+   and the heading/description match `TechGrit About.dc.html` ("Life at TechGrit." / "The people and
+   the culture behind the engineering.").
+4. Confirm the gallery shows 4 equal-size photo tiles in a 4-column grid — no tile spans 2 columns or
+   2 rows (the previous `tall`/`wide` mosaic is gone) — and every tile shows a real photo, not a
+   "Coming soon" placeholder.
+5. Hover each tile and confirm a caption reveals (e.g. "The team" / "Builders and designers behind
+   the engineering.") — matching the same captions already shown on `/careers`'s Life at TechGrit
+   section.
+6. Resize to tablet width (~768-920px) and confirm the grid collapses to 2 columns; resize to mobile
+   width (≤560px) and confirm it collapses to 1 column — no horizontal overflow at either width.
+7. Confirm no "Explore Careers" / "Meet the team" buttons render below this gallery on `/about` (those
+   are `home`-variant-only).
+8. Open `/` and `/careers` and confirm their own Life at TechGrit galleries are visually unchanged —
+   the `LifeGallery.tsx` `src`-type widening introduced no regression on either.
+
+## 15. Gate check (About)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/about/_components/about-us-hero.tsx`, `app/about/_components/
+   about-how-we-work.tsx`, `app/about/_components/about-us-our-role.tsx`, `app/about/_components/
+   about-us-partner.tsx`, `app/about/_components/about-us-values.tsx`, `app/about/_components/
+   about-us-who-you-are.tsx`, `app/about/_components/about-us-culture-gallery.tsx`,
+   `app/about/_data/about-us-content.ts`, `app/about/_data/types.ts`, and
+   `app/_home-components/LifeGallery.tsx` (the `src` type widening only — no visual change to its
+   `home`/`careers` variants). No `tokens.css`/`globals.css` edit, no other About file, no other
+   page, and no other shared component touched.

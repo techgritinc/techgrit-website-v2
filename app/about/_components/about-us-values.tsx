@@ -28,7 +28,8 @@ function ValueIcon({ order }: { order: number }) {
       height="19"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="var(--color-amber-light)"
+      className="stroke-amber-light"
+      stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -41,52 +42,32 @@ function ValueIcon({ order }: { order: number }) {
 
 export function AboutUsValues({ section }: { section: ValuesSection }) {
   return (
-    <section id="values" className="section">
-      <div className="tg-container" style={{ paddingInline: "var(--space-15)" }}>
+    <section id="values" className="relative scroll-mt-[96px]">
+      <div className="mx-auto max-w-[1280px] px-[36px] py-[60px]">
         <RevealOnScroll>
-          <div className="mx-auto mb-[var(--space-25)] text-center content-max-lg">
-            <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2
-              className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-values-h2-xl)]"
-              style={{ lineHeight: 1.1, marginBottom: "var(--space-section-sm)" }}
-            >
+          <div className="mx-auto mb-[50px] max-w-[680px] text-center">
+            <SectionEyebrow showAccent={false} className="mb-4 justify-center">
+              {section.eyebrow}
+            </SectionEyebrow>
+            <h2 className="text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
               {section.title}
             </h2>
           </div>
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-16"
-            style={{ borderBottom: "1px solid var(--color-border-subtle)" }}
-          >
+          <div className="grid grid-cols-2 gap-y-0 gap-x-[64px] border-b border-white/10 max-[920px]:grid-cols-2 max-[560px]:grid-cols-1">
             {section.values.map((value) => (
               <div
                 key={value.order}
-                className="flex px-1"
-                style={{
-                  gap: "var(--space-9)",
-                  paddingBlock: "var(--space-13)",
-                  borderTop: "1px solid var(--color-border-subtle)",
-                }}
+                className="flex gap-[22px] border-t border-white/10 px-[4px] py-[30px] transition-all duration-[250ms] ease-in-out hover:pl-[14px]"
               >
-                <span
-                  className="flex-shrink-0"
-                  style={{
-                    width: 24,
-                    fontFamily: "var(--font-display)",
-                    fontWeight: "var(--fw-bold)",
-                    color: "var(--color-orange)",
-                    fontSize: 14,
-                    letterSpacing: "var(--ls-wide)",
-                    paddingTop: "var(--space-1)",
-                  }}
-                >
+                <span className="w-[24px] shrink-0 pt-[4px] text-[14px] font-bold tracking-[0.05em] text-orange">
                   {String(value.order).padStart(2, "0")}
                 </span>
                 <div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-[11px]">
                     <ValueIcon order={value.order} />
-                    <h3 style={{fontSize: "var(--text-h3-values)"}}>{value.title}</h3>
+                    <h3 className="text-[19px] font-bold tracking-[-0.01em] text-white">{value.title}</h3>
                   </div>
-                  <p className="mt-2" style={{ fontSize: "var(--text-sm)", color: "var(--color-text-faint)" }}>
+                  <p className="mt-[8px] text-[15px] leading-[1.6] text-white/58">
                     {value.description}
                   </p>
                 </div>

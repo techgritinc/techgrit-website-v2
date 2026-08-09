@@ -1,61 +1,57 @@
-import Image from "next/image";
-import type { CultureGallerySection, CulturePhoto } from "../_data/types";
-import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
+import LifeGallery, { type LifeGalleryImage } from "@/app/_home-components/LifeGallery";
+import type { CultureGallerySection } from "../_data/types";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
-function layoutClass(layout: CulturePhoto["layout"]) {
-  if (layout === "tall") return "sm:row-span-2";
-  if (layout === "wide") return "sm:col-span-2";
-  return "";
-}
-
 export function AboutUsCultureGallery({ section }: { section: CultureGallerySection }) {
+  const images: LifeGalleryImage[] = section.photos.map((photo) => ({
+    src: photo.image?.url ?? null,
+    alt: photo.image?.alternativeText ?? "",
+    span: "default",
+    captionLabel: photo.captionLabel,
+    caption: photo.caption,
+  }));
+
   return (
-    <section className="section">
-      <div className="tg-container" style={{ paddingInline: "var(--space-15)" }}>
-        <RevealOnScroll>
-          <div className="mx-auto mb-11 text-center content-max-lg">
-            <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-values-h2-xl)]">
-              {section.title}
-            </h2>
-            <p className="mt-4" style={{ color: "var(--color-text-muted)" }}>
-              {section.subtitle}
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-[var(--space-7)] sm:auto-rows-[200px] sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
-            {section.photos.map((photo, index) => (
+    <section className="relative">
+      <div className="mx-auto max-w-[1280px] px-[36px] py-[80px]">
+        <div className="mx-auto mb-[50px] max-w-[680px] text-center">
+          <SectionEyebrow showAccent={false} className="mb-4 justify-center">
+            {section.eyebrow}
+          </SectionEyebrow>
+          <h2 className="text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
+            {section.title}
+          </h2>
+          <p className="mx-auto mt-[16px] text-[17px] leading-[1.6] text-white/66">
+            {section.subtitle}
+          </p>
+        </div>
+        <div className="grid grid-cols-4 gap-[16px] max-[920px]:grid-cols-2 max-[560px]:grid-cols-1">
+          {section.photos.map((photo, i) => (
+            <figure
+              key={i}
+              className="group relative m-0 aspect-[3/4] overflow-hidden rounded-[18px] border border-white/10 bg-white/5 transition-all duration-[300ms] ease-[cubic-bezier(.2,.7,.2,1)]"
+            >
+              {photo.image?.url && (
+                <img
+                  src={photo.image.url}
+                  alt={photo.image.alternativeText || "Team photo"}
+                  className="block h-full w-full object-cover"
+                />
+              )}
               <div
-                key={index}
-                className={`relative overflow-hidden rounded-xl ${layoutClass(photo.layout)}`}
-                style={{ border: "1px solid var(--color-border-image)", minHeight: 200 }}
+                className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.82))] p-[22px_18px_18px] opacity-0 transition-all duration-[300ms] ease-out translate-y-[6px] group-hover:translate-y-0 group-hover:opacity-100"
+                aria-hidden="true"
               >
-                {photo.image ? (
-                  <Image
-                    src={photo.image.url}
-                    alt={photo.image.alternativeText}
-                    fill
-                    sizes="(max-width: 1140px) 50vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                  />
-                ) : (
-                  <div
-                    className="flex h-full items-center justify-center text-center"
-                    style={{
-                      minHeight: 200,
-                      padding: "var(--space-8)",
-                      background: "var(--color-glass)",
-                      color: "var(--color-text-faint)",
-                      fontSize: "var(--text-xs)",
-                    }}
-                  >
-                    Team photo coming soon
-                  </div>
-                )}
+                <div className="mb-[4px] text-[11px] font-bold uppercase tracking-[0.14em] text-amber-light">
+                  {photo.captionLabel}
+                </div>
+                <figcaption className="text-[14px] font-semibold leading-[1.35] text-white">
+                  {photo.caption}
+                </figcaption>
               </div>
-            ))}
-          </div>
-        </RevealOnScroll>
+            </figure>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -599,3 +599,253 @@ button.
 Single task — T013 is a standalone styling correction to one file, independent of every other
 phase in this section. No polish task is added here; verify visually alongside Phase 2's (T007) or
 Phase 5's (T012) manual checks once implemented.
+
+---
+
+# Contact
+
+**Page**: `/contact` (User Story 9, spec.md). **Task IDs below restart at `T001`**, scoped to this
+`# Contact` heading only — see the numbering-convention note at the top of this file. Everything
+above this heading (Shared Foundation, Homepage, Careers) keeps its own original numbering and is
+unaffected.
+
+## Phase 1: "Skip the Form" Card (User Story 9 slice)
+
+**Input**: [plan.md](./plan.md) "Contact Page — 'Skip the Form' Card (User Story 9 — FR-039)",
+[research.md](./research.md) §17
+**Scope**: only the new "Skip the Form" card added to `contact-hero-form.tsx`'s left column —
+FR-039. FR-040 (existing form submission behavior) needs no task, since nothing in this phase
+touches the form's fields, validation, or submit/reset handlers. No Setup/Foundational sub-phase —
+research.md §17 found exactly one new token is needed (`--gradient-skip-form`), added directly in
+T002 below rather than a separate tokens-only phase.
+
+**Goal**: FR-039 — a "Skip the Form" card renders in the Contact hero's left column, below the
+existing contact-info rows, with the reference's gradient background, icon chip, eyebrow/label copy,
+and a "Book a call" CTA that is a static placeholder (no Calendly widget), per spec.md Clarifications
+Session 2026-08-07.
+
+**Independent Test**: Load `/contact` and confirm a "Skip the form" card renders below the
+email/response-time/location rows in the left column, with a gradient background, a calendar icon
+chip, "Skip the form" / "Book a 30-min discovery call now." copy, and a "Book a call" button;
+confirm clicking that button triggers no external Calendly widget or navigation; confirm the existing
+contact form (topics, fields, submit/success/reset) is visually and behaviorally unchanged.
+
+- [x] T001 [P] [US9] Add `CalendarIcon` to `app/(marketing)/contact/_components/icons.tsx`, copying
+  the reference's exact SVG path data (`TechGrit Contact.dc.html` line 251: rounded box outline +
+  two top tabs + header divider line, `viewBox="0 0 24 24"`, `stroke-width="2"`, round caps/joins),
+  following this file's existing per-icon export convention (research.md §17) — depends on nothing;
+  different file from T002-T003, safe to do in parallel with T002.
+- [x] T002 [US9] Add `--gradient-skip-form: linear-gradient(150deg, rgba(232, 119, 34, 0.14),
+  rgba(255, 255, 255, 0.02))` to `app/tokens.css` section 5 (GRADIENTS), next to the other
+  single-consumer two-stop gradients (research.md §17) — the only new token this phase needs; no
+  `globals.css` entry required (every other gradient token in this file is consumed via
+  `bg-[image:var(--...)]`, not a bare utility) — depends on nothing; independent of T001 (different
+  file).
+- [x] T003 [US9] In `app/(marketing)/contact/_components/contact-hero-form.tsx`: import `Button`
+  from `@/components/ui/Button` and `CalendarIcon` from `./icons`; render the "Skip the Form" card
+  directly below the existing `CONTACT_INFO.map(...)` block (same left-column wrapper `<div>`) —
+  icon chip using `bg-orange/20 border-orange/40` (Tailwind opacity modifiers on the existing base
+  `--color-orange` token, same pattern this file's own `CONTACT_INFO` rows already use), card
+  background via `bg-[image:var(--gradient-skip-form)]` (from T002), card border/blur reusing the
+  existing `border-overlay-orange-strong`/`backdrop-blur-md` tokens (exact matches, research.md
+  §17), eyebrow using `tracking-08`/`text-[var(--color-amber-light)]` (both existing exact matches),
+  and the "Book a call" CTA as `<Button href="#" variant="primary" size="nav">` — a static
+  placeholder per spec.md Clarifications Session 2026-08-07, **not** a Calendly widget integration
+  (FR-039, research.md §17) — depends on T001 (needs `CalendarIcon`) and T002 (needs the gradient
+  token).
+
+**Checkpoint**: the "Skip the Form" card matches `TechGrit Contact.dc.html`'s gradient/icon/copy
+treatment exactly, its CTA is confirmed non-functional (no Calendly script, no live booking flow),
+and the existing contact form's fields/validation/submit/success/reset behavior (FR-040) is
+unchanged — no task in this phase touches `handleSubmit`/`handleReset` or any form field.
+
+---
+
+## Phase 2: Polish (Skip the Form verification)
+
+- [x] T004 Run the quickstart.md Contact section's verification steps (isolated render check +
+  `npm run lint` + `npm run build`). **Done.** `npm run lint` and `npm run build` both green (all 18
+  routes, including `/contact`, prerender successfully). Server-rendered `/contact` HTML confirmed
+  via `curl`: "Skip the form" / "Book a 30-min discovery call now." copy present, "Book a call"
+  button compiles to `href="#">Book a call` (static placeholder — no `calendly`/`Calendly` string
+  anywhere in the response), the icon chip's `bg-orange/20 border border-orange/40` classes and the
+  `CalendarIcon`'s `<rect x="3" y="4" .../>`/`<line x1="16" y1="2" .../>` shapes are present, and the
+  existing form's "Full name"/"Work email"/"New project" topic chip are all still present unchanged.
+  **Not verified interactively** — the Browser-pane tool could not navigate to the local dev server
+  in this environment (navigation denied, consistent with the same limitation noted in Careers'
+  T007/T012), so the card's visual gradient/spacing and the click-triggers-nothing behavior were
+  confirmed by server-rendered markup inspection only, not by driving the UI. Recommend a manual
+  pass in a real browser before merging.
+
+---
+
+## Dependencies (Contact)
+
+- T001 and T002 are independent of each other (different files: `icons.tsx` vs. `tokens.css`).
+- T003 depends on both T001 (needs `CalendarIcon` to exist before it's imported) and T002 (needs
+  `--gradient-skip-form` to exist before it's referenced).
+- T004 runs last, after T001-T003.
+
+## Parallel Example (Contact)
+
+```bash
+# T001 and T002 touch different files and can run together:
+Task: "Add CalendarIcon to app/(marketing)/contact/_components/icons.tsx (T001)"
+Task: "Add --gradient-skip-form token to app/tokens.css (T002)"
+# T003 must wait for both T001 and T002 to land before contact-hero-form.tsx can reference them.
+```
+
+## Implementation Strategy (Contact)
+
+Single increment — all 3 tasks (T001-T003) together are this slice's only deliverable (one
+self-contained additive card, per FR-039). Complete T001-T003, then T004 to verify, then stop. This
+completes User Story 9 in full (FR-039 and FR-040, the latter needing no code change); no other user
+story is affected.
+
+---
+
+# About
+
+**Page**: `/about` (User Story 7, spec.md). **Task IDs below restart at `T001`**, scoped to this
+`# About` heading only — see the numbering-convention note at the top of this file. Everything above
+this heading (Shared Foundation, Homepage, Careers, Contact) keeps its own original numbering and is
+unaffected.
+
+## Phase 1: Badge, Eyebrow & Culture-Gallery Grid Alignment (User Story 7 slice)
+
+**Input**: [plan.md](./plan.md) "About Us Page — Badge, Eyebrow & Culture-Gallery Grid Alignment
+(User Story 7)", [research.md](./research.md) §18-19, [data-model.md](./data-model.md)
+**Scope**: only the hero badge's dot, the page's eyebrow accent symbols, and the culture-photo
+gallery's grid — FR-032, FR-033, FR-034. No other About section (hero copy/CTAs, showcase image, Who
+You Are, Our Role, Values, 3-Step Plan, Achievements, If We Partner, closing CTA) and no other user
+story is in scope. No Setup/Foundational sub-phase — research.md §18-19 found no new tokens are
+needed (the culture gallery reuses `LifeGallery.tsx`'s already-shipped `careers` variant as-is).
+
+**Goal**: FR-032, FR-033, FR-034 — the hero badge shows no dot, every eyebrow on the page shows no
+leading accent symbol, and the culture-photo gallery renders via the shared `LifeGallery.tsx`
+component with its reference-exact uniform grid, matching `TechGrit About.dc.html`.
+
+**Independent Test**: Load `/about` and confirm the hero's "About TechGrit" badge shows no dot;
+confirm every eyebrow on the page ("Who you are", "Our role", "What we stand for", "How we work", "If
+we partner together") shows no leading dash; scroll to "Life at TechGrit" and confirm it renders 4
+equal-size photo tiles in a 4-column grid (collapsing to 2 then 1 at narrower widths) with no
+`tall`/`wide` mosaic spans, each tile showing a hover-reveal caption — independent of any other page.
+
+- [x] T001 [P] [US7] In `app/about/_components/about-us-hero.tsx`: remove the `<span
+  className="status-dot status-orange" />` from the "About TechGrit" badge (line 23) — the reference
+  badge has no dot at all (FR-032, research.md §18) — depends on nothing; different file from
+  T002-T006, safe to do in parallel. **Done.**
+- [x] T002 [P] [US7] Add `showAccent={false}` to the `<SectionEyebrow>` call in 5 files:
+  `about-how-we-work.tsx` (line 11), `about-us-our-role.tsx` (line 13), `about-us-partner.tsx` (line
+  12), `about-us-values.tsx` (line 48), `about-us-who-you-are.tsx` (line 12) (FR-033, research.md
+  §18) — depends on nothing; different files from T001/T003-T006, safe to do in parallel.
+  `about-us-culture-gallery.tsx`'s own `<SectionEyebrow>` call is excluded — T006 replaces that
+  section's entire eyebrow/heading markup. **Done.**
+- [x] T003 [P] [US7] In `app/_home-components/LifeGallery.tsx`: widen the `LifeGalleryImage` interface
+  field `src: string` to `src: string | null` (`MediaSlot` already renders a placeholder for a
+  null/undefined `src` — the type just hadn't caught up) (FR-034, research.md §19, data-model.md) —
+  depends on nothing; different file from T001/T002/T004-T005; must land before T006 references the
+  widened type. **Done. Also, found during implementation (not in the original task description)**:
+  the `careers`-variant caption overlay's label/figcaption elements were wrapped in JSX comments
+  (`{/* ... */}`), so `captionLabel`/`caption` never actually rendered on-screen for *any* consumer —
+  including Careers, which has carried this dormant gap since Careers Phase 4 (tasks.md). The overlay
+  wrapper `<div>` also had no `group-hover:opacity-100` (so it could never become visible) and no
+  background scrim (the reference's `linear-gradient(180deg, transparent, rgba(0,0,0,0.82))`).
+  Uncommented both elements, added `group-hover:opacity-100`, and added
+  `bg-[image:var(--gradient-testimonial-fade)]` — an exact-value existing token
+  (`--gradient-testimonial-fade`, `app/tokens.css` line 240), reused rather than duplicated — plus
+  `text-amber-light` in place of the commented code's hardcoded `text-[#F7B733]` (an exact-match
+  existing token, Principle I). This fix was necessary for About's culture gallery (which newly
+  depends on this code path) to render hover captions at all, matching
+  `TechGrit About.dc.html`/`TechGrit Careers.dc.html` exactly; it also fixes the same dormant gap on
+  `/careers`, which was previously verified by code-reading only, not live rendering (tasks.md
+  Careers Phase 2/5 notes). No visual change to `/`'s `home` variant (never sets `captionLabel`/
+  `caption`, so this block never rendered there either way).
+- [x] T004 [P] [US7] In `app/about/_data/types.ts`: on `CulturePhoto`, remove the `layout: "tall" |
+  "square" | "wide"` field and add two optional fields, `captionLabel?: string` and `caption?:
+  string` (FR-034, research.md §19, data-model.md) — depends on nothing; different file from
+  T001-T003; must land before T005 can populate the new fields. **Done.**
+- [x] T005 [US7] In `app/about/_data/about-us-content.ts`: update the `cultureGallery` section's 4
+  `photos` entries — replace every `image: null` with the same real images Careers' own
+  `LifeAtTechGritContent` already uses (`/assets/team/glasses.png`, `rooftop.png`, `painting.png`,
+  `diwali.png`) and add each photo's `captionLabel`/`caption` per the reference (glasses → "The team"
+  / "Builders and designers behind the engineering."; rooftop → "The office" / "Rooftop breaks, real
+  conversations."; painting → "Craft" / "We take craft seriously — inside & outside code."; diwali →
+  "Together" / "We celebrate wins — and Diwali — together.") (FR-034, research.md §19, data-model.md)
+  — depends on T004 (the `CulturePhoto` type must carry the new fields before this data can
+  type-check). **Done.** Real pixel dimensions read directly from each PNG's header (glasses
+  960×1280, rooftop 1024×768, painting 2048×1153, diwali 2048×1536) for `SectionImage.width/height`.
+- [x] T006 [US7] Rewrite `app/about/_components/about-us-culture-gallery.tsx`: remove its bespoke
+  eyebrow/heading/asymmetric-`1.4fr/1fr/1fr`-mosaic markup; map `section.photos` into
+  `LifeGalleryImage[]` (`src: photo.image?.url ?? null`, `alt: photo.image?.alternativeText ?? ""`,
+  `span: "default"`, `captionLabel: photo.captionLabel`, `caption: photo.caption`); render
+  `<LifeGallery variant="careers" heading={section.title} description={section.subtitle}
+  images={...} />` in place of the removed markup (FR-034, research.md §19, data-model.md) — depends
+  on T003 (needs the widened `src` type) and T005 (needs the updated content data); last edit in this
+  phase. **Done.**
+
+**Checkpoint**: the hero badge, every eyebrow, and the culture-photo gallery all match
+`TechGrit About.dc.html` exactly; every other About section is unchanged.
+
+---
+
+## Phase 2: Polish (About verification)
+
+- [x] T007 Run `npm run lint` and `npm run build` (both must stay green); confirm the server-rendered
+  `/about` HTML no longer contains a `status-dot` element inside the hero badge, that the 5 corrected
+  `SectionEyebrow` call sites render with no leading dash `<span>`, and that the culture-gallery
+  section's compiled markup matches `LifeGallery.tsx`'s `careers`-variant grid (`grid-cols-4` at
+  desktop) with 4 populated (non-placeholder) image tiles and per-tile captions present in the DOM.
+  Manually verify in a browser: the badge/eyebrow changes are visually silent (no layout shift), the
+  gallery grid collapses to 2 columns then 1 at the `tg-md`/`tg-sm` breakpoints with no leftover
+  tall/wide tiles, hovering each tile reveals its caption, and `/` and `/careers`'s own Life at
+  TechGrit galleries remain visually unchanged (confirming the `LifeGallery.tsx` widening introduced
+  no regression). **Done.** `npm run lint` and `npm run build` both green (all 18 routes, including
+  `/`, `/about`, `/careers`, prerender successfully). Server-rendered HTML confirmed via `curl` against
+  the running dev server: `/about` contains zero `status-dot` occurrences (was 1); zero remaining
+  `width:24px;height:2px` eyebrow accent-bar spans; zero `"Coming soon"` placeholder occurrences (all
+  4 gallery images are real); the gallery's compiled class list includes `grid-cols-4`,
+  `max-tg-md:grid-cols-2`, `max-tg-sm:grid-cols-1`, and `aspect-[3/4]`, with no leftover `1.4fr`
+  mosaic pattern (the page's only remaining `1.4fr` match is the unrelated shared Footer's
+  `data-foot-brand` grid); all 4 per-tile captions ("Builders and designers behind the engineering.",
+  etc.) present in the DOM after the §20 `LifeGallery.tsx` fix; no "Explore Careers"/"Meet the team"
+  buttons leak onto `/about` (`home`-variant-only). Cross-checked `/` and `/careers`: both still
+  render their own Life-at-TechGrit galleries correctly (`/`'s two action buttons still present;
+  `/careers`' captions now *also* render correctly, a side-effect fix — see §20) — zero regression
+  from the `LifeGalleryImage.src` widening or the caption-overlay fix. **Not verified interactively in
+  a real browser** — the Browser-pane tool could not navigate to the local dev server in this
+  environment (navigation denied), consistent with this same limitation noted throughout this file's
+  Careers/Contact polish tasks; verification here is via server-rendered markup, computed class-list
+  inspection, and a clean production build/type-check, not a driven UI/visual diff. Recommend a manual
+  pixel-diff pass against `TechGrit About.dc.html` in a real browser before merging, given this task's
+  explicit exact-parity requirement.
+
+---
+
+## Dependencies (About)
+
+- T001, T002, T003, T004 are mutually independent (four different files, no shared state) and can all
+  start immediately.
+- T005 depends on T004 (needs `CulturePhoto`'s new fields to exist before `about-us-content.ts` can
+  populate them).
+- T006 depends on T003 (needs the widened `LifeGalleryImage.src` type) and T005 (needs the updated
+  content data) — same file as no other task, last edit in this phase.
+- T007 runs last, after T001-T006.
+
+## Parallel Example (About)
+
+```bash
+# T001, T002, T003, and T004 touch 4 different files and can all run together:
+Task: "Remove status-dot span from about-us-hero.tsx (T001)"
+Task: "Add showAccent={false} to 5 SectionEyebrow call sites (T002)"
+Task: "Widen LifeGalleryImage.src to string | null (T003)"
+Task: "Remove CulturePhoto.layout, add captionLabel/caption (T004)"
+# T005 must wait for T004; T006 must wait for both T003 and T005.
+```
+
+## Implementation Strategy (About)
+
+Single increment — all 6 tasks (T001-T006) together are this slice's only deliverable (FR-032,
+FR-033, and FR-034 are three small, independent-but-bundled fixes surfaced by the same
+`/speckit.clarify` + `/speckit.plan` pass for User Story 7). Complete T001-T006, then T007 to verify,
+then stop. This completes User Story 7 in full; User Stories 2-6 remain out of scope.

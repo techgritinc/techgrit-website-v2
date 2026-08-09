@@ -102,3 +102,36 @@ display label (`roleTitle`) already captured on `ApplicationContext` at open tim
 
 No relationship changes — `LifeAtTechGritContent` still belongs 1:1 to `CareersPageContent`
 (`app/careers/_data/careers-data.ts`), unaffected by this addendum's field additions.
+
+---
+
+## Entity: `LifeGalleryImage.src` (widened) and `CulturePhoto` (revised — User Story 7, FR-034)
+
+**Companion to**: [plan.md](./plan.md), "About Us Page — Badge, Eyebrow & Culture-Gallery Grid
+Alignment (User Story 7)" | **Spec**: [spec.md](./spec.md), User Story 7, FR-034 | **Scope note**:
+presentation-only, same as above.
+
+`LifeGalleryImage` (`app/_home-components/LifeGallery.tsx`) — one field widened:
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `src` | `string \| null` (was `string`) | Yes (field present; value may be `null`) | Widened — `MediaSlot`, which every `LifeGalleryImage` renders through, already accepts and placeholder-renders a `null`/`undefined` `src`; this just lets the type express what the component already does. `Home`'s and Careers' existing data is unaffected (always a real string). |
+
+`CulturePhoto` (`app/about/_data/types.ts`) — used only by the About page's `cultureGallery` section,
+consumed after being mapped to `LifeGalleryImage[]` by `about-us-culture-gallery.tsx`:
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `image` | `SectionImage \| null` | Yes (field present; value may be `null`) | Unchanged shape. This dataset's *values* change from `null` (all 4) to the same 4 real images Careers already uses (`/assets/team/glasses.png`, `rooftop.png`, `painting.png`, `diwali.png`) — see research.md §19. |
+| `layout` | — | — | **Removed.** Was `"tall" \| "square" \| "wide"`, driving the now-replaced asymmetric mosaic; has no consumer once the section renders via `LifeGallery`'s `careers` variant (which ignores per-image span data — every tile is uniform `aspect-[3/4]`). |
+| `captionLabel` | `string` | No — new | Mirrors `LifeGalleryImage.captionLabel`. Populated with the reference's per-tile category label (e.g. "The team"), byte-identical to Careers' existing values for the same 4 photos. |
+| `caption` | `string` | No — new | Mirrors `LifeGalleryImage.caption`. Populated with the reference's per-tile caption text, byte-identical to Careers' existing values for the same 4 photos. |
+
+**Mapping** (`about-us-culture-gallery.tsx`): each `CulturePhoto` → `LifeGalleryImage` as `{ src:
+photo.image?.url ?? null, alt: photo.image?.alternativeText ?? "", span: "default", captionLabel:
+photo.captionLabel, caption: photo.caption }`. `span` is always `"default"` since the `careers`
+variant ignores it regardless of value — the field is set only because `LifeGalleryImage`'s type
+still requires it.
+
+No relationship changes — `CulturePhoto` still belongs 1:1 to `CultureGallerySection`
+(`app/about/_data/about-us-content.ts`), unaffected beyond this addendum's field changes.

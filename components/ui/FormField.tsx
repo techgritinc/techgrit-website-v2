@@ -10,9 +10,11 @@ type FormFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "classN
   multiline?: boolean;
   rows?: TextareaHTMLAttributes<HTMLTextAreaElement>["rows"];
   inputClassName?: string;
+  /** When provided, completely replaces the default INPUT_BASE styles instead of appending. */
+  inputBaseClassName?: string;
 };
 
-const INPUT_BASE =
+export const INPUT_BASE =
   "w-full rounded-[10px] border bg-glass-strong px-4 py-3.5 text-base sm:text-sm leading-[normal] font-normal text-primary outline-none transition-colors placeholder:!font-light focus:bg-glass-hover focus:border-border-orange-strong";
 
 /** Shared labeled input primitive (FR-015) for the subscribe form; `multiline` renders a textarea instead. */
@@ -23,6 +25,7 @@ export default function FormField({
   containerClassName,
   labelClassName,
   inputClassName,
+  inputBaseClassName,
   type = "text",
   multiline = false,
   rows = 4,
@@ -30,6 +33,8 @@ export default function FormField({
 }: FormFieldProps) {
   const id = useId();
   const errorId = `${id}-error`;
+
+  const base = inputBaseClassName ?? INPUT_BASE;
 
   return (
     <div className={containerClassName}>
@@ -49,7 +54,13 @@ export default function FormField({
           rows={rows}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
-          className={[INPUT_BASE, "border-border-strong resize-none", inputClassName].filter(Boolean).join(" ")}
+          className={[
+            base,
+            inputBaseClassName ? undefined : "border-border-strong resize-none",
+            inputClassName,
+          ]
+            .filter(Boolean)
+            .join(" ")}
           {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)}
         />
       ) : (
@@ -58,7 +69,9 @@ export default function FormField({
           type={type}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
-          className={[INPUT_BASE, "border-border-strong", inputClassName].filter(Boolean).join(" ")}
+          className={[base, inputBaseClassName ? undefined : "border-border-strong", inputClassName]
+            .filter(Boolean)
+            .join(" ")}
           {...rest}
         />
       )}

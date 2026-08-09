@@ -4,32 +4,30 @@ import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
 export function AboutUsWhoYouAre({ section }: { section: WhoYouAreSection }) {
   return (
-    <section className="section">
-      <div className="tg-container-lg">
+    <section className="relative">
+      <div className="mx-auto max-w-[1180px] px-[36px] py-[60px]">
         <RevealOnScroll>
-          <div className="grid grid-cols-1 items-center gap-9 md:grid-cols-[1fr_0.85fr] md:gap-15">
+          <div className="grid grid-cols-[1fr_0.85fr] gap-[60px] max-[920px]:grid-cols-1 max-[920px]:gap-[36px] items-center">
             <div>
-              <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-              <h2
-                className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-about-h2-xl)]"
-                style={{ lineHeight: 1.08 }}
-              >
+              <SectionEyebrow showAccent={false} className="!flex">
+                {section.eyebrow}
+              </SectionEyebrow>
+              <h2 className="text-[clamp(30px,3.6vw,40px)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
                 {section.title}
               </h2>
               {section.paragraphs.map((paragraph, index) => {
-                const marginTop = index === 0 ? 20 : 16;
                 if (!paragraph.highlight) {
                   return (
-                    <p key={index} style={{ marginTop, lineHeight: 1.7 }}>
+                    <p key={index} className={`text-[17px] leading-[1.7] text-white/70 ${index === 0 ? "mt-[20px]" : "mt-[16px]"}`}>
                       {paragraph.text}
                     </p>
                   );
                 }
                 const [before, after] = paragraph.text.split(paragraph.highlight);
                 return (
-                  <p key={index} style={{ marginTop, lineHeight: 1.7 }}>
+                  <p key={index} className={`text-[17px] leading-[1.7] text-white/70 ${index === 0 ? "mt-[20px]" : "mt-[16px]"}`}>
                     {before}
-                    <strong style={{ color: "var(--color-text-primary)", fontWeight: "var(--fw-bold)" }}>
+                    <strong className="font-bold text-white">
                       {paragraph.highlight}
                     </strong>
                     {after}
@@ -37,52 +35,23 @@ export function AboutUsWhoYouAre({ section }: { section: WhoYouAreSection }) {
                 );
               })}
             </div>
-            <div
-              className="card rounded-xl"
-              style={{ borderLeft: "3px solid var(--color-orange)", padding: "var(--space-14) var(--space-14a)" }}
-            >
-              <div
-                style={{
-                  marginBottom: "var(--space-7)",
-                  fontSize: "var(--text-2xs-lg)",
-                  fontWeight: "var(--fw-bold)",
-                  letterSpacing: "var(--ls-widest)",
-                  textTransform: "uppercase",
-                  color: "var(--color-text-muted)",
-                }}
-              >
+            <div className="rounded-[18px] border border-white/10 border-l-[3px] border-l-orange bg-white/4 px-[32px] py-[34px] backdrop-blur-[8px]">
+              <div className="mb-[18px] text-[13px] font-bold uppercase leading-normal tracking-[1.3px] text-white/55">
                 {section.concernsCard.label}
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-[16px]">
                 {section.concernsCard.concerns.map((concern, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <span
-                      className="flex flex-shrink-0 items-center justify-center"
-                      style={{
-                        width: 30,
-                        height: 30,
-                        borderRadius: 9,
-                        background: "var(--color-overlay-orange)",
-                        color: "var(--color-amber-light)",
-                        fontWeight: "var(--fw-bold)",
-                      }}
-                    >
+                  <div key={index} className="flex items-center gap-[13px]">
+                    <span className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[9px] bg-overlay-orange font-bold text-amber-light">
                       ?
                     </span>
-                    <span className="font-semibold" style={{ color: "var(--color-text-primary)" }}>
+                    <span className="text-[16px] font-semibold text-white">
                       {concern}
                     </span>
                   </div>
                 ))}
               </div>
-              <p
-                className="mt-6 pt-5 font-semibold"
-                style={{
-                  borderTop: "1px solid var(--color-border)",
-                  color: "var(--color-text-primary)",
-                  fontSize: "var(--text-md)",
-                }}
-              >
+              <p className="mt-[24px] border-t border-white/10 pt-[20px] text-[16px] font-semibold leading-[1.6] text-white">
                 {section.concernsCard.closingStatement}
               </p>
             </div>
