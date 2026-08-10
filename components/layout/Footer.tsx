@@ -42,7 +42,6 @@ export default function Footer() {
               alt="TechGrit"
               width={132}
               height={44}
-              unoptimized
               className="mb-[22px] block h-[44px] w-auto"
             />
             <p className="mb-[24px] text-[15.5px] leading-[1.6] text-text-66">{FOOTER_BRAND_DESCRIPTION}</p>
