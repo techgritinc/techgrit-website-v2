@@ -700,4 +700,420 @@ Task: "Rewrite IndustriesSection.tsx: icon badges, no photo, Construction-only l
 Complete T049-T050 (independent, parallelizable), then T051/T052 (each depends on one of the first
 group), then T053, then T054, then T055 to verify. The remaining pieces of User Story 1 (Testimonials,
 Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass
-each. `/construction`'s own FR-016–FR-021 work is unaffected and unplanned by this phase.
+each — unless already covered below.
+
+## Phase 12: Homepage Testimonials Section (Phase 2 addendum, User Story 1 slice)
+
+Scope: only `app/_home-components/TestimonialsSection.tsx`, `app/_home-components/home-data.ts`
+(FR-009, FR-009a) — NOT any other homepage section, NOT any other page.
+
+- [ ] T056 [P] Add `QuoteIcon` to `components/ui/icons.tsx` (the reference's quotation-mark path,
+  `TechGrit Homepage.dc.html` lines 646/673: `M9 6C4.5 6 2 10 2 15v11h11V15H6.5c0-3 1.5-5 4.5-5V6zm18
+  0c-4.5 0-7 4-7 9v11h11V15h-6.5c0-3 1.5-5 4.5-5V6z`), following the file's existing
+  `IconProps`/`{...props}`-last convention — `ClockIcon`/`CheckIcon` (both already exist) are reused via
+  prop overrides, not modified.
+- [ ] T057 [P] Add 7 new tokens to `app/tokens.css`, each in its existing numbered section:
+  `--gradient-testimonial-card` (§ Gradients, text-card resting background), `--gradient-testimonial-edge-left`
+  (§ Gradients, track's new left-side fade), `--shadow-testimonial-hover-video` and
+  `--shadow-testimonial-hover-text` (§ Shadows, per-card-type hover shadow shapes),
+  `--shadow-testimonial-avatar` (§ Shadows, text-card avatar shadow), `--color-badge-ink-40`
+  (§ Ink-scale, duration-badge pill background), and `--radius-16: 16px` (§ Radii, numbered tier —
+  deliberately not a reuse of the single-job-annotated `--radius-tile`). **Also correct** the existing
+  `--gradient-testimonial-video`'s first color stop from `rgba(232,119,34,0.92)` to the reference's
+  exact `rgba(232,119,34,0.88)` (`/speckit.analyze` finding
+  H1 — this value change belongs here, in the tokens task, not inside T060's component edit; its second
+  stop already matches and is unchanged). **Also rename** the existing `--color-badge-ink-45` to
+  `--color-badge-ink-50`, correcting its value from `rgba(0,0,0,0.45)` to the reference's actual
+  `rgba(0,0,0,0.50)` (its sole consumer is corrected in T060).
+- [ ] T057a [P] Add a required `id` field to `Testimonial` in `app/_home-components/home-data.ts`,
+  populated for all 6 `TESTIMONIALS` entries (`/speckit.analyze` finding C2 — Constitution Principle
+  III, "Stable identity for repeated content": both of `TestimonialsSection.tsx`'s `.map()` render sites
+  currently key on `testimonial.name`, display text, with no `id`/`slug` field to key on instead — the
+  same gap this feature already fixed for `DeliveryStat`/`TrustedClientLogo` via `T007a`). Independent of
+  T056/T057 (different file); T059 depends on it to re-key both call sites.
+- [ ] T058 Map T057's 7 new/corrected tokens plus the renamed `--color-badge-ink-50` into
+  `app/globals.css`'s `@theme inline` block (removing the stale `--color-badge-ink-45` mapping key), so
+  `bg-badge-ink-40`/`bg-badge-ink-50`, `hover:shadow-testimonial-hover-video`/`-text`,
+  `shadow-testimonial-avatar`, and `rounded-16` all become canonical Tailwind utilities; the 2 gradient
+  tokens are consumed via the existing arbitrary-property pattern already used for
+  `--gradient-testimonial-video`/`-fade`/`-edge`/`-placeholder` (no bare utility equivalent for a
+  gradient value) — the corrected `--gradient-testimonial-video` value flows through its existing
+  mapping unchanged.
+- [ ] T059 In `app/_home-components/TestimonialsSection.tsx`, restructure the header: replace the single
+  centered block with a flex row — a left-aligned text column (eyebrow, `h2`, paragraph, all inside a
+  shared `max-w-[640px]` wrapper, dropping the paragraph's current `text-center mx-auto max-w-[520px]`)
+  on the left, and a new trust-metrics card on the right (3 stat cells — 500+ Projects delivered / 100%
+  Would refer / 6wk Avg. time to value — separated by 2 vertical dividers, defined as a local array in
+  this file with its own `id` field per cell (`/speckit.analyze` finding L1 — keyed on `id`, not label
+  text, from the start, since this is a new `.map()`-rendered list), using
+  `border-border-8`/`bg-glass-3`/`blur-md`/`rounded-16`/`space-8`/`space-11` and the `border-border-14`
+  divider, all exact-match reused tokens), wrapping below the text column via normal `flex-wrap` at
+  narrow widths (no absolute positioning). Also re-key both of this file's `TESTIMONIALS.map()` render
+  sites from `key={testimonial.name}` to `key={testimonial.id}` (T057a).
+- [ ] T060 [P] [US1] In the same file's **video card**, add a duration badge (reusing `ClockIcon` at
+  `width={10} height={10} strokeWidth={2.5}` + "2:14" text in `text-bright`/`text-3xs`, on a
+  `bg-badge-ink-40` pill) next to the existing VIDEO label; add a 5-star rating row (`/speckit.analyze`
+  finding C1 — this card has **no** star-rating markup today, unlike the text card; render 5 static
+  white stars with the reference's subtle `text-shadow`, independent of the `rating` field, which video
+  entries don't set); correct the VIDEO label pill's background class from `bg-badge-ink-45` to
+  `bg-badge-ink-50` (T057's rename); correct the card's border class from `border-border-orange` (0.38)
+  to `border-border-orange-45` (0.45, exact reference match) — the video-gradient background's opacity
+  correction is already handled by T057, this task only consumes the corrected token; add
+  `hover:shadow-testimonial-hover-video` alongside the existing `hover:-translate-y-1.5`; add a decorative
+  `QuoteIcon` (T056) at the reference's video-card size/position/opacity/color (76px, `fill-white`,
+  `opacity-14`). No verified badge is added to this card.
+- [ ] T061 [P] [US1] In the same file's **text card**, add a verified badge (reusing `CheckIcon` at
+  `width={11} height={11}` + "Verified" label in `text-green`/`text-3xs`/`tracking-wider`, positioned in
+  the same row as the existing star rating via `justify-between`); add `hover:border-border-orange-medium`
+  and `hover:shadow-testimonial-hover-text` alongside the existing `hover:-translate-y-1.5`; add
+  `shadow-testimonial-avatar` to the avatar circle (background gradient unchanged — already correct);
+  correct the card's background from flat `bg-glass-4` to the new `bg-[image:var(--gradient-testimonial-card)]`
+  gradient (T057); add a decorative `QuoteIcon` (T056) at the reference's text-card size/position/opacity/
+  color (110px, `fill-orange`, `opacity-06`). No duration badge or play affordance is added to this card.
+- [ ] T062 [US1] In the same file, add the new `--gradient-testimonial-edge-left` fade as a second edge
+  overlay (left side, alongside the existing unchanged right-side `--gradient-testimonial-edge` fade);
+  update the drag pointer handlers — `onPointerDown` now also sets the track's cursor to `grabbing` and
+  `scrollSnapType` to `"none"`; `endDrag` (pointer-up/leave) now also reverts both to `grab`/`"x proximity"` —
+  matching the reference's `_setupTestiDrag` exactly, in addition to the existing `scrollLeft`-based drag
+  logic.
+- [ ] T063 Run `npm run lint` + `npm run build`; browser-verify the header's left-alignment (including the
+  paragraph) and the metrics card's position/wrap behavior, each card type's new elements per the
+  reference-exact per-card-type split (video: duration badge + star rating + quote icon, no verified
+  badge; text: verified badge + quote icon, no duration badge), each card type's distinct hover shadow,
+  the avatar's new shadow, both edge fades (confirm the left one reads visibly lighter/narrower than the
+  right), and the drag cursor/scroll-snap-toggle behavior (grab→grabbing while held, snap suspended
+  mid-drag, restored on release). Confirm `--color-badge-ink-50`'s only consumer is this file, and that
+  both `.map()` sites over `TESTIMONIALS` now key on `testimonial.id`, not `testimonial.name`.
+
+## Dependencies (Testimonials Section)
+
+- T056 (icons.tsx), T057 (tokens.css), and T057a (home-data.ts) are mutually independent (different
+  files) but each blocks later tasks: T056 blocks T060/T061 (import `QuoteIcon`); T057 blocks T058 (maps
+  its new/renamed/corrected tokens) and T059-T062 (consume the new canonical classes); T057a blocks T059
+  (re-keys the `.map()` sites on `testimonial.id`).
+- T058 depends on T057.
+- T059 depends on T057/T058 (consumes `border-border-8`/`bg-glass-3`/`blur-md`/`rounded-16`/etc.) and
+  T057a (re-keying).
+- T060 and T061 are independent of each other (different card-type branches in the same file's `.map()`
+  callback) but both depend on T056 (icon import) and T058 (canonical classes) — run sequentially against
+  the same file to avoid edit conflicts, not truly parallel despite touching different JSX branches.
+- T062 depends on T057/T058 (the new left-edge gradient class) and is otherwise independent of T060/T061's
+  card-level changes.
+- T063 runs last, after T056-T062 (and T057a).
+
+## Parallel Example (Testimonials Section)
+
+```bash
+# T056 (icons.tsx), T057 (tokens.css), and T057a (home-data.ts) can all run together — different files:
+Task: "Add QuoteIcon to components/ui/icons.tsx (T056)"
+Task: "Add 7 new tokens + 1 value correction + 1 rename to app/tokens.css (T057)"
+Task: "Add required id field to Testimonial in home-data.ts (T057a)"
+# Then T058 (globals.css), then the TestimonialsSection.tsx edit chain runs sequentially:
+Task: "Map new/renamed tokens into globals.css @theme inline (T058)"
+Task: "TestimonialsSection.tsx edit chain: T059 -> T060 -> T061 -> T062"
+```
+
+## Implementation Strategy (Testimonials Section)
+
+Complete T056-T057/T057a (independent, parallelizable), then T058 (depends on T057), then the
+sequential T059-T062 chain (all touch the same file), then T063 to verify. The remaining pieces of User
+Story 1 (Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan`
+pass each. `/construction`'s own FR-016–FR-021 work is unaffected and unplanned by this phase.
+
+## Phase 13: Homepage Blog Teaser Section (Phase 2 addendum, User Story 1 slice)
+
+Scope: new `app/_home-components/BlogSection.tsx`, `components/ui/icons.tsx`, `components/ui/GlassCard.tsx`,
+`app/tokens.css`/`globals.css`, `app/page.tsx` (FR-010) — NOT any other homepage section, NOT
+`app/blog/_data/blog-content.ts` or any other `/blog` file, NOT any other page.
+
+- [X] T064 [P] **Revised during implementation**: no new icons needed. `components/ui/icons.tsx`
+  already has `CopilotToAgenticIcon`, `EradicateDebtIcon`, and `InfiniteScalabilityIcon` — added for
+  the Re-Imagine grid, unused since FR-007 replaced them with a shared sparkle icon — and their SVG
+  paths are byte-identical to the reference's 3 Blog-card decorative icons (`TechGrit Homepage.dc.html`
+  lines 789/801/813). Adding 3 new `Blog*Icon` exports would have duplicated these shapes verbatim, a
+  Principle III violation. `BlogSection.tsx` (T068) imports and reuses all 3 as-is, overriding
+  `width`/`height` to 72 and `stroke` to `var(--color-icon-stroke)` via prop spread (matching the
+  hardcoded-stroke convention already used by `case-study-detail-hero.tsx`/`featured-case-study.tsx`).
+  **Done.**
+- [X] T065 [P] Add 15 new tokens to `app/tokens.css`, each in its existing numbered section (see
+  research.md §16 for the full list and reference line numbers): `--gradient-blog-teaser-orange`/`-blue`/
+  `-teal` (§ Gradients), `--color-glow-white-18`, `--color-border-blue-55`, `--color-border-teal-60`
+  (§ Borders & Glass), `--color-text-35` (§ Text Colors), `--text-blog-meta`, `--ls-blog-meta`
+  (§ Typography — both deliberately dedicated, not reusing the value-close `--text-2xs` or the
+  single-job-annotated `--ls-hint`), and `--shadow-blog-teaser-orange`/`-blue`/`-teal` +
+  `-orange-hover`/`-blue-hover`/`-teal-hover` (§ Shadows). Card 1's hover border
+  (`--color-hover-orange-border-55`) and its header-gradient first stop's numeric coincidence with
+  `--color-overlay-orange-strong` need no new token — reused/noted, not duplicated.
+- [X] T066 Map T065's 15 new tokens into `app/globals.css`'s `@theme inline` block (the 3 gradients via
+  the existing arbitrary-property pattern already used for `--gradient-testimonial-*`; the rest as
+  canonical utilities — `bg-glow-white-18`, `border-border-blue-55`, `border-border-teal-60`, `text-35`,
+  `text-blog-meta`, `tracking-blog-meta`, `shadow-blog-teaser-orange`/`-blue`/`-teal`,
+  `hover:shadow-blog-teaser-orange-hover`/`-blue-hover`/`-teal-hover`). **Also add** 2 previously-missing
+  mappings for pre-existing, unrelated tokens this section's own markup needs —
+  `--spacing-tg-6: var(--space-6);` (16px) and `--spacing-tg-10: var(--space-10);` (24px) — neither had a
+  canonical `@theme inline` entry before now (research.md §16). Depends on T065 (same file, sequential).
+- [X] T067 [P] Add a new `"blogTeaser"` member to `GlassCard.tsx`'s `GlassCardVariant` union and a
+  matching entry in each of its 4 `Record`s: `CARD_VARIANTS.blogTeaser` (`"flex flex-col overflow-hidden
+  rounded-2xl border-border-image bg-glass-4 hover:-translate-y-[6px]"` — `bg-glass-4`/`border-border-image`
+  are exact-match reused tokens), `ICON_VARIANTS.blogTeaser` (`"h-18 w-18"` — Tailwind's own canonical
+  72px default, no new token needed), `TITLE_VARIANTS.blogTeaser` (`"mt-tg-4 text-[19px] font-bold
+  text-white leading-[1.32]"`), `DESC_VARIANTS.blogTeaser` (`"mt-tg-3 text-[14.5px] leading-[1.6]
+  text-muted"` — `text-muted` added explicitly, per the same silent-inheritance lesson already applied to
+  the Industries variant). Distinct from the existing `"blogCard"`/`"blogFeatured"` variants (different
+  shape, not a fork of either — neither's own `Record` entries change). Independent of T064/T065/T066
+  (different file).
+- [X] T068 [US1] Create new `app/_home-components/BlogSection.tsx`: a local `BLOG_TEASER_POSTS` array of
+  3 entries (each with its own `id` field from the start, per this feature's established Principle III
+  stable-identity convention), holding the reference's literal topic/title/excerpt/read-time/icon/
+  per-card-color-class fields verbatim (research.md §16 — content is static/reference-exact, not a
+  dynamic pull from `app/blog/_data/blog-content.ts`). The outer `<section>` wrapper uses
+  `max-w-(--container-max) px-9 pt-tg-21 pb-20` (matching the reference's `max-width:1280px;
+  padding:60px 36px 80px` — all already-canonical classes, no new token needed), the same container
+  convention `IndustriesSection`/`TestimonialsSection` already use. Renders a left-aligned hand-rolled
+  eyebrow ("From the blog") + `h2` ("Perspectives on AI-first delivery.", using `LifeGallery.tsx`'s existing
+  `text-[clamp(30px,3.6vw,42px)]` clamp) alongside a right-aligned ghost `<Button href="/blog"
+  variant="ghost">` ("Visit the blog" + arrow), in the same header row shape `IndustriesSection.tsx`
+  already establishes; below, a 3-card grid (`grid-cols-3 gap-6 max-tg-md:grid-cols-1`), each card a
+  plain `<a href="/blog">` (matching `IndustriesSection.tsx`'s own whole-card-link convention exactly —
+  no `style={{ display: "contents" }}` needed, since the `<a>` is itself the direct grid child here)
+  wrapping a `<GlassCard variant="blogTeaser">` (T067) with a 190px gradient/icon header block, a
+  radial-highlight overlay, and a body (topic/dot/read-time meta row, title, description, "Read more →"
+  link) — see plan.md's "Homepage Blog Teaser Section (FR-010)" for the full per-element class
+  breakdown. Depends on T064 (icons — revised to reuse `CopilotToAgenticIcon`/`EradicateDebtIcon`/
+  `InfiniteScalabilityIcon`), T066 (tokens/mappings), and T067 (GlassCard variant). **Done.**
+- [X] T069 [US1] Render `<BlogSection />` in `app/page.tsx` between `<CaseStudiesSection />` and
+  `<LifeGallery />`, matching the reference's own document order (Testimonials → Case Studies →
+  home-blogs → Inside TechGrit). Depends on T068. **Done.**
+- [X] T070 Run `npm run lint` + `npm run build`; browser-verify the section's left-aligned eyebrow/heading,
+  the right-aligned ghost button (22px/15px padding, 52px min-height) linking to `/blog`, all 3 cards'
+  per-card gradient header/icon/topic-color/hover-border/hover-shadow, that clicking anywhere on a card
+  (not just its "Read more" text) navigates to `/blog`, that the 3 cards' content matches the reference
+  verbatim (not any of the 9 real `/blog` posts), and that the section sits between the homepage's Case
+  Studies preview and Life at TechGrit with no other section shifted. Confirm `app/blog/_data/blog-content.ts`
+  and every `/blog` file are unchanged.
+
+## Dependencies (Blog Teaser Section)
+
+- T064 (icons.tsx) and T065 (tokens.css) are mutually independent (different files) but each blocks later
+  tasks: T064 blocks T068 (imports the 3 new icons); T065 blocks T066 (maps its new tokens).
+- T066 depends on T065, and in turn blocks T068 (which consumes T066's canonical classes, not
+  `tokens.css`'s raw custom properties directly).
+- T067 is independent of T064/T065/T066 (different file) but blocks T068 (consumes the new `"blogTeaser"`
+  variant).
+- T068 depends on T064, T066, and T067.
+- T069 depends on T068.
+- T070 runs last, after T064-T069.
+
+## Parallel Example (Blog Teaser Section)
+
+```bash
+# T064 (icons.tsx), T065 (tokens.css), and T067 (GlassCard.tsx) can all run together — different files:
+Task: "Add 3 new decorative icons to components/ui/icons.tsx (T064)"
+Task: "Add 15 new tokens to app/tokens.css (T065)"
+Task: "Add new blogTeaser variant to components/ui/GlassCard.tsx (T067)"
+# Then T066 (globals.css, depends on T065), then the sequential chain:
+Task: "Map new tokens + 2 missing spacing mappings into globals.css @theme inline (T066)"
+Task: "Create BlogSection.tsx (T068) -> render in page.tsx (T069) -> verify (T070)"
+```
+
+## Implementation Strategy (Blog Teaser Section)
+
+Complete T064/T065/T067 (independent, parallelizable), then T066 (depends on T065), then T068 (depends
+on T064/T066/T067), then T069 (depends on T068), then T070 to verify. The remaining pieces of User
+Story 1 (Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass each.
+
+## Phase 14: Homepage Life at TechGrit Section (Phase 2 addendum, User Story 1 slice)
+
+**Input**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Life at TechGrit Section (FR-011)",
+[spec.md](./spec.md) FR-011/FR-044, Clarifications Session 2026-08-06. [research.md](./research.md) §17
+has the full token reuse/no-new-token accounting.
+
+**Scope**: `app/_home-components/LifeGallery.tsx`'s `home` branch only, `app/_home-components/
+home-data.ts` (`CULTURE_GALLERY_IMAGES` caption content), and 2 new tokens in `app/tokens.css`/
+`globals.css` (FR-011) — NOT the `careers` branch of the same file, NOT `/careers` (which must render
+with zero visual change), NOT `components/ui/section-eyebrow.tsx` itself, NOT any other homepage
+section, NOT `app/page.tsx`.
+
+**Goal**: FR-011 — the "Inside TechGrit" eyebrow renders with no leading accent line, the photo grid
+matches the reference's uniform 4-column bordered/captioned layout, and the two action buttons (already
+correct from Phase 1) are confirmed unchanged.
+
+- [X] T071 [P] [US1] Recreate `app/_home-components/LifeGallery.tsx` byte-for-byte from the teammate's
+  supplied unmerged-branch structure — the `variant`/`columns`-based component, `LifeGalleryImage` gaining
+  optional `captionLabel`/`caption` fields, the `careers` branch's aspect-`3/4` bordered tile shell with
+  its caption-rendering block left commented out exactly as supplied, and `scroll-mt-[96px]` on the
+  `<section>` — establishing the merge-conflict-free baseline this addendum's own edits (T075) layer on
+  top of (spec.md Clarifications, Session 2026-08-06; plan.md "Homepage Life at TechGrit Section
+  (FR-011)"). Independent of T072/T074 (different files) — blocks T074 and T075. **Revised during
+  implementation** (direct instruction, discovered mid-recreation): the teammate's pasted `careers`
+  eyebrow hardcoded a raw `text-[#E87722]` hex and a `text-[rgba(255,255,255,0.66)]` literal — both
+  duplicate existing tokens (`--color-orange`, `--color-text-66`) and would have been a fresh Principle I
+  violation. Recreated using the canonical `text-orange`/`text-text-66` classes instead (same resolved
+  color, zero visual difference) — every other byte of the `careers` branch is unchanged from the
+  supplied structure. **Done.**
+- [X] T072 [P] Add 2 new tokens to `app/tokens.css`, each in its existing numbered section (research.md
+  §17): `--gradient-life-cap: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.82));` (§ Gradients —
+  deliberately dedicated, not a reuse of the value-identical but differently-annotated
+  `--gradient-testimonial-fade`) and `--ls-life-cap: 0.14em;` (§ Typography — likewise dedicated, not a
+  reuse of the value-identical `--ls-hint`/`--ls-blog-meta`, both already single-job-annotated). Independent
+  of T071. **Done.**
+- [X] T073 Map T072's 2 new tokens into `app/globals.css`'s `@theme inline` block: `--gradient-life-cap`
+  via the existing arbitrary-property pattern already used for `--gradient-testimonial-*`/`--gradient-
+  blog-teaser-*` (`bg-[image:var(--gradient-life-cap)]`), `--ls-life-cap` as a canonical `tracking-life-cap`
+  utility. Depends on T072 (same file, sequential). **Revised during implementation**: `--gradient-life-cap`
+  itself needs no `@theme inline` entry — confirmed `--gradient-testimonial-fade`/`--gradient-blog-teaser-*`
+  have none either, since composite gradients are consumed directly via `bg-[image:var(--token)]`, not a
+  bare utility; only `--tracking-life-cap: var(--ls-life-cap);` was added. **Done.**
+- [X] T074 [P] [US1] Populate the (post-T071) `captionLabel`/`caption` fields on all 4
+  `CULTURE_GALLERY_IMAGES` entries in `app/_home-components/home-data.ts` with the reference's literal
+  per-tile text (research.md §17): `glasses.png` → `"The team"` / `"Builders and designers behind the
+  engineering."`; `rooftop.png` → `"The office"` / `"Rooftop breaks, real conversations."`; `painting.png`
+  → `"Craft"` / `"We take craft seriously — inside & outside code."`; `diwali.png` → `"Together"` /
+  `"We celebrate wins — and Diwali — together."`. The `span` field is left in place, unused by the
+  rewritten `home` branch (T075) but still read by the untouched `careers` branch. **Also**
+  (`/speckit.analyze` finding C1) — add a required `id: string` field to `CultureGalleryImage` and
+  populate it for all 4 entries (`"glasses"`, `"rooftop"`, `"painting"`, `"diwali"`), closing a
+  pre-existing Principle III stable-identity gap (today's `.map()` keys on `` `${item.src}-${index}` ``,
+  a derived stopgap) at the exact point T075 re-wires this render — the same fix this feature already
+  applied to `DeliveryStat`, `TrustedClientLogo`, and `Testimonial`. **Also** (`/speckit.analyze` finding
+  M1) — correct the `LifeGalleryImage` interface's 2 doc comments inherited from T071's recreation
+  ("Careers-only... Left `undefined` for `home`"), which become stale once `home` populates and renders
+  these fields; reworded to describe both fields as populated for both variants. Depends on T071 (the
+  `captionLabel`/`caption`/`id` fields must exist on the type first); independent of T072/T073 (different
+  file). **Done.**
+- [X] T075 [US1] Rewrite `LifeGallery.tsx`'s `home` branch only (`careers` branch, its `SPAN_CLASSES` map,
+  and every other code path from T071's baseline stay untouched): replace the hand-rolled eyebrow markup
+  (accent-line `<span>` + text `<span>`) with `<SectionEyebrow showAccent={false}>Inside
+  TechGrit</SectionEyebrow>`; replace `gridColsClass`/`auto-rows-[200px]`/span-driven tiles with
+  `grid grid-cols-4 gap-tg-6 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1`; rewrite each tile as
+  `<figure className="group relative m-0 aspect-3/4 overflow-hidden rounded-xl border-border-8 bg-glass-3
+  transition-transform duration-300 hover:-translate-y-1">` containing `MediaSlot` (sizes:
+  `"(max-width: 960px) 50vw, 25vw"`) plus a `<figcaption>` caption overlay
+  (`bg-[image:var(--gradient-life-cap)]`, `px-tg-7 pt-tg-9 pb-tg-7`, `opacity-0 group-hover:opacity-100`,
+  `translate-y-1.5 group-hover:translate-y-0`) rendering `item.captionLabel` (`text-11 tracking-life-cap
+  text-amber-light uppercase`) and `item.caption` (`text-xs leading-[1.35] text-white`) — see plan.md's
+  "Homepage Life at TechGrit Section (FR-011)" for the full per-element class breakdown. The `.map()`
+  call itself keys on `item.id` (T074's new field, `/speckit.analyze` finding C1), not
+  `` `${item.src}-${index}` ``. Depends on T071 (baseline), T073 (tokens mapped into `globals.css`), and
+  T074 (caption content + `id` field populated). **Revised during implementation**: since both variants
+  now render a fixed grid shape (no more `columns`-driven column count or span-based sizing for `home`),
+  `gridColsClass`, `cellRadiusClass`, and the module-level `SPAN_CLASSES` map became dead code and were
+  removed; `columns` stays in `LifeGalleryProps` (undestructured) purely for backward compatibility with
+  `careers/page.tsx`'s existing `columns={4}` call. **Done.**
+- [X] T076 Run `npm run lint` + `npm run build`; browser-verify the "Inside TechGrit" eyebrow shows no
+  leading accent line, the grid shows a uniform 4-tile row (2 cols at `md`, 1 col at `sm`) with each tile
+  bordered/aspect-locked, hovering a tile reveals its category label + caption with a lift, the two action
+  buttons are unchanged, and — critically — `/careers`'s own Life at TechGrit section renders with zero
+  visible difference from before this phase (its `careers` branch was only byte-recreated in T071, never
+  edited). Confirm React DevTools (or the rendered DOM) shows both `CULTURE_GALLERY_IMAGES` tiles keyed on
+  `item.id`, not `` `${item.src}-${index}` `` (`/speckit.analyze` finding C1). **Done** — `npm run lint`
+  and `npm run build` both green; DOM inspection on `/` confirmed 4 equal `286.25px` columns/`16px` gap,
+  each tile `18px` radius/`3:4` aspect-ratio/`rgba(255,255,255,0.08)` border/`rgba(255,255,255,0.03)`
+  background, the eyebrow rendering as plain `.eyebrow`-styled text with no accent-line element, and all 4
+  captions' label/text content present with `opacity-0`/`group-hover:opacity-100` wiring intact; DOM
+  inspection on `/careers` confirmed its own gallery (4 tiles, `18px` radius, `3:4` aspect-ratio, hand-rolled
+  eyebrow, no `<figcaption>` element) is byte-identical to before this phase.
+
+**Known, deliberately-deferred delta** (`/speckit.analyze` finding L1, not a task in this phase): the
+recreated `careers` branch's own tile radius (`rounded-[20px]`) doesn't match the reference's `18px` — a
+pre-existing mismatch in the teammate's unmerged code, correctly out of this phase's FR-011 scope.
+Recorded here for a future Careers-page pass, not silently dropped.
+
+## Dependencies (Life at TechGrit Section)
+
+- T071 (baseline recreation) and T072 (tokens.css) are mutually independent (different files), but T071
+  blocks T074 and T075; T072 blocks T073.
+- T073 depends on T072, and in turn blocks T075 (which consumes the canonical `tracking-life-cap`/
+  `bg-[image:var(--gradient-life-cap)]` classes).
+- T074 depends on T071; independent of T072/T073.
+- T075 depends on T071, T073, and T074.
+- T076 runs last, after T071-T075.
+
+## Parallel Example (Life at TechGrit Section)
+
+```bash
+# T071 (LifeGallery.tsx baseline recreation) and T072 (tokens.css) can run together — different files:
+Task: "Recreate LifeGallery.tsx from the teammate's supplied structure (T071)"
+Task: "Add 2 new tokens to app/tokens.css (T072)"
+# Then T073 (globals.css, depends on T072) and T074 (home-data.ts captions, depends on T071) can run together:
+Task: "Map new tokens into globals.css @theme inline (T073)"
+Task: "Populate captionLabel/caption on CULTURE_GALLERY_IMAGES (T074)"
+# Then the sequential tail:
+Task: "Rewrite LifeGallery.tsx's home branch (T075) -> verify, including /careers zero-diff check (T076)"
+```
+
+## Implementation Strategy (Life at TechGrit Section)
+
+Complete T071/T072 (independent, parallelizable), then T073/T074 (each depends on one of the first pair,
+independent of each other), then T075 (depends on all three prior tasks), then T076 to verify — paying
+particular attention to confirming `/careers` shows no visual change, since T071 touches the same file
+`/careers` consumes. Only the homepage's final CTA remains unplanned within User Story 1; User Stories
+2-9 remain a future `/speckit.plan` pass each.
+
+## Phase 15: Homepage Final CTA Section (Phase 2 addendum, User Story 1 slice)
+
+**Input**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Final CTA Section (FR-012)", [spec.md](./spec.md)
+FR-012, Clarifications Session 2026-08-06. [research.md](./research.md) §18 has the full token
+reuse/no-new-token accounting.
+
+**Scope**: `app/_home-components/FinalCta.tsx`'s outer container and secondary link only, plus 1 new
+token in `app/tokens.css`/`globals.css` (FR-012) — NOT the card's background/border/radius/blur, NOT the
+eyebrow/heading/paragraph, NOT the primary "Schedule an OrbitAI Demo" button, NOT any other homepage
+section, NOT `app/page.tsx`.
+
+**Goal**: FR-012 — the outer container widens to the reference's `1280px`, and the secondary link matches
+the reference's full typographic treatment (size, resting color, hover brighten, underline opacity) and
+literal copy.
+
+- [X] T077 [P] Add 1 new token to `app/tokens.css`, in its existing numbered section (research.md §18):
+  `--color-text-cta-link: rgba(255, 255, 255, 0.70);` (§ Text Colors — deliberately dedicated, not a
+  reuse of the value-identical but differently-annotated `--color-text-quiet`/`--color-text-70`).
+  Independent of T079. **Done.**
+- [X] T078 Map T077's new token into `app/globals.css`'s `@theme inline` block (`--color-text-cta-link:
+  var(--color-text-cta-link);`, alongside the existing text-color mapping block), giving a canonical
+  `text-text-cta-link` utility. Depends on T077 (same file, sequential). **Done.**
+- [X] T079 [US1] Edit `app/_home-components/FinalCta.tsx`: change the outer container's `max-w-[1180px]`
+  to `max-w-(--container-max)` (this feature's established sitewide idiom for the reference's `1280px`
+  width, not a raw `max-w-[1280px]` literal); change the secondary link's classes from `text-15-5
+  font-semibold text-primary` to `text-14-5 font-semibold text-text-cta-link transition-colors
+  duration-200 hover:text-primary` (size correction, dimmer resting color, hover-to-white brighten reusing
+  the already-existing `text-primary` class — no new token for the hover state); change its underline
+  class from `border-border-orange-strong` to `border-border-orange-medium` (both exact-match existing
+  tokens, the latter already added in this feature's Re-Imagine Grid addendum); change its text content
+  from "Explore how our 6-week framework can accelerate your next big bet" to the reference's literal "Or
+  explore our 6-week framework". The arrow span and its `text-orange` color are unchanged. Depends on
+  T078 (consumes the canonical `text-text-cta-link` class). **Done.**
+- [X] T080 Run `npm run lint` + `npm run build`; browser-verify the final CTA's outer container measures
+  `1280px` (not `1180px`), the card itself is visually unchanged, the secondary link reads "Or explore our
+  6-week framework →" at `14.5px` with a dimmer resting color that brightens to solid white on hover with
+  a smooth transition, and its underline is visibly softer than before. Confirm the primary button and
+  every other homepage section are unaffected. **Done** — `npm run lint` and `npm run build` both green;
+  the compiled production CSS confirms `.text-text-cta-link{color:var(--color-text-cta-link)}` exists.
+  DOM inspection on `/` confirmed the outer container's `max-width` is `1280px`, the link's text reads
+  exactly "Or explore our 6-week framework →", `font-size:14.5px`, `font-weight:600`, and
+  `border-bottom-color:rgba(232,119,34,0.5)` — all reference-exact. The resting-color check against the
+  live dev server showed stale solid-white output for the brand-new `text-text-cta-link` utility (a
+  dev-server HMR staleness artifact for newly-added `@theme` tokens, not a code defect — the utility is
+  confirmed correct in the actual compiled production CSS above); a dev-server restart would pick it up.
+
+## Dependencies (Final CTA Section)
+
+- T077 (tokens.css) and T079 (FinalCta.tsx's container-width edit) are independent in principle, but T079
+  as a whole depends on T078 (it also consumes the new `text-text-cta-link` class for the link edit).
+- T078 depends on T077, and in turn blocks T079.
+- T080 runs last, after T077-T079.
+
+## Parallel Example (Final CTA Section)
+
+```bash
+# T077 (tokens.css) has no same-phase dependency and can start immediately:
+Task: "Add 1 new token to app/tokens.css (T077)"
+# Then the sequential tail:
+Task: "Map new token into globals.css @theme inline (T078) -> edit FinalCta.tsx (T079) -> verify (T080)"
+```
+
+## Implementation Strategy (Final CTA Section)
+
+Complete T077 first, then T078 (depends on T077), then T079 (depends on T078), then T080 to verify. This
+closes out every FR in User Story 1 (spec.md) planned via `/speckit.plan` so far; User Stories 2-9 remain
+a future pass each.

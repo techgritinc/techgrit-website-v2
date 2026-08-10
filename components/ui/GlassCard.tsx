@@ -8,6 +8,7 @@ export type GlassCardVariant =
   | "industry"
   | "blogCard"
   | "blogFeatured"
+  | "blogTeaser"
   | "constructionChallenge"
   | "constructionSolution"
   | "constructionImpact"
@@ -29,6 +30,7 @@ const CARD_VARIANTS: Record<GlassCardVariant, string> = {
   industry: "rounded-2xl border-border-9 bg-glass-3 p-tg-13 pb-tg-14 hover:-translate-y-[5px]",
   blogCard: "rounded-2xl border-border-image bg-glass-4 overflow-hidden hover:-translate-y-[6px]",
   blogFeatured: "rounded-4xl border-border bg-glass-4 overflow-hidden hover:-translate-y-[5px]",
+  blogTeaser: "flex flex-col overflow-hidden rounded-2xl border-border-image bg-glass-4 hover:-translate-y-[6px]",
   constructionChallenge: "rounded-[16px] border-border-image bg-glass-4 px-5 py-[22px]",
   constructionSolution: "rounded-[18px] border-border-image bg-glass-4 px-7 py-[30px] hover:-translate-y-[6px]",
   constructionImpact: "rounded-[20px] border-border-image bg-glass-4 px-7 py-8 hover:-translate-y-[6px]",
@@ -73,6 +75,7 @@ const ICON_VARIANTS: Record<GlassCardVariant, string> = {
   industry: "mb-tg-17 h-14 w-14 rounded-full",
   blogCard: "mb-5.5 h-13 w-13 rounded-md",
   blogFeatured: "mb-5.5 h-13 w-13 rounded-md",
+  blogTeaser: "h-18 w-18",
   constructionChallenge: "mb-[14px] h-10 w-10 rounded-[10px]",
   constructionSolution: "mb-5 h-[50px] w-[50px] rounded-[13px]",
   constructionImpact: "mb-5.5 h-13 w-13 rounded-md",
@@ -105,6 +108,7 @@ const TITLE_VARIANTS: Record<GlassCardVariant, string> = {
   industry: "text-industry-title leading-[normal] tracking-title-tight",
   blogCard: "text-[18.5px] font-bold text-white",
   blogFeatured: "text-[length:var(--text-blog-card)] font-display",
+  blogTeaser: "mt-tg-4 text-[19px] font-bold text-white tracking-[normal] leading-[1.32]",
   constructionChallenge: "text-15-5 font-bold text-primary leading-[1.3]",
   constructionSolution: "text-[19px]",
   constructionImpact: "text-[18.5px]",
@@ -134,6 +138,7 @@ const DESC_VARIANTS: Record<GlassCardVariant, string> = {
   industry: "mt-2.5 text-sm leading-[1.6] text-60",
   blogCard: "mt-2.5 text-[14.5px] leading-[1.6]",
   blogFeatured: "mt-2.5 text-15-5 leading-[var(--lh-body)] text-64 max-w-tg-blog-featured-desc",
+  blogTeaser: "mt-tg-3 text-[14.5px] leading-[1.6] text-muted",
   constructionChallenge: "mt-2 text-sm text-faint leading-[1.6]",
   constructionSolution: "mt-[10px] text-[14.5px] text-muted leading-[1.6]",
   constructionImpact: "mt-[10px] text-[14.5px] text-muted leading-[1.6]",
