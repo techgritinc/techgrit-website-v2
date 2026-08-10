@@ -24,7 +24,7 @@ export function TeamPanel({ team }: { team: TeamRole[] }) {
   href="/contact"
   variant="primary"
   size="footer"
-  className="mt-[20px] w-full h-[44px]"
+  className="mt-[20px] w-full min-h-[44px]"
 >
   Start a project <span aria-hidden="true">&#8594;</span>
 </Button>

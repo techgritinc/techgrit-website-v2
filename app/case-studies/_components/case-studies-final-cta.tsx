@@ -26,7 +26,7 @@ export function CaseStudiesFinalCta({ variant = "list" }: { variant?: "list" | "
             <Button
               href="/contact"
               variant="primary"
-              className="relative gap-[10px] text-[16px] !px-[30px] !py-[15px] !rounded-[12px] !h-[52px] whitespace-nowrap"
+              className="relative gap-[10px] text-[16px] !px-[30px] !py-[15px] !rounded-[12px] !min-h-[52px] whitespace-nowrap"
             >
               Get in Touch <span aria-hidden="true" className="text-[17px]">&#8594;</span>
             </Button>
