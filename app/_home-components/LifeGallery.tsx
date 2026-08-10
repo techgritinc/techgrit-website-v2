@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Button from "@/components/ui/Button";
 import MediaSlot from "@/components/ui/MediaSlot";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
@@ -13,6 +16,41 @@ export interface LifeGalleryImage {
   captionLabel?: string;
   /** Caption sentence paired with `captionLabel` in the tile's hover-caption overlay. */
   caption?: string;
+}
+
+/** Careers-variant tile — hover lift + caption reveal driven by explicit React state
+ * (onMouseEnter/onMouseLeave) rather than Tailwind's `group`/`group-hover:` classes, so the
+ * effect renders correctly regardless of Tailwind's arbitrary-value class generation. */
+function CareersGalleryTile({ item, sizes }: { item: LifeGalleryImage; sizes: string }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <figure
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative m-0 block aspect-[3/4] overflow-hidden rounded-xl border border-border-8 bg-glass-3"
+      style={{
+        transform: isHovered ? "translateY(-4px)" : "none",
+        transition: "transform 300ms ",
+      }}
+    >
+      <MediaSlot src={item.src} alt={item.alt} fill sizes={sizes} />
+      {item.captionLabel && item.caption && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 px-[18px] pt-[22px] pb-[18px]"
+          style={{
+            // backgroundImage: "var(--gradient-life-cap)",
+            opacity: isHovered ? 1 : 0,
+            transform: isHovered ? "translateY(0)" : "translateY(6px)",
+            transition: "opacity 300ms ease, transform 300ms ease",
+          }}
+        >
+          
+        </div>
+      )}
+    </figure>
+  );
 }
 
 interface LifeGalleryProps {
@@ -97,27 +135,7 @@ export default function LifeGallery({
               if (item.span === "wide3") sizes = "(max-width: 960px) 100vw, 75vw";
               else if (item.span === "wide") sizes = "(max-width: 960px) 100vw, 50vw";
 
-              return (
-                <figure
-                  key={`${item.src}-${index}`}
-                  className="group relative m-0 block aspect-[3/4] overflow-hidden rounded-xl border border-border-8 bg-glass-3 transition-[transform] duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] [transition-property:transform,border-color] hover:-translate-y-[4px]"
-                >
-                  <MediaSlot src={item.src} alt={item.alt} fill sizes={sizes} />
-                  {item.captionLabel && item.caption && (
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-x-0 bottom-0 translate-y-[6px] px-[18px] pt-[22px] pb-[18px] opacity-0 transition-[opacity,transform] duration-300 ease-[ease] group-hover:translate-y-0"
-                    >
-                      {/* <div className="mb-[4px] text-[11px] font-bold tracking-[0.14em] text-[#F7B733] uppercase">
-                        {item.captionLabel}
-                      </div> */}
-                      {/* <figcaption className="text-[14px] font-semibold leading-[1.35] text-white">
-                        {item.caption}
-                      </figcaption> */}
-                    </div>
-                  )}
-                </figure>
-              );
+              return <CareersGalleryTile key={`${item.src}-${index}`} item={item} sizes={sizes} />;
             })}
           </div>
         )}
