@@ -64,8 +64,8 @@ export function ConstructionChallenges({ section }: { section: ChallengesSection
           <div style={{ lineHeight: "normal" }}>
             <SectionEyebrow showAccent={false}>{section.eyebrow}</SectionEyebrow>
           </div>
-            <h2 className="leading-[1.08]" style={{ fontSize: "clamp(30px, 3.6vw, 42px)" }}>{section.title}</h2>
-            <p className="mt-4" style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-base)" }}>
+            <h2 className="text-[clamp(30px,3.8vw,42px)] leading-[1.08] tracking-[-0.03em]">{section.title}</h2>
+            <p className="mt-4 leading-[1.65] md:leading-normal" style={{ color: "var(--color-text-secondary)", fontSize: "var(--text-base)" }}>
               {section.description}
             </p>
           </div>

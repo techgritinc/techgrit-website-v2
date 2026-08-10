@@ -142,6 +142,7 @@
   --color-glass-hover:    rgba(255, 255, 255, 0.08); /* Input fill on focus */
   --color-nav-glass:      rgba(0, 0, 0, 0.70);    /* Sticky nav background. v2 black (name retained, value migrated) */
   --color-ink-glass-60:   rgba(0, 0, 0, 0.60);    /* Lifecycle diagram mobile-fallback node pill background (TMS-67). v2 black (name retained, value migrated) */
+  --color-ink-glass-40:   rgba(0, 0, 0, 0.40);    /* Lifecycle diagram mobile-fallback node pill background (TMS-67). v2 black (name retained, value migrated) */
   --color-nav-hover:      rgba(255, 255, 255, 0.07); /* Nav link hover background */
   --color-dd-bg:          rgba(0, 0, 0, 0.97);    /* Dropdown menu bg. v2 black (name retained, value migrated) */
   --color-mobile-menu-bg: rgba(0, 0, 0, 0.97);    /* Mobile nav panel bg (darker than dd-bg). v2 black (name retained, value migrated) */

@@ -50,7 +50,7 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
             <span className="eyebrow" style={{ color: "var(--color-amber-light)", lineHeight: "normal" }}>
               {section.eyebrow}
             </span>
-            <h2 className="mt-[14px]" style={{ fontSize: "clamp(26px, 3.2vw, 36px)", lineHeight: "normal" }}>
+            <h2 className="mt-2.5 text-[clamp(26px,3.2vw,36px)] leading-[1.1] tracking-[-0.03em]">
               {section.title}
             </h2>
           </div>
@@ -132,8 +132,8 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
             {section.nodes.map((node) => (
               <div
                 key={node.order}
-                className="rounded-[12px] border border-border text-center"
-                style={{ background: "var(--color-ink-glass-60)", padding: 14 }}
+                className="rounded-[12px] border border-border text-center leading-[normal]"
+                style={{ background: "var(--color-ink-glass-40)", padding: 14 }}
               >
                 <span style={{ fontSize: "13.5px", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
                   {node.name}

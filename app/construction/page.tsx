@@ -54,6 +54,9 @@ export default function ConstructionPage() {
                 paddingBottom={100}
                 titleLineHeight={1.06}
                 maxWidth={1280}
+                primaryBtnClassName="!py-[15px] !px-[34px] !min-h-[52px] !rounded-[13px] !whitespace-normal !h-auto !shrink"
+                secondaryBtnClassName="!py-[16px] !px-[26px] !rounded-[12px]"
+                cardClassName="!p-[80px_40px]"
                 section={{
                   eyebrow: section.eyebrow,
                   title: section.title,

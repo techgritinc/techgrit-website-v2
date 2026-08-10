@@ -40,7 +40,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
           </div>
           <h1
             data-rise
-            className="text-[44px] leading-[1.04] md:text-[54px] tracking-[-1.89px]"
+            className="text-[38px] leading-[1.04] md:text-[54px] tracking-[-1.89px]"
             style={{ animationDelay: ".12s" }}
           >
             {before}
