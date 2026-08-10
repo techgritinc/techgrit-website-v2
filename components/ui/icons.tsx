@@ -256,6 +256,43 @@ export function InfiniteScalabilityIcon(props: IconProps) {
   );
 }
 
+/** Re-Imagine grid — shared star-burst icon for cards 1-3 (v2.2 FR-007), extracted verbatim from
+ * `TechGrit Homepage.dc.html`'s identical icon on all 3 of its differentiator cards. */
+export function ReimagineSparkleIcon(props: IconProps) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" />
+    </svg>
+  );
+}
+
+/** TechGrit brand mark — recreates `public/icons/favicon.png`'s 5x5 grid as a scalable SVG
+ * (v2.2 FR-007, Re-Imagine grid card 4). */
+export function TechGritMarkIcon(props: IconProps) {
+  return (
+    <svg
+      width="30"
+      height="30"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      fill="none"
+      {...props}
+    >
+      <g fill="currentColor">
+        <rect x="3" y="3" width="4" height="4" rx="1" />
+        <rect x="10" y="3" width="4" height="4" rx="1" />
+        <rect x="17" y="3" width="4" height="4" rx="1" />
+        <rect x="3" y="10" width="4" height="4" rx="1" />
+        <rect x="10" y="10" width="4" height="4" rx="1" />
+        <rect x="17" y="10" width="4" height="4" rx="1" />
+        <rect x="3" y="17" width="4" height="4" rx="1" />
+        <rect x="10" y="17" width="4" height="4" rx="1" />
+        <rect x="17" y="17" width="4" height="4" rx="1" />
+      </g>
+    </svg>
+  );
+}
+
 /** "Why AI-First Matters" panel icon (lightning bolt). */
 export function LightningIcon(props: IconProps) {
   return (
@@ -337,6 +374,79 @@ export function ConstructionIcon(props: IconProps) {
   );
 }
 
+/** Homepage Industries-section card icon — FinTech (v2.2 FR-008). Distinct from the shared
+ * `FinTechIcon` above, which the nav mega-menu still uses; this shape is extracted verbatim from
+ * `TechGrit Homepage.dc.html` line 588, always rendered white on a solid color-fill circle. */
+export function IndustryFinTechIcon(props: IconProps) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#fff"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <rect x="2" y="6" width="20" height="14" rx="2" />
+      <path d="M2 10h20" />
+      <path d="M6 15h4" />
+    </svg>
+  );
+}
+
+/** Homepage Industries-section card icon — Healthcare (v2.2 FR-008). Distinct from the shared
+ * `HealthcareIcon` above, which the nav mega-menu still uses; extracted verbatim from
+ * `TechGrit Homepage.dc.html` line 593, always rendered white on a solid color-fill circle. */
+export function IndustryHealthcareIcon(props: IconProps) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#fff"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M6 3h12l-1 4H7z" />
+      <rect x="5" y="7" width="14" height="14" rx="2" />
+      <path d="M12 11v6M9 14h6" />
+    </svg>
+  );
+}
+
+/** Homepage Industries-section card icon — Construction (v2.2 FR-008). Distinct from the shared
+ * `ConstructionIcon` above, which the nav mega-menu still uses; extracted verbatim from
+ * `TechGrit Homepage.dc.html` line 598, always rendered white on a solid color-fill circle. */
+export function IndustryConstructionIcon(props: IconProps) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#fff"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M3 20h18" />
+      <path d="M6 20V10l6-3v13" />
+      <path d="M12 8l8 3v9" />
+      <path d="M9 20v-4h3v4" />
+    </svg>
+  );
+}
+
 /** Video-testimonial play button and the "Don't Migrate. Re-Imagine." heading triangle. */
 export function PlayIcon({
   variant = "default",
@@ -385,6 +495,98 @@ export function CheckIcon(props: IconProps) {
       {...props}
     >
       <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+// Homepage "How We Deliver" methodology phases (app/_home-components/MethodologySection.tsx)
+// One distinct icon per phase, reused at both the top-rail node (26px) and the enlarged
+// phase-detail circle (82px) via a width/height override — shapes re-authored from
+// TechGrit Homepage.dc.html's isP1-isP4 conditionals per Constitution Principle IV.
+
+/** Phase 1 — Architect: circle + pennant/flag. */
+export function PhaseArchitectIcon(props: IconProps) {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <circle cx="12" cy="12" r="9" />
+      <polygon points="16 8 12 14 8 16 12 10 16 8" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+/** Phase 2 — Agentic Build: code-bracket "</>" + slash. */
+export function PhaseAgenticBuildIcon(props: IconProps) {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+      <line x1="14" y1="4" x2="10" y2="20" />
+    </svg>
+  );
+}
+
+/** Phase 3 — Industrialize: shield + checkmark. */
+export function PhaseIndustrializeIcon(props: IconProps) {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M12 2 L4 6 v6 c0 5 3.5 8 8 10 c4.5-2 8-5 8-10 V6 z" />
+      <polyline points="9 12 11 14 15 10" />
+    </svg>
+  );
+}
+
+/** Phase 4 — Impact: sprouting-leaf shape. */
+export function PhaseImpactIcon(props: IconProps) {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M5 15c0-6 4-11 9-12 1 5-4 9-9 12z" />
+      <path d="M14 6c3 0 4 1 4 4 -3 0 -4 -1 -4 -4z" />
+      <path d="M9 13c0 3 1 4 4 4 0-3-1-4-4-4z" />
+      <path d="M5 15c-2 1-2 3-2 5 2 0 4 0 5-2" />
     </svg>
   );
 }

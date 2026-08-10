@@ -155,7 +155,10 @@
   --color-overlay-amber-soft: rgba(245, 158, 11, 0.08); /* Ambient orb / bg glow — Construction page third orb (TMS-67) */
   --color-overlay-amber-12: rgba(245, 158, 11, 0.12); /* Lifecycle diagram panel decorative glow blob (TMS-67) */
   --color-overlay-orange-22: rgba(232, 119, 34, 0.22);/* Methodology numeral ambient glow */
-  --color-overlay-orange-18: rgba(232, 119, 34, 0.18);/* Blog newsletter panel decorative orb */
+  --color-overlay-orange-18: rgba(232, 119, 34, 0.18);/* Blog newsletter panel decorative orb; also Homepage ambient orb 1 (v2.2) */
+  --color-overlay-orange-11: rgba(232, 119, 34, 0.11); /* Homepage ambient orb 3 (v2.2) */
+  --color-overlay-orange-13: rgba(232, 119, 34, 0.13); /* Homepage ambient orb 4 (v2.2) */
+  --color-overlay-amber-light-10: rgba(247, 183, 51, 0.10); /* Homepage ambient orb 2 (v2.2) */
   --color-overlay-green-12: rgba(52, 211, 153, 0.12); /* Blog newsletter success-state background */
   --color-overlay-orange-10: rgba(232, 119, 34, 0.10); /* Webinar hero eyebrow badge background (TMS-73) */
   --color-overlay-orange-06: rgba(232, 119, 34, 0.06); /* Webinar hero collage spin-ring tile background (TMS-73) */
@@ -188,6 +191,8 @@
   --color-glass-faint: rgba(255, 255, 255, 0.03);
   --color-glass-8: rgba(255, 255, 255, 0.08);
   --color-border-8: rgba(255, 255, 255, 0.08);
+  --color-border-9: rgba(255, 255, 255, 0.09); /* Re-Imagine grid card border (v2.2 FR-007) — distinct from --color-glass-faint below */
+  --color-glass-3: rgba(255, 255, 255, 0.03); /* Re-Imagine grid card/panel fill (v2.2 FR-007) — deliberately distinct from --color-glass-faint's shadowed 0.03/0.04 duplicate */
   --color-mac-red: #ff5f57;
   --color-mac-yellow: #febc2e;
   --color-mac-green: #28c840;
@@ -277,6 +282,7 @@
   --text-14-5: 14.5px; /* Webinar upcoming-session date/time text (TMS-73) */
   --text-21: 21px;
   --text-stat: 26px;
+  --text-industry-title: 26px; /* Homepage Industries card title (v2.2 FR-008) — a dedicated token, deliberately not a reuse of --text-stat (single-job token for the Hero delivery-stat digit) */
   --text-blog-card: clamp(26px, 2.9vw, 34px); /* Blog/Case Study card title */
   --text-blog-newsletter-heading: clamp(26px, 3vw, 36px); /* Blog newsletter panel heading — unmapped, arbitrary-value only */
   --text-webinar-newsletter-heading: clamp(26px, 3.2vw, 36px); /* Webinar newsletter panel heading — unmapped, arbitrary-value only */
@@ -336,6 +342,7 @@
   --ls-01:      0.01em;  /* Topic filter chip label spacing (Blog) — zero occurrences in v2 census; retained unchanged, name kept per FR-022 */
   --ls-stat-count: -0.035em;  /* Hero delivery-stat digit tracking (v2.2 Phase 2) */
   --ls-24: 0.24em;  /* Trusted-Clients section label tracking (v2.2 Phase 2) */
+  --ls-title-tight: -0.01em;  /* Homepage Industries card title tracking (v2.2 FR-008) — named to avoid confusion with the unrelated, positive --ls-01 */
 
   /* ----------------------------------------------------------
    * 7. SPACING
@@ -485,7 +492,13 @@
   --shadow-image-lift:    0 30px 70px -30px rgba(0, 0, 0, 0.80);       /* Detail-section image drop shadow */
   --shadow-phase-ring:    0 0 0 7px var(--color-ink); /* Phase-node ring — todo/done state (Methodology) */
   --shadow-phase-active:  0 0 0 7px var(--color-ink), 0 0 30px rgba(232, 119, 34, 0.70);   /* Phase-node ring+glow — active state (Methodology) */
+  --shadow-phase-badge-glow: 0 0 80px rgba(232, 119, 34, 0.55), inset 0 3px 20px rgba(255, 255, 255, 0.35);   /* Phase-detail circular icon badge glow (v2.2 Phase 2, FR-006) */
   --shadow-btn-ghost: 0 8px 24px -10px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.22); /* Ghost button (v2.2 Phase 1) */
+  --shadow-reimagine-glow: 0 0 60px -10px rgba(232, 119, 34, 0.40); /* Re-Imagine grid card 1 hover glow (v2.2 FR-007) */
+  --shadow-reimagine-glow-soft: 0 0 60px -10px rgba(232, 119, 34, 0.35); /* Re-Imagine grid cards 2-3 hover glow (v2.2 FR-007) */
+  --shadow-industry-glow-violet: 0 0 50px -12px rgba(139, 92, 246, 0.35); /* Homepage Industries card hover glow — FinTech (v2.2 FR-008) */
+  --shadow-industry-glow-green: 0 0 50px -12px rgba(16, 185, 129, 0.35); /* Homepage Industries card hover glow — Healthcare (v2.2 FR-008) */
+  --shadow-industry-glow-blue: 0 0 50px -12px rgba(59, 130, 246, 0.35); /* Homepage Industries card hover glow — Construction (v2.2 FR-008) */
   /* Ambient-orb radii (--blur-glow*, §14) and coloured status-dot glows (--shadow-glow-*, above) already form a coherent v2-covering group — confirmed, no gaps (FR-025) */
   --shadow-live-badge: 0 18px 46px -14px rgba(232, 119, 34, 0.70), 0 4px 16px -6px rgba(232, 119, 34, 0.40);   /* Hero Live-Webinar badge outer shadow (v2.2 Phase 2) */
   --shadow-live-badge-chip: 0 6px 18px -4px rgba(245, 158, 11, 0.60);   /* Hero Live-Webinar badge inner chip shadow (v2.2 Phase 2) */

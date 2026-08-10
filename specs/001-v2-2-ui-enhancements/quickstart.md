@@ -142,3 +142,126 @@ is manual, plus `npm run lint`/`npm run build`.
 2. Diff should touch only: `app/_home-components/SubscribeBand.tsx`. No token file
    (`app/tokens.css`, `app/globals.css`), no other homepage section, no other page, and no shared
    component (`Button.tsx`, `FormField.tsx`) changes.
+
+## 12. Methodology / "How We Deliver" (`app/_home-components/MethodologySection.tsx`) — Phase 2 addendum, FR-006
+
+Scope: only `app/_home-components/MethodologySection.tsx` and 4 new exports in
+`components/ui/icons.tsx`. No test framework exists in this repo — this is manual, plus
+`npm run lint`/`npm run build`.
+
+1. Open `/` at desktop width (≥1140px) and scroll to "How We Deliver."
+2. Confirm the eyebrow ("How we deliver") shows no leading dash/symbol.
+3. Confirm each of the 4 top-rail step markers shows a distinct icon (not a numeral) — Architect,
+   Agentic Build, Industrialize, and Impact each look visually different from one another, inside
+   the existing 58px circle.
+4. Confirm the phase-detail panel's large visual (right column) shows a circular gradient badge with
+   an icon inside it — not a giant numeral — and that the icon matches the icon shown in the
+   currently-active top-rail step exactly (scroll to change the active phase and confirm the icon
+   changes to match each time).
+5. Confirm the "Phase 0{n}" label in the bottom-right corner of that visual panel is still present
+   and unchanged.
+6. Confirm the phase title ("Architect", "Agentic Build", etc.) and week label ("Week 1", "Weeks 2
+   to 4", etc.) render in the site's normal display font — not a visibly different font (Arial) from
+   the rest of the page.
+7. Confirm the section's overall content column is visibly as wide as the Trusted Clients/Subscribe
+   Band sections above it (all now `1280px` max-width).
+8. Shrink the browser to a tablet/mobile width (≤960px) and confirm the phase-detail panel's
+   two-column layout (description text + visual) collapses to a single stacked column instead of
+   staying artificially squeezed side-by-side.
+9. Confirm the scroll-pinned behavior itself (the section pins while scrolling through it, the phase
+   rail's progress fill animates, the active phase's description/deliverables swap) is unchanged from
+   before this pass.
+10. Confirm the homepage still renders identically to before this refactor — `MethodologySection` now
+    receives `phases`/`eyebrow`/`heading` as props from `app/page.tsx` instead of importing
+    `home-data.ts` internally (each phase in `phases` now also carries its own `icon` field, read as
+    `phase.icon`/`active.icon` — no separate icon lookup), but this is an internal wiring change only;
+    there should be zero visual or behavioral difference caused by the refactor itself (verify via
+    `git diff` that `app/page.tsx` passes the exact same `METHODOLOGY_PHASES` data through, unchanged).
+
+## 13. Gate check (Methodology)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `components/ui/icons.tsx` (4 new icon exports),
+   `app/_home-components/home-data.ts` (`MethodologyPhase` gains a required `icon: IconComponent`
+   field, populated per phase — no other field changes), `app/_home-components/
+   MethodologySection.tsx` (icon/eyebrow/width/collapse/font fixes, plus the props refactor reading
+   `phase.icon`/`active.icon`), and `app/page.tsx` (passes `phases`/`eyebrow`/`heading` props into
+   `<MethodologySection>`). No token file (`app/tokens.css`, `app/globals.css`), no other homepage
+   section, no other page. No `/frameworks` route, page, or nav change — that
+   page remains out of scope (spec.md Assumptions).
+
+## 14. "Don't Migrate / Re-Imagine" grid (`app/_home-components/ReImagineSection.tsx`) — Phase 2 addendum, FR-007
+
+1. Open `/` at desktop width and scroll to "Don't Migrate. Re-Imagine."
+2. Confirm all 3 top cards show the exact same icon (not 3 different icons as before).
+3. Confirm each of the 3 top cards shows its real image (Copilot→Agentic, Tech Debt, Scalability
+   respectively, sourced from `public/samples/`) — not a "Coming soon" placeholder.
+4. Hover each of the 3 top cards — confirm a subtle orange background tint appears, in addition to
+   the existing lift/border/glow.
+5. Confirm the 4th "card" (the "Why AI-First Matters" panel) shows the TechGrit mark icon in place of
+   the lightning-bolt icon, and that hovering it does nothing at all (no lift, no border change, no
+   background tint) — unlike the 3 cards above it.
+6. Confirm the comparison bars (Traditional Development vs. OrbitAI™ Delivery) are unchanged.
+
+## 15. Gate check (Re-Imagine Grid)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/tokens.css` (4 new tokens), `app/globals.css` (their `@theme inline`
+   mappings, plus the drive-by mapping of `--color-border-orange-medium`), `components/ui/icons.tsx`
+   (2 new icon exports), `components/ui/GlassCard.tsx` (2 new variants), `app/_home-components/
+   home-data.ts` (`DifferentiatorPoint` field changes), and `app/_home-components/
+   ReImagineSection.tsx`. No other homepage section, no other page —
+   `app/_home-components/CaseStudiesSection.tsx` (a `GlassCard variant="reimagine"` consumer) must
+   render unchanged.
+
+## 16. Homepage Industries section (`app/_home-components/IndustriesSection.tsx`) — Phase 2 addendum, FR-008
+
+Scope: only `IndustriesSection.tsx`, its `industry` variant of `GlassCard.tsx`, and `home-data.ts`'s
+`INDUSTRY_CARDS`. This is **not** `/construction` — verify that page separately, unaffected by this
+pass. No test framework exists in this repo — this is manual, plus `npm run lint`/`npm run build`.
+
+1. Open `/` at desktop width (≥1140px) and scroll to the Industries section (directly after "Don't
+   Migrate. Re-Imagine.").
+2. Confirm the "Explore Industry Solutions" ghost button's computed padding is `16px` vertical /
+   `26px` horizontal (`/speckit.analyze` finding M2: the button's own `className` override changed from
+   `px-6!`/24px, which was silently 2px narrower than correct, to `py-4!`/16px — verify both dimensions,
+   not just that the button "looks the same as before").
+3. Confirm none of the 3 cards (FinTech, Healthcare, Construction) shows a photo any longer — each
+   card shows only a large colored circular icon badge (violet/FinTech, green/Healthcare, blue/
+   Construction), a title, and a description.
+4. Confirm each icon badge's icon is a distinct shape from the other two, rendered in white on its
+   colored circle — not the same icon shape used in the site's nav "Industries" mega-menu (open the
+   nav mega-menu separately and confirm its icons are unchanged from before this pass).
+5. Confirm each card's title renders at 26px, not the pre-fix 23px (`/speckit.analyze` finding H1 —
+   measure via computed styles, not just visual impression, since a ~3px delta is easy to miss by eye).
+6. Confirm each card's description renders at `rgba(255,255,255,0.6)`, not the pre-fix inherited
+   `rgba(255,255,255,0.72)` (`/speckit.analyze` finding H2 — again, measure via computed color, since
+   a 0.12 opacity delta is subtle on dark text).
+7. Hover the FinTech and Healthcare cards — confirm neither lifts, shows a border-color change, nor
+   shows a pointer cursor (no click affordance).
+8. Hover the Construction card — confirm it lifts, shows a blue border-color and glow, shows a
+   pointer cursor, and clicking anywhere on the card (not just its old inline text link) navigates to
+   `/construction`.
+9. Confirm the card's border-radius, background, padding, and icon-to-title spacing match
+   `TechGrit Homepage.dc.html` lines 586-602 (20px radius, ~0.09 border, ~0.03 background fill, 30px/
+   34px padding, 44px icon-to-title gap).
+10. Confirm the section's heading and intro paragraph above the cards are unchanged from before this
+    pass.
+
+## 17. Gate check (Industries Section)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/tokens.css` (3 new border tokens, 3 new shadow tokens, 1 new tracking
+   token — `--ls-title-tight`, deliberately not `--ls-tight-01`, to avoid confusion with the existing
+   `--ls-01` — and 1 new font-size token, `--text-industry-title`, deliberately not a reuse of
+   `--text-stat`), `app/globals.css` (their `@theme inline` mappings), `components/ui/icons.tsx` (3 new
+   icon exports: `IndustryFinTechIcon`, `IndustryHealthcareIcon`, `IndustryConstructionIcon` — the
+   existing `FinTechIcon`/`HealthcareIcon`/`ConstructionIcon` exports are untouched), `components/ui/
+   GlassCard.tsx` (`industry` variant's 4 `Record` entries edited in place — `CARD_VARIANTS`,
+   `ICON_VARIANTS`, `TITLE_VARIANTS`, and `DESC_VARIANTS`), `app/_home-components/home-data.ts`
+   (`IndustryCard` loses `image`, gains `iconBg`, `icon` repointed), and `app/_home-components/
+   IndustriesSection.tsx` (icon-badge rendering, photo removal, Construction-only link, ghost-button
+   `className` correction). No other homepage section, no other page — `components/layout/
+   nav-config.ts` and its rendered mega-menu must be pixel-unchanged, `Button.tsx`'s shared `md` size
+   must be untouched (verify other `md`-sized buttons sitewide are unaffected), and `/construction`'s
+   own hero/challenges/impact/CTA sections (FR-016–FR-021) must be unaffected.

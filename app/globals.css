@@ -205,6 +205,9 @@
   --color-glass-4: var(--color-glass-4);
   --color-glass-8: var(--color-glass-8);
   --color-border-8: var(--color-border-8);
+  --color-border-9: var(--color-border-9);
+  --color-glass-3: var(--color-glass-3);
+  --color-border-orange-medium: var(--color-border-orange-medium);
   --color-border-image: var(--color-border-image);
   --color-border-28: var(--color-border-28);
   --color-border-22: var(--color-border-22);
@@ -359,6 +362,9 @@
   --color-overlay-amber-12: var(--color-overlay-amber-12);
   --color-overlay-orange-strong: var(--color-overlay-orange-strong);
   --color-overlay-amber-strong: var(--color-overlay-amber-strong);
+  --color-overlay-orange-11: var(--color-overlay-orange-11);
+  --color-overlay-orange-13: var(--color-overlay-orange-13);
+  --color-overlay-amber-light-10: var(--color-overlay-amber-light-10);
   --color-icon-bg-blue: var(--color-icon-bg-blue);
   --color-icon-bg-teal: var(--color-icon-bg-teal);
   --color-border-image: var(--color-border-image);
@@ -457,6 +463,17 @@
   --color-border-ghost-hover: var(--color-border-ghost-hover);
   --shadow-btn-ghost: var(--shadow-btn-ghost);
   --blur-ghost: var(--blur-ghost);
+
+  /* Re-Imagine grid (v2.2 FR-007) */
+  --shadow-reimagine-glow: var(--shadow-reimagine-glow);
+  --shadow-reimagine-glow-soft: var(--shadow-reimagine-glow-soft);
+
+  /* Industries section (v2.2 FR-008) */
+  --shadow-industry-glow-violet: var(--shadow-industry-glow-violet);
+  --shadow-industry-glow-green: var(--shadow-industry-glow-green);
+  --shadow-industry-glow-blue: var(--shadow-industry-glow-blue);
+  --text-industry-title: var(--text-industry-title);
+  --tracking-title-tight: var(--ls-title-tight);
 }
 @layer base {
   /* ----------------------------------------------------------
@@ -558,7 +575,11 @@
 
   @media (prefers-reduced-motion: reduce) {
     .bg-ambient-orbs span {
-      animation: none;
+      /* !important: animation now comes from a Tailwind `animate-[...]` utility
+       * class (@layer utilities), which outranks this @layer base rule by layer
+       * order alone regardless of selector specificity — same reason
+       * [data-lift-hover] below needs it. */
+      animation: none !important;
     }
 
     [data-lift-hover]:hover,
