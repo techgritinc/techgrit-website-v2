@@ -1,3 +1,4 @@
+import BlogSection from "@/app/_home-components/BlogSection";
 import CaseStudiesSection from "@/app/_home-components/CaseStudiesSection";
 import FinalCta from "@/app/_home-components/FinalCta";
 import Hero from "@/app/_home-components/Hero";
@@ -22,6 +23,7 @@ export default function Home() {
       <IndustriesSection />
       <TestimonialsSection />
       <CaseStudiesSection />
+      <BlogSection />
       <LifeGallery />
       <FinalCta />
     </main>

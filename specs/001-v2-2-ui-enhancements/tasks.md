@@ -328,6 +328,813 @@ TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass e
 
 ---
 
+## Phase 8: Homepage Methodology / "How We Deliver" (Phase 2 addendum, User Story 1 slice)
+
+**Input**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Methodology / 'How We Deliver' (FR-006)"
+(revised), [spec.md](./spec.md) FR-006/FR-006a/FR-006b. [research.md](./research.md) §12 and
+[quickstart.md](./quickstart.md) §12-13 are inputs for T024-T032 only (the original icon/eyebrow/
+width/collapse fidelity pass) — both predate the `PhaseShowcase` extraction, the `className` prop,
+and the orbs work, so they carry no rationale for T033-T039; that rationale lives entirely in
+plan.md's "Homepage Methodology" item 2-5 and spec.md's Session 2026-08-05 Clarifications.
+**Scope**: the "How We Deliver" methodology section — the FR-006/FR-006a slice of User Story 1
+(spec.md), extending Phase 2 (Hero & Trusted Clients, T007a-T019) rather than a new phase — plus, per
+FR-006b, the homepage's own ambient-orb background (added directly here rather than as a separate
+phase, since it was clarified and planned alongside this same section). No other US1 sub-area is in
+scope. The circular icon badge needs no new token (reuses the existing `--gradient-phase-node` token
+verbatim); the homepage orbs need 3 new `tokens.css` entries plus their `@theme inline` mappings
+(research.md §12 predates this revision and doesn't cover the orb work — see plan.md's "Homepage
+ambient orbs" item for the full color/token breakdown).
+
+**Goal**: FR-006 — each of the 4 phases shows its own distinct icon (not a bare numeral) in both the
+top-rail node and the enlarged phase-detail circle, the eyebrow drops its leading symbol via the
+shared `SectionEyebrow` component, the content column widens to `1280px`, the phase-detail panel
+collapses to one column at `md` (960px), and the phase title/week labels drop their hardcoded Arial
+override; the scroll-pinned engine lives in `components/ui/PhaseShowcase.tsx` with
+`MethodologySection.tsx` as a thin homepage wrapper (FR-006, `/speckit.analyze` finding C1); the
+eyebrow's margin-bottom matches the reference's `14px` via `SectionEyebrow`'s new `className` prop
+(FR-006a); and the homepage shows its own reference-exact, all-warm-toned ambient-orb background
+instead of the shared component's 3-orb set (FR-006b).
+
+**Independent Test**: Load `/` at desktop, tablet, and mobile widths; confirm the top-rail step
+markers and the enlarged phase-detail circle both show matching, phase-specific icons (not numerals),
+the eyebrow has no leading dash, the section is as wide as Trusted Clients/Subscribe Band above it,
+the phase-detail panel stacks to one column at tablet/mobile widths, the title/week labels render in
+the site's normal font, and the existing scroll-pinned behavior is otherwise unaffected.
+
+- [x] T024 [P] [US1] Add 4 new icon components to `components/ui/icons.tsx` — `PhaseArchitectIcon`,
+  `PhaseAgenticBuildIcon`, `PhaseIndustrializeIcon`, `PhaseImpactIcon` — extracted verbatim from
+  `TechGrit Homepage.dc.html`'s 4 distinct top-rail SVGs (lines 463-466), following the file's
+  existing `IconProps`/`{...props}`-last convention (FR-006, research.md §12) — independent of
+  T025-T031 (different file), but blocks T024a below. **Done.**
+- [x] T024a [US1] Add a required `icon: IconComponent` field to `MethodologyPhase` in
+  `app/_home-components/home-data.ts` (the same `IconComponent` type already used by
+  `PlatformCapability` and 2 other adjacent types in this file), and set each of the 4
+  `METHODOLOGY_PHASES` entries' `icon` to its matching export from T024 (FR-006, research.md §12 —
+  revised per `/speckit.analyze` finding I1: a per-item data field, not an index-based `getIcon`
+  lookup, matching this file's own established convention) — depends on T024; landed ahead of
+  T025/T026/T031 since it touches a file those tasks' revised wording now assumes. **Done.**
+- [x] T025 [US1] In `app/_home-components/MethodologySection.tsx`: swap the top-rail node's bare
+  numeral (`{phase.n}`) for the matching icon at `phase.icon` (FR-006, research.md §12) — depends on
+  T024a. **Done**, with a design correction found during implementation — see T031's note.
+- [x] T026 [US1] In the same file: replace the phase-detail visual panel's 170px-font-size
+  gradient-text numeral with a 170px-diameter circular badge (`background: var(--gradient-phase-node)`
+  — reused, not a new token) containing the same phase's icon at `active.icon` at 82px, keeping the
+  existing "Phase 0{n}" corner label unchanged (FR-006, research.md §12) — depends on T024a; same file
+  as T025, do sequentially. **Done.** Also added `--shadow-phase-badge-glow` to `app/tokens.css`
+  (`0 0 80px rgba(232,119,34,0.55), inset 0 3px 20px rgba(255,255,255,0.35)`) — the reference's badge
+  glow had no existing token match (a planning gap caught during implementation), consumed via
+  `shadow-[var(--shadow-phase-badge-glow)]`, the same arbitrary-property pattern already used for
+  `--shadow-live-badge` in `Hero.tsx`.
+- [x] T027 [US1] In the same file: remove the 2 hardcoded `fontFamily: "Arial, sans-serif"` inline
+  overrides on the phase title and week labels so they inherit the shared `--font-body`/
+  `--font-display` stack (FR-006, research.md §12 — confirmed defect, not reference-backed) — same
+  file as T025-T026, do sequentially. **Done.**
+- [x] T028 [US1] In the same file: widen the content column from `max-w-[1100px]` to `max-w-[1280px]`
+  (FR-006, research.md §12) — same file as T025-T027, do sequentially. **Done.**
+- [x] T029 [US1] In the same file: add `max-tg-md:grid-cols-1` to the phase-detail panel's
+  `grid-cols-[1.25fr_0.75fr]` so it collapses to one column at the `md` breakpoint (960px) (FR-006,
+  research.md §12 — the reference's own collapse selector is a dead/broken preview-tool typo) — same
+  file as T025-T028, do sequentially. **Done.**
+- [x] T030 [US1] In the same file: migrate the eyebrow from its bespoke `<span>` + hardcoded-dash
+  markup to `<SectionEyebrow showAccent={false}>How we deliver</SectionEyebrow>` (the same toggle
+  FR-017/FR-019/FR-033 already use), removing the outer wrapper's now-redundant `mb-3.5` in favor of
+  `SectionEyebrow`'s own built-in spacing (FR-006, research.md §12) — same file as T025-T029, do
+  sequentially. **Done.**
+- [x] T031 [US1] Refactor `MethodologySection.tsx` to accept `phases`, `eyebrow: string`, and
+  `heading: ReactNode` as props (removing its internal `import { METHODOLOGY_PHASES } from
+  "./home-data"`); update `app/page.tsx` to pass `METHODOLOGY_PHASES`, `"How we deliver"`, and the
+  existing heading JSX into `<MethodologySection>` (FR-006, resolves `/speckit.analyze` finding C1 —
+  research.md §12's "Reusable-component refactor" decision, revised per finding I1 to drop the
+  separate icon-lookup prop; deliberately minimal props otherwise, no `accentColor`/features-grid/CTA
+  shape per spec.md Clarifications, Session 2026-08-05) — depends on T024a and is the last edit to
+  `MethodologySection.tsx`; also touches `app/page.tsx`. **Done, with a correction found during
+  implementation**: the `production build failed` — `app/page.tsx` is a Server Component and
+  `MethodologySection.tsx` is `"use client"`, and a raw component reference (`icon: IconComponent`,
+  a function) cannot cross that Server→Client props boundary (Next.js error: "Functions cannot be
+  passed directly to Client Components"). Fixed by having `app/page.tsx` **pre-render** each phase's
+  icon into a `ReactNode` before handing it down — `MethodologySection`'s prop type is now
+  `MethodologyPhaseContent` (exported from the component itself), where `icon`/`badgeIcon` are
+  `ReactNode`, not `IconComponent`. `app/page.tsx` constructs this via
+  `METHODOLOGY_PHASES.map((phase) => ({ ...phase, icon: <phase.icon />, badgeIcon: <phase.icon width={82} height={82} /> }))`.
+  This is a strictly better reusable-component API too (matches the same `ReactNode`-slot pattern
+  already used for the `heading` prop), not just an RSC workaround. `home-data.ts`'s
+  `MethodologyPhase.icon: IconComponent` field (T024a) is unaffected — it's still read, just rendered
+  server-side before crossing the boundary.
+- [x] T033 [P] [US1] Add an optional `className?: string` prop to `components/ui/section-eyebrow.tsx`
+  that merges onto the outer wrapper `<div>` (additive, the same convention `Button`/`Badge` already
+  use) (FR-006a) — independent of T034-T038, but blocks T034 below. **Done.**
+- [x] T034 [US1] Create `components/ui/PhaseShowcase.tsx` — move the scroll-pin mechanics (420vh
+  track, `position:fixed` stage, scroll-driven `activeIndex`), the top-rail node/icon, the
+  progress-fill rail, and the phase-detail panel (widened `1280px` column, `max-tg-md:grid-cols-1`
+  collapse, 170px circular icon badge) out of `MethodologySection.tsx` into this new file, accepting
+  `phases`/`eyebrow`/`heading` as props (same shape `MethodologySection` currently has); its eyebrow
+  renders via `<SectionEyebrow showAccent={false} className="mb-3.5">` (T033's new prop, the
+  canonical Tailwind step for 14px — not `mb-[14px]`) (FR-006, resolves `/speckit.analyze` finding
+  C1) — depends on T033. **Done, with 3 corrections found during the move**: (1) the pre-move file
+  actually had `max-w-[1208px]` (a digit-transposition typo) instead of the `1280px` T028 was supposed
+  to have already landed — corrected while moving; (2) it likewise still had `max-tg-sm:grid-cols-1`
+  instead of T029's `max-tg-md:grid-cols-1` — corrected too; (3) `className="mb-3.5"` alone did not
+  actually override the base `mb-4` in the browser (Tailwind orders same-property utilities by its own
+  internal catalog, not by className string order — a later class in JSX doesn't win by default,
+  verified computed `margin-bottom: 16px` before the fix) — changed to `className="mb-3.5!"` (Tailwind
+  v4's trailing-`!` important modifier), re-verified computed `margin-bottom: 14px` after.
+- [x] T035 [US1] Reduce `app/_home-components/MethodologySection.tsx` to a thin wrapper: import
+  `METHODOLOGY_PHASES` from `./home-data` directly (moving this import back in, since this file is
+  now the Server-Component-compatible, route-local layer), pre-render each phase's `icon`
+  (`<phase.icon />`, 26px default) and `badgeIcon` (`<phase.icon width={82} height={82} />`) exactly
+  as before, and render `<PhaseShowcase phases={...} eyebrow="How we deliver" heading={...} />` — no
+  scroll-pin/rail/panel markup remains in this file (FR-006) — depends on T034. **Done.**
+- [x] T036 [US1] Revert `app/page.tsx`'s `<MethodologySection>` call back to the plain, prop-less
+  `<MethodologySection />` — T035 moved the `METHODOLOGY_PHASES` import and icon pre-rendering back
+  into `MethodologySection.tsx` itself, so `page.tsx` no longer needs to supply anything — depends on
+  T035. **Done.**
+- [x] T037 [P] [US1] Add 3 new ambient-orb color tokens to `app/tokens.css`'s existing "Ambient orb"
+  grouping — `--color-overlay-orange-11: rgba(232, 119, 34, 0.11)`, `--color-overlay-orange-13:
+  rgba(232, 119, 34, 0.13)`, `--color-overlay-amber-light-10: rgba(247, 183, 51, 0.10)` (the homepage
+  reference's 3 orb colors with no existing exact-match token; its 4th color already exists as
+  `--color-overlay-orange-18`) — and their matching `@theme inline` mappings in `app/globals.css` so
+  `bg-overlay-orange-11`/`bg-overlay-orange-13`/`bg-overlay-amber-light-10` become real canonical
+  Tailwind utilities (Principle I) (FR-006b) — independent of T033-T036 (different files), blocks T038.
+  **Done.**
+- [x] T038 [US1] Rewrite `components/ui/ambient-orbs.tsx` end to end in Tailwind utility classes, no
+  inline `style` anywhere — following the no-inline-style convention `app/case-studies/[slug]/page.tsx`
+  already established for this exact pattern (`className="absolute top-[-160px] right-[-120px]
+  w-[560px] h-[560px] rounded-full bg-overlay-teal blur-[120px]
+  animate-[tgorb_16s_ease-in-out_infinite]"`): (a) convert the existing default 3-orb set's wrapper and
+  3 spans to arbitrary-value position/size/blur/animation classes plus its 3 existing, unchanged
+  `bg-overlay-orange`/`bg-overlay-blue-soft`/`bg-overlay-amber` colors (no new tokens needed here); (b)
+  add a `pathname === "/"` branch (exact match) rendering the homepage's own reference-exact 4-orb,
+  all-warm-toned set instead (positions, sizes, opacities, blur radii, animation timings from
+  `TechGrit Homepage.dc.html` lines 148-158), using `bg-overlay-orange-18` (existing) plus T037's 3 new
+  color utilities — no route-exclusion-check entry for `/` and no separate `app/_home-components/` file
+  (the homepage stays on this same shared, globally-wired component). Also add `!important` to the
+  existing `@media (prefers-reduced-motion: reduce) { .bg-ambient-orbs span { animation: none } }` rule
+  in `app/globals.css` — moving `animation` from inline `style` to a Tailwind class means a later
+  utility-layer class now outranks this rule without it, the same reason `[data-lift-hover]`'s
+  reduced-motion override needed `!important` a few lines below it in the same file (FR-006b) — depends
+  on T037. **Done, with one correction found during implementation**: the pre-move default third orb
+  used a raw `rgba(245, 158, 11, 0.09)` literal — 1% off `--color-overlay-amber`'s `0.10` — rounded onto
+  the existing token instead of minting a 4th one-off token for an imperceptible delta, consistent with
+  this feature's established practice of not chasing sub-visible deltas (research.md §7,
+  `SectionEyebrow`'s 2px delta above).
+
+**Checkpoint**: methodology section's icons, eyebrow, width, responsive collapse, and font all match
+the reference; the scroll-pinned engine lives in `components/ui/PhaseShowcase.tsx`, with
+`MethodologySection.tsx` as a thin wrapper (no scroll-pin/rail/panel markup of its own) and
+`app/page.tsx`'s call prop-less again; the eyebrow's margin-bottom matches the reference's `14px`
+exactly (via `mb-3.5`); `components/ui/ambient-orbs.tsx` renders every orb via Tailwind classes with
+no inline `style`, and the homepage sees its own 4-orb, all-warm-toned branch of that same shared
+component instead of the default 3-orb set; the deliverables checklist and headline gradient are
+unchanged (confirmed already reference-exact, research.md §12). No other homepage section, page, or
+shared component (`Button`, `Badge`, `FormField`) changes.
+
+---
+
+## Phase 9: Polish (Methodology verification)
+
+- [x] T032 Run quickstart.md §12-13's verification steps (isolated render checks + `npm run lint` +
+  `npm run build`). **Done.** `npm run lint` and `npm run build` both green (build initially failed on
+  an RSC server/client boundary error, fixed per T031's note above; second build run succeeded,
+  18/18 static pages generated). Browser-verified via computed styles against the running dev
+  server: content column `max-width:1280px` (was 1100px); all 4 top-rail step markers render an
+  `<svg>` (not numeral text); the phase-detail badge is `~170px` diameter with an `82px` SVG icon,
+  `background-image: linear-gradient(140deg, rgb(247,183,51), rgb(232,119,34))`, and
+  `box-shadow` matching the reference's `0 0 80px rgba(232,119,34,.55), inset 0 3px 20px
+  rgba(255,255,255,.35)` exactly; the active top-rail icon's SVG markup is byte-identical to the
+  enlarged badge's icon markup (confirmed via `innerHTML` comparison); phase title/week labels
+  compute to `font-family: Calibri, Carlito, "Segoe UI", system-ui, -apple-system, sans-serif` (no
+  Arial); the eyebrow renders "How we deliver" with no dash/symbol span; at an 800px viewport (≤960px
+  `md` breakpoint) the phase-detail panel's `grid-template-columns` collapses to a single track. The
+  scroll-pin mechanics, deliverables checklist, and headline gradient were not touched by this pass
+  and remain visually unchanged.
+- [x] T039 Run a fresh browser/build verification pass covering T033-T038: `npm run lint` +
+  `npm run build`; confirm the homepage renders identically to T032's checks above (zero visual
+  regression from *moving* the code into `PhaseShowcase.tsx`, not just from having added it); confirm
+  the eyebrow's computed `margin-bottom` is `14px`; confirm the homepage's ambient-orb background
+  matches `TechGrit Homepage.dc.html` (4 orbs, no blue), that no `style` attribute remains anywhere in
+  `components/ui/ambient-orbs.tsx` (inspect the rendered DOM), that `bg-overlay-orange-11`/
+  `-orange-13`/`-amber-light-10` compute to their expected `rgba()` values, that the reduced-motion
+  media query still stops the orb animation (toggle `prefers-reduced-motion: reduce` and confirm no
+  `animation` is computed), and that `/construction` and `/case-studies` are unaffected.
+
+---
+
+## Dependencies (Methodology)
+
+- T024 is independent (different file, `icons.tsx`) but blocks T024a, which consumes its exports.
+- T024a depends on T024; blocks T025/T026/T031, which now read `phase.icon`/`active.icon` directly.
+- T025 → T026 → T027 → T028 → T029 → T030 → T031: same file (`MethodologySection.tsx`), sequential
+  edits; T031 additionally touches `app/page.tsx`.
+- T033 is independent (different file, `section-eyebrow.tsx`) but blocks T034, which consumes the new
+  `className` prop.
+- T034 → T035 → T036: sequential, each depending on the previous file's new shape existing first;
+  T034 additionally depends on T033.
+- T037 is independent (different files, `tokens.css`/`globals.css`) but blocks T038, which consumes
+  the 3 new `bg-overlay-*` utilities it creates.
+- T032 runs after T024, T024a, T025-T031. T039 runs last, after T033-T038 (and after T032).
+
+## Parallel Example (Methodology)
+
+```bash
+# T024 (icons.tsx) can start immediately; T024a waits on it:
+Task: "Add 4 phase icon components to components/ui/icons.tsx (T024)"
+Task: "Add icon field to MethodologyPhase in home-data.ts, populate per phase (T024a)"
+# Then the MethodologySection.tsx edit chain runs sequentially:
+Task: "MethodologySection.tsx edit chain: T025 -> T026 -> T027 -> T028 -> T029 -> T030 -> T031"
+
+# T033 (section-eyebrow.tsx) and T037 (tokens.css/globals.css) can run together — different files:
+Task: "Add className prop to components/ui/section-eyebrow.tsx (T033)"
+Task: "Add 3 new ambient-orb color tokens + theme mappings (T037)"
+# Then their respective dependent chains run:
+Task: "PhaseShowcase extraction chain: T034 -> T035 -> T036"
+Task: "Rewrite ambient-orbs.tsx to Tailwind classes + homepage 4-orb branch: T038"
+```
+
+## Implementation Strategy (Methodology)
+
+Two increments within this same phase — the original fidelity pass (T024, T024a, T025-T031, verified
+by T032) is already complete; the follow-up reusable-component extraction and homepage ambient orbs
+(T033-T038, verified by T039) is the remaining work. Complete T033-T038, then T039 to verify, then
+stop. The remaining pieces of User Story 1 ("Don't Migrate/Re-Imagine", Construction card,
+Testimonials, Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 remain a future
+`/speckit.plan` pass each. Building `/frameworks` itself (the candidate second consumer that
+motivated the reusable-component extraction) remains explicitly out of scope — a future feature's
+work, not this one's (spec.md Assumptions).
+
+## Phase 10: Homepage Re-Imagine Grid (Phase 2 addendum, User Story 1 slice)
+
+- [x] T040 [P] Add `--color-border-9`, `--color-glass-3`, `--shadow-reimagine-glow`, and
+  `--shadow-reimagine-glow-soft` to `app/tokens.css`, each in its existing numbered section (Borders /
+  Glass fills / Shadows).
+- [x] T041 Map T040's 4 new tokens into `app/globals.css`'s `@theme inline` block, plus the
+  pre-existing-but-unmapped `--color-border-orange-medium`, so `border-border-9`, `bg-glass-3`,
+  `shadow-reimagine-glow(-soft)`, and `border-border-orange-medium` all become canonical Tailwind
+  utilities.
+- [x] T042 [P] Add `ReimagineSparkleIcon` and `TechGritMarkIcon` to `components/ui/icons.tsx`,
+  following the file's existing `IconProps`/`{...props}`-last convention.
+- [x] T043 Add `"reimagineDiff"`/`"reimagineWhy"` to `GlassCardVariant`'s union type first (required —
+  the `Record`s below don't type-check without it), then add matching `reimagineDiff`/`reimagineWhy`
+  entries to `components/ui/GlassCard.tsx`'s `CARD_VARIANTS`, `ICON_VARIANTS`, `TITLE_VARIANTS`, and
+  `DESC_VARIANTS` `Record`s (the existing `reimagine` variant and its consumer,
+  `CaseStudiesSection.tsx`, are left untouched).
+- [x] T044 [P] In `app/_home-components/home-data.ts`, remove `DifferentiatorPoint`'s `icon`/`tone`
+  fields and add a required `image: string` field; populate the 3 existing `DIFFERENTIATORS` entries
+  with `/samples/dm-copilot.png`, `/samples/dm-tech-debt.png`, and `/samples/dm-scalability.png`
+  respectively (all 3 assets confirmed present in `public/samples/`).
+- [x] T045 Rewrite `app/_home-components/ReImagineSection.tsx`'s 3-card row: switch each card to
+  `GlassCard variant="reimagineDiff"` rendering the shared `ReimagineSparkleIcon`, correct the row gap
+  (`gap-6` → `gap-tg-9`) and the grid's own top margin (`mt-14` → `mt-tg-19`), and add each card's
+  `MediaSlot` image region (180px tall, bottom-pinned via `mt-auto`).
+- [x] T046 In the same file, correct the section's outer vertical padding (`pt-15 pb-25` →
+  `pt-20 pb-20`).
+- [x] T047 In the same file, convert the "Why AI-First Matters" panel from a plain `<div>` to
+  `GlassCard variant="reimagineWhy"` (no hover classes, `hoverBorderColor=""`), swapping its icon from
+  `LightningIcon` to `TechGritMarkIcon` and removing the icon's now-reference-incorrect
+  `bg-overlay-orange` background chip.
+- [x] T048 Run `npm run lint` + `npm run build`; browser-verify the 3-card row's computed
+  `border-radius`/`gap`/padding/hover background/hover shadow/border-color against
+  `TechGrit Homepage.dc.html` lines 508-573, confirm each card renders its real image
+  (`dm-copilot.png`/`dm-tech-debt.png`/`dm-scalability.png` via `MediaSlot`, not the "Coming soon"
+  fallback), and confirm the "Why AI-First Matters" panel shows zero hover effect (no translate, no
+  border-color change, no background fill) while its icon renders `TechGritMarkIcon`.
+
+## Dependencies (Re-Imagine Grid)
+
+- T040 is independent (different file, `tokens.css`) but blocks T041, which maps its new tokens.
+- T042 is independent (different file, `icons.tsx`) but blocks T043 (which references the icons only
+  by name in comments, not by import) and T047 (which imports `TechGritMarkIcon`).
+- T041 and T043 both block T045-T047, which consume the new canonical classes and `GlassCard`
+  variants.
+- T044 is independent (different file, `home-data.ts`) but blocks T045 (which reads `item.image`).
+- T045 → T046 → T047: same file (`ReImagineSection.tsx`), sequential edits.
+- T048 runs last, after T040-T047.
+
+## Parallel Example (Re-Imagine Grid)
+
+```bash
+# T040 (tokens.css), T042 (icons.tsx), and T044 (home-data.ts) can run together — different files:
+Task: "Add 4 new border/glass/shadow tokens to app/tokens.css (T040)"
+Task: "Add ReimagineSparkleIcon + TechGritMarkIcon to components/ui/icons.tsx (T042)"
+Task: "Update DifferentiatorPoint shape in home-data.ts (T044)"
+# Then T041 (globals.css) and T043 (GlassCard.tsx) can run together — different files:
+Task: "Map new tokens into globals.css @theme inline (T041)"
+Task: "Add reimagineDiff/reimagineWhy variants to GlassCard.tsx (T043)"
+# Then the ReImagineSection.tsx edit chain runs sequentially:
+Task: "ReImagineSection.tsx edit chain: T045 -> T046 -> T047"
+```
+
+## Implementation Strategy (Re-Imagine Grid)
+
+Complete T040-T044 (independent, parallelizable), then T041/T043 (each depends on one of the first
+group), then the sequential T045-T047 chain, then T048 to verify. The remaining pieces of User Story 1
+(Construction card, Testimonials, Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9
+remain a future `/speckit.plan` pass each.
+
+## Phase 11: Homepage Industries Section (Phase 2 addendum, User Story 1 slice)
+
+Scope: only the homepage's `IndustriesSection.tsx` (FR-008) — NOT the standalone `/construction`
+page, whose own requirements (FR-016–FR-021) are unaffected and out of scope for this phase.
+
+- [x] T049 [P] Add `IndustryFinTechIcon`, `IndustryHealthcareIcon`, and `IndustryConstructionIcon` to
+  `components/ui/icons.tsx`, extracted verbatim from `TechGrit Homepage.dc.html` lines 588/593/598,
+  following the file's existing `IconProps`/`{...props}`-last convention, each with `stroke="#fff"` —
+  the existing `FinTechIcon`/`HealthcareIcon`/`ConstructionIcon` exports (also used by
+  `components/layout/nav-config.ts`'s mega-menu) are left untouched.
+- [x] T050 [P] Add `--color-border-violet-50`, `--color-border-green-55`, `--color-border-blue-55`
+  (§ Borders), `--shadow-industry-glow-violet`, `--shadow-industry-glow-green`,
+  `--shadow-industry-glow-blue` (§ Shadows), `--ls-title-tight: -0.01em` (§ Typography — named to
+  avoid confusion with the existing, unrelated `--ls-01: 0.01em`, per `/speckit.analyze` finding M3),
+  and `--text-industry-title: 26px` (§ Typography — a dedicated token, not a reuse of the
+  single-job-annotated `--text-stat`, per `/speckit.analyze` finding C1) to `app/tokens.css`, each in
+  its existing numbered section.
+- [x] T051 Map T050's 8 new tokens into `app/globals.css`'s `@theme inline` block, so
+  `border-border-violet-50`/`-green-55`/`-blue-55`, `hover:shadow-industry-glow-violet`/`-green`/
+  `-blue`, `tracking-title-tight`, and `text-industry-title` all become canonical Tailwind utilities.
+- [x] T052 [P] In `app/_home-components/home-data.ts`: repoint each `IndustryCard.icon` to its new
+  `Industry*Icon` export (T049), remove the `image` field from the `IndustryCard` type and all 3
+  `INDUSTRY_CARDS` entries, and add a required `iconBg: string` field populated with
+  `bg-avatar-violet`/`bg-avatar-green`/`bg-avatar-blue` (FinTech/Healthcare/Construction respectively —
+  all 3 already exact-match, already-mapped tokens from the Testimonials avatar work, reused as-is).
+- [x] T053 In `components/ui/GlassCard.tsx`, edit the `industry` entry (its sole consumer, confirmed
+  via search — safe to modify in place) in `CARD_VARIANTS` (→
+  `"rounded-2xl border-border-9 bg-glass-3 p-tg-13 pb-tg-14 hover:-translate-y-[5px]"`, dropping
+  `overflow-hidden`), `ICON_VARIANTS` (→ `"mb-tg-17 h-14 w-14 rounded-full"`), `TITLE_VARIANTS` (→
+  `"text-industry-title tracking-title-tight"`, replacing the stale `"text-[23px]"` — `/speckit.analyze`
+  finding H1: the original task only planned to *add* tracking, never correcting the 23px→26px
+  font-size gap), and `DESC_VARIANTS` (→ `"mt-2.5 text-sm leading-[1.6] text-60"`, replacing
+  `"mt-2.5 text-[15px] leading-[1.6]"` — `/speckit.analyze` finding H2: this variant had no color class
+  and was silently inheriting the base `<p>` rule's 0.72-opacity text color instead of the reference's
+  0.6; `text-sm` also replaces the arbitrary `text-[15px]` with its canonical equivalent, per M1).
+- [x] T054 Rewrite `app/_home-components/IndustriesSection.tsx`: remove the `MediaSlot`/photo block and
+  its `ICON_BORDER`/`ICON_COLOR` maps entirely; render each card's icon as
+  `<GlassCardIcon variant="industry" className={industry.iconBg}><Icon className="text-white" /></GlassCardIcon>`;
+  remove the inline "Explore Construction →" text link; wrap only the Construction card (where
+  `industry.href` is non-null) in a whole-card `<a href={industry.href}>` — FinTech and Healthcare
+  render their `GlassCard` unwrapped, with no click affordance. Also correct the "Explore Industry
+  Solutions" `<Button variant="ghost">` call's `className` from `"px-6!"` to `"py-4!"` —
+  `/speckit.analyze` finding M2: `Button.tsx`'s `md`-size default already provides the reference's
+  correct 26px horizontal padding, so `px-6!` (24px) was an unnecessary, fidelity-*regressing*
+  override; the reference's actual gap was vertical padding (14px vs. the needed 16px), which neither
+  the original nor the overridden class corrected.
+- [ ] T055 Run `npm run lint` + `npm run build`; browser-verify each card's computed
+  `border-radius`/`background`/`padding`/icon-to-title gap against `TechGrit Homepage.dc.html` lines
+  586-602, confirm the title renders at 26px (not the stale 23px) and the description at
+  `rgba(255,255,255,0.6)` (not the inherited 0.72), confirm only the Construction card is clickable
+  (whole-card, to `/construction`) with a distinct hover lift/border/glow, confirm FinTech/Healthcare
+  show no hover or click affordance, confirm the ghost button's computed padding is `16px` vertical /
+  `26px` horizontal, and confirm `components/layout/nav-config.ts`'s mega-menu icons render
+  pixel-unchanged.
+
+## Dependencies (Industries Section)
+
+- T049 (icons.tsx) and T050 (tokens.css) are independent (different files) but each blocks a later
+  task: T049 blocks T052 (imports the new icons); T050 blocks T051 (maps its new tokens).
+- T051 and T049 both block T053 (which consumes the new canonical classes) and T054 (which imports the
+  new icons via T052).
+- T052 depends on T049 (icon imports) and is independent of T050/T051/T053 otherwise.
+- T053 depends on T051 (canonical classes must exist first).
+- T054 depends on T052 (repointed `home-data.ts`) and T053 (updated `GlassCard` variant).
+- T055 runs last, after T049-T054.
+
+## Parallel Example (Industries Section)
+
+```bash
+# T049 (icons.tsx) and T050 (tokens.css) can run together — different files:
+Task: "Add 3 new Industry*Icon exports to components/ui/icons.tsx (T049)"
+Task: "Add 3 border tokens + 3 shadow tokens + 1 tracking token + 1 font-size token to app/tokens.css (T050)"
+# Then T051 (globals.css) and T052 (home-data.ts) can run together — different files:
+Task: "Map new tokens into globals.css @theme inline (T051)"
+Task: "Repoint IndustryCard icons, drop image field, add iconBg (T052)"
+# Then T053 (GlassCard.tsx), then T054 (IndustriesSection.tsx) — each depends on the prior:
+Task: "Edit industry variant's CARD_VARIANTS/ICON_VARIANTS/TITLE_VARIANTS/DESC_VARIANTS (T053)"
+Task: "Rewrite IndustriesSection.tsx: icon badges, no photo, Construction-only link, ghost-button padding fix (T054)"
+```
+
+## Implementation Strategy (Industries Section)
+
+Complete T049-T050 (independent, parallelizable), then T051/T052 (each depends on one of the first
+group), then T053, then T054, then T055 to verify. The remaining pieces of User Story 1 (Testimonials,
+Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass
+each — unless already covered below.
+
+## Phase 12: Homepage Testimonials Section (Phase 2 addendum, User Story 1 slice)
+
+Scope: only `app/_home-components/TestimonialsSection.tsx`, `app/_home-components/home-data.ts`
+(FR-009, FR-009a) — NOT any other homepage section, NOT any other page.
+
+- [ ] T056 [P] Add `QuoteIcon` to `components/ui/icons.tsx` (the reference's quotation-mark path,
+  `TechGrit Homepage.dc.html` lines 646/673: `M9 6C4.5 6 2 10 2 15v11h11V15H6.5c0-3 1.5-5 4.5-5V6zm18
+  0c-4.5 0-7 4-7 9v11h11V15h-6.5c0-3 1.5-5 4.5-5V6z`), following the file's existing
+  `IconProps`/`{...props}`-last convention — `ClockIcon`/`CheckIcon` (both already exist) are reused via
+  prop overrides, not modified.
+- [ ] T057 [P] Add 7 new tokens to `app/tokens.css`, each in its existing numbered section:
+  `--gradient-testimonial-card` (§ Gradients, text-card resting background), `--gradient-testimonial-edge-left`
+  (§ Gradients, track's new left-side fade), `--shadow-testimonial-hover-video` and
+  `--shadow-testimonial-hover-text` (§ Shadows, per-card-type hover shadow shapes),
+  `--shadow-testimonial-avatar` (§ Shadows, text-card avatar shadow), `--color-badge-ink-40`
+  (§ Ink-scale, duration-badge pill background), and `--radius-16: 16px` (§ Radii, numbered tier —
+  deliberately not a reuse of the single-job-annotated `--radius-tile`). **Also correct** the existing
+  `--gradient-testimonial-video`'s first color stop from `rgba(232,119,34,0.92)` to the reference's
+  exact `rgba(232,119,34,0.88)` (`/speckit.analyze` finding
+  H1 — this value change belongs here, in the tokens task, not inside T060's component edit; its second
+  stop already matches and is unchanged). **Also rename** the existing `--color-badge-ink-45` to
+  `--color-badge-ink-50`, correcting its value from `rgba(0,0,0,0.45)` to the reference's actual
+  `rgba(0,0,0,0.50)` (its sole consumer is corrected in T060).
+- [ ] T057a [P] Add a required `id` field to `Testimonial` in `app/_home-components/home-data.ts`,
+  populated for all 6 `TESTIMONIALS` entries (`/speckit.analyze` finding C2 — Constitution Principle
+  III, "Stable identity for repeated content": both of `TestimonialsSection.tsx`'s `.map()` render sites
+  currently key on `testimonial.name`, display text, with no `id`/`slug` field to key on instead — the
+  same gap this feature already fixed for `DeliveryStat`/`TrustedClientLogo` via `T007a`). Independent of
+  T056/T057 (different file); T059 depends on it to re-key both call sites.
+- [ ] T058 Map T057's 7 new/corrected tokens plus the renamed `--color-badge-ink-50` into
+  `app/globals.css`'s `@theme inline` block (removing the stale `--color-badge-ink-45` mapping key), so
+  `bg-badge-ink-40`/`bg-badge-ink-50`, `hover:shadow-testimonial-hover-video`/`-text`,
+  `shadow-testimonial-avatar`, and `rounded-16` all become canonical Tailwind utilities; the 2 gradient
+  tokens are consumed via the existing arbitrary-property pattern already used for
+  `--gradient-testimonial-video`/`-fade`/`-edge`/`-placeholder` (no bare utility equivalent for a
+  gradient value) — the corrected `--gradient-testimonial-video` value flows through its existing
+  mapping unchanged.
+- [ ] T059 In `app/_home-components/TestimonialsSection.tsx`, restructure the header: replace the single
+  centered block with a flex row — a left-aligned text column (eyebrow, `h2`, paragraph, all inside a
+  shared `max-w-[640px]` wrapper, dropping the paragraph's current `text-center mx-auto max-w-[520px]`)
+  on the left, and a new trust-metrics card on the right (3 stat cells — 500+ Projects delivered / 100%
+  Would refer / 6wk Avg. time to value — separated by 2 vertical dividers, defined as a local array in
+  this file with its own `id` field per cell (`/speckit.analyze` finding L1 — keyed on `id`, not label
+  text, from the start, since this is a new `.map()`-rendered list), using
+  `border-border-8`/`bg-glass-3`/`blur-md`/`rounded-16`/`space-8`/`space-11` and the `border-border-14`
+  divider, all exact-match reused tokens), wrapping below the text column via normal `flex-wrap` at
+  narrow widths (no absolute positioning). Also re-key both of this file's `TESTIMONIALS.map()` render
+  sites from `key={testimonial.name}` to `key={testimonial.id}` (T057a).
+- [ ] T060 [P] [US1] In the same file's **video card**, add a duration badge (reusing `ClockIcon` at
+  `width={10} height={10} strokeWidth={2.5}` + "2:14" text in `text-bright`/`text-3xs`, on a
+  `bg-badge-ink-40` pill) next to the existing VIDEO label; add a 5-star rating row (`/speckit.analyze`
+  finding C1 — this card has **no** star-rating markup today, unlike the text card; render 5 static
+  white stars with the reference's subtle `text-shadow`, independent of the `rating` field, which video
+  entries don't set); correct the VIDEO label pill's background class from `bg-badge-ink-45` to
+  `bg-badge-ink-50` (T057's rename); correct the card's border class from `border-border-orange` (0.38)
+  to `border-border-orange-45` (0.45, exact reference match) — the video-gradient background's opacity
+  correction is already handled by T057, this task only consumes the corrected token; add
+  `hover:shadow-testimonial-hover-video` alongside the existing `hover:-translate-y-1.5`; add a decorative
+  `QuoteIcon` (T056) at the reference's video-card size/position/opacity/color (76px, `fill-white`,
+  `opacity-14`). No verified badge is added to this card.
+- [ ] T061 [P] [US1] In the same file's **text card**, add a verified badge (reusing `CheckIcon` at
+  `width={11} height={11}` + "Verified" label in `text-green`/`text-3xs`/`tracking-wider`, positioned in
+  the same row as the existing star rating via `justify-between`); add `hover:border-border-orange-medium`
+  and `hover:shadow-testimonial-hover-text` alongside the existing `hover:-translate-y-1.5`; add
+  `shadow-testimonial-avatar` to the avatar circle (background gradient unchanged — already correct);
+  correct the card's background from flat `bg-glass-4` to the new `bg-[image:var(--gradient-testimonial-card)]`
+  gradient (T057); add a decorative `QuoteIcon` (T056) at the reference's text-card size/position/opacity/
+  color (110px, `fill-orange`, `opacity-06`). No duration badge or play affordance is added to this card.
+- [ ] T062 [US1] In the same file, add the new `--gradient-testimonial-edge-left` fade as a second edge
+  overlay (left side, alongside the existing unchanged right-side `--gradient-testimonial-edge` fade);
+  update the drag pointer handlers — `onPointerDown` now also sets the track's cursor to `grabbing` and
+  `scrollSnapType` to `"none"`; `endDrag` (pointer-up/leave) now also reverts both to `grab`/`"x proximity"` —
+  matching the reference's `_setupTestiDrag` exactly, in addition to the existing `scrollLeft`-based drag
+  logic.
+- [ ] T063 Run `npm run lint` + `npm run build`; browser-verify the header's left-alignment (including the
+  paragraph) and the metrics card's position/wrap behavior, each card type's new elements per the
+  reference-exact per-card-type split (video: duration badge + star rating + quote icon, no verified
+  badge; text: verified badge + quote icon, no duration badge), each card type's distinct hover shadow,
+  the avatar's new shadow, both edge fades (confirm the left one reads visibly lighter/narrower than the
+  right), and the drag cursor/scroll-snap-toggle behavior (grab→grabbing while held, snap suspended
+  mid-drag, restored on release). Confirm `--color-badge-ink-50`'s only consumer is this file, and that
+  both `.map()` sites over `TESTIMONIALS` now key on `testimonial.id`, not `testimonial.name`.
+
+## Dependencies (Testimonials Section)
+
+- T056 (icons.tsx), T057 (tokens.css), and T057a (home-data.ts) are mutually independent (different
+  files) but each blocks later tasks: T056 blocks T060/T061 (import `QuoteIcon`); T057 blocks T058 (maps
+  its new/renamed/corrected tokens) and T059-T062 (consume the new canonical classes); T057a blocks T059
+  (re-keys the `.map()` sites on `testimonial.id`).
+- T058 depends on T057.
+- T059 depends on T057/T058 (consumes `border-border-8`/`bg-glass-3`/`blur-md`/`rounded-16`/etc.) and
+  T057a (re-keying).
+- T060 and T061 are independent of each other (different card-type branches in the same file's `.map()`
+  callback) but both depend on T056 (icon import) and T058 (canonical classes) — run sequentially against
+  the same file to avoid edit conflicts, not truly parallel despite touching different JSX branches.
+- T062 depends on T057/T058 (the new left-edge gradient class) and is otherwise independent of T060/T061's
+  card-level changes.
+- T063 runs last, after T056-T062 (and T057a).
+
+## Parallel Example (Testimonials Section)
+
+```bash
+# T056 (icons.tsx), T057 (tokens.css), and T057a (home-data.ts) can all run together — different files:
+Task: "Add QuoteIcon to components/ui/icons.tsx (T056)"
+Task: "Add 7 new tokens + 1 value correction + 1 rename to app/tokens.css (T057)"
+Task: "Add required id field to Testimonial in home-data.ts (T057a)"
+# Then T058 (globals.css), then the TestimonialsSection.tsx edit chain runs sequentially:
+Task: "Map new/renamed tokens into globals.css @theme inline (T058)"
+Task: "TestimonialsSection.tsx edit chain: T059 -> T060 -> T061 -> T062"
+```
+
+## Implementation Strategy (Testimonials Section)
+
+Complete T056-T057/T057a (independent, parallelizable), then T058 (depends on T057), then the
+sequential T059-T062 chain (all touch the same file), then T063 to verify. The remaining pieces of User
+Story 1 (Blog teaser, Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan`
+pass each. `/construction`'s own FR-016–FR-021 work is unaffected and unplanned by this phase.
+
+## Phase 13: Homepage Blog Teaser Section (Phase 2 addendum, User Story 1 slice)
+
+Scope: new `app/_home-components/BlogSection.tsx`, `components/ui/icons.tsx`, `components/ui/GlassCard.tsx`,
+`app/tokens.css`/`globals.css`, `app/page.tsx` (FR-010) — NOT any other homepage section, NOT
+`app/blog/_data/blog-content.ts` or any other `/blog` file, NOT any other page.
+
+- [X] T064 [P] **Revised during implementation**: no new icons needed. `components/ui/icons.tsx`
+  already has `CopilotToAgenticIcon`, `EradicateDebtIcon`, and `InfiniteScalabilityIcon` — added for
+  the Re-Imagine grid, unused since FR-007 replaced them with a shared sparkle icon — and their SVG
+  paths are byte-identical to the reference's 3 Blog-card decorative icons (`TechGrit Homepage.dc.html`
+  lines 789/801/813). Adding 3 new `Blog*Icon` exports would have duplicated these shapes verbatim, a
+  Principle III violation. `BlogSection.tsx` (T068) imports and reuses all 3 as-is, overriding
+  `width`/`height` to 72 and `stroke` to `var(--color-icon-stroke)` via prop spread (matching the
+  hardcoded-stroke convention already used by `case-study-detail-hero.tsx`/`featured-case-study.tsx`).
+  **Done.**
+- [X] T065 [P] Add 15 new tokens to `app/tokens.css`, each in its existing numbered section (see
+  research.md §16 for the full list and reference line numbers): `--gradient-blog-teaser-orange`/`-blue`/
+  `-teal` (§ Gradients), `--color-glow-white-18`, `--color-border-blue-55`, `--color-border-teal-60`
+  (§ Borders & Glass), `--color-text-35` (§ Text Colors), `--text-blog-meta`, `--ls-blog-meta`
+  (§ Typography — both deliberately dedicated, not reusing the value-close `--text-2xs` or the
+  single-job-annotated `--ls-hint`), and `--shadow-blog-teaser-orange`/`-blue`/`-teal` +
+  `-orange-hover`/`-blue-hover`/`-teal-hover` (§ Shadows). Card 1's hover border
+  (`--color-hover-orange-border-55`) and its header-gradient first stop's numeric coincidence with
+  `--color-overlay-orange-strong` need no new token — reused/noted, not duplicated.
+- [X] T066 Map T065's 15 new tokens into `app/globals.css`'s `@theme inline` block (the 3 gradients via
+  the existing arbitrary-property pattern already used for `--gradient-testimonial-*`; the rest as
+  canonical utilities — `bg-glow-white-18`, `border-border-blue-55`, `border-border-teal-60`, `text-35`,
+  `text-blog-meta`, `tracking-blog-meta`, `shadow-blog-teaser-orange`/`-blue`/`-teal`,
+  `hover:shadow-blog-teaser-orange-hover`/`-blue-hover`/`-teal-hover`). **Also add** 2 previously-missing
+  mappings for pre-existing, unrelated tokens this section's own markup needs —
+  `--spacing-tg-6: var(--space-6);` (16px) and `--spacing-tg-10: var(--space-10);` (24px) — neither had a
+  canonical `@theme inline` entry before now (research.md §16). Depends on T065 (same file, sequential).
+- [X] T067 [P] Add a new `"blogTeaser"` member to `GlassCard.tsx`'s `GlassCardVariant` union and a
+  matching entry in each of its 4 `Record`s: `CARD_VARIANTS.blogTeaser` (`"flex flex-col overflow-hidden
+  rounded-2xl border-border-image bg-glass-4 hover:-translate-y-[6px]"` — `bg-glass-4`/`border-border-image`
+  are exact-match reused tokens), `ICON_VARIANTS.blogTeaser` (`"h-18 w-18"` — Tailwind's own canonical
+  72px default, no new token needed), `TITLE_VARIANTS.blogTeaser` (`"mt-tg-4 text-[19px] font-bold
+  text-white leading-[1.32]"`), `DESC_VARIANTS.blogTeaser` (`"mt-tg-3 text-[14.5px] leading-[1.6]
+  text-muted"` — `text-muted` added explicitly, per the same silent-inheritance lesson already applied to
+  the Industries variant). Distinct from the existing `"blogCard"`/`"blogFeatured"` variants (different
+  shape, not a fork of either — neither's own `Record` entries change). Independent of T064/T065/T066
+  (different file).
+- [X] T068 [US1] Create new `app/_home-components/BlogSection.tsx`: a local `BLOG_TEASER_POSTS` array of
+  3 entries (each with its own `id` field from the start, per this feature's established Principle III
+  stable-identity convention), holding the reference's literal topic/title/excerpt/read-time/icon/
+  per-card-color-class fields verbatim (research.md §16 — content is static/reference-exact, not a
+  dynamic pull from `app/blog/_data/blog-content.ts`). The outer `<section>` wrapper uses
+  `max-w-(--container-max) px-9 pt-tg-21 pb-20` (matching the reference's `max-width:1280px;
+  padding:60px 36px 80px` — all already-canonical classes, no new token needed), the same container
+  convention `IndustriesSection`/`TestimonialsSection` already use. Renders a left-aligned hand-rolled
+  eyebrow ("From the blog") + `h2` ("Perspectives on AI-first delivery.", using `LifeGallery.tsx`'s existing
+  `text-[clamp(30px,3.6vw,42px)]` clamp) alongside a right-aligned ghost `<Button href="/blog"
+  variant="ghost">` ("Visit the blog" + arrow), in the same header row shape `IndustriesSection.tsx`
+  already establishes; below, a 3-card grid (`grid-cols-3 gap-6 max-tg-md:grid-cols-1`), each card a
+  plain `<a href="/blog">` (matching `IndustriesSection.tsx`'s own whole-card-link convention exactly —
+  no `style={{ display: "contents" }}` needed, since the `<a>` is itself the direct grid child here)
+  wrapping a `<GlassCard variant="blogTeaser">` (T067) with a 190px gradient/icon header block, a
+  radial-highlight overlay, and a body (topic/dot/read-time meta row, title, description, "Read more →"
+  link) — see plan.md's "Homepage Blog Teaser Section (FR-010)" for the full per-element class
+  breakdown. Depends on T064 (icons — revised to reuse `CopilotToAgenticIcon`/`EradicateDebtIcon`/
+  `InfiniteScalabilityIcon`), T066 (tokens/mappings), and T067 (GlassCard variant). **Done.**
+- [X] T069 [US1] Render `<BlogSection />` in `app/page.tsx` between `<CaseStudiesSection />` and
+  `<LifeGallery />`, matching the reference's own document order (Testimonials → Case Studies →
+  home-blogs → Inside TechGrit). Depends on T068. **Done.**
+- [X] T070 Run `npm run lint` + `npm run build`; browser-verify the section's left-aligned eyebrow/heading,
+  the right-aligned ghost button (22px/15px padding, 52px min-height) linking to `/blog`, all 3 cards'
+  per-card gradient header/icon/topic-color/hover-border/hover-shadow, that clicking anywhere on a card
+  (not just its "Read more" text) navigates to `/blog`, that the 3 cards' content matches the reference
+  verbatim (not any of the 9 real `/blog` posts), and that the section sits between the homepage's Case
+  Studies preview and Life at TechGrit with no other section shifted. Confirm `app/blog/_data/blog-content.ts`
+  and every `/blog` file are unchanged.
+
+## Dependencies (Blog Teaser Section)
+
+- T064 (icons.tsx) and T065 (tokens.css) are mutually independent (different files) but each blocks later
+  tasks: T064 blocks T068 (imports the 3 new icons); T065 blocks T066 (maps its new tokens).
+- T066 depends on T065, and in turn blocks T068 (which consumes T066's canonical classes, not
+  `tokens.css`'s raw custom properties directly).
+- T067 is independent of T064/T065/T066 (different file) but blocks T068 (consumes the new `"blogTeaser"`
+  variant).
+- T068 depends on T064, T066, and T067.
+- T069 depends on T068.
+- T070 runs last, after T064-T069.
+
+## Parallel Example (Blog Teaser Section)
+
+```bash
+# T064 (icons.tsx), T065 (tokens.css), and T067 (GlassCard.tsx) can all run together — different files:
+Task: "Add 3 new decorative icons to components/ui/icons.tsx (T064)"
+Task: "Add 15 new tokens to app/tokens.css (T065)"
+Task: "Add new blogTeaser variant to components/ui/GlassCard.tsx (T067)"
+# Then T066 (globals.css, depends on T065), then the sequential chain:
+Task: "Map new tokens + 2 missing spacing mappings into globals.css @theme inline (T066)"
+Task: "Create BlogSection.tsx (T068) -> render in page.tsx (T069) -> verify (T070)"
+```
+
+## Implementation Strategy (Blog Teaser Section)
+
+Complete T064/T065/T067 (independent, parallelizable), then T066 (depends on T065), then T068 (depends
+on T064/T066/T067), then T069 (depends on T068), then T070 to verify. The remaining pieces of User
+Story 1 (Life at TechGrit, final CTA) and User Stories 2-9 remain a future `/speckit.plan` pass each.
+
+## Phase 14: Homepage Life at TechGrit Section (Phase 2 addendum, User Story 1 slice)
+
+**Input**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Life at TechGrit Section (FR-011)",
+[spec.md](./spec.md) FR-011/FR-044, Clarifications Session 2026-08-06. [research.md](./research.md) §17
+has the full token reuse/no-new-token accounting.
+
+**Scope**: `app/_home-components/LifeGallery.tsx`'s `home` branch only, `app/_home-components/
+home-data.ts` (`CULTURE_GALLERY_IMAGES` caption content), and 2 new tokens in `app/tokens.css`/
+`globals.css` (FR-011) — NOT the `careers` branch of the same file, NOT `/careers` (which must render
+with zero visual change), NOT `components/ui/section-eyebrow.tsx` itself, NOT any other homepage
+section, NOT `app/page.tsx`.
+
+**Goal**: FR-011 — the "Inside TechGrit" eyebrow renders with no leading accent line, the photo grid
+matches the reference's uniform 4-column bordered/captioned layout, and the two action buttons (already
+correct from Phase 1) are confirmed unchanged.
+
+- [X] T071 [P] [US1] Recreate `app/_home-components/LifeGallery.tsx` byte-for-byte from the teammate's
+  supplied unmerged-branch structure — the `variant`/`columns`-based component, `LifeGalleryImage` gaining
+  optional `captionLabel`/`caption` fields, the `careers` branch's aspect-`3/4` bordered tile shell with
+  its caption-rendering block left commented out exactly as supplied, and `scroll-mt-[96px]` on the
+  `<section>` — establishing the merge-conflict-free baseline this addendum's own edits (T075) layer on
+  top of (spec.md Clarifications, Session 2026-08-06; plan.md "Homepage Life at TechGrit Section
+  (FR-011)"). Independent of T072/T074 (different files) — blocks T074 and T075. **Revised during
+  implementation** (direct instruction, discovered mid-recreation): the teammate's pasted `careers`
+  eyebrow hardcoded a raw `text-[#E87722]` hex and a `text-[rgba(255,255,255,0.66)]` literal — both
+  duplicate existing tokens (`--color-orange`, `--color-text-66`) and would have been a fresh Principle I
+  violation. Recreated using the canonical `text-orange`/`text-text-66` classes instead (same resolved
+  color, zero visual difference) — every other byte of the `careers` branch is unchanged from the
+  supplied structure. **Done.**
+- [X] T072 [P] Add 2 new tokens to `app/tokens.css`, each in its existing numbered section (research.md
+  §17): `--gradient-life-cap: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.82));` (§ Gradients —
+  deliberately dedicated, not a reuse of the value-identical but differently-annotated
+  `--gradient-testimonial-fade`) and `--ls-life-cap: 0.14em;` (§ Typography — likewise dedicated, not a
+  reuse of the value-identical `--ls-hint`/`--ls-blog-meta`, both already single-job-annotated). Independent
+  of T071. **Done.**
+- [X] T073 Map T072's 2 new tokens into `app/globals.css`'s `@theme inline` block: `--gradient-life-cap`
+  via the existing arbitrary-property pattern already used for `--gradient-testimonial-*`/`--gradient-
+  blog-teaser-*` (`bg-[image:var(--gradient-life-cap)]`), `--ls-life-cap` as a canonical `tracking-life-cap`
+  utility. Depends on T072 (same file, sequential). **Revised during implementation**: `--gradient-life-cap`
+  itself needs no `@theme inline` entry — confirmed `--gradient-testimonial-fade`/`--gradient-blog-teaser-*`
+  have none either, since composite gradients are consumed directly via `bg-[image:var(--token)]`, not a
+  bare utility; only `--tracking-life-cap: var(--ls-life-cap);` was added. **Done.**
+- [X] T074 [P] [US1] Populate the (post-T071) `captionLabel`/`caption` fields on all 4
+  `CULTURE_GALLERY_IMAGES` entries in `app/_home-components/home-data.ts` with the reference's literal
+  per-tile text (research.md §17): `glasses.png` → `"The team"` / `"Builders and designers behind the
+  engineering."`; `rooftop.png` → `"The office"` / `"Rooftop breaks, real conversations."`; `painting.png`
+  → `"Craft"` / `"We take craft seriously — inside & outside code."`; `diwali.png` → `"Together"` /
+  `"We celebrate wins — and Diwali — together."`. The `span` field is left in place, unused by the
+  rewritten `home` branch (T075) but still read by the untouched `careers` branch. **Also**
+  (`/speckit.analyze` finding C1) — add a required `id: string` field to `CultureGalleryImage` and
+  populate it for all 4 entries (`"glasses"`, `"rooftop"`, `"painting"`, `"diwali"`), closing a
+  pre-existing Principle III stable-identity gap (today's `.map()` keys on `` `${item.src}-${index}` ``,
+  a derived stopgap) at the exact point T075 re-wires this render — the same fix this feature already
+  applied to `DeliveryStat`, `TrustedClientLogo`, and `Testimonial`. **Also** (`/speckit.analyze` finding
+  M1) — correct the `LifeGalleryImage` interface's 2 doc comments inherited from T071's recreation
+  ("Careers-only... Left `undefined` for `home`"), which become stale once `home` populates and renders
+  these fields; reworded to describe both fields as populated for both variants. Depends on T071 (the
+  `captionLabel`/`caption`/`id` fields must exist on the type first); independent of T072/T073 (different
+  file). **Done.**
+- [X] T075 [US1] Rewrite `LifeGallery.tsx`'s `home` branch only (`careers` branch, its `SPAN_CLASSES` map,
+  and every other code path from T071's baseline stay untouched): replace the hand-rolled eyebrow markup
+  (accent-line `<span>` + text `<span>`) with `<SectionEyebrow showAccent={false}>Inside
+  TechGrit</SectionEyebrow>`; replace `gridColsClass`/`auto-rows-[200px]`/span-driven tiles with
+  `grid grid-cols-4 gap-tg-6 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1`; rewrite each tile as
+  `<figure className="group relative m-0 aspect-3/4 overflow-hidden rounded-xl border-border-8 bg-glass-3
+  transition-transform duration-300 hover:-translate-y-1">` containing `MediaSlot` (sizes:
+  `"(max-width: 960px) 50vw, 25vw"`) plus a `<figcaption>` caption overlay
+  (`bg-[image:var(--gradient-life-cap)]`, `px-tg-7 pt-tg-9 pb-tg-7`, `opacity-0 group-hover:opacity-100`,
+  `translate-y-1.5 group-hover:translate-y-0`) rendering `item.captionLabel` (`text-11 tracking-life-cap
+  text-amber-light uppercase`) and `item.caption` (`text-xs leading-[1.35] text-white`) — see plan.md's
+  "Homepage Life at TechGrit Section (FR-011)" for the full per-element class breakdown. The `.map()`
+  call itself keys on `item.id` (T074's new field, `/speckit.analyze` finding C1), not
+  `` `${item.src}-${index}` ``. Depends on T071 (baseline), T073 (tokens mapped into `globals.css`), and
+  T074 (caption content + `id` field populated). **Revised during implementation**: since both variants
+  now render a fixed grid shape (no more `columns`-driven column count or span-based sizing for `home`),
+  `gridColsClass`, `cellRadiusClass`, and the module-level `SPAN_CLASSES` map became dead code and were
+  removed; `columns` stays in `LifeGalleryProps` (undestructured) purely for backward compatibility with
+  `careers/page.tsx`'s existing `columns={4}` call. **Done.**
+- [X] T076 Run `npm run lint` + `npm run build`; browser-verify the "Inside TechGrit" eyebrow shows no
+  leading accent line, the grid shows a uniform 4-tile row (2 cols at `md`, 1 col at `sm`) with each tile
+  bordered/aspect-locked, hovering a tile reveals its category label + caption with a lift, the two action
+  buttons are unchanged, and — critically — `/careers`'s own Life at TechGrit section renders with zero
+  visible difference from before this phase (its `careers` branch was only byte-recreated in T071, never
+  edited). Confirm React DevTools (or the rendered DOM) shows both `CULTURE_GALLERY_IMAGES` tiles keyed on
+  `item.id`, not `` `${item.src}-${index}` `` (`/speckit.analyze` finding C1). **Done** — `npm run lint`
+  and `npm run build` both green; DOM inspection on `/` confirmed 4 equal `286.25px` columns/`16px` gap,
+  each tile `18px` radius/`3:4` aspect-ratio/`rgba(255,255,255,0.08)` border/`rgba(255,255,255,0.03)`
+  background, the eyebrow rendering as plain `.eyebrow`-styled text with no accent-line element, and all 4
+  captions' label/text content present with `opacity-0`/`group-hover:opacity-100` wiring intact; DOM
+  inspection on `/careers` confirmed its own gallery (4 tiles, `18px` radius, `3:4` aspect-ratio, hand-rolled
+  eyebrow, no `<figcaption>` element) is byte-identical to before this phase.
+
+**Known, deliberately-deferred delta** (`/speckit.analyze` finding L1, not a task in this phase): the
+recreated `careers` branch's own tile radius (`rounded-[20px]`) doesn't match the reference's `18px` — a
+pre-existing mismatch in the teammate's unmerged code, correctly out of this phase's FR-011 scope.
+Recorded here for a future Careers-page pass, not silently dropped.
+
+## Dependencies (Life at TechGrit Section)
+
+- T071 (baseline recreation) and T072 (tokens.css) are mutually independent (different files), but T071
+  blocks T074 and T075; T072 blocks T073.
+- T073 depends on T072, and in turn blocks T075 (which consumes the canonical `tracking-life-cap`/
+  `bg-[image:var(--gradient-life-cap)]` classes).
+- T074 depends on T071; independent of T072/T073.
+- T075 depends on T071, T073, and T074.
+- T076 runs last, after T071-T075.
+
+## Parallel Example (Life at TechGrit Section)
+
+```bash
+# T071 (LifeGallery.tsx baseline recreation) and T072 (tokens.css) can run together — different files:
+Task: "Recreate LifeGallery.tsx from the teammate's supplied structure (T071)"
+Task: "Add 2 new tokens to app/tokens.css (T072)"
+# Then T073 (globals.css, depends on T072) and T074 (home-data.ts captions, depends on T071) can run together:
+Task: "Map new tokens into globals.css @theme inline (T073)"
+Task: "Populate captionLabel/caption on CULTURE_GALLERY_IMAGES (T074)"
+# Then the sequential tail:
+Task: "Rewrite LifeGallery.tsx's home branch (T075) -> verify, including /careers zero-diff check (T076)"
+```
+
+## Implementation Strategy (Life at TechGrit Section)
+
+Complete T071/T072 (independent, parallelizable), then T073/T074 (each depends on one of the first pair,
+independent of each other), then T075 (depends on all three prior tasks), then T076 to verify — paying
+particular attention to confirming `/careers` shows no visual change, since T071 touches the same file
+`/careers` consumes. Only the homepage's final CTA remains unplanned within User Story 1; User Stories
+2-9 remain a future `/speckit.plan` pass each.
+
+## Phase 15: Homepage Final CTA Section (Phase 2 addendum, User Story 1 slice)
+
+**Input**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Final CTA Section (FR-012)", [spec.md](./spec.md)
+FR-012, Clarifications Session 2026-08-06. [research.md](./research.md) §18 has the full token
+reuse/no-new-token accounting.
+
+**Scope**: `app/_home-components/FinalCta.tsx`'s outer container and secondary link only, plus 1 new
+token in `app/tokens.css`/`globals.css` (FR-012) — NOT the card's background/border/radius/blur, NOT the
+eyebrow/heading/paragraph, NOT the primary "Schedule an OrbitAI Demo" button, NOT any other homepage
+section, NOT `app/page.tsx`.
+
+**Goal**: FR-012 — the outer container widens to the reference's `1280px`, and the secondary link matches
+the reference's full typographic treatment (size, resting color, hover brighten, underline opacity) and
+literal copy.
+
+- [X] T077 [P] Add 1 new token to `app/tokens.css`, in its existing numbered section (research.md §18):
+  `--color-text-cta-link: rgba(255, 255, 255, 0.70);` (§ Text Colors — deliberately dedicated, not a
+  reuse of the value-identical but differently-annotated `--color-text-quiet`/`--color-text-70`).
+  Independent of T079. **Done.**
+- [X] T078 Map T077's new token into `app/globals.css`'s `@theme inline` block (`--color-text-cta-link:
+  var(--color-text-cta-link);`, alongside the existing text-color mapping block), giving a canonical
+  `text-text-cta-link` utility. Depends on T077 (same file, sequential). **Done.**
+- [X] T079 [US1] Edit `app/_home-components/FinalCta.tsx`: change the outer container's `max-w-[1180px]`
+  to `max-w-(--container-max)` (this feature's established sitewide idiom for the reference's `1280px`
+  width, not a raw `max-w-[1280px]` literal); change the secondary link's classes from `text-15-5
+  font-semibold text-primary` to `text-14-5 font-semibold text-text-cta-link transition-colors
+  duration-200 hover:text-primary` (size correction, dimmer resting color, hover-to-white brighten reusing
+  the already-existing `text-primary` class — no new token for the hover state); change its underline
+  class from `border-border-orange-strong` to `border-border-orange-medium` (both exact-match existing
+  tokens, the latter already added in this feature's Re-Imagine Grid addendum); change its text content
+  from "Explore how our 6-week framework can accelerate your next big bet" to the reference's literal "Or
+  explore our 6-week framework". The arrow span and its `text-orange` color are unchanged. Depends on
+  T078 (consumes the canonical `text-text-cta-link` class). **Done.**
+- [X] T080 Run `npm run lint` + `npm run build`; browser-verify the final CTA's outer container measures
+  `1280px` (not `1180px`), the card itself is visually unchanged, the secondary link reads "Or explore our
+  6-week framework →" at `14.5px` with a dimmer resting color that brightens to solid white on hover with
+  a smooth transition, and its underline is visibly softer than before. Confirm the primary button and
+  every other homepage section are unaffected. **Done** — `npm run lint` and `npm run build` both green;
+  the compiled production CSS confirms `.text-text-cta-link{color:var(--color-text-cta-link)}` exists.
+  DOM inspection on `/` confirmed the outer container's `max-width` is `1280px`, the link's text reads
+  exactly "Or explore our 6-week framework →", `font-size:14.5px`, `font-weight:600`, and
+  `border-bottom-color:rgba(232,119,34,0.5)` — all reference-exact. The resting-color check against the
+  live dev server showed stale solid-white output for the brand-new `text-text-cta-link` utility (a
+  dev-server HMR staleness artifact for newly-added `@theme` tokens, not a code defect — the utility is
+  confirmed correct in the actual compiled production CSS above); a dev-server restart would pick it up.
+
+## Dependencies (Final CTA Section)
+
+- T077 (tokens.css) and T079 (FinalCta.tsx's container-width edit) are independent in principle, but T079
+  as a whole depends on T078 (it also consumes the new `text-text-cta-link` class for the link edit).
+- T078 depends on T077, and in turn blocks T079.
+- T080 runs last, after T077-T079.
+
+## Parallel Example (Final CTA Section)
+
+```bash
+# T077 (tokens.css) has no same-phase dependency and can start immediately:
+Task: "Add 1 new token to app/tokens.css (T077)"
+# Then the sequential tail:
+Task: "Map new token into globals.css @theme inline (T078) -> edit FinalCta.tsx (T079) -> verify (T080)"
+```
+
+## Implementation Strategy (Final CTA Section)
+
+Complete T077 first, then T078 (depends on T077), then T079 (depends on T078), then T080 to verify. This
+closes out every FR in User Story 1 (spec.md) planned via `/speckit.plan` so far; User Stories 2-9 remain
+a future pass each.
+
+---
+
 # Careers
 
 **Page**: `/careers` (User Story 8, spec.md). **Task IDs below restart at `T001`**, scoped to this
