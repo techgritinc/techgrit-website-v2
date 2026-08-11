@@ -209,7 +209,7 @@ export const INDUSTRY_CARDS: IndustryCard[] = [
     id: "fintech",
     icon: IndustryFinTechIcon,
     iconBg: "bg-avatar-violet",
-    title: "FinTech",
+    title: "Fintech",
     description:
       "Build secure and scalable financial platforms—from digital payments and investment systems to AI-driven financial analytics.",
     href: null,

@@ -13,7 +13,7 @@ export function AmbientOrbs() {
   const pathname = usePathname();
   if (pathname?.startsWith("/case-studies") || pathname?.startsWith("/construction")) return null;
 
-  if (pathname === "/") {
+  if (pathname === "/" || pathname?.startsWith("/blog")) {
     return (
       <div aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
         <span className="absolute -top-45 -right-35 h-155 w-155 rounded-full bg-overlay-orange-18 blur-[130px] animate-[tgorb_16s_ease-in-out_infinite]" />

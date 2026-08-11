@@ -360,6 +360,7 @@
   --ls-stat-count: -0.035em;  /* Hero delivery-stat digit tracking (v2.2 Phase 2) */
   --ls-blog-meta: 0.14em; /* Homepage Blog teaser card topic/read-time meta row (v2.2 FR-010) — deliberately not a reuse of the value-identical, single-job-annotated --ls-hint */
   --ls-life-cap: 0.14em; /* Life at TechGrit tile hover-caption label tracking (v2.2 FR-011) — deliberately not a reuse of the value-identical --ls-hint/--ls-blog-meta */
+  --ls-filter-label: 0.14em; /* Blog/Case Studies sticky filter-bar "Filter" label tracking (v2.2 FR-028) — deliberately not a reuse of the value-identical --ls-hint/--ls-blog-meta/--ls-life-cap */
   --ls-24: 0.24em;  /* Trusted-Clients section label tracking (v2.2 Phase 2) */
   --ls-title-tight: -0.01em;  /* Homepage Industries card title tracking (v2.2 FR-008) — named to avoid confusion with the unrelated, positive --ls-01 */
 
