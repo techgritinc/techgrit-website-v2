@@ -20,8 +20,8 @@ export function SessionsSection({
 }) {
   return (
     <section className="relative">
-      <div className="tg-container !px-tg-15" style={{ paddingTop: 40, paddingBottom: 40 }}>
-        <h2 className="mb-7 text-[length:var(--text-webinar-h2)] tracking-[-0.03em]">{heading}</h2>
+      <div className="tg-container !px-9" style={{ paddingTop: 40, paddingBottom: 40 }}>
+        <h2 className="mb-7 text-[length:var(--text-webinar-h2)] tracking-[-0.03em] leading-[normal]">{heading}</h2>
         <div className="grid grid-cols-1 gap-6 tg-md:grid-cols-2">
           {releasedSessions.map((session) =>
             session.cardSize === "full" ? (
@@ -65,11 +65,11 @@ function ReleasedCardHalf({ session }: { session: ReleasedSession }) {
           <WatchNowGlyph />
         </Button>
       </div>
-      <div className="px-[26px] pt-6 pb-[26px]">
+      <div className="px-[26px] pt-6 pb-[26px] -mt-0.5!">
         <span className="text-12 font-bold tracking-wider text-amber-light leading-[normal] uppercase">
           {session.statusLabel}
         </span>
-        <GlassCardTitle variant="webinarReleased" className="mt-1.5">
+        <GlassCardTitle variant="webinarReleased" className="mt-1.75">
           {session.title}
         </GlassCardTitle>
         <GlassCardDescription variant="webinarReleased" className="mt-[9px] text-white/60">
@@ -100,11 +100,11 @@ function ReleasedCardFull({ session }: { session: ReleasedSession }) {
           <WatchNowGlyph compact />
         </Button>
       </div>
-      <div className="px-[18px] pb-[18px] tg-sm:px-0 tg-sm:py-[18px] tg-sm:pr-[26px]">
+      <div className="-mt-0.5! px-[18px] pb-[18px] tg-sm:px-0 tg-sm:py-[18px] tg-sm:pr-[26px]">
         <span className="text-12 font-bold tracking-wider text-amber-light leading-[normal] uppercase">
           {session.statusLabel}
         </span>
-        <GlassCardTitle variant="webinarReleased" className="mt-1">
+        <GlassCardTitle variant="webinarReleased" className="mt-1.25">
           {session.title}
         </GlassCardTitle>
         <GlassCardDescription variant="webinarReleased" className="mt-2! text-white/60">
