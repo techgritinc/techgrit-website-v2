@@ -264,3 +264,46 @@ exists in this repo — this is manual, plus `npm run lint`/`npm run build`.
    `architecture-diagram.tsx`, `team-panel.tsx`, `related-case-studies.tsx`, `case-studies-grid.tsx`,
    `featured-case-study.tsx`), no `components/ui/FilterBar.tsx` or `components/ui/Button.tsx`, no
    other page, and no other shared component touched.
+
+## 18. Services accordion & hero Button component (`/services`)
+
+1. Open `/services` at desktop width and confirm the accordion's intro block renders above the 3 cards:
+   a centered "Our services" eyebrow, "Three services. One AI-first engine." heading, and "Click any
+   service to expand and see the full delivery approach." subheading — none of this exists before this
+   slice lands.
+2. Confirm the first card ("01 · UI/UX Design") renders already expanded (image, description, and the
+   "Our approach" 6-step list visible) while the other two ("02 · Software Product Engineering",
+   "03 · Quality Engineering") render collapsed (header only, no body visible).
+3. Click "02 · Software Product Engineering"'s header and confirm: it expands to show its description,
+   image, and 6-item capability grid; "01" simultaneously collapses (single-open — at no point are two
+   cards expanded together). Click "02" again and confirm it collapses, leaving all 3 cards collapsed.
+4. Confirm the currently-open card's border and shadow show the reference's brand-orange highlight
+   (`rgba(232,119,34,0.35)` border, soft orange glow) — this is correct even for "01" (blue-accented)
+   and "03" (teal-accented) when open; the highlight is never accent-color-matched, per the reference's
+   own hardcoded behavior.
+5. Hover a collapsed card's header and confirm no visual change occurs at all (no background tint, no
+   border change, no lift) — only the cursor becomes a pointer. Then open a card and hover one of its
+   inner "Our approach" steps or capability-grid tiles and confirm that item lifts slightly with a
+   border-color brighten (no background-color change) — this nested-item hover is correct and
+   unchanged.
+6. Resize the browser across the `md`/`lg` breakpoint boundaries (desktop → tablet → mobile and back)
+   while a card is expanded and confirm it stays expanded throughout — its rendered height should
+   adjust smoothly with no clipped/cut-off content and no forced collapse.
+7. Confirm both hero buttons ("Schedule a Consultation", "Explore Services") render through the shared
+   `Button` component's classes (gradient-fill primary, translucent-glass ghost with lift-on-hover) at
+   the same padding/sizing as before this slice — a component swap only, no visual change to either
+   button.
+
+## 19. Gate check (Services)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/services/_data/types.ts` (new `AccordionSection`/
+   `ServiceAccordionItem` types), `app/services/_data/services-content.ts` (new `accordion` section +
+   intro copy), `app/services/page.tsx` (single `case "accordion"` dispatch), `app/services/
+   _components/services-hero.tsx` (CTAs swapped to `Button`), `app/tokens.css`/`app/globals.css` (+4
+   tokens: `--shadow-accordion-open-glow`, `--gradient-divider-blue`, `--gradient-divider-orange`,
+   `--gradient-divider-teal`), and one new file (`app/services/_components/services-accordion.tsx`).
+   `app/services/_components/services-overview.tsx` and `app/services/_components/
+   service-detail-section.tsx` should no longer exist. No other Services file (FR-013a's ambient-orbs
+   work is separate and out of this slice), `components/ui/Button.tsx`, no other page, and no other
+   shared component touched.

@@ -79,6 +79,7 @@
   --color-text-75:        rgba(255, 255, 255, 0.75); /* Testimonials video-badge label */
   --color-text-70:        rgba(255, 255, 255, 0.70); /* Methodology phase-node text — todo state */
   --color-text-60:        rgba(255, 255, 255, 0.60);
+  --color-text-56:        rgba(255, 255, 255, 0.56); /* Services accordion approach-step description text (User Story 2) */
   --color-text-55:        rgba(255, 255, 255, 0.55);
   --color-text-40:        rgba(255, 255, 255, 0.40);
   --color-text-45:        rgba(255, 255, 255, 0.45); /* Blog newsletter helper text — default state */
@@ -254,6 +255,9 @@
   --gradient-live-badge: linear-gradient(135deg, rgba(232, 119, 34, 0.12), rgba(245, 158, 11, 0.06));   /* Hero Live-Webinar badge outer fill (v2.2 Phase 2) */
   --gradient-dialog-panel: linear-gradient(180deg, rgba(20, 20, 20, 0.98), rgba(0, 0, 0, 0.98)); /* Careers Apply-modal panel fill */
   --gradient-skip-form: linear-gradient(150deg, rgba(232, 119, 34, 0.14), rgba(255, 255, 255, 0.02)); /* Contact "Skip the Form" card background (v2.2, User Story 9) */
+  --gradient-divider-blue:   linear-gradient(90deg, rgba(56, 189, 248, 0), rgba(56, 189, 248, 0.4), rgba(56, 189, 248, 0)); /* Services accordion body divider — blue accent (User Story 2) */
+  --gradient-divider-orange: linear-gradient(90deg, rgba(232, 119, 34, 0), rgba(232, 119, 34, 0.4), rgba(232, 119, 34, 0)); /* Services accordion body divider — orange accent (User Story 2) */
+  --gradient-divider-teal:   linear-gradient(90deg, rgba(45, 212, 191, 0), rgba(45, 212, 191, 0.4), rgba(45, 212, 191, 0)); /* Services accordion body divider — teal accent (User Story 2) */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY
@@ -508,6 +512,7 @@
   --shadow-live-badge-chip: 0 6px 18px -4px rgba(245, 158, 11, 0.60);   /* Hero Live-Webinar badge inner chip shadow (v2.2 Phase 2) */
   --shadow-glow-green: 0 0 12px 3px rgba(52, 211, 153, 0.90);   /* Hero Live-Webinar badge dot glow (v2.2 Phase 2) */
   --shadow-dialog-apply: 0 40px 90px -30px rgba(0, 0, 0, 0.85), 0 0 60px -20px rgba(232, 119, 34, 0.35); /* Careers Apply-modal panel shadow */
+  --shadow-accordion-open-glow: 0 0 40px -8px rgba(232, 119, 34, 0.25); /* Services accordion open-card glow — always brand-orange, not accent-matched (User Story 2) */
 
   /* v2 hover-lift distances (additive, FR-024) */
   --lift-hover-1: -1px;

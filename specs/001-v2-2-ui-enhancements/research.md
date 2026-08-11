@@ -1115,3 +1115,122 @@ Both fixes verified via `javascript_tool` computed-style/layout inspection again
 instance — the first time this feature's Case Studies verification went beyond markup/build inspection
 to an actually-running page, which is precisely how these two defects were caught after T009's own
 "cannot confirm sticky-scroll behavior" caveat.
+
+## 23. Services accordion rebuild, hover-treatment correction, and hero Button-component swap (FR-013, FR-013b, FR-014)
+
+**Scope**: User Story 2 (spec.md) only, per spec.md Clarifications Session 2026-08-10's four Services
+resolutions (single-open accordion, first-card-open default, resize-persists state, top-level-card has
+no hover) plus the same session's hero-CTA finding (both hero buttons must use `components/ui/Button`).
+**Reference file**: `TechGrit Services.dc.html` is this slice's sole visual source of truth.
+
+**Audit finding — today's implementation is architecturally not an accordion at all.**
+`services-overview.tsx` renders 3 always-visible cards that anchor-link (`href="#targetId"`) down to 3
+separately-rendered, always-expanded `<ServiceDetailSection>` sections below. The reference's
+`svc-accordion` is a single collapsible-in-place list (`data-acc-item`/`data-acc-head`/`data-acc-body`)
+with exactly one item expanded at a time, item 1 open on load, and a JS resize handler that only
+recalculates the open item's height. Reproducing the reference visually requires collapsing this into
+one real accordion component, not a page-level styling pass.
+
+**Decision — merge `ServiceOverviewCard` + `ServiceDetailSection` into one `ServiceAccordionItem`
+shape.** The reference's collapsed header shows only a number badge ("01"/"02"/"03"), a small colored
+category label, a large heading, and a chevron — no description, no image, no "Explore" arrow (all of
+which today's `ServiceOverviewCard` renders in a permanently-visible card). The description paragraph
+and image appear only inside the expanded body, alongside the "Our approach" list or capability grid
+that `ServiceDetailSection` already models correctly. `app/services/_data/types.ts`'s `OverviewSection`/
+`ServiceOverviewCard`/`ServiceDetailSection` are replaced by one `AccordionSection` (`eyebrow`,
+`heading`, `subheading`, `items: [ServiceAccordionItem, ServiceAccordionItem, ServiceAccordionItem]`)
+and one `ServiceAccordionItem` (`id`, `sequenceNumber`, `categoryLabel`, `heading`, `description`,
+`image`, `accentColor`, `supportingItems` — the last field's `SupportingItemList` union is unchanged).
+`services-content.ts`'s `overview` + 3×`serviceDetail` entries collapse into a single `accordion` entry
+carrying the 3 items' already-correct copy (nothing textual changes, only the container shape).
+
+**Audit finding — the section's own intro copy is completely missing today.** `TechGrit Services.dc.html`
+lines 237-240 render a centered eyebrow ("Our services"), `<h2>` ("Three services. One AI-first
+engine."), and subheading ("Click any service to expand and see the full delivery approach.") above the
+accordion list. `services-overview.tsx` renders straight into the 3-card grid with no such block at all
+— not a v2.2 regression, an original-build omission. Added as the new `AccordionSection`'s
+`eyebrow`/`heading`/`subheading` fields, rendered by the new accordion component.
+
+**Decision — one open index, single-open accordion.** State: `useState<string>(items[0].id)` — a
+single "currently open id" rather than a `Set`/boolean-per-item, which structurally enforces the
+single-open constraint (setting a new id automatically "closes" every other item, since only one id can
+be stored) rather than relying on manually closing siblings on every click the way the reference's own
+imperative JS does (`items.forEach(it => setOpen(it, false))` before opening the target). Clicking the
+currently-open item's header sets the state to `null` (fully collapsed, matching the reference's
+`removeAttribute('data-open')` toggle path — the reference allows re-collapsing the open item, it does
+not enforce "always exactly one open").
+
+**Decision — CSS grid-rows collapse, not JS-measured `max-height`.** The reference measures
+`body.scrollHeight` in JS and writes it as an explicit `max-height`, then re-measures on every window
+`resize` event so the open item doesn't clip after a reflow (this is precisely the mechanism spec.md's
+resize-persistence clarification describes). A CSS-only equivalent — an inner wrapper set to
+`grid-template-rows: 0fr` (collapsed) / `1fr` (open) with `overflow:hidden` on a nested `min-h-0` child,
+transitioning `grid-template-rows` — produces the identical visual open/close animation (same
+`.5s cubic-bezier(.2,.7,.2,1)` duration/easing as the reference's `transition:max-height .5s
+cubic-bezier(.2,.7,.2,1)`) while auto-adjusting to content height on any resize with no JS measurement
+or `resize` listener at all. This is a resize-safe implementation choice that satisfies the same
+resize-persistence requirement more robustly than replicating the reference's own JS, not a visual
+deviation — the rendered result is indistinguishable frame-for-frame.
+
+**Audit finding — the open-state border/glow/chevron tint is always orange, never accent-color-matched.**
+The reference's `setOpen` function (lines 565-581) hardcodes `rgba(232,119,34,0.35)` for the open card's
+border, `0 0 40px -8px rgba(232,119,34,0.25)` for its glow shadow, and `rgba(232,119,34,0.14)` /
+`rgba(232,119,34,0.5)` for the chevron's open background/border — for **every** item, including the
+blue-accented UI/UX Design card and the teal-accented Quality Engineering card. This is not a
+per-accent-color state; it is a fixed brand-orange highlight applied uniformly regardless of which card
+is open. Implemented as fixed (non-accent-parameterized) classes/tokens on the open item, not derived
+from `ACCENT_VAR`/`accentColor`.
+
+**Audit finding — FR-014's hover treatment is correctly "none" at the top level.** `TechGrit
+Services.dc.html`'s `data-acc-item`/`data-acc-head` define no `style-hover` at all (`cursor:pointer`
+only) — confirming spec.md's Session 2026-08-10 correction. The only hover-styled elements on this page
+are the nested `data-card` items inside an expanded body (`style-hover="transform:translateY(-5px);
+border-color:..."`, no background-color change), which `service-detail-section.tsx`'s existing
+`ApproachSteps`/`CapabilityGrid` hover classes (`hover:-translate-y-[5px] hover:border-[...]`) already
+match exactly — zero code change needed for the nested-item hover; it carries over unmodified into the
+new accordion component.
+
+**Token audit** (`app/tokens.css`, field-by-field against the reference):
+
+| Reference value | Use | Existing token | Status |
+|---|---|---|---|
+| `rgba(255,255,255,0.1)` border | card resting border | `--color-border-image` | Exact match, reuse |
+| `20px` radius | card radius | `--radius-2xl` | Exact match, reuse |
+| `8px` blur | card blur | `--blur-md` | Exact match, reuse |
+| `rgba(255,255,255,0.04)` bg | card resting background | `--color-glass-4` | **Real defect**: current code uses `--color-glass` (0.05) instead — a near-miss, not the reference's literal value; corrected to `--color-glass-4` |
+| `rgba(232,119,34,0.35)` | open-card border | `--color-border-orange-35` | Exact match, reuse |
+| `rgba(232,119,34,0.5)` | chevron open border | `--color-border-orange-medium` | Exact match, reuse |
+| `rgba(232,119,34,0.14)` | chevron open background | `--color-overlay-orange-14` | Exact match, reuse |
+| `rgba(255,255,255,0.18)` | chevron resting border | `--color-border-18` | Exact match, reuse |
+| `rgba(255,255,255,0.85)` | chevron resting icon color | `--color-text-85` | Exact match, reuse |
+| `rgba(2,132,199,0.16)` / `#38bdf8` | UI/UX badge bg/text | `--color-icon-bg-blue` / `--color-blue-light` | Exact match, reuse |
+| `rgba(232,119,34,0.16)` / `#F7B733` | Engineering badge bg/text | `--color-overlay-orange` / `--color-amber-light` | Exact match, reuse |
+| `rgba(15,118,110,0.2)` / `#2dd4bf` | QA badge bg/text | `--color-icon-bg-teal` / `--color-teal-light` | Exact match, reuse |
+| `0 0 40px -8px rgba(232,119,34,0.25)` | open-card glow shadow | none | **New token needed** |
+| 3× per-accent divider gradient (`linear-gradient(90deg, <accent> 0 → 0.4 → 0)`) | body divider line | none | **New token needed** (×3, one per accent) |
+
+Four new tokens required — one shadow, three gradients:
+
+| Token | Value | `tokens.css` section |
+|---|---|---|
+| `--shadow-accordion-open-glow` | `0 0 40px -8px rgba(232, 119, 34, 0.25)` | 10. SHADOWS |
+| `--gradient-divider-blue` | `linear-gradient(90deg, rgba(56, 189, 248, 0), rgba(56, 189, 248, 0.4), rgba(56, 189, 248, 0))` | 5. GRADIENTS |
+| `--gradient-divider-orange` | `linear-gradient(90deg, rgba(232, 119, 34, 0), rgba(232, 119, 34, 0.4), rgba(232, 119, 34, 0))` | 5. GRADIENTS |
+| `--gradient-divider-teal` | `linear-gradient(90deg, rgba(45, 212, 191, 0), rgba(45, 212, 191, 0.4), rgba(45, 212, 191, 0))` | 5. GRADIENTS |
+
+**Decision — hero CTAs swap to `components/ui/Button` (FR-013b).** `services-hero.tsx` currently
+renders both CTAs as bespoke `<a className="btn btn-primary btn-lg">`/`<a className="btn btn-ghost
+btn-ghost--static-border btn-lg">` links. Per spec.md's Session 2026-08-10 clarification, both switch to
+`<Button variant="primary">`/`<Button variant="ghost">`, following this plan's established
+per-instance-`className`-override convention (SubscribeBand T022, Contact T003, Case Studies T008) to
+preserve the reference's exact padding/gap values already present in the current markup — no new tokens
+needed, this is a component swap only, not a value change.
+
+## New tokens summary (Services)
+
+| Token | Value | Section |
+|---|---|---|
+| `--shadow-accordion-open-glow` | `0 0 40px -8px rgba(232, 119, 34, 0.25)` | 10. SHADOWS |
+| `--gradient-divider-blue` | `linear-gradient(90deg, rgba(56, 189, 248, 0), rgba(56, 189, 248, 0.4), rgba(56, 189, 248, 0))` | 5. GRADIENTS |
+| `--gradient-divider-orange` | `linear-gradient(90deg, rgba(232, 119, 34, 0), rgba(232, 119, 34, 0.4), rgba(232, 119, 34, 0))` | 5. GRADIENTS |
+| `--gradient-divider-teal` | `linear-gradient(90deg, rgba(45, 212, 191, 0), rgba(45, 212, 191, 0.4), rgba(45, 212, 191, 0))` | 5. GRADIENTS |

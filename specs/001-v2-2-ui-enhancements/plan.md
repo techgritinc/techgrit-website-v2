@@ -976,3 +976,142 @@ Research (this addendum, §21) confirmed every orb/chip/CTA value against both r
 confirmed `FilterBar.tsx` needs no modification to serve as this page's filter shell, and worked out
 the featured-card/chip-list/no-results consequences of spec.md's Clarifications Session 2026-08-10
 before planning any new file. No new violations. Gate: PASS.
+
+## Services Page — Accordion Rebuild & Hero Button Component (User Story 2)
+
+**Date**: 2026-08-10. Extends this plan to cover User Story 2 (spec.md) only: FR-013 (single-open
+accordion, first-card-open default, resize-persists state), FR-013a (ambient orbs — already planned
+separately, unaffected here), FR-013b (hero CTAs via `components/ui/Button`), FR-014 (top-level card has
+no hover; nested items keep their existing hover), per spec.md Clarifications Session 2026-08-10's five
+Services resolutions. No other page and no other user story is affected. **Reference file**:
+`TechGrit Services.dc.html` is this slice's sole visual source of truth, per direct instruction — every
+value below is read from it, with the goal of zero visible difference when toggling between the
+reference and this page.
+
+**Exact-parity constraint (direct instruction)**: every visual value in this slice matches
+`TechGrit Services.dc.html` pixel-for-pixel — card geometry, open/collapsed states, the always-orange
+open-state highlight (not accent-color-matched, see research.md §23), and the intro eyebrow/heading/
+subheading block that today's page is missing entirely.
+
+### Audit findings
+
+Compared the current Services files against the reference field-by-field before planning any change
+(full detail: research.md §23):
+
+1. **FR-013 — today's implementation is not an accordion.** `services-overview.tsx` renders 3
+   always-visible cards that anchor-link down to 3 separately-rendered, always-expanded
+   `<ServiceDetailSection>`s. The reference is a true single-open, collapsible-in-place accordion. This
+   is a structural rebuild, not a styling pass.
+2. **Missing intro copy.** The reference's centered "Our services" eyebrow / "Three services. One
+   AI-first engine." heading / "Click any service to expand..." subheading (lines 237-240) has no
+   equivalent anywhere in the current page — an original-build omission, not a v2.2 regression.
+3. **Card background token near-miss.** The accordion card's resting background
+   (`rgba(255,255,255,0.04)`) is a real, exact-match existing token (`--color-glass-4`), but the current
+   overview/detail cards use `--color-glass` (0.05) instead — a one-token fix.
+4. **FR-014 is already correct for nested items, and the "no hover" correction needs no code change of
+   its own.** The reference defines no hover on the top-level card; the current
+   `ApproachSteps`/`CapabilityGrid` hover (border-color + lift, no background) already matches the
+   reference's nested-item hover exactly. Only the *new* accordion header must be built with no hover
+   styling from the start — there is nothing to remove from the old components (`services-overview.tsx`'s
+   card-level hover lift/border does not carry over, since that whole component is superseded).
+5. **FR-013b — hero CTAs are plain links, not the shared `Button`.** `services-hero.tsx` renders both
+   CTAs as bespoke `<a className="btn ...">` elements.
+
+### Summary
+
+1. **`app/services/_data/types.ts`** — replace `OverviewSection`, `ServiceOverviewCard`, and
+   `ServiceDetailSection` with one `AccordionSection` (`eyebrow`, `heading`, `subheading`,
+   `items: [ServiceAccordionItem, ServiceAccordionItem, ServiceAccordionItem]`) and one
+   `ServiceAccordionItem` (`id`, `sequenceNumber`, `categoryLabel`, `heading`, `description`, `image`,
+   `accentColor`, `supportingItems`); update `PageSectionEntry` to `HeroSection | AccordionSection |
+   FinalCtaSection` (research.md §23).
+2. **`app/services/_data/services-content.ts`** — replace the `overview` section and the 3
+   `serviceDetail` sections with one `accordion` section carrying the "Our services" intro copy (item 2
+   above) and the 3 services' already-correct existing copy reshaped into `items[]`. No copy changes.
+3. **New `app/services/_components/services-accordion.tsx`** (`"use client"`) — renders the intro block,
+   then the 3-item single-open accordion: `useState<string | null>` defaulting to `items[0].id`; each
+   item's header (number badge, category label, heading, chevron) toggles the open id on click
+   (clicking the open item's own header sets it to `null`); the collapsible body uses a CSS
+   `grid-template-rows` 0fr/1fr transition (research.md §23's resize-safe alternative to the reference's
+   JS-measured `max-height`) wrapping the existing image+description row and the `ApproachSteps`/
+   `CapabilityGrid` renderers (moved in from `service-detail-section.tsx`, unmodified). The open item's
+   border/glow/chevron tint is the fixed brand-orange highlight from research.md §23 — not derived from
+   `accentColor` — matching the reference exactly.
+4. **Delete `app/services/_components/services-overview.tsx` and
+   `app/services/_components/service-detail-section.tsx`** — both are fully superseded by item 3; no
+   other file imports them.
+5. **`app/services/page.tsx`** — replace the `case "overview"` / `case "serviceDetail"` branches with a
+   single `case "accordion"` rendering `<ServicesAccordion section={section} />`.
+6. **`app/services/_components/services-hero.tsx`** — replace both `<a className="btn ...">` CTAs with
+   `<Button href={...} variant="primary">`/`<Button href={...} variant="ghost">` (FR-013b), preserving
+   the existing padding/gap values via per-instance `className` overrides (this plan's established
+   convention — SubscribeBand T022, Contact T003, Case Studies T008).
+7. **`app/tokens.css`** (+ matching `app/globals.css` `@theme inline` entries) — add the 4 new tokens
+   from research.md §23 (`--shadow-accordion-open-glow`, `--gradient-divider-blue`,
+   `--gradient-divider-orange`, `--gradient-divider-teal`). Every other value in this slice reuses an
+   existing exact-match token (research.md §23's field-by-field table) — including the `--color-glass-4`
+   fix in item 3 above.
+
+FR-013a (ambient orbs) is unaffected by this addendum — it is a separate, already-scoped
+`services-hero.tsx`/page-level addition with no dependency on the accordion rebuild, planned
+independently. No other Services file, page, or shared component beyond `components/ui/Button.tsx`
+(consumed unmodified, already built in Shared Foundation) is touched.
+
+### Technical Context (addendum)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React 19.2.4,
+Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo; manual
+verification, see `quickstart.md` addendum) · **Target Platform**: Web · **Project Type**: single Next.js
+App Router app · **Performance Goals**: N/A (presentation-only + one small client-state addition) ·
+**Constraints**: no new libraries; accordion collapse uses CSS `grid-template-rows`, not a JS-measured
+`max-height`/resize-listener (research.md §23); single-open state is one `useState<string | null>`, not
+a per-item boolean set · **Scale/Scope**: 1 existing file edited for its type shape
+(`types.ts`), 1 existing file edited for its content shape (`services-content.ts`), 1 existing file
+edited for its CTAs (`services-hero.tsx`), 1 existing file edited for its section dispatch (`page.tsx`),
+2 existing files deleted (`services-overview.tsx`, `service-detail-section.tsx`), 1 new file created
+(`services-accordion.tsx`), `tokens.css`/`globals.css` gain 4 new token entries. No `data-model.md`
+change — this is a page-local TypeScript content-module reshape, the same category of change as About
+Us's `CulturePhoto` type edit (tasks.md, About Phase 1, T004), not a new persisted entity.
+
+### Constitution Check (addendum)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this addendum.*
+
+- **I (Token-Only Styling)** — PASS. The 4 new values with no existing token (the open-card glow shadow,
+  3 per-accent divider gradients) are added to `tokens.css` first; every other value in this slice reuses
+  an existing exact-match token, including correcting the card background from the near-miss
+  `--color-glass` (0.05) to the exact-match `--color-glass-4` (0.04) already in `tokens.css` — no
+  near-duplicate token is spawned for a value that already has an exact match.
+- **II (Breakpoints)** — PASS, not applicable. No new breakpoint is introduced; the accordion's 2-column
+  image/description row already collapses to 1 column via this page's existing `min-[921px]:grid-cols-2`
+  convention (unchanged from `service-detail-section.tsx` today).
+- **III (Component Library)** — PASS. Hero CTAs move onto `components/ui/Button.tsx` (consumed
+  unmodified, already built); `ApproachSteps`/`CapabilityGrid`'s existing hover-styled nested cards carry
+  over into the new accordion component unmodified — no forked hover logic, no bespoke button.
+- **IV (References Are Visual Truth)** — PASS with zero recorded deviation for this slice — every value
+  (accordion behavior, open-state highlight color, intro copy, card tokens) is read directly from
+  `TechGrit Services.dc.html`, including the reference's own non-obvious choice to keep the open-state
+  highlight brand-orange regardless of the open item's own accent color.
+- **V (Dark-First Brand)** — PASS. No new surface fill; the new divider gradients are low-opacity
+  (0 → 0.4 → 0) accent-tinted fades matching this page's existing per-accent divider treatment, and the
+  new glow shadow is a decorative, low-opacity (0.25) accent glow consistent with this app's existing
+  glow-shadow conventions elsewhere.
+- **VI (frontend-design skill)** — not re-invoked for this addendum; the single-open accordion pattern
+  and CSS grid-rows collapse technique are both well-established UI patterns with no novel aesthetic
+  judgment required beyond matching the reference's own already-specified values.
+- No violations — Complexity Tracking unchanged.
+
+**Anchor files**: `app/services/_data/types.ts`, `app/services/_data/services-content.ts`,
+`app/services/_components/services-accordion.tsx` (new), `app/services/page.tsx`,
+`app/services/_components/services-hero.tsx`, `app/tokens.css` (+4 tokens), `app/globals.css` (+4
+`@theme inline` entries). `app/services/_components/services-overview.tsx` and
+`app/services/_components/service-detail-section.tsx` are deleted (superseded). No `data-model.md`/
+`contracts/` change. `components/ui/Button.tsx` is consumed unmodified — no other page, shared
+component, or user story is touched.
+
+### Post-Design Constitution Re-Check (Services addendum)
+
+Research (this addendum, §23) confirmed every card/badge/chevron/divider value against the reference,
+worked out the single-open state model and the resize-safe CSS collapse technique, and confirmed the
+open-state highlight is deliberately brand-orange rather than accent-matched, before planning any new
+file. No new violations. Gate: PASS.

@@ -1156,3 +1156,485 @@ FR-024, FR-025, and FR-026 are one cohesive reference-alignment pass surfaced by
 then stop. This completes User Story 4 in full; User Stories 5-6 (Blog, Webinar) remain out of scope,
 though FR-044's cross-cutting note means Blog's own future filter-bar wiring should follow this same
 `FilterBar` + page-local-chips pattern once it's planned.
+
+---
+
+# Services
+
+**Page**: `/services` (User Story 2, spec.md). **Task IDs below restart at `T001`**, scoped to this
+`# Services` heading only — see the numbering-convention note at the top of this file. Everything
+above this heading (Shared Foundation, Homepage, Careers, Contact, About, Case Studies) keeps its own
+original numbering and is unaffected.
+
+## Phase 1: Accordion Rebuild & Hero Button Component (User Story 2 slice)
+
+**Input**: [plan.md](./plan.md) "Services Page — Accordion Rebuild & Hero Button Component (User
+Story 2)", [research.md](./research.md) §23
+**Scope**: only FR-013 (single-open accordion, first-card-open default, resize-persists state),
+FR-013b (hero CTAs via shared `Button`), and FR-014 (top-level card has no hover) — the full slice of
+User Story 2 covered by spec.md Clarifications Session 2026-08-10. FR-013a (ambient orbs) is a
+separate, already-scoped addition with no dependency on this slice and is not included here. No other
+page and no other user story is in scope.
+
+**Already satisfied, no task needed**: FR-014's nested-item hover (the `ApproachSteps`/
+`CapabilityGrid` border-color+lift hover, carried over unmodified from `service-detail-section.tsx`
+into the new accordion component by T003 below) already matches the reference exactly — audited in
+research.md §23, no separate fix task.
+
+**Goal**: `/services` renders a true single-open accordion (at most one of the 3 service cards expanded
+at a time, first card open on initial load, expanded/collapsed state unaffected by viewport resize),
+with the reference's "Our services" intro copy, the reference's always-brand-orange open-state
+highlight, no hover treatment on the top-level card, and both hero CTAs rendered via the shared
+`Button` component — matching `TechGrit Services.dc.html` exactly.
+
+**Independent Test**: Load `/services` and confirm the "01 · UI/UX Design" card renders already
+expanded with the other two collapsed; click "02 · Software Product Engineering" and confirm it
+expands while "01" collapses at the same time (single-open); click "02" again and confirm it collapses
+with no card left open; resize the viewport across the `md`/`lg` breakpoints while a card is open and
+confirm it stays open (only its rendered height adjusts); confirm no hover effect appears when
+pointing at a collapsed card's header; confirm both hero buttons ("Schedule a Consultation", "Explore
+Services") render through the shared `Button` component styling.
+
+- [x] T001 [P] [US2] In `app/tokens.css`: add `--shadow-accordion-open-glow: 0 0 40px -8px
+  rgba(232, 119, 34, 0.25)` (section 10, SHADOWS) and `--gradient-divider-blue`/
+  `--gradient-divider-orange`/`--gradient-divider-teal` (section 5, GRADIENTS), per research.md §23's
+  token table — depends on nothing; different file from T002-T006, safe to do in parallel. **Done.**
+  **Revised during implementation**: no `app/globals.css` `@theme inline` entries were added — all 4
+  tokens are consumed via arbitrary-value syntax (`shadow-[var(--shadow-accordion-open-glow)]`,
+  `bg-[image:var(--gradient-divider-blue)]`, etc.), the same established convention already used by
+  `--gradient-skip-form`/`--shadow-dialog-apply` (never exposed as bare Tailwind utilities, so no
+  `@theme inline` mapping is needed per CLAUDE.md's either/or rule).
+- [x] T002 [US2] In `app/services/_data/types.ts`: replace `OverviewSection`, `ServiceOverviewCard`,
+  and `ServiceDetailSection` with one `AccordionSection` (`eyebrow`, `heading`, `subheading`,
+  `items: [ServiceAccordionItem, ServiceAccordionItem, ServiceAccordionItem]`) and one
+  `ServiceAccordionItem` (`id`, `sequenceNumber`, `categoryLabel`, `heading`, `description`, `image`,
+  `accentColor`, `supportingItems`); update `PageSectionEntry` to `HeroSection | AccordionSection |
+  FinalCtaSection` (FR-013, research.md §23) — depends on nothing; must land before T003 can reference
+  the new types. **Done.**
+- [x] T003 [US2] In `app/services/_data/services-content.ts`: replace the `overview` section and the 3
+  `serviceDetail` sections with one `accordion` section carrying the "Our services" /
+  "Three services. One AI-first engine." / "Click any service to expand and see the full delivery
+  approach." intro copy (research.md §23 — currently missing entirely) and the 3 services' existing
+  copy reshaped into `items[]`, with no textual changes to any existing label, heading, or description
+  (FR-013) — depends on T002 (needs the new `AccordionSection`/`ServiceAccordionItem` types). **Done.**
+  **Also**: `categoryLabel` drops the "Service 0X · " prefix the old data carried (that prefix pattern
+  belongs only to the reference's hidden/dead legacy sections — the live accordion's own header shows
+  the bare label, e.g. "UI/UX Design", confirmed against `TechGrit Services.dc.html` lines 249/283/314)
+  and the hero's `secondaryCtaHref` changes from the now-removed `#service-uiux` anchor to `#svc-accordion`
+  (matching the reference's own `href="#svc-accordion"`, line 229), landing the accordion `<section>`
+  wrapper's `id` to match.
+- [x] T004 [US2] Create `app/services/_components/services-accordion.tsx` (`"use client"`): render the
+  intro block (eyebrow/heading/subheading from T003's data), then the 3-item accordion using
+  `useState<string | null>` defaulting to `items[0].id` (first card open on load); each item's header
+  (number badge, category label, heading, chevron) sets the open id on click, and clicking the
+  currently-open item's own header sets it to `null` (single-open — FR-013); the collapsible body uses
+  a CSS `grid-template-rows` 0fr/1fr transition (`.5s cubic-bezier(.2,.7,.2,1)`, resize-safe with no JS
+  measurement, research.md §23) wrapping the image+description row and the `ApproachSteps`/
+  `CapabilityGrid` renderers moved in from `service-detail-section.tsx` unmodified (including their
+  existing hover treatment — FR-014, already correct, no change); the open item's border/glow/chevron
+  tint uses the fixed brand-orange tokens from T001 (`--color-border-orange-35`,
+  `--shadow-accordion-open-glow`, `--color-overlay-orange-14`/`--color-border-orange-medium`), not
+  `accentColor` (FR-013, research.md §23's always-orange finding); the card's resting background uses
+  `--color-glass-4` (not `--color-glass`, correcting research.md §23's token near-miss finding); the
+  top-level header itself carries no hover styling at all (FR-014) — depends on T001 (needs the new
+  tokens) and T003 (needs the `accordion` section data); this is the slice's central new file. **Done.**
+  Verified server-rendered HTML confirms exactly one item at `grid-template-rows:1fr` (open) and two at
+  `0fr` (collapsed) on initial load — item 1 ("01 · UI/UX Design") — with `aria-expanded="true"` on
+  exactly one header button; the `--shadow-accordion-open-glow`/`--color-border-orange-35` classes each
+  appear exactly once (only the open card), and all three `--gradient-divider-*` classes are present
+  (one per item's body, regardless of open/collapsed state, matching the reference's own
+  always-in-DOM-just-collapsed approach).
+- [x] T005 [US2] Delete `app/services/_components/services-overview.tsx` and
+  `app/services/_components/service-detail-section.tsx` — both fully superseded by T004; confirm no
+  other file still imports either — depends on T004 (the replacement must exist first). **Done.** `npm
+  run build` confirms no dangling import (would have failed the build otherwise).
+- [x] T006 [US2] In `app/services/page.tsx`: replace the `case "overview"` and `case "serviceDetail"`
+  branches with a single `case "accordion"` rendering `<ServicesAccordion section={section} />`,
+  importing `ServicesAccordion` from `./_components/services-accordion` (FR-013) — depends on T004
+  (component must exist) and T005 (old imports must be removed first). **Done.**
+- [x] T007 [P] [US2] In `app/services/_components/services-hero.tsx`: replace both
+  `<a className="btn btn-primary btn-lg">`/`<a className="btn btn-ghost btn-ghost--static-border
+  btn-lg">` CTAs with `<Button href={section.primaryCtaHref} variant="primary">`/`<Button
+  href={section.secondaryCtaHref} variant="ghost">`, importing `Button` from `@/components/ui/Button`
+  and preserving the existing padding/gap values via per-instance `className` overrides, matching this
+  plan's established convention (SubscribeBand T022, Contact T003, Case Studies T008) (FR-013b) —
+  depends on nothing; different file from T001-T006, safe to do in parallel. **Done.** Server-rendered
+  HTML confirms both buttons compile through `Button`'s own classes (`shadow-btn-primary` on the
+  primary CTA, the `gradient-ghost` token class on the secondary), not the old bespoke `.btn` classes.
+
+**Checkpoint**: `/services` matches `TechGrit Services.dc.html` exactly — a true single-open accordion
+with the reference's intro copy, always-orange open-state highlight, no top-level hover, and both hero
+CTAs rendered through the shared `Button` component.
+
+---
+
+## Phase 2: Polish (Services verification)
+
+- [x] T008 Run `quickstart.md` §18's verification steps (isolated render checks + `npm run lint` +
+  `npm run build`); confirm the compiled CSS contains the 4 new tokens from T001, confirm
+  `services-overview.tsx`/`service-detail-section.tsx` no longer exist and nothing imports them, and
+  confirm no other page/shared component was touched. **Done.** `npm run lint` (0 errors, 7
+  pre-existing unrelated warnings) and `npm run build` both green — all 18 routes, including
+  `/services`, prerender successfully. Server-rendered HTML (fetched via `curl` against a running
+  instance of the dev server, since the Browser-pane tool could not composite frames in this
+  environment — the same limitation already noted throughout this file's Careers/Contact/About/Case
+  Studies polish tasks) confirms: the "Our services" intro block renders, exactly 3 accordion items
+  render with sequence badges 01/02/03, item 1 is open by default (`grid-template-rows:1fr`,
+  `aria-expanded="true"`) while items 2-3 are collapsed (`0fr`, `aria-expanded="false"`), the
+  open-state tokens (`--shadow-accordion-open-glow`, `--color-border-orange-35`) appear on exactly one
+  item, all three per-accent divider gradients are present, both hero CTAs compile through `Button`'s
+  classes, and no reference to the deleted `services-overview`/`service-detail-section` files remains
+  anywhere in the diff. Diff confirmed scoped to exactly the 7 files listed in quickstart.md §19 (plus
+  the 1 new file), no other page or shared component touched. **Not confirmed via an actual
+  click-through/visual screenshot** — only server-rendered markup and a clean production build/
+  type-check, consistent with this same environment limitation noted elsewhere in this file; the
+  single-open toggle interaction (click "02", confirm "01" collapses) and the resize-persistence
+  behavior are logically verified via code review (a single `openId` state variable structurally
+  enforces single-open; the CSS `grid-template-rows` collapse technique has no JS resize dependency to
+  break) but recommend a manual click-through pass in a real browser before merging.
+
+---
+
+## Phase 3: Accordion Collapse-Animation Flicker Fix (found via live comparison)
+
+**Input**: direct user report after T001-T008 landed — visible flickering when comparing the accordion
+against `TechGrit Services.dc.html` live, side by side ("the hero section is good and perfect" — scoped
+to the accordion only, hero explicitly excluded).
+**Scope**: only `app/services/_components/services-accordion.tsx`'s `AccordionItem` collapse mechanism.
+No visual value (color, spacing, copy) changes — this is a rendering-technique fix only.
+
+**Root cause**: T004's collapse animation transitioned `grid-template-rows` between `"0fr"`/`"1fr"` on a
+wrapper inside a card that also carries `backdropFilter: blur(var(--blur-md))`, sitting over this page's
+continuously-animating ambient orbs (`tgorb`, `position:fixed`, infinite). Animating a grid track's `fr`
+size is layout-affecting on every frame, and doing so underneath a `backdrop-filter` forces the browser
+to recompute the blurred backdrop at each intermediate layout step — a known Chromium/Firefox
+repaint-flicker interaction, and the reason this was specific to the accordion (the only place on this
+page combining an animated-height element with `backdrop-filter`) and not the hero (static, no
+backdrop-filter animation).
+
+- [x] T009 [US2] In `app/services/_components/services-accordion.tsx`'s `AccordionItem`: replace the
+  `grid-template-rows` 0fr/1fr transition with a measured `max-height` transition — resting states need
+  no measurement and are correct on first paint (`"0px"` closed / `"none"` open, derived synchronously
+  from the `isOpen` prop, so server-rendered HTML and the first client paint already match, no flash on
+  load); a pixel height is measured via `scrollHeight` and animated only during an actual toggle (the
+  standard "animate to auto-height" pattern), reverting to `"none"` after the open transition completes
+  so content isn't clipped if it later reflows (e.g. a breakpoint change) — this also continues to
+  satisfy the resize-persists requirement (FR-013, spec.md Clarifications Session 2026-08-10) since an
+  open card's resting `"none"` state has nothing to clip regardless of viewport width — depends on
+  nothing else; no token, copy, or layout value changed. **Done.**
+
+**Verified**: `npm run lint` (0 errors, same 7 pre-existing unrelated warnings) and `npm run build` both
+green (all 18 routes, including `/services`, prerender successfully) after the change. **Not confirmed
+via an actual visual comparison / recorded flicker repro** — the Browser-pane tool cannot composite
+frames in this environment (the same limitation noted throughout this file), so this fix is grounded in
+the mechanism (grid-track animation + backdrop-filter + moving background is a documented repaint-flicker
+combination) rather than a before/after screenshot; recommend the user re-confirm side-by-side against
+`TechGrit Services.dc.html` and report back if any flicker remains.
+
+**Checkpoint**: the accordion's open/close transition no longer animates a layout-affecting grid track
+underneath the card's `backdrop-filter`; visual output (colors, spacing, open-state highlight, resting
+states) is unchanged — only the collapse mechanism differs.
+
+---
+
+## Phase 4: Fixed-Pixel-Height Regressions, Missing Ambient Orbs, Persisting Flicker (found via live comparison)
+
+**Input**: direct user report after T009 landed — flicker still present "across the entire Our Services
+section" (not just per-card), hero buttons overlap the subtitle paragraph on mobile, the accordion
+overlaps the closing CTA on both mobile and tablet, and the background ambient orbs don't match the
+reference at all.
+
+**Root cause 1 — fixed pixel `height` values from an earlier manual pixel-matching pass.** Between T008
+and this phase, `services-hero.tsx` and `services-accordion.tsx` picked up literal `height:"Npx"` values
+(measured against the reference at desktop width only: the hero's eyebrow badge `33px`, its subtitle
+paragraph `61px`, and the entire accordion `<section>` `1196.7px`). A fixed `height` (not `min-height`)
+clamps the box at that exact size regardless of viewport — when the same content wraps to more lines at
+mobile/tablet widths (the subtitle paragraph) or reflows to a taller single-column layout (the
+accordion's image+description rows, capability grids, approach-steps list), the overflowing content
+spills past its now-too-small fixed box in normal document flow, landing visually on top of whatever
+sits below it. This is the direct cause of both overlap reports: the subtitle overlapping the hero
+button row below it, and the accordion section overlapping the closing CTA section below it. It is also
+the most likely secondary contributor to "flickering across the entire section" — the outer accordion
+`<section>`'s fixed `1196.7px` height did not track the accordion's own animating content height from
+T009's fix, so toggling a card meant the actual content height and the section's rigid box height were
+fighting each other on every frame of the open/close transition.
+
+**Root cause 2 — Services never got its own ambient-orb entry.** `components/ui/ambient-orbs.tsx` (the
+shared, path-aware decorative background layer mounted once in `app/layout.tsx`) has dedicated branches
+for `/case-studies`, `/construction`, `/contact`, `/careers`, and `/about`, each rendering that page's
+own reference-specific orb set — but no `/services` branch existed, so `/services` fell through to the
+generic default 3-orb set (top-right orange 0.16 / mid-left blue 0.10 / bottom-center amber 0.09) instead
+of `TechGrit Services.dc.html`'s own 4-orb set (top-right orange 0.18 / mid-left amber 0.10 / mid-right
+orange 0.11 / bottom-center orange 0.13). FR-013a was written into spec.md but never actually
+implemented — this was a genuine, pre-existing gap, not a regression from a prior fix.
+
+- [x] T010 [US2] In `app/services/_components/services-hero.tsx`: change the eyebrow badge's
+  `height:"33px"` and the subtitle paragraph's `height:"61px"` to `minHeight` — both values stay exact
+  at desktop (where the content already fits in that height), but now allow the box to grow instead of
+  clipping/overflowing when the same text wraps to more lines at mobile/tablet widths — depends on
+  nothing; no other value changed. **Done.**
+- [x] T011 [US2] In `app/services/_components/services-accordion.tsx`: change the outer `<section
+  id="svc-accordion">`'s `height:"1196.7px"` to `minHeight`, and the intro eyebrow wrapper's `h-[15px]`
+  to `min-h-[15px]` (same fixed-height pattern, defensive fix) — the section now matches the reference's
+  exact desktop height while growing to fit its actual (and, post-T009, actually-animating) content at
+  every other breakpoint and open/close state — depends on nothing; no other value changed. **Done.**
+- [x] T012 [US2] [P] In `components/ui/ambient-orbs.tsx`: add a `/services` branch reusing the identical
+  4-orb set already defined for `/careers` and `/about` (`TechGrit Careers.dc.html`/
+  `TechGrit About.dc.html`/`TechGrit Services.dc.html` all specify the same top-right/mid-left/mid-right/
+  bottom-center orange-amber-orange-orange geometry byte-for-byte) — consolidated the three previously
+  near-duplicated JSX blocks into one shared return keyed by a per-page class name
+  (`bg-ambient-orbs-services`, following the existing `bg-ambient-orbs-careers`/`-about` naming
+  convention) rather than tripling the identical markup a third time (FR-013a) — depends on nothing;
+  different file from T010-T011, safe to do in parallel. **Done.**
+
+**Verified**: `npm run lint` (0 errors, same 7 pre-existing unrelated warnings) and `npm run build` both
+green (all 18 routes, including `/services`, prerender successfully). Server-rendered HTML (fetched via
+`curl`) confirms: `bg-ambient-orbs-services` renders with all 3 of the reference's distinctive orange
+opacities (`0.18`/`0.11`/`0.13`) plus the amber `0.10` orb present; the eyebrow badge, subtitle
+paragraph, and accordion section all now compile to `min-height` (not `height`) at their same exact
+pixel values. **Not confirmed via an actual responsive screenshot at mobile/tablet widths or a live
+flicker repro** — the Browser-pane tool cannot composite frames in this environment (the same limitation
+noted throughout this file); this fix is grounded in the mechanism (a fixed `height` cannot grow to
+contain wrapped/reflowed content, `min-height` can) rather than a visual before/after. Recommend the user
+re-confirm at mobile and tablet widths and report back if any overlap or flicker remains.
+
+**Checkpoint**: no element in the hero or accordion clamps its box to a fixed pixel height that could be
+shorter than its content at a non-desktop breakpoint; `/services` renders its own reference-matched
+4-orb ambient background instead of the generic default set.
+
+---
+
+## Phase 5: Empty Space Before CTA & Persisting Open-Animation Flicker (found via live comparison)
+
+**Input**: direct user report after T010-T012 landed — an empty gap between the accordion section and
+the closing CTA section, and the accordion still flickers specifically when a card is opened.
+
+**Root cause 1 — `minHeight` was still the wrong tool, just a smaller wrong number.** T011 changed the
+accordion `<section>`'s fixed `height:"1196.7px"` to `minHeight`, which fixed the too-small-clipping
+case but not the inverse: `minHeight` is a floor, and the accordion's actual rendered height depends
+entirely on which card is open (or whether all are closed), so any snapshot value pinned to one
+particular state (whichever was open when it was captured) leaves a gap under every other state whose
+content is shorter than that snapshot. Between T011 and this phase the section's `minHeight` value had
+already changed once on its own (`1196.7px` → `601.79px`, a second desktop-width snapshot taken at a
+different accordion state) — direct evidence the number itself was never going to be stable. The
+reference's own `#svc-accordion` (`TechGrit Services.dc.html` line 235) declares no height at all,
+relying purely on normal document flow to size itself to whichever card is open. **Fix**: remove the
+height constraint entirely rather than replace it with another measured value.
+
+**Root cause 2 (continuing from Phase 3) — the card's `backdrop-filter` still repaints against an
+animating box.** Switching the collapse mechanism from `grid-template-rows` to `max-height` (T009)
+removed the layout-thrashing grid-track recalculation, but the card carrying `backdrop-filter` still
+visually resizes every frame as its animated child grows/shrinks — swapping *which* CSS property drives
+the resize doesn't change that the backdrop-filtered box itself is still changing size over the page's
+continuously-animating ambient orbs, which remains the documented Chromium/Firefox repaint-flicker
+combination. **Fix**: isolate the card's paint from the rest of the page (`contain: paint`) and hint the
+browser to optimize specifically for the animated property (`will-change: max-height`) — both are
+established, purely technical mitigations for this exact class of bug, with no visual value changed.
+Additionally, `ServiceImage`'s `<Image>` now loads with `priority` (previously default lazy-loading):
+since the two collapsed cards' images sit inside a `max-height:0` box with zero rendered area, the
+browser may defer fetching them until the card first opens, so a first-time open could show a
+"pop-in" as the image loads mid-transition — a second, distinct flicker-like symptom with the same
+"looks like flicker when opened" report. Eager-loading all 3 (a small, fixed set of images) removes
+that race entirely.
+
+- [x] T013 [US2] In `app/services/_components/services-accordion.tsx`'s `ServicesAccordion`: remove the
+  outer `<section id="svc-accordion">`'s `minHeight` (and its snapshot pixel value) entirely, leaving
+  only `position: "relative"` — the section returns to pure content-driven `auto` height, matching the
+  reference's own undeclared height exactly, and can no longer produce a gap under a shorter accordion
+  state or clip a taller one. **Done.**
+- [x] T014 [US2] [P] In the same file's `AccordionItem`: add `contain: "paint"` to the card's outer
+  style and `willChange: "max-height"` to the collapsible body wrapper's style — pure rendering-isolation
+  hints, no visual value changed — depends on nothing else. **Done.**
+- [x] T015 [US2] [P] In the same file's `ServiceImage`: add the `priority` prop to the `<Image>` so all
+  3 service images load eagerly regardless of which card is currently collapsed, removing any
+  lazy-load-triggered pop-in the first time a previously-untouched card is opened — depends on nothing
+  else; different concern from T014, safe to do alongside it. **Done.**
+
+**Verified**: `npm run lint` (0 errors, same 7 pre-existing unrelated warnings) and `npm run build` both
+green (all 18 routes, including `/services`, prerender successfully). Server-rendered HTML confirms
+`#svc-accordion` now compiles to `style="position:relative"` with no height property at all, and
+`contain:paint`/`will-change:max-height` are present on all 3 accordion cards. **Not confirmed via an
+actual visual comparison or a resolved flicker repro** — the Browser-pane tool cannot composite frames
+in this environment (the same limitation noted throughout this file), and the `priority`-image change
+in particular could not be confirmed via the loading-attribute markup on the currently-running dev server
+(a production build was used for the type/compile check instead). If the flicker persists after this
+phase, the next step would need an actual recorded repro (e.g. a screen capture) to identify the exact
+compositor operation involved, since the mechanism-level fixes available from static code review have
+now been exhausted.
+
+**Note for future manual pixel-matching passes**: several of the regressions across Phases 4-5 (the
+fixed heights, both snapshot values) originated from copying a browser's *computed* style at one
+specific viewport/state into the source as a literal value. That technique is safe for values that are
+genuinely constant (colors, border-radii, font-sizes already gated behind a breakpoint), but not for any
+box whose height depends on responsive reflow or component state (wrapped text, an accordion's open
+card) — those need `min-height`/no-height-at-all, never a bare snapshot `height`, or the same class of
+bug will keep recurring under a new number each time.
+
+**Checkpoint**: the accordion section has no explicit height at all and sizes purely to its current
+content, eliminating any possible gap or clip against the closing CTA section regardless of which card
+is open; the open-card's paint is isolated from the page's animated background and its images no longer
+race lazy-loading against the open transition.
+
+---
+
+## Phase 6: Ambient-Orb Route-Change Flash & will-change Cleanup (found via live comparison)
+
+**Input**: direct user report — flickering persists specifically "when I toggle between the pages" and
+"especially with the cards in the accordion when expanded and the final CTA section as well." The CTA
+section has no interactive/animated state of its own, which rules out any per-card open/close mechanism
+as the sole cause and points to something shared by every glass/`backdrop-filter` panel on the page.
+
+**Root cause — `components/ui/ambient-orbs.tsx` updates orb `<span>`s in place across a route change
+instead of remounting them.** This component is mounted once in `app/layout.tsx` and persists across
+every client-side navigation; it picks a different orb configuration by reading `pathname`. Its 4 return
+branches share the same shape at the same tree position (a `<div>` wrapping 2-4 `<span>`s, none keyed),
+so when a navigation crosses between two branches — e.g. from the homepage's 3-orb default set to
+`/services`'s 4-orb set — React's positional reconciliation matches the surviving `<span>`s by index and
+patches their `top`/`right`/`width`/`height`/`background`/`filter` values **in place**, with no
+transition on any of those properties. The result: the ambient glow instantly snaps to a different
+color/position/size at the exact moment of navigation — a real, visible flash, made most obvious exactly
+where the user reported it, since a `backdrop-filter` panel (an accordion card, the CTA card) is
+continuously sampling whatever is currently rendered behind it, so a sudden change in the orbs directly
+behind it reads as that panel itself flickering, even though the panel's own styles never changed.
+
+**Fix**: give each of the 4 return branches an explicit, mutually-distinct `key` on its root `<div>`. A
+`key` change on the single child a component renders into its parent's slot forces React to fully
+unmount the old subtree and mount a fresh one, rather than reconciling incompatible orb sets in place —
+so a route change now cleanly swaps the whole orb layer instead of jump-cutting individual `<span>`
+properties.
+
+**Secondary hygiene fix**: `AccordionItem`'s `will-change: max-height` (Phase 5, T014) was applied via a
+static style value, meaning it stayed active on every card permanently, including at rest — an always-on
+compositing layer over a `backdrop-filter` element that this codebase's own `RevealOnScroll` component
+explicitly avoids (it sets `willChange` on mount and resets it to `"auto"` once its one-time transition
+ends). Reworked to match that precedent: `will-change` is now set imperatively via the wrapper ref only
+for the duration of an actual open/close transition, then cleared on `transitionend`.
+
+- [x] T016 [US2] In `components/ui/ambient-orbs.tsx`: add a distinct `key` to each of the 4 returned root
+  `<div>`s (`"contact"`, the shared careers/about/services `className` value, and `"default"`) so a
+  route change that crosses between orb-set variants remounts the orb layer instead of patching
+  incompatible `<span>` values in place (FR-013a; this fix also benefits every other page consuming this
+  shared component, not just Services) — depends on nothing. **Done.**
+- [x] T017 [US2] In `app/services/_components/services-accordion.tsx`'s `AccordionItem`: remove the
+  static `willChange: "max-height"` from the wrapper's style object; instead set
+  `wrapper.style.willChange = "max-height"` imperatively at the start of the toggle effect and reset it
+  to `"auto"` on `transitionend`, mirroring `RevealOnScroll`'s own cleanup pattern rather than leaving a
+  compositing layer active on every card at rest — depends on nothing else. **Done.**
+
+**Verified**: `npm run lint` (0 errors, same 7 pre-existing unrelated warnings) and `npm run build` both
+green (all 18 routes, including `/services`, prerender successfully). Server-rendered HTML confirms
+`will-change:max-height` no longer appears in any card's static markup (it's applied only via the ref at
+runtime, during an actual transition) and the Services orb variant still renders correctly with its own
+`key`. **Not confirmed via an actual route-change repro or visual comparison** — the Browser-pane tool
+cannot composite frames or navigate between pages in this environment (the same limitation noted
+throughout this file), so this fix is grounded in the mechanism (unkeyed positional reconciliation across
+structurally-different-but-same-shaped branches is a well-documented React "flash on prop swap" pattern)
+rather than a before/after recording. This is also the first fix in this investigation that plausibly
+explains the CTA section's flicker (which has no open/close state of its own to blame), since it targets
+something ambient and shared across the whole page rather than the accordion specifically — recommend
+the user re-confirm across an actual page-to-page navigation and report back if anything remains.
+
+**Checkpoint**: navigating to or from `/services` (or any other page whose orb configuration differs
+from the page navigated from) fully replaces the ambient-orb layer instead of snapping existing orbs to
+new values in place; no accordion card holds a permanent compositing layer while at rest.
+
+---
+
+## Phase 7: ApproachSteps/CapabilityGrid Typography Audit (found via user-identified field mismatch)
+
+**Input**: direct user report — the flickering traces to `ApproachSteps`/`CapabilityGrid`'s font-size,
+letter-spacing, and line-height values ("or any other") not matching the reference, with an instruction
+to audit and fix. **Scope**: only these two functions inside
+`app/services/_components/services-accordion.tsx`. **Reference**: `TechGrit Services.dc.html` lines
+264-272 (approach steps) and 298-303 (capability grid), read field-by-field against the current code.
+
+**Why a typography mismatch reads as "flicker"**: `AccordionItem`'s open/close animation measures
+`inner.scrollHeight` (T009) to drive its `max-height` transition — that measurement reflects whatever
+text size/line-height/spacing is *actually* rendered inside `ApproachSteps`/`CapabilityGrid` at that
+instant. Any value that diverges from the reference changes how many lines text wraps to and how much
+vertical space each item occupies, which lands directly in the measured height driving the animation —
+so an incorrect font-size isn't just a cosmetic gap, it can make the measured/animated height subtly
+wrong every time, which reads as the content "settling" or jumping once rendering catches up.
+
+**Findings, field-by-field**:
+
+| Element | Property | Was | Reference | Fix |
+|---|---|---|---|---|
+| Approach: "Our approach" label | `margin-bottom` | `var(--space-10)` (24px) | `20px` | `var(--space-8)` (exact-match existing token, 20px) |
+| Approach: step title `<h3>` | `font-size` | `"16px"` | `16.5px` | `"16.5px"` |
+| Approach: step description `<p>` | `color` | `var(--color-text-faint)` (0.58) | `rgba(255,255,255,0.56)` | new token `--color-text-56` |
+| Capability: card title `<h3>` | `font-size` | `18` | `16.5px` | `16.5` |
+| Capability: card title `<h3>` | `letter-spacing`/`line-height` | unset (inherits base `h1-h6` rule) | unset (plain default) | `"normal"`/`"normal"` (matching the sibling approach-step title's existing override — the reference declares neither property on either heading, so both need the same explicit reset to avoid inheriting the base heading rule's own letter-spacing/line-height, per Constitution Principle IV) |
+| Capability: card description `<p>` | `margin-top` | `9` | `8px` | `8` |
+| Capability: card description `<p>` | `font-size` | `14.5` | `14px` | `14` |
+| Capability: card description `<p>` | `line-height` | `1.6` | `1.55` | `1.55` |
+| Capability: card description `<p>` | `color` | `var(--color-text-muted)` (0.62) | `rgba(255,255,255,0.6)` | `var(--color-text-soft)` (exact-match existing token, 0.6) |
+
+The capability-grid title's font-size (18px vs. the reference's 16.5px, ~9% larger) is the most
+layout-significant single finding — large enough to plausibly change wrap behavior on longer titles
+("Product Strategy & Architecture", "AI & Automation Integration") at narrower grid-column widths.
+
+- [x] T018 [US2] In `app/tokens.css` (Section 2, TEXT COLORS, next to the existing `--color-text-60`/
+  `-55` cluster): add `--color-text-56: rgba(255, 255, 255, 0.56)` — the one value in this pass with no
+  existing exact-match token — depends on nothing; different file from T019, safe to do in parallel.
+- [x] T019 [US2] In `app/services/_components/services-accordion.tsx`'s `ApproachSteps` and
+  `CapabilityGrid`: apply every correction in the table above — depends on T018 (the description-text
+  color fix references the new token). **Done.**
+
+**Verified**: `npm run lint` (0 errors, same 7 pre-existing unrelated warnings) and `npm run build` both
+green (all 18 routes, including `/services`, prerender successfully). Server-rendered HTML confirms
+`font-size:16.5px` now appears on both headings (21 total occurrences across all 3 accordion items'
+approach-steps/capability-grid headings), `line-height:1.55` appears on both description types (18
+occurrences), `--color-text-56`/`--color-text-soft` are both present, and `var(--space-8)` is used for
+the "Our approach" label's margin — with no leftover `18px`/`14.5px`/`1.6` (non-`.55`) values anywhere in
+`ApproachSteps`/`CapabilityGrid`'s own markup (the 2 remaining `18px` and 1 remaining `1.6` matches found
+during verification belong to the unrelated closing-CTA paragraph/arrow icon and the accordion's own
+intro subheading, confirmed by inspecting surrounding context — not leftovers of this bug). **Not
+confirmed via an actual visual comparison or a resolved flicker repro** — the Browser-pane tool cannot
+composite frames in this environment (the same limitation noted throughout this file); recommend the
+user re-confirm and report back whether this closes out the flicker investigation or whether a recorded
+repro is needed for whatever (if anything) remains.
+
+**Checkpoint**: every font-size/letter-spacing/line-height/color value in `ApproachSteps` and
+`CapabilityGrid` now matches `TechGrit Services.dc.html` exactly, field-by-field.
+
+## Dependencies (Services)
+
+- T001 is independent of T002-T007 (different file, `tokens.css`/`globals.css`).
+- T002 → T003 → T004: `types.ts` → `services-content.ts` → `services-accordion.tsx`, each depends on
+  the previous. T004 additionally depends on T001 (needs the new tokens).
+- T004 → T005 → T006: the new component must exist (T004) before the old files can be safely deleted
+  (T005), which must happen before `page.tsx`'s dispatch is repointed (T006).
+- T007 is independent of T001-T006 (different file, `services-hero.tsx`).
+- T008 runs last, after T001-T007.
+- T009 depends on T004 (edits the same file, `services-accordion.tsx`, after it exists) and follows
+  T008 chronologically (found via live comparison after the initial verification pass).
+- T010 depends on T007 (edits the same file, `services-hero.tsx`, after it exists).
+- T011 depends on T009 (edits the same file, `services-accordion.tsx`, after it exists).
+- T012 is independent of T010-T011 (different file, `components/ui/ambient-orbs.tsx`, shared across
+  pages) — safe to do in parallel with either.
+- T013 depends on T011 (edits the same file, `services-accordion.tsx`, same section, after it exists).
+- T014 and T015 are independent of T013 and of each other (different functions in the same file, no
+  overlapping props/styles) — safe to do in parallel with T013 and each other.
+- T016 is independent of everything else in this section (different file, `components/ui/
+  ambient-orbs.tsx`, shared across pages).
+- T017 depends on T014 (reworks the same `will-change` concern T014 introduced, same file).
+- T018 is independent of T019 at the file level (different file, `tokens.css`) but T019 depends on it
+  (the description-text color fix references the new token) — T018 must land first.
+
+## Parallel Example (Services)
+
+```bash
+# T001 and T007 touch different files from the T002-T006 chain and can run alongside it:
+Task: "Add accordion open-glow shadow + 3 divider gradients to tokens.css (T001)"
+Task: "Swap hero CTAs to shared Button component (T007)"
+# T002 -> T003 -> T004 -> T005 -> T006 must run in sequence (each depends on the previous).
+```
+
+## Implementation Strategy (Services)
+
+Single increment — all 7 tasks (T001-T007) together are this slice's only deliverable (FR-013,
+FR-013b, and FR-014 are one cohesive accordion-rebuild pass surfaced by the same `/speckit.clarify` +
+`/speckit.plan` pass for User Story 2). Complete T001-T007, then T008 to verify, then stop. FR-013a
+(ambient orbs) is a separate, already-scoped addition tracked outside this slice; User Story 2 is not
+considered fully complete until that addition also lands.
