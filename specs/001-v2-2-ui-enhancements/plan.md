@@ -1825,3 +1825,345 @@ violations. Gate: PASS.
 Research (Phase 0 of this slice) confirmed all 3 corrected values already exist as exact-match
 tokens before any file changed, and confirmed the ghost button needed no change at all (already
 byte-matched during Phase 1). No new violations. Gate: PASS.
+
+---
+
+## User Story 6 — Webinar Page (FR-030, FR-031)
+
+**Date**: 2026-08-07 | **Spec**: [spec.md](./spec.md), User Story 6 (Insights: Webinar page
+reference alignment), scoped to **only** FR-030 and FR-031.
+
+**Reference**: `raw-files-v2/TechGrit Website V2.2/TechGrit Webinar.dc.html` exclusively.
+
+**Scope note**: this is an independent slice, unrelated to Home Page (User Story 1) or Construction
+(User Story 3) above — tracked as its own block precisely so a teammate can work any other user
+story in parallel without touching this section or its files. It covers **only** the 2 FRs named
+above. No Home Page, Construction, Case Studies, Blog, About, Careers, or Contact file is touched.
+
+### Summary
+
+Reading `TechGrit Webinar.dc.html` directly against today's `/webinar` implementation shows the
+reference never puts the upcoming session's title/date/CTA inside the hero's own two-column grid at
+all — it renders a separate, full-width "announcement strip" (`data-web-announce`) positioned
+directly above the hero section, and explicitly hides the old "upcoming featured" card inside the
+sessions grid (`display:none`, with the file's own comment: "moved to floating strip above hero per
+UX review"). Today's app does the opposite: the hero has no upcoming-session content at all, and the
+sessions grid's `UpcomingPanel` renders exactly the "Upcoming Live" block FR-031 says must not exist
+as a separate element. Per spec.md's Session 2026-08-07 Clarifications (Story 6), this resolves to:
+
+1. **New `app/webinar/_components/announcement-strip.tsx`** (FR-030) — a full-width strip rendered
+   directly above `<HeroSection>` (not nested inside its two-column grid), reusing the existing
+   `UpcomingSession` content type verbatim (no data-model change). Structure matches the reference's
+   literal 3-column row: a status label with a blinking amber dot ("Upcoming · Live"), the session's
+   title + date/time (`{session.title} · {session.date} · {session.time} {session.timezone}`, matching
+   the reference's single truncated line, line 222), and a "Register" control that smooth-scrolls to
+   `#subscribe` — reusing `UpcomingPanel`'s existing `handleRegisterClick` pattern (`document.
+   getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" })`), not a native anchor. At the
+   app's canonical `sm` breakpoint (560px) and below, the row's `grid-cols-[auto_1fr_auto]` collapses
+   to a single column (FR-030's mobile-stacking clarification) — the reference itself defines no
+   mobile treatment for this row at all.
+   **Deliberate deviation from the reference's literal markup**: the reference wraps the entire strip
+   in one `<a href="#subscribe">` (whole-row clickable, with a visually-button-styled `<span>` nested
+   inside the same anchor). This app keeps only the "Register" control itself interactive (a `<button
+   onClick={...}>`, matching `UpcomingPanel`'s existing pattern) with the outer strip as a
+   non-interactive `<div>` — avoiding a nested-interactive-element accessibility anti-pattern
+   (button-inside-link) that the reference's own preview-tool markup doesn't need to avoid. This is a
+   deliberate, here-recorded exception to Principle IV, the same class of exception already used
+   elsewhere in this plan for FR-020's per-card-link removal.
+2. **`app/webinar/_components/sessions-section.tsx`** (FR-031) — the `UpcomingPanel` function and its
+   render call are removed entirely from `SessionsSection`; the `upcomingSession` prop is removed from
+   `SessionsSection`'s own prop type (the data now flows to the new `AnnouncementStrip` instead, per
+   item 1). Auditing the reference's "Sessions" heading and every remaining released-session card
+   against today's markup (`--text-webinar-h2`, `GlassCard variant="webinarReleased"`,
+   `RELEASED_ACCENT_COVER`) shows every value already matches `TechGrit Webinar.dc.html` exactly
+   **except one**: the orange-accent card's cover currently reuses `--gradient-blog-featured`
+   (`rgba(232,119,34,0.20)…`), a token borrowed from the Blog section for visual convenience, which is
+   2% opacity off the reference's own `rgba(232,119,34,0.18)…` (line 279). Everything else — the h2's
+   `clamp(26px,3vw,34px)`/`-0.03em` sizing (`--text-webinar-h2`, itself already the exact reference
+   clamp), the cards' `20px` radius/`0.10` border/`0.04` background (`--radius-2xl`, `--color-border-
+   image`, `--color-glass-4`, all exact-match tokens), the `18.5px/700/1.3` title and `14.5px/1.6/
+   rgba(255,255,255,0.6)` description (already overridden to `text-white/60` per-instance), the status
+   label's `12px/700/0.10em/#F7B733` styling (`text-12`/`tracking-wider` — remapped to `--ls-wider`
+   0.10em via `@theme inline`, not Tailwind's own 0.05em default — /`text-amber-light`), and the blue/
+   teal cover gradients (`--gradient-webinar-released-blue`/`-teal`, both exact matches) — needs **no
+   change**. FR-031's "MUST use the reference's updated colors and typography" therefore resolves to
+   one token fix, not a rewrite.
+3. **`app/tokens.css`** — add 4 tokens with no existing exact match, in their respective existing
+   numbered sections: `--gradient-webinar-announce: linear-gradient(90deg, rgba(245, 158, 11, 0.14),
+   rgba(232, 119, 34, 0.05));` (§ Gradients — announcement strip's resting background, line 220),
+   `--color-border-amber-35: rgba(245, 158, 11, 0.35);` and `--color-border-amber-70: rgba(245, 158,
+   11, 0.70);` (§ Borders — the strip's resting and hover border colors; the existing `--color-border-
+   amber-30`/`-medium` (0.30/0.40) are close but not exact matches for this new element's own two
+   distinct values), `--shadow-webinar-announce: 0 12px 40px -18px rgba(232, 119, 34, 0.5);` (§ Shadows
+   — the strip's ambient glow shadow, line 220), and `--gradient-webinar-released-orange: linear-
+   gradient(150deg, rgba(232, 119, 34, 0.18), rgba(2, 132, 199, 0.06));` (§ Gradients — the dedicated
+   released-card orange-accent gradient that item 2's fix introduces, replacing the borrowed
+   `--gradient-blog-featured`). The strip's `16px` border-radius has no existing exact-match token
+   (`rounded-lg` is `14px`, `rounded-2xl` is `20px` per the Construction addendum's own confirmation of
+   `--radius-2xl: 20px`), so it uses the arbitrary-value `rounded-[16px]` class, consistent with this
+   plan's own established precedent (the Re-Imagine Grid addendum's `h-[180px]` decision) of not
+   spawning a token for a single, section-specific usage. The
+   `12px` backdrop-blur (already an exact match — `--blur-cta`, "Final CTA panel"), and the `14px 22px`
+   padding / `22px` column gap (literal arbitrary-value classes, same precedent) need no new tokens.
+   Existing `--shadow-glow-amber-sm` (0.80 opacity) is reused verbatim for the status dot's glow, a
+   already-accepted 5%-opacity delta against the reference's `0.85` — the same class of sub-visible
+   shared-token delta this plan has already accepted elsewhere (stat-divider border, Construction's
+   primary-button shadow) rather than forking a new token for a near-imperceptible difference.
+4. **`app/webinar/page.tsx`** — render `<AnnouncementStrip session={webinarPageContent.upcomingSession} />`
+   between `<HeroSection>` and `<SessionsSection>`; `<SessionsSection>` no longer receives an
+   `upcomingSession` prop.
+5. **`app/webinar/_components/sessions-section.tsx`** (continued, item 2) — `RELEASED_ACCENT_COVER.
+   orange` switches from `"bg-[image:var(--gradient-blog-featured)]"` to `"bg-[image:var(--gradient-
+   webinar-released-orange)]"`.
+
+Nothing else changes. `HeroSection`'s own two-column grid/collage, `SubscribePanel`, and every other
+released-session card value already confirmed exact above are untouched.
+
+### Technical Context (User Story 6 slice)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo; manual
+verification, see quickstart.md addendum) · **Target Platform**: Web · **Project Type**: single
+Next.js App Router app · **Performance Goals**: N/A (markup relocation + one gradient-token swap) ·
+**Constraints**: no new libraries; the existing `UpcomingSession` data type is reused verbatim (no
+data-model change); zero visual change to any `/webinar` section other than the new announcement
+strip's position, the sessions grid's removed `UpcomingPanel`, and the orange released-card cover's
+gradient · **Scale/Scope**: 1 new file created (`announcement-strip.tsx`), 2 existing files edited
+(`sessions-section.tsx`, `page.tsx`), 4 new tokens added to `tokens.css`, 0 new libraries.
+
+### Constitution Check (User Story 6 slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS. All 4 new literal values (announcement-strip gradient/border
+  ×2/shadow, released-card orange gradient) are added to `tokens.css` first, in their existing
+  numbered sections, before any component consumes them. The strip's `16px` radius and `14px 22px`
+  padding stay arbitrary-value classes, consistent with this plan's own established precedent of not
+  spawning a token for a single, section-specific spacing usage with no reuse elsewhere. The status
+  dot's glow shadow reuses the existing `--shadow-glow-amber-sm` verbatim (a 5%-opacity delta already
+  accepted elsewhere in this plan), not a new near-duplicate token.
+- **II (Breakpoints)** — PASS. The strip's mobile-stacking collapse uses the app's canonical `sm`
+  (560px, `max-tg-sm:`) breakpoint, per spec.md's clarification — no new breakpoint introduced.
+- **III (Component Library)** — PASS with one recorded exception: the announcement strip's row-shaped
+  content (status label + single-line session summary + CTA) doesn't fit `GlassCard`'s icon+title+
+  description card shape, so it's a bespoke `<div>` rather than a forced new `GlassCard` variant whose
+  unused `ICON_VARIANTS`/`TITLE_VARIANTS`/`DESC_VARIANTS` entries would exist only to satisfy the
+  Record's exhaustiveness — the same reasoning `TrustedClients.tsx` and the pre-migration Live-Webinar
+  badge already established for bespoke, non-card-shaped sections elsewhere in this plan. The strip
+  still reuses this app's existing `Button`-pattern smooth-scroll handler (`UpcomingPanel`'s own
+  `handleRegisterClick`) rather than inventing a new interaction, and `GlassCard variant="
+  webinarReleased"` (sessions grid) is untouched and reused as-is.
+- **IV (References Are Visual Truth)** — PASS with one recorded, deliberate exception: the
+  whole-strip-as-a-single-anchor structure is not reproduced (see Summary item 1) to avoid a
+  nested-interactive-element accessibility anti-pattern the reference's own preview-tool markup
+  doesn't need to avoid — every other structural and value decision (strip position, 3-column
+  content, colors, the released-card gradient fix) is read directly from the reference.
+- **V (Dark-First Brand)** — PASS. No new surface fill; the strip's amber/orange gradient stays a
+  translucent glass tint (0.05-0.14 opacity), matching the reference and the app's existing sparing-
+  accent convention.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- No violations — Complexity Tracking is empty.
+
+### UI Design Approach (User Story 6 slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's two visible craft surfaces — the
+announcement strip's new glass treatment and the mobile-stacked fallback. Takeaways applied: **strip
+glass treatment** — the resting border stays a modest `0.35`-opacity amber line (not the brighter
+`0.70` reserved for hover), so the strip reads as "quietly present, brightens on interaction" rather
+than competing with the hero directly beneath it; the `0.05-0.14` gradient fill and `12px` blur keep it
+in the same translucent-glass register as every other card-like surface in this app, not a solid
+banner. **Mobile stack** — at `sm` and below, the status label renders first (establishing "this is
+live/upcoming" before the title, matching reading order), the session summary second, and the Register
+button last, full-width — so the collapsed column still reads top-to-bottom as urgency → context →
+action, the same order the desktop row already establishes left-to-right.
+
+**Reconciliation with Principles I–V**: none needed beyond the two recorded exceptions above (III's
+bespoke-wrapper choice, IV's nested-interactive-element avoidance) — the skill's guidance confirmed
+Principle V's sparing-accent convention without surfacing any further conflict.
+
+**Anchor files**: `app/webinar/_components/announcement-strip.tsx` (new),
+`app/webinar/_components/sessions-section.tsx` (`UpcomingPanel` removed, `upcomingSession` prop
+removed, orange gradient token swapped), `app/webinar/page.tsx` (renders `<AnnouncementStrip>` between
+`<HeroSection>` and `<SessionsSection>`), `app/tokens.css` (4 new tokens).
+
+### Project Structure (User Story 6 slice)
+
+```text
+app/webinar/_components/
+├── announcement-strip.tsx   # NEW — full-width strip above the hero; reuses UpcomingSession data
+├── sessions-section.tsx     # UpcomingPanel removed; upcomingSession prop removed;
+│                             # RELEASED_ACCENT_COVER.orange → --gradient-webinar-released-orange
+└── hero-section.tsx          # unchanged
+
+app/webinar/page.tsx          # + <AnnouncementStrip session={...} /> rendered before <SessionsSection>;
+                               # <SessionsSection> no longer receives upcomingSession
+
+app/tokens.css                 # + --gradient-webinar-announce, --color-border-amber-35,
+                                #   --color-border-amber-70, --shadow-webinar-announce,
+                                #   --gradient-webinar-released-orange
+```
+
+No `data-model.md`/`contracts/` (presentation-only, same as every other slice in this plan).
+**Correction (post-implementation)**: the plan's original "no `app/globals.css` change" claim held
+for all 4 originally-identified tokens (each consumed via arbitrary-value `bg-[image:var(...)]`/
+`border-[var(...)]`/`shadow-[var(...)]` syntax, matching the existing `webinarUpcoming`/
+`webinarReleased` variants' consumption pattern), but implementation surfaced a 5th token not
+identified during planning — the status label's `letter-spacing:0.14em` had no existing exact-match
+tracking token, so `--ls-announce-label` was added to `tokens.css` (§ Typography) and mapped via
+`--tracking-announce-label: var(--ls-announce-label);` in `app/globals.css`'s `@theme inline` block
+(matching the sibling `--tracking-hint`/`--tracking-blog-meta`/`--tracking-life-cap` mappings already
+in that file), becoming the canonical `tracking-announce-label` utility. `app/webinar/_data/types.ts`
+is unchanged — `UpcomingSession` is reused verbatim, no new field.
+
+**Structure Decision**: existing single-project structure. `announcement-strip.tsx` stays route-local
+(`app/webinar/_components/`), matching its sibling section files — it is consumed by the webinar page
+only.
+
+### Complexity Tracking (User Story 6 slice)
+
+*Empty — the two recorded Principle III/IV exceptions above are deliberate, spec-informed choices,
+not unjustified complexity.*
+
+### Post-Design Constitution Re-Check (User Story 6 slice)
+
+Research (Phase 0 of this slice) audited every value in the sessions grid's "Sessions" heading and
+released cards against the reference before any file changed, confirming all but one (the orange
+cover gradient) were already exact matches — narrowing FR-031's actual code change to a single token
+swap rather than a broader rewrite. No new violations. Gate: PASS.
+
+## User Story 6 (continued) — Webinar Page Polish (FR-030a, FR-030b, FR-031a)
+
+**Date**: 2026-08-07. Extends the same "User Story 6 — Webinar Page" block above with 3 direct-
+instruction items surfaced during this session: the announcement strip's Register control moving
+onto the shared `Button` primitive (FR-030a), the page's background ambient orbs matching the
+reference's own 2-orb set instead of the shared default 3-orb set (FR-030b), and the sessions grid's
+"Watch Now" buttons rendering with `font-family: Arial` (FR-031a). FR-030/FR-031's own scope above is
+unaffected and complete; no other user story is touched.
+
+**Reference**: `TechGrit Webinar.dc.html` for FR-030a/FR-030b. FR-031a is explicitly **not**
+reference-backed — see Constitution Check below.
+
+### Summary (FR-030a/030b/031a)
+
+1. **`app/webinar/_components/announcement-strip.tsx`** (FR-030a) — the Register control's bespoke
+   `<button onClick={...}>` is replaced by `<Button onClick={...} className="...">`, carrying the
+   same per-instance overrides (`!rounded-[10px] !py-[9px] !px-[18px] !text-[13.5px]`, `size="sm"` as
+   the closest existing size preset) needed to keep its rendered output pixel-identical to before —
+   this is a Component Library conformance fix (Constitution III), not a visual change.
+2. **`components/ui/ambient-orbs.tsx`** (FR-030b) — gains a `pathname === "/webinar"` branch,
+   following the exact same in-component-branch, Tailwind-classes-only convention already established
+   for the homepage's own 4-orb branch (no route-exclusion entry, no separate page-local file).
+   Comparing the reference's 2 orbs (lines 110-113) against the existing default 3-orb branch shows
+   the first orb is **already pixel-identical** (`-top-40 -right-30 h-140 w-140 blur-[120px]
+   animate-[tgorb_16s_ease-in-out_infinite]`, `--color-overlay-orange` at 0.16 vs. the reference's
+   0.15 — the same class of sub-visible opacity delta already accepted elsewhere in this plan) and the
+   second orb needs only its own vertical offset corrected (`top-225` → `top-300`, i.e. `900px` →
+   `1200px`, matching the reference's `top:1200px` exactly; its size/color/blur/animation —
+   `h-130 w-130`, `--color-overlay-blue-soft` at an exact-match `rgba(2,132,199,0.10)`, `blur-[130px]`,
+   `20s reverse` — were already exact). The new branch is therefore the existing default branch's
+   first two orbs, with one position correction, and the 3rd (amber) orb dropped entirely, since the
+   reference has no third orb.
+3. **`app/webinar/_components/sessions-section.tsx`** (FR-031a) — both `ReleasedCardHalf`'s and
+   `ReleasedCardFull`'s `<Button>` calls for "Watch Now" gain an inline `style={{ fontFamily: "Arial,
+   sans-serif" }}` — a per-instance override on these two specific button instances only, not a
+   `className` token and not a change to `components/ui/Button.tsx` itself, so every other `Button`
+   consumer across the entire app keeps inheriting the shared `--font-body`/`--font-display` stack
+   unaffected.
+
+Nothing else changes. `HeroSection`, `SubscribePanel`, the announcement strip's status label/session
+text, and every other page's ambient-orb branch are untouched.
+
+### Constitution Check (FR-030a/030b/031a slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS for FR-030a/030b (no new literal value; the orb branch reuses
+  `--color-overlay-orange`/`--color-overlay-blue-soft` verbatim, and the `top-300` position uses the
+  same numeric Tailwind spacing scale every other orb position in this file already uses). **FR-031a
+  is a recorded exception**: `Arial` is a literal font-family value with no token and is deliberately
+  not tokenized — Principle I governs design-system values (color/spacing/radius/etc.), and this is a
+  one-off, explicitly-instructed override on 2 button instances, not a reusable style decision that
+  would warrant a `--font-*` token.
+- **II (Breakpoints)** — PASS, not applicable.
+- **III (Component Library)** — PASS. FR-030a is itself a Component Library conformance fix (the
+  announcement strip's Register control now goes through the shared `Button` primitive instead of a
+  fork). FR-030b reuses the existing `AmbientOrbs` branch-per-pathname pattern rather than a new
+  component. FR-031a's `Button` calls are unchanged as calls — only a per-instance `style` prop is
+  added, the same escape hatch every `Button` consumer already has.
+- **IV (References Are Visual Truth)** — PASS for FR-030a/030b (both values are read directly from
+  `TechGrit Webinar.dc.html`). **FR-031a is a recorded, deliberate exception**: the reference sets no
+  font-family override on these buttons at all (they'd inherit the page's Calibri/Carlito body font),
+  so Arial is not reference-backed — implemented anyway per direct, explicit instruction, confirmed
+  after this exact conflict was surfaced and the instruction was repeated.
+- **V (Dark-First Brand)** — PASS for FR-030a/030b (no new surface fill). **FR-031a is a recorded,
+  deliberate exception**: this app's brand system is Calibri/Carlito only (a prior hardcoded Arial
+  override elsewhere in this same feature was already flagged and removed as a confirmed bug,
+  Clarifications Session 2026-08-05) — Arial on these 2 buttons directly contradicts that convention.
+  This is knowingly implemented per direct instruction, scoped as narrowly as possible (a per-instance
+  `style` prop on exactly 2 button call sites, not a token, not a `Button.tsx` change, not applied to
+  any other button on this page or any other) specifically so it cannot silently spread.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- **Complexity Tracking**: FR-031a is logged here as a knowing, explicitly-instructed exception to
+  Principles IV and V — not silent drift. No other violation.
+
+### UI Design Approach (FR-030a/030b/031a slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's two visible craft questions.
+Takeaways applied: **orb-count reduction** — dropping the 3rd (amber) orb reads as a deliberate
+quieting of the background, appropriate for this page's already color-dense sessions grid (3 accent-
+tinted card covers plus the announcement strip's own amber tint) — 2 orbs let the grid's own colors
+read clearly against the black surface instead of competing with a 3rd ambient color cast. **Arial
+exception** — the skill's own guidance explicitly names Arial as a font to avoid; this instruction
+directly overrides that guidance for these 2 button instances specifically, per this project's own
+instruction-precedence rule (direct user instruction outranks skill guidance, which in turn outranks
+default behavior). To keep it from reading as an unintentional regression rather than a deliberate
+choice, it's confined to exactly the 2 "Watch Now" button call sites via an inline `style` override —
+nothing else on the page (headings, body copy, the Register button, any other page's buttons)
+inherits it, so a future reader sees a narrow, clearly-scoped exception rather than a spreading
+pattern.
+
+**Reconciliation with Principles I–V**: FR-030a/030b need none. FR-031a is a knowing, recorded
+exception to Principles IV and V, made here by direct instruction after the conflict was explicitly
+surfaced and confirmed — not left as silent drift.
+
+**Anchor files**: `app/webinar/_components/announcement-strip.tsx` (Register control now `<Button>`),
+`components/ui/ambient-orbs.tsx` (new `pathname === "/webinar"` branch), `app/webinar/_components/
+sessions-section.tsx` (`style={{ fontFamily: "Arial, sans-serif" }}` on both Watch Now `<Button>` calls).
+
+### Project Structure (FR-030a/030b/031a slice)
+
+```text
+app/webinar/_components/
+├── announcement-strip.tsx   # Register control: bespoke <button> → <Button>
+└── sessions-section.tsx     # Watch Now <Button> calls (both renderers) get
+                              # style={{ fontFamily: "Arial, sans-serif" }}
+
+components/ui/
+└── ambient-orbs.tsx          # + pathname === "/webinar" branch (2 orbs, 3rd amber orb dropped,
+                               #   2nd orb's position corrected from top-225 to top-300)
+```
+
+No `app/tokens.css`/`app/globals.css` change (every value reused is an existing exact or
+near-exact-match token; Arial is a deliberate non-token literal, per Constitution Check above). No
+`data-model.md`/`contracts/` change.
+
+**Structure Decision**: existing single-project structure. All 3 edits stay inside their existing
+files — no new file, no new shared primitive.
+
+### Complexity Tracking (FR-030a/030b/031a slice)
+
+FR-031a is the one recorded complexity/exception in this slice: a knowing, direct-instruction
+override of Principles IV and V, scoped to 2 button instances via a per-instance `style` prop with no
+token and no shared-component change — not silent drift, and reversible by deleting 2 `style` props
+if this exception is ever revoked.
+
+### Post-Design Constitution Re-Check (FR-030a/030b/031a slice)
+
+Research (Phase 0 of this slice) confirmed the orb branch's first orb was already pixel-identical to
+the reference and the second needed only a position correction (no new tokens), and confirmed the
+Arial instruction's conflict with both the reference and the brand system before implementing it
+anyway, per direct instruction. No new violations beyond the one recorded FR-031a exception. Gate: PASS.
