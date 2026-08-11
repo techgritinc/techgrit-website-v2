@@ -1507,3 +1507,321 @@ value) and predates this addendum.
 Research (Phase 0 of this addendum) confirmed the new token value against the reference directly, and
 confirmed the sitewide `max-w-(--container-max)` idiom as the correct replacement for the literal
 `max-w-[1180px]`, before any file changed. No new violations. Gate: PASS.
+
+---
+
+## User Story 3 — Construction Page (FR-016a, FR-017, FR-018)
+
+**Date**: 2026-08-07 | **Spec**: [spec.md](./spec.md), User Story 3 (Industries (`/construction`)
+page reference alignment), scoped to **only** FR-016a, FR-017, and FR-018 — the `/construction`
+hero's ghost button + metrics-panel background, the Challenge section's eyebrow, and "What We
+Build"'s spacing.
+
+**Reference**: `raw-files-v2/TechGrit Website V2.2/TechGrit Construction.dc.html` exclusively (spec.md
+Clarifications, Session 2026-08-07) — **not** `TechGrit Industries.dc.html`, which describes the
+unbuilt multi-industry hub and is out of scope entirely.
+
+**Scope note**: this is an independent slice, unrelated to Home Page (User Story 1) above — it is
+tracked as its own block precisely so a teammate can work User Story 1's remaining pieces (or any
+other story) in parallel without touching this section or its files. It covers **only** the 3 FRs
+named above. FR-016 (no new `/industries` route), FR-019 ("Why TechGrit" eyebrow), FR-020 (Proven
+Impact equal-height cards), and FR-021 (final CTA width/buttons) — the rest of User Story 3 — remain
+unplanned. No Home Page file (`app/_home-components/*`, `app/page.tsx`) is touched.
+
+### Summary
+
+Reading `TechGrit Construction.dc.html` directly against today's `/construction` implementation
+shows the ghost button is **already reference-exact** (Phase 1's shared `Button.tsx` ghost-variant
+tokens — `--gradient-ghost`, `--color-border-ghost`, `--shadow-btn-ghost`, `--blur-ghost` — were
+already byte-matched against this same file, per this plan's Phase 1 Constitution Check: "Ghost-button
+values read directly from `TechGrit Homepage.dc.html`... and `TechGrit Construction.dc.html` —
+byte-identical"). `construction-hero.tsx`'s secondary "See Solutions" CTA already renders
+`<Button variant="ghost">`, so FR-016a's ghost-button clause needs **no code change** — only the
+metrics-panel background needs correcting. Three concrete fixes result:
+
+1. **`app/construction/_components/construction-hero.tsx`** (FR-016a, metrics-panel background
+   only) — the hero image's 3-stat overlay (`<30d` / `1000s` / `24/7`) currently uses
+   `background: "rgba(10,24,34,0.6)"`, `border: "1px solid var(--color-border-strong)"` (0.16), and
+   `backdropFilter: blur(var(--blur-sm))` (6px). The reference's own stat-card panel (lines 246-249)
+   is `background:rgba(0,0,0,0.6)`, `border:1px solid rgba(255,255,255,0.12)`,
+   `backdrop-filter:blur(8px)` — all three already exist as exact-value tokens in this codebase
+   (`--color-ink-glass-60`, `--color-border`, `--blur-md`), so this is a 3-line value swap, not a
+   new token addition. No ghost-button change needed (already correct, see above).
+2. **`app/construction/_components/construction-challenges.tsx`** (FR-017) — the Challenge section's
+   `<SectionEyebrow>{section.eyebrow}</SectionEyebrow>` call currently renders with its default
+   `showAccent` (`true`), showing a leading accent-line span the reference's own "The challenge"
+   eyebrow (line 276) does not have. Add `showAccent={false}`, the same prop FR-006/FR-019/FR-033
+   already use elsewhere — no new component work, `SectionEyebrow`'s toggle already exists (Phase 1,
+   T003).
+3. **`app/construction/_components/construction-solutions.tsx`** (FR-018) — the "What We Build"
+   `<section id="solutions">` currently carries no vertical padding of its own at all (`className=""`
+   on the section element), while the reference's own SOLUTIONS section (line 306-307) is
+   `padding:50px 36px 30px` (horizontal 36px already comes from the shared `.tg-container` inside
+   it). Add `pt-[50px] pb-[30px]` to the section element to match. The header's `mb-[40px]` margin
+   and the card grid's `gap-[22px]` already match the reference's own `margin-bottom:40px` (line 308)
+   and `gap:22px` (line 312) exactly — no change needed to either.
+
+Nothing else changes. `construction-hero.tsx`'s hero copy/CTA-link/headline, `construction-
+challenges.tsx`'s challenge cards/icons/grid, and `construction-solutions.tsx`'s solution
+cards/icons/grid are already reference-correct (or out of this slice's scope) and untouched. No
+other `/construction` component (`construction-integrations-strip.tsx`,
+`construction-lifecycle-diagram.tsx`, `construction-advantage.tsx`, `construction-impact.tsx`) is
+touched — their own requirements (FR-016, FR-019, FR-020, FR-021) remain unplanned.
+
+### Technical Context (User Story 3 slice)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo;
+manual verification, see quickstart.md addendum) · **Target Platform**: Web · **Project Type**:
+single Next.js App Router app · **Performance Goals**: N/A (CSS-only value corrections) ·
+**Constraints**: no new libraries; no new tokens (all 3 fixes reuse existing exact-value tokens); zero
+visual change to any `/construction` section other than the hero's stat-card overlay, the Challenge
+eyebrow, and the Solutions section's own vertical padding · **Scale/Scope**: 3 existing files edited,
+0 new files, 0 new tokens.
+
+### Constitution Check (User Story 3 slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS. All 3 corrected values (`--color-ink-glass-60`,
+  `--color-border`, `--blur-md`) already exist in `tokens.css` as exact matches for the reference's
+  `rgba(0,0,0,0.6)` / `rgba(255,255,255,0.12)` / `8px` — reused verbatim, no new token added. The
+  Solutions section's `50px`/`30px` padding uses literal arbitrary-value Tailwind classes since no
+  existing spacing token matches either value exactly (consistent with this plan's own established
+  precedent of not spawning a token for a single, section-specific usage — see the Re-Imagine Grid
+  addendum's `h-[180px]` decision above).
+- **II (Breakpoints)** — PASS, not applicable (no new breakpoint introduced).
+- **III (Component Library)** — PASS. No component is forked or duplicated: `SectionEyebrow`'s
+  existing `showAccent` prop (Phase 1, T003) is reused as-is; `Button`'s existing `ghost` variant is
+  reused as-is (no change needed).
+- **IV (References Are Visual Truth)** — PASS. Every corrected value is read directly from
+  `TechGrit Construction.dc.html` (lines 246-249, 276, 306-312) — not `TechGrit Industries.dc.html`,
+  per the spec's Session 2026-08-07 clarification.
+- **V (Dark-First Brand)** — PASS. No new surface fill; the stat-card overlay stays a translucent
+  black glass panel, matching the reference and the app's existing dark-first convention.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- No violations — Complexity Tracking is empty.
+
+### UI Design Approach (User Story 3 slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's one visible craft surface — the
+hero's stat-card overlay's background/border/blur correction. Takeaway applied: dropping the overlay
+from `rgba(10,24,34,0.6)` (the app's ink-tinted default) to the reference's neutral
+`rgba(0,0,0,0.6)` reads as intentional rather than a regression, because the surrounding hero image
+already sits on the page's own black background (post-TMS-85 migration) — the ink tint was a holdover
+from before that migration and no longer serves a visible purpose here; removing it lets the stat
+cards recede quietly into the image's own gradient overlay instead of introducing a second, subtly
+different dark tone next to it. The Challenge eyebrow's accent-removal and the Solutions section's
+padding correction are non-visual-judgment, reference-exact value fixes with no further craft
+decision to make.
+
+**Reconciliation with Principles I–V**: none needed — the skill's guidance confirmed Principle IV
+(reference is visual truth) without surfacing any conflict with Principles I/III/V.
+
+**Anchor files**: `app/construction/_components/construction-hero.tsx` (stat-card overlay value
+swap only), `app/construction/_components/construction-challenges.tsx` (`showAccent={false}`),
+`app/construction/_components/construction-solutions.tsx` (section padding).
+
+### Project Structure (User Story 3 slice)
+
+```text
+app/construction/_components/
+├── construction-hero.tsx         # stat-card overlay: background/border/blur → existing tokens
+├── construction-challenges.tsx   # <SectionEyebrow showAccent={false}>
+└── construction-solutions.tsx    # <section id="solutions" className="pt-[50px] pb-[30px]">
+```
+
+No `data-model.md`/`contracts/` (presentation-only, same as every other slice in this plan). No
+other file is touched — not `app/construction/page.tsx`, not `app/tokens.css`, not `app/globals.css`
+(no new tokens needed for this slice).
+
+**Structure Decision**: existing single-project structure. All 3 edits stay inside
+`app/construction/_components/`, the route-local private folder already established for this page —
+no shared-primitive or `components/ui/` change is needed since every value/prop this slice needs
+already exists.
+
+### Complexity Tracking (User Story 3 slice)
+
+*Empty — no violations.*
+
+### Post-Design Constitution Re-Check (User Story 3 slice, FR-016a/17/18)
+
+Research (Phase 0 of this slice) confirmed all 3 corrected values already exist as exact-match
+tokens before any file changed, and confirmed the ghost button needed no change at all (already
+byte-matched during Phase 1). No new violations. Gate: PASS.
+
+## User Story 3 (continued) — Construction Page (FR-019, FR-020, FR-021)
+
+**Date**: 2026-08-07. Extends the same "User Story 3 — Construction Page" block above to cover the
+remaining 3 requirements of User Story 3 — the "Why TechGrit" eyebrow, "Proven Impact" equal-height
+cards, and the closing CTA — per spec.md Clarifications Session 2026-08-07. FR-016a, FR-017, and
+FR-018 above are complete and unaffected. FR-016 (no new `/industries` route) needs no
+implementation (it's a negative/already-true requirement). No Home Page file is touched.
+
+**Reference**: `TechGrit Construction.dc.html` exclusively, same as the FR-016a/17/18 slice above —
+not `TechGrit Industries.dc.html`.
+
+### Summary (FR-019/20/21)
+
+1. **`app/construction/_components/construction-advantage.tsx`** (FR-019) — the "Why TechGrit"
+   `<SectionEyebrow>{section.eyebrow}</SectionEyebrow>` call currently renders with its default
+   `showAccent` (`true`), showing a leading accent-line span the reference's own "Why TechGrit"
+   eyebrow (line 409) does not have. Add `showAccent={false}` — the same prop FR-017 already used
+   one component over; no new component work.
+2. **`app/construction/_components/construction-impact.tsx`** (FR-020) — each Proven Impact card is
+   currently wrapped in `<a key={caseStudy.order} href={caseStudy.link} className="block">`, making
+   the whole card individually clickable — the per-card link the Session 2026-08-03 Clarifications
+   already decided to remove (a deliberate divergence from the reference, which does wrap its own 3
+   cards in `<a href="TechGrit Contact.dc.html">`, line 431 — an approved exception, same pattern as
+   SC-001's other two recorded exceptions). Remove the `<a>` wrapper entirely; `<GlassCard
+   key={caseStudy.order} variant="constructionImpact" hoverBorderColor="">` becomes the direct grid
+   child. This also resolves the equal-height half of FR-020 as a direct side effect, with no
+   additional class needed: today, the `<a className="block">` element is the actual CSS grid item
+   and already stretches to the row's full height under the grid's own default `align-items: stretch`,
+   but the un-stretched `GlassCard` div nested inside it does not fill that stretched space — once
+   `GlassCard` itself becomes the direct grid item, the same default `stretch` behavior applies to it
+   natively, giving every card in a row equal height regardless of its own content length, without a
+   new `h-full` class or any other CSS. The "Read case study →" `<span>` inside each card stays as
+   static, non-interactive decorative text (matching the reference's own literal copy) — it was never
+   itself a link even today (the whole card was), so removing only the outer `<a>` leaves it exactly
+   as visually present as before, just no longer clickable, which is the requirement.
+3. **`components/ui/final-cta.tsx`** (FR-021, width only) — add an optional `maxWidth?: number`
+   prop (default `1180`, the component's current literal value) consumed by the `tg-container`'s
+   inline `style={{ maxWidth, ... }}` in place of the current hardcoded `1180`. This is additive and
+   non-breaking: its one other existing consumer, `app/about/page.tsx`, omits the new prop and keeps
+   rendering at exactly `1180px`, unchanged (spec.md Clarifications, Session 2026-08-07 — the
+   opt-in-prop decision, chosen specifically to avoid widening that other page's CTA ahead of its own
+   FR-034). **Correction (post-implementation verification)**: Case Studies and Services were
+   initially believed to share this same component — a false positive from a substring grep match on
+   `final-cta"` (their own `case-studies-final-cta.tsx`/`services-final-cta.tsx` are separate,
+   route-local components that never import `components/ui/final-cta.tsx`). Verified via
+   import-statement search and live computed-style checks post-implementation: both already render
+   at `1180px` via their own components, unaffected by this change either way.
+4. **`app/construction/page.tsx`** (FR-021, width only) — the page's `<FinalCta>` call gains
+   `maxWidth={1280}`, matching `TechGrit Construction.dc.html`'s own CTA container width (line 458).
+   No other prop on this call changes.
+
+**Deliberately not changed**: FR-021's "updated styling for both action buttons" clause is satisfied
+for the ghost (secondary) button by the same shared `Button` `ghost` variant already confirmed
+byte-exact against this reference during the FR-016a slice above — no further change needed. The
+primary button's box-shadow shows a small delta against the reference's literal
+`0 18px 44px -12px rgba(232,119,34,0.85)` (`--shadow-btn-primary`/`--shadow-btn-hover` are
+`0 14px 36px -10px rgba(232,119,34,0.75)` / `0 18px 44px -10px rgba(232,119,34,0.90)`), but both
+tokens are shared sitewide by every primary CTA button (Hero, Subscribe, every other page's final
+CTA) — forking or retuning them here would be the same kind of uncontrolled blast-radius change the
+width prop above was specifically designed to avoid, for a sub-visible glow-shadow delta, not a
+structural mismatch. Left as-is, consistent with this plan's own established precedent of not
+chasing sub-pixel/sub-opacity deltas on shared, cross-cutting tokens (see the stat-divider-border
+and hero-token-consolidation precedents earlier in this plan). The primary/ghost buttons' padding
+and border-radius are already corrected via each button's existing per-instance style overrides in
+`final-cta.tsx` (unchanged by this slice).
+
+Nothing else changes. `construction-advantage.tsx`'s advantage-points list, `construction-
+impact.tsx`'s card content/metrics, and `final-cta.tsx`'s card background/border/radius/blur/glow are
+already reference-correct (or out of this slice's scope) and untouched.
+
+### Technical Context (FR-019/20/21 slice)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (manual verification, see quickstart.md
+addendum) · **Target Platform**: Web · **Project Type**: single Next.js App Router app ·
+**Performance Goals**: N/A (markup simplification + one additive prop) · **Constraints**: no new
+libraries; the new `maxWidth` prop on `components/ui/final-cta.tsx` MUST default to `1180` so its 4
+other consumers (About, Case Studies hub + detail, Services) render pixel-identical to today ·
+**Scale/Scope**: 3 existing files edited (`construction-advantage.tsx`, `construction-impact.tsx`,
+`final-cta.tsx`) + 1 existing file's call-site updated (`construction/page.tsx`), 0 new files, 0 new
+tokens.
+
+### Constitution Check (FR-019/20/21 slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS. No new literal color/spacing/shadow value is introduced; the
+  `maxWidth` prop carries a plain number (a layout dimension, not a design-token-governed value,
+  consistent with how `paddingTop`/`titleLineHeight` are already plain-typed props on this same
+  component). The primary-button shadow delta is knowingly left on the existing shared tokens rather
+  than forked (see Summary above) — an explicit, recorded acceptance, not a Principle I gap.
+- **II (Breakpoints)** — PASS, not applicable.
+- **III (Component Library)** — PASS. `components/ui/final-cta.tsx` is extended with one optional,
+  default-preserving prop — not forked — so About keeps consuming the exact same component,
+  unchanged (Case Studies and Services each have their own separate, route-local final-CTA
+  component and never touch this file at all). `SectionEyebrow`'s existing `showAccent` prop and
+  `GlassCard`'s existing `constructionImpact` variant are both reused as-is.
+- **IV (References Are Visual Truth)** — PASS. The eyebrow fix and CTA width are read directly from
+  `TechGrit Construction.dc.html` (lines 409, 458). The per-card link removal is a knowing,
+  spec-recorded exception to the reference (Session 2026-08-03) — Principle IV's "reference is
+  visual truth" is honored everywhere else in this slice.
+- **V (Dark-First Brand)** — PASS. No new surface fill; no light-surface token introduced.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- No violations — Complexity Tracking is empty.
+
+### UI Design Approach (FR-019/20/21 slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's one genuine craft question — how
+removing the Proven Impact cards' per-card link should read visually once it's no longer
+interactive. Takeaway applied: keeping the "Read case study →" copy in place (rather than deleting
+it outright) preserves the reference's own visual rhythm and the card's sense of narrative
+completion — the arrow reads as "this case closes here," not strictly as a functional affordance,
+so a sighted user scanning the grid doesn't perceive a missing element. The hover lift
+(`hover:-translate-y-[6px]`, already on the `constructionImpact` variant) stays as the card's only
+interactive-feeling cue, correctly signaling "this card is still worth reading" without implying
+"this card is clickable." The eyebrow accent-removal and CTA width change are non-visual-judgment,
+reference-exact value fixes with no further craft decision to make.
+
+**Reconciliation with Principles I–V**: none needed — the skill's guidance confirmed Principle IV
+(reference is visual truth, with one explicitly-recorded exception) without surfacing any conflict
+with Principles I/III/V.
+
+**Anchor files**: `app/construction/_components/construction-advantage.tsx` (`showAccent={false}`),
+`app/construction/_components/construction-impact.tsx` (`<a>` wrapper removed, `GlassCard` becomes
+direct grid child), `components/ui/final-cta.tsx` (new optional `maxWidth` prop),
+`app/construction/page.tsx` (`<FinalCta maxWidth={1280}>`).
+
+### Project Structure (FR-019/20/21 slice)
+
+```text
+app/construction/_components/
+├── construction-advantage.tsx   # <SectionEyebrow showAccent={false}>
+└── construction-impact.tsx      # <a href> wrapper removed; <GlassCard> is now the direct grid child
+
+components/ui/
+└── final-cta.tsx                 # + optional maxWidth?: number prop (default 1180, non-breaking)
+
+app/construction/page.tsx          # <FinalCta ... maxWidth={1280}>
+```
+
+No `data-model.md`/`contracts/` (presentation-only, same as every other slice in this plan). No
+`app/tokens.css`/`app/globals.css` change (no new tokens needed). `app/about/page.tsx` is
+unaffected — its `<FinalCta>` call omits the new prop and keeps rendering at `1180px`. Case Studies
+(`app/case-studies/page.tsx`, `app/case-studies/[slug]/page.tsx`) and Services (`app/services/page.tsx`)
+never touch `components/ui/final-cta.tsx` at all — each renders its closing CTA via its own
+route-local component (`case-studies-final-cta.tsx`, `services-final-cta.tsx`).
+
+**Structure Decision**: existing single-project structure. The 2 route-local edits stay inside
+`app/construction/_components/`; `final-cta.tsx`'s new prop follows the same additive,
+default-preserving convention already used for its existing `tone`/`paddingTop`/`titleLineHeight`
+props, so no new shared-primitive file or fork is needed.
+
+### Complexity Tracking (FR-019/20/21 slice)
+
+*Empty — no violations.*
+
+### Post-Design Constitution Re-Check (FR-019/20/21 slice)
+
+Research (Phase 0 of this slice) confirmed the reference values for the eyebrow and CTA width, and
+confirmed the shared `final-cta.tsx` component's one other consumer (About) before any file changed
+— the opt-in `maxWidth` prop's default was verified to reproduce its current `1180px` rendering
+exactly. Post-implementation, live computed-style checks confirmed `/about` still renders at
+`1180px`, `/construction` renders at the new `1280px`, and `/case-studies`/`/services` (each on
+their own separate, route-local final-CTA component) are untouched at `1180px` regardless. No new
+violations. Gate: PASS.
+
+### Post-Design Constitution Re-Check (User Story 3 slice)
+
+Research (Phase 0 of this slice) confirmed all 3 corrected values already exist as exact-match
+tokens before any file changed, and confirmed the ghost button needed no change at all (already
+byte-matched during Phase 1). No new violations. Gate: PASS.
