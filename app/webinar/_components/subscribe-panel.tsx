@@ -33,7 +33,7 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
 
   return (
     <section id="subscribe" className="relative scroll-mt-[84px]">
-      <div className="tg-container !px-tg-15" style={{ paddingTop: 30, paddingBottom: 90 }}>
+      <div className="tg-container !px-9" style={{ paddingTop: 30, paddingBottom: 90 }}>
         <GlassCard
           variant="blogFeatured"
           hoverBorderColor=""
@@ -47,7 +47,7 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
             <h2 className="text-[length:var(--text-webinar-newsletter-heading)] leading-[var(--lh-newsletter-heading)] tracking-[-0.03em]">
               {content.heading}
             </h2>
-            <p className="mt-3.5 text-[16px] leading-[25.6px] text-[var(--color-text-68)]">{content.copy}</p>
+            <p className="mt-3.75 text-[16px] leading-[25.6px] text-[var(--color-text-68)]">{content.copy}</p>
           </div>
           <form onSubmit={handleSubmit} noValidate className="relative flex flex-col gap-3">
             <FormField
@@ -66,10 +66,10 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
               {status === "success" ? "Subscribed ✓" : content.ctaLabel}
             </Button>
             {status === "success" && (
-              <p className="text-sm font-semibold text-teal-light">{content.successText}</p>
+              <p className="text-sm font-semibold text-teal-light !mt-3.5 leading-[normal]">{content.successText}</p>
             )}
             {status === "error" && errorMessage && (
-              <p role="alert" className="text-sm font-semibold text-error">
+              <p role="alert" className="text-sm font-semibold text-error !mt-3.5 leading-[normal]">
                 {errorMessage}
               </p>
             )}

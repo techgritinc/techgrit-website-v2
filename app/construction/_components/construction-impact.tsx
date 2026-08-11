@@ -8,7 +8,7 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
       <div className="mx-auto max-w-[1280px] px-9 pt-[40px] pb-[60px]" data-reveal>
           <div className="mb-[38px] max-w-[760px]">
             <SectionEyebrow tone="amber" className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
-            <h2 className="leading-[45.36px] tracking-[-1.26px] text-[42px]">{section.title}</h2>
+            <h2 className="text-[clamp(30px,3.8vw,42px)] leading-[1.08] tracking-[-0.03em]">{section.title}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-[22px]">
             {section.caseStudies.map((caseStudy) => (
@@ -18,10 +18,9 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
                 hoverBorderColor=""
               >
                 <div
-                  className="leading-[normal]"
+                  className="leading-[normal] text-[36px] sm:text-[40px]"
                   style={{
                     fontFamily: "var(--font-display)",
-                    fontSize: "40px",
                     fontWeight: "var(--fw-bold)",
                     color: "var(--color-amber-light)",
                     letterSpacing: "-0.02em",
@@ -40,7 +39,7 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
                 >
                   {caseStudy.label}
                 </div>
-                <GlassCardTitle variant="constructionImpact" className="mt-[14px] tracking-[normal]">
+                <GlassCardTitle variant="constructionImpact" className="mt-[14px] tracking-[normal] text-[16px] md:text-[18.5px]">
                   {caseStudy.title}
                 </GlassCardTitle>
                 <GlassCardDescription variant="constructionImpact">{caseStudy.description}</GlassCardDescription>

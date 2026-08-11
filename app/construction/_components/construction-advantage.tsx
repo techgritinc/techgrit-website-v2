@@ -8,7 +8,7 @@ export function ConstructionAdvantage({ section }: { section: AdvantageSection }
         <div className="grid grid-cols-1 items-start gap-[56px] md:grid-cols-[0.8fr_1.2fr]">
           <div className="mt-[-3px]">
             <SectionEyebrow showAccent={false} className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
-            <h2 className="leading-[41.8px] tracking-[-1.14px] text-[38px]">{section.title}</h2>
+            <h2 className="text-[clamp(28px,3.4vw,38px)] leading-[1.1] tracking-[-0.03em]">{section.title}</h2>
             <p className="mt-4" style={{ fontSize: "16.5px", lineHeight: 1.65, color: "var(--color-text-muted)" }}>
               {section.description}
             </p>

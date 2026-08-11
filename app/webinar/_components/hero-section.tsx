@@ -38,7 +38,7 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
   return (
     <section className="relative">
       <div
-        className="tg-container !px-tg-15 grid grid-cols-1 items-center gap-9 tg-md:grid-cols-2 tg-md:gap-[60px]"
+        className="tg-container !px-9 grid grid-cols-1 items-center gap-9 tg-md:grid-cols-2 tg-md:gap-[60px]"
         style={{ paddingTop: 74, paddingBottom: 40 }}
       >
         <div>
@@ -80,12 +80,12 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
               required
               placeholder={content.formPlaceholder}
               containerClassName="min-w-[220px] flex-1"
-              inputClassName="!rounded-card !py-tg-5a !px-tg-7 placeholder:!font-normal !h-[52px]"
+              inputClassName="!rounded-card !py-tg-5a !px-tg-7 placeholder:!font-normal !h-[52px] placeholder:!text-white/36"
             />
             <Button
               type="submit"
               style={{ fontFamily: "Arial, sans-serif" }}
-              className="!py-tg-5a !px-tg-11 !text-[15.5px] !shadow-btn-subscribe !h-[52px]"
+              className="!py-tg-5a !px-tg-11 !text-[15.5px] !shadow-btn-subscribe !h-[52px] leading-[normal]"
             >
               {status === "success" ? "Subscribed ✓" : content.formCtaLabel}
             </Button>

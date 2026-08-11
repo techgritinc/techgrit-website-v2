@@ -28,9 +28,13 @@ export default function IndustriesSection() {
           </Button>
         </div>
 
-        <div className="mt-12 grid grid-cols-3 gap-6 max-tg-md:grid-cols-1">
-          {INDUSTRY_CARDS.map((industry) => {
+        <div className="mt-12 grid grid-cols-3 gap-6 max-tg-sm:grid-cols-1 tg-sm:max-tg-lg:grid-cols-2">
+          {INDUSTRY_CARDS.map((industry, index) => {
             const Icon = industry.icon;
+            const isLast = index === INDUSTRY_CARDS.length - 1;
+            const tabletCenterClass = isLast
+              ? "tg-sm:max-tg-lg:col-span-2 tg-sm:max-tg-lg:justify-self-center tg-sm:max-tg-lg:w-[calc(50%-12px)]"
+              : "";
             const card = (
               <GlassCard
                 variant="industry"
@@ -46,11 +50,13 @@ export default function IndustriesSection() {
             );
 
             return industry.href ? (
-              <a key={industry.id} href={industry.href}>
+              <a key={industry.id} href={industry.href} className={tabletCenterClass}>
                 {card}
               </a>
             ) : (
-              <Fragment key={industry.id}>{card}</Fragment>
+              <Fragment key={industry.id}>
+                {tabletCenterClass ? <div className={tabletCenterClass}>{card}</div> : card}
+              </Fragment>
             );
           })}
         </div>
