@@ -8,7 +8,7 @@ export function BlogHero({ content }: { content: BlogHeroContent }) {
     <section>
       <div className="mx-auto max-w-tg-blog-hero px-9 pt-tg-22 pb-tg-11 text-center">
         <div className="opacity-0 [animation-delay:0.05s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mb-tg-11 inline-flex items-center gap-2.5 rounded-full border border-border-strong bg-glass px-4 py-2 leading-[normal]">
-          <span className="text-2xs font-bold tracking-wider text-strong uppercase">
+          <span className="text-[12.5px] font-bold tracking-wider text-strong uppercase">
             {content.eyebrow}
           </span>
         </div>

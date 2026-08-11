@@ -28,7 +28,7 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
   return (
     <section>
       <div className="mx-auto max-w-(--container-max) px-9 pt-tg-3 pb-tg-23">
-        <div className="relative overflow-hidden rounded-4xl border border-border-image bg-glass-4 py-tg-19a px-tg-19">
+        <div className="relative overflow-hidden rounded-4xl border border-border-image bg-glass-4 py-[52px] px-[48px]">
           <div
             aria-hidden="true"
             className="absolute -top-[110px] right-[4%] size-tg-380 rounded-full bg-overlay-orange-18 blur-glow-xl"
@@ -64,18 +64,18 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
                     <Button
                       style={{fontFamily: "Arial"}}
                       type="submit"
-                      className="!leading-[normal] gap-[9px] !py-tg-4a sm:!py-[16px] !px-tg-11 !text-15-5 !shadow-btn-subscribe !rounded-[12px] active:!shadow-btn-subscribe"
+                      className="!leading-[normal] gap-[9px] !py-[16px] !px-tg-11 !text-15-5 !shadow-btn-subscribe !rounded-[12px] active:!shadow-btn-subscribe"
                     >
                       {content.ctaLabel} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
                     </Button>
                     {status === "error" && (
-                      <p aria-hidden="true" className="w-full text-2xs sm:mt-tg-3a text-error sm:hidden">
+                      <p aria-hidden="true" className="w-full text-[12.5px] sm:mt-tg-3a text-error sm:hidden">
                         {content.errorText}
                       </p>
                     )}
                   </form>
                   {status !== "error" && (
-                    <p className="mt-tg-3a text-2xs leading-[normal] text-text-45">{content.helperText}</p>
+                    <p className="mt-tg-3a text-[12.5px] leading-[normal] text-text-45">{content.helperText}</p>
                   )}
                 </>
               )}

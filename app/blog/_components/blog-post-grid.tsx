@@ -6,7 +6,7 @@ import type { BlogPost } from "../_data/types";
 export function BlogPostGrid({ posts, onReset }: { posts: BlogPost[]; onReset: () => void }) {
   return (
     <section>
-      <div className="mx-auto max-w-(--container-max) px-9 pt-tg-13 pb-tg-21">
+      <div className="mx-auto max-w-(--container-max) px-9 pt-tg-11 pb-tg-21">
         {posts.length === 0 ? (
           <div className="mt-14 flex flex-col items-center gap-3 text-center">
             <p className="text-[15.5px] text-muted">No posts match this topic yet — check back soon.</p>
@@ -19,7 +19,7 @@ export function BlogPostGrid({ posts, onReset }: { posts: BlogPost[]; onReset: (
             </button>
           </div>
         ) : (
-          <div className="mt-tg-11 grid grid-cols-3 gap-6 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
+          <div className="grid grid-cols-3 gap-6 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
             {posts.map((post) => {
               const hex = accentHex(post.accent);
               return (
