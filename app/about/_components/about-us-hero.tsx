@@ -52,7 +52,7 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
             href={section.secondaryCtaLink}
             variant="ghost"
             size="hero"
-            className="!px-[26px] leading-[normal] max-[560px]:hidden"
+            className="!px-[26px] leading-[normal]"
           >
             {section.secondaryCtaLabel}
           </Button>
