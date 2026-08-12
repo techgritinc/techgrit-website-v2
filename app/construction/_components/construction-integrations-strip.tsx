@@ -3,7 +3,7 @@ import type { IntegrationsStripSection } from "../_data/types";
 export function ConstructionIntegrationsStrip({ section }: { section: IntegrationsStripSection }) {
   return (
     <section>
-      <div className="tg-container" style={{ paddingTop: 18 }}>
+      <div className="mx-auto max-w-[1280px] px-9 pt-[18px] pb-[60px]">
         <div
           className="flex flex-wrap items-center justify-between"
           style={{

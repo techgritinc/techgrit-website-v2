@@ -78,11 +78,13 @@
   --color-text-85:        rgba(255, 255, 255, 0.85); /* Methodology deliverable list items */
   --color-text-75:        rgba(255, 255, 255, 0.75); /* Testimonials video-badge label */
   --color-text-70:        rgba(255, 255, 255, 0.70); /* Methodology phase-node text — todo state */
+  --color-text-cta-link:  rgba(255, 255, 255, 0.70); /* Homepage Final CTA secondary link resting color (v2.2 FR-012) */
   --color-text-60:        rgba(255, 255, 255, 0.60);
   --color-text-55:        rgba(255, 255, 255, 0.55);
   --color-text-40:        rgba(255, 255, 255, 0.40);
   --color-text-45:        rgba(255, 255, 255, 0.45); /* Blog newsletter helper text — default state */
   --color-text-32:        rgba(255, 255, 255, 0.32);
+  --color-text-35:        rgba(255, 255, 255, 0.35); /* Homepage Blog teaser card meta dot separator (v2.2 FR-010) */
   --color-text-64:        rgba(255, 255, 255, 0.64); /* Case study card description text */
   --color-text-68:        rgba(255, 255, 255, 0.68); /* Careers "Life at TechGrit" paragraph copy */
   --color-text-13:        rgba(255, 255, 255, 0.13); /* Testimonials video-card initials watermark */
@@ -114,6 +116,9 @@
   --color-border-orange-45: rgba(232, 119, 34, 0.45); /* Role card hover border (Careers) */
   --color-border-blue-strong: rgba(2, 132, 199, 0.60);   /* Card hover border (blue accent) */
   --color-border-teal-strong: rgba(15, 118, 110, 0.70);  /* Card hover border (teal accent) */
+  --color-border-blue-55: rgba(2, 132, 199, 0.55);   /* Homepage Blog teaser card 2 hover border (v2.2 FR-010) */
+  --color-border-teal-60: rgba(15, 118, 110, 0.60);  /* Homepage Blog teaser card 3 hover border (v2.2 FR-010) */
+  --color-glow-white-18: rgba(255, 255, 255, 0.18);  /* Homepage Blog teaser card-header radial highlight (v2.2 FR-010) — distinct job from --color-border-18's same value */
   --color-border-orange-30: rgba(232, 119, 34, 0.30);  /* Why-Join benefit icon border — orange (Careers) */
   --color-border-blue-light-30: rgba(56, 189, 248, 0.30); /* Why-Join benefit icon border — blue (Careers) */
   --color-border-teal-light-30: rgba(45, 212, 191, 0.30); /* Why-Join benefit icon border — teal (Careers) */
@@ -130,7 +135,7 @@
   --color-border-amber-medium: rgba(245, 158, 11, 0.40); /* Webinar hero collage play-triangle tile dashed border (TMS-73) */
   --color-border-blue-light-soft: rgba(56, 189, 248, 0.30); /* Webinar hero collage pulse-dot tile border (TMS-73) */
   --color-border-amber-30: rgba(245, 158, 11, 0.30); /* Webinar upcoming-session panel border (TMS-73) */
-
+  --color-border-amber-35: rgba(245, 158, 11, 0.35); /* Webinar announcement-strip resting border (v2.2 FR-030) */
   --color-glass:          rgba(255, 255, 255, 0.05); /* Glass card fill */
   --color-glass-hairline: rgba(255, 255, 255, 0.02); /* Architecture-diagram panel gradient stop */
   --color-glass-4:        rgba(255, 255, 255, 0.04); /* Secondary glass fill */
@@ -138,6 +143,7 @@
   --color-glass-hover:    rgba(255, 255, 255, 0.08); /* Input fill on focus */
   --color-nav-glass:      rgba(0, 0, 0, 0.70);    /* Sticky nav background. v2 black (name retained, value migrated) */
   --color-ink-glass-60:   rgba(0, 0, 0, 0.60);    /* Lifecycle diagram mobile-fallback node pill background (TMS-67). v2 black (name retained, value migrated) */
+  --color-ink-glass-40:   rgba(0, 0, 0, 0.40);    /* Lifecycle diagram mobile-fallback node pill background (TMS-67). v2 black (name retained, value migrated) */
   --color-nav-hover:      rgba(255, 255, 255, 0.07); /* Nav link hover background */
   --color-dd-bg:          rgba(0, 0, 0, 0.97);    /* Dropdown menu bg. v2 black (name retained, value migrated) */
   --color-mobile-menu-bg: rgba(0, 0, 0, 0.97);    /* Mobile nav panel bg (darker than dd-bg). v2 black (name retained, value migrated) */
@@ -156,7 +162,10 @@
   --color-overlay-amber-soft: rgba(245, 158, 11, 0.08); /* Ambient orb / bg glow — Construction page third orb (TMS-67) */
   --color-overlay-amber-12: rgba(245, 158, 11, 0.12); /* Lifecycle diagram panel decorative glow blob (TMS-67) */
   --color-overlay-orange-22: rgba(232, 119, 34, 0.22);/* Methodology numeral ambient glow */
-  --color-overlay-orange-18: rgba(232, 119, 34, 0.18);/* Blog newsletter panel decorative orb */
+  --color-overlay-orange-18: rgba(232, 119, 34, 0.18);/* Blog newsletter panel decorative orb; also Homepage ambient orb 1 (v2.2) */
+  --color-overlay-orange-11: rgba(232, 119, 34, 0.11); /* Homepage ambient orb 3 (v2.2) */
+  --color-overlay-orange-13: rgba(232, 119, 34, 0.13); /* Homepage ambient orb 4 (v2.2) */
+  --color-overlay-amber-light-10: rgba(247, 183, 51, 0.10); /* Homepage ambient orb 2 (v2.2) */
   --color-overlay-green-12: rgba(52, 211, 153, 0.12); /* Blog newsletter success-state background */
   --color-overlay-orange-10: rgba(232, 119, 34, 0.10); /* Webinar hero eyebrow badge background (TMS-73) */
   --color-overlay-orange-06: rgba(232, 119, 34, 0.06); /* Webinar hero collage spin-ring tile background (TMS-73) */
@@ -189,11 +198,14 @@
   --color-glass-faint: rgba(255, 255, 255, 0.03);
   --color-glass-8: rgba(255, 255, 255, 0.08);
   --color-border-8: rgba(255, 255, 255, 0.08);
+  --color-border-9: rgba(255, 255, 255, 0.09); /* Re-Imagine grid card border (v2.2 FR-007) — distinct from --color-glass-faint below */
+  --color-glass-3: rgba(255, 255, 255, 0.03); /* Re-Imagine grid card/panel fill (v2.2 FR-007) — deliberately distinct from --color-glass-faint's shadowed 0.03/0.04 duplicate */
   --color-mac-red: #ff5f57;
   --color-mac-yellow: #febc2e;
   --color-mac-green: #28c840;
   --color-glass-10:       rgba(255, 255, 255, 0.10); /* Testimonials lightbox close-button fill */
-  --color-badge-ink-45:   rgba(0, 0, 0, 0.45);      /* Testimonials video-badge pill background. v2 black (name retained, value migrated) */
+  --color-badge-ink-50:   rgba(0, 0, 0, 0.50);      /* Testimonials video-badge pill background. Renamed from --color-badge-ink-45 (v2.2 FR-009, /speckit.analyze finding H1) — the 0.45 value was an incorrect migration; the reference's actual value is 0.50 */
+  --color-badge-ink-40:   rgba(0, 0, 0, 0.40);      /* Testimonials video-card duration-badge pill background (v2.2 FR-009) */
   --color-white-96:       rgba(255, 255, 255, 0.96);  /* Testimonials play-button circle fill */
   --color-modal-backdrop: rgba(5, 10, 15, 0.88);      /* Testimonials lightbox modal backdrop. FR-006a sanctioned exception: v2 itself still uses this navy value — do not repoint to black */
   --color-border-faint:   rgba(255, 255, 255, 0.10); /* Case-study glass card border */
@@ -237,14 +249,18 @@
   --gradient-brand:      linear-gradient(135deg, #F59E0B, #E87722);
   --gradient-brand-text: linear-gradient(120deg, #F59E0B, #E87722); /* Use with background-clip: text */
   --gradient-phase-node: linear-gradient(140deg, #F7B733, #E87722); /* Methodology phase-node — done/active background */
-  --gradient-testimonial-video:       linear-gradient(150deg, rgba(232, 119, 34, 0.92), rgba(154, 52, 18, 0.96)); /* Testimonials video-card background */
+  --gradient-testimonial-video:       linear-gradient(150deg, rgba(232, 119, 34, 0.88), rgba(154, 52, 18, 0.96)); /* Testimonials video-card background. First stop corrected 0.92 -> 0.88 (v2.2 FR-009, /speckit.analyze finding H1) */
   --gradient-testimonial-fade:        linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.82)); /* Testimonials video-card bottom fade. v2 black (value migrated) */
   --gradient-testimonial-edge:        linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.95) 82%); /* Testimonials carousel right-edge fade. v2 black + stop-position migrated */
+  --gradient-testimonial-edge-left:   linear-gradient(-90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.70) 82%); /* Testimonials carousel left-edge fade (v2.2 FR-009a) */
   --gradient-testimonial-placeholder: linear-gradient(150deg, rgba(232, 119, 34, 0.2), rgba(0, 0, 0, 0.5)); /* Testimonials lightbox placeholder background. v2 black (value migrated) */
+  --gradient-testimonial-card:        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)); /* Testimonials text-card resting-state background (v2.2 FR-009) */
   --gradient-blog-featured: linear-gradient(150deg, rgba(232, 119, 34, 0.20), rgba(2, 132, 199, 0.06)); /* Blog featured-post visual panel background */
   --gradient-webinar-upcoming: linear-gradient(150deg, rgba(245, 158, 11, 0.12), rgba(255, 255, 255, 0.03)); /* Webinar upcoming-session panel background (TMS-73) */
   --gradient-webinar-released-blue: linear-gradient(150deg, rgba(56, 189, 248, 0.18), rgba(15, 118, 110, 0.06)); /* Webinar released-session cover — blue accent (TMS-73) */
   --gradient-webinar-released-teal: linear-gradient(150deg, rgba(45, 212, 191, 0.18), rgba(56, 189, 248, 0.06)); /* Webinar released-session cover — teal accent (TMS-73) */
+  --gradient-webinar-released-orange: linear-gradient(150deg, rgba(232, 119, 34, 0.18), rgba(2, 132, 199, 0.06)); /* Webinar released-session cover — orange accent (v2.2 FR-031), replaces the borrowed --gradient-blog-featured (0.20, a 2% delta) */
+  --gradient-webinar-announce: linear-gradient(90deg, rgba(245, 158, 11, 0.14), rgba(232, 119, 34, 0.05)); /* Webinar announcement-strip resting background (v2.2 FR-030) */
   --gradient-hover-orange-amber: linear-gradient(135deg, rgba(232, 119, 34, 0.28), rgba(245, 158, 11, 0.18)); /* v2 hover-state gradient (additive, FR-024) */
   --gradient-footer-wordmark: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0)); /* Footer decorative "TechGrit" wordmark fill (TMS-63) */
   --gradient-footer-follow-line: linear-gradient(90deg, rgba(232, 119, 34, 0.70), rgba(232, 119, 34, 0)); /* Footer "Follow us" label accent line (TMS-63) */
@@ -253,6 +269,10 @@
   --gradient-ghost-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.40), rgba(255, 255, 255, 0.20)); /* Ghost button hover fill (v2.2 Phase 1) */
   --gradient-live-badge: linear-gradient(135deg, rgba(232, 119, 34, 0.12), rgba(245, 158, 11, 0.06));   /* Hero Live-Webinar badge outer fill (v2.2 Phase 2) */
   --gradient-dialog-panel: linear-gradient(180deg, rgba(20, 20, 20, 0.98), rgba(0, 0, 0, 0.98)); /* Careers Apply-modal panel fill */
+  --gradient-blog-teaser-orange: linear-gradient(150deg, rgba(232, 119, 34, 0.28), rgba(154, 52, 18, 0.50)); /* Homepage Blog teaser card 1 header background (v2.2 FR-010) */
+  --gradient-blog-teaser-blue:   linear-gradient(150deg, rgba(2, 132, 199, 0.28), rgba(3, 60, 90, 0.50));    /* Homepage Blog teaser card 2 header background (v2.2 FR-010) */
+  --gradient-blog-teaser-teal:   linear-gradient(150deg, rgba(15, 118, 110, 0.30), rgba(6, 52, 48, 0.50));   /* Homepage Blog teaser card 3 header background (v2.2 FR-010) */
+  --gradient-life-cap: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.82));   /* Life at TechGrit tile hover-caption bottom fade (v2.2 FR-011) */
   --gradient-skip-form: linear-gradient(150deg, rgba(232, 119, 34, 0.14), rgba(255, 255, 255, 0.02)); /* Contact "Skip the Form" card background (v2.2, User Story 9) */
 
   /* ----------------------------------------------------------
@@ -294,6 +314,8 @@
   --text-14-5: 14.5px; /* Webinar upcoming-session date/time text (TMS-73) */
   --text-21: 21px;
   --text-stat: 26px;
+  --text-industry-title: 26px; /* Homepage Industries card title (v2.2 FR-008) — a dedicated token, deliberately not a reuse of --text-stat (single-job token for the Hero delivery-stat digit) */
+  --text-testimonial-stat: 28px; /* Testimonials trust-metrics card stat digit (v2.2 FR-009) */
   --text-blog-card: clamp(26px, 2.9vw, 34px); /* Blog/Case Study card title */
   --text-blog-newsletter-heading: clamp(26px, 3vw, 36px); /* Blog newsletter panel heading — unmapped, arbitrary-value only */
   --text-webinar-newsletter-heading: clamp(26px, 3.2vw, 36px); /* Webinar newsletter panel heading — unmapped, arbitrary-value only */
@@ -301,6 +323,7 @@
   --text-h3-values: 19px;
   --text-22: 22px;
   --text-stat-count: 44px;  /* Hero delivery-stat digit size (v2.2 Phase 2) */
+  --text-blog-meta: 12px; /* Homepage Blog teaser card topic/read-time meta row (v2.2 FR-010) — deliberately not a reuse of the value-close --text-2xs (12.5px) */
 
   /* Responsive step tokens (base/sm/md/lg/xl at the 560/960/1140/1280
      breakpoint contract) — consumed directly via Tailwind arbitrary-value
@@ -352,7 +375,11 @@
   --ls-badge:   0.18em;  /* Methodology phase-corner label */
   --ls-01:      0.01em;  /* Topic filter chip label spacing (Blog) — zero occurrences in v2 census; retained unchanged, name kept per FR-022 */
   --ls-stat-count: -0.035em;  /* Hero delivery-stat digit tracking (v2.2 Phase 2) */
+  --ls-blog-meta: 0.14em; /* Homepage Blog teaser card topic/read-time meta row (v2.2 FR-010) — deliberately not a reuse of the value-identical, single-job-annotated --ls-hint */
+  --ls-life-cap: 0.14em; /* Life at TechGrit tile hover-caption label tracking (v2.2 FR-011) — deliberately not a reuse of the value-identical --ls-hint/--ls-blog-meta */
+  --ls-filter-label: 0.14em; /* Blog/Case Studies sticky filter-bar "Filter" label tracking (v2.2 FR-028) — deliberately not a reuse of the value-identical --ls-hint/--ls-blog-meta/--ls-life-cap */
   --ls-24: 0.24em;  /* Trusted-Clients section label tracking (v2.2 Phase 2) */
+  --ls-title-tight: -0.01em;  /* Homepage Industries card title tracking (v2.2 FR-008) — named to avoid confusion with the unrelated, positive --ls-01 */
 
   /* ----------------------------------------------------------
    * 7. SPACING
@@ -468,6 +495,7 @@
   --radius-40: 40px;
   --radius-70: 70px;
   --radius-80: 80px;
+  --radius-16: 16px;  /* Testimonials trust-metrics card (v2.2 FR-009) — distinct from the single-job-annotated --radius-tile */
 
   /* ----------------------------------------------------------
    * 10. SHADOWS
@@ -502,12 +530,28 @@
   --shadow-image-lift:    0 30px 70px -30px rgba(0, 0, 0, 0.80);       /* Detail-section image drop shadow */
   --shadow-phase-ring:    0 0 0 7px var(--color-ink); /* Phase-node ring — todo/done state (Methodology) */
   --shadow-phase-active:  0 0 0 7px var(--color-ink), 0 0 30px rgba(232, 119, 34, 0.70);   /* Phase-node ring+glow — active state (Methodology) */
+  --shadow-phase-badge-glow: 0 0 80px rgba(232, 119, 34, 0.55), inset 0 3px 20px rgba(255, 255, 255, 0.35);   /* Phase-detail circular icon badge glow (v2.2 Phase 2, FR-006) */
   --shadow-btn-ghost: 0 8px 24px -10px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.22); /* Ghost button (v2.2 Phase 1) */
+  --shadow-reimagine-glow: 0 0 60px -10px rgba(232, 119, 34, 0.40); /* Re-Imagine grid card 1 hover glow (v2.2 FR-007) */
+  --shadow-reimagine-glow-soft: 0 0 60px -10px rgba(232, 119, 34, 0.35); /* Re-Imagine grid cards 2-3 hover glow (v2.2 FR-007) */
+  --shadow-industry-glow-violet: 0 0 50px -12px rgba(139, 92, 246, 0.35); /* Homepage Industries card hover glow — FinTech (v2.2 FR-008) */
+  --shadow-industry-glow-green: 0 0 50px -12px rgba(16, 185, 129, 0.35); /* Homepage Industries card hover glow — Healthcare (v2.2 FR-008) */
+  --shadow-industry-glow-blue: 0 0 50px -12px rgba(59, 130, 246, 0.35); /* Homepage Industries card hover glow — Construction (v2.2 FR-008) */
+  --shadow-testimonial-hover-video: 0 24px 60px -20px rgba(232, 119, 34, 0.60); /* Testimonials video-card hover shadow (v2.2 FR-009) */
+  --shadow-testimonial-hover-text: 0 24px 54px -20px rgba(232, 119, 34, 0.28); /* Testimonials text-card hover shadow (v2.2 FR-009) */
+  --shadow-webinar-announce: 0 12px 40px -18px rgba(232, 119, 34, 0.5); /* Webinar announcement-strip ambient shadow (v2.2 FR-030) */
+  --shadow-testimonial-avatar: 0 6px 16px -4px rgba(232, 119, 34, 0.55); /* Testimonials text-card avatar circle shadow (v2.2 FR-009) */
   /* Ambient-orb radii (--blur-glow*, §14) and coloured status-dot glows (--shadow-glow-*, above) already form a coherent v2-covering group — confirmed, no gaps (FR-025) */
   --shadow-live-badge: 0 18px 46px -14px rgba(232, 119, 34, 0.70), 0 4px 16px -6px rgba(232, 119, 34, 0.40);   /* Hero Live-Webinar badge outer shadow (v2.2 Phase 2) */
   --shadow-live-badge-chip: 0 6px 18px -4px rgba(245, 158, 11, 0.60);   /* Hero Live-Webinar badge inner chip shadow (v2.2 Phase 2) */
   --shadow-glow-green: 0 0 12px 3px rgba(52, 211, 153, 0.90);   /* Hero Live-Webinar badge dot glow (v2.2 Phase 2) */
   --shadow-dialog-apply: 0 40px 90px -30px rgba(0, 0, 0, 0.85), 0 0 60px -20px rgba(232, 119, 34, 0.35); /* Careers Apply-modal panel shadow */
+  --shadow-blog-teaser-orange: 0 0 40px -8px rgba(232, 119, 34, 0.15); /* Homepage Blog teaser card 1 resting shadow (v2.2 FR-010) */
+  --shadow-blog-teaser-blue: 0 0 40px -8px rgba(56, 189, 248, 0.15); /* Homepage Blog teaser card 2 resting shadow (v2.2 FR-010) */
+  --shadow-blog-teaser-teal: 0 0 40px -8px rgba(45, 212, 191, 0.15); /* Homepage Blog teaser card 3 resting shadow (v2.2 FR-010) */
+  --shadow-blog-teaser-orange-hover: 0 0 60px -6px rgba(232, 119, 34, 0.35); /* Homepage Blog teaser card 1 hover glow (v2.2 FR-010) */
+  --shadow-blog-teaser-blue-hover: 0 0 60px -6px rgba(56, 189, 248, 0.35); /* Homepage Blog teaser card 2 hover glow (v2.2 FR-010) */
+  --shadow-blog-teaser-teal-hover: 0 0 60px -6px rgba(45, 212, 191, 0.35); /* Homepage Blog teaser card 3 hover glow (v2.2 FR-010) */
 
   /* v2 hover-lift distances (additive, FR-024) */
   --lift-hover-1: -1px;
@@ -550,6 +594,8 @@
   --opacity-40:     0.40;
   --opacity-low:    0.18;
   --opacity-faint:  0.07;
+  --opacity-14:     0.14;  /* Testimonials video-card decorative quote-icon opacity (v2.2 FR-009) */
+  --opacity-06:     0.06;  /* Testimonials text-card decorative quote-icon opacity (v2.2 FR-009) */
 
   /* ----------------------------------------------------------
    * 14. BACKDROP BLUR
