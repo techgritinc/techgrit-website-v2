@@ -4,7 +4,7 @@ import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 function NarrativeHeading({ id, children }: { id: string; children: React.ReactNode }) {
   return (
-    <h2 id={id} className="text-[26px] font-bold tracking-[var(--ls-normal)] scroll-mt-[100px]">
+    <h2 id={id} className="text-[26px] font-bold tracking-[var(--ls-normal)] scroll-mt-[100px] leading-[normal]">
       {children}
     </h2>
   );
@@ -37,7 +37,7 @@ export function CaseStudyNarrative({ sections }: { sections: NarrativeSection[] 
                   {section.painPoints.map((point, index) => (
                     <div
                       key={index}
-                      className="flex items-start gap-[14px] bg-glass-faint border border-border-faint rounded-lg px-[20px] py-[18px]"
+                      className="flex items-start gap-[14px] bg-glass-faint border border-border-faint rounded-lg px-[20px] py-[18px] leading-[normal]"
                     >
                       <svg
                         width="18"

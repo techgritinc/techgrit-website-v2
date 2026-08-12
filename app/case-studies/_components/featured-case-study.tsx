@@ -29,7 +29,7 @@ export function FeaturedCaseStudy({ caseStudy }: { caseStudy: CaseStudy }) {
                 >
                   {caseStudy.headlineMetric.value}
                 </span>
-                <span className="pb-2 text-[15px] text-text-soft">
+                <span className="pb-2 text-[15px] text-text-soft leading-[normal]">
                   {caseStudy.headlineMetric.label}
                 </span>
               </div>
@@ -39,7 +39,7 @@ export function FeaturedCaseStudy({ caseStudy }: { caseStudy: CaseStudy }) {
               <p className="max-w-[520px] text-[15.5px] leading-[var(--lh-relaxed)] text-text-dimmer">
                 {caseStudy.summary}
               </p>
-              <span className="inline-flex items-center mt-1.5 gap-2 text-[15px] font-bold text-amber-light">
+              <span className="inline-flex items-center mt-1.5 gap-2 text-[15px] font-bold text-amber-light leading-[normal]">
                 Read case study <span aria-hidden="true" className="text-[17px]">&#8594;</span>
               </span>
             </div>

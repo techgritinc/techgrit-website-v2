@@ -67,6 +67,8 @@ export const CANONICAL_NARRATIVE: CaseStudyNarrative = {
   teamSize: 15,
 };
 
+export const CASE_STUDY_CATEGORIES = ["All", "FinTech", "Marketplace", "AI Enablement", "Design"];
+
 export const CASE_STUDIES: CaseStudy[] = [
   {
     slug: "net-migration-fintech-modernization",

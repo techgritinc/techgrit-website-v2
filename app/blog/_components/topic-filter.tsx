@@ -8,7 +8,7 @@ export function TopicFilter({
   onSelect: (topic: string) => void;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-2.5" role="group" aria-label="Filter posts by topic">
+    <div className="flex items-center gap-2.5 flex-nowrap" role="group" aria-label="Filter posts by topic">
       {topics.map((topic) => {
         const active = topic === activeTopic;
         return (

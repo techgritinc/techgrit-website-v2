@@ -14,19 +14,30 @@ export function FinalCta({
   tone = "orange",
   paddingTop = 40,
   titleLineHeight,
+  maxWidth = 1180,
+  paddingBottom = 110,
+  primaryBtnClassName = "",
+  secondaryBtnClassName = "",
+  cardClassName = "",
 }: {
   section: FinalCtaContent;
   tone?: "orange" | "amber";
   paddingTop?: number | string;
   titleLineHeight?: number | string;
+  maxWidth?: number;
+  paddingBottom?: number | string;
+  primaryBtnClassName?: string;
+  secondaryBtnClassName?: string;
+  cardClassName?: string;
 }) {
   const glow = tone === "amber" ? "var(--color-overlay-amber-strong)" : "var(--color-overlay-orange-strong)";
   const eyebrowColor = tone === "amber" ? "var(--color-amber-light)" : "var(--color-orange)";
   return (
-    <section id="contact" style={{ position: "relative", scrollMarginTop: 96 }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "56px 36px 100px" }}>
+    <section>
+      <div className="mx-auto px-9 w-full" style={{ maxWidth: maxWidth, paddingTop: paddingTop, paddingBottom: paddingBottom }}>
           <div
-            style={{ position: "relative", overflow: "hidden", borderRadius: 28, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)", backdropFilter: "blur(12px)", padding: "80px 40px", textAlign: "center" }}
+            className={`glass-card glass-card-lg mx-auto text-center ${cardClassName}`}
+            style={{ position: "relative", overflow: "hidden", padding: "var(--space-27) var(--space-16a)" }}
           >
             <div
               aria-hidden="true"
@@ -38,55 +49,60 @@ export function FinalCta({
                 width: 520,
                 height: 340,
                 borderRadius: "50%",
-                background: "rgba(232,119,34,0.28)",
+                background: glow,
                 filter: "blur(90px)",
               }}
             />
             <div style={{ position: "relative" }}>
               <div
                 style={{
-                  fontSize: 12.5,
-                  fontWeight: 700,
-                  letterSpacing: "0.16em",
+                  fontSize: "var(--text-2xs)",
+                  fontWeight: "var(--fw-bold)",
+                  letterSpacing: "var(--ls-widest)",
                   textTransform: "uppercase",
-                  color: "#E87722",
+                  color: eyebrowColor,
+                  lineHeight: "normal",
                 }}
               >
                 {section.eyebrow}
               </div>
-              <h2 style={{ marginTop: 16, fontSize: "clamp(34px, 4.4vw, 48px)", fontWeight: 700, letterSpacing: "-0.03em", color: "#fff", lineHeight: 1.06 }}>{section.title}</h2>
+              <h2 className="mt-4" style={{ fontSize: "clamp(34px, 4.4vw, 48px)", lineHeight: titleLineHeight }}>{section.title}</h2>
               <p
-                style={{ margin: "20px auto 0", fontSize: 18, lineHeight: 1.6, color: "rgba(255,255,255,0.72)", maxWidth: 600 }}
+                className="mx-auto mt-5 text-[length:var(--text-18)]"
+                style={{ maxWidth: 600, color: "var(--color-text-secondary)" }}
               >
                 {section.description}
               </p>
               <div
-                style={{ marginTop: 34, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 15 }}
+                className="flex flex-wrap items-center justify-center"
+                style={{ marginTop: 34, gap: 15 }}
               >
-                <a
+                <Button
                   href={section.ctaLink}
+                  variant="primary"
+                  size="lg"
+                  className={primaryBtnClassName}
                   style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 10,
-                    background: "linear-gradient(135deg,#F59E0B,#E87722)",
-                    color: "#fff",
-                    fontSize: 17,
-                    fontWeight: 700,
-                    padding: "15px 34px",
+                    gap: "10px",
+                    padding: "17px 34px",
                     borderRadius: 13,
-                    boxShadow: "0 18px 44px -12px rgba(232,119,34,0.85)",
-                    minHeight: 52,
-                    transition: "transform .2s ease",
+                    lineHeight: "normal",
                   }}
-                  className="hover:-translate-y-[2px]"
                 >
-                  {section.ctaLabel} <span style={{ fontSize: 18 }}>&#8594;</span>
-                </a>
+                  <span className="text-[length:var(--text-base)]">
+                    {section.ctaLabel}
+                  </span>{" "}
+                  <span
+                    aria-hidden="true"
+                    className="text-[length:var(--text-base)] md:text-[length:var(--text-18)]"
+                  >
+                    &#8594;
+                  </span>
+                </Button>
                 {section.secondaryCta && (
                   <Button
                     href={section.secondaryCta.link}
-                    className="leading-[normal] text-[16px]"
+                    className={`leading-[normal] text-[16px] ${secondaryBtnClassName}`}
                     variant="ghost"
                     size="lg"
                   >

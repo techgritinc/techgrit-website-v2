@@ -22,8 +22,8 @@ export function FeaturedPost({ post }: { post: FeaturedPostContent }) {
               <GlassCardDescription variant="blogFeatured" className="!mt-0">
                 {post.excerpt}
               </GlassCardDescription>
-              <div className="mt-1.5 flex items-center gap-3.5">
-                <div className="flex size-tg-42 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-brand)] text-xs font-bold text-primary">
+              <div className="mt-2 flex items-center gap-3.5">
+                <div className="flex size-tg-42 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-brand)] text-xs font-bold text-primary leading-[normal]">
                   {post.author.initials}
                 </div>
                 <div className="leading-[normal]">

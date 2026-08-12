@@ -186,10 +186,10 @@ export const constructionContent: ConstructionPageContent = {
       title: "Talk to a construction tech expert.",
       description:
         "Tell us where projects are slipping — submittals, field reporting, safety, or cost. We'll map an AI-first plan in a single working session. No pressure, no commitments.",
-      primaryCtaLabel: "Book on Calendly",
-      primaryCtaLink: "#",
-      secondaryCtaLabel: "Email the team",
-      secondaryCtaLink: "mailto:support@techgrit.com?subject=Construction%20enquiry",
+      primaryCtaLabel: "Talk to a construction expert",
+      primaryCtaLink: "/contact/",
+      secondaryCtaLabel: "Contact the team",
+      secondaryCtaLink: "/contact/",
     },
   ],
 };

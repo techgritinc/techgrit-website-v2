@@ -534,6 +534,722 @@ one caller's need). `inputClassName` merges additively onto `INPUT_BASE`'s class
 `SubscribeBand.tsx`'s two inputs pick up the `15px 18px`/`52px` override; every other `FormField`
 consumer is untouched.
 
+## 12. "How We Deliver" methodology section fidelity (FR-006)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Methodology / 'How We Deliver'
+(FR-006)" | **Spec**: [spec.md](./spec.md), FR-006, Clarifications Session 2026-08-05
+
+Scope: only `app/_home-components/MethodologySection.tsx` and 4 new exports in
+`components/ui/icons.tsx`. §§5-11 above are unaffected.
+
+**Decision**: `TechGrit Homepage.dc.html` (lines 449-504, plus the JS-computed `phaseTabs`/`active`
+render data at lines 1372-1384) and the current `MethodologySection.tsx` diverge on five confirmed
+points:
+
+| Property | Current | Reference | Fix |
+|---|---|---|---|
+| Top-rail node content | bare numeral `{phase.n}` in a 58px circle | one of 4 distinct SVG icons per phase (lines 463-466), same 58px circle | swap numeral for the matching new icon component, switched on `phase.n` |
+| Phase-detail visual panel | 170px-font-size gradient-text numeral (`{active.n}`) | 170px-diameter circular `linear-gradient(140deg,#F7B733,#E87722)` badge containing the same phase's icon at 82px (lines 491-496) | replace the numeral treatment with the circular icon badge; "Phase 0{n}" corner label (line 497) already present in current code, unchanged |
+| Phase title/week `fontFamily` | hardcoded `"Arial, sans-serif"` (2 occurrences) | none set — inherits body font (lines 1378-1379: `titleStyle`/`weekStyle` carry no `font-family`) | remove both hardcoded overrides |
+| Content column width | `max-w-[1100px]` | `max-width:1280px` (line 452) | `max-w-[1280px]` |
+| Phase-detail panel responsive collapse | none (`grid-cols-[1.25fr_0.75fr]` fixed at every width) | intended `grid-template-columns:1fr` at ≤960px, but the reference's own selector (`[data-phase-card]`/`[data-step-panel]`, line 131-132) doesn't match the actual `data-phase-panel` element — dead/broken in the reference itself | add `max-tg-md:grid-cols-1` anyway (spec.md Clarifications: treat as a preview-tool typo, not intentional) |
+
+**Icon source and reuse (Principle III/IV)**: each phase's icon is extracted verbatim from the
+reference's hardcoded `isP1`-`isP4` conditionals (top rail, 26px) — there is no per-phase `icon` field
+in `this.phases` in the reference; the icon choice is positional (index 0-3), not data-driven. The
+same 4 shapes reappear at 82px in the phase-detail panel via the reference's own separate
+`hpIsP1`-`hpIsP4` conditionals — confirmed byte-identical `<path>`/`<polyline>`/`<circle>` data to
+their 26px counterparts, just larger. Because `home-data.ts`'s `MethodologyPhase` type already
+carries a stable `n: number` (1-4) field, no new data field is needed — `MethodologySection.tsx`
+switches on `phase.n`/`active.n` directly. The 4 new components (`PhaseArchitectIcon`,
+`PhaseAgenticBuildIcon`, `PhaseIndustrializeIcon`, `PhaseImpactIcon`) go in
+`components/ui/icons.tsx` — the constitution's single consolidated icon file — following its existing
+`IconProps`/`{...props}`-last convention, so the same component renders at both `26px` (top rail,
+default) and `82px` (phase-detail panel, via a `width`/`height` override), satisfying FR-006's "the
+same icon used for that phase in the top timeline (not a separate/distinct icon)" literally: one
+component, two call sites, per phase.
+
+**Confirmed defect, not a design choice (Arial override)**: the reference's `titleStyle`/`weekStyle`
+objects set `marginTop`/`fontSize`/`fontWeight`/`color`/etc. but no `fontFamily` at all — meaning
+these labels inherit the page's body font in the reference. The current code's
+`style={{ fontFamily: "Arial, sans-serif" }}` on both labels has no reference backing and
+contradicts the app's own brand system (`--font-body`/`--font-display`, both Calibri/Carlito, never
+Arial). Removing it is a bug fix, not a value change — both labels already have every other property
+(`--text-sm`=15px, `--space-5a`=15px margin-top, `--text-xs-alt`=11.5px) correctly token-matched
+today; only the stray inline `fontFamily` needs deleting.
+
+**Width fix**: `max-w-[1100px]` → `max-w-[1280px]` is a one-word Tailwind arbitrary-value change,
+consistent with every other homepage section already using `max-w-[1280px]` (Trusted Clients,
+Subscribe Band above).
+
+**Eyebrow migration to `SectionEyebrow`**: FR-006's existing text already names "the same
+`SectionEyebrow` toggle as FR-017/FR-019/FR-033" as the intended mechanism — this was never
+ambiguous, simply not yet implemented. Today the eyebrow is bespoke markup:
+`<span className="inline-flex items-center gap-[9px] ..."><span aria-hidden="true" className="h-[2px]
+w-6 bg-orange" />How we deliver</span>`, wrapped in a `<div className="mb-3.5 text-center">`. Migrating
+to `<SectionEyebrow showAccent={false}>How we deliver</SectionEyebrow>` (Principle III: extend the
+existing primitive, don't re-fork bespoke dash markup per section) drops the leading dash correctly,
+but `SectionEyebrow`'s own wrapper already carries `mb-4` (16px) — the outer `<div>`'s `mb-3.5` (14px,
+matching the reference's own `margin-bottom:14px`, line 453) becomes redundant and is removed in
+favor of the shared component's built-in spacing. **Accepted 2px delta**: `SectionEyebrow` is already
+consumed with this exact built-in spacing on every other page using `showAccent={false}` (Industries,
+About) — introducing a one-off spacing override for this single call site would fork the primitive's
+behavior for a 2px difference, the same category of sub-visible delta this feature has already
+declined to chase elsewhere (e.g. the Hero stat-divider border, research.md §7).
+
+**Not changed**: the scroll-pin mechanics (420vh track, `position:fixed` stage-pinning,
+scroll-driven `activeIndex`), the phase-rail progress-fill clip-path animation, the deliverables
+checklist (`CheckIcon` in an amber circle), and the headline's gradient-clip treatment all already
+match the reference exactly and are untouched by this addendum.
+
+**No new `tokens.css` entries needed**: the circular badge's gradient (`linear-gradient(140deg,
+#F7B733,#E87722)`) is a new literal not currently in `tokens.css` under this exact angle/stop
+order — checked against `--gradient-brand` (`135deg`) and `--gradient-phase-node` (already used for
+the top-rail node's filled state); confirms `--gradient-phase-node`'s existing value is this same
+`140deg,#F7B733,#E87722` gradient already, reused as-is via `var(--gradient-phase-node)` for the
+circular badge background — no new token, no duplicate.
+
+## 13. "Don't Migrate / Re-Imagine" grid fidelity (FR-007)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Re-Imagine Grid (FR-007)" |
+**Spec**: [spec.md](./spec.md), FR-007
+
+Scope: only `app/_home-components/ReImagineSection.tsx`, `components/ui/GlassCard.tsx`,
+`components/ui/icons.tsx`, `app/_home-components/home-data.ts`, `app/tokens.css`, `app/globals.css`.
+§§1-12 above are unaffected.
+
+**Decision**: `TechGrit Homepage.dc.html` (lines 508-573) and the current `ReImagineSection.tsx`
+diverge on four confirmed points:
+
+| Property | Current | Reference | Fix |
+|---|---|---|---|
+| Top 3 cards' icon | 3 distinct icons, one per card | one identical star-burst icon on all 3 (lines 521/533/545) | new shared `ReimagineSparkleIcon`, used on all 3 |
+| Top 3 cards' imagery | none | an `image-slot` per card (180px tall) | `MediaSlot` per card, wired to the real assets already present at `public/samples/dm-copilot.png`/`dm-tech-debt.png`/`dm-scalability.png` (confirmed via `Bash` search) — no "Coming soon" fallback expected |
+| Top 3 cards' hover | lift + border-color only | (not present in reference; added per FR-007's own text, not the reference) | add `hover:bg-hover-orange-fill-14` on top of the existing lift/border/glow |
+| 4th "card" (comparison panel) | plain `<div>`, `LightningIcon`, no hover | plain `<div>`, no hover (lines 558-572) | becomes a `GlassCard` (FR-007's unification ask) with `TechGritMarkIcon`, hover explicitly disabled to stay reference-exact |
+
+**Tokens needed**: `--color-border-9` (0.09 border), `--color-glass-3` (0.03 background), and two
+hover-glow shadows (`--shadow-reimagine-glow`/`-soft`, `0 0 60px -10px rgba(232,119,34,0.40/0.35)`) —
+none of these exact values exist in `tokens.css` today. Radius (22px), gap (22px), padding (26px), and
+section padding (80px) all already have exact canonical classes (`rounded-3xl`, `gap-tg-9`, `p-tg-11`,
+`p-20`) — confirmed via `tokens.css`/`globals.css`, no new tokens needed for those four.
+**Note**: `--color-glass-3` is a new, distinct token — `tokens.css` already has an unrelated,
+pre-existing duplicate `--color-glass-faint` key (0.03, silently shadowed by a later 0.04
+redeclaration for Case-Study cards); `--color-glass-3` does not fix that bug and must not be confused
+with or merged into it.
+
+**Not changed**: the comparison bars' percentages, labels, and scroll-reveal animation already match
+the reference and are untouched by this addendum.
+
+**Reusable-component refactor (resolves `/speckit.analyze` finding C1)**: `/speckit.analyze`
+(2026-08-05) flagged that FR-006's "reusable by other pages" clause had zero task coverage and
+conflicted with the constitution's own anti-speculative-structure rule (`.specify/memory/
+constitution.md` lines 488-489: "nothing moves to `components/ui/` until it's genuinely consumed by
+more than one route"). Investigation found a real, evidenced candidate second consumer:
+`TechGrit Frameworks.dc.html`'s "UNIFIED FRAMEWORK PORTFOLIO" section (`id="showcase"`) uses the
+identical scroll-pinned phase-panel/rail mechanic — its own source comment reads "scroll-driven
+pinned phase panel — same technique as homepage Sprint-to-Scale" — and `nav-config.ts`'s "How We
+Work" nav item already links to `/frameworks` (`matchPaths: ["/frameworks"]`), a route that doesn't
+exist yet (currently 404s).
+
+**Decision (spec.md Clarifications, Session 2026-08-05)**: building `/frameworks` is **not** brought
+into this feature's scope (too large a scope reversal from spec.md's existing Assumption that this
+reference file is out of scope). Instead, `MethodologySection.tsx` is refactored to accept its
+content via props — the minimal set needed to decouple it from `home-data.ts` and satisfy "reusable"
+honestly:
+
+```ts
+type MethodologySectionProps = {
+  phases: MethodologyPhase[];  // MethodologyPhase now carries a required `icon: IconComponent` field
+  eyebrow: string;
+  heading: ReactNode;
+};
+```
+
+`app/page.tsx` passes `METHODOLOGY_PHASES` (from `home-data.ts`), `"How we deliver"`, and the existing
+gradient-clip heading JSX. This is the smallest change that makes the component's *content* genuinely
+swappable, matching the clarification's "minimal props" answer — not the fuller shape Frameworks
+would eventually need (per-phase `accentColor`, a 2-column features+"Best for"+CTA content mode),
+since no consumer exists yet to justify that additional surface area.
+
+**Revised (`/speckit.analyze` finding I1)**: the original draft of this decision planned a separate
+`getIcon: (n: number) => ComponentType<SVGProps<SVGSVGElement>>` lookup-function prop, switched on
+`phase.n`. A follow-up `/speckit.analyze` pass flagged this as an unnecessary, less-idiomatic shape:
+`home-data.ts` already defines `export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>`
+(line 14) and uses it as a **direct per-item data field** — `icon: IconComponent` — in
+`PlatformCapability` (lines 68-69) and two other adjacent types in the same file, all populated the
+same way (`icon: AutonomousAgentIcon`, etc.). There is no reason `MethodologyPhase` should be the one
+type in this file that sources its icon through an index-based callback instead of a data field.
+`MethodologyPhase` gains the same `icon: IconComponent` field, populated per phase in
+`METHODOLOGY_PHASES` with the 4 new icons from item 1 (`icon: PhaseArchitectIcon`, etc.) —
+`MethodologySection.tsx` then reads `phase.icon`/`active.icon` directly, with no lookup indirection
+and no `getIcon` prop at all. This is a **superset-compatible simplification**, not a scope change:
+the props list shrinks by one, and `home-data.ts` picks up one new field on an existing type.
+
+**Why file location doesn't change**: FR-006 says "reusable by other pages," not "relocated to
+`components/ui/`." The constitution's rule gates the *location* change on genuine multi-route
+consumption, which this feature deliberately doesn't create. `MethodologySection.tsx` stays in
+`app/_home-components/`, now prop-driven internally but still only imported by `app/page.tsx` — this
+resolves the C1 tension without violating the anti-speculative-structure rule in either direction (no
+premature move, no unfulfillable requirement).
+
+**What changes in `home-data.ts` (revised per finding I1)**: `MethodologyPhase` gains one required
+field, `icon: IconComponent` (the same type already imported for `PlatformCapability` et al.), and
+each of the 4 `METHODOLOGY_PHASES` entries gets its matching icon from item 1. No other field changes
+— `n`, `week`, `title`, `description`, `deliverables` are untouched. No new file, no new shared
+primitive beyond the 4 icons already planned in item 1.
+
+**Discovered during implementation — RSC server/client props boundary**: `npm run build` failed with
+`Error: Functions cannot be passed directly to Client Components` when `app/page.tsx` (a Server
+Component — no `"use client"`) passed `METHODOLOGY_PHASES` (each phase carrying `icon: IconComponent`,
+a function) directly into `<MethodologySection>` (`"use client"`). Next.js's App Router only allows
+serializable values — plain data and already-rendered React elements — across a Server→Client props
+boundary; a raw component *reference* is a function and cannot cross it, regardless of whether it's
+passed as a data field (this addendum's original plan) or as a lookup-callback prop (the pre-I1
+design) — both fail identically, since the restriction is about the value being a function at all,
+not about which shape carries it.
+
+**Fix**: `MethodologySection`'s prop type does not reuse `home-data.ts`'s `MethodologyPhase` directly.
+It defines its own `MethodologyPhaseContent` (exported from the component) where `icon`/`badgeIcon`
+are `ReactNode`, not `IconComponent`. `app/page.tsx` — still a Server Component, still the only place
+that imports the icon components — pre-renders each phase's icon at both sizes before crossing the
+boundary:
+
+```tsx
+phases={METHODOLOGY_PHASES.map((phase) => ({
+  ...phase,
+  icon: <phase.icon />,              // 26px, top-rail node (default size)
+  badgeIcon: <phase.icon width={82} height={82} />,  // 82px, phase-detail badge
+}))}
+```
+
+This is not merely an RSC workaround — it is arguably the more correct reusable-component API
+regardless of the server/client boundary: it mirrors the same `ReactNode`-slot pattern already used
+for the `heading` prop (the caller fully owns what renders, `MethodologySection` just places it), and
+it removes the section's only remaining dependency on knowing *how* to instantiate an icon component
+(size, props) — a future consumer supplies finished nodes, not a component reference it has to know
+how to call correctly. `home-data.ts`'s `MethodologyPhase.icon: IconComponent` field (T024a) is
+unaffected by this — it's still the single source of truth for which icon belongs to which phase;
+only the last step (turning that reference into a node) moved to the Server Component boundary where
+it's actually safe to do so.
+
+**New token found missing during implementation**: the phase-detail badge's box-shadow
+(`0 0 80px rgba(232,119,34,0.55), inset 0 3px 20px rgba(255,255,255,0.35)`, `TechGrit Homepage.dc.html`
+line 491) had no existing token — this addendum's original token check only confirmed the gradient
+background, not the shadow. Added `--shadow-phase-badge-glow` to `tokens.css`'s SHADOWS section
+(next to the existing `--shadow-phase-ring`/`--shadow-phase-active` Methodology tokens), consumed via
+`shadow-[var(--shadow-phase-badge-glow)]` — the same arbitrary-property pattern already used for
+`--shadow-live-badge` in `Hero.tsx`, no `@theme inline` mapping needed.
+
+## 14. Homepage Industries Section fidelity (FR-008)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Industries Section (FR-008)" |
+**Spec**: [spec.md](./spec.md), FR-008, Clarifications Session 2026-08-06
+
+Scope: only `app/_home-components/IndustriesSection.tsx`, `app/_home-components/home-data.ts`,
+`components/ui/GlassCard.tsx`'s `industry` variant, `components/ui/icons.tsx`, `app/tokens.css`,
+`app/globals.css`. §§1-13 above are unaffected. This is **not** `/construction` — that page's own
+requirements (FR-016–FR-021) have no research entry here; nothing in this section touches them.
+
+**Decision (scope correction)**: FR-008's original text ("ghost button, icon replacement, background
+image removal, per-card-link removal") was first mis-scoped to the standalone `/construction` page,
+matching an earlier spec.md Assumption. Re-clarified (Session 2026-08-06): it targets the homepage's
+`IndustriesSection.tsx` 3-card grid, rendered directly after "Don't Migrate / Re-Imagine." "Background
+image" in the original request meant the per-card `MediaSlot` photo, not a section-level background —
+confirmed neither the current implementation nor `TechGrit Homepage.dc.html` (lines 577-604) has a
+section-level background image here.
+
+**Decision (card structure)**: `TechGrit Homepage.dc.html` (lines 586-602) shows no per-card photo at
+all — each card is a `data-card` anchor containing a 56px colored circular icon badge (white stroke
+icon on a solid color fill), a title, and a description. The current implementation instead shows a
+photo (`MediaSlot`) with a small bordered icon overlaid at its bottom-left corner. Per the
+clarification, the card structure changes to match the reference exactly — the photo is removed, the
+icon badge becomes the card's only visual element above the text.
+
+| Property | Current | Reference | Fix |
+|---|---|---|---|
+| Icon presentation | small bordered badge overlaid on a photo | large 56px solid-color circle, white icon | `GlassCardIcon` resized to `h-14 w-14 rounded-full`, backed by a per-industry solid-fill class |
+| Photo | `MediaSlot`, `relative h-[178px]` wrapper | none | removed entirely; `IndustryCard.image` field removed |
+| Icon set | shared `FinTechIcon`/`HealthcareIcon`/`ConstructionIcon` (also used by the nav mega-menu) | 3 distinct SVGs at lines 588/593/598, different shapes from the nav's icons | 3 new dedicated exports (`Industry*Icon`), nav mega-menu icons untouched |
+| Card link | only Construction has an inline "Explore Construction →" text link inside the card | all 3 cards are `data-card` anchors (FinTech/Healthcare → an unbuilt Industries-hub page's anchors, Construction → its own page) | only Construction wraps the whole card in a link to `/construction` (the only real destination in this app); FinTech/Healthcare stay non-clickable |
+
+**Decision (icon-sharing conflict)**: `HealthcareIcon` and `ConstructionIcon` (`components/ui/icons.tsx`)
+are imported by both `home-data.ts`'s `INDUSTRY_CARDS` (this section) and
+`components/layout/nav-config.ts`'s "Industries" mega-menu (confirmed via search — 2 consumers, not
+1). Repointing these shared exports to the reference's homepage-specific shapes would silently change
+the nav mega-menu too, which is out of this addendum's scope. `nav-config.ts` already established the
+precedent for exactly this situation: `FinTechIcon`'s shape didn't fit the nav either, so a separate
+`NavFinTechIcon` was added rather than mutating the shared export. This addendum follows the same
+precedent in the opposite direction — 3 new `Industry*Icon` exports are added for the homepage
+section, and the existing `FinTechIcon`/`HealthcareIcon`/`ConstructionIcon` are left untouched for the
+nav.
+
+**Decision (card link target)**: since only `/construction` exists as a real route in this app
+(FinTech/Healthcare hub pages remain out of scope per the existing "INDUSTRIES PAGE" Clarification,
+Session 2026-08-03), the reference's per-card-links-to-a-hub-page pattern can't be replicated
+literally. Per the Session 2026-08-06 clarification: only the Construction card becomes a whole-card
+link (to `/construction`, replacing its current inline text-link treatment); FinTech and Healthcare
+stay non-clickable, since neither has a real destination.
+
+**Tokens needed**: none of the following exist at their exact values today —
+- 3 hover border colors (lines 587/592/597): `rgba(139,92,246,0.50)`, `rgba(16,185,129,0.55)`,
+  `rgba(59,130,246,0.55)` — new `--color-border-violet-50`/`-green-55`/`-blue-55`. (The existing
+  `--color-border-blue-strong`/`-teal-strong` are different hues/opacities for unrelated cards, not
+  matches.)
+- 3 hover glow shadows (`0 0 50px -12px rgba(...,0.35)`, same 3 lines) — new
+  `--shadow-industry-glow-violet`/`-green`/`-blue`. (The existing `--shadow-glow-*-avatar` tokens are a
+  different shadow shape — `0 0 0 -12px`, a Testimonials avatar-ring effect, not a card glow — and are
+  not reused here.)
+- 1 letter-spacing value, `-0.01em` (card title tracking) — new `--ls-title-tight`. (`--ls-normal` at
+  `-0.02em` is the closest existing value but is a different, non-matching number. **Naming, revised
+  per `/speckit.analyze` finding M3**: originally planned as `--ls-tight-01`, which reads too similarly
+  to the existing, unrelated `--ls-01: 0.01em` — same numeric suffix, opposite sign, different
+  component — a realistic source of future mix-ups. Renamed to `--ls-title-tight` before
+  implementation.)
+- 1 font-size value, `26px` (card title) — new `--text-industry-title`. **Revised per `/speckit.analyze`
+  finding C1**: this addendum originally planned to reuse `--text-stat` (already 26px), reasoning that
+  Principle I governs values, not names. `/speckit.analyze` correctly identified this as a Principle I
+  violation on a stricter reading: the constitution states "each token has exactly one semantic job...
+  do not repurpose a token for an unrelated role," and `--text-stat` is explicitly annotated "Hero
+  delivery-stat digit size (v2.2 Phase 2)" — a named, single-job token, not a general-purpose scale
+  step. A dedicated `--text-industry-title` token is added instead, even though its value duplicates
+  `--text-stat`'s.
+
+**Tokens reused, not duplicated** — all exact matches, confirmed by direct comparison against
+`tokens.css`:
+- Icon-badge fill colors (`#8B5CF6`/`#10B981`/`#3B82F6`) — already `--color-avatar-violet`/`-blue`/
+  `-green` (added for the Testimonials avatar circles), already mapped to canonical
+  `bg-avatar-violet`/`-blue`/`-green` in `globals.css`.
+- Card radius (20px) — `--radius-2xl` (`rounded-2xl`).
+- Card padding (`30px 30px 34px`) — `--space-13`/`--space-14` (`p-tg-13`/`pb-tg-14`).
+- Icon-to-title gap (44px) — `--space-17` (`mb-tg-17`).
+- Card border (0.09) / background (0.03) — `--color-border-9`/`--color-glass-3`, both added earlier in
+  this same feature for the Re-Imagine grid (§13) and directly reusable here without any new value.
+- Card description size/color (15px, `rgba(255,255,255,0.6)`) — `--text-sm`/`--color-text-60`
+  (`text-sm`/`text-60`). Unlike `--text-stat` above, both are general-purpose, many-consumer tokens
+  with no single named job, so reusing them is not a Principle I concern.
+
+**Corrected during analysis (`/speckit.analyze` findings H1/H2/M1/M2)** — this addendum's first draft
+asserted 3 things as "already correct, no change needed" that a closer check showed were not:
+
+1. **Card title font-size (H1)**: `GlassCard.tsx`'s current `TITLE_VARIANTS.industry` is `"text-[23px]"`
+   — the draft's token decision (reuse a 26px value) was never actually wired into an edit; the title
+   would have kept rendering at 23px. Fixed: `TITLE_VARIANTS.industry` is now an explicit class swap to
+   `"text-industry-title tracking-title-tight"`.
+2. **Card description color (H2)**: `DESC_VARIANTS.industry` (`"mt-2.5 text-[15px] leading-[1.6]"`)
+   carries no color class, so it was silently inheriting the base `<p>` tag rule's
+   `--color-text-secondary` (`rgba(255,255,255,0.72)`, `globals.css:544`) — not the reference's
+   `rgba(255,255,255,0.6)`. Fixed: `DESC_VARIANTS.industry` becomes `"mt-2.5 text-sm leading-[1.6]
+   text-60"`, adding the missing color and switching `text-[15px]` to its canonical `text-sm`
+   equivalent (M1).
+3. **Ghost button padding (M2)**: the "no code change needed" claim for FR-008's ghost-button clause
+   was true for the shared `Button.tsx` component (correct since Phase 1) but not for
+   `IndustriesSection.tsx`'s own call site, which passes `className="px-6!"`. `Button.tsx`'s `md`-size
+   default is `px-[26px] py-3.5` (26px/14px) — the horizontal value already matches the reference's
+   `26px` (line 584) exactly, so the `px-6!` override (24px, forced via `!important`) was silently
+   *regressing* fidelity by 2px, while the actual gap — vertical padding, 14px vs. the reference's 16px
+   — went uncorrected. Fixed: the button's `className` changes from `"px-6!"` to `"py-4!"` (16px),
+   removing the incorrect horizontal override and adding the missing vertical one; `Button.tsx`'s
+   shared `md` size is untouched (other `md` buttons sitewide are unaffected).
+
+**Not changed**: the section's heading and intro paragraph are already reference-correct.
+
+## 15. Homepage Testimonials Section fidelity (FR-009, FR-009a)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Testimonials Section (FR-009,
+FR-009a)" | **Spec**: [spec.md](./spec.md), FR-009, FR-009a, Clarifications Session 2026-08-06
+
+Scope: only `app/_home-components/TestimonialsSection.tsx`, `app/_home-components/home-data.ts`,
+`components/ui/icons.tsx`, `app/tokens.css`, `app/globals.css`. §§1-14 above are unaffected.
+
+**Decision (per-card-type element scoping)**: `TechGrit Homepage.dc.html` gives VIDEO cards (lines
+638-667) a duration badge, VIDEO label, and play affordance but no verified badge; TEXT cards (lines
+669-690) get a verified badge and quote icon but no duration badge or play affordance. Star rating and
+a quotation-mark icon appear on both. FR-009's original acceptance scenario listed all of these as if
+they apply together when hovering a video card — corrected in spec.md (Clarifications Session
+2026-08-06) to the reference-exact per-card-type split above, rather than adding elements the reference
+never shows for that card type.
+
+**Discovered during `/speckit.analyze` (finding C1)**: this addendum's first draft still missed one
+element the per-card-type split requires — the video card has **no star-rating markup at all** today
+(only the text card renders `"★★★★★".slice(...)`); the reference always shows 5 static white stars with
+a subtle `text-shadow` on the video card too (line 659), independent of the `rating` field (video
+entries in `TESTIMONIALS` don't set one). Folded into plan.md's video-card bullet and the
+tokens/component task split below.
+
+**Discovered during `/speckit.analyze` (finding C2, Constitution Principle III)**: both of
+`TestimonialsSection.tsx`'s `.map()` render sites key on `testimonial.name` — display text — and the
+`Testimonial` type (`home-data.ts`) has no `id`/`slug` field to key on instead. This is the exact
+"repeated content keyed on display text" gap Principle III's "Stable identity for repeated content"
+bullet forbids, and one this same feature already fixed twice earlier in this Phase 2 addendum
+(`DeliveryStat.id`, `TrustedClientLogo.id`, both added specifically because their `.map()` call sites
+were keyed on label/alt text). Since FR-009 already rewrites this exact file and its array-consuming
+component, the fix is folded in here rather than left as a still-open gap: `Testimonial` gains a
+required `id` field (populated for all 6 entries), and both call sites re-key on `testimonial.id`. The
+new metrics-card local array (also a `.map()`) is given its own `id` field from the start for the same
+reason (finding L1) — a preventive fix rather than a retrofit.
+
+**Decision (hover vs. static styling)**: FR-009's "update card hover background/typography/duration-badge
+styling" reads, against the reference's own `style-hover` attributes (transform + border-color +
+box-shadow only, both card types), as a description of each card's **static resting-state** values
+needing correction — not a new hover-triggered background-color change. Confirmed in spec.md
+Clarifications: hover stays limited to transform/border-color/box-shadow.
+
+**Decision (metrics card layout)**: the reference's trust-stats card sits in the same
+`display:flex; justify-content:space-between` header row as the eyebrow/title column, wrapping below
+it only when the row doesn't fit — not absolutely positioned. Confirmed in spec.md Clarifications.
+
+**Decision (paragraph alignment)**: FR-009's "left-align its eyebrow and title" extends to the
+supporting paragraph too, per spec.md Clarifications — the paragraph moves into the same left-aligned
+`max-width:640px` column, replacing its current `text-center mx-auto max-w-[520px]` treatment.
+
+**Decision (drag/hold behavior, FR-009a)**: the reference's `_setupTestiDrag` (lines 1208-1221) swaps
+the track's cursor between `grab`/`grabbing` on pointer-down/up and temporarily sets
+`scroll-snap-type: none` for the duration of the drag gesture, restoring `x proximity` on release. The
+current implementation drags the track via `scrollLeft` but does neither. Per spec.md Clarifications,
+both are added, reference-exact.
+
+**Decision (edge fades, FR-009a)**: the reference gives the track two edge fades — right (140px,
+95%-black) and left (80px, 70%-black), lines 694-696. The current implementation only has the
+right-side fade (which already matches the reference exactly, confirmed by direct value comparison —
+`--gradient-testimonial-edge`). Only the missing left-side fade needs adding; the right-side token is
+unchanged.
+
+**Discovered during `/speckit.analyze` (finding H1)**: this addendum's first draft specified the
+`--gradient-testimonial-video` opacity correction (see below) inside the video-card's *component* bullet
+in plan.md, not its *tokens* bullet — inconsistent with Principle I ("values change in `tokens.css`
+first") and with this feature's own established file-to-task boundary (tokens task vs. component task).
+Moved into the tokens list below; the component bullet now only describes consuming the corrected
+token.
+
+**Tokens needed** — none of the following exist at their exact values today:
+- `--gradient-testimonial-card: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))`
+  — text card resting-state background (line 671). The current `--color-glass-4` (flat 0.04) is a
+  different shape (flat fill vs. two-stop gradient), not a value match.
+- `--gradient-testimonial-edge-left: linear-gradient(-90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.70) 82%)`
+  — new left-side track fade (line 696).
+- `--shadow-testimonial-hover-video: 0 24px 60px -20px rgba(232,119,34,0.60)` (line 640) and
+  `--shadow-testimonial-hover-text: 0 24px 54px -20px rgba(232,119,34,0.28)` (line 671) — two distinct
+  shadow shapes, one per card type; neither matches any existing shadow token (the closest,
+  `--shadow-reimagine-glow`/`-soft` from §13, is a different shape, `0 0 60px -10px`, a centered glow
+  not an offset drop-shadow).
+- `--shadow-testimonial-avatar: 0 6px 16px -4px rgba(232,119,34,0.55)` (line 683) — text-card avatar
+  shadow, currently missing entirely (the avatar div has no `box-shadow` today).
+- `--color-badge-ink-40: rgba(0,0,0,0.40)` (line 650) — the video card's duration-badge pill
+  background; distinct from the VIDEO-label pill's own (renamed) background token below.
+- `--radius-16: 16px` (line 616, metrics card radius) — **not** a reuse of the existing `--radius-tile`
+  (also 16px), which is explicitly annotated "Webinar hero collage tile corners" — the same
+  single-job-token concern `/speckit.analyze` raised for `--text-industry-title` vs. `--text-stat` in
+  §14, applied proactively here.
+
+That is **7** new tokens, not 6 (`/speckit.analyze` finding M2 — an earlier draft's summary said "6 new
+tokens" while separately appending `--radius-16` as a 7th bullet, undercounting its own list).
+
+**Token corrected (value)**: `--gradient-testimonial-video`'s first color stop is corrected from
+`rgba(232,119,34,0.92)` to the reference's exact `rgba(232,119,34,0.88)` (line 640). This token already
+exists (added in an earlier phase of this feature) with an incorrect first-stop value; its second stop
+(`rgba(154,52,18,0.96)`) already matches and is unchanged. Its sole consumer is the video card's own
+background — the correction is made in `tokens.css` directly (`/speckit.analyze` finding H1), not as a
+side effect of a component edit.
+
+**Token corrected (rename)**: `--color-badge-ink-45` (`rgba(0,0,0,0.45)`) is renamed to
+`--color-badge-ink-50: rgba(0,0,0,0.50)`. Its only consumer (confirmed via search — the VIDEO-label
+pill background, this same file) was built against `0.45`; the reference's actual value at line 649 is
+`0.50`. Since it has exactly one consumer and its current name no longer describes its corrected value,
+it is renamed and corrected in place rather than left mismatched or duplicated as a second near-identical
+token.
+
+**Pre-existing reference deltas corrected by this addendum**: 3 in total (`/speckit.analyze` finding
+M1 — an earlier draft's Constitution Check only enumerated 2) — video-card border `0.38→0.45`,
+VIDEO-label pill background `0.45→0.50`, and video-card gradient first stop `0.92→0.88`, all predating
+this feature and all caught by direct value comparison against the reference rather than assumed
+correct.
+
+**Tokens reused, not duplicated** — all exact matches, confirmed by direct comparison against
+`tokens.css`:
+- `--color-border-orange-45` (`rgba(232,119,34,0.45)`, video card border, line 640) — corrects the
+  current implementation's `border-border-orange` (0.38), a pre-existing mismatch unrelated to this
+  feature's other work.
+- `--color-border-orange-medium` (`rgba(232,119,34,0.50)`, text card hover border, line 671) — already
+  added/mapped in §13 (Re-Imagine grid); reused verbatim here, not redefined.
+- `--color-green` (`#34d399`, verified-badge checkmark/label color, line 677).
+- `--color-text-bright` (`rgba(255,255,255,0.90)`, duration-badge text color, line 650).
+- `--ls-wider` (`0.10em`, verified-badge tracking, line 677).
+- `--text-3xs` (`10.5px`, verified-badge and duration-badge font-size, lines 650/677).
+- `--color-border-8`/`--color-glass-3`/`--blur-md`/`--space-8`/`--space-11` (metrics card
+  border/0.08, background/0.03, blur/8px, vertical padding/20px, horizontal padding/26px — line 616,
+  all exact).
+- `--color-border-14` (`rgba(255,255,255,0.14)`, metrics-card divider, line 621).
+- `--gradient-phase-node` (`linear-gradient(140deg,#F7B733,#E87722)`, text-card avatar background, line
+  683) — already correct in the current implementation; unchanged.
+- `ClockIcon`/`CheckIcon` (`components/ui/icons.tsx`) — both already exist from earlier phases of this
+  feature; reused via prop overrides (size/stroke-width) rather than new icons, matching the same
+  multi-size-reuse convention `PhaseArchitectIcon`'s siblings (§12) already established.
+- The video card's new star rating (`/speckit.analyze` finding C1) needs no new token or icon at all —
+  it reuses the same `"★★★★★"` Unicode-glyph pattern the text card already renders (line 108 of the
+  current implementation), just with the reference's plain white color and `text-shadow` instead of the
+  text card's amber color, both expressible as plain Tailwind classes with no new token value.
+
+**Not changed**: the video-lightbox modal markup, the "Drag to explore more stories" hint row, and the
+track's existing `scroll-snap-type`/gap/padding values are already reference-correct.
+
+## 16. Homepage Blog Teaser Section fidelity (FR-010)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Blog Teaser Section (FR-010)" |
+**Spec**: [spec.md](./spec.md), FR-010, Clarifications Session 2026-08-06
+
+Scope: a new `app/_home-components/BlogSection.tsx`, plus `components/ui/icons.tsx`,
+`components/ui/GlassCard.tsx`, `app/tokens.css`, `app/globals.css`, and `app/page.tsx`'s render order.
+§§1-15 above are unaffected.
+
+**Decision (content sourcing)**: FR-010's original text said the section's content "MUST be sourced
+from the existing blog content used on `/blog`." Investigation of `app/blog/_data/blog-content.ts`
+found its 9 real `BlogPost` entries have no icon field (only a `topic` string and an `accent` color
+token), no featured/top-3 concept, and every entry's `href` is a placeholder `"#"` — no `/blog/[slug]`
+detail route exists. `TechGrit Homepage.dc.html` (lines 785-821) instead shows 3 fully-authored cards
+(own title/topic/excerpt/read-time/icon/gradient-tint) that don't correspond to any of the 9 real posts.
+Per spec.md Clarifications (Session 2026-08-06), the 3 homepage cards use the reference's own literal
+content verbatim — a static, homepage-local data set — not a dynamic pull from `blog-content.ts`. FR-010
+itself was corrected to match.
+
+**Decision (icon sourcing)**: since `BlogPost` has no icon field at all, and the reference's 3 icons
+(constellation, code-bracket, package/box) are purely decorative and unrelated to any real post's
+content, the icons are reused as-is, one per fixed card position — not derived from a
+topic-to-icon lookup, since no such mapping is needed once the content itself is static.
+
+**Decision ("Read More" target)**: since every real post's `href` is a placeholder and no post detail
+route exists, every card's "Read more" affordance — and the section's own "Visit the blog" ghost button
+— link to `/blog`, matching the reference's own `href="TechGrit Blog.dc.html"` on every one of these
+elements (lines 783/786/798/810).
+
+**Tokens needed** — 15 total, none of which exist today at these exact values:
+- `--gradient-blog-teaser-orange`/`-blue`/`-teal` (§ Gradients) — each card's header-block background
+  (lines 787/799/811), a 2-stop `150deg` composite literal, following this codebase's existing
+  gradient-token convention (`--gradient-testimonial-video`, `--gradient-phase-node`) of one composite
+  token per treatment, not decomposed stop-by-stop. Card 1's first stop (`rgba(232,119,34,0.28)`)
+  happens to numerically equal the existing `--color-overlay-orange-strong`; this is not a Principle I
+  conflict since gradient tokens in this file are never built from `var()`-nested stops.
+- `--color-glow-white-18` (§ Borders & Glass) — the radial highlight shared by all 3 card headers (lines
+  788/800/812). The value-identical `--color-border-18` exists but is annotated "Phase-node border — todo
+  state," a distinct semantic job — the same single-job-token concern already raised for
+  `--text-industry-title`/`--radius-16` earlier in this feature, applied proactively here rather than
+  reusing a mismatched-purpose token.
+- `--color-border-blue-55` (card 2 hover border, `rgba(2,132,199,0.55)`, line 798) and
+  `--color-border-teal-60` (card 3 hover border, `rgba(15,118,110,0.60)`, line 810) — both distinct from
+  the existing `--color-border-blue-strong`/`--color-border-teal-strong` (0.60/0.70), different values,
+  not duplicates. Card 1's own hover border (`rgba(232,119,34,0.55)`, line 786) is an exact match for the
+  existing `--color-hover-orange-border-55` and needs no new token.
+- `--color-text-35` (§ Text Colors) — the topic/read-time meta row's dot separator (lines 792/804/816,
+  `rgba(255,255,255,0.35)`); no existing text-color token sits at exactly this value. The read-time text
+  itself (`rgba(255,255,255,0.55)`) is an exact match for the existing `--color-text-55`.
+- `--text-blog-meta: 12px` and `--ls-blog-meta: 0.14em` (§ Typography) — the same meta row's font-size
+  and letter-spacing. Deliberately not reused from the value-close `--text-2xs` (12.5px, a genuine
+  0.5px miss) or the value-identical `--ls-hint` (annotated "Methodology scroll-hint caption," a
+  different single-job token) — same precedent as `--text-industry-title` vs. `--text-stat`.
+- `--shadow-blog-teaser-orange`/`-blue`/`-teal` (resting, `0 0 40px -8px`, `0.15` opacity, lines
+  786/798/810) and `--shadow-blog-teaser-orange-hover`/`-blue-hover`/`-teal-hover` (hover, `0 0 60px
+  -6px`, `0.35` opacity, same lines) — 6 tokens, 2 distinct shapes, 3 colors each; the closest existing
+  shadow, `--shadow-reimagine-glow`/`-soft`, is a different shape (`0 0 60px -10px`).
+
+**Tokens reused, not duplicated** — all exact matches: `--color-hover-orange-border-55` (card 1 hover
+border), `--color-text-55` (read-time text), `--color-amber-light`/`--color-blue-light`/`--color-teal-light`
+(per-card topic label color, already-mapped `text-amber-light`/`-blue-light`/`-teal-light` classes),
+`--color-orange` (ghost button arrow, `text-orange`, matching `IndustriesSection`'s own ghost-button
+convention), `--color-icon-stroke` (all 3 decorative icons' stroke — already annotated "Decorative SVG
+icon stroke (case study panels)," reused rather than duplicating its `rgba(255,255,255,0.85)` value),
+`--radius-2xl`/`--color-glass-4`/`--color-border-image`/`--blur-md` (card base chrome — radius,
+background, border, backdrop-blur, all exact matches for the reference's `20px`/`0.04`/`0.10`/`8px`),
+`--space-4`/`--space-3`/`--space-9`/`--space-5a`/`--space-19a`/`--space-11`/`--space-12`/`--space-15`/
+`--space-1b` (title margin-top, description margin-top, ghost-button padding/min-height, card body
+padding, header row margin-bottom, "Read more" row gap — all already-mapped `tg-` spacing classes).
+
+**Discovered while researching (missing `@theme inline` mappings)**: `tokens.css` already defines
+`--space-6` (16px) and `--space-10` (24px) — both pre-existing, unrelated to this addendum — but
+`globals.css` never mapped either to a `--spacing-tg-6`/`--spacing-tg-10` entry, so no canonical
+`mt-tg-6`/`pt-tg-10` utility exists today. This section's own markup needs both (the "Read more" row's
+16px top margin, the card body's 24px top padding) and would otherwise have to fall back to an
+arbitrary-value class for a value that already has a token — precisely the bug class this session's
+CLAUDE.md calls out by name ("A token that exists in `tokens.css` but has no matching `@theme inline`
+entry is a real bug, not a style nit"). Both mappings are added as part of this addendum's `globals.css`
+task, not deferred.
+
+**Icon shapes** (verbatim from the reference, `TechGrit Homepage.dc.html`):
+- Card 1 (`BlogConstellationIcon`, line 789): `<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2
+  12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>`
+- Card 2 (`BlogCodeBracketIcon`, line 801): `<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2
+  12 8 18"/>`
+- Card 3 (`BlogPackageIcon`, line 813): `<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7
+  4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96
+  12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>`
+
+**Not changed**: no other homepage section, no `data-model.md`/`contracts/` (presentation-only, same as
+every prior addendum), `app/blog/_data/blog-content.ts` and `/blog`'s own rendering (`blog-post-grid.tsx`)
+are untouched — this addendum reads their shape only to confirm why a dynamic pull isn't viable, it does
+not modify either file.
+
+## 17. Homepage Life at TechGrit Section fidelity (FR-011)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Life at TechGrit Section (FR-011)" |
+**Spec**: [spec.md](./spec.md), FR-011, FR-044, Clarifications Session 2026-08-06
+
+Scope: `app/_home-components/LifeGallery.tsx` (`home` branch only), `app/_home-components/home-data.ts`
+(`CULTURE_GALLERY_IMAGES` caption content), `app/tokens.css`, `app/globals.css`. §§1-16 above are
+unaffected. `components/ui/section-eyebrow.tsx` is read but not edited — this addendum is its 5th
+consumer, not a change to its own code.
+
+**Decision (baseline)**: a teammate's unmerged branch already refactored `LifeGallery.tsx` into the
+`variant`/`columns`-based shared component this addendum builds on — investigation confirmed its
+`careers` branch already carries the exact tile shell (`aspect-3/4`, bordered, backed, hover-lift) and
+`captionLabel`/`caption` fields this addendum's `home` branch needs, with the `careers` branch's own
+caption-rendering block left commented out in the supplied code. Since that branch can't be pulled
+without conflicts, this feature's branch recreates the file byte-for-byte first (spec.md Clarifications,
+Session 2026-08-06), so only FR-011's own `home`-branch changes diverge from what will eventually merge.
+The `careers` branch's commented-out caption block is deliberately left commented out — enabling it is a
+`careers`/Careers-page decision, out of this addendum's FR-011 scope, not a byproduct of recreating the
+baseline.
+
+**Decision (grid shape)**: `TechGrit Homepage.dc.html` (lines 826-878) shows a uniform 4-column grid
+(`repeat(4,1fr)`, `16px` gap, `aspect-ratio:3/4` per tile) with no span concept — a structural break from
+the current `home` branch's 3-column asymmetric grid (`grid-cols-[1.4fr_1fr_1fr]`, `auto-rows-[200px]`,
+`tall`/`wide`/`wide3` spans). The `home` branch's rendering is rewritten to the reference's uniform shape
+rather than reconciled with the old span system — there is no reference value to preserve for `span` on
+`home`, and the field stays on `CultureGalleryImage`/`LifeGalleryImage` only because the `careers` branch
+(out of scope here) still reads it via its own `SPAN_CLASSES` lookup for `careersPageContent
+.lifeAtTechGrit.images`.
+
+**Decision (captions)**: the reference's 4 tiles each show a category label + caption on hover (lines
+844/852/860/868) — content that maps 1:1 onto `CULTURE_GALLERY_IMAGES`' existing 4 entries by asset
+(`glasses.png`→"The team", `rooftop.png`→"The office", `painting.png`→"Craft", `diwali.png`→"Together"),
+confirming these are the same 4 photos the reference itself uses, just previously uncaptioned in this
+codebase. Populating the already-existing (post-recreation) `captionLabel`/`caption` fields is therefore
+a content fix, not a new field/type addition. **Also** (`/speckit.analyze` finding M1) — the 2 doc
+comments the baseline recreation carries over verbatim ("Careers-only hover-caption category label...
+Left `undefined` for `home`") become stale the moment `home` populates and renders these same fields;
+corrected in the same edit to describe both fields as populated for both variants.
+
+**Decision (stable identity)** (`/speckit.analyze` finding C1): `CULTURE_GALLERY_IMAGES`' `.map()` render
+site is keyed on `` `${item.src}-${index}` `` today — a derived stopgap, not a stable field, the exact
+Principle III gap this feature already fixed 3 times elsewhere (`DeliveryStat.id`, `TrustedClientLogo.id`,
+`Testimonial.id`). Since this addendum's `home`-branch rewrite is the moment this render is re-wired, a
+required `CultureGalleryImage.id` field is added and populated (`"glasses"`, `"rooftop"`, `"painting"`,
+`"diwali"`), and the `.map()` re-keys on `item.id`.
+
+**Decision (eyebrow)**: per spec.md Clarifications (Session 2026-08-06), the hand-rolled accent-line +
+text eyebrow migrates to `<SectionEyebrow showAccent={false}>` rather than a narrow inline delete of just
+the `<span>` — closing FR-044's gap (Life at TechGrit was missing from its eyebrow-symbol-removal
+consistency list) rather than leaving a second one-off eyebrow implementation in this file.
+
+**Tokens needed** — 2 total, neither of which exists today at these exact values with a matching
+semantic job:
+- `--gradient-life-cap` (§ Gradients) — the caption overlay's bottom fade (`linear-gradient(180deg,
+  transparent, rgba(0,0,0,0.82))`, line 843). The value is an exact numeric match for the existing
+  `--gradient-testimonial-fade`, but that token is annotated "Testimonials video-card bottom fade" — a
+  distinct single job, the same concern already raised for `--text-industry-title` vs. `--text-stat` and
+  `--radius-16` vs. `--radius-tile` earlier in this feature. A dedicated token is added rather than
+  reused.
+- `--ls-life-cap: 0.14em` (§ Typography) — the caption label's letter-spacing (line 844). Value-identical
+  to both the existing `--ls-hint` ("Methodology scroll-hint caption") and this same feature's own
+  `--ls-blog-meta` ("Blog teaser meta row") — both already single-job-annotated for other components, so
+  a third dedicated token follows the same established precedent rather than repurposing either.
+
+**Tokens reused, not duplicated** — all exact matches, confirmed by direct comparison against
+`tokens.css`:
+- `--radius-xl` (`18px`) — already annotated "Image cards (Careers gallery)," the exact semantic job this
+  addendum's tile radius needs; reused verbatim, not redefined, despite now also serving `home`.
+- `--color-border-8` (`rgba(255,255,255,0.08)`, tile border, line 841) and `--color-glass-3`
+  (`rgba(255,255,255,0.03)`, tile background, line 841) — both already added/mapped in §13 (Re-Imagine
+  grid); reused verbatim here, not redefined.
+- `--color-amber-light` (`#F7B733`, caption label color, line 844).
+- `--text-11` (`11px`, caption label font-size, line 844).
+- `--text-xs` (`14px`, figcaption font-size, line 845) — already annotated "Captions, card meta," a
+  general-purpose, many-consumer token whose existing annotation already describes this exact use, unlike
+  the single-job tokens above.
+- `--space-6`/`gap-tg-6` (`16px`, grid gap, line 839) — already mapped in the Blog Teaser addendum (§16)
+  for an unrelated section; reused verbatim here, the intended cross-section reuse a general-purpose
+  spacing token is for.
+- `--space-9`/`--space-7` (`22px`/`18px`, caption padding `22px 18px 18px`, line 843) — both already
+  canonical (`pt-tg-9`, `px-tg-7`, `pb-tg-7`).
+- `--color-orange` (`#E87722`, `SectionEyebrow`'s default `tone="orange"`) and `--ls-widest`/`--text-2xs`
+  (`.eyebrow`'s tracking/font-size, both already resolve to the reference's `0.16em`/`12.5px` exactly) —
+  all already correct in `SectionEyebrow`/`.eyebrow`; the migration changes which markup renders them, not
+  their values.
+
+**Not a new token**: the tile hover-lift (`transform:translateY(-4px)`, line 874) is expressed as
+`hover:-translate-y-1` — Tailwind's own canonical 4px spacing step, not an arbitrary `-[4px]` value, per
+this session's "Tailwind must use canonical classes" direction. This corrects the pattern only for the
+new `home`-branch markup; the recreated `careers` branch's own `hover:-translate-y-[4px]` (from the
+teammate's supplied code) is left exactly as recreated, since editing it is outside FR-011's scope.
+
+**Not changed**: the two action buttons below the grid (`Explore Careers` gradient button, `Meet the
+team` ghost button) are already reference-correct from the baseline recreation and Phase 1's
+`Button.tsx` ghost-variant work (research.md §1) — no further token or markup change needed for FR-011's
+"two action buttons" clause. The `careers` branch, `app/page.tsx`'s render order, and every other
+homepage section are untouched.
+
+**Known, deliberately-deferred delta** (`/speckit.analyze` finding L1): the recreated `careers` branch's
+own tile radius (`rounded-[20px]`, from the teammate's unmerged code) doesn't match `TechGrit
+Careers.dc.html`/`TechGrit About.dc.html`'s own reference value (`18px`) — a pre-existing mismatch,
+correctly out of this addendum's FR-011 scope. Recorded here, not silently dropped, so a future
+Careers-page pass can pick it up once the teammate's branch merges.
+
+## 18. Homepage Final CTA Section fidelity (FR-012)
+
+**Companion to**: [plan.md](./plan.md) Phase 2 addendum, "Homepage Final CTA Section (FR-012)" |
+**Spec**: [spec.md](./spec.md), FR-012, Clarifications Session 2026-08-06
+
+Scope: `app/_home-components/FinalCta.tsx`, `app/tokens.css`, `app/globals.css`. §§1-17 above are
+unaffected.
+
+**Decision (card width)**: `TechGrit Homepage.dc.html`'s final-CTA wrapper (line 888) is
+`max-width:1280px`, matching every other homepage section's container in this feature — today's
+`FinalCta.tsx` is an outlier at `max-w-[1180px]`. Rather than a raw `max-w-[1280px]` literal, the fix
+uses this feature's own established sitewide idiom for the `--container-max` token —
+`max-w-(--container-max)` — already used by `Hero.tsx`, `IndustriesSection.tsx`, `ReImagineSection.tsx`,
+`BlogSection.tsx`, and others.
+
+**Decision (link typography)**: per spec.md Clarifications (Session 2026-08-06), FR-012's "clickable-text
+typography" covers the secondary link's full treatment — size, resting color, hover color, and underline
+opacity — not just font-size. The reference (line 897) gives this link `font-size:14.5px;
+font-weight:600; color:rgba(255,255,255,0.7)`, brightening to `#fff` only on `:hover` (via `style-hover`),
+with a `border-bottom:1px solid rgba(232,119,34,0.5)` underline. Today's implementation is
+`15.5px`/`text-primary` (already solid white, no hover state) with a `0.60`-opacity underline — flattening
+the reference's own resting/dimmer vs. hover/bright distinction entirely.
+
+**Decision (link copy)**: per spec.md Clarifications (Session 2026-08-06), the link's text content also
+updates from today's paraphrase ("Explore how our 6-week framework can accelerate your next big bet") to
+the reference's literal wording ("Or explore our 6-week framework") — FR-012 was extended to cover this
+alongside the typography correction.
+
+**Tokens needed** — 1 total, which doesn't exist today at this exact value with a matching semantic job:
+- `--color-text-cta-link: rgba(255, 255, 255, 0.70)` (§ Text Colors) — the link's resting color (line
+  897). Value-identical to both the existing `--color-text-quiet` ("CTA banner paragraph copy" — this
+  same CTA banner, but the paragraph, not this link) and `--color-text-70` ("Methodology phase-node text
+  — todo state," an unrelated component). Neither annotation actually describes this element, so a
+  dedicated token is added rather than repurposing either — the same precedent as `--text-industry-title`
+  vs. `--text-stat`, `--radius-16` vs. `--radius-tile`, and `--ls-life-cap` vs. `--ls-hint`/`--ls-blog-meta`
+  earlier in this feature.
+
+**Tokens reused, not duplicated** — all exact matches, confirmed by direct comparison against
+`tokens.css`:
+- `--container-max` (`1280px`) — already the sitewide token for this exact width; consumed via the
+  established `max-w-(--container-max)` idiom, not a new literal.
+- `--text-14-5` (`14.5px`) — already exists (`text-14-5`, "Webinar upcoming-session date/time text"), a
+  general-purpose font-size value; reused verbatim for this link's size correction.
+- `--color-text-primary` (`rgba(255,255,255,1.00)`, already the canonical `text-primary` class) — reused
+  as-is for the link's hover target color; no new token needed since the app already expresses "solid
+  white" this way everywhere else.
+- `--color-border-orange-medium` (`0.50`) — already added/mapped in this feature's Re-Imagine Grid
+  addendum (§13); reused verbatim for the underline correction, not redefined.
+
+**Not a new token**: the underline's `padding-bottom:3px` (reference line 897) has no matching spacing
+token (`--space-3` is `10px`, a different value) — it predates this addendum as `pb-[3px]` and is left
+as the same one-off arbitrary value, consistent with this feature's precedent for genuinely one-off
+pixel values with no token match.
+
+**Not changed**: the card's background/border/radius/blur, the bottom overlay glow, the eyebrow/heading/
+paragraph, and the primary "Schedule an OrbitAI Demo" button are already reference-correct and untouched
+— FR-012 names only the outer container width and the secondary link's typography/copy.
+
 ---
 
 # Phase 0 Research Addendum — Careers Apply Modal (User Story 8)
@@ -927,3 +1643,191 @@ and `/careers`' output; `/`'s `home` variant is unaffected (it never sets `capti
 None — every value this slice needs already exists via the reused `careers` variant of
 `LifeGallery.tsx`, including the caption-overlay fix in §20 above (both new classes reuse existing
 exact-match tokens); no `tokens.css`/`globals.css` change.
+
+## 21. Case Studies hub/detail — orb defects, filter-bar reuse, and chip/CTA token fit (FR-022–FR-026)
+
+Companion to plan.md's "Case Studies Hub & Detail Pages — Filter Bar Wiring & Reference Alignment
+(User Story 4)" addendum. Every value below is read from `TechGrit Case Studies.dc.html` (hub) or
+`TechGrit Case Study.dc.html` (detail), per direct instruction that these two files are this slice's
+sole visual source of truth.
+
+**Ambient orbs — hub page (`app/case-studies/page.tsx`), FR-022**
+
+| Orb | Reference (`TechGrit Case Studies.dc.html`) | Current code | Verdict |
+|---|---|---|---|
+| 1 | `top:-160px; right:-120px; 560×560; rgba(232,119,34,0.16); blur(120px); 16s` (line 106) | `color-mix(in srgb, var(--color-blue) 13%, transparent)`, same geometry | **Wrong hue and opacity** — mixes blue at 13%, reference is orange at 16% |
+| 2 | `top:1100px; left:-180px; 520×520; rgba(232,119,34,0.10); blur(130px); 20s reverse` (line 107) | `color-mix(in srgb, var(--color-orange) 10%, transparent)`, same geometry | Exact match |
+| 3 | `bottom:-160px; left:40%; 600×600; rgba(15,118,110,0.08); blur(140px); 22s` (line 108) | `color-mix(in srgb, var(--color-teal) 8%, transparent)`, same geometry | Exact match |
+
+**Decision**: fix orb 1's `color-mix()` argument to `var(--color-orange) 16%`. `--color-orange` is the
+existing base token (`#E87722` / `rgba(232,119,34,1)`); mixed at 16% it reproduces
+`rgba(232,119,34,0.16)` exactly, matching how orb 2 already correctly mixes the same base token at
+10%. No new token needed.
+
+**Ambient orbs — detail page (`app/case-studies/[slug]/page.tsx`), FR-025**
+
+| Orb | Reference (`TechGrit Case Study.dc.html`) | Current code | Verdict |
+|---|---|---|---|
+| 1 | `top:-160px; right:-120px; 560×560; rgba(232,119,34,0.16); blur(120px); 16s` (line 111) | `top-[-160px] right-[-120px] w-[560px] h-[560px]`, `bg-overlay-teal` (`rgba(15,118,110,0.12)`), `blur-[120px]`, 16s | Position/size/blur/timing already correct; **color is wrong** (teal instead of orange) |
+| 2 | `top:35%; left:-220px; 560×560; rgba(247,183,51,0.10); blur(140px); 20s reverse` (line 112) | `top-[1300px] left-[-180px] w-[520px] h-[520px]`, `bg-overlay-blue-soft` (`rgba(2,132,199,0.10)`), `blur-[130px]`, 20s reverse | **Every value wrong**: position (fixed px vs. `35%`), `left` offset (-180 vs. -220), size (520 vs. 560), color (blue vs. amber-light), blur (130 vs. 140) |
+
+This reads as a copy-paste of a different page's (or an earlier draft's) orb pair into the detail
+page during the original TMS-68 build — orb 1's geometry is already right, just the wrong color;
+orb 2 has no correct dimension at all. Not a v2.2 regression — the detail page's orbs have never
+matched this reference.
+
+**Decision**: rebuild both. Orb 1 becomes `bg-overlay-orange` (`--color-overlay-orange:
+rgba(232,119,34,0.16)`, exact match — the same base value the hub page's orb 1 mixes to) at its
+already-correct geometry — this is a pure color-class swap (`bg-overlay-teal` → `bg-overlay-orange`),
+no positional change needed. Orb 2 needs a new token: no existing token produces
+`rgba(247,183,51,0.10)` exactly — the nearest existing candidate, `--color-overlay-amber-light-06`
+(`app/tokens.css` line 207, added for the footer's decorative glow), is the same hue at the wrong
+opacity (0.06, not 0.10) — reusing it would be a real 40% opacity error, not a sub-2%-delta reuse
+candidate like this plan's other tolerance decisions, so a new sibling token is warranted:
+`--color-overlay-amber-light-10: rgba(247, 183, 51, 0.10)`, added next to the existing Case-study
+token cluster in tokens.css Section 4 (BORDERS & GLASS), with a matching `@theme inline` entry.
+Orb 2's geometry corrects to `top-[35%] left-[-220px] w-[560px] h-[560px] blur-[140px]`, keeping its
+existing `20s reverse` timing (already correct).
+
+**Filter bar — reuse fit (FR-024)**
+
+`components/ui/FilterBar.tsx` (built Shared Foundation T004, already consumed by Careers' Open Roles,
+research.md §14) needs zero modification to serve Case Studies:
+
+| Property | Reference `.cs-chip` bar (`TechGrit Case Studies.dc.html` line 226) | `FilterBar.tsx` (as-is) | Verdict |
+|---|---|---|---|
+| Sticky offset | `top:80px` | `top-nav` (80px token, exact) | Exact match |
+| Background | `rgba(0,0,0,0.72)` | `bg-nav-glass` (`rgba(0,0,0,0.70)`) | Sub-3%-delta reuse — same tolerance precedent as research.md §14's Careers filter-bar reuse |
+| Blur | `blur(14px)` | `backdrop-blur-nav` (16px) | Sub-2px-delta reuse — same precedent |
+| Borders | top + bottom, `rgba(255,255,255,0.06)` | `border-t border-b border-border-subtle` (`rgba(255,255,255,0.07)`) | Already carries both borders (added for Careers, research.md §14) — sub-2%-delta reuse |
+| Label | "Filter", uppercase, small, dim | `text-xs font-bold tracking-widest text-secondary uppercase` | Matches the reference's label treatment class-for-class |
+| Overflow | `overflow-x:auto; scrollbar-width:none` | `overflow-x-auto [scrollbar-width:none]` | Exact match |
+
+No changes to `FilterBar.tsx` are needed — the same instance Careers already uses fits Case Studies'
+reference within this plan's own established reuse tolerances.
+
+**Category chips — token fit (FR-024)**
+
+The reference's `.cs-chip`/`.cs-chip.is-active` classes (`TechGrit Case Studies.dc.html` lines
+239-241) are byte-identical in intent to `app/blog/_components/topic-filter.tsx`'s own inactive/active
+chip classes:
+
+| Property | Reference `.cs-chip` | `topic-filter.tsx`'s existing classes | Verdict |
+|---|---|---|---|
+| Inactive background | `rgba(255,255,255,0.04)` | `bg-glass-4` | Exact match |
+| Inactive border | `rgba(255,255,255,0.14)` | `border-border-14` | Exact match |
+| Inactive text | `rgba(255,255,255,0.72)` | `text-secondary` | Exact match (existing token resolves to the same value) |
+| Active background | `linear-gradient(135deg,#F59E0B,#E87722)` | `bg-[image:var(--gradient-brand)]` | Exact match |
+| Active border | `transparent` | `border-border-orange-strong` on `topic-filter.tsx`'s active state | **Diverges** — see below |
+| Active shadow | `0 6px 18px -6px rgba(232,119,34,0.7)` | `shadow-chip-active` | Exact match (same token Blog already uses) |
+| Shape/spacing | `padding:9px 16px; border-radius:30px; font-size:13px; font-weight:700` | `rounded-full px-tg-7 py-tg-3 text-[13.5px] font-bold` | Sub-1px-delta reuse (13px vs. 13.5px), same tolerance precedent used throughout this plan |
+
+**Decision**: the new `case-studies-filters.tsx` reuses every one of `topic-filter.tsx`'s token
+classes as-is, **except** the active chip's border — the Case Studies reference specifies
+`border-color:transparent` for the active chip (line 241: `.cs-chip.is-active{...border-color:
+transparent...}`), while `topic-filter.tsx`'s own active state uses `border-border-orange-strong`
+(an existing, deliberate choice for Blog's own reference, not touched here). `case-studies-filters.tsx`
+sets its active chip's border to `border-transparent` instead, matching Case Studies' own reference
+exactly. This is the one intentional divergence from `topic-filter.tsx`'s exact classes; every other
+class carries over unchanged.
+
+**Closing CTA — token fit (FR-026)**
+
+| Property | Reference (`TechGrit Case Studies.dc.html` line 289) | Current `case-studies-final-cta.tsx` | Existing exact-match token |
+|---|---|---|---|
+| Background | `rgba(255,255,255,0.04)` | `bg-ink-mid` (`#000000`) — wrong | `--color-glass-faint` |
+| Border | `1px solid rgba(255,255,255,0.12)` | `border-border-faint` (`rgba(255,255,255,0.10)`) — wrong | `--color-border` |
+| Blur | `backdrop-filter:blur(12px)` | none | `--blur-cta` (12px, already tagged "Final CTA panel") |
+| Button padding | `15px 30px` | `px-[30px] py-[16px]` (horizontal exact, vertical 1px off) | n/a — className override |
+| Button min-height | `52px` | none | n/a — className override |
+| Button radius | `12px` | `rounded-[12px]` — already correct | n/a |
+
+**Decision**: swap the three background/border/blur classes to the exact-match tokens above (via this
+component family's own `border-[var(--token)]` arbitrary-value idiom, matching
+`case-studies-grid.tsx`'s existing style) and replace the bespoke `<Link className="btn btn-primary
+btn-lg ...">` with `<Button href="/contact" variant="primary">` plus a className override for the
+`15px`/`52px` deltas — following the identical per-instance-override pattern already used for
+Subscribe Band's button (research.md §11) and Contact's CTA (research.md §17).
+
+**Featured-card filtering and chip-list consequences (spec.md Clarifications Session 2026-08-10)**
+
+The reference's own filter script applies its category logic to a shared `[data-cs-item]` selector
+that includes the featured card — an unmatching filter hides it. spec.md's clarification session
+deliberately diverged from this: the featured card stays visible regardless of the active filter, and
+no live match-count indicator is added. Two direct, mechanical consequences worked out during this
+planning pass (not separately re-clarified, since they follow necessarily from the already-recorded
+decision):
+
+1. **The "Featured" chip is dropped from `CASE_STUDY_CATEGORIES`.** The reference's chip list is All /
+   Featured / FinTech / Marketplace / AI Enablement / Design. Since the featured card no longer
+   participates in the filterable grid, and no grid item's own `category` is `"Featured"` (only the one
+   featured item — rendered outside the filterable grid entirely — carries that flag), selecting a
+   "Featured" chip would always show zero grid results. Shipping a chip that always empties the grid
+   would be a broken control, not reference parity, so it is omitted.
+2. **No task touches `FeaturedCaseStudy`/`page.tsx`'s featured-card wiring** to make it
+   filter-aware — its permanent visibility is a structural property of where it's rendered (directly
+   in `page.tsx`, outside the new `CaseStudiesFilterSection`), not a runtime condition that needs its
+   own logic.
+
+**No-results copy (FR-024)**
+
+The reference's own hardcoded 6-case-study dataset never reaches an empty filtered state in its own
+script (every one of its 5 category chips matches at least one of its 6 items), so there is no literal
+reference copy for the "no results" message. New copy is chosen for this pass: a short message plus a
+"Reset filter" control (`components/ui/Button` `variant="ghost" size="sm"`) that clears the filter
+back to `"All"` — satisfying FR-024's requirement without inventing a bespoke reset control.
+
+## New tokens summary (Case Studies)
+
+One: `--color-overlay-amber-light-10: rgba(247, 183, 51, 0.10)` (Section 4, BORDERS & GLASS), plus its
+`@theme inline` mapping in `app/globals.css`. Every other value in this slice (orb 1 on both pages,
+the filter bar shell, the category chips, the CTA background/border/blur) reuses an existing
+exact-match token.
+
+## 22. Filter bar sticky/mobile bugs, found via live browser testing (FR-024)
+
+§21's `FilterBar.tsx` reuse-fit table above compared it to the reference on background/blur/border/
+label/overflow, but was written from markup inspection only (research.md's own stated limitation
+throughout this feature, e.g. tasks.md's repeated "Browser-pane tool could not render/screenshot"
+notes) — it did not catch two real defects only visible once the page was actually driven live:
+
+1. **`z-raised` is a dead Tailwind class, sitewide.** `app/tokens.css`'s `--z-raised: 1` is mapped in
+   `app/globals.css`'s `@theme inline` block as `--z-raised: var(--z-raised)` — under the bare `--z-*`
+   key. Tailwind v4's z-index utility scale reads from the `--z-index-*` theme namespace, not `--z-*`,
+   so no `z-raised` utility class is ever generated; any element using it gets no z-index rule at all
+   (confirmed live: `getComputedStyle(el).zIndex === "auto"`). This is a pre-existing, sitewide gap —
+   `Hero.tsx` and `TrustedClients.tsx` also use the same dead class (`grep -rn "z-raised"` finds only
+   these 3 call sites total) — but only `FilterBar.tsx`'s usage produced a visible symptom, because it
+   is the only one of the three with a same-DOM-order-later sibling that independently forms its own
+   stacking context: `case-studies-grid.tsx`'s cards set `backdrop-blur-md` unconditionally (not just
+   on hover), which creates a stacking context on every card at rest. Two elements at the same
+   effective (`auto`) stacking level paint in DOM order, and the cards render after the filter bar in
+   the tree — so once both were effectively at the same z-level, the cards painted on top of the bar
+   while it was stuck, exactly matching the reported "cards overlapping the filter" symptom. `Hero.tsx`/
+   `TrustedClients.tsx` don't exhibit this because they have no same-level competing sibling positioned
+   later in the DOM — out of scope to fix here, not reported as broken, left as-is.
+   **Fix**: `FilterBar.tsx` switches to `z-[var(--z-sticky)]` — arbitrary-value syntax reading the
+   token directly (bypassing the broken named-utility path entirely), the same robust pattern the site
+   header already uses for `z-[var(--z-nav)]`. `--z-sticky` (10) is also the semantically correct token
+   for a sticky filter bar, versus `--z-raised` (1, meant for generic "lift above the ambient-orb
+   background" contexts like Hero/TrustedClients, not scroll-stacking chrome). Since `FilterBar.tsx` is
+   shared, this fix also resolves the same latent bug on Careers' Open Roles filter bar (research.md
+   §14) — that page was never reported as broken, but was verified by markup only (tasks.md, Careers
+   Phase 3/5), so it likely carried the identical defect undetected.
+2. **Chip row wraps instead of scrolling at narrow widths.** `case-studies-filters.tsx`'s chip
+   container used `flex flex-wrap`, copied from `app/blog/_components/topic-filter.tsx` (§21's stated
+   source of the reused token set). Wrapping is correct for Blog's own filter row today, since it isn't
+   wrapped inside a horizontally-scrollable sticky shell — but inside `FilterBar.tsx`'s
+   `overflow-x-auto` row, a wrappable child gives the layout engine a non-overflowing resolution (wrap
+   to 2+ lines) that browsers prefer over horizontal overflow, so at mobile widths (label + 5 chips
+   don't fit in 375px) the chips wrapped instead of staying in one scrollable row, diverging from
+   `TechGrit Case Studies.dc.html`'s own `overflow-x:auto` single-row behavior.
+   **Fix**: drop `flex-wrap`, add `shrink-0` (so the parent flex row cannot compress this container
+   into wrapping either), leaving `flex shrink-0 items-center gap-2.5`. Confirmed live at a 375px
+   viewport: chip row `scrollWidth` (614px) > `clientWidth` (375px), horizontally scrollable, all 5
+   chips sharing one identical `top` offset (one row).
+
+Both fixes verified via `javascript_tool` computed-style/layout inspection against a live dev-server
+instance — the first time this feature's Case Studies verification went beyond markup/build inspection
+to an actually-running page, which is precisely how these two defects were caught after T009's own
+"cannot confirm sticky-scroll behavior" caveat.

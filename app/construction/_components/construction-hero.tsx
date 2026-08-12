@@ -8,8 +8,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
   return (
     <section>
       <div
-        className="tg-container grid grid-cols-1 items-center gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-16"
-        style={{ paddingTop: 78, paddingBottom: 26 }}
+        className="mx-auto max-w-[1280px] px-9 pt-[78px] pb-[26px] grid grid-cols-1 items-center gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-16"
       >
         <div className="order-1">
           <div
@@ -41,7 +40,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
           </div>
           <h1
             data-rise
-            className="text-[44px] leading-[1.04] md:text-[54px] tracking-[-1.89px]"
+            className="text-[38px] leading-[1.04] md:text-[54px] tracking-[-1.89px]"
             style={{ animationDelay: ".12s" }}
           >
             {before}
@@ -111,7 +110,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0"
-              style={{ background: "linear-gradient(180deg, rgba(10,24,34,0) 45%, rgba(10,24,34,0.55))" }}
+              style={{ background: "linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.55))" }}
             />
             <div className="absolute flex leading-[normal]" style={{ left: 20, bottom: 18, right: 20, gap: 10 }}>
               {section.stats.map((stat) => (
@@ -119,9 +118,9 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
                   key={stat.order}
                   className="flex-1 leading-[normal]"
                   style={{
-                    background: "rgba(10,24,34,0.6)",
-                    backdropFilter: "blur(var(--blur-sm))",
-                    border: "1px solid var(--color-border-strong)",
+                    background: "var(--color-ink-glass-60)",
+                    backdropFilter: "blur(var(--blur-md))",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "var(--radius-lg)",
                     padding: "12px 14px",
                   }}
