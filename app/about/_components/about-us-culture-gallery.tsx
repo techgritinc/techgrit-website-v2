@@ -39,15 +39,15 @@ export function AboutUsCultureGallery({ section }: { section: CultureGallerySect
                 />
               )}
               <div
-                className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.82))] p-[22px_18px_18px] opacity-0 transition-all duration-[300ms] ease-out translate-y-[6px] group-hover:translate-y-0 group-hover:opacity-100"
+                className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.82))] p-[22px_18px_18px] opacity-0 transition-all duration-[300ms] ease-out translate-y-[6px] group-hover:translate-y-0"
                 aria-hidden="true"
               >
-                <div className="mb-[4px] text-[11px] font-bold uppercase tracking-[0.14em] text-amber-light">
+                {/* <div className="mb-[4px] text-[11px] font-bold uppercase tracking-[0.14em] text-amber-light">
                   {photo.captionLabel}
                 </div>
                 <figcaption className="text-[14px] font-semibold leading-[1.35] text-white">
                   {photo.caption}
-                </figcaption>
+                </figcaption> */}
               </div>
             </figure>
           ))}
