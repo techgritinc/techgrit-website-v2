@@ -6,22 +6,23 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
 
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1200px] text-center pt-[96px] px-[36px] pb-[70px]">
+      <div className="mx-auto max-w-[1000px] text-center pt-[96px] px-[36px] pb-[70px]">
         <div
           data-rise
-          className="inline-flex items-center gap-[var(--space-3)] bg-glass border border-border px-[var(--space-6)] py-[var(--space-2)] rounded-pill mb-[var(--space-12)] backdrop-blur-[var(--blur-sm)]"
-          style={{ animationDelay: ".05s" }}
+          className="inline-flex items-center gap-[10px] bg-glass border border-border-hairline px-[16px] py-[8px] rounded-[40px] mb-[28px] backdrop-blur-[var(--blur-sm)]"
+          style={{ animationDelay: ".05s", lineHeight: "normal", opacity: 0 }}
         >
           <span
-            className="text-[12.5px] font-bold tracking-[0.08em] uppercase text-strong leading-normal"
+            className="font-bold uppercase text-strong leading-normal"
+            style={{ fontSize: "12.5px", letterSpacing: "0.08em" }}
           >
             {section.eyebrow}
           </span>
         </div>
         <h1
           data-rise
-          className="text-[60px] leading-[1.02] max-[920px]:text-[46px] min-[921px]:whitespace-nowrap tracking-[-0.04em] font-bold text-white"
-          style={{ animationDelay: ".12s" }}
+          className="text-[60px] max-[920px]:text-[46px] font-bold text-white"
+          style={{ animationDelay: ".12s", lineHeight: 1.02, letterSpacing: "-0.04em", opacity: 0 }}
         >
           {before}
           <span className="text-gradient">{section.titleHighlight}</span>
@@ -29,29 +30,29 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
         </h1>
         <p
           data-rise
-          className="mx-auto mt-[var(--space-11)] max-w-[var(--measure-blog-lead)] text-[18.5px] leading-[1.65] text-secondary"
-          style={{ animationDelay: ".2s" }}
+          className="mx-auto mt-[26px] max-w-[640px] text-secondary"
+          style={{ animationDelay: ".2s", fontSize: "18.5px", lineHeight: 1.65, opacity: 0 }}
         >
           {section.subtitle}
         </p>
         <div
           data-rise
-          className="mt-[var(--space-15)] flex flex-wrap items-center justify-center gap-[15px]"
-          style={{ animationDelay: ".3s" }}
+          className="mt-[36px] flex flex-wrap items-center justify-center gap-[15px]"
+          style={{ animationDelay: ".3s", opacity: 0 }}
         >
           <Button
             href={section.primaryCtaLink}
             variant="primary"
             size="hero"
-            className="text-4 leading-[normal] w-[214.688px] h-[52px]"
+            className="!py-[15px] min-h-[52px] leading-[normal]"
           >
-            {section.primaryCtaLabel} <span aria-hidden="true">&#8594;</span>
+            {section.primaryCtaLabel} <span aria-hidden="true" className="text-[17px]">&#8594;</span>
           </Button>
-          <Button 
-            href={section.secondaryCtaLink} 
-            variant="ghost" 
+          <Button
+            href={section.secondaryCtaLink}
+            variant="ghost"
             size="hero"
-            className="leading-[normal] w-[176.844px]"
+            className="!px-[26px] leading-[normal]"
           >
             {section.secondaryCtaLabel}
           </Button>

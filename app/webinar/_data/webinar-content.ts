@@ -31,14 +31,14 @@ export const webinarPageContent: WebinarPageContent = {
   },
   sessionsHeading: "Sessions",
   upcomingSession: {
-    statusLabel: "Upcoming · Live",
-    title: "Migrating 2.5 million lines to .NET 10 — without taking the product down.",
+    statusLabel: "Upcoming Live Webinar",
+    title: "Migrating 2.5M lines to .NET 10 — without downtime",
     description:
       "A live walkthrough of the AI-assisted, human-governed delivery model behind one of our largest modernization projects.",
     date: "30th June 2026",
     time: "12:00 PM",
     timezone: "CST",
-    ctaLabel: "Register Now",
+    ctaLabel: "Register",
   },
   releasedSessions: [
     {

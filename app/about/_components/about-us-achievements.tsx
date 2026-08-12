@@ -10,10 +10,10 @@ export function AboutUsAchievements({ section }: { section: AchievementsSection 
             <div className="grid grid-cols-4 gap-[20px] max-[560px]:grid-cols-2 text-center">
               {section.stats.map((stat, index) => (
                 <div key={index}>
-                  <div className="bg-gradient-to-br from-amber-light to-orange bg-clip-text text-[clamp(40px,5vw,56px)] font-bold leading-none tracking-[-0.03em] text-transparent">
+                  <div className="bg-[image:var(--gradient-phase-node)] bg-clip-text text-[clamp(40px,5vw,56px)] font-bold leading-none tracking-[-0.03em] text-transparent">
                     {stat.value}
                   </div>
-                  <div className="mt-2 text-[14px] font-bold uppercase tracking-[0.08em] text-white/55">
+                  <div className="mt-2 text-[14px] leading-[normal] font-bold uppercase tracking-[0.08em] text-white/55">
                     {stat.label}
                   </div>
                 </div>

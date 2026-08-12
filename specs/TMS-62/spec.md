@@ -247,7 +247,9 @@ bottom of the page renders with its own primary and secondary calls-to-action.
 - **FR-008**: The homepage MUST present an industries section with three industry cards (FinTech,
   Healthcare, Construction), each showing imagery, a title, and a description; the section MUST
   offer a link to explore industry solutions, and the Construction card MUST additionally offer its
-  own dedicated link.
+  own dedicated link. At the `md` (tablet) breakpoint the cards MUST lay out as the first two cards
+  in one row with the third card centered on the row below, not stacked full-width; desktop (`lg`)
+  and small/mobile layouts are unaffected.
 - **FR-009**: The homepage MUST present a testimonials section as a horizontally browsable
   collection of testimonial cards, each showing a quote, author name, and role; text testimonials
   MUST additionally show a star rating, and video testimonials MUST open a lightbox showing the

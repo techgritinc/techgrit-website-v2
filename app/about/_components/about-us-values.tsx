@@ -65,7 +65,7 @@ export function AboutUsValues({ section }: { section: ValuesSection }) {
                 <div>
                   <div className="flex items-center gap-[11px]">
                     <ValueIcon order={value.order} />
-                    <h3 className="text-[19px] font-bold tracking-[-0.01em] text-white">{value.title}</h3>
+                    <h3 className="text-[19px] font-bold leading-normal tracking-[-0.01em] text-white">{value.title}</h3>
                   </div>
                   <p className="mt-[8px] text-[15px] leading-[1.6] text-white/58">
                     {value.description}
