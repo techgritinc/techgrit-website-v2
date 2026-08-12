@@ -1,36 +1,32 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import { GlassCard, GlassCardDescription, GlassCardTitle } from "@/components/ui/GlassCard";
 import Badge from "@/components/ui/Badge";
-import { TopicFilter } from "./topic-filter";
 import { accentHex, hexA } from "../_lib/accent";
 import type { BlogPost } from "../_data/types";
 
-export function BlogPostGrid({ topics, posts }: { topics: string[]; posts: BlogPost[] }) {
-  const [activeTopic, setActiveTopic] = useState("All");
-
-  const filteredPosts = useMemo(
-    () => (activeTopic === "All" ? posts : posts.filter((post) => post.topic === activeTopic)),
-    [activeTopic, posts],
-  );
-
+export function BlogPostGrid({ posts, onReset }: { posts: BlogPost[]; onReset: () => void }) {
   return (
     <section>
-      <div className="mx-auto max-w-(--container-max) px-9 pt-tg-13 pb-tg-21">
-        <TopicFilter topics={topics} activeTopic={activeTopic} onSelect={setActiveTopic} />
-
-        {filteredPosts.length === 0 ? (
-          <p className="mt-14 text-center text-[15.5px] text-muted">No posts match this topic yet — check back soon.</p>
+      <div className="mx-auto max-w-(--container-max) px-9 pt-tg-11 pb-tg-21">
+        {posts.length === 0 ? (
+          <div className="mt-14 flex flex-col items-center gap-3 text-center">
+            <p className="text-[15.5px] text-muted">No posts match this topic yet — check back soon.</p>
+            <button
+              type="button"
+              onClick={onReset}
+              className="inline-flex items-center border-b border-border-orange-medium pb-[3px] text-14-5 font-semibold text-muted leading-[normal] transition-colors duration-200 hover:text-primary"
+            >
+              Reset filter
+            </button>
+          </div>
         ) : (
-          <div className="mt-tg-11 grid grid-cols-3 gap-6 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
-            {filteredPosts.map((post) => {
+          <div className="grid grid-cols-3 gap-6 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
+            {posts.map((post) => {
               const hex = accentHex(post.accent);
               return (
                 <a key={post.slug} href={post.href} style={{ display: "contents" }}>
                   <GlassCard
                     variant="blogCard"
-                    hoverBorderColor="hover:border-border-28"
+                    hoverBorderColor=""
                     className="flex flex-col"
                   >
                     <div
@@ -58,7 +54,7 @@ export function BlogPostGrid({ topics, posts }: { topics: string[]; posts: BlogP
                       <GlassCardTitle variant="blogCard" className="!mt-0 leading-[1.32] tracking-[normal]">
                         {post.title}
                       </GlassCardTitle>
-                      <GlassCardDescription variant="blogCard" className="flex-1">
+                      <GlassCardDescription variant="blogCard" className="flex-1 text-muted">
                         {post.excerpt}
                       </GlassCardDescription>
                       <div className="mt-[20px] flex items-center gap-tg-3a border-t border-border-8 pt-4">

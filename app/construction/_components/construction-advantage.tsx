@@ -3,12 +3,12 @@ import type { AdvantageSection } from "../_data/types";
 
 export function ConstructionAdvantage({ section }: { section: AdvantageSection }) {
   return (
-    <section className="section">
-      <div className="tg-container">
+    <section className="relative">
+      <div className="mx-auto max-w-[1280px] px-9 pt-[40px] pb-[60px]" data-reveal>
         <div className="grid grid-cols-1 items-start gap-[56px] md:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2 style={{ fontSize: "clamp(28px, 3.4vw, 38px)", lineHeight: 1.1 }}>{section.title}</h2>
+          <div className="mt-[-3px]">
+            <SectionEyebrow showAccent={false} className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
+            <h2 className="text-[clamp(28px,3.4vw,38px)] leading-[1.1] tracking-[-0.03em]">{section.title}</h2>
             <p className="mt-4" style={{ fontSize: "16.5px", lineHeight: 1.65, color: "var(--color-text-muted)" }}>
               {section.description}
             </p>
