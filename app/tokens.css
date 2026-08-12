@@ -135,7 +135,7 @@
   --color-border-amber-medium: rgba(245, 158, 11, 0.40); /* Webinar hero collage play-triangle tile dashed border (TMS-73) */
   --color-border-blue-light-soft: rgba(56, 189, 248, 0.30); /* Webinar hero collage pulse-dot tile border (TMS-73) */
   --color-border-amber-30: rgba(245, 158, 11, 0.30); /* Webinar upcoming-session panel border (TMS-73) */
-
+  --color-border-amber-35: rgba(245, 158, 11, 0.35); /* Webinar announcement-strip resting border (v2.2 FR-030) */
   --color-glass:          rgba(255, 255, 255, 0.05); /* Glass card fill */
   --color-glass-hairline: rgba(255, 255, 255, 0.02); /* Architecture-diagram panel gradient stop */
   --color-glass-4:        rgba(255, 255, 255, 0.04); /* Secondary glass fill */
@@ -143,6 +143,7 @@
   --color-glass-hover:    rgba(255, 255, 255, 0.08); /* Input fill on focus */
   --color-nav-glass:      rgba(0, 0, 0, 0.70);    /* Sticky nav background. v2 black (name retained, value migrated) */
   --color-ink-glass-60:   rgba(0, 0, 0, 0.60);    /* Lifecycle diagram mobile-fallback node pill background (TMS-67). v2 black (name retained, value migrated) */
+  --color-ink-glass-40:   rgba(0, 0, 0, 0.40);    /* Lifecycle diagram mobile-fallback node pill background (TMS-67). v2 black (name retained, value migrated) */
   --color-nav-hover:      rgba(255, 255, 255, 0.07); /* Nav link hover background */
   --color-dd-bg:          rgba(0, 0, 0, 0.97);    /* Dropdown menu bg. v2 black (name retained, value migrated) */
   --color-mobile-menu-bg: rgba(0, 0, 0, 0.97);    /* Mobile nav panel bg (darker than dd-bg). v2 black (name retained, value migrated) */
@@ -257,6 +258,8 @@
   --gradient-webinar-upcoming: linear-gradient(150deg, rgba(245, 158, 11, 0.12), rgba(255, 255, 255, 0.03)); /* Webinar upcoming-session panel background (TMS-73) */
   --gradient-webinar-released-blue: linear-gradient(150deg, rgba(56, 189, 248, 0.18), rgba(15, 118, 110, 0.06)); /* Webinar released-session cover — blue accent (TMS-73) */
   --gradient-webinar-released-teal: linear-gradient(150deg, rgba(45, 212, 191, 0.18), rgba(56, 189, 248, 0.06)); /* Webinar released-session cover — teal accent (TMS-73) */
+  --gradient-webinar-released-orange: linear-gradient(150deg, rgba(232, 119, 34, 0.18), rgba(2, 132, 199, 0.06)); /* Webinar released-session cover — orange accent (v2.2 FR-031), replaces the borrowed --gradient-blog-featured (0.20, a 2% delta) */
+  --gradient-webinar-announce: linear-gradient(90deg, rgba(245, 158, 11, 0.14), rgba(232, 119, 34, 0.05)); /* Webinar announcement-strip resting background (v2.2 FR-030) */
   --gradient-hover-orange-amber: linear-gradient(135deg, rgba(232, 119, 34, 0.28), rgba(245, 158, 11, 0.18)); /* v2 hover-state gradient (additive, FR-024) */
   --gradient-footer-wordmark: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0)); /* Footer decorative "TechGrit" wordmark fill (TMS-63) */
   --gradient-footer-follow-line: linear-gradient(90deg, rgba(232, 119, 34, 0.70), rgba(232, 119, 34, 0)); /* Footer "Follow us" label accent line (TMS-63) */
@@ -372,6 +375,7 @@
   --ls-stat-count: -0.035em;  /* Hero delivery-stat digit tracking (v2.2 Phase 2) */
   --ls-blog-meta: 0.14em; /* Homepage Blog teaser card topic/read-time meta row (v2.2 FR-010) — deliberately not a reuse of the value-identical, single-job-annotated --ls-hint */
   --ls-life-cap: 0.14em; /* Life at TechGrit tile hover-caption label tracking (v2.2 FR-011) — deliberately not a reuse of the value-identical --ls-hint/--ls-blog-meta */
+  --ls-filter-label: 0.14em; /* Blog/Case Studies sticky filter-bar "Filter" label tracking (v2.2 FR-028) — deliberately not a reuse of the value-identical --ls-hint/--ls-blog-meta/--ls-life-cap */
   --ls-24: 0.24em;  /* Trusted-Clients section label tracking (v2.2 Phase 2) */
   --ls-title-tight: -0.01em;  /* Homepage Industries card title tracking (v2.2 FR-008) — named to avoid confusion with the unrelated, positive --ls-01 */
 
@@ -533,6 +537,7 @@
   --shadow-industry-glow-blue: 0 0 50px -12px rgba(59, 130, 246, 0.35); /* Homepage Industries card hover glow — Construction (v2.2 FR-008) */
   --shadow-testimonial-hover-video: 0 24px 60px -20px rgba(232, 119, 34, 0.60); /* Testimonials video-card hover shadow (v2.2 FR-009) */
   --shadow-testimonial-hover-text: 0 24px 54px -20px rgba(232, 119, 34, 0.28); /* Testimonials text-card hover shadow (v2.2 FR-009) */
+  --shadow-webinar-announce: 0 12px 40px -18px rgba(232, 119, 34, 0.5); /* Webinar announcement-strip ambient shadow (v2.2 FR-030) */
   --shadow-testimonial-avatar: 0 6px 16px -4px rgba(232, 119, 34, 0.55); /* Testimonials text-card avatar circle shadow (v2.2 FR-009) */
   /* Ambient-orb radii (--blur-glow*, §14) and coloured status-dot glows (--shadow-glow-*, above) already form a coherent v2-covering group — confirmed, no gaps (FR-025) */
   --shadow-live-badge: 0 18px 46px -14px rgba(232, 119, 34, 0.70), 0 4px 16px -6px rgba(232, 119, 34, 0.40);   /* Hero Live-Webinar badge outer shadow (v2.2 Phase 2) */

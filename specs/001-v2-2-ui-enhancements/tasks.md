@@ -1135,6 +1135,449 @@ a future pass each.
 
 ---
 
+# Tasks: User Story 3 — Construction Page (FR-016a, FR-017, FR-018)
+
+**Input**: [plan.md](./plan.md) § "User Story 3 — Construction Page (FR-016a, FR-017, FR-018)"
+**Scope**: exactly 3 requirements on the existing `/construction` page — the hero's metrics-panel
+background (ghost button already reference-exact, no change needed), the Challenge section's
+eyebrow, and "What We Build"'s section padding. Reference: `TechGrit Construction.dc.html`
+exclusively (spec.md Clarifications, Session 2026-08-07) — not `TechGrit Industries.dc.html`.
+
+**Independent task-ID block**: this story's tasks restart at **T001** in their own `[US3]`
+namespace, deliberately separate from User Story 1's T000–T080 sequence above, so a teammate working
+any other user story (Home Page or otherwise) in parallel can identify and touch this block without
+renumbering collisions. No dependency exists between this block and T000–T080.
+
+## Phase 1: User Story 3 — Construction Page (FR-016a, FR-017, FR-018)
+
+**Goal**: the `/construction` hero's metrics-panel overlay, the Challenge section's eyebrow, and the
+"What We Build" section's own vertical padding match `TechGrit Construction.dc.html` exactly.
+
+**Independent Test**: Load `/construction`; confirm the hero's `<30d`/`1000s`/`24/7` stat overlay
+renders on a neutral black glass panel (not the prior ink-tinted one), the "The challenge" eyebrow
+shows no leading accent-line span, and the "What We Build" section's top/bottom spacing matches the
+reference — independently of every other `/construction` subsection and of every Home Page (User
+Story 1) change above.
+
+- [X] T001 [P] [US3] In `app/construction/_components/construction-hero.tsx`, correct the hero
+  image's 3-stat overlay panel: `background: "rgba(10,24,34,0.6)"` → `"var(--color-ink-glass-60)"`,
+  `border: "1px solid var(--color-border-strong)"` → `"1px solid var(--color-border)"`, and
+  `backdropFilter: "blur(var(--blur-sm))"` → `"blur(var(--blur-md))"` (FR-016a — metrics-panel
+  background; ghost button already reference-exact, no change). **Done.**
+- [X] T002 [P] [US3] In `app/construction/_components/construction-challenges.tsx`, add
+  `showAccent={false}` to the `<SectionEyebrow>{section.eyebrow}</SectionEyebrow>` call (FR-017). **Done.**
+- [X] T003 [P] [US3] In `app/construction/_components/construction-solutions.tsx`, add
+  `pt-[50px] pb-[30px]` to the `<section id="solutions">` element's `className` (FR-018). **Done.**
+- [X] T004 [US3] Verify: load `/construction` at desktop, tablet, and mobile widths; confirm the
+  hero stat-card overlay, the Challenge eyebrow, and the Solutions section's spacing match
+  `TechGrit Construction.dc.html`; run `npm run lint` and `npm run build`. **Done** — computed
+  styles confirmed exact matches (`rgba(0,0,0,0.6)` / `rgba(255,255,255,0.12)` / `blur(8px)` /
+  `50px`/`30px` padding / no accent span on "The challenge"), `npm run lint` clean, `npm run build`
+  green (18/18 static pages).
+
+**Checkpoint**: FR-016a, FR-017, and FR-018 are complete and independently verified; no other
+`/construction` file or Home Page file was touched.
+
+## Dependencies (User Story 3)
+
+- T001, T002, T003 touch three different files with no shared state — fully parallel.
+- T004 runs last, after T001-T003.
+
+## Parallel Example (User Story 3)
+
+```bash
+# All 3 fixes touch different files and can run together:
+Task: "Fix hero stat-card overlay tokens in construction-hero.tsx (T001)"
+Task: "Add showAccent={false} to Challenge eyebrow in construction-challenges.tsx (T002)"
+Task: "Add pt-[50px] pb-[30px] to Solutions section in construction-solutions.tsx (T003)"
+# Then verify:
+Task: "Load /construction, confirm against reference, run lint + build (T004)"
+```
+
+## Implementation Strategy (User Story 3)
+
+Single increment — T001-T003 in any order or in parallel (different files), then T004 to verify.
+This closes out the FR-016a/FR-017/FR-018 slice of User Story 3; FR-016, FR-019, FR-020, and FR-021
+(the rest of User Story 3) remain a future pass.
+
+---
+
+## Phase 2: User Story 3 (continued) — Construction Page (FR-019, FR-020, FR-021)
+
+**Input**: [plan.md](./plan.md) § "User Story 3 (continued) — Construction Page (FR-019, FR-020,
+FR-021)"
+**Scope**: the remaining 3 requirements of User Story 3 — the "Why TechGrit" eyebrow, "Proven
+Impact" equal-height + per-card-link removal, and the closing CTA's width (via a new opt-in prop on
+the shared `final-cta.tsx`, defaulting to today's value so About is unaffected — Case Studies and
+Services each use their own separate, route-local final-CTA component and never touch this file).
+Reference: `TechGrit Construction.dc.html` exclusively (spec.md Clarifications, Session 2026-08-07).
+Continues this same story's task numbering — **T005** onward, same `[US3]` label — rather than a
+new T001 block, since it's the same user story, not a new independent one.
+
+**Goal**: FR-019, FR-020, FR-021 — the "Why TechGrit" eyebrow shows no leading accent, Proven Impact
+cards render at equal height with no per-card link, and the closing CTA renders at the reference's
+wider `1280px` container with no change to About.
+
+**Independent Test**: Load `/construction`; confirm the "Why TechGrit" eyebrow shows no leading
+accent-line span, the 3 Proven Impact cards render at equal height in their row regardless of
+description length and are no longer individually clickable (no `<a>` wrapper, hover lift still
+present), and the closing CTA renders at `1280px` — then load `/about` and confirm its closing CTA
+still renders at `1180px`, unchanged (Case Studies and Services need no check — they never consume
+`components/ui/final-cta.tsx`).
+
+- [X] T005 [P] [US3] In `app/construction/_components/construction-advantage.tsx`, add
+  `showAccent={false}` to the `<SectionEyebrow>{section.eyebrow}</SectionEyebrow>` call (FR-019). **Done.**
+- [X] T006 [P] [US3] In `app/construction/_components/construction-impact.tsx`, remove the
+  `<a key={caseStudy.order} href={caseStudy.link} className="block">...</a>` wrapper around each
+  Proven Impact card; `<GlassCard key={caseStudy.order} variant="constructionImpact"
+  hoverBorderColor="">` becomes the direct child of the grid (FR-020 — this also resolves
+  equal-height for free via the grid's own default `align-items: stretch` once `GlassCard` is the
+  direct grid item; no new class needed). The "Read case study →" `<span>` inside each card is kept
+  as-is, now non-interactive decorative text. **Done.**
+- [X] T007 [P] [US3] In `components/ui/final-cta.tsx`, add an optional `maxWidth?: number` prop
+  (default `1180`) to the component's props type, and consume it in the `tg-container`'s
+  `style={{ maxWidth: maxWidth, ... }}` in place of the current hardcoded `1180` (FR-021, width
+  only — additive, non-breaking; every existing consumer keeps rendering at `1180px` unchanged). **Done.**
+- [X] T008 [US3] In `app/construction/page.tsx`, add `maxWidth={1280}` to the page's `<FinalCta>`
+  call — depends on T007 (the prop must exist first) (FR-021). **Done.**
+- [X] T009 [US3] Verify: load `/construction` at desktop, tablet, and mobile widths; confirm the
+  "Why TechGrit" eyebrow, Proven Impact cards (equal height, no per-card link, hover lift intact),
+  and the closing CTA's `1280px` width. Load `/about`, `/case-studies`, and `/services` and confirm
+  each still renders its closing CTA at `1180px`, unchanged. Run `npm run lint` and `npm run build`.
+  **Done** — computed styles confirmed: "Why TechGrit" has no accent span, "Proven impact" keeps its
+  accent (out of scope, unchanged), all 3 impact cards measure identical heights (293.97px each),
+  0 anchors inside the Proven Impact grid, `/construction`'s closing CTA measures `1280px`,
+  `/about`/`/case-studies`/`/services` all measure `1180px` unchanged. `npm run lint` clean.
+  **Correction**: initial blast-radius analysis (plan.md) wrongly listed Case Studies and Services
+  as sharing `components/ui/final-cta.tsx` (a substring-grep false positive on `final-cta"` matching
+  their own separate `case-studies-final-cta.tsx`/`services-final-cta.tsx`) — corrected in spec.md
+  and plan.md; the implementation itself (opt-in prop, About-only default concern) was already
+  correct regardless.
+
+**Checkpoint**: FR-019, FR-020, and FR-021 are complete; FR-016 needs no implementation (already
+true — no `/industries` route exists); User Story 3 (spec.md) is now fully implemented. About's
+closing CTA is unaffected; Case Studies and Services never touch the shared component at all.
+
+## Dependencies (User Story 3, FR-019/20/21)
+
+- T005, T006, T007 touch three different files with no shared state — fully parallel.
+- T007 → T008 (the `maxWidth` prop must exist before `construction/page.tsx` can pass it).
+- T009 runs last, after T005-T008.
+
+## Parallel Example (User Story 3, FR-019/20/21)
+
+```bash
+# T005, T006, and T007 touch different files and can run together:
+Task: "Add showAccent={false} to Why TechGrit eyebrow in construction-advantage.tsx (T005)"
+Task: "Remove per-card <a> wrapper in construction-impact.tsx (T006)"
+Task: "Add optional maxWidth prop to components/ui/final-cta.tsx (T007)"
+# Then, once T007 lands:
+Task: "Pass maxWidth={1280} in construction/page.tsx's <FinalCta> call (T008)"
+# Then verify:
+Task: "Load /construction + /about + /case-studies + /services, confirm against reference, run lint + build (T009)"
+```
+
+## Implementation Strategy (User Story 3, FR-019/20/21)
+
+T005-T007 in parallel (different files), then T008 (depends on T007), then T009 to verify. This
+completes every FR in User Story 3 (spec.md); User Stories 2 and 4-9 remain a future pass each.
+
+---
+
+# Tasks: User Story 6 — Webinar Page (FR-030, FR-031)
+
+**Input**: [plan.md](./plan.md) § "User Story 6 — Webinar Page (FR-030, FR-031)"
+**Scope**: exactly 2 requirements on the existing `/webinar` page — moving the upcoming webinar's
+details out of the sessions grid's `UpcomingPanel` into a new full-width announcement strip
+positioned above the hero (FR-030), and removing that "Upcoming Live" panel from the sessions list
+while correcting the one released-card color value that wasn't already reference-exact (FR-031).
+Reference: `TechGrit Webinar.dc.html` exclusively (spec.md Clarifications, Session 2026-08-07, Story
+6 block).
+
+**Independent task-ID block**: this story's tasks restart at **T001** in their own `[US6]` namespace,
+deliberately separate from every other user story's task sequence above, so a teammate working Home
+Page, Construction, or any other user story in parallel can identify and touch this block without
+renumbering collisions. No dependency exists between this block and any other story's tasks.
+
+## Story 6 — Webinar Page (FR-030, FR-031)
+
+**Goal**: the upcoming webinar's details render in a new announcement strip above the hero (not
+inside the hero's own two-column grid, and no longer as a separate "Upcoming Live" panel in the
+sessions grid), and the "Sessions" heading plus every released-session card match
+`TechGrit Webinar.dc.html`'s colors and typography exactly.
+
+**Independent Test**: Load `/webinar` at desktop, tablet, and mobile widths; confirm the announcement
+strip renders above the hero (status label, session title/date, a Register control that scrolls to
+`#subscribe`), stacks to a single column at the `sm` breakpoint, that the sessions grid no longer
+shows a separate "Upcoming Live" panel, and that the first released card's cover gradient matches the
+reference's orange accent exactly — independently of every other page's state.
+
+- [X] T001 [US6] In `app/tokens.css`, add 4 new tokens in their respective existing numbered
+  sections: `--gradient-webinar-announce: linear-gradient(90deg, rgba(245, 158, 11, 0.14), rgba(232,
+  119, 34, 0.05));` (§ Gradients), `--color-border-amber-35: rgba(245, 158, 11, 0.35);` and
+  `--color-border-amber-70: rgba(245, 158, 11, 0.70);` (§ Borders), `--shadow-webinar-announce: 0 12px
+  40px -18px rgba(232, 119, 34, 0.5);` (§ Shadows), and `--gradient-webinar-released-orange: linear-
+  gradient(150deg, rgba(232, 119, 34, 0.18), rgba(2, 132, 199, 0.06));` (§ Gradients) (FR-030, FR-031).
+  **Done. Correction (discovered during implementation)**: the strip's status label needed a 5th new
+  token not identified during planning — `--ls-announce-label: 0.14em;` (§ Typography), matching
+  `TechGrit Webinar.dc.html`'s literal `letter-spacing:0.14em` on this label (deliberately not a reuse
+  of the value-identical `--ls-hint`/`--ls-blog-meta`/`--ls-life-cap`, per this file's own established
+  per-job-token convention) — plus its `@theme inline` mapping (`--tracking-announce-label`) in
+  `app/globals.css`, so `tracking-announce-label` becomes a canonical Tailwind utility. The label's
+  font-size (`11.5px`) and font-weight (`800`) and the session-detail text's color (`rgba(255,255,255,
+  0.92)`) all turned out to already have exact-match tokens (`--text-xs-alt`, `--fw-extrabold`,
+  `--color-text-strong`) — reused verbatim via their canonical classes (`text-xs-alt`,
+  `font-extrabold`, `text-strong`), no further new tokens needed.
+- [X] T002 [P] [US6] Create `app/webinar/_components/announcement-strip.tsx` — a full-width strip
+  accepting `{ session: UpcomingSession }`, rendered as a `grid grid-cols-[auto_1fr_auto]
+  items-center gap-[22px] max-tg-sm:grid-cols-1 max-tg-sm:gap-3` row inside a `rounded-[16px]
+  border-[var(--color-border-amber-35)] hover:border-[var(--color-border-amber-70)]
+  bg-[image:var(--gradient-webinar-announce)] shadow-[var(--shadow-webinar-announce)]
+  backdrop-blur-cta` wrapper: a status label (`"Upcoming · Live"`-style span with a
+  `status-dot bg-yellow shadow-glow-amber-sm animate-[tgblink_1.8s_ease-in-out_infinite]
+  motion-reduce:animate-none` dot), the session's title + date/time on one line, and a "Register"
+  `<button>` that calls `document.getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" })`
+  — depends on T001 for the new tokens (FR-030). **Done.**
+- [X] T003 [P] [US6] In `app/webinar/_components/sessions-section.tsx`: remove the `UpcomingPanel`
+  function and its `<UpcomingPanel session={upcomingSession} />` render call from `SessionsSection`;
+  remove `upcomingSession` from `SessionsSection`'s prop type and destructuring; change
+  `RELEASED_ACCENT_COVER.orange` from `"bg-[image:var(--gradient-blog-featured)]"` to
+  `"bg-[image:var(--gradient-webinar-released-orange)]"` — depends on T001 for the new gradient token
+  (FR-031). **Done** — `ClockIcon` and `UpcomingSession` imports removed as a direct consequence
+  (both became unused once `UpcomingPanel` was deleted); `Button`, `GlassCardTitle`,
+  `GlassCardDescription`, and `PlayIcon` remain in use by the released-card renderers.
+- [] T004 [US6] In `app/webinar/page.tsx`, render `<AnnouncementStrip session={webinarPageContent.
+  upcomingSession} />` between `<HeroSection>` and `<SessionsSection>`, and remove the
+  `upcomingSession={webinarPageContent.upcomingSession}` prop from the `<SessionsSection>` call —
+  depends on T002 (component must exist) and T003 (prop must be removed from `SessionsSection`) (FR-030).
+  **Done** — `<AnnouncementStrip>` renders first, before `<HeroSection>`, matching the reference's own
+  DOM order (the strip sits above the hero `<section>`, not inside it).
+- [X] T005 [US6] Verify: load `/webinar` at desktop, tablet, and mobile widths; confirm the
+  announcement strip renders above the hero with correct status-dot blink, title/date line, and
+  working Register scroll-to-subscribe; confirm it stacks to one column at the `sm` breakpoint;
+  confirm the sessions grid shows no "Upcoming Live" panel; confirm the first released card's cover
+  gradient matches the reference's `rgba(232,119,34,0.18)…` exactly (not the prior `0.20` Blog-borrowed
+  value); run `npm run lint` and `npm run build`.
+
+**Checkpoint**: FR-030 and FR-031 are complete and independently verified; no other `/webinar` file,
+Home Page file, or Construction file was touched.
+
+## Dependencies (User Story 6)
+
+- T001 has no dependency — runs first.
+- T002 and T003 both depend on T001 (new tokens) but touch different files — parallel once T001 lands.
+- T004 depends on both T002 and T003.
+- T005 runs last, after T001-T004.
+
+## Parallel Example (User Story 6)
+
+```bash
+# T001 runs first (new tokens, no dependency):
+Task: "Add 4 new tokens to app/tokens.css (T001)"
+# Then T002 and T003 run together (different files, both depend on T001 only):
+Task: "Create announcement-strip.tsx (T002)"
+Task: "Remove UpcomingPanel + swap orange gradient token in sessions-section.tsx (T003)"
+# Then, once T002 and T003 land:
+Task: "Wire <AnnouncementStrip> into page.tsx, remove upcomingSession prop from <SessionsSection> (T004)"
+# Then verify:
+Task: "Load /webinar, confirm against reference at 3 breakpoints, run lint + build (T005)"
+```
+
+## Implementation Strategy (User Story 6)
+
+T001 first (new tokens), then T002/T003 in parallel (different files, both depend only on T001), then
+T004 (depends on both), then T005 to verify. This completes every FR in User Story 6 (spec.md); User
+Stories 2, 4, 5, and 7-9 remain a future pass each.
+
+---
+
+## Story 6 (continued) — Webinar Page Polish (FR-030a, FR-030b, FR-031a)
+
+**Input**: [plan.md](./plan.md) § "User Story 6 (continued) — Webinar Page Polish (FR-030a, FR-030b,
+FR-031a)"
+**Scope**: 3 direct-instruction items on top of the completed FR-030/FR-031 slice above — the
+announcement strip's Register control moving onto the shared `Button` primitive (FR-030a), `/webinar`'s
+background ambient orbs matching the reference's own 2-orb set (FR-030b), and the sessions grid's
+"Watch Now" buttons rendering with `font-family: Arial` (FR-031a, a deliberate exception to both the
+reference and this app's brand system — see plan.md's Constitution Check for the recorded rationale).
+Continues this same story's task numbering — **T006** onward, same `[US6]` label — rather than a new
+T001 block, since it's the same user story.
+
+**Goal**: FR-030a, FR-030b, FR-031a — the Register control is a `<Button>`, `/webinar`'s background
+shows exactly 2 orbs matching the reference (no 3rd amber orb), and both "Watch Now" buttons render in
+Arial.
+
+**Independent Test**: Load `/webinar`; confirm the announcement strip's Register control is rendered
+by the shared `Button` component (inspect DOM/computed styles) with no visual change from before;
+confirm the page background shows exactly 2 ambient orbs (orange top-right, blue bottom-left at
+`top:1200px`) with no 3rd amber orb; confirm both "Watch Now" buttons compute `font-family: Arial` —
+then load `/`, `/services`, `/about`, `/careers`, `/blog` and confirm each still shows its own
+unaffected orb set (homepage's 4-orb branch, or the shared default 3-orb set elsewhere).
+
+- [X] T006 [P] [US6] In `app/webinar/_components/announcement-strip.tsx`, replace the Register
+  control's bespoke `<button onClick={handleRegisterClick}>` with `<Button onClick=
+  {handleRegisterClick} size="sm" className="...">`, carrying the same `!rounded-[10px] !py-[9px]
+  !px-[18px] !text-[13.5px]` overrides needed to keep its rendered output pixel-identical to before
+  (FR-030a). **Done.**
+- [X] T007 [P] [US6] In `components/ui/ambient-orbs.tsx`, add a `pathname === "/webinar"` branch
+  rendering exactly 2 orbs: the existing default branch's first orb unchanged (`-top-40 -right-30
+  h-140 w-140 bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]`) and its second
+  orb with the vertical offset corrected from `top-225` to `top-300` (`bg-overlay-blue-soft h-130
+  w-130 blur-[130px] animate-[tgorb_20s_ease-in-out_infinite_reverse]`) — the 3rd (amber) orb is not
+  carried over, since the reference has none (FR-030b). **Done.**
+- [X] T008 [P] [US6] In `app/webinar/_components/sessions-section.tsx`, add `style={{ fontFamily:
+  "Arial, sans-serif" }}` to both `ReleasedCardHalf`'s and `ReleasedCardFull`'s "Watch Now" `<Button>`
+  calls (FR-031a). **Done.**
+- [X] T009 [US6] Verify: load `/webinar`; confirm the Register control renders via the shared `Button`
+  component with unchanged visual output; confirm exactly 2 background orbs render (no 3rd amber
+  orb), with the blue orb at the corrected `top:1200px` position; confirm both "Watch Now" buttons
+  compute `font-family: Arial`; load `/`, `/services`, `/about`, `/careers`, and `/blog` and confirm
+  each still renders its own unaffected orb set; run `npm run lint` and `npm run build`.
+
+**Checkpoint**: FR-030a, FR-030b, and FR-031a are complete; FR-030 and FR-031 (above) remain
+unaffected and complete. User Story 6 (spec.md) is now fully implemented.
+
+## Dependencies (Story 6 continued)
+
+- T006, T007, and T008 touch three different files with no shared state — fully parallel.
+- T009 runs last, after T006-T008.
+
+## Parallel Example (Story 6 continued)
+
+```bash
+# T006, T007, and T008 touch different files and can run together:
+Task: "Swap Register control to shared Button in announcement-strip.tsx (T006)"
+Task: "Add /webinar's 2-orb branch to ambient-orbs.tsx (T007)"
+Task: "Add Arial style override to both Watch Now Button calls in sessions-section.tsx (T008)"
+# Then verify:
+Task: "Load /webinar + other routes, confirm against reference, run lint + build (T009)"
+```
+
+## Implementation Strategy (Story 6 continued)
+
+T006-T008 in parallel (different files), then T009 to verify. This completes every FR in User Story 6
+(spec.md); User Stories 2, 4, 5, and 7-9 remain a future pass each.
+
+## Story 5 — Blog Page (FR-027, FR-028, FR-029)
+
+**Input**: [plan.md](./plan.md) § "Story 5 — Blog Page (FR-027, FR-028, FR-029)"
+**Scope**: 3 FRs only — the hero badge's dot indicator (FR-027), the topic filter bar becoming a
+sticky/dark/labeled bar via the existing shared `components/ui/FilterBar.tsx` primitive plus a
+zero-results reset control (FR-028), and the newsletter panel's background token (FR-029). Tracked as
+its own block, independent of every other user story above, so a teammate can work Home Page,
+Construction, Webinar, or any other story in parallel without touching this section or its files.
+Starts its own task numbering at **T001**, distinct from every other story's numbering in this file.
+
+**Goal**: `/blog`'s hero badge shows no dot; the topic filter becomes a dark, sticky, labeled bar
+(wired to the shared `FilterBar` primitive) positioned between the featured post and the grid, with a
+working reset-to-"All" control when a topic matches zero posts; the newsletter panel's background
+matches the reference's `rgba(255,255,255,0.04)`.
+
+**Independent Test**: Load `/blog` at desktop, tablet, and mobile widths; confirm the hero badge shows
+no dot; confirm the filter bar renders as its own sticky element (dark background, visible "Filter"
+label) between the featured post and the grid, and stays stuck to the top of the viewport on scroll;
+select a topic with zero matching posts and confirm a "no results" message plus a working reset
+control appears while the filter bar remains usable; confirm the newsletter panel's background matches
+the reference — independently of every other page's state.
+
+- [X] T001 [US5] In `app/tokens.css`, add one new token in its existing § Typography section:
+  `--ls-filter-label: 0.14em;` (matching `TechGrit Blog.dc.html`'s literal filter-label letter-spacing,
+  line 252 — deliberately not a reuse of the value-identical `--ls-hint`/`--ls-blog-meta`/`--ls-life-
+  cap`/`--ls-announce-label`, per this file's own "one job, one token" convention). In `app/globals.css`'s
+  `@theme inline` block, add `--tracking-filter-label: var(--ls-filter-label);` alongside the sibling
+  `--tracking-hint`/`--tracking-blog-meta`/`--tracking-life-cap`/`--tracking-announce-label` mappings,
+  producing the canonical `tracking-filter-label` utility (FR-028).
+- [X] T002 [P] [US5] In `app/blog/_components/blog-hero.tsx`, remove the dot `<span className="h-2 w-2
+  shrink-0 rounded-full bg-orange shadow-glow-orange" aria-hidden="true" />` from the eyebrow badge
+  (lines 11-14), leaving only the badge's outer pill and label text — matching `TechGrit Blog.dc.html`'s
+  reference badge (line 218-220), which has no dot (FR-027).
+- [X] T003 [P] [US5] In `components/ui/FilterBar.tsx`, correct the label's default classes from
+  `text-xs font-bold tracking-widest text-secondary uppercase` to `text-xs-alt font-bold tracking-
+  filter-label text-ghost uppercase` (11.5px/700/0.14em/`rgba(255,255,255,0.42)`, matching the
+  reference's literal filter-label styling exactly), and change the wrapper's `z-raised` to the
+  arbitrary-value `z-[var(--z-sticky)]` — NOT a bare `z-sticky` class, since `--z-sticky` has no
+  `@theme inline` mapping in `globals.css` and would silently resolve to no z-index at all
+  (Constitution Principle I); this matches `components/layout/Header.tsx:76-77`'s own
+  `z-[var(--z-nav)]` precedent for the same unmapped-token situation. `10` still stays under the
+  sticky nav's own `z-nav` (`100`) — depends on T001 for the new tracking utility (FR-028).
+- [X] T004 [P] [US5] In `app/blog/_components/newsletter-panel.tsx`, change the panel's outer container
+  class from `bg-ink-mid` to `bg-glass-4` (line 31), matching `TechGrit Blog.dc.html`'s literal
+  newsletter-card background (`rgba(255,255,255,0.04)`, an existing exact-match token) (FR-029).
+- [X] T005 [US5] Create `app/blog/_components/blog-filter-bar.tsx` — a client component accepting
+  `{ topics, activeTopic, onSelect }`, rendering `<FilterBar label="Filter"><TopicFilter topics=
+  {topics} activeTopic={activeTopic} onSelect={onSelect} /></FilterBar>` (importing the shared
+  `components/ui/FilterBar.tsx` and the existing `./topic-filter`) — depends on T003 for the corrected
+  shared-component styling (FR-028). Note: `FilterBar` wraps its `children` in its own `flex flex-wrap
+  items-center gap-2.5` div, and `TopicFilter` independently renders an identical wrapper div around
+  its chips — the resulting nested flex wrappers are visually identical and harmless; this is an
+  accepted, intentional redundancy, not a defect to fix by changing `TopicFilter`'s public shape.
+- [X] T006 [US5] In `app/blog/_components/blog-post-grid.tsx`: remove the `activeTopic` `useState`, the
+  `filteredPosts` `useMemo`, the `<TopicFilter>` render call, and the `topics`/`activeTopic`/`onSelect`
+  handling entirely — the component now accepts `{ posts, onReset }` (already-filtered `posts`, plus a
+  reset callback) and is purely presentational; add a "Reset filter" clickable-text control (matching
+  this app's existing secondary-link styling, e.g. the homepage Final CTA's secondary link) beneath the
+  existing "No posts match this topic yet — check back soon." message, calling `onReset` when clicked
+  — depends on T005 (filter bar takes over topic-selection ownership) (FR-028).
+- [X] T007 [US5] Create `app/blog/_components/blog-filterable-section.tsx` — a client component
+  (`"use client"`) accepting `{ topics, posts }`; owns `activeTopic` state and a `filteredPosts` memo
+  (`activeTopic === "All" ? posts : posts.filter((post) => post.topic === activeTopic)`); renders
+  `<BlogFilterBar topics={topics} activeTopic={activeTopic} onSelect={setActiveTopic} />` and
+  `<BlogPostGrid posts={filteredPosts} onReset={() => setActiveTopic("All")} />` as its own two direct
+  children — depends on T005 (`BlogFilterBar` must exist) and T006 (`BlogPostGrid`'s new prop shape)
+  (FR-028).
+- [X] T008 [US5] In `app/blog/page.tsx` (stays a server component — no `"use client"`, matching the
+  existing `app/services/page.tsx`/`app/careers/page.tsx` pattern of keeping `page.tsx` server-only and
+  pushing client state into a dedicated section component): render `<BlogHero>`, `<FeaturedPost>`,
+  `<BlogFilterableSection topics={BLOG_CONTENT.topics} posts={BLOG_CONTENT.posts} />`, and
+  `<NewsletterPanel>` as direct siblings, in that order — matching `TechGrit Blog.dc.html`'s own DOM
+  order (the filter bar sits between the Featured section and the Grid section) — depends on T007
+  (FR-028).
+- [X] T009 [US5] Verify: load `/blog` at desktop, tablet, and mobile widths; confirm the hero badge
+  shows no dot; confirm the filter bar renders as its own sticky element (dark `bg-nav-glass`
+  background, visible "Filter" label at 11.5px/`rgba(255,255,255,0.42)`) positioned between the
+  featured post and the grid, sticking to `top: var(--nav-height)` on scroll independent of the grid's
+  own scroll position; confirm `app/blog/page.tsx` remains a server component with no `"use client"`
+  directive; select a topic matching zero posts and confirm the "no results" message plus the "Reset
+  filter" control appear, and that clicking it restores "All" and the full grid, with the filter bar
+  remaining usable throughout; confirm the newsletter panel's background matches
+  `rgba(255,255,255,0.04)`; run `npm run lint` and `npm run build`.
+
+**Checkpoint**: FR-027, FR-028, and FR-029 are complete and independently verified; no other `/blog`
+file, Home Page file, Construction file, Webinar file, or Case Studies file was touched (Case Studies'
+own FR-024 remains a future slice, now able to reuse the same corrected `FilterBar.tsx` unchanged).
+
+## Dependencies (Story 5)
+
+- T001 blocks T003 (new tracking utility must exist before `FilterBar.tsx` consumes it).
+- T002 and T004 are independent of everything else in this story — different files, no shared state.
+- T003 blocks T005 (filter bar wraps the corrected shared component).
+- T005 blocks T006 (grid's new presentational prop shape depends on the filter bar taking over topic
+  selection) and T007 (`blog-filterable-section.tsx` renders `BlogFilterBar`).
+- T006 blocks T007 (`blog-filterable-section.tsx` renders `BlogPostGrid`'s new prop shape).
+- T007 blocks T008 (`page.tsx` renders `BlogFilterableSection`).
+- T009 runs last, after T001-T008.
+
+## Parallel Example (Story 5)
+
+```bash
+# T002 and T004 touch different files with no shared state and can run immediately:
+Task: "Remove the dot span from blog-hero.tsx's eyebrow badge (T002)"
+Task: "Swap newsletter-panel.tsx's bg-ink-mid to bg-glass-4 (T004)"
+# T001 must land first, then T003 can run:
+Task: "Add --ls-filter-label token + tracking-filter-label mapping (T001)"
+Task: "Correct FilterBar.tsx's label typography and z-index (T003)"
+# Then, in order: T005 → T006 → T007 → T008 → T009
+```
+
+## Implementation Strategy (Story 5)
+
+T001 first (new token), then T002/T003/T004 in parallel (T003 depends only on T001), then T005 (new
+`BlogFilterBar`), then T006 (grid becomes presentational), then T007 (new `BlogFilterableSection`
+client wrapper owning filter state), then T008 (`page.tsx` — stays a server component, renders the new
+wrapper), then T009 to verify. This completes every FR in User Story 5 (spec.md).
+
+---
+
 # Careers
 
 **Page**: `/careers` (User Story 8, spec.md). **Task IDs below restart at `T001`**, scoped to this

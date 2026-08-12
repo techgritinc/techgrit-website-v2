@@ -14,20 +14,30 @@ export function FinalCta({
   tone = "orange",
   paddingTop = 40,
   titleLineHeight,
+  maxWidth = 1180,
+  paddingBottom = 110,
+  primaryBtnClassName = "",
+  secondaryBtnClassName = "",
+  cardClassName = "",
 }: {
   section: FinalCtaContent;
   tone?: "orange" | "amber";
   paddingTop?: number | string;
   titleLineHeight?: number | string;
+  maxWidth?: number;
+  paddingBottom?: number | string;
+  primaryBtnClassName?: string;
+  secondaryBtnClassName?: string;
+  cardClassName?: string;
 }) {
   const glow = tone === "amber" ? "var(--color-overlay-amber-strong)" : "var(--color-overlay-orange-strong)";
   const eyebrowColor = tone === "amber" ? "var(--color-amber-light)" : "var(--color-orange)";
   return (
     <section>
-      <div className="tg-container" style={{ maxWidth: 1180, paddingTop: paddingTop, paddingBottom: 110 }}>
+      <div className="mx-auto px-9 w-full" style={{ maxWidth: maxWidth, paddingTop: paddingTop, paddingBottom: paddingBottom }}>
           <div
-            className="glass-card glass-card-lg mx-auto text-center"
-            style={{ position: "relative", overflow: "hidden",padding:"var(--space-27) var(--space-16a)" }}
+            className={`glass-card glass-card-lg mx-auto text-center ${cardClassName}`}
+            style={{ position: "relative", overflow: "hidden", padding: "var(--space-27) var(--space-16a)" }}
           >
             <div
               aria-hidden="true"
@@ -51,6 +61,7 @@ export function FinalCta({
                   letterSpacing: "var(--ls-widest)",
                   textTransform: "uppercase",
                   color: eyebrowColor,
+                  lineHeight: "normal",
                 }}
               >
                 {section.eyebrow}
@@ -70,6 +81,7 @@ export function FinalCta({
                   href={section.ctaLink}
                   variant="primary"
                   size="lg"
+                  className={primaryBtnClassName}
                   style={{
                     gap: "10px",
                     padding: "17px 34px",
@@ -90,7 +102,7 @@ export function FinalCta({
                 {section.secondaryCta && (
                   <Button
                     href={section.secondaryCta.link}
-                    className="leading-[normal] text-[16px]"
+                    className={`leading-[normal] text-[16px] ${secondaryBtnClassName}`}
                     variant="ghost"
                     size="lg"
                   >

@@ -1508,6 +1508,874 @@ Research (Phase 0 of this addendum) confirmed the new token value against the re
 confirmed the sitewide `max-w-(--container-max)` idiom as the correct replacement for the literal
 `max-w-[1180px]`, before any file changed. No new violations. Gate: PASS.
 
+---
+
+## User Story 3 — Construction Page (FR-016a, FR-017, FR-018)
+
+**Date**: 2026-08-07 | **Spec**: [spec.md](./spec.md), User Story 3 (Industries (`/construction`)
+page reference alignment), scoped to **only** FR-016a, FR-017, and FR-018 — the `/construction`
+hero's ghost button + metrics-panel background, the Challenge section's eyebrow, and "What We
+Build"'s spacing.
+
+**Reference**: `raw-files-v2/TechGrit Website V2.2/TechGrit Construction.dc.html` exclusively (spec.md
+Clarifications, Session 2026-08-07) — **not** `TechGrit Industries.dc.html`, which describes the
+unbuilt multi-industry hub and is out of scope entirely.
+
+**Scope note**: this is an independent slice, unrelated to Home Page (User Story 1) above — it is
+tracked as its own block precisely so a teammate can work User Story 1's remaining pieces (or any
+other story) in parallel without touching this section or its files. It covers **only** the 3 FRs
+named above. FR-016 (no new `/industries` route), FR-019 ("Why TechGrit" eyebrow), FR-020 (Proven
+Impact equal-height cards), and FR-021 (final CTA width/buttons) — the rest of User Story 3 — remain
+unplanned. No Home Page file (`app/_home-components/*`, `app/page.tsx`) is touched.
+
+### Summary
+
+Reading `TechGrit Construction.dc.html` directly against today's `/construction` implementation
+shows the ghost button is **already reference-exact** (Phase 1's shared `Button.tsx` ghost-variant
+tokens — `--gradient-ghost`, `--color-border-ghost`, `--shadow-btn-ghost`, `--blur-ghost` — were
+already byte-matched against this same file, per this plan's Phase 1 Constitution Check: "Ghost-button
+values read directly from `TechGrit Homepage.dc.html`... and `TechGrit Construction.dc.html` —
+byte-identical"). `construction-hero.tsx`'s secondary "See Solutions" CTA already renders
+`<Button variant="ghost">`, so FR-016a's ghost-button clause needs **no code change** — only the
+metrics-panel background needs correcting. Three concrete fixes result:
+
+1. **`app/construction/_components/construction-hero.tsx`** (FR-016a, metrics-panel background
+   only) — the hero image's 3-stat overlay (`<30d` / `1000s` / `24/7`) currently uses
+   `background: "rgba(10,24,34,0.6)"`, `border: "1px solid var(--color-border-strong)"` (0.16), and
+   `backdropFilter: blur(var(--blur-sm))` (6px). The reference's own stat-card panel (lines 246-249)
+   is `background:rgba(0,0,0,0.6)`, `border:1px solid rgba(255,255,255,0.12)`,
+   `backdrop-filter:blur(8px)` — all three already exist as exact-value tokens in this codebase
+   (`--color-ink-glass-60`, `--color-border`, `--blur-md`), so this is a 3-line value swap, not a
+   new token addition. No ghost-button change needed (already correct, see above).
+2. **`app/construction/_components/construction-challenges.tsx`** (FR-017) — the Challenge section's
+   `<SectionEyebrow>{section.eyebrow}</SectionEyebrow>` call currently renders with its default
+   `showAccent` (`true`), showing a leading accent-line span the reference's own "The challenge"
+   eyebrow (line 276) does not have. Add `showAccent={false}`, the same prop FR-006/FR-019/FR-033
+   already use elsewhere — no new component work, `SectionEyebrow`'s toggle already exists (Phase 1,
+   T003).
+3. **`app/construction/_components/construction-solutions.tsx`** (FR-018) — the "What We Build"
+   `<section id="solutions">` currently carries no vertical padding of its own at all (`className=""`
+   on the section element), while the reference's own SOLUTIONS section (line 306-307) is
+   `padding:50px 36px 30px` (horizontal 36px already comes from the shared `.tg-container` inside
+   it). Add `pt-[50px] pb-[30px]` to the section element to match. The header's `mb-[40px]` margin
+   and the card grid's `gap-[22px]` already match the reference's own `margin-bottom:40px` (line 308)
+   and `gap:22px` (line 312) exactly — no change needed to either.
+
+Nothing else changes. `construction-hero.tsx`'s hero copy/CTA-link/headline, `construction-
+challenges.tsx`'s challenge cards/icons/grid, and `construction-solutions.tsx`'s solution
+cards/icons/grid are already reference-correct (or out of this slice's scope) and untouched. No
+other `/construction` component (`construction-integrations-strip.tsx`,
+`construction-lifecycle-diagram.tsx`, `construction-advantage.tsx`, `construction-impact.tsx`) is
+touched — their own requirements (FR-016, FR-019, FR-020, FR-021) remain unplanned.
+
+### Technical Context (User Story 3 slice)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo;
+manual verification, see quickstart.md addendum) · **Target Platform**: Web · **Project Type**:
+single Next.js App Router app · **Performance Goals**: N/A (CSS-only value corrections) ·
+**Constraints**: no new libraries; no new tokens (all 3 fixes reuse existing exact-value tokens); zero
+visual change to any `/construction` section other than the hero's stat-card overlay, the Challenge
+eyebrow, and the Solutions section's own vertical padding · **Scale/Scope**: 3 existing files edited,
+0 new files, 0 new tokens.
+
+### Constitution Check (User Story 3 slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS. All 3 corrected values (`--color-ink-glass-60`,
+  `--color-border`, `--blur-md`) already exist in `tokens.css` as exact matches for the reference's
+  `rgba(0,0,0,0.6)` / `rgba(255,255,255,0.12)` / `8px` — reused verbatim, no new token added. The
+  Solutions section's `50px`/`30px` padding uses literal arbitrary-value Tailwind classes since no
+  existing spacing token matches either value exactly (consistent with this plan's own established
+  precedent of not spawning a token for a single, section-specific usage — see the Re-Imagine Grid
+  addendum's `h-[180px]` decision above).
+- **II (Breakpoints)** — PASS, not applicable (no new breakpoint introduced).
+- **III (Component Library)** — PASS. No component is forked or duplicated: `SectionEyebrow`'s
+  existing `showAccent` prop (Phase 1, T003) is reused as-is; `Button`'s existing `ghost` variant is
+  reused as-is (no change needed).
+- **IV (References Are Visual Truth)** — PASS. Every corrected value is read directly from
+  `TechGrit Construction.dc.html` (lines 246-249, 276, 306-312) — not `TechGrit Industries.dc.html`,
+  per the spec's Session 2026-08-07 clarification.
+- **V (Dark-First Brand)** — PASS. No new surface fill; the stat-card overlay stays a translucent
+  black glass panel, matching the reference and the app's existing dark-first convention.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- No violations — Complexity Tracking is empty.
+
+### UI Design Approach (User Story 3 slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's one visible craft surface — the
+hero's stat-card overlay's background/border/blur correction. Takeaway applied: dropping the overlay
+from `rgba(10,24,34,0.6)` (the app's ink-tinted default) to the reference's neutral
+`rgba(0,0,0,0.6)` reads as intentional rather than a regression, because the surrounding hero image
+already sits on the page's own black background (post-TMS-85 migration) — the ink tint was a holdover
+from before that migration and no longer serves a visible purpose here; removing it lets the stat
+cards recede quietly into the image's own gradient overlay instead of introducing a second, subtly
+different dark tone next to it. The Challenge eyebrow's accent-removal and the Solutions section's
+padding correction are non-visual-judgment, reference-exact value fixes with no further craft
+decision to make.
+
+**Reconciliation with Principles I–V**: none needed — the skill's guidance confirmed Principle IV
+(reference is visual truth) without surfacing any conflict with Principles I/III/V.
+
+**Anchor files**: `app/construction/_components/construction-hero.tsx` (stat-card overlay value
+swap only), `app/construction/_components/construction-challenges.tsx` (`showAccent={false}`),
+`app/construction/_components/construction-solutions.tsx` (section padding).
+
+### Project Structure (User Story 3 slice)
+
+```text
+app/construction/_components/
+├── construction-hero.tsx         # stat-card overlay: background/border/blur → existing tokens
+├── construction-challenges.tsx   # <SectionEyebrow showAccent={false}>
+└── construction-solutions.tsx    # <section id="solutions" className="pt-[50px] pb-[30px]">
+```
+
+No `data-model.md`/`contracts/` (presentation-only, same as every other slice in this plan). No
+other file is touched — not `app/construction/page.tsx`, not `app/tokens.css`, not `app/globals.css`
+(no new tokens needed for this slice).
+
+**Structure Decision**: existing single-project structure. All 3 edits stay inside
+`app/construction/_components/`, the route-local private folder already established for this page —
+no shared-primitive or `components/ui/` change is needed since every value/prop this slice needs
+already exists.
+
+### Complexity Tracking (User Story 3 slice)
+
+*Empty — no violations.*
+
+### Post-Design Constitution Re-Check (User Story 3 slice, FR-016a/17/18)
+
+Research (Phase 0 of this slice) confirmed all 3 corrected values already exist as exact-match
+tokens before any file changed, and confirmed the ghost button needed no change at all (already
+byte-matched during Phase 1). No new violations. Gate: PASS.
+
+## User Story 3 (continued) — Construction Page (FR-019, FR-020, FR-021)
+
+**Date**: 2026-08-07. Extends the same "User Story 3 — Construction Page" block above to cover the
+remaining 3 requirements of User Story 3 — the "Why TechGrit" eyebrow, "Proven Impact" equal-height
+cards, and the closing CTA — per spec.md Clarifications Session 2026-08-07. FR-016a, FR-017, and
+FR-018 above are complete and unaffected. FR-016 (no new `/industries` route) needs no
+implementation (it's a negative/already-true requirement). No Home Page file is touched.
+
+**Reference**: `TechGrit Construction.dc.html` exclusively, same as the FR-016a/17/18 slice above —
+not `TechGrit Industries.dc.html`.
+
+### Summary (FR-019/20/21)
+
+1. **`app/construction/_components/construction-advantage.tsx`** (FR-019) — the "Why TechGrit"
+   `<SectionEyebrow>{section.eyebrow}</SectionEyebrow>` call currently renders with its default
+   `showAccent` (`true`), showing a leading accent-line span the reference's own "Why TechGrit"
+   eyebrow (line 409) does not have. Add `showAccent={false}` — the same prop FR-017 already used
+   one component over; no new component work.
+2. **`app/construction/_components/construction-impact.tsx`** (FR-020) — each Proven Impact card is
+   currently wrapped in `<a key={caseStudy.order} href={caseStudy.link} className="block">`, making
+   the whole card individually clickable — the per-card link the Session 2026-08-03 Clarifications
+   already decided to remove (a deliberate divergence from the reference, which does wrap its own 3
+   cards in `<a href="TechGrit Contact.dc.html">`, line 431 — an approved exception, same pattern as
+   SC-001's other two recorded exceptions). Remove the `<a>` wrapper entirely; `<GlassCard
+   key={caseStudy.order} variant="constructionImpact" hoverBorderColor="">` becomes the direct grid
+   child. This also resolves the equal-height half of FR-020 as a direct side effect, with no
+   additional class needed: today, the `<a className="block">` element is the actual CSS grid item
+   and already stretches to the row's full height under the grid's own default `align-items: stretch`,
+   but the un-stretched `GlassCard` div nested inside it does not fill that stretched space — once
+   `GlassCard` itself becomes the direct grid item, the same default `stretch` behavior applies to it
+   natively, giving every card in a row equal height regardless of its own content length, without a
+   new `h-full` class or any other CSS. The "Read case study →" `<span>` inside each card stays as
+   static, non-interactive decorative text (matching the reference's own literal copy) — it was never
+   itself a link even today (the whole card was), so removing only the outer `<a>` leaves it exactly
+   as visually present as before, just no longer clickable, which is the requirement.
+3. **`components/ui/final-cta.tsx`** (FR-021, width only) — add an optional `maxWidth?: number`
+   prop (default `1180`, the component's current literal value) consumed by the `tg-container`'s
+   inline `style={{ maxWidth, ... }}` in place of the current hardcoded `1180`. This is additive and
+   non-breaking: its one other existing consumer, `app/about/page.tsx`, omits the new prop and keeps
+   rendering at exactly `1180px`, unchanged (spec.md Clarifications, Session 2026-08-07 — the
+   opt-in-prop decision, chosen specifically to avoid widening that other page's CTA ahead of its own
+   FR-034). **Correction (post-implementation verification)**: Case Studies and Services were
+   initially believed to share this same component — a false positive from a substring grep match on
+   `final-cta"` (their own `case-studies-final-cta.tsx`/`services-final-cta.tsx` are separate,
+   route-local components that never import `components/ui/final-cta.tsx`). Verified via
+   import-statement search and live computed-style checks post-implementation: both already render
+   at `1180px` via their own components, unaffected by this change either way.
+4. **`app/construction/page.tsx`** (FR-021, width only) — the page's `<FinalCta>` call gains
+   `maxWidth={1280}`, matching `TechGrit Construction.dc.html`'s own CTA container width (line 458).
+   No other prop on this call changes.
+
+**Deliberately not changed**: FR-021's "updated styling for both action buttons" clause is satisfied
+for the ghost (secondary) button by the same shared `Button` `ghost` variant already confirmed
+byte-exact against this reference during the FR-016a slice above — no further change needed. The
+primary button's box-shadow shows a small delta against the reference's literal
+`0 18px 44px -12px rgba(232,119,34,0.85)` (`--shadow-btn-primary`/`--shadow-btn-hover` are
+`0 14px 36px -10px rgba(232,119,34,0.75)` / `0 18px 44px -10px rgba(232,119,34,0.90)`), but both
+tokens are shared sitewide by every primary CTA button (Hero, Subscribe, every other page's final
+CTA) — forking or retuning them here would be the same kind of uncontrolled blast-radius change the
+width prop above was specifically designed to avoid, for a sub-visible glow-shadow delta, not a
+structural mismatch. Left as-is, consistent with this plan's own established precedent of not
+chasing sub-pixel/sub-opacity deltas on shared, cross-cutting tokens (see the stat-divider-border
+and hero-token-consolidation precedents earlier in this plan). The primary/ghost buttons' padding
+and border-radius are already corrected via each button's existing per-instance style overrides in
+`final-cta.tsx` (unchanged by this slice).
+
+Nothing else changes. `construction-advantage.tsx`'s advantage-points list, `construction-
+impact.tsx`'s card content/metrics, and `final-cta.tsx`'s card background/border/radius/blur/glow are
+already reference-correct (or out of this slice's scope) and untouched.
+
+### Technical Context (FR-019/20/21 slice)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (manual verification, see quickstart.md
+addendum) · **Target Platform**: Web · **Project Type**: single Next.js App Router app ·
+**Performance Goals**: N/A (markup simplification + one additive prop) · **Constraints**: no new
+libraries; the new `maxWidth` prop on `components/ui/final-cta.tsx` MUST default to `1180` so its 4
+other consumers (About, Case Studies hub + detail, Services) render pixel-identical to today ·
+**Scale/Scope**: 3 existing files edited (`construction-advantage.tsx`, `construction-impact.tsx`,
+`final-cta.tsx`) + 1 existing file's call-site updated (`construction/page.tsx`), 0 new files, 0 new
+tokens.
+
+### Constitution Check (FR-019/20/21 slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS. No new literal color/spacing/shadow value is introduced; the
+  `maxWidth` prop carries a plain number (a layout dimension, not a design-token-governed value,
+  consistent with how `paddingTop`/`titleLineHeight` are already plain-typed props on this same
+  component). The primary-button shadow delta is knowingly left on the existing shared tokens rather
+  than forked (see Summary above) — an explicit, recorded acceptance, not a Principle I gap.
+- **II (Breakpoints)** — PASS, not applicable.
+- **III (Component Library)** — PASS. `components/ui/final-cta.tsx` is extended with one optional,
+  default-preserving prop — not forked — so About keeps consuming the exact same component,
+  unchanged (Case Studies and Services each have their own separate, route-local final-CTA
+  component and never touch this file at all). `SectionEyebrow`'s existing `showAccent` prop and
+  `GlassCard`'s existing `constructionImpact` variant are both reused as-is.
+- **IV (References Are Visual Truth)** — PASS. The eyebrow fix and CTA width are read directly from
+  `TechGrit Construction.dc.html` (lines 409, 458). The per-card link removal is a knowing,
+  spec-recorded exception to the reference (Session 2026-08-03) — Principle IV's "reference is
+  visual truth" is honored everywhere else in this slice.
+- **V (Dark-First Brand)** — PASS. No new surface fill; no light-surface token introduced.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- No violations — Complexity Tracking is empty.
+
+### UI Design Approach (FR-019/20/21 slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's one genuine craft question — how
+removing the Proven Impact cards' per-card link should read visually once it's no longer
+interactive. Takeaway applied: keeping the "Read case study →" copy in place (rather than deleting
+it outright) preserves the reference's own visual rhythm and the card's sense of narrative
+completion — the arrow reads as "this case closes here," not strictly as a functional affordance,
+so a sighted user scanning the grid doesn't perceive a missing element. The hover lift
+(`hover:-translate-y-[6px]`, already on the `constructionImpact` variant) stays as the card's only
+interactive-feeling cue, correctly signaling "this card is still worth reading" without implying
+"this card is clickable." The eyebrow accent-removal and CTA width change are non-visual-judgment,
+reference-exact value fixes with no further craft decision to make.
+
+**Reconciliation with Principles I–V**: none needed — the skill's guidance confirmed Principle IV
+(reference is visual truth, with one explicitly-recorded exception) without surfacing any conflict
+with Principles I/III/V.
+
+**Anchor files**: `app/construction/_components/construction-advantage.tsx` (`showAccent={false}`),
+`app/construction/_components/construction-impact.tsx` (`<a>` wrapper removed, `GlassCard` becomes
+direct grid child), `components/ui/final-cta.tsx` (new optional `maxWidth` prop),
+`app/construction/page.tsx` (`<FinalCta maxWidth={1280}>`).
+
+### Project Structure (FR-019/20/21 slice)
+
+```text
+app/construction/_components/
+├── construction-advantage.tsx   # <SectionEyebrow showAccent={false}>
+└── construction-impact.tsx      # <a href> wrapper removed; <GlassCard> is now the direct grid child
+
+components/ui/
+└── final-cta.tsx                 # + optional maxWidth?: number prop (default 1180, non-breaking)
+
+app/construction/page.tsx          # <FinalCta ... maxWidth={1280}>
+```
+
+No `data-model.md`/`contracts/` (presentation-only, same as every other slice in this plan). No
+`app/tokens.css`/`app/globals.css` change (no new tokens needed). `app/about/page.tsx` is
+unaffected — its `<FinalCta>` call omits the new prop and keeps rendering at `1180px`. Case Studies
+(`app/case-studies/page.tsx`, `app/case-studies/[slug]/page.tsx`) and Services (`app/services/page.tsx`)
+never touch `components/ui/final-cta.tsx` at all — each renders its closing CTA via its own
+route-local component (`case-studies-final-cta.tsx`, `services-final-cta.tsx`).
+
+**Structure Decision**: existing single-project structure. The 2 route-local edits stay inside
+`app/construction/_components/`; `final-cta.tsx`'s new prop follows the same additive,
+default-preserving convention already used for its existing `tone`/`paddingTop`/`titleLineHeight`
+props, so no new shared-primitive file or fork is needed.
+
+### Complexity Tracking (FR-019/20/21 slice)
+
+*Empty — no violations.*
+
+### Post-Design Constitution Re-Check (FR-019/20/21 slice)
+
+Research (Phase 0 of this slice) confirmed the reference values for the eyebrow and CTA width, and
+confirmed the shared `final-cta.tsx` component's one other consumer (About) before any file changed
+— the opt-in `maxWidth` prop's default was verified to reproduce its current `1180px` rendering
+exactly. Post-implementation, live computed-style checks confirmed `/about` still renders at
+`1180px`, `/construction` renders at the new `1280px`, and `/case-studies`/`/services` (each on
+their own separate, route-local final-CTA component) are untouched at `1180px` regardless. No new
+violations. Gate: PASS.
+
+### Post-Design Constitution Re-Check (User Story 3 slice)
+
+Research (Phase 0 of this slice) confirmed all 3 corrected values already exist as exact-match
+tokens before any file changed, and confirmed the ghost button needed no change at all (already
+byte-matched during Phase 1). No new violations. Gate: PASS.
+
+---
+
+## User Story 6 — Webinar Page (FR-030, FR-031)
+
+**Date**: 2026-08-07 | **Spec**: [spec.md](./spec.md), User Story 6 (Insights: Webinar page
+reference alignment), scoped to **only** FR-030 and FR-031.
+
+**Reference**: `raw-files-v2/TechGrit Website V2.2/TechGrit Webinar.dc.html` exclusively.
+
+**Scope note**: this is an independent slice, unrelated to Home Page (User Story 1) or Construction
+(User Story 3) above — tracked as its own block precisely so a teammate can work any other user
+story in parallel without touching this section or its files. It covers **only** the 2 FRs named
+above. No Home Page, Construction, Case Studies, Blog, About, Careers, or Contact file is touched.
+
+### Summary
+
+Reading `TechGrit Webinar.dc.html` directly against today's `/webinar` implementation shows the
+reference never puts the upcoming session's title/date/CTA inside the hero's own two-column grid at
+all — it renders a separate, full-width "announcement strip" (`data-web-announce`) positioned
+directly above the hero section, and explicitly hides the old "upcoming featured" card inside the
+sessions grid (`display:none`, with the file's own comment: "moved to floating strip above hero per
+UX review"). Today's app does the opposite: the hero has no upcoming-session content at all, and the
+sessions grid's `UpcomingPanel` renders exactly the "Upcoming Live" block FR-031 says must not exist
+as a separate element. Per spec.md's Session 2026-08-07 Clarifications (Story 6), this resolves to:
+
+1. **New `app/webinar/_components/announcement-strip.tsx`** (FR-030) — a full-width strip rendered
+   directly above `<HeroSection>` (not nested inside its two-column grid), reusing the existing
+   `UpcomingSession` content type verbatim (no data-model change). Structure matches the reference's
+   literal 3-column row: a status label with a blinking amber dot ("Upcoming · Live"), the session's
+   title + date/time (`{session.title} · {session.date} · {session.time} {session.timezone}`, matching
+   the reference's single truncated line, line 222), and a "Register" control that smooth-scrolls to
+   `#subscribe` — reusing `UpcomingPanel`'s existing `handleRegisterClick` pattern (`document.
+   getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" })`), not a native anchor. At the
+   app's canonical `sm` breakpoint (560px) and below, the row's `grid-cols-[auto_1fr_auto]` collapses
+   to a single column (FR-030's mobile-stacking clarification) — the reference itself defines no
+   mobile treatment for this row at all.
+   **Deliberate deviation from the reference's literal markup**: the reference wraps the entire strip
+   in one `<a href="#subscribe">` (whole-row clickable, with a visually-button-styled `<span>` nested
+   inside the same anchor). This app keeps only the "Register" control itself interactive (a `<button
+   onClick={...}>`, matching `UpcomingPanel`'s existing pattern) with the outer strip as a
+   non-interactive `<div>` — avoiding a nested-interactive-element accessibility anti-pattern
+   (button-inside-link) that the reference's own preview-tool markup doesn't need to avoid. This is a
+   deliberate, here-recorded exception to Principle IV, the same class of exception already used
+   elsewhere in this plan for FR-020's per-card-link removal.
+2. **`app/webinar/_components/sessions-section.tsx`** (FR-031) — the `UpcomingPanel` function and its
+   render call are removed entirely from `SessionsSection`; the `upcomingSession` prop is removed from
+   `SessionsSection`'s own prop type (the data now flows to the new `AnnouncementStrip` instead, per
+   item 1). Auditing the reference's "Sessions" heading and every remaining released-session card
+   against today's markup (`--text-webinar-h2`, `GlassCard variant="webinarReleased"`,
+   `RELEASED_ACCENT_COVER`) shows every value already matches `TechGrit Webinar.dc.html` exactly
+   **except one**: the orange-accent card's cover currently reuses `--gradient-blog-featured`
+   (`rgba(232,119,34,0.20)…`), a token borrowed from the Blog section for visual convenience, which is
+   2% opacity off the reference's own `rgba(232,119,34,0.18)…` (line 279). Everything else — the h2's
+   `clamp(26px,3vw,34px)`/`-0.03em` sizing (`--text-webinar-h2`, itself already the exact reference
+   clamp), the cards' `20px` radius/`0.10` border/`0.04` background (`--radius-2xl`, `--color-border-
+   image`, `--color-glass-4`, all exact-match tokens), the `18.5px/700/1.3` title and `14.5px/1.6/
+   rgba(255,255,255,0.6)` description (already overridden to `text-white/60` per-instance), the status
+   label's `12px/700/0.10em/#F7B733` styling (`text-12`/`tracking-wider` — remapped to `--ls-wider`
+   0.10em via `@theme inline`, not Tailwind's own 0.05em default — /`text-amber-light`), and the blue/
+   teal cover gradients (`--gradient-webinar-released-blue`/`-teal`, both exact matches) — needs **no
+   change**. FR-031's "MUST use the reference's updated colors and typography" therefore resolves to
+   one token fix, not a rewrite.
+3. **`app/tokens.css`** — add 4 tokens with no existing exact match, in their respective existing
+   numbered sections: `--gradient-webinar-announce: linear-gradient(90deg, rgba(245, 158, 11, 0.14),
+   rgba(232, 119, 34, 0.05));` (§ Gradients — announcement strip's resting background, line 220),
+   `--color-border-amber-35: rgba(245, 158, 11, 0.35);` and `--color-border-amber-70: rgba(245, 158,
+   11, 0.70);` (§ Borders — the strip's resting and hover border colors; the existing `--color-border-
+   amber-30`/`-medium` (0.30/0.40) are close but not exact matches for this new element's own two
+   distinct values), `--shadow-webinar-announce: 0 12px 40px -18px rgba(232, 119, 34, 0.5);` (§ Shadows
+   — the strip's ambient glow shadow, line 220), and `--gradient-webinar-released-orange: linear-
+   gradient(150deg, rgba(232, 119, 34, 0.18), rgba(2, 132, 199, 0.06));` (§ Gradients — the dedicated
+   released-card orange-accent gradient that item 2's fix introduces, replacing the borrowed
+   `--gradient-blog-featured`). The strip's `16px` border-radius has no existing exact-match token
+   (`rounded-lg` is `14px`, `rounded-2xl` is `20px` per the Construction addendum's own confirmation of
+   `--radius-2xl: 20px`), so it uses the arbitrary-value `rounded-[16px]` class, consistent with this
+   plan's own established precedent (the Re-Imagine Grid addendum's `h-[180px]` decision) of not
+   spawning a token for a single, section-specific usage. The
+   `12px` backdrop-blur (already an exact match — `--blur-cta`, "Final CTA panel"), and the `14px 22px`
+   padding / `22px` column gap (literal arbitrary-value classes, same precedent) need no new tokens.
+   Existing `--shadow-glow-amber-sm` (0.80 opacity) is reused verbatim for the status dot's glow, a
+   already-accepted 5%-opacity delta against the reference's `0.85` — the same class of sub-visible
+   shared-token delta this plan has already accepted elsewhere (stat-divider border, Construction's
+   primary-button shadow) rather than forking a new token for a near-imperceptible difference.
+4. **`app/webinar/page.tsx`** — render `<AnnouncementStrip session={webinarPageContent.upcomingSession} />`
+   between `<HeroSection>` and `<SessionsSection>`; `<SessionsSection>` no longer receives an
+   `upcomingSession` prop.
+5. **`app/webinar/_components/sessions-section.tsx`** (continued, item 2) — `RELEASED_ACCENT_COVER.
+   orange` switches from `"bg-[image:var(--gradient-blog-featured)]"` to `"bg-[image:var(--gradient-
+   webinar-released-orange)]"`.
+
+Nothing else changes. `HeroSection`'s own two-column grid/collage, `SubscribePanel`, and every other
+released-session card value already confirmed exact above are untouched.
+
+### Technical Context (User Story 6 slice)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo; manual
+verification, see quickstart.md addendum) · **Target Platform**: Web · **Project Type**: single
+Next.js App Router app · **Performance Goals**: N/A (markup relocation + one gradient-token swap) ·
+**Constraints**: no new libraries; the existing `UpcomingSession` data type is reused verbatim (no
+data-model change); zero visual change to any `/webinar` section other than the new announcement
+strip's position, the sessions grid's removed `UpcomingPanel`, and the orange released-card cover's
+gradient · **Scale/Scope**: 1 new file created (`announcement-strip.tsx`), 2 existing files edited
+(`sessions-section.tsx`, `page.tsx`), 4 new tokens added to `tokens.css`, 0 new libraries.
+
+### Constitution Check (User Story 6 slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS. All 4 new literal values (announcement-strip gradient/border
+  ×2/shadow, released-card orange gradient) are added to `tokens.css` first, in their existing
+  numbered sections, before any component consumes them. The strip's `16px` radius and `14px 22px`
+  padding stay arbitrary-value classes, consistent with this plan's own established precedent of not
+  spawning a token for a single, section-specific spacing usage with no reuse elsewhere. The status
+  dot's glow shadow reuses the existing `--shadow-glow-amber-sm` verbatim (a 5%-opacity delta already
+  accepted elsewhere in this plan), not a new near-duplicate token.
+- **II (Breakpoints)** — PASS. The strip's mobile-stacking collapse uses the app's canonical `sm`
+  (560px, `max-tg-sm:`) breakpoint, per spec.md's clarification — no new breakpoint introduced.
+- **III (Component Library)** — PASS with one recorded exception: the announcement strip's row-shaped
+  content (status label + single-line session summary + CTA) doesn't fit `GlassCard`'s icon+title+
+  description card shape, so it's a bespoke `<div>` rather than a forced new `GlassCard` variant whose
+  unused `ICON_VARIANTS`/`TITLE_VARIANTS`/`DESC_VARIANTS` entries would exist only to satisfy the
+  Record's exhaustiveness — the same reasoning `TrustedClients.tsx` and the pre-migration Live-Webinar
+  badge already established for bespoke, non-card-shaped sections elsewhere in this plan. The strip
+  still reuses this app's existing `Button`-pattern smooth-scroll handler (`UpcomingPanel`'s own
+  `handleRegisterClick`) rather than inventing a new interaction, and `GlassCard variant="
+  webinarReleased"` (sessions grid) is untouched and reused as-is.
+- **IV (References Are Visual Truth)** — PASS with one recorded, deliberate exception: the
+  whole-strip-as-a-single-anchor structure is not reproduced (see Summary item 1) to avoid a
+  nested-interactive-element accessibility anti-pattern the reference's own preview-tool markup
+  doesn't need to avoid — every other structural and value decision (strip position, 3-column
+  content, colors, the released-card gradient fix) is read directly from the reference.
+- **V (Dark-First Brand)** — PASS. No new surface fill; the strip's amber/orange gradient stays a
+  translucent glass tint (0.05-0.14 opacity), matching the reference and the app's existing sparing-
+  accent convention.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- No violations — Complexity Tracking is empty.
+
+### UI Design Approach (User Story 6 slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's two visible craft surfaces — the
+announcement strip's new glass treatment and the mobile-stacked fallback. Takeaways applied: **strip
+glass treatment** — the resting border stays a modest `0.35`-opacity amber line (not the brighter
+`0.70` reserved for hover), so the strip reads as "quietly present, brightens on interaction" rather
+than competing with the hero directly beneath it; the `0.05-0.14` gradient fill and `12px` blur keep it
+in the same translucent-glass register as every other card-like surface in this app, not a solid
+banner. **Mobile stack** — at `sm` and below, the status label renders first (establishing "this is
+live/upcoming" before the title, matching reading order), the session summary second, and the Register
+button last, full-width — so the collapsed column still reads top-to-bottom as urgency → context →
+action, the same order the desktop row already establishes left-to-right.
+
+**Reconciliation with Principles I–V**: none needed beyond the two recorded exceptions above (III's
+bespoke-wrapper choice, IV's nested-interactive-element avoidance) — the skill's guidance confirmed
+Principle V's sparing-accent convention without surfacing any further conflict.
+
+**Anchor files**: `app/webinar/_components/announcement-strip.tsx` (new),
+`app/webinar/_components/sessions-section.tsx` (`UpcomingPanel` removed, `upcomingSession` prop
+removed, orange gradient token swapped), `app/webinar/page.tsx` (renders `<AnnouncementStrip>` between
+`<HeroSection>` and `<SessionsSection>`), `app/tokens.css` (4 new tokens).
+
+### Project Structure (User Story 6 slice)
+
+```text
+app/webinar/_components/
+├── announcement-strip.tsx   # NEW — full-width strip above the hero; reuses UpcomingSession data
+├── sessions-section.tsx     # UpcomingPanel removed; upcomingSession prop removed;
+│                             # RELEASED_ACCENT_COVER.orange → --gradient-webinar-released-orange
+└── hero-section.tsx          # unchanged
+
+app/webinar/page.tsx          # + <AnnouncementStrip session={...} /> rendered before <SessionsSection>;
+                               # <SessionsSection> no longer receives upcomingSession
+
+app/tokens.css                 # + --gradient-webinar-announce, --color-border-amber-35,
+                                #   --color-border-amber-70, --shadow-webinar-announce,
+                                #   --gradient-webinar-released-orange
+```
+
+No `data-model.md`/`contracts/` (presentation-only, same as every other slice in this plan).
+**Correction (post-implementation)**: the plan's original "no `app/globals.css` change" claim held
+for all 4 originally-identified tokens (each consumed via arbitrary-value `bg-[image:var(...)]`/
+`border-[var(...)]`/`shadow-[var(...)]` syntax, matching the existing `webinarUpcoming`/
+`webinarReleased` variants' consumption pattern), but implementation surfaced a 5th token not
+identified during planning — the status label's `letter-spacing:0.14em` had no existing exact-match
+tracking token, so `--ls-announce-label` was added to `tokens.css` (§ Typography) and mapped via
+`--tracking-announce-label: var(--ls-announce-label);` in `app/globals.css`'s `@theme inline` block
+(matching the sibling `--tracking-hint`/`--tracking-blog-meta`/`--tracking-life-cap` mappings already
+in that file), becoming the canonical `tracking-announce-label` utility. `app/webinar/_data/types.ts`
+is unchanged — `UpcomingSession` is reused verbatim, no new field.
+
+**Structure Decision**: existing single-project structure. `announcement-strip.tsx` stays route-local
+(`app/webinar/_components/`), matching its sibling section files — it is consumed by the webinar page
+only.
+
+### Complexity Tracking (User Story 6 slice)
+
+*Empty — the two recorded Principle III/IV exceptions above are deliberate, spec-informed choices,
+not unjustified complexity.*
+
+### Post-Design Constitution Re-Check (User Story 6 slice)
+
+Research (Phase 0 of this slice) audited every value in the sessions grid's "Sessions" heading and
+released cards against the reference before any file changed, confirming all but one (the orange
+cover gradient) were already exact matches — narrowing FR-031's actual code change to a single token
+swap rather than a broader rewrite. No new violations. Gate: PASS.
+
+## User Story 6 (continued) — Webinar Page Polish (FR-030a, FR-030b, FR-031a)
+
+**Date**: 2026-08-07. Extends the same "User Story 6 — Webinar Page" block above with 3 direct-
+instruction items surfaced during this session: the announcement strip's Register control moving
+onto the shared `Button` primitive (FR-030a), the page's background ambient orbs matching the
+reference's own 2-orb set instead of the shared default 3-orb set (FR-030b), and the sessions grid's
+"Watch Now" buttons rendering with `font-family: Arial` (FR-031a). FR-030/FR-031's own scope above is
+unaffected and complete; no other user story is touched.
+
+**Reference**: `TechGrit Webinar.dc.html` for FR-030a/FR-030b. FR-031a is explicitly **not**
+reference-backed — see Constitution Check below.
+
+### Summary (FR-030a/030b/031a)
+
+1. **`app/webinar/_components/announcement-strip.tsx`** (FR-030a) — the Register control's bespoke
+   `<button onClick={...}>` is replaced by `<Button onClick={...} className="...">`, carrying the
+   same per-instance overrides (`!rounded-[10px] !py-[9px] !px-[18px] !text-[13.5px]`, `size="sm"` as
+   the closest existing size preset) needed to keep its rendered output pixel-identical to before —
+   this is a Component Library conformance fix (Constitution III), not a visual change.
+2. **`components/ui/ambient-orbs.tsx`** (FR-030b) — gains a `pathname === "/webinar"` branch,
+   following the exact same in-component-branch, Tailwind-classes-only convention already established
+   for the homepage's own 4-orb branch (no route-exclusion entry, no separate page-local file).
+   Comparing the reference's 2 orbs (lines 110-113) against the existing default 3-orb branch shows
+   the first orb is **already pixel-identical** (`-top-40 -right-30 h-140 w-140 blur-[120px]
+   animate-[tgorb_16s_ease-in-out_infinite]`, `--color-overlay-orange` at 0.16 vs. the reference's
+   0.15 — the same class of sub-visible opacity delta already accepted elsewhere in this plan) and the
+   second orb needs only its own vertical offset corrected (`top-225` → `top-300`, i.e. `900px` →
+   `1200px`, matching the reference's `top:1200px` exactly; its size/color/blur/animation —
+   `h-130 w-130`, `--color-overlay-blue-soft` at an exact-match `rgba(2,132,199,0.10)`, `blur-[130px]`,
+   `20s reverse` — were already exact). The new branch is therefore the existing default branch's
+   first two orbs, with one position correction, and the 3rd (amber) orb dropped entirely, since the
+   reference has no third orb.
+3. **`app/webinar/_components/sessions-section.tsx`** (FR-031a) — both `ReleasedCardHalf`'s and
+   `ReleasedCardFull`'s `<Button>` calls for "Watch Now" gain an inline `style={{ fontFamily: "Arial,
+   sans-serif" }}` — a per-instance override on these two specific button instances only, not a
+   `className` token and not a change to `components/ui/Button.tsx` itself, so every other `Button`
+   consumer across the entire app keeps inheriting the shared `--font-body`/`--font-display` stack
+   unaffected.
+
+Nothing else changes. `HeroSection`, `SubscribePanel`, the announcement strip's status label/session
+text, and every other page's ambient-orb branch are untouched.
+
+### Constitution Check (FR-030a/030b/031a slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS for FR-030a/030b (no new literal value; the orb branch reuses
+  `--color-overlay-orange`/`--color-overlay-blue-soft` verbatim, and the `top-300` position uses the
+  same numeric Tailwind spacing scale every other orb position in this file already uses). **FR-031a
+  is a recorded exception**: `Arial` is a literal font-family value with no token and is deliberately
+  not tokenized — Principle I governs design-system values (color/spacing/radius/etc.), and this is a
+  one-off, explicitly-instructed override on 2 button instances, not a reusable style decision that
+  would warrant a `--font-*` token.
+- **II (Breakpoints)** — PASS, not applicable.
+- **III (Component Library)** — PASS. FR-030a is itself a Component Library conformance fix (the
+  announcement strip's Register control now goes through the shared `Button` primitive instead of a
+  fork). FR-030b reuses the existing `AmbientOrbs` branch-per-pathname pattern rather than a new
+  component. FR-031a's `Button` calls are unchanged as calls — only a per-instance `style` prop is
+  added, the same escape hatch every `Button` consumer already has.
+- **IV (References Are Visual Truth)** — PASS for FR-030a/030b (both values are read directly from
+  `TechGrit Webinar.dc.html`). **FR-031a is a recorded, deliberate exception**: the reference sets no
+  font-family override on these buttons at all (they'd inherit the page's Calibri/Carlito body font),
+  so Arial is not reference-backed — implemented anyway per direct, explicit instruction, confirmed
+  after this exact conflict was surfaced and the instruction was repeated.
+- **V (Dark-First Brand)** — PASS for FR-030a/030b (no new surface fill). **FR-031a is a recorded,
+  deliberate exception**: this app's brand system is Calibri/Carlito only (a prior hardcoded Arial
+  override elsewhere in this same feature was already flagged and removed as a confirmed bug,
+  Clarifications Session 2026-08-05) — Arial on these 2 buttons directly contradicts that convention.
+  This is knowingly implemented per direct instruction, scoped as narrowly as possible (a per-instance
+  `style` prop on exactly 2 button call sites, not a token, not a `Button.tsx` change, not applied to
+  any other button on this page or any other) specifically so it cannot silently spread.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- **Complexity Tracking**: FR-031a is logged here as a knowing, explicitly-instructed exception to
+  Principles IV and V — not silent drift. No other violation.
+
+### UI Design Approach (FR-030a/030b/031a slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's two visible craft questions.
+Takeaways applied: **orb-count reduction** — dropping the 3rd (amber) orb reads as a deliberate
+quieting of the background, appropriate for this page's already color-dense sessions grid (3 accent-
+tinted card covers plus the announcement strip's own amber tint) — 2 orbs let the grid's own colors
+read clearly against the black surface instead of competing with a 3rd ambient color cast. **Arial
+exception** — the skill's own guidance explicitly names Arial as a font to avoid; this instruction
+directly overrides that guidance for these 2 button instances specifically, per this project's own
+instruction-precedence rule (direct user instruction outranks skill guidance, which in turn outranks
+default behavior). To keep it from reading as an unintentional regression rather than a deliberate
+choice, it's confined to exactly the 2 "Watch Now" button call sites via an inline `style` override —
+nothing else on the page (headings, body copy, the Register button, any other page's buttons)
+inherits it, so a future reader sees a narrow, clearly-scoped exception rather than a spreading
+pattern.
+
+**Reconciliation with Principles I–V**: FR-030a/030b need none. FR-031a is a knowing, recorded
+exception to Principles IV and V, made here by direct instruction after the conflict was explicitly
+surfaced and confirmed — not left as silent drift.
+
+**Anchor files**: `app/webinar/_components/announcement-strip.tsx` (Register control now `<Button>`),
+`components/ui/ambient-orbs.tsx` (new `pathname === "/webinar"` branch), `app/webinar/_components/
+sessions-section.tsx` (`style={{ fontFamily: "Arial, sans-serif" }}` on both Watch Now `<Button>` calls).
+
+### Project Structure (FR-030a/030b/031a slice)
+
+```text
+app/webinar/_components/
+├── announcement-strip.tsx   # Register control: bespoke <button> → <Button>
+└── sessions-section.tsx     # Watch Now <Button> calls (both renderers) get
+                              # style={{ fontFamily: "Arial, sans-serif" }}
+
+components/ui/
+└── ambient-orbs.tsx          # + pathname === "/webinar" branch (2 orbs, 3rd amber orb dropped,
+                               #   2nd orb's position corrected from top-225 to top-300)
+```
+
+No `app/tokens.css`/`app/globals.css` change (every value reused is an existing exact or
+near-exact-match token; Arial is a deliberate non-token literal, per Constitution Check above). No
+`data-model.md`/`contracts/` change.
+
+**Structure Decision**: existing single-project structure. All 3 edits stay inside their existing
+files — no new file, no new shared primitive.
+
+### Complexity Tracking (FR-030a/030b/031a slice)
+
+FR-031a is the one recorded complexity/exception in this slice: a knowing, direct-instruction
+override of Principles IV and V, scoped to 2 button instances via a per-instance `style` prop with no
+token and no shared-component change — not silent drift, and reversible by deleting 2 `style` props
+if this exception is ever revoked.
+
+### Post-Design Constitution Re-Check (FR-030a/030b/031a slice)
+
+Research (Phase 0 of this slice) confirmed the orb branch's first orb was already pixel-identical to
+the reference and the second needed only a position correction (no new tokens), and confirmed the
+Arial instruction's conflict with both the reference and the brand system before implementing it
+anyway, per direct instruction. No new violations beyond the one recorded FR-031a exception. Gate: PASS.
+
+## Story 5 — Blog Page (FR-027, FR-028, FR-029)
+
+**Date**: 2026-08-07 | **Spec**: [spec.md](./spec.md), User Story 5 (Insights: Blog page reference
+alignment), scoped to **only** FR-027, FR-028, and FR-029, per the Clarifications, "Story 5 — Blog
+Page (Session 2026-08-07)" answers.
+
+**Reference**: `raw-files-v2/TechGrit Website V2.2/TechGrit Blog.dc.html` exclusively.
+
+**Scope note**: this is an independent slice, unrelated to Home Page (User Story 1), Construction
+(User Story 3), or Webinar (User Story 6) above — tracked as its own block precisely so a teammate can
+work any other user story in parallel without touching this section or its files. It covers **only**
+the 3 FRs named above. No Home Page, Construction, Case Studies, Webinar, About, Careers, or Contact
+file is touched.
+
+### Summary
+
+Reading `TechGrit Blog.dc.html` directly against today's `/blog` implementation:
+
+1. **`app/blog/_components/blog-hero.tsx`** (FR-027) — the top eyebrow badge already renders a dot
+   indicator (`<span className="h-2 w-2 shrink-0 rounded-full bg-orange shadow-glow-orange" aria-
+   hidden="true" />`, line 11-14) that the reference's own badge (line 218-220) does not have — a
+   literal `<span>` with only the uppercase label text, no dot. The `<span>` is removed; the badge's
+   outer pill/border/background is otherwise already reference-correct and untouched.
+2. **New `app/blog/_components/blog-filter-bar.tsx`** (FR-028) — per the Clarifications' first two
+   Story 5 answers, this wires the existing, currently-unwired shared `components/ui/FilterBar.tsx`
+   primitive (Blog becomes its first real consumer) around the existing `TopicFilter` chip component
+   (chip pill styling is already reference-correct and untouched). The "shared parent" the
+   Clarifications call for is a **new client wrapper**, `app/blog/_components/blog-filterable-
+   section.tsx` (`"use client"`), which owns `activeTopic` state and the `filteredPosts` memo, and
+   renders `<BlogFilterBar>` and `<BlogPostGrid>` as its own two direct children — matching the
+   reference's DOM order (`data-blog-filter-bar` sits between the Featured section and the Grid
+   section, not nested inside either) without requiring `app/blog/page.tsx` itself to become a client
+   component. This follows the same pattern already established by `app/services/page.tsx` and
+   `app/careers/page.tsx` (both keep `page.tsx` a server component and push client state into a
+   dedicated section component) and avoids foreclosing a future `export const metadata` on `/blog`,
+   which a client `page.tsx` cannot have. `app/blog/_components/blog-post-grid.tsx` (FR-028, continued)
+   drops its own `useState`/`useMemo`/`TopicFilter` ownership entirely — it becomes a presentational
+   component receiving already-filtered `posts` plus an `onReset` callback, used only by its new
+   zero-results control (see item 4).
+3. **`components/ui/FilterBar.tsx`** (FR-028) — its own doc comment ("Not yet wired into any page in
+   this slice") confirms its label typography was placeholder, not reference-verified. Auditing its
+   current default classes (`text-xs font-bold tracking-widest text-secondary uppercase` → 14px/700/
+   0.16em/`rgba(255,255,255,0.72)`) against the reference's literal filter-label styling (line 252:
+   `font-size:11.5px; font-weight:700; letter-spacing:0.14em; color:rgba(255,255,255,0.42)`) shows
+   every value diverges. Corrected in place (on the shared component's own default, not a per-
+   instance override on Blog's usage) to `text-xs-alt font-bold tracking-filter-label text-ghost
+   uppercase` — `--text-xs-alt` (11.5px) and `--color-text-ghost` (`rgba(255,255,255,0.42)`, exposed as
+   `text-ghost`) are both existing exact-match tokens; `tracking-filter-label` is new (see item 5).
+   Fixing the shared default now (with zero current consumers) benefits Blog immediately and leaves
+   Case Studies' own future FR-024 slice reference-correct on day one, rather than needing a second
+   correction later — consistent with FR-044's "one consistent treatment" mandate. Its sticky
+   positioning (`top-nav`, i.e. `top: var(--nav-height)` = 80px) and background (`bg-nav-glass`,
+   `rgba(0,0,0,0.70)`) already match the reference's `top:80px`/`rgba(0,0,0,0.72)` closely enough to
+   be an already-accepted sub-2%-opacity delta (the same class of delta already accepted elsewhere in
+   this plan, e.g. the webinar announcement strip's status-dot glow) — no change needed there. Its
+   `z-raised` (value `1`) z-index — semantically wrong for a sticky-positioned bar, describing
+   hover-lift elevation instead — is swapped for `z-[var(--z-sticky)]` (value `10`), the arbitrary-
+   value form, not a bare `z-sticky` utility: `--z-sticky` has no `@theme inline` mapping in
+   `globals.css` (unlike `--z-raised`/`--z-modal`/`--z-overlay`, which are mapped), so a bare
+   `z-sticky` class would silently resolve to no z-index at all, per Constitution Principle I's
+   explicit warning about unmapped tokens. This mirrors the codebase's own existing precedent for
+   this exact situation — `components/layout/Header.tsx:76-77` already uses `z-[var(--z-nav)]`
+   rather than a bare `z-nav` class, since `--z-nav` is likewise unmapped. `10` still stays well
+   under the sticky nav's own `z-nav` (`100`), preserving the reference's own "filter bar (60) below
+   nav (100)" stacking order.
+4. **`app/blog/_components/blog-post-grid.tsx`** (FR-028, continued) — the existing zero-results
+   message ("No posts match this topic yet — check back soon.") has no control to clear/reset the
+   filter, which FR-028 explicitly requires. A "Reset filter" text-button is added beneath the message,
+   calling the new `onReset` prop (which `page.tsx` wires to `() => setActiveTopic("All")`) — reusing
+   this app's existing clickable-text-link convention (e.g. the homepage Final CTA's secondary link)
+   rather than introducing a new control pattern.
+5. **`app/tokens.css`** (FR-028) — adds one new token with no existing exact match: `--ls-filter-
+   label: 0.14em;` (§ Typography), deliberately not a reuse of the value-identical `--ls-hint`/
+   `--ls-blog-meta`/`--ls-life-cap`/`--ls-announce-label`, per this file's own established "one job,
+   one token" convention (the same reasoning already applied to each of those four). Mapped via
+   `--tracking-filter-label: var(--ls-filter-label);` in `app/globals.css`'s `@theme inline` block
+   (matching the sibling `--tracking-hint`/`--tracking-blog-meta`/`--tracking-life-cap`/`--tracking-
+   announce-label` mappings already there), becoming the canonical `tracking-filter-label` utility.
+6. **`app/blog/_components/newsletter-panel.tsx`** (FR-029) — its outer panel's `bg-ink-mid`
+   (`#000000`, line 31) is swapped for `bg-glass-4` (`--color-glass-4`, `rgba(255,255,255,0.04)`) — a
+   byte-identical existing token to the reference's literal newsletter-card background (line 288),
+   already reused elsewhere in the app (e.g. the inactive filter chip, Re-Imagine grid cards). No new
+   token, per the Clarifications' third Story 5 answer and FR-041/SC-006.
+
+Nothing else changes. `BlogHero`'s heading/lead copy, `FeaturedPost`, `TopicFilter`'s own chip pill
+styling, and `NewsletterPanel`'s form/success-state markup are untouched.
+
+### Technical Context (Story 5 slice)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo; manual
+verification, see Implementation Strategy below) · **Target Platform**: Web · **Project Type**: single
+Next.js App Router app · **Performance Goals**: N/A (markup relocation + a state lift + 2 token
+additions) · **Constraints**: no new libraries; `BlogPost`/`BlogHeroContent`/`NewsletterPanelContent`
+data types are reused verbatim (no data-model change); `app/blog/page.tsx` stays a server component
+(state ownership lives in a new client wrapper instead), matching the existing Services/Careers
+pattern · **Scale/Scope**: 2 new files created (`blog-filter-bar.tsx`, `blog-filterable-section.tsx`),
+3 existing files edited (`page.tsx`, `blog-post-grid.tsx`, `newsletter-panel.tsx`), plus
+`components/ui/FilterBar.tsx`, 1 new token added to `tokens.css` (+ its `@theme inline` mapping in
+`globals.css`), 0 new libraries.
+
+### Constitution Check (Story 5 slice)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this slice.*
+
+- **I (Token-Only Styling)** — PASS. The one new literal value (`0.14em` letter-spacing) is added to
+  `tokens.css` first, in its existing § Typography section, before `FilterBar.tsx` consumes it. Every
+  other value used (`--text-xs-alt`, `--color-text-ghost`/`text-ghost`, `--color-glass-4`/`bg-glass-4`,
+  `--nav-height`/`top-nav`, `--color-nav-glass`/`bg-nav-glass`, `--z-sticky`/`z-[var(--z-sticky)]`) is an existing
+  exact-match token, reused verbatim — no hardcoded hex/rgba/px literal is introduced anywhere.
+- **II (Breakpoints)** — PASS, not applicable — no new breakpoint-specific behavior in this slice.
+- **III (Component Library)** — PASS. FR-028 is itself a Component Library conformance fix: Blog
+  becomes the first real consumer of the `components/ui/FilterBar.tsx` primitive that was purpose-built
+  for exactly this treatment, rather than retrofitting bespoke sticky/dark/label styling onto
+  `TopicFilter` (which would itself violate FR-044). `TopicFilter`'s existing chip-button markup is
+  reused as-is, nested inside the shared shell, not forked.
+- **IV (References Are Visual Truth)** — PASS. Every structural and value decision (badge-dot removal,
+  filter-bar DOM position/background/label/sticky offset, newsletter background) is read directly from
+  `TechGrit Blog.dc.html`. The zero-results "Reset filter" control has no reference markup to copy
+  (the reference's own preview-tool data binding never renders a zero-result state) — it's built to
+  match this app's existing clickable-text-link convention instead, the same class of "no reference
+  markup exists, reuse an existing in-app pattern" decision this plan has already made elsewhere (e.g.
+  the Case Studies/Blog zero-results control decided in spec.md's Session 2026-08-03 Clarifications).
+- **V (Dark-First Brand)** — PASS. No new surface fill; `bg-glass-4` and `bg-nav-glass` are both
+  existing translucent dark-glass tokens already used elsewhere, not a new solid fill.
+- **VI (frontend-design skill)** — PASS, invoked; see UI Design Approach below.
+- No violations — Complexity Tracking is empty.
+
+### UI Design Approach (Story 5 slice)
+
+**UI mode**: ON (Next.js/React tech signal + spec.md content signal).
+
+**`frontend-design` skill invocation**: consulted for this slice's two visible craft surfaces — the
+filter bar's label/chip contrast and the zero-results control. Since this slice is reference-exact
+matching work (not new creative direction), the skill's generic aesthetic guidance is superseded by
+this repo's own repo-specific rules per AGENTS.md/CLAUDE.md wherever the two conflict (Principles I–V
+win); its guidance is otherwise consulted for craft judgment where the reference and repo rules are
+silent. Takeaways applied: **label contrast** — correcting the label to the reference's dimmer
+`rgba(255,255,255,0.42)`/11.5px keeps it reading as a quiet, secondary "Filter" caption rather than
+competing with the chips themselves for attention, consistent with this app's existing eyebrow/label
+hierarchy elsewhere (How We Deliver, Industries, About). **Zero-results control** — styled as a plain
+clickable-text link (not a filled button) so it reads as a low-emphasis recovery action, matching the
+existing Final CTA secondary-link's resting/hover treatment (dimmer resting color, brightening on
+hover) rather than introducing a new, heavier control pattern for a rare empty-state case.
+
+**Reconciliation with Principles I–V**: none needed — the skill's guidance confirmed Principle V's
+sparing-accent convention and Principle III's reuse mandate without surfacing any further conflict.
+
+**Anchor files**: `app/blog/_components/blog-hero.tsx` (dot span removed), `app/blog/_components/
+blog-filter-bar.tsx` (new — wraps `FilterBar` + `TopicFilter`), `app/blog/_components/blog-filterable-
+section.tsx` (new — `"use client"`, owns `activeTopic` state, renders filter bar and grid as siblings),
+`app/blog/page.tsx` (unchanged as a server component, renders `<BlogFilterableSection>`),
+`app/blog/_components/blog-post-grid.tsx` (drops state ownership, adds `onReset` control),
+`components/ui/FilterBar.tsx` (default label typography corrected, `z-raised` → `z-[var(--z-sticky)]`),
+`app/blog/_components/newsletter-panel.tsx` (`bg-ink-mid` → `bg-glass-4`), `app/tokens.css` +
+`app/globals.css` (`--ls-filter-label` / `tracking-filter-label`).
+
+### Project Structure (Story 5 slice)
+
+```text
+app/blog/_components/
+├── blog-hero.tsx              # dot <span> removed from the eyebrow badge
+├── blog-filter-bar.tsx        # NEW — wraps components/ui/FilterBar.tsx (label="Filter") around
+│                                # the existing TopicFilter chips
+├── blog-filterable-section.tsx # NEW — "use client"; owns activeTopic state and the filteredPosts
+│                                # memo; renders <BlogFilterBar> and <BlogPostGrid> as siblings
+├── blog-post-grid.tsx         # activeTopic state + TopicFilter rendering removed; now presentational
+│                                # (receives filtered posts), zero-results branch gains a "Reset filter"
+│                                # control calling the new onReset prop
+└── newsletter-panel.tsx       # bg-ink-mid → bg-glass-4
+
+app/blog/page.tsx           # stays a server component; renders <BlogHero>, <FeaturedPost>,
+                             # <BlogFilterableSection>, <NewsletterPanel>
+
+components/ui/FilterBar.tsx  # default label classes corrected to text-xs-alt/tracking-filter-label/
+                              # text-ghost; z-raised → z-[var(--z-sticky)] (arbitrary value, matching
+                              # Header.tsx's own z-[var(--z-nav)] precedent — --z-sticky is unmapped)
+
+app/tokens.css               # + --ls-filter-label (§ Typography)
+app/globals.css              # + --tracking-filter-label mapping in @theme inline
+```
+
+No `data-model.md`/`contracts/` change (presentation-only, same as every other slice in this plan).
+`app/blog/_data/types.ts` is unchanged — `BlogPost`/`BlogHeroContent`/`NewsletterPanelContent` are
+reused verbatim, no new field.
+
+**Structure Decision**: existing single-project structure. `blog-filter-bar.tsx` and `blog-filterable-
+section.tsx` stay route-local (`app/blog/_components/`), matching their sibling section files — both
+are consumed by the Blog page only, while the generic `FilterBar` shell `blog-filter-bar.tsx` wraps
+stays in `components/ui/` for Case Studies' own future FR-024 slice to reuse unchanged. `FilterBar`
+wraps its `children` in its own `flex flex-wrap items-center gap-2.5` div, and `TopicFilter`
+independently renders an identical `flex flex-wrap items-center gap-2.5" role="group"` div around its
+chips — nesting them inside `blog-filter-bar.tsx` produces two redundant, visually-identical, harmless
+flex wrappers. This is an accepted, intentional redundancy, not a defect requiring `TopicFilter`'s
+public shape to change for its only current consumer.
+
+### Complexity Tracking (Story 5 slice)
+
+*Empty — no unjustified complexity or deviation from the constitution in this slice.*
+
+### Post-Design Constitution Re-Check (Story 5 slice)
+
+Research (Phase 0 of this slice) confirmed the shared `FilterBar.tsx` primitive's sticky positioning
+and background were already reference-correct (only its label typography and z-index token needed
+correction), and confirmed every other value change (badge dot, newsletter background) resolves to an
+existing exact-match token with zero new hardcoded literals beyond the one new letter-spacing token.
+No violations. Gate: PASS.
+
 ## Careers Apply-Modal Field Alignment (User Story 8 — FR-037a/FR-037b)
 
 **Date**: 2026-08-05. Extends this plan to cover `app/careers/_components/application-dialog.tsx`,
