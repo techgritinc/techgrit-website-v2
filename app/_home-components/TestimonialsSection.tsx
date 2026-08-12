@@ -64,14 +64,14 @@ export default function TestimonialsSection() {
   const current = openIndex !== null ? TESTIMONIALS[openIndex] : null;
 
   return (
-    <section className="scroll-mt-[96px] relative">
+    <section className="scroll-mt-24 relative">
       <div data-reveal className="mx-auto max-w-[1280px] px-9 pt-20 pb-6">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div className="max-w-[640px]">
             <div className="text-2xs leading-[normal] font-bold tracking-widest text-orange uppercase">What our clients say</div>
-            <h2 className="mt-3.5 text-[42px] leading-[1.06]">Trusted by forward-thinking teams.</h2>
+            <h2 className="mt-3.5 text-[42px] leading-[1.06]">15+ webinars on AI-first engineering. And counting.</h2>
             <p className="mt-3.5 text-base leading-[1.55] text-muted">
-              Empowering fast-growing companies with AI-powered solutions built for scale.
+              Over the past two years, TechGrit has hosted more than 15 webinars on AI-first engineering practices.
             </p>
           </div>
 

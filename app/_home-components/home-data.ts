@@ -26,22 +26,25 @@ export type DeliveryStat = {
   count?: number;
   suffix?: string;
   suffixClassName?: string;
+  postSuffix?: string;
+  postSuffixClassName?: string;
   staticValue?: string;
   /** Whether the value uses the brand gradient text-clip treatment. */
   gradient?: boolean;
 };
 
 export const DELIVERY_STATS: DeliveryStat[] = [
-  { id: "delivery-speed", count: 10, suffix: "X", suffixClassName: "text-amber-light", label: "Delivery Speed" },
+  { id: "sucessful-projects", count: 500, suffix: "+", suffixClassName: "text-amber-light", label: "Successful Projects" },
+  { id: "sucessful-clients", count: 70, suffix: "+", suffixClassName: "text-amber-light", label: "Successful Clients" },
+  { id: "deep-industry-expertise", count: 12, suffix: "+", postSuffix: "years", postSuffixClassName: "text-amber-light text-stat ml-2" , suffixClassName: "text-amber-light", label: "Deep Industry Expertise" },
   {
     id: "sprint-to-scale",
     count: 6,
     suffix: " weeks",
     suffixClassName: "text-amber-light text-stat",
-    label: "Sprint to Scale",
+    label: "AI deployed. Fast. Scalable.",
     gradient: true,
   },
-  { id: "legacy-debt", staticValue: "zero", label: "Legacy Debt" },
 ];
 
 export type TrustedClientLogo = {
@@ -78,20 +81,26 @@ export type PlatformCapability = {
 export const PLATFORM_CAPABILITIES: PlatformCapability[] = [
   {
     icon: AutonomousAgentIcon,
-    title: "Autonomous Agent Integration",
-    description: "Agents handle PR reviews, test generation, and CI/CD validation autonomously.",
+    title: "OrbitAI™",
+    description: "AI-assisted software delivery orchestrated across the entire SDLC",
     tone: "blue",
   },
   {
     icon: PromptToProductionIcon,
-    title: "Prompt-to-Production Pipeline",
-    description: "From a defined prompt to deployed, tested code, with no manual handoffs.",
+    title: "4D™",
+    description: "A structured engineering methodology for successful software delivery.",
     tone: "blue",
   },
   {
     icon: SelfHealingIcon,
-    title: "Self-Healing Infrastructure",
-    description: "Systems that detect, diagnose, and remediate issues before they reach users.",
+    title: "PRISM™",
+    description: "Understand your legacy systems before you modernize them.",
+    tone: "teal",
+  },
+  {
+    icon: SelfHealingIcon,
+    title: "AI IMPACT™",
+    description: "Discover where AI delivers measurable business value.",
     tone: "teal",
   },
 ];
@@ -113,9 +122,9 @@ export const METHODOLOGY_PHASES: MethodologyPhase[] = [
   {
     n: 1,
     week: "Week 1",
-    title: "Architect",
+    title: "Discovery & Architecture",
     description:
-      "We architect the vision before a line of code is written, defining the technical blueprint, the AI agent workflows, and the success criteria we will be measured against.",
+      "Agreed technical blueprint, defined AI workflows, and shared success criteria, before a line of code is written. ",
     deliverables: ["Technical architecture blueprint", "Defined AI agent workflows", "Shared success criteria"],
     icon: PhaseArchitectIcon,
   },
@@ -124,25 +133,25 @@ export const METHODOLOGY_PHASES: MethodologyPhase[] = [
     week: "Weeks 2 to 4",
     title: "Agentic Build",
     description:
-      "OrbitAI agents build in parallel across the UI, business logic, and data layers, while our engineers review every pull request and steer the system at each gate.",
+      "Parallel development across UI, business logic, and data layers, governed by our framework agents with engineer oversight.",
     deliverables: ["Parallel UI, logic and data build", "OrbitAI agent orchestration", "Engineer oversight on every PR"],
     icon: PhaseAgenticBuildIcon,
   },
   {
     n: 3,
     week: "Week 5",
-    title: "Industrialize",
+    title: "Hardening & Scale Review",
     description:
-      "We harden the system for the real world, validating security, load-testing at scale, and clearing every enterprise-readiness gate. Nothing ships until it passes.",
+      "Security validation, load testing, and enterprise readiness checks. Nothing ships without passing these gates.",
     deliverables: ["Security validation", "Load and scale testing", "Enterprise-readiness gates"],
     icon: PhaseIndustrializeIcon,
   },
   {
     n: 4,
     week: "Week 6",
-    title: "Impact",
+    title: "Production Launch",
     description:
-      "We deploy to production with real users and real data, and hand over a system your team can own, complete with runbooks and architecture documentation.",
+      "Live deployment, real users, and a documented handover; including runbooks, architecture diagrams, and support transition.",
     deliverables: ["Live production deployment", "Runbooks and architecture docs", "Full support transition"],
     icon: PhaseImpactIcon,
   },

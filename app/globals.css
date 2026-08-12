@@ -320,6 +320,8 @@
    * consumed solely by the base h1-h4 tag rules below. */
   --text-2xs: var(--text-2xs);
   --text-xs: var(--text-xs);
+  --text-md: var(--text-md);
+  --text-lg-fixed: var(--text-lg-fixed);
   --text-sm: var(--text-sm);
   --text-base: var(--text-base);
   --text-lg: var(--text-lg);
@@ -331,6 +333,7 @@
   --text-13-5: var(--text-13-5);
   --text-15-5: var(--text-15-5);
   --text-14-5: var(--text-14-5);
+  --text-18: var(--text-18);
   --text-21: var(--text-21);
   --text-stat: var(--text-stat);
   --text-stat-count: var(--text-stat-count);

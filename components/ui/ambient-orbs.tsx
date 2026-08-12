@@ -26,7 +26,7 @@ export function AmbientOrbs() {
 
   // Webinar's own reference-exact 2-orb set (TechGrit Webinar.dc.html lines 110-113) —
   // the shared default's 3rd (amber) orb has no reference equivalent here (v2.2 FR-030b).
-  if (pathname === "/webinar") {
+  if (pathname === "/webinar/") {
     return (
       <div aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
         <span className="absolute -top-40 -right-30 h-140 w-140 rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]" />

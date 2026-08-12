@@ -23,13 +23,14 @@ type PhaseShowcaseProps = {
   phases: MethodologyPhaseContent[];
   eyebrow: string;
   heading: ReactNode;
+  description?: ReactNode;
 };
 
 /** Reusable scroll-pinned phase showcase (FR-006) — content is caller-supplied so a future
  * consumer (e.g. /frameworks) could reuse this component without forking it; see
  * specs/001-v2-2-ui-enhancements/research.md §12 and plan.md's "Homepage Methodology"
  * addendum item 2 (extracted from app/_home-components/MethodologySection.tsx). */
-export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcaseProps) {
+export default function PhaseShowcase({ phases, eyebrow, heading, description }: PhaseShowcaseProps) {
   const phaseCount = phases.length;
   const [activeIndex, setActiveIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -104,7 +105,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
           className="flex min-h-screen flex-col items-center justify-center max-tg-sm:justify-start overflow-hidden py-10 max-tg-sm:pt-21 max-tg-sm:pb-5 px-tg-15 max-tg-md:px-tg-17"
           style={{ position: "absolute", top: 0, left: 0, right: 0 }}
         >
-          <div className="mx-auto w-full max-w-[1280px] px-tg-15 max-tg-md:px-tg-17">
+          <div className="mx-auto w-full max-w-7xl px-tg-15 max-tg-md:px-tg-17">
             <div className="text-center">
               <SectionEyebrow showAccent={false} className="mb-3.5! max-tg-sm:mb-2! leading-[normal]">
                 {eyebrow}
@@ -113,6 +114,11 @@ export default function PhaseShowcase({ phases, eyebrow, heading }: PhaseShowcas
             <h2 className="mx-auto max-w-205 text-center leading-[46.2px] max-tg-sm:leading-8.5 text-[clamp(30px,4vw,44px)]">
               {heading}
             </h2>
+            {description && (
+              <p className="mx-auto mt-4.5 max-w-170 text-center text-[17.5px] leading-[1.65] text-muted max-tg-sm:text-xs max-tg-sm:mt-3">
+                {description}
+              </p>
+            )}
 
             <div className="relative mt-10 max-tg-sm:mt-4">
               <div

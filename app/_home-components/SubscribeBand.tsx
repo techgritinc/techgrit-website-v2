@@ -43,7 +43,7 @@ export default function SubscribeBand() {
             <div>
               <h3 className="text-[25px] leading-[1.2]">Stay ahead of the legacy.</h3>
               <p className="mt-2 text-[16px] leading-[1.5] text-muted">
-                Subscribe for exclusive access to our upcoming AI-first webinars and podcasts.
+                Subscribe to be the first to know when we announce our next session.
               </p>
             </div>
 
