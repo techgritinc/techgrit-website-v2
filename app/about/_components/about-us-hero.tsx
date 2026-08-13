@@ -1,42 +1,28 @@
 import type { HeroSection } from "../_data/types";
+import Button from "@/components/ui/Button";
 
 export function AboutUsHero({ section }: { section: HeroSection }) {
   const [before, after] = section.title.split(section.titleHighlight);
 
   return (
-    <section>
-      <div className="mx-auto text-center" style={{ maxWidth: "var(--measure-hero)", paddingTop: "var(--space-24)", paddingInline: "var(--space-15)", paddingBottom: "var(--space-26)" }}>
+    <section className="relative">
+      <div className="mx-auto max-w-[1000px] text-center pt-[96px] px-[36px] pb-[70px]">
         <div
           data-rise
-          className="inline-flex items-center"
-          style={{
-            animationDelay: ".05s",
-            gap: "var(--space-3)",
-            background: "var(--color-glass)",
-            border: "1px solid var(--color-border)",
-            padding: "var(--space-2) var(--space-6)",
-            borderRadius: "var(--radius-pill)",
-            marginBottom: "var(--space-12)",
-            backdropFilter: "blur(var(--blur-sm))",
-          }}
+          className="inline-flex items-center gap-[10px] bg-glass border border-border-hairline px-[16px] py-[8px] rounded-[40px] mb-[28px] backdrop-blur-[var(--blur-sm)]"
+          style={{ animationDelay: ".05s", lineHeight: "normal", opacity: 0 }}
         >
-          <span className="status-dot status-orange" />
           <span
-            style={{
-              fontSize: "var(--text-2xs)",
-              fontWeight: "var(--fw-bold)",
-              letterSpacing: "var(--ls-08)",
-              color: "var(--color-text-strong)",
-              textTransform: "uppercase",
-            }}
+            className="font-bold uppercase text-strong leading-normal"
+            style={{ fontSize: "12.5px", letterSpacing: "0.08em" }}
           >
             {section.eyebrow}
           </span>
         </div>
         <h1
           data-rise
-          className="text-[46px] leading-[1.02] tracking-[var(--ls-tight)] md:text-[60px]"
-          style={{ animationDelay: ".12s" }}
+          className="text-[60px] max-[920px]:text-[46px] font-bold text-white"
+          style={{ animationDelay: ".12s", lineHeight: 1.02, letterSpacing: "-0.04em", opacity: 0 }}
         >
           {before}
           <span className="text-gradient">{section.titleHighlight}</span>
@@ -44,34 +30,32 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
         </h1>
         <p
           data-rise
-          className="mx-auto text-[length:var(--text-lg-fixed)]"
-          style={{
-            animationDelay: ".2s",
-            marginTop: "var(--space-11)",
-            maxWidth: "var(--measure-blog-lead)",
-            lineHeight: "var(--lh-body)",
-            color: "var(--color-text-secondary)",
-          }}
+          className="mx-auto mt-[26px] max-w-[640px] text-secondary"
+          style={{ animationDelay: ".2s", fontSize: "18.5px", lineHeight: 1.65, opacity: 0 }}
         >
           {section.subtitle}
         </p>
         <div
           data-rise
-          className="flex flex-wrap items-center justify-center"
-          style={{ animationDelay: ".3s", marginTop: "var(--space-15)", gap: 15 }}
+          className="mt-[36px] flex flex-wrap items-center justify-center gap-[15px]"
+          style={{ animationDelay: ".3s", opacity: 0 }}
         >
-          <a
+          <Button
             href={section.primaryCtaLink}
-            className="btn btn-primary btn-lg"
-            style={{ fontSize: "var(--text-md)" }}
+            variant="primary"
+            size="hero"
+            className="!py-[15px] min-h-[52px] leading-[normal]"
           >
-            {section.primaryCtaLabel} <span aria-hidden="true">&#8594;</span>
-          </a>
-          <a href={section.secondaryCtaLink} className="btn btn-ghost btn-lg"
-            style={{ padding: "var(--space-6) var(--space-11)", fontSize: "var(--text-md)" }}
+            {section.primaryCtaLabel} <span aria-hidden="true" className="text-[17px]">&#8594;</span>
+          </Button>
+          <Button
+            href={section.secondaryCtaLink}
+            variant="ghost"
+            size="hero"
+            className="!px-[26px] leading-[normal]"
           >
             {section.secondaryCtaLabel}
-          </a>
+          </Button>
         </div>
       </div>
     </section>

@@ -1,3 +1,5 @@
+
+
 export interface CollageImage {
   src: string;
   alt: string;
@@ -46,7 +48,6 @@ export interface OpenRole {
 export interface LifeAtTechGritContent {
   heading: string;
   description: string;
-  images: CollageImage[];
 }
 
 export interface ClosingCtaContent {
@@ -197,15 +198,9 @@ export const careersPageContent: CareersPageContent = {
     },
   ],
   lifeAtTechGrit: {
-    heading: "Life at TechGrit",
-    description:
-      "The work is hard and the standards are high — but we make room for the moments that turn a team into a family.",
-    images: [
-      { src: "/assets/team/glasses.png", alt: "Team portrait", span: "tall" },
-      { src: "/assets/team/rooftop.png", alt: "Rooftop gathering", span: "wide" },
-      { src: "/assets/team/painting.png", alt: "Diwali painting", span: "default" },
-      { src: "/assets/team/diwali.png", alt: "Diwali celebration", span: "wide3" },
-    ],
+    heading: "Life at TechGrit.",
+    description: "The people and the culture behind the engineering.",
+    
   },
   cta: {
     heading: "Don't see your exact role?",

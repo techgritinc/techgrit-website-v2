@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
+import Button from "@/components/ui/Button";
 
 export function CaseStudiesFinalCta({ variant = "list" }: { variant?: "list" | "detail" }) {
   return (
@@ -7,7 +7,7 @@ export function CaseStudiesFinalCta({ variant = "list" }: { variant?: "list" | "
       <div className="tg-container pt-[20px] pb-[90px] px-[var(--space-15)]">
         <RevealOnScroll>
           <div
-            className="relative overflow-hidden flex flex-wrap items-center justify-between rounded-4xl bg-ink-mid border border-border-faint px-[48px] py-[54px] gap-[30px]"
+            className="relative overflow-hidden flex flex-wrap items-center justify-between rounded-4xl bg-[var(--color-glass-faint)] border border-[var(--color-border)] backdrop-blur-[var(--blur-cta)] px-[48px] py-[54px] gap-[30px]"
           >
             <div
               aria-hidden="true"
@@ -23,12 +23,13 @@ export function CaseStudiesFinalCta({ variant = "list" }: { variant?: "list" | "
                   : "The era of artificial intelligence is here. Explore how to leverage AI-driven insights and tools to gain a competitive edge and build a smarter tomorrow."}
               </p>
             </div>
-            <Link
+            <Button
               href="/contact"
-              className="btn btn-primary btn-lg relative gap-[10px] text-[16px] px-[30px] py-[16px] rounded-[12px] whitespace-nowrap"
+              variant="primary"
+              className="relative gap-[10px] text-[16px] !px-[30px] !py-[15px] !rounded-[12px] !min-h-[52px] whitespace-nowrap"
             >
               Get in Touch <span aria-hidden="true" className="text-[17px]">&#8594;</span>
-            </Link>
+            </Button>
           </div>
         </RevealOnScroll>
       </div>

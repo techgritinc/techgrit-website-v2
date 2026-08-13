@@ -86,19 +86,19 @@ export const aboutUsContent: AboutUsPageContent = {
       steps: [
         {
           order: 1,
-          label: "Step 01",
+          label: "STEP 01",
           title: "Strategize & Design",
           description: "We collaborate to define your vision and create a clear technical roadmap.",
         },
         {
           order: 2,
-          label: "Step 02",
+          label: "STEP 02",
           title: "Engineer & Innovate",
           description: "Our expert team, enhanced by AI, builds a robust and scalable solution.",
         },
         {
           order: 3,
-          label: "Step 03",
+          label: "STEP 03",
           title: "Scale & Support",
           description: "We deploy your solution and provide ongoing support to ensure long-term success.",
         },
@@ -134,13 +134,6 @@ export const aboutUsContent: AboutUsPageContent = {
       eyebrow: "Inside TechGrit",
       title: "Life at TechGrit.",
       subtitle: "The people and the culture behind the engineering.",
-      // No real team photos exist yet — null on every photo exercises the FR-013 placeholder path.
-      photos: [
-        { layout: "tall", image: null },
-        { layout: "square", image: null },
-        { layout: "square", image: null },
-        { layout: "wide", image: null },
-      ],
     },
     {
       type: "finalCta",
@@ -154,3 +147,4 @@ export const aboutUsContent: AboutUsPageContent = {
     },
   ],
 };
+ 

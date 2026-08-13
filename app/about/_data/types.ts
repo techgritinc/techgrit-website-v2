@@ -112,18 +112,12 @@ export interface PartnerSection {
   outcomes: PartnershipOutcome[];
 }
 
-export interface CulturePhoto {
-  layout: "tall" | "square" | "wide";
-  image: SectionImage | null;
-}
-
 export interface CultureGallerySection {
   type: "cultureGallery";
   order: number;
   eyebrow: string;
   title: string;
   subtitle: string;
-  photos: CulturePhoto[];
 }
 
 export interface FinalCtaSection {
@@ -152,3 +146,4 @@ export interface AboutUsPageContent {
   seo: PageSeo;
   sections: PageSectionEntry[];
 }
+ 

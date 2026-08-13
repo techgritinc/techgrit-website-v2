@@ -434,3 +434,168 @@ this repo — this is manual, plus `npm run lint`/`npm run build`.
    secondary link's typography/hover/underline classes, and its text content). No other homepage
    section, no other page — the card's own background/border/radius/blur, the eyebrow/heading/paragraph,
    and the primary button must be pixel- and byte-unchanged.
+
+---
+
+# Quickstart Addendum: Verifying "Skip the Form" Card (Contact, User Story 9)
+
+Scope: only the new card in `app/(marketing)/contact/_components/contact-hero-form.tsx`'s left
+column, plus its supporting icon and token. No test framework exists in this repo — this is manual,
+plus `npm run lint`/`npm run build`.
+
+## 12. "Skip the Form" card (`contact-hero-form.tsx`)
+
+1. Open `/contact` at desktop width and confirm a new card renders in the left column, directly
+   below the "Where we work" contact-info row.
+2. Confirm the card shows: a calendar-icon chip, an amber uppercase "Skip the form" label, "Book a
+   30-min discovery call now." body copy, and a "Book a call" button with a gradient background
+   matching the existing "Send message"/CTA buttons elsewhere on the page.
+3. Confirm the card's own background is a subtle diagonal orange-to-transparent gradient (not a flat
+   fill), matching `TechGrit Contact.dc.html` lines 249-258.
+4. Click "Book a call" and confirm **no** Calendly widget/popup opens and no network request to
+   `calendly.com` fires (check the Network tab) — the button is a static placeholder, per spec.md
+   Clarifications Session 2026-08-07.
+5. Confirm the existing contact form (topic chips, Full name/Work email/Company/message fields,
+   Send message button, and the sent/success state) is visually and behaviorally unchanged.
+6. Resize to tablet and mobile widths and confirm the card wraps/stacks normally with no horizontal
+   overflow, consistent with the rest of the left column.
+
+## 13. Gate check (Contact — Skip the Form)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/(marketing)/contact/_components/contact-hero-form.tsx`,
+   `app/(marketing)/contact/_components/icons.tsx` (+1 icon), and `app/tokens.css` (+1 gradient
+   token, no `globals.css` entry needed). No other Contact file, no other page, and no shared
+   component beyond consuming the existing `components/ui/Button` primitive as-is (no edit to
+   `Button.tsx` itself).
+
+---
+
+# Quickstart Addendum: Verifying About Us Page — Badge, Eyebrow & Culture-Gallery Grid Alignment (User Story 7)
+
+Scope: only the hero badge's dot, the page's `SectionEyebrow` accent symbols, and the culture-photo
+gallery's grid (`about-us-culture-gallery.tsx`, delegating to `LifeGallery.tsx`). No test framework
+exists in this repo — this is manual, plus `npm run lint`/`npm run build`.
+
+## 14. Badge, eyebrows, and culture gallery (`/about`)
+
+1. Open `/about` at desktop width and confirm the "About TechGrit" hero badge shows no dot — just the
+   uppercase label text.
+2. Scroll through the page and confirm every eyebrow ("Who you are", "Our role", "What we stand
+   for", "How we work", "If we partner together") shows no leading dash before the label.
+3. Scroll to "Life at TechGrit" and confirm the eyebrow reads "Inside TechGrit" with no leading dash,
+   and the heading/description match `TechGrit About.dc.html` ("Life at TechGrit." / "The people and
+   the culture behind the engineering.").
+4. Confirm the gallery shows 4 equal-size photo tiles in a 4-column grid — no tile spans 2 columns or
+   2 rows (the previous `tall`/`wide` mosaic is gone) — and every tile shows a real photo, not a
+   "Coming soon" placeholder.
+5. Hover each tile and confirm a caption reveals (e.g. "The team" / "Builders and designers behind
+   the engineering.") — matching the same captions already shown on `/careers`'s Life at TechGrit
+   section.
+6. Resize to tablet width (~768-920px) and confirm the grid collapses to 2 columns; resize to mobile
+   width (≤560px) and confirm it collapses to 1 column — no horizontal overflow at either width.
+7. Confirm no "Explore Careers" / "Meet the team" buttons render below this gallery on `/about` (those
+   are `home`-variant-only).
+8. Open `/` and `/careers` and confirm their own Life at TechGrit galleries are visually unchanged —
+   the `LifeGallery.tsx` `src`-type widening introduced no regression on either.
+
+## 15. Gate check (About)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/about/_components/about-us-hero.tsx`, `app/about/_components/
+   about-how-we-work.tsx`, `app/about/_components/about-us-our-role.tsx`, `app/about/_components/
+   about-us-partner.tsx`, `app/about/_components/about-us-values.tsx`, `app/about/_components/
+   about-us-who-you-are.tsx`, `app/about/_components/about-us-culture-gallery.tsx`,
+   `app/about/_data/about-us-content.ts`, `app/about/_data/types.ts`, and
+   `app/_home-components/LifeGallery.tsx` (the `src` type widening only — no visual change to its
+   `home`/`careers` variants). No `tokens.css`/`globals.css` edit, no other About file, no other
+   page, and no other shared component touched.
+
+## 16. Case Studies hub & detail (`/case-studies`, `/case-studies/[slug]`)
+
+1. Open `/case-studies` at desktop width and confirm the 3 background ambient orbs: the top-right orb
+   reads as orange (not blue), and the other two (lower-left, bottom-center) are unchanged from
+   today — all three should look like a single coherent warm/cool orb set, matching
+   `TechGrit Case Studies.dc.html`.
+2. Hover the featured card (top banner) and confirm it lifts and its border tints toward its accent
+   color (e.g. blue for a FinTech card) — this border-color change is correct and expected, not a
+   regression. Hover a grid card below and confirm the same lift + border-brighten treatment.
+3. Confirm the hero's "Case Studies" badge still shows its blue glowing dot — this page's badge
+   correctly keeps its dot (unlike Services/Blog/About).
+4. Scroll to the filter bar (below the featured card) and confirm it shows a dark, blurred background,
+   a "Filter" label, and chips reading All / FinTech / Marketplace / AI Enablement / Design — no
+   "Featured" chip. Continue scrolling and confirm the bar sticks to the top of the viewport (just
+   below the header) while the grid scrolls beneath it, and the featured card above it has already
+   scrolled out of view.
+5. Click a category chip (e.g. "FinTech") and confirm: the grid re-filters to only matching cards with
+   no page reload or navigation; the featured card does NOT disappear, regardless of its own category,
+   since it stays outside the filterable set by design.
+6. Click a chip with no matching grid entries is not possible today (every chip has at least one
+   match) — instead, verify the "no results" path by temporarily confirming the reset control exists:
+   click "All" after any other chip and confirm the full grid returns.
+7. Open a case-study detail page (e.g. via "View Case Study") and confirm its 2 background orbs: a
+   top-right orange orb (same as the hub page's first orb) and a second, amber-toned orb positioned
+   around a third of the way down the left edge — both should read as warm-toned, not the previous
+   teal/blue pair.
+8. Scroll to the closing CTA on both the hub and a detail page and confirm: the card's background
+   reads as a translucent dark glass panel (not solid black) with a soft blur, and the "Get in Touch"
+   control renders through the shared button styling (gradient fill, lift-on-hover) at the reference's
+   `15px 30px` padding / `52px` height.
+
+## 17. Gate check (Case Studies)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/case-studies/page.tsx` (orb 1 color fix, filter-section wiring),
+   `app/case-studies/[slug]/page.tsx` (both orbs rebuilt), `app/case-studies/_components/
+   case-studies-final-cta.tsx` (background + Button swap), `app/case-studies/_data/
+   case-studies-content.ts` (+`CASE_STUDY_CATEGORIES`), two new files
+   (`app/case-studies/_components/case-studies-filters.tsx`,
+   `app/case-studies/_components/case-studies-filter-section.tsx`), and `app/tokens.css`/
+   `app/globals.css` (+1 token pair, `--color-overlay-amber-light-10`). No other Case Studies file
+   (`case-study-detail-hero.tsx`, `metrics-strip.tsx`, `case-study-narrative.tsx`,
+   `architecture-diagram.tsx`, `team-panel.tsx`, `related-case-studies.tsx`, `case-studies-grid.tsx`,
+   `featured-case-study.tsx`), no `components/ui/FilterBar.tsx` or `components/ui/Button.tsx`, no
+   other page, and no other shared component touched.
+
+## 18. Services accordion & hero Button component (`/services`)
+
+1. Open `/services` at desktop width and confirm the accordion's intro block renders above the 3 cards:
+   a centered "Our services" eyebrow, "Three services. One AI-first engine." heading, and "Click any
+   service to expand and see the full delivery approach." subheading — none of this exists before this
+   slice lands.
+2. Confirm the first card ("01 · UI/UX Design") renders already expanded (image, description, and the
+   "Our approach" 6-step list visible) while the other two ("02 · Software Product Engineering",
+   "03 · Quality Engineering") render collapsed (header only, no body visible).
+3. Click "02 · Software Product Engineering"'s header and confirm: it expands to show its description,
+   image, and 6-item capability grid; "01" simultaneously collapses (single-open — at no point are two
+   cards expanded together). Click "02" again and confirm it collapses, leaving all 3 cards collapsed.
+4. Confirm the currently-open card's border and shadow show the reference's brand-orange highlight
+   (`rgba(232,119,34,0.35)` border, soft orange glow) — this is correct even for "01" (blue-accented)
+   and "03" (teal-accented) when open; the highlight is never accent-color-matched, per the reference's
+   own hardcoded behavior.
+5. Hover a collapsed card's header and confirm no visual change occurs at all (no background tint, no
+   border change, no lift) — only the cursor becomes a pointer. Then open a card and hover one of its
+   inner "Our approach" steps or capability-grid tiles and confirm that item lifts slightly with a
+   border-color brighten (no background-color change) — this nested-item hover is correct and
+   unchanged.
+6. Resize the browser across the `md`/`lg` breakpoint boundaries (desktop → tablet → mobile and back)
+   while a card is expanded and confirm it stays expanded throughout — its rendered height should
+   adjust smoothly with no clipped/cut-off content and no forced collapse.
+7. Confirm both hero buttons ("Schedule a Consultation", "Explore Services") render through the shared
+   `Button` component's classes (gradient-fill primary, translucent-glass ghost with lift-on-hover) at
+   the same padding/sizing as before this slice — a component swap only, no visual change to either
+   button.
+
+## 19. Gate check (Services)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/services/_data/types.ts` (new `AccordionSection`/
+   `ServiceAccordionItem` types), `app/services/_data/services-content.ts` (new `accordion` section +
+   intro copy), `app/services/page.tsx` (single `case "accordion"` dispatch), `app/services/
+   _components/services-hero.tsx` (CTAs swapped to `Button`), `app/tokens.css`/`app/globals.css` (+4
+   tokens: `--shadow-accordion-open-glow`, `--gradient-divider-blue`, `--gradient-divider-orange`,
+   `--gradient-divider-teal`), and one new file (`app/services/_components/services-accordion.tsx`).
+   `app/services/_components/services-overview.tsx` and `app/services/_components/
+   service-detail-section.tsx` should no longer exist. No other Services file (FR-013a's ambient-orbs
+   work is separate and out of this slice), `components/ui/Button.tsx`, no other page, and no other
+   shared component touched.

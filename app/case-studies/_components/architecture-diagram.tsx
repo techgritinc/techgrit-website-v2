@@ -46,15 +46,14 @@ const NODE_STYLES = [
 export function ArchitectureDiagram({ flow }: { flow: ArchitectureFlow }) {
   return (
     <div
-      className="mt-[26px] border border-border-faint rounded-[20px] px-[30px] py-[38px]"
-      style={{ background: "linear-gradient(160deg, var(--color-glass), var(--color-glass-hairline))" }}
+      className="mt-[26px] border border-border-faint rounded-[20px] px-[30px] py-[38px] h-[258px] max-tg-sm:h-auto bg-[linear-gradient(160deg,var(--color-glass),var(--color-glass-hairline))]"
     >
       <div className="flex flex-wrap max-tg-sm:flex-col items-center justify-center gap-[8px]">
         {flow.nodes.map((node, index) => {
           const nodeStyle = NODE_STYLES[index] ?? NODE_STYLES[NODE_STYLES.length - 1];
           return (
             <div key={node} className="contents">
-              <div className="text-center" style={{ minWidth: nodeStyle.minWidth }}>
+              <div className="text-center leading-[normal]" style={{ minWidth: nodeStyle.minWidth }}>
                 <div
                   className="w-full rounded-[14px]"
                   style={{
@@ -87,12 +86,12 @@ export function ArchitectureDiagram({ flow }: { flow: ArchitectureFlow }) {
 
       {flow.integrations.length > 0 ? (
         <>
-          <div className="flex items-center justify-center gap-[10px] mt-[18px]">
+          <div className="flex items-center justify-center gap-[10px] mt-[18px] leading-[normal]">
             <span className="text-text-whisper" aria-hidden="true">&#8595;</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-[14px]">
             {flow.integrations.map((integration) => (
-              <div key={integration.label} className="text-center" style={{ minWidth: 110 }}>
+              <div key={integration.label} className="text-center leading-[normal]" style={{ minWidth: 110 }}>
                 <div className="bg-glass border border-border rounded-card px-[12px] py-[13px] text-[12.5px] font-bold text-text-bright">
                   {integration.label}
                 </div>

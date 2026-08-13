@@ -1,7 +1,17 @@
-import { LightningIcon, BookIcon, HomeIcon, HeartIcon, BarChartIcon, UsersIcon } from "@/components/ui/icons";
+import {
+  LightningIcon,
+  BookIcon,
+  HomeIcon,
+  HeartIcon,
+  BarChartIcon,
+  UsersIcon,
+} from "@/components/ui/icons";
 import type { Benefit, BenefitIconName } from "../_data/careers-data";
 
-const ICON_COMPONENTS: Record<BenefitIconName, (props: { className?: string }) => React.JSX.Element> = {
+const ICON_COMPONENTS: Record<
+  BenefitIconName,
+  (props: { className?: string }) => React.JSX.Element
+> = {
   lightning: LightningIcon,
   book: BookIcon,
   home: HomeIcon,
@@ -11,11 +21,23 @@ const ICON_COMPONENTS: Record<BenefitIconName, (props: { className?: string }) =
 };
 
 const ICON_ACCENT_CLASSES: Record<BenefitIconName, { bg: string; border: string; text: string }> = {
-  lightning: { bg: "bg-overlay-orange-12", border: "border-border-orange-30", text: "text-amber-light" },
+  lightning: {
+    bg: "bg-overlay-orange-12",
+    border: "border-border-orange-30",
+    text: "text-amber-light",
+  },
   book: { bg: "bg-overlay-blue", border: "border-border-blue-light-30", text: "text-blue-light" },
-  home: { bg: "bg-overlay-teal-light-12", border: "border-border-teal-light-30", text: "text-teal-light" },
+  home: {
+    bg: "bg-overlay-teal-light-12",
+    border: "border-border-teal-light-30",
+    text: "text-teal-light",
+  },
   heart: { bg: "bg-overlay-amber-12", border: "border-border-amber-30", text: "text-yellow" },
-  barChart: { bg: "bg-overlay-orange-12", border: "border-border-orange-30", text: "text-amber-light" },
+  barChart: {
+    bg: "bg-overlay-orange-12",
+    border: "border-border-orange-30",
+    text: "text-amber-light",
+  },
   users: { bg: "bg-overlay-blue", border: "border-border-blue-light-30", text: "text-blue-light" },
 };
 
@@ -23,7 +45,9 @@ export function WhyJoinSection({ heading, benefits }: { heading: string; benefit
   return (
     <section>
       <div className="mx-auto max-w-[1280px] px-9 pt-14 pb-[30px]">
-        <h2 className="max-w-[680px] text-[clamp(28px,3.4vw,40px)] font-bold leading-[normal] tracking-[-0.03em]">{heading}</h2>
+        <h2 className="font-body max-w-[680px] text-[clamp(28px,3.4vw,40px)] font-bold leading-[normal] tracking-[-0.03em] text-white">
+          {heading}
+        </h2>
 
         <div className="mt-[34px] grid grid-cols-3 gap-5 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
           {benefits.map((benefit) => {
@@ -40,8 +64,12 @@ export function WhyJoinSection({ heading, benefits }: { heading: string; benefit
                 >
                   <Icon className="h-[22px] w-[22px]" />
                 </div>
-                <h3 className="mt-4 text-[18.5px] font-bold leading-[normal] tracking-[0] text-primary">{benefit.title}</h3>
-                <p className="mt-[9px] text-[14.5px] leading-[1.6] text-text-60">{benefit.description}</p>
+                <h3 className="font-body mt-4 text-[18.5px] font-bold leading-[normal] tracking-[0] text-white">
+                  {benefit.title}
+                </h3>
+                <p className="mt-[9px] text-[14.5px] leading-[1.6] text-text-60">
+                  {benefit.description}
+                </p>
               </div>
             );
           })}

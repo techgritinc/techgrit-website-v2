@@ -379,42 +379,12 @@ export type CultureGalleryImage = {
   id: string;
   src: string;
   alt: string;
-  span: "tall" | "wide" | "default" | "wide3";
-  captionLabel: string;
-  caption: string;
 };
 
 export const CULTURE_GALLERY_IMAGES: CultureGalleryImage[] = [
-  {
-    id: "glasses",
-    src: "/assets/team/glasses.png",
-    alt: "TechGrit team member",
-    span: "tall",
-    captionLabel: "The team",
-    caption: "Builders and designers behind the engineering.",
-  },
-  {
-    id: "rooftop",
-    src: "/assets/team/rooftop.png",
-    alt: "TechGrit office rooftop",
-    span: "default",
-    captionLabel: "The office",
-    caption: "Rooftop breaks, real conversations.",
-  },
-  {
-    id: "painting",
-    src: "/assets/team/painting.png",
-    alt: "TechGrit culture moment",
-    span: "default",
-    captionLabel: "Craft",
-    caption: "We take craft seriously — inside & outside code.",
-  },
-  {
-    id: "diwali",
-    src: "/assets/team/diwali.png",
-    alt: "TechGrit team celebration",
-    span: "wide",
-    captionLabel: "Together",
-    caption: "We celebrate wins — and Diwali — together.",
-  },
+  { id: "glasses", src: "/assets/team/glasses.png", alt: "TechGrit team member" },
+  { id: "rooftop", src: "/assets/team/rooftop.png", alt: "TechGrit office rooftop" },
+  { id: "painting", src: "/assets/team/painting.png", alt: "TechGrit culture moment" },
+  { id: "diwali", src: "/assets/team/diwali.png", alt: "TechGrit team celebration" },
 ];
+ 

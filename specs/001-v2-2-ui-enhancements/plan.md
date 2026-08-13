@@ -122,8 +122,8 @@ fidelity), scoped to **only** FR-001 through FR-004
  "Trusted by our clients" strip into its own section — the narrowest possible slice of User Story 1.
 It does **not** cover the subscribe row (FR-005), "How We Deliver", "Don't Migrate/Re-Imagine", 
 Construction card, Testimonials, Blog teaser, Life at TechGrit, or the final CTA — all still-open 
-pieces of US1 remain unplanned. Phase 1 above (shared-primitive foundation) is unaffected by this addendum 
-and stays complete as documented.
+pieces of US1 remain unplanned. Shared Foundation above (shared-primitive foundation) is unaffected
+by this addendum and stays complete as documented.
 
 ## Summary
 
@@ -142,7 +142,7 @@ and stays complete as documented.
    live green dot and ripple ring (FR-003a, new — the badge has no dot/ripple today), fix the
    stat/metrics display's font-size/letter-spacing and add the reference's per-segment
    suffix color/size split ("X"/" weeks" render independently from their digits — FR-003; the
-   ghost button half of FR-003 is already satisfied by Phase 1's `Button.tsx` update), and remove
+   ghost button half of FR-003 is already satisfied by Shared Foundation's `Button.tsx` update), and remove
    the nested "Trusted by our clients" block (moved out, FR-004).
 2. **New `app/_home-components/TrustedClients.tsx`** — the "Trusted by our clients" strip as its
    own section, reusing `TRUSTED_CLIENT_LOGOS` from `home-data.ts`, keeping its **current** white
@@ -308,7 +308,7 @@ app/globals.css             # + matching @theme inline entries (letter-spacing, 
                              #   @media (min-width: 960px) (FR-045, research.md §10 — sitewide fix)
 ```
 
-No `data-model.md`/`contracts/` (presentation-only, same as Phase 1). No other file is touched.
+No `data-model.md`/`contracts/` (presentation-only, same as Shared Foundation). No other file is touched.
 
 **Structure Decision**: existing single-project structure. `TrustedClients.tsx` is route-local
 (`app/_home-components/`), matching the constitution's rule that route-local sections stay
@@ -2375,3 +2375,753 @@ and background were already reference-correct (only its label typography and z-i
 correction), and confirmed every other value change (badge dot, newsletter background) resolves to an
 existing exact-match token with zero new hardcoded literals beyond the one new letter-spacing token.
 No violations. Gate: PASS.
+
+## Careers Apply-Modal Field Alignment (User Story 8 — FR-037a/FR-037b)
+
+**Date**: 2026-08-05. Extends this plan to cover `app/careers/_components/application-dialog.tsx`,
+per spec.md's User Story 8 update (Clarifications Session 2026-08-05, new FR-037a/FR-037b)
+documenting the Apply modal's reference-exact trigger, structure, fields, and interactions against
+`TechGrit Careers.dc.html`. No other Careers section (hero, stats, Open Roles filters, Life at
+TechGrit, closing CTA copy/layout) is affected, and no other user story's plan changes.
+
+**Already satisfied, no code change**: the modal-open trigger (`RoleCard`'s Apply button →
+`OpenRolesSection.handleApply` → `ApplicationDialog`, plus `CareersCta`'s "Send your resume" general
+entry point), its dismiss behavior (`components/ui/Modal.tsx`'s existing overlay-click/close-button/
+Escape/focus-trap handling), and its reset-on-reopen behavior (`application-dialog.tsx`'s existing
+`prevIsOpen` effect, which already clears all fields and errors on every open) already satisfy
+FR-037a's trigger/dismiss requirements and FR-037b's reset-on-reopen requirement exactly — this
+addendum's only real gap is the form's **field set** and **file-upload validation**, which today
+diverge from the reference.
+
+### Summary
+
+1. **`app/careers/_components/application-dialog.tsx`** — replace the current field set (First
+   name / Last name / Email / Phone / required "fit statement") with the reference's exact fields:
+   **Full name** (one field, replacing the First/Last split), **Email**, **LinkedIn or portfolio
+   URL** (optional, new), a **Resume upload** control (new — required, `.pdf`/`.doc`/`.docx`, max
+   5MB), and **"Why TechGrit?"** (optional message, replacing the required "fit statement"
+   textarea). The current `phone` field is dropped — no reference equivalent. Submit-time required-
+   field validation now checks full name, email, and resume only (not phone/message, both optional
+   per the reference).
+2. **New resume-upload control** inside `application-dialog.tsx` — a clickable card wrapping a
+   visually-hidden `<input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,
+   application/vnd.openxmlformats-officedocument.wordprocessingml.document">`, showing an icon, the
+   selected filename (or a "Click to upload your resume" placeholder), and a sub-label ("PDF, DOC,
+   or DOCX" / "Click to replace file"). Its `onChange` handler enforces FR-037b: a file over 5MB
+   immediately sets a specific over-size error and clears the selection (not deferred to submit); a
+   valid file clears any prior error and stores the filename.
+3. **`components/ui/icons.tsx`** — add one new upload icon (no existing icon in the consolidated
+   icon file covers this), following the file's existing icon-export convention.
+4. Success-state copy is aligned to the reference's pattern (name-aware thanks line, 2-business-day
+   framing) — still a client-side-only state transition with no backend call, per FR-037a.
+
+Nothing else changes. `RoleCard.tsx`, `open-roles-section.tsx`, `CareersCta.tsx`, and
+`components/ui/Modal.tsx` are untouched — their trigger/dismiss/reset behavior already matches
+FR-037a/FR-037b. Because `application-dialog.tsx` is the one shared modal behind both the per-role
+Apply buttons and `CareersCta`'s general "Send your resume" entry point, this field/validation
+rework applies to both entry points identically — not new scope, just this one shared component's
+existing blast radius.
+
+**Constitution check** — PASS on all six principles: no new literal value duplicates an existing
+token — the validation-error box reuses the already-present `--color-error-light` (text) and
+`--color-overlay-red-14`/`--color-overlay-red-40` (background/border) tokens (tagged "Careers
+error-state text" since an earlier pass); the new upload icon's box background/border (reference:
+`rgba(232,119,34,0.14)`/`rgba(232,119,34,0.35)`) reuses the nearest existing tokens
+(`--color-overlay-orange-12`, `--color-border-orange-30`) rather than adding near-duplicate tokens
+for a sub-2%-opacity delta, consistent with this plan's own precedent (Phase 2 addendum's
+stat-divider-border decision). `FormField` is reused as-is for the text/email/url/textarea fields;
+the new file-upload control is a one-off scoped to this one component (no existing primitive covers
+a styled file-picker, and only this dialog needs one today, so it isn't promoted to
+`components/ui/`, per the constitution's "don't pre-scaffold shared primitives" rule). Every
+corrected field, validation rule, and copy pattern is read directly from `TechGrit Careers.dc.html`
+(lines 410-455). No new surface fill; the upload icon's accent stays sparing, matching the
+reference. `frontend-design` skill re-consulted for the one new visual element (the upload control):
+keep its icon-chip + two-line text-stack layout exactly as the reference's inline-flex row, since it
+already reads clearly against this app's existing dark glass-card language. **Anchor files**:
+`app/careers/_components/application-dialog.tsx`, `components/ui/icons.tsx` (+1 icon). No
+`data-model.md`/`contracts/` changes (presentation-only, same as the rest of this plan); no
+`tokens.css`/`globals.css` edit (all needed tokens already exist). No other file touched.
+
+## Careers Page — Full User Story 8 Coverage (Hero, Open Roles Filter, Life at TechGrit)
+
+**Date**: 2026-08-05. Expands this plan's Careers coverage beyond the Apply-modal addendum directly
+above to the rest of User Story 8 (spec.md): FR-035 (hero), FR-036 (Open Roles sticky filter row),
+and the image-layout/copy portion of FR-038 (Life at TechGrit) — the "Inside TechGrit" `Badge` itself
+was already added in Shared Foundation – T005. **The Apply-modal addendum directly above
+(FR-037a/FR-037b) is unchanged and covers the Apply *form's* field/validation/copy scope — it does
+not cover FR-037's own ghost-Apply-button-styling clause, which `/speckit.analyze` (2026-08-05)
+found unaddressed and currently incorrect in code; see tasks.md's Careers Phase 6
+(`Careers – T013`) for that documented gap.** Every value below is read directly from
+`TechGrit Careers.dc.html`.
+
+### FR-035 — Hero: audited, already reference-exact (no code change)
+
+Compared `app/careers/_components/CareersHero.tsx` against the reference (lines 220-243) field by
+field:
+- Eyebrow container (`border-orange-30`/`bg-overlay-orange-10`/`px-4 py-2`) and its label text
+  (`text-2xs`/`tracking-wider`/`text-strong`/uppercase/bold) already resolve to the reference's exact
+  values (`rgba(232,119,34,0.3)`/`0.1`/`8px 16px`/`12.5px`/`0.10em`/`rgba(255,255,255,0.92)`).
+- H1 (`text-[clamp(40px,5.2vw,58px)] tracking-[-0.035em]`) and paragraph (`mt-5 max-w-[500px]
+  text-[18px] leading-[1.65] text-secondary`) both match the reference's `clamp(40px,5.2vw,58px)`/
+  `-0.035em`/`20px`/`500px`/`18px`/`1.65`/`rgba(255,255,255,0.72)` exactly.
+- The "Life at TechGrit" secondary CTA already consumes `variant="ghost"`, already fixed sitewide in
+  Shared Foundation – T002; its per-instance `h-[54px] w-[171.719px]` sizing was already measured
+  against this exact reference button. (Contrast with `RoleCard.tsx`'s Apply button, which does
+  *not* consume this fix cleanly — see `Careers – T013` below.)
+
+**Decision**: no code change for FR-035 — already satisfied. (The hero eyebrow's small dot indicator
+present in code but absent from the reference is deliberately not touched here: FR-044's
+cross-cutting badge-dot-removal list does not name Careers, and FR-035's own wording is scoped to
+"typography, colors, and the ghost button" — adding a dot-removal requirement spec.md itself doesn't
+state would be scope creep beyond what spec.md, this pass's source of truth, actually asks for.)
+
+### FR-036 — Open Roles filter row: real gap, needs restructuring
+
+`app/careers/_components/open-roles-section.tsx` currently renders the "Open roles" `<h2>` and
+`RoleFilters`' chips in one inline flex row (`items-end justify-between`), with no sticky
+positioning, no dark background, and no "Filter" label — none of which matches the reference (lines
+297-310): the heading sits in its own block (`padding:50px 36px 12px`), and a separate sticky bar
+below it (`position:sticky; top:80px; background:rgba(0,0,0,0.72); backdrop-filter:blur(14px);
+border-top`+`border-bottom:rgba(255,255,255,0.06)`) carries a "Filter" label plus the chips.
+
+**Decision**: wire the existing, still-unconsumed `components/ui/FilterBar.tsx` (built in
+Shared Foundation – T004, not yet used by any page) into `open-roles-section.tsx` — split today's single flex row into
+the `<h2>`'s own block, followed by `<FilterBar label="Filter">` wrapping `<RoleFilters .../>`.
+`FilterBar`'s existing tokens already land close enough to the reference to reuse as-is (`top-nav` =
+80px, an exact match; `bg-nav-glass` 0.70 vs. the reference's 0.72; `border-subtle` 0.07 vs. 0.06;
+`blur-nav` 16px vs. 14px — each within the sub-2%-delta reuse tolerance already established
+elsewhere in this plan, not worth new near-duplicate tokens). One real gap in the primitive itself:
+`FilterBar.tsx` today only carries a `border-b`, but the reference's bar has both a top and bottom
+border — add `border-t border-border-subtle` directly to `FilterBar.tsx` (it has no other consumer
+yet, so this fixes the primitive for every future consumer, not a Careers-only patch, with zero risk
+of visual regression elsewhere).
+
+**Anchor files**: `app/careers/_components/open-roles-section.tsx`, `components/ui/FilterBar.tsx`
+(+ top border). `role-filters.tsx`'s chip styling is unchanged — its pill/active-state colors already
+match the reference.
+
+### FR-038 — Life at TechGrit: badge done (Shared Foundation), image layout + copy still diverge
+
+Shared Foundation – T005 already added the "Inside TechGrit" `Badge` to `LifeGallery.tsx`'s `careers`
+variant — that part of FR-038 is complete. Auditing the rest against the reference (lines 334-378)
+surfaced two further gaps:
+
+1. **Supporting copy** ("updated supporting content"): `app/careers/_data/careers-data.ts`'s
+   `lifeAtTechGrit.heading`/`description` ("Life at TechGrit" / "The work is hard and the standards
+   are high — but we make room for the moments that turn a team into a family.") don't match the
+   reference's copy ("Life at TechGrit." / "The people and the culture behind the engineering.").
+   **Decision**: update both strings to the reference's exact copy.
+2. **Image layout**: the reference's 4 tiles are equal-size (`aspect-ratio:3/4`, no spans) with a
+   hover-reveal caption overlay per tile (a category label + a `<figcaption>`) — today's
+   `careers-data.ts` images use asymmetric `tall`/`wide`/`wide3` spans (the `home` variant's own
+   layout, not Careers') and `LifeGallery.tsx` has no caption-overlay markup for either variant.
+   **Decision**: for the `careers` variant only (the `home` variant's own reference-matched layout is
+   untouched), change every image's `span` to `"default"` in `careers-data.ts`; add two new optional
+   fields to the `LifeGalleryImage` type (`captionLabel?: string`, `caption?: string`) populated with
+   the reference's exact per-tile text (glasses → "The team" / "Builders and designers behind the
+   engineering."; rooftop → "The office" / "Rooftop breaks, real conversations."; painting → "Craft" /
+   "We take craft seriously — inside & outside code."; diwali → "Together" / "We celebrate wins — and
+   Diwali — together."); and add a `careers`-only hover-caption overlay to `LifeGallery.tsx`'s tile
+   markup (gradient scrim + label + figcaption, `opacity-0` → `opacity-100` on hover) gated on
+   `variant === "careers"`, so the `home` variant's tiles render exactly as they do today.
+3. **Heading block alignment and sizing**: the reference centers this section's eyebrow/heading/
+   paragraph (`text-align:center; max-width:720px; margin:0 auto`) with `clamp(30px,3.6vw,42px)`/
+   `17px` sizing; the current `careers`-branch markup is left-aligned at `clamp(28px,3.4vw,40px)`/
+   `16.5px`. **Decision**: for the `careers` branch only, center the block and correct both font
+   sizes to the reference's values — the `home` branch's own left-aligned block (matching *its*
+   reference) is untouched.
+
+**Also, deliberately not changed**: the reference's eyebrow for this section is a plain colored text
+label (`color:#E87722`, no pill/border), not a bordered `Badge` pill — but per the same reasoning as
+FR-035's dot above, spec.md's FR-038 text only requires a badge to be *present*, and
+Shared Foundation already delivered that via `components/ui/Badge.tsx` (Shared Foundation – T005)
+per direct prior instruction; reversing that choice is out of this pass's scope. This deviation is
+now also recorded in spec.md's Assumptions section (added 2026-08-05, per `/speckit.analyze`
+finding I2), so it isn't only discoverable here.
+
+**Anchor files**: `app/careers/_data/careers-data.ts` (copy + image spans/captions),
+`app/_home-components/LifeGallery.tsx` (`careers`-only: centered header block, corrected font sizes,
+caption-overlay markup, updated `LifeGalleryImage` type).
+
+### Constitution check (addendum)
+
+- **I (Token-Only Styling)** — PASS. `FilterBar`'s sub-2%-delta reuses (`bg-nav-glass`,
+  `border-subtle`, `blur-nav`) follow this plan's own established precedent for decorative deltas; no
+  new hardcoded literal duplicates an existing token; the new `LifeGalleryImage.captionLabel`/
+  `caption` fields are plain data, not styling.
+- **II (Breakpoints)** — PASS, not applicable.
+- **III (Component Library)** — PASS. `FilterBar` gets its first real consumer exactly as originally
+  scoped in Shared Foundation (a primitive built ahead of its first use, not forked for this one
+  caller);
+  `LifeGallery`'s existing variant-branch pattern is extended, not forked, so the `home` variant is
+  provably unaffected by every `careers`-gated change above.
+- **IV (References Are Visual Truth)** — PASS. Every corrected value (filter-bar sticky/background/
+  border; Life-section copy/layout/captions) is read directly from `TechGrit Careers.dc.html`; FR-035
+  needed no correction since the hero was already reference-exact.
+- **V (Dark-First Brand)** — PASS. No new surface fill; the caption overlay is a dark gradient scrim,
+  consistent with this app's existing hover-reveal conventions (e.g. Testimonials video-card hover).
+- **VI (frontend-design skill)** — PASS, invoked for the one new visual pattern (the caption-hover
+  overlay) — see below.
+- No violations — Complexity Tracking unchanged.
+
+**UI Design Approach note**: `frontend-design` skill consulted for the caption-hover overlay.
+Takeaway: keep it a simple gradient-scrim reveal (opacity + slight upward translate on hover),
+matching the reference's own restrained treatment, rather than introducing a new interaction pattern
+beyond what this app's existing hover-reveal conventions already establish.
+
+**Anchor files (this addendum)**: `app/careers/_components/open-roles-section.tsx`,
+`components/ui/FilterBar.tsx`, `app/careers/_data/careers-data.ts`,
+`app/_home-components/LifeGallery.tsx`. No `tokens.css`/`globals.css` edit needed — every value
+reuses an existing token, confirmed above. No `data-model.md`/`contracts/` change.
+`CareersHero.tsx` needs no change (FR-035 audit found no gap). The Apply-modal addendum above
+(`application-dialog.tsx`, `components/ui/icons.tsx`) is unaffected and unchanged by this section.
+
+### Post-Design Constitution Re-Check (addendum)
+
+Audited FR-035 field-by-field before concluding no change was needed, avoiding an edit that would
+have duplicated already-correct values; confirmed `FilterBar`'s and `LifeGallery`'s existing
+structure could be extended rather than forked before planning any new markup. No new violations.
+Gate: PASS.
+
+---
+
+## Contact Page — "Skip the Form" Card (User Story 9 — FR-039)
+
+**Date**: 2026-08-07. Extends this plan to cover `app/(marketing)/contact/_components/
+contact-hero-form.tsx`, per spec.md's User Story 9 (FR-039, FR-040) and its Clarifications Session
+2026-08-07. No other Contact element (hero copy, contact-info rows, the form card itself, "What
+happens next") and no other user story is affected.
+
+### Summary
+
+1. **`app/(marketing)/contact/_components/contact-hero-form.tsx`** — add a new "Skip the Form" card
+   to the left column, directly below the existing `CONTACT_INFO` block and above the closing of that
+   column's wrapper `<div>`, matching `TechGrit Contact.dc.html` lines 248-258: an icon chip (new
+   calendar icon), an amber "Skip the form" eyebrow, a "Book a 30-min discovery call now." line, and
+   a "Book a call →" CTA. The CTA renders via the shared `components/ui/Button` primitive
+   (`variant="primary" size="nav"`, `href="#"`) rather than bespoke markup, per Principle III and
+   consistent with how the Construction page's own "Book on Calendly" placeholder already renders
+   through a shared button component (`app/construction/_data/construction-content.ts` line 190).
+2. **Calendly explicitly not integrated**: per spec.md's Clarifications (Session 2026-08-07), the
+   "Book a call" action is a static placeholder (`href="#"`) — it MUST NOT embed Calendly's external
+   `widget.js`/`widget.css` or call `Calendly.initPopupWidget()` as the reference does, since that
+   would introduce a new third-party dependency this feature's scope rules out. This mirrors the
+   Construction page's existing "Book on Calendly" precedent (`primaryCtaLink: "#"`), not a new
+   pattern.
+3. **`app/(marketing)/contact/_components/icons.tsx`** — add a new `CalendarIcon`, following this
+   file's own existing convention of defining its icons locally (it already has route-local
+   `MailIcon`/`ClockIcon`/`GlobeIcon` rather than importing `components/ui/icons.tsx`'s versions) —
+   not a new violation introduced by this pass, just following the file's established pattern.
+4. **`app/tokens.css`** — add exactly one new token, `--gradient-skip-form` (section 5, GRADIENTS),
+   for the card's `linear-gradient(150deg, rgba(232,119,34,0.14), rgba(255,255,255,0.02))`
+   background — no existing gradient token matches this two-stop value (research.md §17). Every
+   other value the card needs (border, blur, icon-chip fill/border, eyebrow tracking/color, button
+   gradient) reuses an existing exact-match token or the base `--color-orange` token via Tailwind's
+   opacity-modifier syntax (`bg-orange/20 border-orange/40`), the same pattern this file's own
+   `CONTACT_INFO` rows already use — see research.md §17's field-by-field table. No `globals.css`
+   `@theme inline` entry is needed for the new gradient token, consistent with how every other
+   gradient token in this file is consumed (via `bg-[image:var(--...)]`, not a bare utility class).
+
+Nothing else changes. The existing contact form's fields, validation, and client-side
+submit/success/reset behavior (FR-040) are untouched — no code in this addendum touches
+`handleSubmit`/`handleReset` or any form field.
+
+### Constitution check (addendum)
+
+- **I (Token-Only Styling)** — PASS. The one new literal value with no existing token
+  (`--gradient-skip-form`) is added to `tokens.css` first, per its existing numbered section, before
+  any component consumes it; every other value reuses an existing exact-match token or the base
+  `--color-orange` token via Tailwind's opacity modifier — no hardcoded literal duplicates an
+  existing token.
+- **II (Breakpoints)** — PASS, not applicable (the card wraps via the existing `flex-wrap` behavior
+  already used by this same component's contact-info rows; no new breakpoint is introduced).
+- **III (Component Library)** — PASS. The "Book a call" CTA renders via the existing
+  `components/ui/Button` primitive (`variant="primary" size="nav"`), not a bespoke `<button>` —
+  consistent with how this file's form already uses shared primitives and how Construction's own
+  Calendly-placeholder CTA already renders through a shared button component.
+- **IV (References Are Visual Truth)** — PASS with one recorded, spec.md-approved deviation: every
+  visual value (gradient, border, blur, icon-chip fill, eyebrow tracking/color) is read directly from
+  `TechGrit Contact.dc.html` lines 248-258; the one intentional divergence is the CTA's *behavior*
+  (static placeholder instead of a real Calendly widget), per Clarifications Session 2026-08-07 —
+  not an oversight.
+- **V (Dark-First Brand)** — PASS. The card's gradient background stays a low-opacity accent tint
+  (0.14/0.02 stops), not a full-surface fill; the orange accent stays confined to the icon chip,
+  eyebrow text, and CTA button, consistent with existing sparing-accent usage elsewhere in this file.
+- **VI (frontend-design skill)** — not re-invoked for this addendum; every visual value is a direct,
+  literal read from the reference (research.md §17), with no new visual pattern requiring craft
+  judgment beyond what the reference already specifies.
+- No violations — Complexity Tracking unchanged.
+
+**Anchor files**: `app/(marketing)/contact/_components/contact-hero-form.tsx`,
+`app/(marketing)/contact/_components/icons.tsx` (+1 icon), `app/tokens.css` (+1 gradient token). No
+`globals.css` edit, no `data-model.md`/`contracts/` change (presentation-only, same as the rest of
+this plan). No other Contact file, page, or shared component is touched.
+
+### Post-Design Constitution Re-Check (Contact addendum)
+
+Research (this addendum, §17) confirmed every needed value against `TechGrit Contact.dc.html` and
+resolved the Calendly-integration question (spec.md Clarifications, Session 2026-08-07) before any
+file changes were planned. No new violations. Gate: PASS.
+
+---
+
+## About Us Page — Badge, Eyebrow & Culture-Gallery Grid Alignment (User Story 7)
+
+**Date**: 2026-08-07. Extends this plan to cover User Story 7 (spec.md): FR-032 (badge dot removal),
+FR-033 (eyebrow accent-symbol removal), and FR-034 (culture-photo gallery grid), per spec.md
+Clarifications Session 2026-08-07's resolution of FR-034's "imagery/showcase section" ambiguity — it
+targets the "Life at TechGrit" culture-photo gallery, not the single-image hero showcase. No other
+About Us section (hero copy/CTAs, showcase image, Who You Are, Our Role, Values, 3-Step Plan,
+Achievements, If We Partner, closing CTA) and no other user story is affected.
+
+### Summary
+
+1. **`app/about/_components/about-us-hero.tsx`** — remove the `<span className="status-dot
+   status-orange" />` from the hero's "About TechGrit" badge (FR-032) — `TechGrit About.dc.html`'s
+   own badge (line 229) is plain text with no dot at all, and this is the page's only badge.
+2. **Five `<SectionEyebrow>` call sites** — add `showAccent={false}` to disable the leading dash,
+   matching the already-established toggle (Shared Foundation – T003) and the reference's own
+   plain-text eyebrows throughout (`TechGrit About.dc.html` lines 255, 275, 285, 339, 381) (FR-033):
+   `about-how-we-work.tsx`, `about-us-our-role.tsx`, `about-us-partner.tsx`, `about-us-values.tsx`,
+   `about-us-who-you-are.tsx`. **Excluded**: `about-us-culture-gallery.tsx`'s own `<SectionEyebrow>`
+   call — item 6 below replaces that section's entire eyebrow/heading markup with `LifeGallery.tsx`'s
+   own accent-free eyebrow, so no `showAccent` prop is needed there.
+3. **`app/_home-components/LifeGallery.tsx`** — widen `LifeGalleryImage.src` from `string` to
+   `string | null`. `MediaSlot` (which this component already renders images through) already
+   accepts and placeholder-renders a `null`/`undefined` `src`; the type just hadn't caught up. Purely
+   additive — `Home`/`Careers`' existing data always supplies a real string, so neither variant's
+   output changes.
+4. **`app/about/_data/types.ts`** — on `CulturePhoto`: drop the `layout: "tall" | "square" | "wide"`
+   field (its asymmetric-mosaic spans have no equivalent once item 6 switches to `LifeGallery`'s
+   uniform `careers`-variant grid, which ignores per-image span data entirely) and add two optional
+   fields, `captionLabel?: string` and `caption?: string`, mirroring `LifeGalleryImage`'s own
+   Careers-variant caption fields (data-model.md).
+5. **`app/about/_data/about-us-content.ts`** — update the `cultureGallery` section's 4 `photos`
+   entries from placeholder `image: null` to the same 4 real images `LifeAtTechGritContent` already
+   uses on Careers (`/assets/team/glasses.png`, `rooftop.png`, `painting.png`, `diwali.png` — already
+   present in `public/assets/team/`), with the reference's exact per-tile captions (`TechGrit
+   About.dc.html` lines 403-430, byte-identical to Careers' own): glasses → "The team" / "Builders
+   and designers behind the engineering."; rooftop → "The office" / "Rooftop breaks, real
+   conversations."; painting → "Craft" / "We take craft seriously — inside & outside code."; diwali →
+   "Together" / "We celebrate wins — and Diwali — together." The reference's own HTML comment marks
+   this section `<!-- LIFE AT TECHGRIT (shared component — matches Homepage & Careers) -->`,
+   confirming identical content across all three pages is the intended design, not a coincidence.
+6. **`app/about/_components/about-us-culture-gallery.tsx`** — replace the section's bespoke
+   eyebrow/heading/asymmetric-`1.4fr/1fr/1fr`-mosaic markup with a thin adapter that maps
+   `section.photos` into `LifeGalleryImage[]` (`src: photo.image?.url ?? null`, `alt:
+   photo.image?.alternativeText ?? ""`, `span: "default"`, `captionLabel`, `caption`) and renders
+   `<LifeGallery variant="careers" heading={section.title} description={section.subtitle}
+   images={...} />` (FR-034). This keeps the page's structured-content architecture intact (base
+   about-us-page spec, FR-015 — `page.tsx`'s `cultureGallery` case still receives a typed `section`
+   prop and still owns rendering the section) while reusing the shared primitive rather than
+   maintaining a diverging mosaic.
+
+Nothing else changes. `about-us-showcase.tsx` (the single-image hero showcase) is explicitly
+unaffected by FR-034 — the reference itself renders that section as one full-width image with no
+grid — and every other About section/file is untouched.
+
+### Technical Context (addendum)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo; manual
+verification, see `quickstart.md` addendum) · **Target Platform**: Web · **Project Type**: single
+Next.js App Router app · **Performance Goals**: N/A (presentation-only) · **Constraints**: no new
+libraries; the `careers` variant of `LifeGallery.tsx` is reused byte-for-byte (no new variant, no new
+breakpoint) — its existing `960px`/`560px` collapse points are a sub-5%, already-established-tolerance
+match for the reference's own `920px`/`560px` gallery breakpoints (`TechGrit About.dc.html` lines
+98/105), consistent with this plan's own precedent for sub-2-5%-delta reuse (research.md §14) ·
+**Scale/Scope**: 4 existing files edited (`about-us-hero.tsx`, 5 `SectionEyebrow` call sites across
+5 files, `about-us-content.ts`, `about-us-culture-gallery.tsx`) + 2 shared-file additive widenings
+(`LifeGallery.tsx`'s `src` type, `types.ts`'s `CulturePhoto` shape). No new file created, no
+`tokens.css`/`globals.css` change (every value this slice needs already exists via the reused
+`careers` variant).
+
+### Constitution Check (addendum)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this addendum.*
+
+- **I (Token-Only Styling)** — PASS. No new literal styling value is introduced anywhere in this
+  slice — the culture gallery's entire visual treatment comes from `LifeGallery.tsx`'s existing
+  `careers` variant, already token-driven; the `src`/`CulturePhoto` type changes are data-shape only.
+- **II (Breakpoints)** — PASS. No new breakpoint is introduced; the `careers` variant's existing
+  `tg-md`/`tg-sm` (960px/560px) collapse points are reused as-is (see Technical Context above for the
+  sub-5%-delta tolerance rationale, consistent with research.md §14's precedent).
+- **III (Component Library)** — PASS, and this is the point of the slice: the culture gallery stops
+  maintaining its own one-off asymmetric-mosaic grid and instead reuses `LifeGallery.tsx` — the same
+  primitive Home and Careers already consume — exactly the "reuse whatever primitive already covers
+  the need" rule this principle states. `LifeGallery.tsx` itself is extended (widened `src` type),
+  not forked; `Home`'s and `Careers`' existing output is unchanged (verified: both variants' data
+  always supplies non-null strings today).
+- **IV (References Are Visual Truth)** — PASS. The badge-dot removal, eyebrow-accent removal, and
+  gallery-grid reuse are read directly from `TechGrit About.dc.html` (lines 229, 255/275/285/339/381,
+  394-431); the reference's own "shared component" comment on the Life-at-TechGrit section is direct
+  textual confirmation that reusing the same component/content as Home and Careers is correct, not an
+  assumption.
+- **V (Dark-First Brand)** — PASS. No new surface fill or accent usage is introduced; the culture
+  gallery's visual treatment is unchanged from what `LifeGallery.tsx`'s `careers` variant already
+  renders on Careers today.
+- **VI (frontend-design skill)** — not re-invoked for this addendum; every visual value already
+  exists in the already-shipped `careers` variant (no new visual pattern requiring fresh craft
+  judgment).
+- No violations — Complexity Tracking unchanged.
+
+**Anchor files**: `app/about/_components/about-us-hero.tsx`, `app/about/_components/
+about-how-we-work.tsx`, `app/about/_components/about-us-our-role.tsx`, `app/about/_components/
+about-us-partner.tsx`, `app/about/_components/about-us-values.tsx`, `app/about/_components/
+about-us-who-you-are.tsx`, `app/about/_components/about-us-culture-gallery.tsx`, `app/about/_data/
+about-us-content.ts`, `app/about/_data/types.ts`, `app/_home-components/LifeGallery.tsx` (`src` type
+widening only). No `tokens.css`/`globals.css` edit. `data-model.md` gains one new section
+(`CulturePhoto`/`LifeGalleryImage.src`); no `contracts/` change (presentation-only, same as the rest
+of this plan). No other About file, page, or shared component is touched.
+
+### Post-Design Constitution Re-Check (About addendum)
+
+Research (this addendum, §18) confirmed FR-034's target section (the culture gallery, not the hero
+showcase — already settled in spec.md Clarifications, Session 2026-08-07) and the `careers` variant's
+exact fit (breakpoints, padding, absence of the `home`-only action buttons) before any file changed.
+No new violations. Gate: PASS.
+
+---
+
+## Case Studies Hub & Detail Pages — Filter Bar Wiring & Reference Alignment (User Story 4)
+
+**Date**: 2026-08-10. Extends this plan to cover User Story 4 (spec.md): FR-022 (ambient orbs, card
+hover), FR-023 (hero badge dot — audited, already correct, see below), FR-024 (sticky category filter
+bar), FR-025 (detail-page ambient orbs), FR-026 (closing CTA background + shared `Button`), per
+spec.md Clarifications Session 2026-08-10's four resolutions. No other page and no other user story
+is affected. **Reference files**: `TechGrit Case Studies.dc.html` (hub, `/case-studies`) and
+`TechGrit Case Study.dc.html` (detail, `/case-studies/[slug]`) are this slice's sole visual source of
+truth, per direct instruction — every value below is read from one of these two files.
+
+**Filter bar constraint (direct instruction)**: `components/ui/FilterBar.tsx` — already built in
+Shared Foundation (T004) and already consumed by Careers' Open Roles (Careers Phase 3, T008) — MUST
+be reused as-is for the Case Studies filter bar shell. No new filter-bar shell component is created;
+only the category-chip row and the filtering state are Case-Studies-specific, page-local additions,
+matching how Careers' own `RoleFilters`/Blog's own `TopicFilter` are page-local children of the same
+shared `FilterBar` shell.
+
+**Exact-parity constraint (direct instruction)**: every visual value in this slice matches
+`TechGrit Case Studies.dc.html`/`TechGrit Case Study.dc.html` pixel-for-pixel, **except** the filter
+bar's position/scope, which follows spec.md's own Clarifications Session 2026-08-10 (a recorded,
+approved divergence from the reference — not an oversight): the filter bar sits below the featured
+card (not between hero and featured, as the reference's own DOM order has it), the featured card
+stays visible regardless of the active filter, and no live match-count indicator is added.
+
+### Audit findings — two real defects, two already-correct items
+
+Compared every current Case Studies file against the two reference files field-by-field before
+planning any change:
+
+1. **FR-022 hover border — already correct, no task needed.** `featured-case-study.tsx`'s
+   `hover:border-[var(--hover-border)]` (accent-mixed, e.g. `rgba(56,189,248,0.5)` for a FinTech
+   featured card) and `case-studies-grid.tsx`'s `hover:border-[var(--color-border-plain)]`
+   (`rgba(255,255,255,0.28)`) already match the reference's `style-hover` border-color changes on both
+   the featured card and grid cards exactly (spec.md Clarifications Session 2026-08-10 corrected
+   FR-022's earlier "no hover border" text, which had it backwards). Zero code change.
+2. **FR-023 hero badge dot — already correct, no task needed.** `case-studies-hero.tsx`'s badge dot
+   (`bg-blue-light`, `shadow-glow-blue-sm`) already matches the reference's own `#38bdf8` glowing dot
+   (`TechGrit Case Studies.dc.html` line 217) exactly — Case Studies' hero badge is one of the
+   references that legitimately keeps its dot; FR-044's cross-cutting badge-dot-removal list does not
+   name Case Studies' *hero* badge (only the general "Case Studies" entry refers to card-hover
+   treatment already covered by finding 1). Zero code change.
+3. **FR-022 hub-page ambient orbs — real, narrow defect.** `app/case-studies/page.tsx`'s 3 orbs use
+   `color-mix(in srgb, var(--color-blue) 13%, transparent)` / `var(--color-orange) 10%` /
+   `var(--color-teal) 8%`. Orbs 2 and 3 already match the reference exactly (`rgba(232,119,34,0.10)`,
+   `rgba(15,118,110,0.08)` — `TechGrit Case Studies.dc.html` lines 107-108). **Orb 1 is wrong**: the
+   reference's first orb (line 106) is `rgba(232,119,34,0.16)` (orange, matching `--color-overlay-orange`
+   exactly) at the same position/size/blur/timing the current code already has — but the current code
+   mixes `--color-blue` at 13%, not orange at 16%. One-line color-mix argument fix.
+4. **FR-025 detail-page ambient orbs — real, total mismatch.** `app/case-studies/[slug]/page.tsx`'s 2
+   orbs (`bg-overlay-teal` top-right, `bg-overlay-blue-soft` at `top-[1300px] left-[-180px]`) match
+   neither of `TechGrit Case Study.dc.html`'s actual 2 orbs (line 111: `rgba(232,119,34,0.16)` at
+   `top:-160px; right:-120px; width:560px; height:560px; blur(120px)`, 16s — identical to the hub
+   page's own orb 1; line 112: `rgba(247,183,51,0.10)` at `top:35%; left:-220px; width:560px;
+   height:560px; blur(140px)`, 20s reverse) on color, position, size, or blur — every value diverges.
+   This looks like a copy-paste of the wrong orb set during the original TMS-68 build, not a v2.2
+   regression. Full rebuild of both orbs.
+
+### Summary
+
+1. **`app/tokens.css`** (Section 4, BORDERS & GLASS, next to the existing Case-study token cluster) —
+   add exactly one new token: `--color-overlay-amber-light-10: rgba(247, 183, 51, 0.10)` (the detail
+   page's second orb color — the existing `--color-overlay-amber-light-06` sibling is the same hue at
+   the wrong opacity, 0.06 vs. the needed 0.10, so it is not reused). Add its matching `@theme inline`
+   entry in `app/globals.css`. **No other new token is needed** — orb 1 on both pages reuses the
+   existing `--color-overlay-orange` (hub, via its existing `color-mix()` pattern) / `bg-overlay-orange`
+   (detail, as a Tailwind utility, matching the hub's effective color), and the CTA/chip work below
+   reuses only already-exact-match existing tokens (research.md §21's field-by-field table).
+2. **`app/case-studies/page.tsx`** — fix orb 1's `color-mix()` argument from `var(--color-blue) 13%` to
+   `var(--color-orange) 16%` (finding 3 above); replace the direct `<CaseStudiesGrid caseStudies={grid}
+   />` call with `<CaseStudiesFilterSection caseStudies={grid} categories={CASE_STUDY_CATEGORIES} />`
+   (item 5 below), positioned in the same place in the tree (immediately after `<FeaturedCaseStudy
+   />`, before `<CaseStudiesFinalCta />`) — preserving the already-clarified filter-bar-below-featured
+   order (spec.md Clarifications Session 2026-08-10) with no structural reordering.
+3. **`app/case-studies/[slug]/page.tsx`** — replace both orb `<div>`s with the reference-exact pair
+   (finding 4 above): orb 1 `bg-overlay-orange` (existing token, exact match) at the same
+   `top-[-160px] right-[-120px] w-[560px] h-[560px] blur-[120px]` geometry the file already has for its
+   first orb; orb 2 `bg-[var(--color-overlay-amber-light-10)]` (new token, item 1 above) at
+   `top-[35%] left-[-220px] w-[560px] h-[560px] blur-[140px]`, keeping the existing
+   `animate-[tgorb_20s_ease-in-out_infinite_reverse]` timing (already correct) but correcting its
+   position/size/blur to match.
+4. **`app/case-studies/_data/case-studies-content.ts`** — add `export const CASE_STUDY_CATEGORIES =
+   ["All", "FinTech", "Marketplace", "AI Enablement", "Design"];`, an explicit literal list (matching
+   `BLOG_CONTENT.topics`'s own explicit-list convention, not a derived `Set`) reflecting the 4 distinct
+   `category` values already present across the 6 non-featured `CASE_STUDIES` entries. **"Featured" is
+   deliberately omitted** — spec.md Clarifications Session 2026-08-10 decided the featured card stays
+   permanently visible and out of the filterable set, so a "Featured" chip would filter the grid to
+   zero results every time (the reference's own featured card is the *only* item tagged `featured`,
+   and it no longer participates in this grid's filtering) — a dead option, not reference parity, so
+   it is dropped rather than shipped as a broken chip. Documented here so it reads as a deliberate,
+   spec-traceable choice, not a missed reference detail.
+5. **New `app/case-studies/_components/case-studies-filters.tsx`** — a presentational category-chip
+   row (props: `categories: string[]`, `active: string`, `onSelect: (category: string) => void`),
+   styled to match `TechGrit Case Studies.dc.html`'s `.cs-chip`/`.cs-chip.is-active` classes exactly:
+   inactive `bg-glass-4 border border-border-14 text-secondary`, active
+   `bg-[image:var(--gradient-brand)] border-transparent text-primary shadow-chip-active` — the same
+   token set `app/blog/_components/topic-filter.tsx` already uses for its own chips (byte-identical
+   values in both reference files' chip CSS, confirmed research.md §21), so this is a second consumer
+   of an existing token combination, not a new one. Mirrors `topic-filter.tsx`'s own component shape
+   (a plain controlled-list presentational component, no internal state) rather than Careers'
+   `role-filters.tsx` — either existing pattern would fit equally; `topic-filter.tsx` is chosen since
+   its token values are the closer reference match.
+6. **New `app/case-studies/_components/case-studies-filter-section.tsx`** — a `"use client"` component
+   (props: `caseStudies: CaseStudy[]`, `categories: string[]`) that owns the filter state (`useState`
+   defaulting to `"All"`), derives the filtered list via `useMemo`, and renders `<FilterBar
+   label="Filter">` (the existing shared shell, unmodified) wrapping `<CaseStudiesFilters
+   .../>` (item 5), followed by either the existing, unmodified `<CaseStudiesGrid caseStudies={filtered}
+   />` (FR-024's "functionally filter... with no full page reload" — client-side state, no route
+   change) or, when the filtered list is empty, a "no results" block: a message plus a "Reset filter"
+   control (reusing `components/ui/Button` `variant="ghost" size="sm"`, per Principle III, rather than
+   a bespoke control) that sets the filter back to `"All"` (FR-024). This exact copy/control pairing is
+   a new decision, not sourced from the reference — the reference's own hardcoded 6-case-study dataset
+   never actually reaches an empty state in its own script, so there is no literal reference copy to
+   match here (research.md §21). The already-existing `CaseStudiesGrid`/`FeaturedCaseStudy` component
+   files are not otherwise touched — the featured card is rendered by `page.tsx` directly, outside this
+   new component, so it is structurally guaranteed to stay visible regardless of the active filter
+   (spec.md Clarifications Session 2026-08-10), with no conditional logic needed to keep it so.
+7. **`app/case-studies/_components/case-studies-final-cta.tsx`** (FR-026, shared by both `variant="list"`
+   and `variant="detail"`, so this one fix covers both pages) — change the outer card's classes from
+   `bg-ink-mid border border-border-faint` to `bg-[var(--color-glass-faint)] border
+   border-[var(--color-border)] backdrop-blur-[var(--blur-cta)]` (all three are existing exact-match
+   tokens — `rgba(255,255,255,0.04)`/`rgba(255,255,255,0.12)`/`12px`, `TechGrit Case Studies.dc.html`
+   line 289 — using this component-family's own established arbitrary-value idiom, e.g.
+   `case-studies-grid.tsx`'s `hover:border-[var(--color-border-plain)]`, rather than introducing bare
+   utility-class names into this file for the first time). Replace the bespoke `<Link
+   className="btn btn-primary btn-lg ...">` with `<Button href="/contact" variant="primary"
+   className="gap-[10px] !rounded-[12px] !px-[30px] !py-[15px] !min-h-[52px] text-[16px]">` (FR-026's
+   "shared reusable Button component in place of a plain link" — the className override matches the
+   reference's exact `padding:15px 30px; border-radius:12px; min-height:52px` values, following the
+   same per-instance-override convention already established elsewhere in this plan, e.g. SubscribeBand
+   T022, Contact T003).
+
+Nothing else changes. `case-study-detail-hero.tsx`, `metrics-strip.tsx`, `case-study-narrative.tsx`,
+`architecture-diagram.tsx`, `team-panel.tsx`, and `related-case-studies.tsx` are untouched — none of
+FR-022 through FR-026 name any detail-page content section beyond its ambient orbs and its (shared)
+closing CTA, and spec.md's Assumptions section already confirms the detail page's narrative/team/
+architecture content is out of this pass's scope.
+
+### Technical Context (addendum)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React
+19.2.4, Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo; manual
+verification, see `quickstart.md` addendum) · **Target Platform**: Web · **Project Type**: single
+Next.js App Router app · **Performance Goals**: N/A (presentation-only + one small client-state
+addition) · **Constraints**: no new libraries; `components/ui/FilterBar.tsx` MUST be reused as-is (no
+new filter-bar shell); filtering is `useState`/`useMemo` client state, no route/query-param change ·
+**Scale/Scope**: 2 existing files edited with a one-line orb fix each (`page.tsx`,
+`[slug]/page.tsx`'s orb geometry), 1 existing file edited for its CTA background/button
+(`case-studies-final-cta.tsx`), 1 existing file edited to add the categories constant
+(`case-studies-content.ts`), 2 new page-local files created (`case-studies-filters.tsx`,
+`case-studies-filter-section.tsx`), `tokens.css`/`globals.css` gain exactly 1 new token pair. No
+`data-model.md` change — `CaseStudy.category` already exists as a field; the new
+`CASE_STUDY_CATEGORIES` list and filter state are plain configuration/UI state, not a new entity
+shape.
+
+### Constitution Check (addendum)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this addendum.*
+
+- **I (Token-Only Styling)** — PASS. The one new literal value with no existing token
+  (`--color-overlay-amber-light-10`) is added to `tokens.css` first, in its existing BORDERS & GLASS
+  section, before any component consumes it; every other value in this slice (orb 1's orange, the
+  chip row's gradient/glass/border tokens, the CTA's glass/border/blur tokens) reuses an existing
+  exact-match token — none is a near-duplicate spawned for a sub-pixel delta.
+- **II (Breakpoints)** — PASS, not applicable (the filter bar's horizontal scroll-on-overflow behavior
+  for its chip row reuses `FilterBar.tsx`'s own existing `overflow-x-auto` handling, already used by
+  Careers' `RoleFilters`; no new breakpoint is introduced).
+- **III (Component Library)** — PASS, and this is the point of the filter-bar work: `FilterBar.tsx`
+  gets its second real consumer exactly as it was designed for (a shared shell, page-specific chips
+  and state supplied by the caller) — not forked, not reimplemented. The "no results" reset control
+  reuses `components/ui/Button` (`variant="ghost"`) rather than a bespoke control. `CaseStudiesGrid`
+  and `FeaturedCaseStudy` are consumed unmodified — the new filter-section component wraps them rather
+  than duplicating their markup.
+- **IV (References Are Visual Truth)** — PASS with one recorded, spec.md-approved deviation. Every
+  visual value (orb positions/colors/blur, chip styling, CTA background/button sizing) is read
+  directly from `TechGrit Case Studies.dc.html`/`TechGrit Case Study.dc.html`; the filter bar's
+  position (below the featured card, not between hero and featured), the featured card's exemption
+  from filtering, and the omission of the live match-count indicator and the "Featured" chip are all
+  deliberate, spec.md-recorded divergences (Clarifications Session 2026-08-10), not oversights.
+- **V (Dark-First Brand)** — PASS. No new surface fill; the new amber-light orb token is a low-opacity
+  (0.10) decorative glow matching this page's existing orb treatment, and the chip row's active state
+  reuses the existing brand gradient rather than introducing a new fill.
+- **VI (frontend-design skill)** — not re-invoked for this addendum; every visual pattern here (sticky
+  labeled filter bar, pill-shaped filter chips, glass-card CTA banner) already exists elsewhere in this
+  app (Careers' Open Roles filter bar, Blog's topic chips, the CTA banner's existing glass treatment
+  used by other pages' final-CTA sections) — no new visual pattern requires fresh craft judgment.
+- No violations — Complexity Tracking unchanged.
+
+**Anchor files**: `app/case-studies/page.tsx`, `app/case-studies/[slug]/page.tsx`,
+`app/case-studies/_components/case-studies-final-cta.tsx`, `app/case-studies/_data/
+case-studies-content.ts`, `app/case-studies/_components/case-studies-filters.tsx` (new),
+`app/case-studies/_components/case-studies-filter-section.tsx` (new), `app/tokens.css` (+1 token),
+`app/globals.css` (+1 `@theme inline` entry). No `data-model.md`/`contracts/` change
+(presentation-only, same as the rest of this plan). `case-study-detail-hero.tsx`, `metrics-strip.tsx`,
+`case-study-narrative.tsx`, `architecture-diagram.tsx`, `team-panel.tsx`, `related-case-studies.tsx`,
+`components/ui/FilterBar.tsx`, and `components/ui/Button.tsx` are all consumed unmodified — no other
+page, shared component, or user story is touched.
+
+### Post-Design Constitution Re-Check (Case Studies addendum)
+
+Research (this addendum, §21) confirmed every orb/chip/CTA value against both reference files,
+confirmed `FilterBar.tsx` needs no modification to serve as this page's filter shell, and worked out
+the featured-card/chip-list/no-results consequences of spec.md's Clarifications Session 2026-08-10
+before planning any new file. No new violations. Gate: PASS.
+
+## Services Page — Accordion Rebuild & Hero Button Component (User Story 2)
+
+**Date**: 2026-08-10. Extends this plan to cover User Story 2 (spec.md) only: FR-013 (single-open
+accordion, first-card-open default, resize-persists state), FR-013a (ambient orbs — already planned
+separately, unaffected here), FR-013b (hero CTAs via `components/ui/Button`), FR-014 (top-level card has
+no hover; nested items keep their existing hover), per spec.md Clarifications Session 2026-08-10's five
+Services resolutions. No other page and no other user story is affected. **Reference file**:
+`TechGrit Services.dc.html` is this slice's sole visual source of truth, per direct instruction — every
+value below is read from it, with the goal of zero visible difference when toggling between the
+reference and this page.
+
+**Exact-parity constraint (direct instruction)**: every visual value in this slice matches
+`TechGrit Services.dc.html` pixel-for-pixel — card geometry, open/collapsed states, the always-orange
+open-state highlight (not accent-color-matched, see research.md §23), and the intro eyebrow/heading/
+subheading block that today's page is missing entirely.
+
+### Audit findings
+
+Compared the current Services files against the reference field-by-field before planning any change
+(full detail: research.md §23):
+
+1. **FR-013 — today's implementation is not an accordion.** `services-overview.tsx` renders 3
+   always-visible cards that anchor-link down to 3 separately-rendered, always-expanded
+   `<ServiceDetailSection>`s. The reference is a true single-open, collapsible-in-place accordion. This
+   is a structural rebuild, not a styling pass.
+2. **Missing intro copy.** The reference's centered "Our services" eyebrow / "Three services. One
+   AI-first engine." heading / "Click any service to expand..." subheading (lines 237-240) has no
+   equivalent anywhere in the current page — an original-build omission, not a v2.2 regression.
+3. **Card background token near-miss.** The accordion card's resting background
+   (`rgba(255,255,255,0.04)`) is a real, exact-match existing token (`--color-glass-4`), but the current
+   overview/detail cards use `--color-glass` (0.05) instead — a one-token fix.
+4. **FR-014 is already correct for nested items, and the "no hover" correction needs no code change of
+   its own.** The reference defines no hover on the top-level card; the current
+   `ApproachSteps`/`CapabilityGrid` hover (border-color + lift, no background) already matches the
+   reference's nested-item hover exactly. Only the *new* accordion header must be built with no hover
+   styling from the start — there is nothing to remove from the old components (`services-overview.tsx`'s
+   card-level hover lift/border does not carry over, since that whole component is superseded).
+5. **FR-013b — hero CTAs are plain links, not the shared `Button`.** `services-hero.tsx` renders both
+   CTAs as bespoke `<a className="btn ...">` elements.
+
+### Summary
+
+1. **`app/services/_data/types.ts`** — replace `OverviewSection`, `ServiceOverviewCard`, and
+   `ServiceDetailSection` with one `AccordionSection` (`eyebrow`, `heading`, `subheading`,
+   `items: [ServiceAccordionItem, ServiceAccordionItem, ServiceAccordionItem]`) and one
+   `ServiceAccordionItem` (`id`, `sequenceNumber`, `categoryLabel`, `heading`, `description`, `image`,
+   `accentColor`, `supportingItems`); update `PageSectionEntry` to `HeroSection | AccordionSection |
+   FinalCtaSection` (research.md §23).
+2. **`app/services/_data/services-content.ts`** — replace the `overview` section and the 3
+   `serviceDetail` sections with one `accordion` section carrying the "Our services" intro copy (item 2
+   above) and the 3 services' already-correct existing copy reshaped into `items[]`. No copy changes.
+3. **New `app/services/_components/services-accordion.tsx`** (`"use client"`) — renders the intro block,
+   then the 3-item single-open accordion: `useState<string | null>` defaulting to `items[0].id`; each
+   item's header (number badge, category label, heading, chevron) toggles the open id on click
+   (clicking the open item's own header sets it to `null`); the collapsible body uses a CSS
+   `grid-template-rows` 0fr/1fr transition (research.md §23's resize-safe alternative to the reference's
+   JS-measured `max-height`) wrapping the existing image+description row and the `ApproachSteps`/
+   `CapabilityGrid` renderers (moved in from `service-detail-section.tsx`, unmodified). The open item's
+   border/glow/chevron tint is the fixed brand-orange highlight from research.md §23 — not derived from
+   `accentColor` — matching the reference exactly.
+4. **Delete `app/services/_components/services-overview.tsx` and
+   `app/services/_components/service-detail-section.tsx`** — both are fully superseded by item 3; no
+   other file imports them.
+5. **`app/services/page.tsx`** — replace the `case "overview"` / `case "serviceDetail"` branches with a
+   single `case "accordion"` rendering `<ServicesAccordion section={section} />`.
+6. **`app/services/_components/services-hero.tsx`** — replace both `<a className="btn ...">` CTAs with
+   `<Button href={...} variant="primary">`/`<Button href={...} variant="ghost">` (FR-013b), preserving
+   the existing padding/gap values via per-instance `className` overrides (this plan's established
+   convention — SubscribeBand T022, Contact T003, Case Studies T008).
+7. **`app/tokens.css`** (+ matching `app/globals.css` `@theme inline` entries) — add the 4 new tokens
+   from research.md §23 (`--shadow-accordion-open-glow`, `--gradient-divider-blue`,
+   `--gradient-divider-orange`, `--gradient-divider-teal`). Every other value in this slice reuses an
+   existing exact-match token (research.md §23's field-by-field table) — including the `--color-glass-4`
+   fix in item 3 above.
+
+FR-013a (ambient orbs) is unaffected by this addendum — it is a separate, already-scoped
+`services-hero.tsx`/page-level addition with no dependency on the accordion rebuild, planned
+independently. No other Services file, page, or shared component beyond `components/ui/Button.tsx`
+(consumed unmodified, already built in Shared Foundation) is touched.
+
+### Technical Context (addendum)
+
+**Language/Version**: TypeScript 5 (strict) · **Primary Dependencies**: Next.js 16.2.10, React 19.2.4,
+Tailwind CSS v4 · **Storage**: N/A · **Testing**: N/A (no test framework in this repo; manual
+verification, see `quickstart.md` addendum) · **Target Platform**: Web · **Project Type**: single Next.js
+App Router app · **Performance Goals**: N/A (presentation-only + one small client-state addition) ·
+**Constraints**: no new libraries; accordion collapse uses CSS `grid-template-rows`, not a JS-measured
+`max-height`/resize-listener (research.md §23); single-open state is one `useState<string | null>`, not
+a per-item boolean set · **Scale/Scope**: 1 existing file edited for its type shape
+(`types.ts`), 1 existing file edited for its content shape (`services-content.ts`), 1 existing file
+edited for its CTAs (`services-hero.tsx`), 1 existing file edited for its section dispatch (`page.tsx`),
+2 existing files deleted (`services-overview.tsx`, `service-detail-section.tsx`), 1 new file created
+(`services-accordion.tsx`), `tokens.css`/`globals.css` gain 4 new token entries. No `data-model.md`
+change — this is a page-local TypeScript content-module reshape, the same category of change as About
+Us's `CulturePhoto` type edit (tasks.md, About Phase 1, T004), not a new persisted entity.
+
+### Constitution Check (addendum)
+
+*GATE: before Phase 0 and re-checked after Phase 1 of this addendum.*
+
+- **I (Token-Only Styling)** — PASS. The 4 new values with no existing token (the open-card glow shadow,
+  3 per-accent divider gradients) are added to `tokens.css` first; every other value in this slice reuses
+  an existing exact-match token, including correcting the card background from the near-miss
+  `--color-glass` (0.05) to the exact-match `--color-glass-4` (0.04) already in `tokens.css` — no
+  near-duplicate token is spawned for a value that already has an exact match.
+- **II (Breakpoints)** — PASS, not applicable. No new breakpoint is introduced; the accordion's 2-column
+  image/description row already collapses to 1 column via this page's existing `min-[921px]:grid-cols-2`
+  convention (unchanged from `service-detail-section.tsx` today).
+- **III (Component Library)** — PASS. Hero CTAs move onto `components/ui/Button.tsx` (consumed
+  unmodified, already built); `ApproachSteps`/`CapabilityGrid`'s existing hover-styled nested cards carry
+  over into the new accordion component unmodified — no forked hover logic, no bespoke button.
+- **IV (References Are Visual Truth)** — PASS with zero recorded deviation for this slice — every value
+  (accordion behavior, open-state highlight color, intro copy, card tokens) is read directly from
+  `TechGrit Services.dc.html`, including the reference's own non-obvious choice to keep the open-state
+  highlight brand-orange regardless of the open item's own accent color.
+- **V (Dark-First Brand)** — PASS. No new surface fill; the new divider gradients are low-opacity
+  (0 → 0.4 → 0) accent-tinted fades matching this page's existing per-accent divider treatment, and the
+  new glow shadow is a decorative, low-opacity (0.25) accent glow consistent with this app's existing
+  glow-shadow conventions elsewhere.
+- **VI (frontend-design skill)** — not re-invoked for this addendum; the single-open accordion pattern
+  and CSS grid-rows collapse technique are both well-established UI patterns with no novel aesthetic
+  judgment required beyond matching the reference's own already-specified values.
+- No violations — Complexity Tracking unchanged.
+
+**Anchor files**: `app/services/_data/types.ts`, `app/services/_data/services-content.ts`,
+`app/services/_components/services-accordion.tsx` (new), `app/services/page.tsx`,
+`app/services/_components/services-hero.tsx`, `app/tokens.css` (+4 tokens), `app/globals.css` (+4
+`@theme inline` entries). `app/services/_components/services-overview.tsx` and
+`app/services/_components/service-detail-section.tsx` are deleted (superseded). No `data-model.md`/
+`contracts/` change. `components/ui/Button.tsx` is consumed unmodified — no other page, shared
+component, or user story is touched.
+
+### Post-Design Constitution Re-Check (Services addendum)
+
+Research (this addendum, §23) confirmed every card/badge/chevron/divider value against the reference,
+worked out the single-open state model and the resize-safe CSS collapse technique, and confirmed the
+open-state highlight is deliberately brand-orange rather than accent-matched, before planning any new
+file. No new violations. Gate: PASS.
