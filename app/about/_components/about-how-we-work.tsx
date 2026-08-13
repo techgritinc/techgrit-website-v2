@@ -24,10 +24,10 @@ export function AboutHowWeWork({ section }: { section: ProcessSection }) {
                 key={step.order}
                 className="relative rounded-[20px] border border-white/10 bg-white/4 px-[30px] py-[34px] backdrop-blur-[8px] transition-[transform,border-color] duration-[250ms] ease-in-out hover:-translate-y-[5px] hover:border-orange/50"
               >
-                <div className="text-[15px] font-bold tracking-[0.05em] text-amber-light">
+                <div className="text-[15px] font-bold tracking-[0.05em] h-[18px] text-amber-light">
                   {step.label}
                 </div>
-                <h3 className="mt-[14px] text-[22px] font-bold text-white">{step.title}</h3>
+                <h3 className="mt-[14px] text-[22px] font-bold !leading-normal tracking-normal text-white">{step.title}</h3>
                 <p className="mt-[11px] text-[15.5px] leading-[1.6] text-white/64">
                   {step.description}
                 </p>
