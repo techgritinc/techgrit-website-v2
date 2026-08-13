@@ -1,59 +1,35 @@
 import type { FinalCtaSection } from "../_data/types";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
+import Button from "@/components/ui/Button"
 
 export function ServicesFinalCta({ section }: { section: FinalCtaSection }) {
   return (
-    <section>
-      <div className="tg-container" style={{ maxWidth: 1180, paddingTop: 40, paddingBottom: 110, paddingInline: "var(--space-15)" }}>
+    <section id="contact" className="relative scroll-mt-24">
+      <div className="mx-auto max-w-[1280px] px-9 pt-[56px] pb-[100px]">
         <RevealOnScroll>
-          <div
-            className="glass-card mx-auto text-center"
-            style={{ padding: "76px 40px", borderRadius: 28, position: "relative", overflow: "hidden" }}
-          >
+          <div className="relative overflow-hidden rounded-[28px] border border-border bg-glass-4 px-10 py-[80px] text-center backdrop-blur-[12px]">
             <div
               aria-hidden="true"
-              style={{
-                position: "absolute",
-                bottom: -120,
-                left: "50%",
-                transform: "translateX(-50%)",
-                width: 520,
-                height: 340,
-                borderRadius: "50%",
-                background: "var(--color-overlay-orange-strong)",
-                filter: "blur(90px)",
-              }}
+              className="absolute bottom-[-120px] left-1/2 h-[340px] w-[520px] -translate-x-1/2 rounded-full bg-[var(--color-overlay-orange-strong)] blur-[90px]"
             />
-            <div style={{ position: "relative" }}>
-              <div
-                style={{
-                  fontSize: "var(--text-2xs)",
-                  fontWeight: "var(--fw-bold)",
-                  letterSpacing: "var(--ls-widest)",
-                  textTransform: "uppercase",
-                  color: "var(--color-orange)",
-                }}
-              >
+            <div className="relative">
+              <div className="text-[12.5px] leading-[normal] font-bold uppercase tracking-[2px] text-orange">
                 {section.eyebrow}
               </div>
-              <h2 className="mt-4" style={{ fontSize: "clamp(34px, 4.4vw, 48px)", lineHeight: 1.06 }}>{section.heading}</h2>
-              <p className="mx-auto mt-5" style={{ maxWidth: 600, color: "var(--color-text-secondary)", fontSize: 18, lineHeight: "var(--lh-relaxed)" }}>
+              <h2 className="mt-4 text-[clamp(34px,4.4vw,48px)] leading-[1.06]">
+                {section.heading}
+              </h2>
+              <p className="mx-auto mt-5 max-w-[600px] text-[18px] leading-[1.6] text-secondary">
                 {section.description}
               </p>
-              <div style={{ marginTop: "var(--space-14)" }}>
-                <a
+              <div className="mt-[34px]">
+                <Button
                   href={section.ctaHref}
-                  className="btn btn-primary btn-lg"
-                  style={{
-                    fontSize: "var(--text-base)",
-                    gap: "10px",
-                    padding: "17px var(--space-14)",
-                    borderRadius: 13,
-                    whiteSpace: "normal",
-                  }}
+                  variant="primary"
+                  className="!whitespace-normal !h-auto !gap-[10px] !rounded-[13px] !px-[34px] !py-[15px] !min-h-[52px] !text-[17px] !shadow-[0_18px_44px_-12px_var(--color-border-orange-hover)]"
                 >
-                  {section.ctaLabel} <span aria-hidden="true" style={{ fontSize: 18 }}>&#8594;</span>
-                </a>
+                  {section.ctaLabel} <span className="text-[18px]">&#8594;</span>
+                </Button>
               </div>
             </div>
           </div>

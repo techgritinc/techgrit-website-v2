@@ -4,15 +4,20 @@ import { useEffect, useRef } from "react";
 
 // Scroll-triggered fade/rise reveal, shared across below-the-fold sections
 // site-wide. Uses direct DOM manipulation instead of React state to avoid
-// re-render-induced flickering. A safety timeout guarantees content is never
-// left hidden if the observer doesn't fire (reduced motion, slow device,
-// older browser).
+// re-render-induced flickering. SSR-safe: content is fully visible on the
+// server and during hydration; the hidden state is only applied after mount
+// so content is never permanently invisible if JS fails or is slow.
 export function RevealOnScroll({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
+
+    // Apply hidden state now that we're mounted on the client
+    node.style.opacity = "0";
+    node.style.transform = "translateY(24px)";
+    node.style.willChange = "opacity, transform";
 
     // Fallback: if no IntersectionObserver, reveal immediately without transition
     if (!("IntersectionObserver" in window)) {
@@ -61,9 +66,6 @@ export function RevealOnScroll({ children }: { children: React.ReactNode }) {
     <div
       ref={ref}
       style={{
-        opacity: 0,
-        transform: "translateY(24px)",
-        willChange: "opacity, transform",
         backfaceVisibility: "hidden",
       }}
     >
@@ -71,3 +73,4 @@ export function RevealOnScroll({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
