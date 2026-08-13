@@ -22,11 +22,10 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
             data-rise
             className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-border-orange-30 bg-overlay-orange-10 px-4 py-2 leading-[normal] [animation-delay:.05s]"
           >
-            <span className="h-2 w-2 shrink-0 rounded-full bg-orange shadow-glow-orange" aria-hidden="true" />
             <span className="text-2xs font-bold tracking-wider text-strong uppercase">{content.eyebrow}</span>
           </div>
 
-          <h1 data-rise className="text-[clamp(40px,5.2vw,58px)] tracking-[-0.035em] [animation-delay:.12s]">
+          <h1 data-rise className="font-display text-[clamp(40px,5.2vw,58px)] font-bold leading-[1.03] tracking-[-0.035em] text-white [animation-delay:.12s]">
             {before}
             <span className="bg-[image:var(--gradient-brand-text)] bg-clip-text text-transparent">
               {content.headingHighlight}
@@ -37,10 +36,10 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
           <p data-rise className="mt-5 max-w-[500px] text-[18px] leading-[1.65] text-secondary [animation-delay:.2s]">{content.lead}</p>
 
           <div data-rise className="mt-[30px] flex flex-wrap gap-3.5 [animation-delay:.28s]">
-            <Button href={content.primaryCta.href} variant="primary" size="hero" className="h-[54px] leading-normal">
+            <Button href={content.primaryCta.href} variant="primary" size="hero" className="min-h-[52px] !px-7 !py-[15px] !text-[16px] !font-bold leading-[normal]">
               {content.primaryCta.label} <span aria-hidden="true" className="text-[17px]">&#8594;</span>
             </Button>
-            <Button href={content.secondaryCta.href} variant="ghost" size="hero" className="h-[54px] w-[171.719px] leading-normal">
+            <Button href={content.secondaryCta.href} variant="ghost" size="hero" className="min-h-[52px] !px-[26px] !py-4 !text-[16px] !font-bold leading-[normal]">
               {content.secondaryCta.label} 
             </Button>
           </div>

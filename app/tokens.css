@@ -92,6 +92,7 @@
   --color-text-82:        rgba(255, 255, 255, 0.82); /* Webinar upcoming-session date/time text (TMS-73) */
   --color-text-68:        rgba(255, 255, 255, 0.68); /* Webinar subscribe-panel copy text (TMS-73) */
   /* Methodology scroll-hint caption */
+  --color-text-35:        rgba(255, 255, 255, 0.35); /* Careers Apply modal — input placeholder text */
 
   /* ----------------------------------------------------------
    * 3. SURFACE COLORS — Light page sections (v1 light palette)
@@ -228,6 +229,19 @@
    --color-border-hairline-08: rgba(255, 255, 255, 0.08);
    /* Trusted-Clients section top divider */
 
+  /* Careers Apply modal (code-review remediation — code.md, PR review 2026-08-06) */
+  --color-overlay-scrim-72:   rgba(0, 0, 0, 0.72);        /* Apply-modal backdrop overlay */
+  --color-border-15:          rgba(255, 255, 255, 0.15);  /* Apply-modal "Close" button border */
+  --color-border-24:          rgba(255, 255, 255, 0.24);  /* Apply-modal resume-upload dashed border */
+  --color-border-40:          rgba(255, 255, 255, 0.40);  /* Apply-modal resume-upload dashed border, hover */
+  --color-border-orange-35:   rgba(232, 119, 34, 0.35);   /* Apply-modal resume-upload icon chip border */
+  --color-overlay-orange-14:  rgba(232, 119, 34, 0.14);   /* Apply-modal resume-upload icon chip background */
+  --color-border-green-45:    rgba(52, 211, 153, 0.45);   /* Apply-modal success-icon ring border */
+  --color-overlay-green-15:   rgba(52, 211, 153, 0.15);   /* Apply-modal success-icon ring background */
+  --color-overlay-red-15:     rgba(239, 68, 68, 0.15);    /* Apply-modal validation-error background */
+  --color-scrollbar-thumb:       rgba(255, 255, 255, 0.20); /* Apply-modal scrollbar thumb */
+  --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.30); /* Apply-modal scrollbar thumb, hover */
+
   /* ----------------------------------------------------------
    * 5. GRADIENTS
    * ---------------------------------------------------------- */
@@ -253,6 +267,7 @@
   --gradient-ghost:       linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12)); /* Ghost button fill (v2.2 Phase 1) */
   --gradient-ghost-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.40), rgba(255, 255, 255, 0.20)); /* Ghost button hover fill (v2.2 Phase 1) */
   --gradient-live-badge: linear-gradient(135deg, rgba(232, 119, 34, 0.12), rgba(245, 158, 11, 0.06));   /* Hero Live-Webinar badge outer fill (v2.2 Phase 2) */
+  --gradient-dialog-panel: linear-gradient(180deg, rgba(20, 20, 20, 0.98), rgba(0, 0, 0, 0.98)); /* Careers Apply-modal panel fill */
   --gradient-blog-teaser-orange: linear-gradient(150deg, rgba(232, 119, 34, 0.28), rgba(154, 52, 18, 0.50)); /* Homepage Blog teaser card 1 header background (v2.2 FR-010) */
   --gradient-blog-teaser-blue:   linear-gradient(150deg, rgba(2, 132, 199, 0.28), rgba(3, 60, 90, 0.50));    /* Homepage Blog teaser card 2 header background (v2.2 FR-010) */
   --gradient-blog-teaser-teal:   linear-gradient(150deg, rgba(15, 118, 110, 0.30), rgba(6, 52, 48, 0.50));   /* Homepage Blog teaser card 3 header background (v2.2 FR-010) */
@@ -262,8 +277,8 @@
    * 6. TYPOGRAPHY
    * ---------------------------------------------------------- */
   /* v2 collapses the body/display split into one family; both names retained per FR-022 */
-  --font-body: "Calibri", "Carlito", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-display: "Calibri", "Carlito", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-body: "Calibri", var(--font-calibri-body, "Carlito"), "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: "Calibri", var(--font-calibri-display, "Carlito"), "Segoe UI", system-ui, -apple-system, sans-serif;
 
   /* Fluid type scale — uses clamp() for responsive sizing */
   /* v2 canonical hero cap 62px absorbs per-page deltas (Frameworks 64, About 60, Industries/Services/Careers/Case Studies/Blog 58) — consciously absorbed, not missed (FR-010, FR-032, FR-034) */
@@ -528,6 +543,7 @@
   --shadow-live-badge: 0 18px 46px -14px rgba(232, 119, 34, 0.70), 0 4px 16px -6px rgba(232, 119, 34, 0.40);   /* Hero Live-Webinar badge outer shadow (v2.2 Phase 2) */
   --shadow-live-badge-chip: 0 6px 18px -4px rgba(245, 158, 11, 0.60);   /* Hero Live-Webinar badge inner chip shadow (v2.2 Phase 2) */
   --shadow-glow-green: 0 0 12px 3px rgba(52, 211, 153, 0.90);   /* Hero Live-Webinar badge dot glow (v2.2 Phase 2) */
+  --shadow-dialog-apply: 0 40px 90px -30px rgba(0, 0, 0, 0.85), 0 0 60px -20px rgba(232, 119, 34, 0.35); /* Careers Apply-modal panel shadow */
   --shadow-blog-teaser-orange: 0 0 40px -8px rgba(232, 119, 34, 0.15); /* Homepage Blog teaser card 1 resting shadow (v2.2 FR-010) */
   --shadow-blog-teaser-blue: 0 0 40px -8px rgba(56, 189, 248, 0.15); /* Homepage Blog teaser card 2 resting shadow (v2.2 FR-010) */
   --shadow-blog-teaser-teal: 0 0 40px -8px rgba(45, 212, 191, 0.15); /* Homepage Blog teaser card 3 resting shadow (v2.2 FR-010) */

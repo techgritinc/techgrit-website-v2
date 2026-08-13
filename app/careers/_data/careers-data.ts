@@ -1,3 +1,5 @@
+import type { LifeGalleryImage } from "../../_home-components/LifeGallery";
+
 export interface CollageImage {
   src: string;
   alt: string;
@@ -46,7 +48,7 @@ export interface OpenRole {
 export interface LifeAtTechGritContent {
   heading: string;
   description: string;
-  images: CollageImage[];
+  images: LifeGalleryImage[];
 }
 
 export interface ClosingCtaContent {
@@ -197,14 +199,37 @@ export const careersPageContent: CareersPageContent = {
     },
   ],
   lifeAtTechGrit: {
-    heading: "Life at TechGrit",
-    description:
-      "The work is hard and the standards are high — but we make room for the moments that turn a team into a family.",
+    heading: "Life at TechGrit.",
+    description: "The people and the culture behind the engineering.",
     images: [
-      { src: "/assets/team/glasses.png", alt: "Team portrait", span: "tall" },
-      { src: "/assets/team/rooftop.png", alt: "Rooftop gathering", span: "wide" },
-      { src: "/assets/team/painting.png", alt: "Diwali painting", span: "default" },
-      { src: "/assets/team/diwali.png", alt: "Diwali celebration", span: "wide3" },
+      {
+        src: "/assets/team/glasses.png",
+        alt: "Team portrait",
+        span: "default",
+        captionLabel: "The team",
+        caption: "Builders and designers behind the engineering.",
+      },
+      {
+        src: "/assets/team/rooftop.png",
+        alt: "Rooftop gathering",
+        span: "default",
+        captionLabel: "The office",
+        caption: "Rooftop breaks, real conversations.",
+      },
+      {
+        src: "/assets/team/painting.png",
+        alt: "Diwali painting",
+        span: "default",
+        captionLabel: "Craft",
+        caption: "We take craft seriously — inside & outside code.",
+      },
+      {
+        src: "/assets/team/diwali.png",
+        alt: "Diwali celebration",
+        span: "default",
+        captionLabel: "Together",
+        caption: "We celebrate wins — and Diwali — together.",
+      },
     ],
   },
   cta: {

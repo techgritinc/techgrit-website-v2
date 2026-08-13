@@ -89,8 +89,8 @@ Tailwind utility rather than `var(--token-name)` directly.
 
 **Companion to**: [plan.md](./plan.md) addendum | **Spec**: [spec.md](./spec.md), FR-001–FR-004
 
-Scope: only the Homepage hero and the new Trusted-Clients section. Phase 1's research above (ghost
-button, eyebrow, FilterBar, LifeGallery) is unaffected.
+Scope: only the Homepage hero and the new Trusted-Clients section. Shared Foundation's research
+above (ghost button, eyebrow, FilterBar, LifeGallery) is unaffected.
 
 ## 5. Hero alignment vs. the raw reference (FR-001, FR-002) — REVISED
 
@@ -183,7 +183,7 @@ correctness improvement worth keeping regardless.
 
 ## 7. Metrics/stat display fidelity (FR-003) — REVISED to add the suffix color/size split
 
-**Decision**: the ghost-button half of FR-003 is already satisfied — Phase 1 updated
+**Decision**: the ghost-button half of FR-003 is already satisfied — Shared Foundation updated
 `components/ui/Button.tsx`'s `ghost` variant, and `Hero.tsx` already consumes it via
 `variant="ghost"`. The metrics-display half needs the following fixes, all currently hardcoded
 arbitrary values (or missing entirely) with no backing token (pre-existing Principle I gap, now in
@@ -1249,3 +1249,226 @@ pixel values with no token match.
 **Not changed**: the card's background/border/radius/blur, the bottom overlay glow, the eyebrow/heading/
 paragraph, and the primary "Schedule an OrbitAI Demo" button are already reference-correct and untouched
 — FR-012 names only the outer container width and the secondary link's typography/copy.
+
+---
+
+# Phase 0 Research Addendum — Careers Apply Modal (User Story 8)
+
+**Companion to**: [plan.md](./plan.md), "Careers Apply-Modal Field Alignment (User Story 8 —
+FR-037a/FR-037b)" | **Spec**: [spec.md](./spec.md), User Story 8, Clarifications Session 2026-08-05
+
+Scope: only `app/careers/_components/application-dialog.tsx` and one new icon in
+`components/ui/icons.tsx`. §§1-11 above (Shared Foundation, Homepage Hero/Trusted
+Clients/Subscribe Band) are unaffected. **Not covered here**: FR-037's ghost-Apply-button-styling
+clause (the button on each role card that opens this modal, not the modal itself) — see §16 below
+and `Careers – T013` in tasks.md for that separate, still-open gap (`/speckit.analyze` finding C1).
+
+## 12. Careers Apply-modal field/validation alignment (FR-037a, FR-037b)
+
+**Decision — trigger/dismiss/reset already satisfied, no code change needed**: inspected
+`app/careers/_components/role-card.tsx` → `open-roles-section.tsx`'s `handleApply` →
+`ApplicationDialog`, `CareersCta.tsx`'s general "Send your resume" entry point,
+`components/ui/Modal.tsx`'s existing overlay-click/close-button/Escape-key/focus-trap handling, and
+`application-dialog.tsx`'s existing `prevIsOpen` effect (which already clears every field and any
+error on each open). All four already satisfy FR-037a's trigger/dismiss requirements and FR-037b's
+reset-on-reopen requirement exactly — no further research or task is needed on these points.
+
+**Decision — field set (FR-037a)**: current implementation vs. the reference
+(`TechGrit Careers.dc.html` lines 410-441):
+
+| Field | Current (`application-dialog.tsx`) | Reference | Fix |
+|---|---|---|---|
+| Name | `firstName` + `lastName` (2 required fields) | one required "Full name" field (`applyName`) | merge to one `fullName` field |
+| Email | required, regex-validated | required (`applyEmail`) | unchanged |
+| LinkedIn/portfolio | none | optional `type="url"` (`applyLink`) | new optional field |
+| Resume | none | required file upload, `.pdf`/`.doc`/`.docx`, max 5MB (`applyFileName`) | new required field + upload control |
+| Message | required "fit statement" textarea | optional "Why TechGrit?" (`applyMessage`) | make optional, relabel |
+| Phone | required | no reference equivalent | drop |
+
+**Decision — file-size validation timing (FR-037b)**: the reference's `onApplyFile` handler
+(`TechGrit Careers.dc.html` lines 635-639) checks `f.size > 5*1024*1024` inside `onChange`, before
+submit — it sets a specific over-size error message and clears `e.target.value`. The current
+codebase has no file field at all today; the new control's `onChange` must replicate this
+check-on-select behavior exactly, not defer it to `handleSubmit`.
+
+**Decision — file-upload control markup**: no existing `components/ui/` primitive renders a styled
+file-picker (`FormField` only covers text/textarea inputs). The new control's markup lives inline in
+`application-dialog.tsx` rather than being promoted to `components/ui/` — only this one dialog needs
+it today, consistent with the constitution's "don't pre-scaffold shared primitives until consumed by
+2+ routes" rule. It follows the reference's own structure: a `<label>` wrapping a visually-hidden
+`<input type="file">` plus a visible icon-chip + filename/placeholder + sub-label row.
+
+**Decision — new icon**: the reference's resume-upload icon (`TechGrit Careers.dc.html` line 431) is
+a distinct "upload" glyph (box outline + up-arrow) not covered by any icon already in
+`components/ui/icons.tsx`. Add `UploadIcon`, copying the reference's exact SVG path data
+(`viewBox="0 0 24 24"`, `stroke-width="2"`, round caps/joins), following the file's existing
+one-function-per-icon convention (see `LinkedInIcon`, `YouTubeIcon`).
+
+**Decision — token reuse, no new tokens needed**:
+
+| Element | Reference value | Existing token used |
+|---|---|---|
+| Validation-error text | `#fca5a5` | `--color-error-light` (already tagged "Careers error-state text") |
+| Validation-error background | `rgba(239,68,68,0.14)` | `--color-overlay-red-14` (exact match) |
+| Validation-error border | `rgba(239,68,68,0.4)` | `--color-overlay-red-40` (exact match) |
+| Upload-icon box background | `rgba(232,119,34,0.14)` | `--color-overlay-orange-12` (0.12 — nearest existing match; a 0.02 delta on a decorative icon chip does not warrant a near-duplicate token, same precedent as §7's stat-divider-border decision) |
+| Upload-icon box border | `rgba(232,119,34,0.35)` | `--color-border-orange-30` (0.30 — nearest existing match, same reasoning) |
+| Upload-icon stroke | `#F7B733` | `--color-amber-light` (exact match, already used elsewhere in this file's sibling components) |
+
+No `tokens.css`/`globals.css` edit is needed for this addendum — every value the new markup needs
+already exists.
+
+**Decision — success-state copy**: the reference's success copy (`TechGrit Careers.dc.html` lines
+452-453) is name-aware — `Thanks{{ applyNameSuffix }} — a hiring lead is going to read your note
+and get back within 2 business days.` — versus the current generic "Thanks — we've received your
+application and will be in touch soon." Aligned to the reference's pattern: the first token of
+`fullName` (when present) is interpolated the same way `applyNameSuffix` does in the reference,
+falling back to the reference's own no-name phrasing when `fullName` was left empty at submit time
+(not reachable today, since `fullName` is required — kept for exact parity with the reference's own
+conditional). This remains a client-side-only state transition (FR-037a) — no backend call is added
+to produce this copy.
+
+## New tokens summary (Careers Apply Modal)
+
+None — every value this addendum needs reuses an existing token (see table above).
+
+---
+
+# Phase 0 Research Addendum — Careers Open Roles Filter Bar & Life at TechGrit (User Story 8)
+
+**Companion to**: [plan.md](./plan.md), "Careers Page — Full User Story 8 Coverage (Hero, Open Roles
+Filter, Life at TechGrit)" | **Spec**: [spec.md](./spec.md), User Story 8, FR-035, FR-036, FR-038
+
+Scope: `app/careers/_components/open-roles-section.tsx`, `components/ui/FilterBar.tsx`,
+`app/_home-components/LifeGallery.tsx`, `app/careers/_data/careers-data.ts`. §12 above (the Apply
+modal, FR-037a/FR-037b) is unaffected.
+
+## 13. Hero fidelity audit (FR-035) — no gap found
+
+**Decision**: field-by-field comparison of `CareersHero.tsx` against the reference (lines 220-243)
+found every value already exact — eyebrow container/text, h1 size/tracking, paragraph size/line-
+height/color, and the hero's own ghost secondary CTA ("Life at TechGrit", already fixed sitewide in
+Shared Foundation). No research question remained open for the hero itself; no fix is planned here.
+(Not investigated further: the eyebrow's dot indicator, present in code but absent from the
+reference — out of scope, since neither FR-035 nor FR-044's cross-cutting badge-dot list names
+Careers. Separately, and not part of this hero audit: FR-037's *other* ghost button — Open Roles'
+per-role Apply button — was found to diverge from the reference; see §16.)
+
+## 14. Open Roles filter bar (FR-036)
+
+**Decision**: `open-roles-section.tsx` renders the "Open roles" heading and the filter chips in one
+inline row today — no sticky positioning, no dark background, no "Filter" label. The reference
+(lines 297-310) instead gives the heading its own block, then a separate sticky bar below it
+(`position:sticky; top:80px; background:rgba(0,0,0,0.72); backdrop-filter:blur(14px); border-top`+
+`border-bottom:rgba(255,255,255,0.06)`) carrying a "Filter" label plus the chips. `components/ui/
+FilterBar.tsx` (built in Shared Foundation – T004) already implements this shape and has no
+consumer yet — wire it in rather than building new sticky/label markup a second time.
+
+**Token reuse check** (Principle I, before any edit):
+
+| Reference value | `FilterBar`'s existing token | Match |
+|---|---|---|
+| `top:80px` | `top-nav` → `--nav-height: 80px` | Exact |
+| `background:rgba(0,0,0,0.72)` | `bg-nav-glass` → `--color-nav-glass: rgba(0,0,0,0.70)` | 0.02 delta, reused (same sub-2% tolerance as §7's stat-divider decision) |
+| `border-*:rgba(255,255,255,0.06)` | `border-subtle` → `--color-border-subtle: rgba(255,255,255,0.07)` | 0.01 delta, reused |
+| `backdrop-filter:blur(14px)` | `backdrop-blur-nav` → `--blur-nav: 16px` | 2px delta, reused |
+
+No new token needed. **One real gap in the primitive**: `FilterBar.tsx` only has `border-b`; the
+reference's bar has both a top and bottom border. Since `FilterBar` has no other consumer yet, fixing
+this directly in the shared primitive (add `border-t border-border-subtle`) benefits every future
+consumer (Blog, Case Studies) rather than patching around it at the Careers call site.
+
+**Alignment fix**: today's single flex row (`items-end justify-between`) puts the heading and filters
+side-by-side; the reference stacks them (heading block, then the filter bar as its own sticky
+element below). This is the "corrected alignment" half of FR-036, not just the sticky/background
+half.
+
+## 15. Life at TechGrit content and image layout (FR-038)
+
+**Decision**: the "Inside TechGrit" `Badge` (Shared Foundation – T005) is done; two further gaps
+against the reference (lines 334-378) remain:
+
+**Copy**: `careers-data.ts`'s `lifeAtTechGrit.heading`/`description` ("Life at TechGrit" / "The work
+is hard and the standards are high — but we make room for the moments that turn a team into a
+family.") diverge entirely from the reference's own copy ("Life at TechGrit." / "The people and the
+culture behind the engineering."). Fix: replace both strings verbatim.
+
+**Image layout**: the reference's 4 tiles are equal-size (`aspect-ratio:3/4`, no spans), each with a
+hover-reveal caption overlay (category label + `<figcaption>`, `opacity:0→1` and `translateY(6px)→0`
+on `:hover`). Today's `careers`-variant images reuse the `home` variant's own asymmetric
+`tall`/`wide`/`wide3` spans (correct for Home's reference, wrong for Careers') and neither variant's
+markup has any caption-overlay element. Fix, scoped to the `careers` branch of `LifeGallery.tsx`
+only (the `home` branch's own reference-matched layout must not change):
+- `careers-data.ts`: every image's `span` → `"default"`.
+- `LifeGalleryImage` type: add optional `captionLabel?: string` and `caption?: string` (only
+  populated for the `careers` variant's data; `home`'s images leave both `undefined`).
+- Reference's exact per-tile captions: glasses → "The team" / "Builders and designers behind the
+  engineering."; rooftop → "The office" / "Rooftop breaks, real conversations."; painting → "Craft" /
+  "We take craft seriously — inside & outside code."; diwali → "Together" / "We celebrate wins — and
+  Diwali — together."
+- `LifeGallery.tsx`: render the gradient-scrim + label + figcaption overlay only when
+  `variant === "careers"` and the image carries a `captionLabel`/`caption` — `home`'s tiles keep
+  rendering with zero markup change.
+
+**Heading-block alignment/sizing**: the reference centers this section's eyebrow/heading/paragraph
+(`text-align:center; max-width:720px; margin:0 auto`) at `clamp(30px,3.6vw,42px)`/`17px`; the current
+`careers` branch is left-aligned at `clamp(28px,3.4vw,40px)`/`16.5px`. Fix, `careers` branch only:
+center the block, correct both font-sizes.
+
+**Not changed**: the reference's plain-text eyebrow (no pill) versus the current `Badge` pill — per
+direct prior instruction (Shared Foundation – T005), reversing that choice is out of scope for this
+pass. This deviation is now also recorded in spec.md's Assumptions section (added 2026-08-05, per
+`/speckit.analyze` finding I2).
+
+## New tokens summary (Filter Bar & Life at TechGrit)
+
+None — every value reuses an existing token (§14's table above); the new `captionLabel`/`caption`
+fields are plain string data, not styling tokens.
+
+---
+
+# Phase 0 Research Addendum — Open Roles Apply-Button Ghost-Styling Gap (User Story 8)
+
+**Companion to**: [tasks.md](./tasks.md), Careers Phase 6 (`Careers – T013`) | **Spec**:
+[spec.md](./spec.md), FR-037 | **Source**: `/speckit.analyze` finding C1 (2026-08-05)
+
+Scope: only `app/careers/_components/role-card.tsx`'s Apply button. §12 (the Apply modal itself)
+and §§13-15 (hero, filter bar, Life at TechGrit) are unaffected — this section documents a gap the
+prior three sections' audits did not check, since none of them read `role-card.tsx`'s own button
+styling in detail.
+
+## 16. Open Roles Apply-button ghost-styling gap (FR-037) — real defect, not yet fixed
+
+**Decision**: `role-card.tsx`'s Apply button passes `Button.tsx` a `className` of
+`!rounded-[11px] !bg-glass-strong !px-5 !py-3 !text-[14.5px] hover:!border-orange
+hover:!bg-overlay-orange-12` on top of `variant="ghost"`. Because Tailwind's `!important` overrides
+win regardless of source order, this **replaces** the `ghost` variant's already reference-matched
+`bg-[image:var(--gradient-ghost)]` background and lift-only hover (no color change — Shared
+Foundation §1's explicit decision) with a flat `--color-glass-strong` background and a new
+orange-tinted hover that has no counterpart in the reference at all:
+
+| Property | Reference (line 326) | `Button.tsx`'s `ghost` variant | `role-card.tsx`'s override | Match? |
+|---|---|---|---|---|
+| Background | `linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.12))` | `var(--gradient-ghost)` (same value) | `!bg-glass-strong` (flat) | **No — overridden away from the correct value** |
+| Hover background/border | brightens to `rgba(...0.4/0.2)` / `rgba(255,255,255,0.7)`, no color shift | lift-only (`hover:-translate-y-[2px]`), brighten deliberately not wired (Shared Foundation §1) | adds `hover:!border-orange hover:!bg-overlay-orange-12` | **No — introduces a color shift absent from both the reference and this app's own decided convention** |
+| Border radius | `12px` | inherited via `border-border-ghost` (radius comes from `rounded-card` in `SIZE_CLASSES`, not the variant) | `!rounded-[11px]` | 1px delta — minor, not the main issue |
+| Padding | `12px 22px` | size-driven | `!px-5 !py-3` (20px/12px) | 2px horizontal delta — minor |
+| Font size | `14.5px` | size-driven | `!text-[14.5px]` | Exact |
+
+**Contrast**: `CareersHero.tsx`'s "Life at TechGrit" ghost button (§13 above) has no such override
+and renders `Button.tsx`'s `ghost` variant untouched — it is correct. `RoleCard.tsx`'s Apply button
+is the one Careers ghost button that diverges.
+
+**Why this wasn't caught earlier**: §12 (Apply-modal addendum) scoped itself to the modal's own
+fields/validation/copy, not the button that opens it; §13 (hero audit) only read `CareersHero.tsx`;
+neither the original `/speckit.plan` nor `/speckit.tasks` passes for User Story 8 read
+`role-card.tsx`'s button styling in detail. `/speckit.analyze` (2026-08-05) found it by comparing
+the rendered className against the reference line-by-line.
+
+**Decision — documentation only, no code change in this pass**: per explicit instruction, this
+addendum records the gap and its exact fix (tasks.md `Careers – T013`) without editing
+`role-card.tsx` itself.
+
+## New tokens summary (Ghost-Styling Gap)
+
+None — the fix removes overrides; it adds no new styling.

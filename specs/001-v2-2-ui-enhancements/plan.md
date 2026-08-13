@@ -122,8 +122,8 @@ fidelity), scoped to **only** FR-001 through FR-004
  "Trusted by our clients" strip into its own section — the narrowest possible slice of User Story 1.
 It does **not** cover the subscribe row (FR-005), "How We Deliver", "Don't Migrate/Re-Imagine", 
 Construction card, Testimonials, Blog teaser, Life at TechGrit, or the final CTA — all still-open 
-pieces of US1 remain unplanned. Phase 1 above (shared-primitive foundation) is unaffected by this addendum 
-and stays complete as documented.
+pieces of US1 remain unplanned. Shared Foundation above (shared-primitive foundation) is unaffected
+by this addendum and stays complete as documented.
 
 ## Summary
 
@@ -142,7 +142,7 @@ and stays complete as documented.
    live green dot and ripple ring (FR-003a, new — the badge has no dot/ripple today), fix the
    stat/metrics display's font-size/letter-spacing and add the reference's per-segment
    suffix color/size split ("X"/" weeks" render independently from their digits — FR-003; the
-   ghost button half of FR-003 is already satisfied by Phase 1's `Button.tsx` update), and remove
+   ghost button half of FR-003 is already satisfied by Shared Foundation's `Button.tsx` update), and remove
    the nested "Trusted by our clients" block (moved out, FR-004).
 2. **New `app/_home-components/TrustedClients.tsx`** — the "Trusted by our clients" strip as its
    own section, reusing `TRUSTED_CLIENT_LOGOS` from `home-data.ts`, keeping its **current** white
@@ -308,7 +308,7 @@ app/globals.css             # + matching @theme inline entries (letter-spacing, 
                              #   @media (min-width: 960px) (FR-045, research.md §10 — sitewide fix)
 ```
 
-No `data-model.md`/`contracts/` (presentation-only, same as Phase 1). No other file is touched.
+No `data-model.md`/`contracts/` (presentation-only, same as Shared Foundation). No other file is touched.
 
 **Structure Decision**: existing single-project structure. `TrustedClients.tsx` is route-local
 (`app/_home-components/`), matching the constitution's rule that route-local sections stay
@@ -2375,3 +2375,210 @@ and background were already reference-correct (only its label typography and z-i
 correction), and confirmed every other value change (badge dot, newsletter background) resolves to an
 existing exact-match token with zero new hardcoded literals beyond the one new letter-spacing token.
 No violations. Gate: PASS.
+
+## Careers Apply-Modal Field Alignment (User Story 8 — FR-037a/FR-037b)
+
+**Date**: 2026-08-05. Extends this plan to cover `app/careers/_components/application-dialog.tsx`,
+per spec.md's User Story 8 update (Clarifications Session 2026-08-05, new FR-037a/FR-037b)
+documenting the Apply modal's reference-exact trigger, structure, fields, and interactions against
+`TechGrit Careers.dc.html`. No other Careers section (hero, stats, Open Roles filters, Life at
+TechGrit, closing CTA copy/layout) is affected, and no other user story's plan changes.
+
+**Already satisfied, no code change**: the modal-open trigger (`RoleCard`'s Apply button →
+`OpenRolesSection.handleApply` → `ApplicationDialog`, plus `CareersCta`'s "Send your resume" general
+entry point), its dismiss behavior (`components/ui/Modal.tsx`'s existing overlay-click/close-button/
+Escape/focus-trap handling), and its reset-on-reopen behavior (`application-dialog.tsx`'s existing
+`prevIsOpen` effect, which already clears all fields and errors on every open) already satisfy
+FR-037a's trigger/dismiss requirements and FR-037b's reset-on-reopen requirement exactly — this
+addendum's only real gap is the form's **field set** and **file-upload validation**, which today
+diverge from the reference.
+
+### Summary
+
+1. **`app/careers/_components/application-dialog.tsx`** — replace the current field set (First
+   name / Last name / Email / Phone / required "fit statement") with the reference's exact fields:
+   **Full name** (one field, replacing the First/Last split), **Email**, **LinkedIn or portfolio
+   URL** (optional, new), a **Resume upload** control (new — required, `.pdf`/`.doc`/`.docx`, max
+   5MB), and **"Why TechGrit?"** (optional message, replacing the required "fit statement"
+   textarea). The current `phone` field is dropped — no reference equivalent. Submit-time required-
+   field validation now checks full name, email, and resume only (not phone/message, both optional
+   per the reference).
+2. **New resume-upload control** inside `application-dialog.tsx` — a clickable card wrapping a
+   visually-hidden `<input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,
+   application/vnd.openxmlformats-officedocument.wordprocessingml.document">`, showing an icon, the
+   selected filename (or a "Click to upload your resume" placeholder), and a sub-label ("PDF, DOC,
+   or DOCX" / "Click to replace file"). Its `onChange` handler enforces FR-037b: a file over 5MB
+   immediately sets a specific over-size error and clears the selection (not deferred to submit); a
+   valid file clears any prior error and stores the filename.
+3. **`components/ui/icons.tsx`** — add one new upload icon (no existing icon in the consolidated
+   icon file covers this), following the file's existing icon-export convention.
+4. Success-state copy is aligned to the reference's pattern (name-aware thanks line, 2-business-day
+   framing) — still a client-side-only state transition with no backend call, per FR-037a.
+
+Nothing else changes. `RoleCard.tsx`, `open-roles-section.tsx`, `CareersCta.tsx`, and
+`components/ui/Modal.tsx` are untouched — their trigger/dismiss/reset behavior already matches
+FR-037a/FR-037b. Because `application-dialog.tsx` is the one shared modal behind both the per-role
+Apply buttons and `CareersCta`'s general "Send your resume" entry point, this field/validation
+rework applies to both entry points identically — not new scope, just this one shared component's
+existing blast radius.
+
+**Constitution check** — PASS on all six principles: no new literal value duplicates an existing
+token — the validation-error box reuses the already-present `--color-error-light` (text) and
+`--color-overlay-red-14`/`--color-overlay-red-40` (background/border) tokens (tagged "Careers
+error-state text" since an earlier pass); the new upload icon's box background/border (reference:
+`rgba(232,119,34,0.14)`/`rgba(232,119,34,0.35)`) reuses the nearest existing tokens
+(`--color-overlay-orange-12`, `--color-border-orange-30`) rather than adding near-duplicate tokens
+for a sub-2%-opacity delta, consistent with this plan's own precedent (Phase 2 addendum's
+stat-divider-border decision). `FormField` is reused as-is for the text/email/url/textarea fields;
+the new file-upload control is a one-off scoped to this one component (no existing primitive covers
+a styled file-picker, and only this dialog needs one today, so it isn't promoted to
+`components/ui/`, per the constitution's "don't pre-scaffold shared primitives" rule). Every
+corrected field, validation rule, and copy pattern is read directly from `TechGrit Careers.dc.html`
+(lines 410-455). No new surface fill; the upload icon's accent stays sparing, matching the
+reference. `frontend-design` skill re-consulted for the one new visual element (the upload control):
+keep its icon-chip + two-line text-stack layout exactly as the reference's inline-flex row, since it
+already reads clearly against this app's existing dark glass-card language. **Anchor files**:
+`app/careers/_components/application-dialog.tsx`, `components/ui/icons.tsx` (+1 icon). No
+`data-model.md`/`contracts/` changes (presentation-only, same as the rest of this plan); no
+`tokens.css`/`globals.css` edit (all needed tokens already exist). No other file touched.
+
+## Careers Page — Full User Story 8 Coverage (Hero, Open Roles Filter, Life at TechGrit)
+
+**Date**: 2026-08-05. Expands this plan's Careers coverage beyond the Apply-modal addendum directly
+above to the rest of User Story 8 (spec.md): FR-035 (hero), FR-036 (Open Roles sticky filter row),
+and the image-layout/copy portion of FR-038 (Life at TechGrit) — the "Inside TechGrit" `Badge` itself
+was already added in Shared Foundation – T005. **The Apply-modal addendum directly above
+(FR-037a/FR-037b) is unchanged and covers the Apply *form's* field/validation/copy scope — it does
+not cover FR-037's own ghost-Apply-button-styling clause, which `/speckit.analyze` (2026-08-05)
+found unaddressed and currently incorrect in code; see tasks.md's Careers Phase 6
+(`Careers – T013`) for that documented gap.** Every value below is read directly from
+`TechGrit Careers.dc.html`.
+
+### FR-035 — Hero: audited, already reference-exact (no code change)
+
+Compared `app/careers/_components/CareersHero.tsx` against the reference (lines 220-243) field by
+field:
+- Eyebrow container (`border-orange-30`/`bg-overlay-orange-10`/`px-4 py-2`) and its label text
+  (`text-2xs`/`tracking-wider`/`text-strong`/uppercase/bold) already resolve to the reference's exact
+  values (`rgba(232,119,34,0.3)`/`0.1`/`8px 16px`/`12.5px`/`0.10em`/`rgba(255,255,255,0.92)`).
+- H1 (`text-[clamp(40px,5.2vw,58px)] tracking-[-0.035em]`) and paragraph (`mt-5 max-w-[500px]
+  text-[18px] leading-[1.65] text-secondary`) both match the reference's `clamp(40px,5.2vw,58px)`/
+  `-0.035em`/`20px`/`500px`/`18px`/`1.65`/`rgba(255,255,255,0.72)` exactly.
+- The "Life at TechGrit" secondary CTA already consumes `variant="ghost"`, already fixed sitewide in
+  Shared Foundation – T002; its per-instance `h-[54px] w-[171.719px]` sizing was already measured
+  against this exact reference button. (Contrast with `RoleCard.tsx`'s Apply button, which does
+  *not* consume this fix cleanly — see `Careers – T013` below.)
+
+**Decision**: no code change for FR-035 — already satisfied. (The hero eyebrow's small dot indicator
+present in code but absent from the reference is deliberately not touched here: FR-044's
+cross-cutting badge-dot-removal list does not name Careers, and FR-035's own wording is scoped to
+"typography, colors, and the ghost button" — adding a dot-removal requirement spec.md itself doesn't
+state would be scope creep beyond what spec.md, this pass's source of truth, actually asks for.)
+
+### FR-036 — Open Roles filter row: real gap, needs restructuring
+
+`app/careers/_components/open-roles-section.tsx` currently renders the "Open roles" `<h2>` and
+`RoleFilters`' chips in one inline flex row (`items-end justify-between`), with no sticky
+positioning, no dark background, and no "Filter" label — none of which matches the reference (lines
+297-310): the heading sits in its own block (`padding:50px 36px 12px`), and a separate sticky bar
+below it (`position:sticky; top:80px; background:rgba(0,0,0,0.72); backdrop-filter:blur(14px);
+border-top`+`border-bottom:rgba(255,255,255,0.06)`) carries a "Filter" label plus the chips.
+
+**Decision**: wire the existing, still-unconsumed `components/ui/FilterBar.tsx` (built in
+Shared Foundation – T004, not yet used by any page) into `open-roles-section.tsx` — split today's single flex row into
+the `<h2>`'s own block, followed by `<FilterBar label="Filter">` wrapping `<RoleFilters .../>`.
+`FilterBar`'s existing tokens already land close enough to the reference to reuse as-is (`top-nav` =
+80px, an exact match; `bg-nav-glass` 0.70 vs. the reference's 0.72; `border-subtle` 0.07 vs. 0.06;
+`blur-nav` 16px vs. 14px — each within the sub-2%-delta reuse tolerance already established
+elsewhere in this plan, not worth new near-duplicate tokens). One real gap in the primitive itself:
+`FilterBar.tsx` today only carries a `border-b`, but the reference's bar has both a top and bottom
+border — add `border-t border-border-subtle` directly to `FilterBar.tsx` (it has no other consumer
+yet, so this fixes the primitive for every future consumer, not a Careers-only patch, with zero risk
+of visual regression elsewhere).
+
+**Anchor files**: `app/careers/_components/open-roles-section.tsx`, `components/ui/FilterBar.tsx`
+(+ top border). `role-filters.tsx`'s chip styling is unchanged — its pill/active-state colors already
+match the reference.
+
+### FR-038 — Life at TechGrit: badge done (Shared Foundation), image layout + copy still diverge
+
+Shared Foundation – T005 already added the "Inside TechGrit" `Badge` to `LifeGallery.tsx`'s `careers`
+variant — that part of FR-038 is complete. Auditing the rest against the reference (lines 334-378)
+surfaced two further gaps:
+
+1. **Supporting copy** ("updated supporting content"): `app/careers/_data/careers-data.ts`'s
+   `lifeAtTechGrit.heading`/`description` ("Life at TechGrit" / "The work is hard and the standards
+   are high — but we make room for the moments that turn a team into a family.") don't match the
+   reference's copy ("Life at TechGrit." / "The people and the culture behind the engineering.").
+   **Decision**: update both strings to the reference's exact copy.
+2. **Image layout**: the reference's 4 tiles are equal-size (`aspect-ratio:3/4`, no spans) with a
+   hover-reveal caption overlay per tile (a category label + a `<figcaption>`) — today's
+   `careers-data.ts` images use asymmetric `tall`/`wide`/`wide3` spans (the `home` variant's own
+   layout, not Careers') and `LifeGallery.tsx` has no caption-overlay markup for either variant.
+   **Decision**: for the `careers` variant only (the `home` variant's own reference-matched layout is
+   untouched), change every image's `span` to `"default"` in `careers-data.ts`; add two new optional
+   fields to the `LifeGalleryImage` type (`captionLabel?: string`, `caption?: string`) populated with
+   the reference's exact per-tile text (glasses → "The team" / "Builders and designers behind the
+   engineering."; rooftop → "The office" / "Rooftop breaks, real conversations."; painting → "Craft" /
+   "We take craft seriously — inside & outside code."; diwali → "Together" / "We celebrate wins — and
+   Diwali — together."); and add a `careers`-only hover-caption overlay to `LifeGallery.tsx`'s tile
+   markup (gradient scrim + label + figcaption, `opacity-0` → `opacity-100` on hover) gated on
+   `variant === "careers"`, so the `home` variant's tiles render exactly as they do today.
+3. **Heading block alignment and sizing**: the reference centers this section's eyebrow/heading/
+   paragraph (`text-align:center; max-width:720px; margin:0 auto`) with `clamp(30px,3.6vw,42px)`/
+   `17px` sizing; the current `careers`-branch markup is left-aligned at `clamp(28px,3.4vw,40px)`/
+   `16.5px`. **Decision**: for the `careers` branch only, center the block and correct both font
+   sizes to the reference's values — the `home` branch's own left-aligned block (matching *its*
+   reference) is untouched.
+
+**Also, deliberately not changed**: the reference's eyebrow for this section is a plain colored text
+label (`color:#E87722`, no pill/border), not a bordered `Badge` pill — but per the same reasoning as
+FR-035's dot above, spec.md's FR-038 text only requires a badge to be *present*, and
+Shared Foundation already delivered that via `components/ui/Badge.tsx` (Shared Foundation – T005)
+per direct prior instruction; reversing that choice is out of this pass's scope. This deviation is
+now also recorded in spec.md's Assumptions section (added 2026-08-05, per `/speckit.analyze`
+finding I2), so it isn't only discoverable here.
+
+**Anchor files**: `app/careers/_data/careers-data.ts` (copy + image spans/captions),
+`app/_home-components/LifeGallery.tsx` (`careers`-only: centered header block, corrected font sizes,
+caption-overlay markup, updated `LifeGalleryImage` type).
+
+### Constitution check (addendum)
+
+- **I (Token-Only Styling)** — PASS. `FilterBar`'s sub-2%-delta reuses (`bg-nav-glass`,
+  `border-subtle`, `blur-nav`) follow this plan's own established precedent for decorative deltas; no
+  new hardcoded literal duplicates an existing token; the new `LifeGalleryImage.captionLabel`/
+  `caption` fields are plain data, not styling.
+- **II (Breakpoints)** — PASS, not applicable.
+- **III (Component Library)** — PASS. `FilterBar` gets its first real consumer exactly as originally
+  scoped in Shared Foundation (a primitive built ahead of its first use, not forked for this one
+  caller);
+  `LifeGallery`'s existing variant-branch pattern is extended, not forked, so the `home` variant is
+  provably unaffected by every `careers`-gated change above.
+- **IV (References Are Visual Truth)** — PASS. Every corrected value (filter-bar sticky/background/
+  border; Life-section copy/layout/captions) is read directly from `TechGrit Careers.dc.html`; FR-035
+  needed no correction since the hero was already reference-exact.
+- **V (Dark-First Brand)** — PASS. No new surface fill; the caption overlay is a dark gradient scrim,
+  consistent with this app's existing hover-reveal conventions (e.g. Testimonials video-card hover).
+- **VI (frontend-design skill)** — PASS, invoked for the one new visual pattern (the caption-hover
+  overlay) — see below.
+- No violations — Complexity Tracking unchanged.
+
+**UI Design Approach note**: `frontend-design` skill consulted for the caption-hover overlay.
+Takeaway: keep it a simple gradient-scrim reveal (opacity + slight upward translate on hover),
+matching the reference's own restrained treatment, rather than introducing a new interaction pattern
+beyond what this app's existing hover-reveal conventions already establish.
+
+**Anchor files (this addendum)**: `app/careers/_components/open-roles-section.tsx`,
+`components/ui/FilterBar.tsx`, `app/careers/_data/careers-data.ts`,
+`app/_home-components/LifeGallery.tsx`. No `tokens.css`/`globals.css` edit needed — every value
+reuses an existing token, confirmed above. No `data-model.md`/`contracts/` change.
+`CareersHero.tsx` needs no change (FR-035 audit found no gap). The Apply-modal addendum above
+(`application-dialog.tsx`, `components/ui/icons.tsx`) is unaffected and unchanged by this section.
+
+### Post-Design Constitution Re-Check (addendum)
+
+Audited FR-035 field-by-field before concluding no change was needed, avoiding an edit that would
+have duplicated already-correct values; confirmed `FilterBar`'s and `LifeGallery`'s existing
+structure could be extended rather than forked before planning any new markup. No new violations.
+Gate: PASS.
