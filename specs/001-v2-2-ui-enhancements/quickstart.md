@@ -468,3 +468,91 @@ plus `npm run lint`/`npm run build`.
    token, no `globals.css` entry needed). No other Contact file, no other page, and no shared
    component beyond consuming the existing `components/ui/Button` primitive as-is (no edit to
    `Button.tsx` itself).
+
+---
+
+# Quickstart Addendum: Verifying About Us Page — Badge, Eyebrow & Culture-Gallery Grid Alignment (User Story 7)
+
+Scope: only the hero badge's dot, the page's `SectionEyebrow` accent symbols, and the culture-photo
+gallery's grid (`about-us-culture-gallery.tsx`, delegating to `LifeGallery.tsx`). No test framework
+exists in this repo — this is manual, plus `npm run lint`/`npm run build`.
+
+## 14. Badge, eyebrows, and culture gallery (`/about`)
+
+1. Open `/about` at desktop width and confirm the "About TechGrit" hero badge shows no dot — just the
+   uppercase label text.
+2. Scroll through the page and confirm every eyebrow ("Who you are", "Our role", "What we stand
+   for", "How we work", "If we partner together") shows no leading dash before the label.
+3. Scroll to "Life at TechGrit" and confirm the eyebrow reads "Inside TechGrit" with no leading dash,
+   and the heading/description match `TechGrit About.dc.html` ("Life at TechGrit." / "The people and
+   the culture behind the engineering.").
+4. Confirm the gallery shows 4 equal-size photo tiles in a 4-column grid — no tile spans 2 columns or
+   2 rows (the previous `tall`/`wide` mosaic is gone) — and every tile shows a real photo, not a
+   "Coming soon" placeholder.
+5. Hover each tile and confirm a caption reveals (e.g. "The team" / "Builders and designers behind
+   the engineering.") — matching the same captions already shown on `/careers`'s Life at TechGrit
+   section.
+6. Resize to tablet width (~768-920px) and confirm the grid collapses to 2 columns; resize to mobile
+   width (≤560px) and confirm it collapses to 1 column — no horizontal overflow at either width.
+7. Confirm no "Explore Careers" / "Meet the team" buttons render below this gallery on `/about` (those
+   are `home`-variant-only).
+8. Open `/` and `/careers` and confirm their own Life at TechGrit galleries are visually unchanged —
+   the `LifeGallery.tsx` `src`-type widening introduced no regression on either.
+
+## 15. Gate check (About)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/about/_components/about-us-hero.tsx`, `app/about/_components/
+   about-how-we-work.tsx`, `app/about/_components/about-us-our-role.tsx`, `app/about/_components/
+   about-us-partner.tsx`, `app/about/_components/about-us-values.tsx`, `app/about/_components/
+   about-us-who-you-are.tsx`, `app/about/_components/about-us-culture-gallery.tsx`,
+   `app/about/_data/about-us-content.ts`, `app/about/_data/types.ts`, and
+   `app/_home-components/LifeGallery.tsx` (the `src` type widening only — no visual change to its
+   `home`/`careers` variants). No `tokens.css`/`globals.css` edit, no other About file, no other
+   page, and no other shared component touched.
+
+## 16. Case Studies hub & detail (`/case-studies`, `/case-studies/[slug]`)
+
+1. Open `/case-studies` at desktop width and confirm the 3 background ambient orbs: the top-right orb
+   reads as orange (not blue), and the other two (lower-left, bottom-center) are unchanged from
+   today — all three should look like a single coherent warm/cool orb set, matching
+   `TechGrit Case Studies.dc.html`.
+2. Hover the featured card (top banner) and confirm it lifts and its border tints toward its accent
+   color (e.g. blue for a FinTech card) — this border-color change is correct and expected, not a
+   regression. Hover a grid card below and confirm the same lift + border-brighten treatment.
+3. Confirm the hero's "Case Studies" badge still shows its blue glowing dot — this page's badge
+   correctly keeps its dot (unlike Services/Blog/About).
+4. Scroll to the filter bar (below the featured card) and confirm it shows a dark, blurred background,
+   a "Filter" label, and chips reading All / FinTech / Marketplace / AI Enablement / Design — no
+   "Featured" chip. Continue scrolling and confirm the bar sticks to the top of the viewport (just
+   below the header) while the grid scrolls beneath it, and the featured card above it has already
+   scrolled out of view.
+5. Click a category chip (e.g. "FinTech") and confirm: the grid re-filters to only matching cards with
+   no page reload or navigation; the featured card does NOT disappear, regardless of its own category,
+   since it stays outside the filterable set by design.
+6. Click a chip with no matching grid entries is not possible today (every chip has at least one
+   match) — instead, verify the "no results" path by temporarily confirming the reset control exists:
+   click "All" after any other chip and confirm the full grid returns.
+7. Open a case-study detail page (e.g. via "View Case Study") and confirm its 2 background orbs: a
+   top-right orange orb (same as the hub page's first orb) and a second, amber-toned orb positioned
+   around a third of the way down the left edge — both should read as warm-toned, not the previous
+   teal/blue pair.
+8. Scroll to the closing CTA on both the hub and a detail page and confirm: the card's background
+   reads as a translucent dark glass panel (not solid black) with a soft blur, and the "Get in Touch"
+   control renders through the shared button styling (gradient fill, lift-on-hover) at the reference's
+   `15px 30px` padding / `52px` height.
+
+## 17. Gate check (Case Studies)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/case-studies/page.tsx` (orb 1 color fix, filter-section wiring),
+   `app/case-studies/[slug]/page.tsx` (both orbs rebuilt), `app/case-studies/_components/
+   case-studies-final-cta.tsx` (background + Button swap), `app/case-studies/_data/
+   case-studies-content.ts` (+`CASE_STUDY_CATEGORIES`), two new files
+   (`app/case-studies/_components/case-studies-filters.tsx`,
+   `app/case-studies/_components/case-studies-filter-section.tsx`), and `app/tokens.css`/
+   `app/globals.css` (+1 token pair, `--color-overlay-amber-light-10`). No other Case Studies file
+   (`case-study-detail-hero.tsx`, `metrics-strip.tsx`, `case-study-narrative.tsx`,
+   `architecture-diagram.tsx`, `team-panel.tsx`, `related-case-studies.tsx`, `case-studies-grid.tsx`,
+   `featured-case-study.tsx`), no `components/ui/FilterBar.tsx` or `components/ui/Button.tsx`, no
+   other page, and no other shared component touched.

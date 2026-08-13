@@ -1,41 +1,26 @@
 import type { HeroSection } from "../_data/types";
+import Button from "@/components/ui/Button";
 
 export function AboutUsHero({ section }: { section: HeroSection }) {
   const [before, after] = section.title.split(section.titleHighlight);
 
   return (
-    <section>
-      <div className="mx-auto text-center" style={{ maxWidth: "var(--measure-hero)", paddingTop: "var(--space-24)", paddingInline: "var(--space-15)", paddingBottom: "var(--space-26)" }}>
+    <section className="relative">
+      <div className="mx-auto max-w-[1200px] text-center pt-[96px] px-[36px] pb-[70px]">
         <div
           data-rise
-          className="inline-flex items-center"
-          style={{
-            animationDelay: ".05s",
-            gap: "var(--space-3)",
-            background: "var(--color-glass)",
-            border: "1px solid var(--color-border)",
-            padding: "var(--space-2) var(--space-6)",
-            borderRadius: "var(--radius-pill)",
-            marginBottom: "var(--space-12)",
-            backdropFilter: "blur(var(--blur-sm))",
-          }}
+          className="inline-flex items-center gap-[var(--space-3)] bg-glass border border-border px-[var(--space-6)] py-[var(--space-2)] rounded-pill mb-[var(--space-12)] backdrop-blur-[var(--blur-sm)]"
+          style={{ animationDelay: ".05s" }}
         >
-          <span className="status-dot status-orange" />
           <span
-            style={{
-              fontSize: "var(--text-2xs)",
-              fontWeight: "var(--fw-bold)",
-              letterSpacing: "var(--ls-08)",
-              color: "var(--color-text-strong)",
-              textTransform: "uppercase",
-            }}
+            className="text-[12.5px] font-bold tracking-[0.08em] uppercase text-strong leading-normal"
           >
             {section.eyebrow}
           </span>
         </div>
         <h1
           data-rise
-          className="text-[46px] leading-[1.02] tracking-[var(--ls-tight)] md:text-[60px]"
+          className="text-[60px] leading-[1.02] max-[920px]:text-[46px] min-[921px]:whitespace-nowrap tracking-[-0.04em] font-bold text-white"
           style={{ animationDelay: ".12s" }}
         >
           {before}
@@ -44,34 +29,32 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
         </h1>
         <p
           data-rise
-          className="mx-auto text-[length:var(--text-lg-fixed)]"
-          style={{
-            animationDelay: ".2s",
-            marginTop: "var(--space-11)",
-            maxWidth: "var(--measure-blog-lead)",
-            lineHeight: "var(--lh-body)",
-            color: "var(--color-text-secondary)",
-          }}
+          className="mx-auto mt-[var(--space-11)] max-w-[var(--measure-blog-lead)] text-[18.5px] leading-[1.65] text-secondary"
+          style={{ animationDelay: ".2s" }}
         >
           {section.subtitle}
         </p>
         <div
           data-rise
-          className="flex flex-wrap items-center justify-center"
-          style={{ animationDelay: ".3s", marginTop: "var(--space-15)", gap: 15 }}
+          className="mt-[var(--space-15)] flex flex-wrap items-center justify-center gap-[15px]"
+          style={{ animationDelay: ".3s" }}
         >
-          <a
+          <Button
             href={section.primaryCtaLink}
-            className="btn btn-primary btn-lg"
-            style={{ fontSize: "var(--text-md)" }}
+            variant="primary"
+            size="hero"
+            className="text-4 leading-[normal] w-[214.688px] h-[52px]"
           >
             {section.primaryCtaLabel} <span aria-hidden="true">&#8594;</span>
-          </a>
-          <a href={section.secondaryCtaLink} className="btn btn-ghost btn-lg"
-            style={{ padding: "var(--space-6) var(--space-11)", fontSize: "var(--text-md)" }}
+          </Button>
+          <Button 
+            href={section.secondaryCtaLink} 
+            variant="ghost" 
+            size="hero"
+            className="leading-[normal] w-[176.844px]"
           >
             {section.secondaryCtaLabel}
-          </a>
+          </Button>
         </div>
       </div>
     </section>

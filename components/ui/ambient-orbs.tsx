@@ -135,6 +135,69 @@ export function AmbientOrbs() {
     );
   }
 
+  if (pathname?.startsWith("/about")) {
+    return (
+      <div
+        aria-hidden="true"
+        className="bg-ambient-orbs-about"
+        style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            top: -180,
+            right: -140,
+            width: 620,
+            height: 620,
+            borderRadius: "50%",
+            background: "rgba(232, 119, 34, 0.18)",
+            filter: "blur(130px)",
+            animation: "tgorb 16s ease-in-out infinite",
+          }}
+        />
+        <span
+          style={{
+            position: "absolute",
+            top: "35%",
+            left: -220,
+            width: 560,
+            height: 560,
+            borderRadius: "50%",
+            background: "rgba(247, 183, 51, 0.10)",
+            filter: "blur(140px)",
+            animation: "tgorb 20s ease-in-out infinite reverse",
+          }}
+        />
+        <span
+          style={{
+            position: "absolute",
+            top: "60%",
+            right: -160,
+            width: 520,
+            height: 520,
+            borderRadius: "50%",
+            background: "rgba(232, 119, 34, 0.11)",
+            filter: "blur(140px)",
+            animation: "tgorb 24s ease-in-out infinite reverse",
+          }}
+        />
+        <span
+          style={{
+            position: "absolute",
+            bottom: -200,
+            left: "38%",
+            width: 660,
+            height: 660,
+            borderRadius: "50%",
+            background: "rgba(232, 119, 34, 0.13)",
+            filter: "blur(150px)",
+            animation: "tgorb 22s ease-in-out infinite",
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
       <span className="absolute -top-40 -right-30 h-140 w-140 rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]" />

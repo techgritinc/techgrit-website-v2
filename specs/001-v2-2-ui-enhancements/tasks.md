@@ -1951,3 +1951,458 @@ Single increment — all 3 tasks (T001-T003) together are this slice's only deli
 self-contained additive card, per FR-039). Complete T001-T003, then T004 to verify, then stop. This
 completes User Story 9 in full (FR-039 and FR-040, the latter needing no code change); no other user
 story is affected.
+
+---
+
+# About
+
+**Page**: `/about` (User Story 7, spec.md). **Task IDs below restart at `T001`**, scoped to this
+`# About` heading only — see the numbering-convention note at the top of this file. Everything above
+this heading (Shared Foundation, Homepage, Careers, Contact) keeps its own original numbering and is
+unaffected.
+
+## Phase 1: Badge, Eyebrow & Culture-Gallery Grid Alignment (User Story 7 slice)
+
+**Input**: [plan.md](./plan.md) "About Us Page — Badge, Eyebrow & Culture-Gallery Grid Alignment
+(User Story 7)", [research.md](./research.md) §18-19, [data-model.md](./data-model.md)
+**Scope**: only the hero badge's dot, the page's eyebrow accent symbols, and the culture-photo
+gallery's grid — FR-032, FR-033, FR-034. No other About section (hero copy/CTAs, showcase image, Who
+You Are, Our Role, Values, 3-Step Plan, Achievements, If We Partner, closing CTA) and no other user
+story is in scope. No Setup/Foundational sub-phase — research.md §18-19 found no new tokens are
+needed (the culture gallery reuses `LifeGallery.tsx`'s already-shipped `careers` variant as-is).
+
+**Goal**: FR-032, FR-033, FR-034 — the hero badge shows no dot, every eyebrow on the page shows no
+leading accent symbol, and the culture-photo gallery renders via the shared `LifeGallery.tsx`
+component with its reference-exact uniform grid, matching `TechGrit About.dc.html`.
+
+**Independent Test**: Load `/about` and confirm the hero's "About TechGrit" badge shows no dot;
+confirm every eyebrow on the page ("Who you are", "Our role", "What we stand for", "How we work", "If
+we partner together") shows no leading dash; scroll to "Life at TechGrit" and confirm it renders 4
+equal-size photo tiles in a 4-column grid (collapsing to 2 then 1 at narrower widths) with no
+`tall`/`wide` mosaic spans, each tile showing a hover-reveal caption — independent of any other page.
+
+- [x] T001 [P] [US7] In `app/about/_components/about-us-hero.tsx`: remove the `<span
+  className="status-dot status-orange" />` from the "About TechGrit" badge (line 23) — the reference
+  badge has no dot at all (FR-032, research.md §18) — depends on nothing; different file from
+  T002-T006, safe to do in parallel. **Done.**
+- [x] T002 [P] [US7] Add `showAccent={false}` to the `<SectionEyebrow>` call in 5 files:
+  `about-how-we-work.tsx` (line 11), `about-us-our-role.tsx` (line 13), `about-us-partner.tsx` (line
+  12), `about-us-values.tsx` (line 48), `about-us-who-you-are.tsx` (line 12) (FR-033, research.md
+  §18) — depends on nothing; different files from T001/T003-T006, safe to do in parallel.
+  `about-us-culture-gallery.tsx`'s own `<SectionEyebrow>` call is excluded — T006 replaces that
+  section's entire eyebrow/heading markup. **Done.**
+- [x] T003 [P] [US7] In `app/_home-components/LifeGallery.tsx`: widen the `LifeGalleryImage` interface
+  field `src: string` to `src: string | null` (`MediaSlot` already renders a placeholder for a
+  null/undefined `src` — the type just hadn't caught up) (FR-034, research.md §19, data-model.md) —
+  depends on nothing; different file from T001/T002/T004-T005; must land before T006 references the
+  widened type. **Done. Also, found during implementation (not in the original task description)**:
+  the `careers`-variant caption overlay's label/figcaption elements were wrapped in JSX comments
+  (`{/* ... */}`), so `captionLabel`/`caption` never actually rendered on-screen for *any* consumer —
+  including Careers, which has carried this dormant gap since Careers Phase 4 (tasks.md). The overlay
+  wrapper `<div>` also had no `group-hover:opacity-100` (so it could never become visible) and no
+  background scrim (the reference's `linear-gradient(180deg, transparent, rgba(0,0,0,0.82))`).
+  Uncommented both elements, added `group-hover:opacity-100`, and added
+  `bg-[image:var(--gradient-testimonial-fade)]` — an exact-value existing token
+  (`--gradient-testimonial-fade`, `app/tokens.css` line 240), reused rather than duplicated — plus
+  `text-amber-light` in place of the commented code's hardcoded `text-[#F7B733]` (an exact-match
+  existing token, Principle I). This fix was necessary for About's culture gallery (which newly
+  depends on this code path) to render hover captions at all, matching
+  `TechGrit About.dc.html`/`TechGrit Careers.dc.html` exactly; it also fixes the same dormant gap on
+  `/careers`, which was previously verified by code-reading only, not live rendering (tasks.md
+  Careers Phase 2/5 notes). No visual change to `/`'s `home` variant (never sets `captionLabel`/
+  `caption`, so this block never rendered there either way).
+- [x] T004 [P] [US7] In `app/about/_data/types.ts`: on `CulturePhoto`, remove the `layout: "tall" |
+  "square" | "wide"` field and add two optional fields, `captionLabel?: string` and `caption?:
+  string` (FR-034, research.md §19, data-model.md) — depends on nothing; different file from
+  T001-T003; must land before T005 can populate the new fields. **Done.**
+- [x] T005 [US7] In `app/about/_data/about-us-content.ts`: update the `cultureGallery` section's 4
+  `photos` entries — replace every `image: null` with the same real images Careers' own
+  `LifeAtTechGritContent` already uses (`/assets/team/glasses.png`, `rooftop.png`, `painting.png`,
+  `diwali.png`) and add each photo's `captionLabel`/`caption` per the reference (glasses → "The team"
+  / "Builders and designers behind the engineering."; rooftop → "The office" / "Rooftop breaks, real
+  conversations."; painting → "Craft" / "We take craft seriously — inside & outside code."; diwali →
+  "Together" / "We celebrate wins — and Diwali — together.") (FR-034, research.md §19, data-model.md)
+  — depends on T004 (the `CulturePhoto` type must carry the new fields before this data can
+  type-check). **Done.** Real pixel dimensions read directly from each PNG's header (glasses
+  960×1280, rooftop 1024×768, painting 2048×1153, diwali 2048×1536) for `SectionImage.width/height`.
+- [x] T006 [US7] Rewrite `app/about/_components/about-us-culture-gallery.tsx`: remove its bespoke
+  eyebrow/heading/asymmetric-`1.4fr/1fr/1fr`-mosaic markup; map `section.photos` into
+  `LifeGalleryImage[]` (`src: photo.image?.url ?? null`, `alt: photo.image?.alternativeText ?? ""`,
+  `span: "default"`, `captionLabel: photo.captionLabel`, `caption: photo.caption`); render
+  `<LifeGallery variant="careers" heading={section.title} description={section.subtitle}
+  images={...} />` in place of the removed markup (FR-034, research.md §19, data-model.md) — depends
+  on T003 (needs the widened `src` type) and T005 (needs the updated content data); last edit in this
+  phase. **Done.**
+
+**Checkpoint**: the hero badge, every eyebrow, and the culture-photo gallery all match
+`TechGrit About.dc.html` exactly; every other About section is unchanged.
+
+---
+
+## Phase 2: Polish (About verification)
+
+- [x] T007 Run `npm run lint` and `npm run build` (both must stay green); confirm the server-rendered
+  `/about` HTML no longer contains a `status-dot` element inside the hero badge, that the 5 corrected
+  `SectionEyebrow` call sites render with no leading dash `<span>`, and that the culture-gallery
+  section's compiled markup matches `LifeGallery.tsx`'s `careers`-variant grid (`grid-cols-4` at
+  desktop) with 4 populated (non-placeholder) image tiles and per-tile captions present in the DOM.
+  Manually verify in a browser: the badge/eyebrow changes are visually silent (no layout shift), the
+  gallery grid collapses to 2 columns then 1 at the `tg-md`/`tg-sm` breakpoints with no leftover
+  tall/wide tiles, hovering each tile reveals its caption, and `/` and `/careers`'s own Life at
+  TechGrit galleries remain visually unchanged (confirming the `LifeGallery.tsx` widening introduced
+  no regression). **Done.** `npm run lint` and `npm run build` both green (all 18 routes, including
+  `/`, `/about`, `/careers`, prerender successfully). Server-rendered HTML confirmed via `curl` against
+  the running dev server: `/about` contains zero `status-dot` occurrences (was 1); zero remaining
+  `width:24px;height:2px` eyebrow accent-bar spans; zero `"Coming soon"` placeholder occurrences (all
+  4 gallery images are real); the gallery's compiled class list includes `grid-cols-4`,
+  `max-tg-md:grid-cols-2`, `max-tg-sm:grid-cols-1`, and `aspect-[3/4]`, with no leftover `1.4fr`
+  mosaic pattern (the page's only remaining `1.4fr` match is the unrelated shared Footer's
+  `data-foot-brand` grid); all 4 per-tile captions ("Builders and designers behind the engineering.",
+  etc.) present in the DOM after the §20 `LifeGallery.tsx` fix; no "Explore Careers"/"Meet the team"
+  buttons leak onto `/about` (`home`-variant-only). Cross-checked `/` and `/careers`: both still
+  render their own Life-at-TechGrit galleries correctly (`/`'s two action buttons still present;
+  `/careers`' captions now *also* render correctly, a side-effect fix — see §20) — zero regression
+  from the `LifeGalleryImage.src` widening or the caption-overlay fix. **Not verified interactively in
+  a real browser** — the Browser-pane tool could not navigate to the local dev server in this
+  environment (navigation denied), consistent with this same limitation noted throughout this file's
+  Careers/Contact polish tasks; verification here is via server-rendered markup, computed class-list
+  inspection, and a clean production build/type-check, not a driven UI/visual diff. Recommend a manual
+  pixel-diff pass against `TechGrit About.dc.html` in a real browser before merging, given this task's
+  explicit exact-parity requirement.
+
+---
+
+## Dependencies (About)
+
+- T001, T002, T003, T004 are mutually independent (four different files, no shared state) and can all
+  start immediately.
+- T005 depends on T004 (needs `CulturePhoto`'s new fields to exist before `about-us-content.ts` can
+  populate them).
+- T006 depends on T003 (needs the widened `LifeGalleryImage.src` type) and T005 (needs the updated
+  content data) — same file as no other task, last edit in this phase.
+- T007 runs last, after T001-T006.
+
+## Parallel Example (About)
+
+```bash
+# T001, T002, T003, and T004 touch 4 different files and can all run together:
+Task: "Remove status-dot span from about-us-hero.tsx (T001)"
+Task: "Add showAccent={false} to 5 SectionEyebrow call sites (T002)"
+Task: "Widen LifeGalleryImage.src to string | null (T003)"
+Task: "Remove CulturePhoto.layout, add captionLabel/caption (T004)"
+# T005 must wait for T004; T006 must wait for both T003 and T005.
+```
+
+## Implementation Strategy (About)
+
+Single increment — all 6 tasks (T001-T006) together are this slice's only deliverable (FR-032,
+FR-033, and FR-034 are three small, independent-but-bundled fixes surfaced by the same
+`/speckit.clarify` + `/speckit.plan` pass for User Story 7). Complete T001-T006, then T007 to verify,
+then stop. This completes User Story 7 in full; User Stories 2-6 remain out of scope.
+
+---
+
+# Case Studies
+
+**Pages**: `/case-studies`, `/case-studies/[slug]` (User Story 4, spec.md). **Task IDs below restart
+at `T001`**, scoped to this `# Case Studies` heading only — see the numbering-convention note at the
+top of this file. Everything above this heading (Shared Foundation, Homepage, Careers, Contact,
+About) keeps its own original numbering and is unaffected.
+
+## Phase 1: Ambient Orbs, Filter Bar Wiring & Closing CTA (User Story 4 slice)
+
+**Input**: [plan.md](./plan.md) "Case Studies Hub & Detail Pages — Filter Bar Wiring & Reference
+Alignment (User Story 4)", [research.md](./research.md) §21
+**Scope**: only FR-022 (ambient orbs, card hover — the latter needs no task, see below), FR-024
+(sticky category filter bar), FR-025 (detail-page ambient orbs), and FR-026 (closing CTA background +
+shared `Button`) — the full functional slice of User Story 4. No other page and no other user story
+is in scope. `components/ui/FilterBar.tsx` is reused as-is, per direct instruction — no task modifies
+it.
+
+**Already satisfied, no task needed**: FR-022's card hover-border treatment
+(`featured-case-study.tsx`/`case-studies-grid.tsx` already match the reference's border-color-on-hover
+exactly, per spec.md Clarifications Session 2026-08-10) and FR-023's hero badge dot
+(`case-studies-hero.tsx`'s dot already matches the reference's own dotted badge) — both audited in
+research.md §21/plan.md and found already correct; neither gets a task here.
+
+**Goal**: FR-022, FR-024, FR-025, FR-026 — the hub page's 3 ambient orbs and the detail page's 2
+ambient orbs match `TechGrit Case Studies.dc.html`/`TechGrit Case Study.dc.html` exactly; a sticky,
+dark, labeled category filter bar (reusing `FilterBar.tsx`) sits below the featured card and
+functionally filters the grid with no page reload, while the featured card stays visible regardless
+of the active filter (spec.md Clarifications Session 2026-08-10); the closing CTA (shared by both
+pages) uses the reference's glass background and the shared `Button` component.
+
+**Independent Test**: Load `/case-studies` and confirm the top-right orb reads orange (not blue), the
+other two orbs are unchanged; scroll past the featured card to the filter bar and confirm it shows a
+dark/blurred background, a "Filter" label, and 5 chips (All/FinTech/Marketplace/AI Enablement/Design,
+no "Featured" chip); select each chip and confirm the grid re-filters with no page reload while the
+featured card stays on screen throughout; open a case-study detail page and confirm its 2 orbs read
+orange (top-right) and amber (left-middle); confirm the closing CTA's translucent glass background and
+gradient button on both pages.
+
+- [x] T001 [P] [US4] Add `--color-overlay-amber-light-10: rgba(247, 183, 51, 0.10)` to
+  `app/tokens.css` Section 4 (BORDERS & GLASS, next to the existing Case-study token cluster), plus
+  its `@theme inline` entry in `app/globals.css` (FR-025, research.md §21) — depends on nothing;
+  different file from T002/T004/T005/T008, safe to do in parallel.
+- [x] T002 [P] [US4] In `app/case-studies/page.tsx`: fix ambient orb 1's `color-mix()` argument from
+  `var(--color-blue) 13%` to `var(--color-orange) 16%` (FR-022, research.md §21) — depends on nothing;
+  independent of T001 (different file), but see T007 below (same file, do sequentially before it).
+- [x] T003 [US4] In `app/case-studies/[slug]/page.tsx`: change ambient orb 1's class from
+  `bg-overlay-teal` to `bg-overlay-orange` (geometry unchanged — already correct); replace orb 2
+  entirely with `bg-[var(--color-overlay-amber-light-10)]` (from T001) at `top-[35%] left-[-220px]
+  w-[560px] h-[560px] blur-[140px]`, keeping the existing `animate-[tgorb_20s_ease-in-out_
+  infinite_reverse]` timing (FR-025, research.md §21) — depends on T001 (needs the new token);
+  independent of T002 (different file).
+- [x] T004 [P] [US4] In `app/case-studies/_data/case-studies-content.ts`: add `export const
+  CASE_STUDY_CATEGORIES = ["All", "FinTech", "Marketplace", "AI Enablement", "Design"];` — "Featured"
+  is deliberately omitted (research.md §21: the featured card is excluded from the filterable grid, so
+  a "Featured" chip would always show zero results) (FR-024, research.md §21) — depends on nothing;
+  different file from T001-T003/T005/T008, safe to do in parallel.
+- [x] T005 [P] [US4] Create `app/case-studies/_components/case-studies-filters.tsx` — a
+  presentational category-chip row (props: `categories: string[]`, `active: string`, `onSelect:
+  (category: string) => void`), reusing `app/blog/_components/topic-filter.tsx`'s existing chip
+  classes (`bg-glass-4 border-border-14 text-secondary` inactive; `bg-[image:var(--gradient-brand)]
+  shadow-chip-active` active) with one deviation: the active chip's border is `border-transparent`,
+  matching `TechGrit Case Studies.dc.html`'s `.cs-chip.is-active` exactly (not `topic-filter.tsx`'s own
+  `border-border-orange-strong`) (FR-024, research.md §21) — depends on nothing; different file from
+  T001-T004/T008, safe to do in parallel; must land before T006 imports it.
+- [x] T006 [US4] Create `app/case-studies/_components/case-studies-filter-section.tsx` — a `"use
+  client"` component (props: `caseStudies: CaseStudy[]`, `categories: string[]`) that owns
+  `useState("All")` and a `useMemo`-derived filtered list (matching on `category`), rendering
+  `<FilterBar label="Filter">` (existing shared shell, unmodified) wrapping `<CaseStudiesFilters
+  .../>` (T005), followed by either the existing, unmodified `<CaseStudiesGrid
+  caseStudies={filtered} />` or — when the filtered list is empty — a "no results" message plus a
+  "Reset filter" control (`components/ui/Button` `variant="ghost" size="sm"`, resetting the filter to
+  `"All"`) (FR-024, research.md §21) — depends on T005 (imports `CaseStudiesFilters`); independent of
+  T001-T004/T008 (different file); must land before T007 imports it.
+- [x] T007 [US4] In `app/case-studies/page.tsx`: replace the direct `<CaseStudiesGrid
+  caseStudies={grid} />` call with `<CaseStudiesFilterSection caseStudies={grid}
+  categories={CASE_STUDY_CATEGORIES} />`, importing `CASE_STUDY_CATEGORIES` from
+  `./_data/case-studies-content` (T004) and `CaseStudiesFilterSection` from
+  `./_components/case-studies-filter-section` (T006), positioned in the same place in the tree
+  (immediately after `<FeaturedCaseStudy />`, before `<CaseStudiesFinalCta />` — no structural
+  reordering, preserving the filter-bar-below-featured order per spec.md Clarifications Session
+  2026-08-10) (FR-024) — depends on T004 and T006; same file as T002, do sequentially after it.
+- [x] T008 [P] [US4] In `app/case-studies/_components/case-studies-final-cta.tsx`: change the outer
+  card's classes from `bg-ink-mid border border-border-faint` to `bg-[var(--color-glass-faint)]
+  border border-[var(--color-border)] backdrop-blur-[var(--blur-cta)]`; replace the bespoke `<Link
+  className="btn btn-primary btn-lg ...">` with `<Button href="/contact" variant="primary"
+  className="gap-[10px] !rounded-[12px] !px-[30px] !py-[15px] !min-h-[52px] text-[16px]">`, importing
+  `Button` from `@/components/ui/Button` (FR-026, research.md §21) — depends on nothing; different
+  file from T001-T007, safe to do in parallel; this one fix covers both the hub (`variant="list"`) and
+  detail (`variant="detail"`) pages, since both already consume this shared component.
+
+**Checkpoint**: `/case-studies` and every case-study detail page match
+`TechGrit Case Studies.dc.html`/`TechGrit Case Study.dc.html` exactly, except the filter bar's
+spec.md-approved divergences (position below the featured card, featured card exempt from filtering,
+no live count, no "Featured" chip); the card hover-border treatment and hero badge dot required no
+change (already correct).
+
+---
+
+## Phase 2: Polish (Case Studies verification)
+
+- [x] T009 Run `quickstart.md` §16-17's verification steps (isolated render checks + `npm run lint` +
+  `npm run build`). **Done.** `npm run lint` (0 errors, 7 pre-existing unrelated warnings) and
+  `npm run build` both green — all 18 routes, including `/case-studies` and all 7
+  `/case-studies/[slug]` static params, prerender successfully. Server-rendered HTML confirmed via
+  `curl` against the running dev server: hub page's orb 1 now reads
+  `color-mix(in srgb, var(--color-orange) 16%, transparent)` (was `--color-blue) 13%`), orbs 2/3
+  unchanged (already correct); the filter bar renders with a "Filter" label and exactly 5 chips
+  (All/FinTech/Marketplace/AI Enablement/Design — no "Featured" chip); detail page's 2 orbs compile to
+  `bg-overlay-orange` at `top-[-160px] right-[-120px] w-[560px] h-[560px] blur-[120px]` and
+  `bg-[var(--color-overlay-amber-light-10)]` at `top-[35%] left-[-220px] w-[560px] h-[560px]
+  blur-[140px]` — both now match `TechGrit Case Study.dc.html` exactly (previously
+  `bg-overlay-teal`/`bg-overlay-blue-soft` at unrelated positions/sizes); the shipped CSS
+  (`/_next/static/css/app/layout.css`) contains `--color-overlay-amber-light-10:
+  rgba(247, 183, 51, 0.10)`, the exact reference value. Both pages' closing CTA compiles to
+  `bg-[var(--color-glass-faint)] border border-[var(--color-border)] backdrop-blur-[var(--blur-cta)]`
+  (was `bg-ink-mid border-border-faint`, no blur) with the "Get in Touch" control rendering as a real
+  `<a>` through `components/ui/Button` (confirmed via its compiled `shadow-btn-primary`/`rounded-card`
+  base classes plus the `!px-[30px] !py-[15px] !rounded-[12px] !min-h-[52px]` overrides), not the old
+  bespoke `.btn .btn-primary .btn-lg` link. Confirmed the filter bar and its chips render only on
+  `/case-studies` and not on the detail page (0 matches for "Filter" label there), and the featured
+  card's own markup/classes are untouched. **Not verified interactively in a real browser** — the
+  Browser-pane tool could not composite frames in this environment ("the Browser pane is not
+  displayed"), consistent with this same limitation noted throughout this file's Careers/Contact/About
+  polish tasks; verification here is via server-rendered markup, compiled CSS inspection, and a clean
+  production build/type-check, not a driven UI/visual diff. Recommend a manual pixel-diff pass against
+  `TechGrit Case Studies.dc.html`/`TechGrit Case Study.dc.html` in a real browser before merging, given
+  this task's explicit exact-parity requirement — in particular the sticky-scroll behavior, the filter
+  click-to-refilter interaction, and the "no results" reset-button flow, none of which can be
+  confirmed by markup inspection alone.
+
+---
+
+## Phase 3: Filter Bar Sticky/Mobile Bug Fixes (found via live browser testing)
+
+**Input**: direct user report after T001-T009 landed — "the filter behavior is not as expected it is
+getting sticked at the top but all the cards are getting overlapped on the filter... in mobile view
+filter should be in one row but here it is in more than one row."
+**Scope**: only `components/ui/FilterBar.tsx` (shared component — this fix also benefits Careers'
+Open Roles filter bar, its other consumer) and `app/case-studies/_components/case-studies-filters.tsx`.
+This phase exists because T009's own polish note explicitly flagged that markup/build inspection
+cannot confirm sticky-scroll behavior or the filter interaction — this is exactly the gap that
+surfaced once the page was driven live.
+
+**Root causes**, confirmed via live DOM inspection (`getComputedStyle` in a real running instance,
+not markup reading):
+
+1. **Card/filter-bar overlap.** `FilterBar.tsx`'s sticky bar used the bare Tailwind class `z-raised`.
+   Tailwind v4 never generated a utility for it — `--z-raised` is mapped in `globals.css`'s `@theme
+   inline` block under the `--z-*` key, not the `--z-index-*` namespace Tailwind's z-index scale
+   actually reads from, so `z-raised` silently compiled to nothing. Confirmed live:
+   `getComputedStyle(filterBar).zIndex === "auto"`. Meanwhile, `case-studies-grid.tsx`'s cards carry
+   `backdrop-blur-md` unconditionally (not just on hover), which creates a stacking context on every
+   card at rest. Two elements at the same effective (`auto`) stacking level paint in DOM order — since
+   the cards render after the filter bar in the tree, they painted on top of it once both were
+   competing at the same effective level, exactly matching the reported "cards overlapping the
+   filter" symptom.
+2. **Mobile multi-row wrap.** `case-studies-filters.tsx`'s chip row used `flex flex-wrap` (copied
+   from `app/blog/_components/topic-filter.tsx`, where wrapping is correct since Blog's own filter row
+   isn't inside a horizontally-scrollable sticky shell yet). Inside `FilterBar.tsx`'s
+   `overflow-x-auto` row, a wrappable child gives the browser a non-overflowing layout option
+   (wrap to 2+ lines) that it prefers over horizontal overflow — so at mobile widths, where the
+   label + 5 chips don't fit in 375px, the chips wrapped instead of staying in one scrollable row.
+
+- [x] T010 [US4] In `components/ui/FilterBar.tsx`: change the sticky bar's z-index class from the
+  broken `z-raised` to `z-[var(--z-sticky)]` (arbitrary-value syntax, matching the same robust pattern
+  the site header already uses for `--z-nav`, rather than relying on a bare utility that Tailwind
+  doesn't generate) — depends on nothing; shared component, also fixes the same latent bug on
+  Careers' Open Roles filter bar (its other consumer), though that page was not reported as broken.
+- [x] T011 [P] [US4] In `app/case-studies/_components/case-studies-filters.tsx`: remove `flex-wrap`
+  from the chip row's className (now `flex shrink-0 items-center gap-2.5`) so the row stays a single
+  non-wrapping line that the parent `FilterBar`'s `overflow-x-auto` can scroll horizontally at narrow
+  widths, matching `TechGrit Case Studies.dc.html`'s own `overflow-x:auto` filter-bar behavior —
+  depends on nothing; different file from T010, safe to do in parallel.
+
+**Verified live** (via `javascript_tool` computed-style/layout inspection against the running dev
+server, since the Browser-pane tool still cannot composite frames for a screenshot in this
+environment): post-fix, `getComputedStyle(filterBar).zIndex === "10"` (was `"auto"`); at a 375px
+mobile viewport, the chip row's `scrollWidth` (614px) exceeds its `clientWidth` (375px) and is
+confirmed horizontally scrollable, with all 5 chips sharing one identical `top` offset (one row, not
+wrapped). `npm run lint` (0 errors, same 7 pre-existing unrelated warnings) and `npm run build` both
+green afterward (all 18 routes prerender). **Still not confirmed via an actual visual
+screenshot/pixel-diff** — only computed styles/layout metrics, since this environment's Browser pane
+cannot render frames; recommend a manual visual pass to confirm the scroll-and-stick interaction looks
+correct end-to-end.
+
+**Checkpoint**: the Case Studies filter bar sticks correctly above scrolling cards with no overlap,
+and its chips stay in one horizontally-scrollable row at every viewport width, matching the
+reference's own `overflow-x:auto` filter-bar behavior (the one deliberately-approved area where this
+feature's UI is allowed to diverge from the reference is the filter bar's *position/scope*, per
+spec.md Clarifications Session 2026-08-10 — not its scroll mechanics, which now match exactly).
+
+---
+
+## Phase 4: Detail-Page Responsive Fixes (found via live browser testing)
+
+**Input**: direct user report after Phase 3 landed — "Metrics strip in the reference mobile view is
+aligned in one line but in our UI it is aligned in two lines... the architecture diagram is getting
+overlapped with the next section in the mobile view and the button in the team panel is not matching
+the reference tablet view and more case studies is getting overlapped with the cta section in both
+mobile and tablet view... make sure no any other changes is allowed other than responsiveness."
+**Scope**: strictly responsive/breakpoint fixes to 4 detail-page files — no color, copy, desktop
+layout, or content change in any of them. All four are the same root-cause shape: a value hardcoded
+for the desktop layout (a 2-column mobile override, or a fixed pixel height/width) that was never
+re-validated once the layout genuinely reflows at narrower breakpoints.
+
+**Root causes**, confirmed via live DOM/layout inspection (`getComputedStyle`/`getBoundingClientRect`
+in the running dev server, resized to mobile 375px and tablet 768px):
+
+1. **Metrics strip two-line wrap.** `metrics-strip.tsx`'s 4-metric grid had a `max-[560px]:grid-cols-2`
+   override with no reference equivalent (`TechGrit Case Study.dc.html` line 242 specifies
+   `grid-template-columns:repeat(4,1fr)` with no responsive collapse at all) — 4 items in 2 columns
+   necessarily wraps to 2 rows. **Fix**: removed the override; `grid-cols-4` now applies at every
+   width, matching the reference's single-row layout.
+2. **Architecture diagram overlapping the next section on mobile.** The diagram's outer panel had a
+   fixed `h-[258px]` at every breakpoint, sized for the desktop `flex-wrap` row layout. Below `tg-sm`
+   (560px) the internal layout switches to `max-tg-sm:flex-col` (3 stacked nodes + connectors +
+   wrapped integration chips), which needs far more vertical space than 258px — confirmed live:
+   `scrollHeight` reached 568px, well past the fixed box, so the panel's real content spilled into
+   (overlapped) the section below it. **Fix**: added `max-tg-sm:h-auto` so the panel grows to fit its
+   stacked content below 560px; the desktop/tablet `h-[258px]` (where the `flex-wrap` row layout still
+   fits it) is unchanged.
+3. **Team-panel button not matching the reference on tablet.** The "Start a project" button had a
+   hardcoded `w-[234.667px]` — a measurement that happens to fit the desktop-only 280px sidebar column
+   (`grid-cols-[1fr_280px]`, only active at `tg-md`/960px and above). Below `tg-md`, the detail page's
+   body grid collapses to one column (`app/case-studies/[slug]/page.tsx`'s existing
+   `grid-cols-1 tg-md:grid-cols-[1fr_280px]`), so the team-panel card stretches to the full content
+   width — confirmed live at 768px tablet width, the card measured 696.67px wide while the button
+   stayed pinned at its old fixed value. The reference's own button (`TechGrit Case Study.dc.html` line
+   317) sets no width at all — a block-level `display:flex` anchor, which fills its parent's width by
+   default at every breakpoint. **Fix**: changed the button's width from the fixed pixel value to
+   `w-full`, matching the reference's own implicit 100%-width behavior; confirmed live at 768px the
+   button now measures 651.33px, correctly filling the wider tablet card (was fixed at 234.667px
+   regardless of card width).
+4. **"More case studies" overlapping the closing CTA on mobile and tablet.** Same shape as finding 2:
+   `related-case-studies.tsx`'s 3-card grid had a fixed `h-[137px]` at every breakpoint, sized for the
+   `tg-md:grid-cols-3` single-row layout. Below `tg-md` (960px — covering both mobile and tablet,
+   exactly matching the report), the grid is `grid-cols-1` (3 cards stacked), which needs far more than
+   137px — confirmed live: `scrollHeight` reached 482px at both 375px and 768px widths, spilling past
+   the fixed box into the CTA section immediately below it. **Fix**: added `max-tg-md:h-auto` so the
+   grid grows to fit its stacked cards below 960px; the desktop `tg-md:h-[137px]` (3-column row) is
+   unchanged.
+
+- [x] T012 [P] [US4] In `app/case-studies/_components/metrics-strip.tsx`: remove the
+  `max-[560px]:grid-cols-2` override from the metrics grid so it stays `grid-cols-4` at every
+  breakpoint (finding 1) — depends on nothing; different file from T013-T015, safe to do in parallel.
+- [x] T013 [P] [US4] In `app/case-studies/_components/architecture-diagram.tsx`: add `max-tg-sm:h-auto`
+  alongside the existing `h-[258px]` on the diagram's outer panel (finding 2) — depends on nothing;
+  different file from T012/T014/T015, safe to do in parallel.
+- [x] T014 [P] [US4] In `app/case-studies/_components/team-panel.tsx`: change the "Start a project"
+  button's `className` from `w-[234.667px] h-[44px]` to `w-full h-[44px]` (finding 3) — depends on
+  nothing; different file from T012/T013/T015, safe to do in parallel.
+- [x] T015 [P] [US4] In `app/case-studies/_components/related-case-studies.tsx`: change the related-
+  cards grid's `h-[137px]` to `max-tg-md:h-auto tg-md:h-[137px]` (finding 4) — depends on nothing;
+  different file from T012-T014, safe to do in parallel.
+
+**Verified live** (via `javascript_tool` computed-style/layout inspection against the running dev
+server, resized to 375px mobile and 768px tablet — the Browser-pane tool still cannot composite frames
+for a screenshot in this environment): metrics grid's 4 items now share one identical `top` offset at
+375px (one row, was two); the architecture panel's height auto-sizes to 569px at 375px with
+`scrollHeight === clientHeight` (no overflow, was clipped at a fixed 258px); the team-panel button
+measures 651.33px inside a 696.67px-wide card at 768px tablet width (fills its container, was fixed at
+234.667px regardless of card width); the related-cards grid auto-sizes to 482px at both 375px and
+768px with no overflow and a clean ~105px gap before the CTA heading (was clipped at a fixed 137px).
+`npm run lint` (0 errors, same 7 pre-existing unrelated warnings) and `npm run build` both green
+afterward (all 18 routes prerender). No color, copy, or desktop-breakpoint value was touched in any of
+the 4 files — confirmed each edit is additive-only (a new `max-tg-*`/`max-[...]` class or a value swap
+scoped to the reported breakpoint), per the "no changes other than responsiveness" constraint.
+
+**Checkpoint**: the detail page's metrics strip, architecture diagram, team-panel button, and related-
+case-studies grid all render correctly (one-line metrics, no section overlap, full-width tablet button)
+at mobile and tablet widths, with zero change to their desktop rendering or to any non-layout value.
+
+## Dependencies (Case Studies)
+
+- T001 → T003 (orb 2's new token must exist before the detail page references it).
+- T002 is independent of T001/T003 (different file, `page.tsx`'s orb vs. `[slug]/page.tsx`'s orbs).
+- T004 and T005 are independent of T001-T003 and of each other (three different files).
+- T005 → T006 (the filter-section component imports `CaseStudiesFilters`).
+- T004, T006 → T007 (`page.tsx` imports both `CASE_STUDY_CATEGORIES` and `CaseStudiesFilterSection`);
+  T007 is also sequential with T002 (same file, `page.tsx`), after it.
+- T008 is independent of every other task (different file, `case-studies-final-cta.tsx`).
+- T009 runs last, after T001-T008.
+
+## Parallel Example (Case Studies)
+
+```bash
+# T001, T002, T004, T005, and T008 touch 5 different files/edits and can all run together:
+Task: "Add --color-overlay-amber-light-10 token (T001)"
+Task: "Fix hub-page orb 1 color-mix argument (T002)"
+Task: "Add CASE_STUDY_CATEGORIES to case-studies-content.ts (T004)"
+Task: "Create case-studies-filters.tsx (T005)"
+Task: "Fix case-studies-final-cta.tsx background + Button swap (T008)"
+# T003 must wait for T001; T006 must wait for T005; T007 must wait for T004 and T006,
+# and must run after T002 (same file, page.tsx).
+```
+
+## Implementation Strategy (Case Studies)
+
+Single increment — all 8 tasks (T001-T008) together are this slice's only deliverable (FR-022,
+FR-024, FR-025, and FR-026 are one cohesive reference-alignment pass surfaced by the same
+`/speckit.clarify` + `/speckit.plan` pass for User Story 4). Complete T001-T008, then T009 to verify,
+then stop. This completes User Story 4 in full; User Stories 5-6 (Blog, Webinar) remain out of scope,
+though FR-044's cross-cutting note means Blog's own future filter-bar wiring should follow this same
+`FilterBar` + page-local-chips pattern once it's planned.

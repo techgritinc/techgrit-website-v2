@@ -86,19 +86,19 @@ export const aboutUsContent: AboutUsPageContent = {
       steps: [
         {
           order: 1,
-          label: "Step 01",
+          label: "STEP 01",
           title: "Strategize & Design",
           description: "We collaborate to define your vision and create a clear technical roadmap.",
         },
         {
           order: 2,
-          label: "Step 02",
+          label: "STEP 02",
           title: "Engineer & Innovate",
           description: "Our expert team, enhanced by AI, builds a robust and scalable solution.",
         },
         {
           order: 3,
-          label: "Step 03",
+          label: "STEP 03",
           title: "Scale & Support",
           description: "We deploy your solution and provide ongoing support to ensure long-term success.",
         },
@@ -134,12 +134,49 @@ export const aboutUsContent: AboutUsPageContent = {
       eyebrow: "Inside TechGrit",
       title: "Life at TechGrit.",
       subtitle: "The people and the culture behind the engineering.",
-      // No real team photos exist yet — null on every photo exercises the FR-013 placeholder path.
+      // Same 4 photos/captions as Careers' Life at TechGrit gallery (TechGrit About.dc.html
+      // marks this section a "shared component — matches Homepage & Careers").
       photos: [
-        { layout: "tall", image: null },
-        { layout: "square", image: null },
-        { layout: "square", image: null },
-        { layout: "wide", image: null },
+        {
+          image: {
+            url: "/assets/team/glasses.png",
+            alternativeText: "TechGrit team member",
+            width: 960,
+            height: 1280,
+          },
+          captionLabel: "The team",
+          caption: "Builders and designers behind the engineering.",
+        },
+        {
+          image: {
+            url: "/assets/team/rooftop.png",
+            alternativeText: "TechGrit office rooftop",
+            width: 1024,
+            height: 768,
+          },
+          captionLabel: "The office",
+          caption: "Rooftop breaks, real conversations.",
+        },
+        {
+          image: {
+            url: "/assets/team/painting.png",
+            alternativeText: "TechGrit culture moment",
+            width: 2048,
+            height: 1153,
+          },
+          captionLabel: "Craft",
+          caption: "We take craft seriously — inside & outside code.",
+        },
+        {
+          image: {
+            url: "/assets/team/diwali.png",
+            alternativeText: "TechGrit team celebration",
+            width: 2048,
+            height: 1536,
+          },
+          captionLabel: "Together",
+          caption: "We celebrate wins — and Diwali — together.",
+        },
       ],
     },
     {

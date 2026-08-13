@@ -214,6 +214,7 @@
   --color-border-plain:   rgba(255, 255, 255, 0.28); /* Case-study grid card hover border */
   --color-border-cover:   rgba(255, 255, 255, 0.08); /* Case-study grid cover divider */
   --color-overlay-orange-soft: rgba(232, 119, 34, 0.18); /* CTA banner glow blob */
+  --color-overlay-amber-light-10: rgba(247, 183, 51, 0.10); /* Case-study detail-page ambient orb (second orb) */
 
   /* Footer (TMS-63, Footer-only update 2026-07-30) */
   --color-overlay-amber-light-06: rgba(247, 183, 51, 0.06); /* Footer bottom-left decorative glow */

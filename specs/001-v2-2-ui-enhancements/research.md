@@ -1527,3 +1527,307 @@ introduced by this pass, just following the file's established local pattern.
 - No other new tokens. The icon-chip fill/border, eyebrow tracking/color, card border, card blur,
   and button gradient all reuse exact-match existing tokens or the base `--color-orange` token via
   Tailwind's opacity-modifier syntax (see table above).
+
+---
+
+# Phase 0 Research Addendum — About Us Page (User Story 7)
+
+**Companion to**: [plan.md](./plan.md), "About Us Page — Badge, Eyebrow & Culture-Gallery Grid
+Alignment (User Story 7)" | **Spec**: [spec.md](./spec.md), User Story 7, FR-032, FR-033, FR-034,
+Clarifications Session 2026-08-07
+
+Scope: only `app/about/`'s badge, eyebrow, and culture-photo-gallery treatment, per `TechGrit
+About.dc.html`. No other About section is affected.
+
+## 18. Badge dot and eyebrow accent — single, already-solved gaps (FR-032, FR-033)
+
+**Badge (FR-032)**: grepped the entire `app/about/` tree for `status-dot`/`Badge` — exactly one
+match: `about-us-hero.tsx`'s hero badge (`<span className="status-dot status-orange" />`). The
+reference's own hero badge (`TechGrit About.dc.html` line 229-231) is a plain text pill with no dot
+element at all. **Decision**: delete the span; no other badge exists on this page to audit.
+
+**Eyebrow (FR-033)**: `components/ui/section-eyebrow.tsx` already carries the `showAccent?: boolean`
+toggle (default `true`) added in Shared Foundation – T003, used elsewhere (Industries' "Why
+TechGrit"/"Challenge" eyebrows). Six About files call `<SectionEyebrow>` with no `showAccent` prop:
+`about-how-we-work.tsx`, `about-us-culture-gallery.tsx`, `about-us-our-role.tsx`,
+`about-us-partner.tsx`, `about-us-values.tsx`, `about-us-who-you-are.tsx`. The reference's own
+eyebrows throughout the page (`Who you are` line 255, `Our role` line 275, `What we stand for` line
+285, `How we work` line 339, `If we partner together` line 381, `Inside TechGrit` line 398) are all
+plain uppercase text with no leading dash/symbol. **Decision**: add `showAccent={false}` to 5 of the
+6 call sites. The 6th (`about-us-culture-gallery.tsx`) is excluded — §19 below replaces that section's
+entire eyebrow/heading markup with `LifeGallery.tsx`'s own already-accent-free eyebrow, so the prop
+is moot there.
+
+## 19. Culture-photo gallery — which section FR-034 targets, and the `LifeGallery` reuse decision (FR-034)
+
+**Which section**: already resolved in spec.md Clarifications (Session 2026-08-07) — FR-034 targets
+the "Life at TechGrit" culture-photo gallery (`about-us-culture-gallery.tsx`), not the single-image
+hero showcase (`about-us-showcase.tsx`), which the reference renders as one 460px-tall image with no
+grid at all (`TechGrit About.dc.html` lines 242-249). This section documents the resulting
+implementation decision.
+
+**Reuse decision**: `TechGrit About.dc.html`'s Life-at-TechGrit section carries its own HTML comment,
+`<!-- ===== LIFE AT TECHGRIT (shared component — matches Homepage & Careers) ===== -->` (line 394) —
+direct confirmation from the design reference itself that this section is meant to be identical
+across Home, Careers, and About, not independently designed per page. `app/_home-components/
+LifeGallery.tsx` already implements this section for Home (`variant="home"`) and Careers
+(`variant="careers"`); the `careers` variant is the correct fit for About:
+
+| Property | Reference (`About.dc.html`) | `LifeGallery` `careers` variant | Match? |
+|---|---|---|---|
+| Section padding | `padding:80px 36px 80px` (line 396) | `pt-[80px] pb-[80px]` | Exact |
+| Grid columns (desktop) | `repeat(4, 1fr)` (implicit 4-up via `[data-gallery]`) | `grid-cols-4` | Exact |
+| Grid columns (≤ collapse 1) | `1fr 1fr` at `max-width:920px` (line 98) | `grid-cols-2` at `tg-md` (960px) | 40px/~4% breakpoint delta — within this plan's established sub-5% reuse tolerance (research.md §14) |
+| Grid columns (≤ collapse 2) | `1fr` at `max-width:560px` (line 108) | `grid-cols-1` at `tg-sm` (560px) | Exact |
+| Tile aspect ratio | implicit via fixed `height:200px` md/`sm` overrides, no explicit ratio at desktop — but every tile in the reference markup shares one size | `aspect-[3/4]` uniform, no per-tile span | Exact fit — no `tall`/`wide` span in the reference at all |
+| Action buttons below grid | none | only rendered when `variant === "home"` — `careers` renders none | Exact |
+| Eyebrow style | plain uppercase text, no leading dash (line 398) | `careers` branch's eyebrow is already plain text, no accent bar | Exact |
+
+No property required a new `LifeGallery.tsx` visual change — every value the reference needs already
+exists in the shipped `careers` variant.
+
+**`src` type gap (the one real code change needed)**: `LifeGalleryImage.src` is typed `string`
+(non-nullable), but `MediaSlot` (which `LifeGallery.tsx` renders every image through) already accepts
+`string | null | undefined` and renders a "Coming soon" placeholder when absent — the type simply
+hadn't caught up to what the component already supports. **Decision**: widen `LifeGalleryImage.src`
+to `string | null`. Purely additive: `Home`'s `CULTURE_GALLERY_IMAGES` and Careers'
+`LifeAtTechGritContent.images` both always supply a real string today, so neither variant's rendered
+output changes.
+
+**Real images, not `null` placeholders**: `about-us-content.ts`'s `cultureGallery` section currently
+sets `image: null` on all 4 photos (comment: "No real team photos exist yet"). But the reference's 4
+tiles (`life1`-`life4`, lines 403-430) point at `assets/team/glasses.png`/`rooftop.png`/
+`painting.png`/`diwali.png` with specific per-tile captions — and these are the **exact same** 4
+files (already present in `public/assets/team/`) and **exact same** captions Careers already added
+to its own `LifeAtTechGritContent` (tasks.md, Careers Phase 4 – T011). **Decision**: populate About's
+4 photos with these same real images and captions rather than leaving them `null` — consistent with
+the reference's own "shared component" framing, and avoiding the alternative of shipping a page with
+4 placeholder tiles when the real assets and copy already exist and are already used identically two
+pages over. `CulturePhoto.image` stays typed `SectionImage | null` (the base about-us-page spec's
+general placeholder capability, FR-013, is preserved for any future content gap) — only this
+dataset's *values* change from `null` to real images.
+
+**`CulturePhoto.layout` removal**: the base about-us-page spec's Key Entities section defines
+`Culture Photo` as "an image and an optional descriptive caption/alt text" — it does not mention a
+layout/span field; `layout: "tall" | "square" | "wide"` was an implementation-only addition driving
+the now-replaced asymmetric mosaic. Once the section renders via `LifeGallery`'s `careers` variant
+(which ignores per-image span data entirely — every tile is `aspect-[3/4]`, uniform), `layout` has no
+consumer. **Decision**: drop it from `CulturePhoto`, replacing it with the two optional caption
+fields the reference's per-tile captions need (`captionLabel`, `caption`), mirroring
+`LifeGalleryImage`'s own Careers-variant fields (data-model.md).
+
+## 20. Caption-overlay dormant bug, found during implementation (FR-034)
+
+Implementing T006 and rendering `/about` for the first time revealed that `LifeGallery.tsx`'s
+`careers`-variant caption overlay never actually displayed any text: the `captionLabel`/`caption`
+elements added in Careers Phase 4 (tasks.md) were left wrapped in JSX comments (`{/* ... */}`), so
+they compiled out of the output entirely, and the wrapper `<div>` had no `group-hover:opacity-100`
+counterpart to its `opacity-0` base (so the overlay could never become visible even if its children
+had rendered) and no background scrim (the reference's `linear-gradient(180deg, transparent,
+rgba(0,0,0,0.82))`). This affected `/careers` identically — it had simply never been caught, since
+that page's own verification (tasks.md, Careers Phase 2/5) was code-inspection-only, not
+live-rendered (the Browser-pane tool was unavailable in that pass too).
+
+**Decision — fix directly, not just document**: this dormant gap sits squarely in the code path
+About's culture gallery now depends on, and leaving it broken would fail this task's own exact-parity
+requirement against `TechGrit About.dc.html`'s hover-caption behavior. Fixed in `LifeGallery.tsx`:
+uncommented the `captionLabel`/`caption` elements, added `group-hover:opacity-100`, and added
+`bg-[image:var(--gradient-testimonial-fade)]` (`app/tokens.css` line 240 — an exact-value existing
+token, originally added for Testimonials' video-card bottom fade, reused rather than duplicated) plus
+`text-amber-light` in place of the dead code's hardcoded `text-[#F7B733]` (also an exact-match
+existing token). Verified via server-rendered HTML: the caption text now appears in both `/about`'s
+and `/careers`' output; `/`'s `home` variant is unaffected (it never sets `captionLabel`/`caption`).
+
+## New tokens summary (About)
+
+None — every value this slice needs already exists via the reused `careers` variant of
+`LifeGallery.tsx`, including the caption-overlay fix in §20 above (both new classes reuse existing
+exact-match tokens); no `tokens.css`/`globals.css` change.
+
+## 21. Case Studies hub/detail — orb defects, filter-bar reuse, and chip/CTA token fit (FR-022–FR-026)
+
+Companion to plan.md's "Case Studies Hub & Detail Pages — Filter Bar Wiring & Reference Alignment
+(User Story 4)" addendum. Every value below is read from `TechGrit Case Studies.dc.html` (hub) or
+`TechGrit Case Study.dc.html` (detail), per direct instruction that these two files are this slice's
+sole visual source of truth.
+
+**Ambient orbs — hub page (`app/case-studies/page.tsx`), FR-022**
+
+| Orb | Reference (`TechGrit Case Studies.dc.html`) | Current code | Verdict |
+|---|---|---|---|
+| 1 | `top:-160px; right:-120px; 560×560; rgba(232,119,34,0.16); blur(120px); 16s` (line 106) | `color-mix(in srgb, var(--color-blue) 13%, transparent)`, same geometry | **Wrong hue and opacity** — mixes blue at 13%, reference is orange at 16% |
+| 2 | `top:1100px; left:-180px; 520×520; rgba(232,119,34,0.10); blur(130px); 20s reverse` (line 107) | `color-mix(in srgb, var(--color-orange) 10%, transparent)`, same geometry | Exact match |
+| 3 | `bottom:-160px; left:40%; 600×600; rgba(15,118,110,0.08); blur(140px); 22s` (line 108) | `color-mix(in srgb, var(--color-teal) 8%, transparent)`, same geometry | Exact match |
+
+**Decision**: fix orb 1's `color-mix()` argument to `var(--color-orange) 16%`. `--color-orange` is the
+existing base token (`#E87722` / `rgba(232,119,34,1)`); mixed at 16% it reproduces
+`rgba(232,119,34,0.16)` exactly, matching how orb 2 already correctly mixes the same base token at
+10%. No new token needed.
+
+**Ambient orbs — detail page (`app/case-studies/[slug]/page.tsx`), FR-025**
+
+| Orb | Reference (`TechGrit Case Study.dc.html`) | Current code | Verdict |
+|---|---|---|---|
+| 1 | `top:-160px; right:-120px; 560×560; rgba(232,119,34,0.16); blur(120px); 16s` (line 111) | `top-[-160px] right-[-120px] w-[560px] h-[560px]`, `bg-overlay-teal` (`rgba(15,118,110,0.12)`), `blur-[120px]`, 16s | Position/size/blur/timing already correct; **color is wrong** (teal instead of orange) |
+| 2 | `top:35%; left:-220px; 560×560; rgba(247,183,51,0.10); blur(140px); 20s reverse` (line 112) | `top-[1300px] left-[-180px] w-[520px] h-[520px]`, `bg-overlay-blue-soft` (`rgba(2,132,199,0.10)`), `blur-[130px]`, 20s reverse | **Every value wrong**: position (fixed px vs. `35%`), `left` offset (-180 vs. -220), size (520 vs. 560), color (blue vs. amber-light), blur (130 vs. 140) |
+
+This reads as a copy-paste of a different page's (or an earlier draft's) orb pair into the detail
+page during the original TMS-68 build — orb 1's geometry is already right, just the wrong color;
+orb 2 has no correct dimension at all. Not a v2.2 regression — the detail page's orbs have never
+matched this reference.
+
+**Decision**: rebuild both. Orb 1 becomes `bg-overlay-orange` (`--color-overlay-orange:
+rgba(232,119,34,0.16)`, exact match — the same base value the hub page's orb 1 mixes to) at its
+already-correct geometry — this is a pure color-class swap (`bg-overlay-teal` → `bg-overlay-orange`),
+no positional change needed. Orb 2 needs a new token: no existing token produces
+`rgba(247,183,51,0.10)` exactly — the nearest existing candidate, `--color-overlay-amber-light-06`
+(`app/tokens.css` line 207, added for the footer's decorative glow), is the same hue at the wrong
+opacity (0.06, not 0.10) — reusing it would be a real 40% opacity error, not a sub-2%-delta reuse
+candidate like this plan's other tolerance decisions, so a new sibling token is warranted:
+`--color-overlay-amber-light-10: rgba(247, 183, 51, 0.10)`, added next to the existing Case-study
+token cluster in tokens.css Section 4 (BORDERS & GLASS), with a matching `@theme inline` entry.
+Orb 2's geometry corrects to `top-[35%] left-[-220px] w-[560px] h-[560px] blur-[140px]`, keeping its
+existing `20s reverse` timing (already correct).
+
+**Filter bar — reuse fit (FR-024)**
+
+`components/ui/FilterBar.tsx` (built Shared Foundation T004, already consumed by Careers' Open Roles,
+research.md §14) needs zero modification to serve Case Studies:
+
+| Property | Reference `.cs-chip` bar (`TechGrit Case Studies.dc.html` line 226) | `FilterBar.tsx` (as-is) | Verdict |
+|---|---|---|---|
+| Sticky offset | `top:80px` | `top-nav` (80px token, exact) | Exact match |
+| Background | `rgba(0,0,0,0.72)` | `bg-nav-glass` (`rgba(0,0,0,0.70)`) | Sub-3%-delta reuse — same tolerance precedent as research.md §14's Careers filter-bar reuse |
+| Blur | `blur(14px)` | `backdrop-blur-nav` (16px) | Sub-2px-delta reuse — same precedent |
+| Borders | top + bottom, `rgba(255,255,255,0.06)` | `border-t border-b border-border-subtle` (`rgba(255,255,255,0.07)`) | Already carries both borders (added for Careers, research.md §14) — sub-2%-delta reuse |
+| Label | "Filter", uppercase, small, dim | `text-xs font-bold tracking-widest text-secondary uppercase` | Matches the reference's label treatment class-for-class |
+| Overflow | `overflow-x:auto; scrollbar-width:none` | `overflow-x-auto [scrollbar-width:none]` | Exact match |
+
+No changes to `FilterBar.tsx` are needed — the same instance Careers already uses fits Case Studies'
+reference within this plan's own established reuse tolerances.
+
+**Category chips — token fit (FR-024)**
+
+The reference's `.cs-chip`/`.cs-chip.is-active` classes (`TechGrit Case Studies.dc.html` lines
+239-241) are byte-identical in intent to `app/blog/_components/topic-filter.tsx`'s own inactive/active
+chip classes:
+
+| Property | Reference `.cs-chip` | `topic-filter.tsx`'s existing classes | Verdict |
+|---|---|---|---|
+| Inactive background | `rgba(255,255,255,0.04)` | `bg-glass-4` | Exact match |
+| Inactive border | `rgba(255,255,255,0.14)` | `border-border-14` | Exact match |
+| Inactive text | `rgba(255,255,255,0.72)` | `text-secondary` | Exact match (existing token resolves to the same value) |
+| Active background | `linear-gradient(135deg,#F59E0B,#E87722)` | `bg-[image:var(--gradient-brand)]` | Exact match |
+| Active border | `transparent` | `border-border-orange-strong` on `topic-filter.tsx`'s active state | **Diverges** — see below |
+| Active shadow | `0 6px 18px -6px rgba(232,119,34,0.7)` | `shadow-chip-active` | Exact match (same token Blog already uses) |
+| Shape/spacing | `padding:9px 16px; border-radius:30px; font-size:13px; font-weight:700` | `rounded-full px-tg-7 py-tg-3 text-[13.5px] font-bold` | Sub-1px-delta reuse (13px vs. 13.5px), same tolerance precedent used throughout this plan |
+
+**Decision**: the new `case-studies-filters.tsx` reuses every one of `topic-filter.tsx`'s token
+classes as-is, **except** the active chip's border — the Case Studies reference specifies
+`border-color:transparent` for the active chip (line 241: `.cs-chip.is-active{...border-color:
+transparent...}`), while `topic-filter.tsx`'s own active state uses `border-border-orange-strong`
+(an existing, deliberate choice for Blog's own reference, not touched here). `case-studies-filters.tsx`
+sets its active chip's border to `border-transparent` instead, matching Case Studies' own reference
+exactly. This is the one intentional divergence from `topic-filter.tsx`'s exact classes; every other
+class carries over unchanged.
+
+**Closing CTA — token fit (FR-026)**
+
+| Property | Reference (`TechGrit Case Studies.dc.html` line 289) | Current `case-studies-final-cta.tsx` | Existing exact-match token |
+|---|---|---|---|
+| Background | `rgba(255,255,255,0.04)` | `bg-ink-mid` (`#000000`) — wrong | `--color-glass-faint` |
+| Border | `1px solid rgba(255,255,255,0.12)` | `border-border-faint` (`rgba(255,255,255,0.10)`) — wrong | `--color-border` |
+| Blur | `backdrop-filter:blur(12px)` | none | `--blur-cta` (12px, already tagged "Final CTA panel") |
+| Button padding | `15px 30px` | `px-[30px] py-[16px]` (horizontal exact, vertical 1px off) | n/a — className override |
+| Button min-height | `52px` | none | n/a — className override |
+| Button radius | `12px` | `rounded-[12px]` — already correct | n/a |
+
+**Decision**: swap the three background/border/blur classes to the exact-match tokens above (via this
+component family's own `border-[var(--token)]` arbitrary-value idiom, matching
+`case-studies-grid.tsx`'s existing style) and replace the bespoke `<Link className="btn btn-primary
+btn-lg ...">` with `<Button href="/contact" variant="primary">` plus a className override for the
+`15px`/`52px` deltas — following the identical per-instance-override pattern already used for
+Subscribe Band's button (research.md §11) and Contact's CTA (research.md §17).
+
+**Featured-card filtering and chip-list consequences (spec.md Clarifications Session 2026-08-10)**
+
+The reference's own filter script applies its category logic to a shared `[data-cs-item]` selector
+that includes the featured card — an unmatching filter hides it. spec.md's clarification session
+deliberately diverged from this: the featured card stays visible regardless of the active filter, and
+no live match-count indicator is added. Two direct, mechanical consequences worked out during this
+planning pass (not separately re-clarified, since they follow necessarily from the already-recorded
+decision):
+
+1. **The "Featured" chip is dropped from `CASE_STUDY_CATEGORIES`.** The reference's chip list is All /
+   Featured / FinTech / Marketplace / AI Enablement / Design. Since the featured card no longer
+   participates in the filterable grid, and no grid item's own `category` is `"Featured"` (only the one
+   featured item — rendered outside the filterable grid entirely — carries that flag), selecting a
+   "Featured" chip would always show zero grid results. Shipping a chip that always empties the grid
+   would be a broken control, not reference parity, so it is omitted.
+2. **No task touches `FeaturedCaseStudy`/`page.tsx`'s featured-card wiring** to make it
+   filter-aware — its permanent visibility is a structural property of where it's rendered (directly
+   in `page.tsx`, outside the new `CaseStudiesFilterSection`), not a runtime condition that needs its
+   own logic.
+
+**No-results copy (FR-024)**
+
+The reference's own hardcoded 6-case-study dataset never reaches an empty filtered state in its own
+script (every one of its 5 category chips matches at least one of its 6 items), so there is no literal
+reference copy for the "no results" message. New copy is chosen for this pass: a short message plus a
+"Reset filter" control (`components/ui/Button` `variant="ghost" size="sm"`) that clears the filter
+back to `"All"` — satisfying FR-024's requirement without inventing a bespoke reset control.
+
+## New tokens summary (Case Studies)
+
+One: `--color-overlay-amber-light-10: rgba(247, 183, 51, 0.10)` (Section 4, BORDERS & GLASS), plus its
+`@theme inline` mapping in `app/globals.css`. Every other value in this slice (orb 1 on both pages,
+the filter bar shell, the category chips, the CTA background/border/blur) reuses an existing
+exact-match token.
+
+## 22. Filter bar sticky/mobile bugs, found via live browser testing (FR-024)
+
+§21's `FilterBar.tsx` reuse-fit table above compared it to the reference on background/blur/border/
+label/overflow, but was written from markup inspection only (research.md's own stated limitation
+throughout this feature, e.g. tasks.md's repeated "Browser-pane tool could not render/screenshot"
+notes) — it did not catch two real defects only visible once the page was actually driven live:
+
+1. **`z-raised` is a dead Tailwind class, sitewide.** `app/tokens.css`'s `--z-raised: 1` is mapped in
+   `app/globals.css`'s `@theme inline` block as `--z-raised: var(--z-raised)` — under the bare `--z-*`
+   key. Tailwind v4's z-index utility scale reads from the `--z-index-*` theme namespace, not `--z-*`,
+   so no `z-raised` utility class is ever generated; any element using it gets no z-index rule at all
+   (confirmed live: `getComputedStyle(el).zIndex === "auto"`). This is a pre-existing, sitewide gap —
+   `Hero.tsx` and `TrustedClients.tsx` also use the same dead class (`grep -rn "z-raised"` finds only
+   these 3 call sites total) — but only `FilterBar.tsx`'s usage produced a visible symptom, because it
+   is the only one of the three with a same-DOM-order-later sibling that independently forms its own
+   stacking context: `case-studies-grid.tsx`'s cards set `backdrop-blur-md` unconditionally (not just
+   on hover), which creates a stacking context on every card at rest. Two elements at the same
+   effective (`auto`) stacking level paint in DOM order, and the cards render after the filter bar in
+   the tree — so once both were effectively at the same z-level, the cards painted on top of the bar
+   while it was stuck, exactly matching the reported "cards overlapping the filter" symptom. `Hero.tsx`/
+   `TrustedClients.tsx` don't exhibit this because they have no same-level competing sibling positioned
+   later in the DOM — out of scope to fix here, not reported as broken, left as-is.
+   **Fix**: `FilterBar.tsx` switches to `z-[var(--z-sticky)]` — arbitrary-value syntax reading the
+   token directly (bypassing the broken named-utility path entirely), the same robust pattern the site
+   header already uses for `z-[var(--z-nav)]`. `--z-sticky` (10) is also the semantically correct token
+   for a sticky filter bar, versus `--z-raised` (1, meant for generic "lift above the ambient-orb
+   background" contexts like Hero/TrustedClients, not scroll-stacking chrome). Since `FilterBar.tsx` is
+   shared, this fix also resolves the same latent bug on Careers' Open Roles filter bar (research.md
+   §14) — that page was never reported as broken, but was verified by markup only (tasks.md, Careers
+   Phase 3/5), so it likely carried the identical defect undetected.
+2. **Chip row wraps instead of scrolling at narrow widths.** `case-studies-filters.tsx`'s chip
+   container used `flex flex-wrap`, copied from `app/blog/_components/topic-filter.tsx` (§21's stated
+   source of the reused token set). Wrapping is correct for Blog's own filter row today, since it isn't
+   wrapped inside a horizontally-scrollable sticky shell — but inside `FilterBar.tsx`'s
+   `overflow-x-auto` row, a wrappable child gives the layout engine a non-overflowing resolution (wrap
+   to 2+ lines) that browsers prefer over horizontal overflow, so at mobile widths (label + 5 chips
+   don't fit in 375px) the chips wrapped instead of staying in one scrollable row, diverging from
+   `TechGrit Case Studies.dc.html`'s own `overflow-x:auto` single-row behavior.
+   **Fix**: drop `flex-wrap`, add `shrink-0` (so the parent flex row cannot compress this container
+   into wrapping either), leaving `flex shrink-0 items-center gap-2.5`. Confirmed live at a 375px
+   viewport: chip row `scrollWidth` (614px) > `clientWidth` (375px), horizontally scrollable, all 5
+   chips sharing one identical `top` offset (one row).
+
+Both fixes verified via `javascript_tool` computed-style/layout inspection against a live dev-server
+instance — the first time this feature's Case Studies verification went beyond markup/build inspection
+to an actually-running page, which is precisely how these two defects were caught after T009's own
+"cannot confirm sticky-scroll behavior" caveat.
