@@ -169,6 +169,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 1. **Given** a visitor on `/contact`, **When** the page renders, **Then** a "Skip the Form" card is visible near the existing form with a gradient background matching the reference.
 2. **Given** a visitor submitting the existing contact form, **When** they submit, **Then** the existing client-side success behavior is unchanged.
+3. **Given** a visitor viewing the "Skip the Form" card, **When** they activate its "Book a call" action, **Then** no external Calendly widget is loaded and no live booking flow is triggered — the action is a static/placeholder target only.
 
 ---
 
@@ -273,6 +274,10 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 - Q: `TechGrit Blog.dc.html`'s sticky filter bar (`data-blog-filter-bar`) is its own standalone element positioned between the Featured-post section and the Grid section, not nested inside the grid's own section — but today's `TopicFilter` renders inside `BlogPostGrid`, with `activeTopic` state owned by that same client component. Should the filter bar be promoted to its own sibling element matching the reference's DOM structure, with filter state lifted to a shared parent? → A: Yes — reference-exact placement. The filter bar (wrapped in the shared `FilterBar.tsx` from the prior answer) renders as its own element in `app/blog/page.tsx` between `<FeaturedPost>` and the post grid, with `activeTopic` state lifted out of `BlogPostGrid` into a shared parent so both the bar and the grid read/update the same state, preserving the bar's existing sticky behavior and filtering functionality.
 - Q: The reference's newsletter-panel background (`rgba(255,255,255,0.04)`) is byte-identical to the existing `--color-glass-4` token, already reused elsewhere in the app; the current implementation instead uses `bg-ink-mid` (`#000000`). Should FR-029 reuse `--color-glass-4`, or add a new dedicated single-job token at the same value (per this file's established "one job, one token" convention)? → A: Reuse `--color-glass-4` (`bg-glass-4`) — no new token. A new token at an already-existing value would itself violate FR-041/SC-006's no-duplicate-token rule.
 
+### Session 2026-08-07
+
+- Q: The reference's "Skip the Form" card wires its "Book a call" button to a real Calendly widget (loads Calendly's external `widget.js`/`widget.css` and calls `Calendly.initPopupWidget({url:'https://calendly.com/techgrit/30min'})`). Should this feature embed that real widget, wire a real external link, or ship a static/placeholder action? → A: Static/placeholder — the button/link MUST NOT embed Calendly's external widget script or otherwise introduce a new third-party dependency; it uses a placeholder target (e.g. `href="#"`), matching the existing "Book on Calendly" precedent already used on the Construction page (`app/construction/_data/construction-content.ts`'s `primaryCtaLink: "#"`). No live booking integration is introduced by this feature.
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
@@ -360,7 +365,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 **Contact Us Page**
 
-- **FR-039**: A new "Skip the Form" card MUST be added near the existing contact form, offering a direct scheduling path, using the reference's gradient background.
+- **FR-039**: A new "Skip the Form" card MUST be added near the existing contact form, offering a direct scheduling path, using the reference's gradient background. Its "Book a call" action MUST be a static/placeholder action (e.g. a non-navigating `href="#"`) and MUST NOT embed Calendly's external widget script or link out to a live Calendly booking URL — no new third-party dependency or live scheduling integration is introduced, consistent with the placeholder precedent already used by the Construction page's "Book on Calendly" CTA.
 - **FR-040**: The existing contact form's current client-side submission behavior MUST remain unchanged.
 
 **Cross-Cutting**

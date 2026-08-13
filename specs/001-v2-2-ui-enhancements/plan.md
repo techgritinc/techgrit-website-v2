@@ -2582,3 +2582,83 @@ Audited FR-035 field-by-field before concluding no change was needed, avoiding a
 have duplicated already-correct values; confirmed `FilterBar`'s and `LifeGallery`'s existing
 structure could be extended rather than forked before planning any new markup. No new violations.
 Gate: PASS.
+
+---
+
+## Contact Page — "Skip the Form" Card (User Story 9 — FR-039)
+
+**Date**: 2026-08-07. Extends this plan to cover `app/(marketing)/contact/_components/
+contact-hero-form.tsx`, per spec.md's User Story 9 (FR-039, FR-040) and its Clarifications Session
+2026-08-07. No other Contact element (hero copy, contact-info rows, the form card itself, "What
+happens next") and no other user story is affected.
+
+### Summary
+
+1. **`app/(marketing)/contact/_components/contact-hero-form.tsx`** — add a new "Skip the Form" card
+   to the left column, directly below the existing `CONTACT_INFO` block and above the closing of that
+   column's wrapper `<div>`, matching `TechGrit Contact.dc.html` lines 248-258: an icon chip (new
+   calendar icon), an amber "Skip the form" eyebrow, a "Book a 30-min discovery call now." line, and
+   a "Book a call →" CTA. The CTA renders via the shared `components/ui/Button` primitive
+   (`variant="primary" size="nav"`, `href="#"`) rather than bespoke markup, per Principle III and
+   consistent with how the Construction page's own "Book on Calendly" placeholder already renders
+   through a shared button component (`app/construction/_data/construction-content.ts` line 190).
+2. **Calendly explicitly not integrated**: per spec.md's Clarifications (Session 2026-08-07), the
+   "Book a call" action is a static placeholder (`href="#"`) — it MUST NOT embed Calendly's external
+   `widget.js`/`widget.css` or call `Calendly.initPopupWidget()` as the reference does, since that
+   would introduce a new third-party dependency this feature's scope rules out. This mirrors the
+   Construction page's existing "Book on Calendly" precedent (`primaryCtaLink: "#"`), not a new
+   pattern.
+3. **`app/(marketing)/contact/_components/icons.tsx`** — add a new `CalendarIcon`, following this
+   file's own existing convention of defining its icons locally (it already has route-local
+   `MailIcon`/`ClockIcon`/`GlobeIcon` rather than importing `components/ui/icons.tsx`'s versions) —
+   not a new violation introduced by this pass, just following the file's established pattern.
+4. **`app/tokens.css`** — add exactly one new token, `--gradient-skip-form` (section 5, GRADIENTS),
+   for the card's `linear-gradient(150deg, rgba(232,119,34,0.14), rgba(255,255,255,0.02))`
+   background — no existing gradient token matches this two-stop value (research.md §17). Every
+   other value the card needs (border, blur, icon-chip fill/border, eyebrow tracking/color, button
+   gradient) reuses an existing exact-match token or the base `--color-orange` token via Tailwind's
+   opacity-modifier syntax (`bg-orange/20 border-orange/40`), the same pattern this file's own
+   `CONTACT_INFO` rows already use — see research.md §17's field-by-field table. No `globals.css`
+   `@theme inline` entry is needed for the new gradient token, consistent with how every other
+   gradient token in this file is consumed (via `bg-[image:var(--...)]`, not a bare utility class).
+
+Nothing else changes. The existing contact form's fields, validation, and client-side
+submit/success/reset behavior (FR-040) are untouched — no code in this addendum touches
+`handleSubmit`/`handleReset` or any form field.
+
+### Constitution check (addendum)
+
+- **I (Token-Only Styling)** — PASS. The one new literal value with no existing token
+  (`--gradient-skip-form`) is added to `tokens.css` first, per its existing numbered section, before
+  any component consumes it; every other value reuses an existing exact-match token or the base
+  `--color-orange` token via Tailwind's opacity modifier — no hardcoded literal duplicates an
+  existing token.
+- **II (Breakpoints)** — PASS, not applicable (the card wraps via the existing `flex-wrap` behavior
+  already used by this same component's contact-info rows; no new breakpoint is introduced).
+- **III (Component Library)** — PASS. The "Book a call" CTA renders via the existing
+  `components/ui/Button` primitive (`variant="primary" size="nav"`), not a bespoke `<button>` —
+  consistent with how this file's form already uses shared primitives and how Construction's own
+  Calendly-placeholder CTA already renders through a shared button component.
+- **IV (References Are Visual Truth)** — PASS with one recorded, spec.md-approved deviation: every
+  visual value (gradient, border, blur, icon-chip fill, eyebrow tracking/color) is read directly from
+  `TechGrit Contact.dc.html` lines 248-258; the one intentional divergence is the CTA's *behavior*
+  (static placeholder instead of a real Calendly widget), per Clarifications Session 2026-08-07 —
+  not an oversight.
+- **V (Dark-First Brand)** — PASS. The card's gradient background stays a low-opacity accent tint
+  (0.14/0.02 stops), not a full-surface fill; the orange accent stays confined to the icon chip,
+  eyebrow text, and CTA button, consistent with existing sparing-accent usage elsewhere in this file.
+- **VI (frontend-design skill)** — not re-invoked for this addendum; every visual value is a direct,
+  literal read from the reference (research.md §17), with no new visual pattern requiring craft
+  judgment beyond what the reference already specifies.
+- No violations — Complexity Tracking unchanged.
+
+**Anchor files**: `app/(marketing)/contact/_components/contact-hero-form.tsx`,
+`app/(marketing)/contact/_components/icons.tsx` (+1 icon), `app/tokens.css` (+1 gradient token). No
+`globals.css` edit, no `data-model.md`/`contracts/` change (presentation-only, same as the rest of
+this plan). No other Contact file, page, or shared component is touched.
+
+### Post-Design Constitution Re-Check (Contact addendum)
+
+Research (this addendum, §17) confirmed every needed value against `TechGrit Contact.dc.html` and
+resolved the Calendly-integration question (spec.md Clarifications, Session 2026-08-07) before any
+file changes were planned. No new violations. Gate: PASS.

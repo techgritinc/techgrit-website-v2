@@ -272,6 +272,7 @@
   --gradient-blog-teaser-blue:   linear-gradient(150deg, rgba(2, 132, 199, 0.28), rgba(3, 60, 90, 0.50));    /* Homepage Blog teaser card 2 header background (v2.2 FR-010) */
   --gradient-blog-teaser-teal:   linear-gradient(150deg, rgba(15, 118, 110, 0.30), rgba(6, 52, 48, 0.50));   /* Homepage Blog teaser card 3 header background (v2.2 FR-010) */
   --gradient-life-cap: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.82));   /* Life at TechGrit tile hover-caption bottom fade (v2.2 FR-011) */
+  --gradient-skip-form: linear-gradient(150deg, rgba(232, 119, 34, 0.14), rgba(255, 255, 255, 0.02)); /* Contact "Skip the Form" card background (v2.2, User Story 9) */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY

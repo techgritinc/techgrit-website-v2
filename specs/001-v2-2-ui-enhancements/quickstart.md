@@ -434,3 +434,37 @@ this repo — this is manual, plus `npm run lint`/`npm run build`.
    secondary link's typography/hover/underline classes, and its text content). No other homepage
    section, no other page — the card's own background/border/radius/blur, the eyebrow/heading/paragraph,
    and the primary button must be pixel- and byte-unchanged.
+
+---
+
+# Quickstart Addendum: Verifying "Skip the Form" Card (Contact, User Story 9)
+
+Scope: only the new card in `app/(marketing)/contact/_components/contact-hero-form.tsx`'s left
+column, plus its supporting icon and token. No test framework exists in this repo — this is manual,
+plus `npm run lint`/`npm run build`.
+
+## 12. "Skip the Form" card (`contact-hero-form.tsx`)
+
+1. Open `/contact` at desktop width and confirm a new card renders in the left column, directly
+   below the "Where we work" contact-info row.
+2. Confirm the card shows: a calendar-icon chip, an amber uppercase "Skip the form" label, "Book a
+   30-min discovery call now." body copy, and a "Book a call" button with a gradient background
+   matching the existing "Send message"/CTA buttons elsewhere on the page.
+3. Confirm the card's own background is a subtle diagonal orange-to-transparent gradient (not a flat
+   fill), matching `TechGrit Contact.dc.html` lines 249-258.
+4. Click "Book a call" and confirm **no** Calendly widget/popup opens and no network request to
+   `calendly.com` fires (check the Network tab) — the button is a static placeholder, per spec.md
+   Clarifications Session 2026-08-07.
+5. Confirm the existing contact form (topic chips, Full name/Work email/Company/message fields,
+   Send message button, and the sent/success state) is visually and behaviorally unchanged.
+6. Resize to tablet and mobile widths and confirm the card wraps/stacks normally with no horizontal
+   overflow, consistent with the rest of the left column.
+
+## 13. Gate check (Contact — Skip the Form)
+
+1. `npm run lint` and `npm run build` — both green.
+2. Diff should touch only: `app/(marketing)/contact/_components/contact-hero-form.tsx`,
+   `app/(marketing)/contact/_components/icons.tsx` (+1 icon), and `app/tokens.css` (+1 gradient
+   token, no `globals.css` entry needed). No other Contact file, no other page, and no shared
+   component beyond consuming the existing `components/ui/Button` primitive as-is (no edit to
+   `Button.tsx` itself).
