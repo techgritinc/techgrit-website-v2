@@ -134,50 +134,6 @@ export const aboutUsContent: AboutUsPageContent = {
       eyebrow: "Inside TechGrit",
       title: "Life at TechGrit.",
       subtitle: "The people and the culture behind the engineering.",
-      // Same 4 photos/captions as Careers' Life at TechGrit gallery (TechGrit About.dc.html
-      // marks this section a "shared component — matches Homepage & Careers").
-      photos: [
-        {
-          image: {
-            url: "/assets/team/glasses.png",
-            alternativeText: "TechGrit team member",
-            width: 960,
-            height: 1280,
-          },
-          captionLabel: "The team",
-          caption: "Builders and designers behind the engineering.",
-        },
-        {
-          image: {
-            url: "/assets/team/rooftop.png",
-            alternativeText: "TechGrit office rooftop",
-            width: 1024,
-            height: 768,
-          },
-          captionLabel: "The office",
-          caption: "Rooftop breaks, real conversations.",
-        },
-        {
-          image: {
-            url: "/assets/team/painting.png",
-            alternativeText: "TechGrit culture moment",
-            width: 2048,
-            height: 1153,
-          },
-          captionLabel: "Craft",
-          caption: "We take craft seriously — inside & outside code.",
-        },
-        {
-          image: {
-            url: "/assets/team/diwali.png",
-            alternativeText: "TechGrit team celebration",
-            width: 2048,
-            height: 1536,
-          },
-          captionLabel: "Together",
-          caption: "We celebrate wins — and Diwali — together.",
-        },
-      ],
     },
     {
       type: "finalCta",
@@ -191,3 +147,4 @@ export const aboutUsContent: AboutUsPageContent = {
     },
   ],
 };
+ 
