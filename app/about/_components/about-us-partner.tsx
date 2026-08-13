@@ -45,6 +45,14 @@ export function AboutUsPartner({ section }: { section: PartnerSection }) {
               ))}
             </div>
           </div>
+          <div className="mt-9 flex flex-col gap-2.5 rounded-[16px] border border-white/10 border-l-[3px] border-l-orange bg-white/4 px-7 py-5.5 backdrop-blur-[8px] max-[560px]:gap-1.5 sm:flex-row sm:items-center sm:gap-5">
+            <span className="shrink-0 text-[13px] font-bold uppercase leading-normal tracking-[1.3px] text-amber-light">
+              {section.closingLabel}
+            </span>
+            <p className="text-[15.5px] leading-[1.6] text-white/80">
+              <strong className="font-semibold text-white">{section.closingLead}</strong> {section.closingSupport}
+            </p>
+          </div>
         </RevealOnScroll>
       </div>
     </section>

@@ -199,7 +199,7 @@ export const careersPageContent: CareersPageContent = {
   ],
   lifeAtTechGrit: {
     heading: "Life at TechGrit.",
-    description: "The people and the culture behind the engineering.",
+    description: "Celebrating the people behind our success- moments of teamwork, innovation, and fun at TechGrit!",
     
   },
   cta: {

@@ -37,20 +37,27 @@ export const aboutUsContent: AboutUsPageContent = {
       type: "whoYouAre",
       order: 3,
       eyebrow: "Who you are",
-      title: "You're ambitious, forward-thinking, and ready to scale.",
+      title: "You're a business or technology leader looking to innovate and scale your software solutions.",
       paragraphs: [
         {
-          text: "You're a business or technology leader looking to innovate and scale your software, and you understand that AI and modern engineering practices are critical to staying competitive.",
+          text: "You're ambitious, forward-thinking, and you understand that AI and modern engineering practices are critical to staying competitive.",
           highlight: "AI and modern engineering practices are critical to staying competitive.",
         },
         {
-          text: "The challenge isn't a lack of technical knowledge. It's the complexity, risk, and uncertainty that come with building and scaling software, whether in-house or with the wrong partners.",
+          text: "The challenge isn't a lack of technical knowledge. You already have that.",
+          highlight: "",
+        },
+        {
+          text: "It's the complexity, risk, and uncertainty that come with building and scaling software, whether in-house or with the wrong partners.",
           highlight: "complexity, risk, and uncertainty",
         },
       ],
       concernsCard: {
+        situationsLabel: "You may be",
+        situations: ["Building a new application", "Integrating AI into existing systems", "Modernizing legacy platforms"],
         label: "The real concerns",
         concerns: ["Will timelines slip?", "Will costs spiral?", "Will it meet expectations?"],
+        closingLead: "Great ideas shouldn't be slowed down by execution challenges.",
         closingStatement: "You need a clear, reliable, and scalable path to bring your vision to life.",
       },
     },
@@ -58,19 +65,19 @@ export const aboutUsContent: AboutUsPageContent = {
       type: "ourRole",
       order: 4,
       eyebrow: "Our role",
-      title: "We become your engineering partner, from idea to execution.",
-      titleHighlight: "engineering partner",
+      title: "We will be your trusted, AI-first engineering partner, guiding you from idea to execution.",
+      titleHighlight: "AI-first engineering partner",
       description:
-        "Our approach combines deep software engineering expertise with a practical, AI-first mindset to deliver outcomes, not just code. We own the path from strategic intent to production-grade software, with full accountability.",
+        "Our approach combines deep software engineering expertise with a practical, AI-first mindset to deliver outcomes — not just code.",
     },
     {
       type: "values",
       order: 5,
       eyebrow: "What we stand for",
-      title: "Six core values guide everything we do.",
+      title: "Everything we do is guided by six core values.",
       values: [
-        { order: 1, title: "Customer Obsession", description: "Putting the customer first, always." },
-        { order: 2, title: "Excellence", description: "Raising the bar, every single day." },
+        { order: 1, title: "Customer Obsession", description: "Putting the customer first always!" },
+        { order: 2, title: "Excellence", description: "Raise the bar every day!" },
         { order: 3, title: "Innovation", description: "Pioneering tomorrow's solutions." },
         { order: 4, title: "Teamwork", description: "Collaborating for shared success." },
         { order: 5, title: "Integrity", description: "Doing the right thing, even when it's difficult." },
@@ -100,7 +107,7 @@ export const aboutUsContent: AboutUsPageContent = {
           order: 3,
           label: "STEP 03",
           title: "Scale & Support",
-          description: "We deploy your solution and provide ongoing support to ensure long-term success.",
+          description: "We'll deploy your solution and provide ongoing support to ensure long-term success.",
         },
       ],
     },
@@ -127,6 +134,11 @@ export const aboutUsContent: AboutUsPageContent = {
         { text: "A more productive, confident engineering environment" },
         { text: "A long-term partner invested in your success" },
       ],
+      closingLabel: "And most importantly:",
+      closingLead:
+        "Peace of mind — knowing your technology is built right, built to scale, and built for the future.",
+      closingSupport:
+        "The future belongs to teams that build smarter and TechGrit helps you get there, faster and with confidence.",
     },
     {
       type: "cultureGallery",
@@ -147,4 +159,3 @@ export const aboutUsContent: AboutUsPageContent = {
     },
   ],
 };
- 
