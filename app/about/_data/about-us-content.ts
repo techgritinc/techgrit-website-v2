@@ -134,7 +134,7 @@ export const aboutUsContent: AboutUsPageContent = {
         { text: "A more productive, confident engineering environment" },
         { text: "A long-term partner invested in your success" },
       ],
-      closingLabel: "And most importantly:",
+      closingLabel: "most importantly:",
       closingLead:
         "Peace of mind — knowing your technology is built right, built to scale, and built for the future.",
       closingSupport:
