@@ -19,7 +19,7 @@ export default function PlatformSection() {
       <div className="mx-auto grid max-w-(--container-max) grid-cols-[1fr_1.05fr] items-center gap-tg-20 px-9 py-[96px] max-tg-md:py-[76px] max-tg-sm:py-[56px] max-tg-md:grid-cols-1 max-tg-md:gap-tg-17">
         <div>
           <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">Meet OrbitAI&trade;</div>
-          <h2 className="mt-3 text-[46px] font-bold tracking-[var(--ls-snug)] text-white leading-[1.04]">Our AI-First Delivery Platform.</h2>
+          <h2 className="mt-3 text-[46px] font-bold tracking-[var(--ls-snug)] text-white leading-[1.04]">Our Architectural Frameworks</h2>
           <p className="mt-5 max-w-110 text-[17.5px] leading-[1.65] text-muted">
             Competitors sell hours. We sell outcomes, powered by OrbitAI, our orchestration layer that automates the
             grind so our engineers focus on strategy, architecture, and innovation.

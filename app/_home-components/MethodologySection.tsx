@@ -24,6 +24,7 @@ export default function MethodologySection() {
           Framework.
         </>
       }
+      description={`We don't just "do Agile". We execute the 6-Week Sprint-to-Scale methodology. While others are still documenting requirements, we’ve already deployed your MVP and started the first feedback loop.`}
     />
   );
 }

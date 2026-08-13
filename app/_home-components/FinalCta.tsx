@@ -11,14 +11,11 @@ export default function FinalCta() {
           />
           <div className="relative">
             <div className="leading-[normal] text-[12.5px] font-bold tracking-widest text-orange uppercase">See how we help teams win</div>
-            <h2 className="font-display mt-4 text-[52px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
-              Ready to build at the
-              <br />
-              speed of thought?
+            <h2 className="font-display mt-4 text-testimonial-stat tg-sm:text-[52px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
+              Let&rsquo;s scope your next engagement.
             </h2>
-            <p className="mx-auto mt-5.5 max-w-[600px] text-[18.5px] leading-[1.6] text-secondary">
-              Let&rsquo;s move past the &ldquo;Copilot&rdquo; era and into the Agentic era. See how TechGrit can
-              transform your roadmap from a backlog into a launchpad.
+            <p className="mx-auto mt-5.5 max-w-[600px] text-md tg-sm:text-lg-fixed leading-[1.6] text-secondary">
+              Whether you&rsquo;re building a new product, modernizing an existing platform, or evaluating where AI-engineering fits in your roadmap, we&rsquo;ll give you an honest assessment in a single working session. No sales deck. No commitments.
             </p>
             <div className="mt-9.5 flex flex-col items-center gap-5">
               <Button
@@ -26,7 +23,7 @@ export default function FinalCta() {
                 size="lg"
                 className="!leading-[normal] !gap-[10px] !rounded-[13px] !px-[34px] !py-[15px] !text-[17px] !whitespace-normal hover:!shadow-btn-primary"
               >
-                Schedule an OrbitAI Demo <span aria-hidden="true" className="text-[18px]">&rarr;</span>
+                Request an Engineering Review <span aria-hidden="true" className="text-[18px]">&rarr;</span>
               </Button>
               <a
                 href="#methodology"
