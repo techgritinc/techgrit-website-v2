@@ -17,7 +17,7 @@ export function RelatedCaseStudies({ currentSlug }: { currentSlug: string }) {
             <h2 className="text-[24px] font-bold tracking-[-0.02em] mb-[24px] text-primary">
               More case studies
             </h2>
-            <div className="grid grid-cols-1 gap-[24px] tg-md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-[24px] tg-md:grid-cols-3 max-tg-md:h-auto tg-md:h-[137px] leading-[normal]">
               {related.map((caseStudy) => {
                 const accentColor = ACCENT_VAR[caseStudy.accent];
 

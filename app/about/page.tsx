@@ -8,7 +8,7 @@ import { AboutUsValues } from "./_components/about-us-values";
 import { AboutHowWeWork } from "./_components/about-how-we-work";
 import { AboutUsAchievements } from "./_components/about-us-achievements";
 import { AboutUsPartner } from "./_components/about-us-partner";
-import { AboutUsCultureGallery } from "./_components/about-us-culture-gallery";
+import LifeGallery from "@/app/_home-components/LifeGallery";
 import { FinalCta } from "@/components/ui/final-cta";
 
 export const metadata: Metadata = {
@@ -38,7 +38,14 @@ export default function AboutPage() {
           case "partner":
             return <AboutUsPartner key={section.order} section={section} />;
           case "cultureGallery":
-            return <AboutUsCultureGallery key={section.order} section={section} />;
+            return (
+              <LifeGallery
+                key={section.order}
+                id="life"
+                heading={section.title}
+                description={section.subtitle}
+              />
+            );
           case "finalCta":
             return (
               <FinalCta
@@ -59,3 +66,4 @@ export default function AboutPage() {
     </main>
   );
 }
+ 

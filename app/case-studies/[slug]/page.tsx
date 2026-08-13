@@ -39,10 +39,10 @@ export default async function CaseStudyDetailPage({ params }: Props) {
         className="fixed inset-0 pointer-events-none z-0"
       >
         <div
-          className="absolute top-[-160px] right-[-120px] w-[560px] h-[560px] rounded-full bg-overlay-teal blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]"
+          className="absolute top-[-160px] right-[-120px] w-[560px] h-[560px] rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]"
         />
         <div
-          className="absolute top-[1300px] left-[-180px] w-[520px] h-[520px] rounded-full bg-overlay-blue-soft blur-[130px] animate-[tgorb_20s_ease-in-out_infinite_reverse]"
+          className="absolute top-[35%] left-[-220px] w-[560px] h-[560px] rounded-full bg-[var(--color-overlay-amber-light-10)] blur-[140px] animate-[tgorb_20s_ease-in-out_infinite_reverse]"
         />
       </div>
       <CaseStudyDetailHero caseStudy={caseStudy} />

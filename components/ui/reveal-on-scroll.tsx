@@ -1,26 +1,52 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 // Scroll-triggered fade/rise reveal, shared across below-the-fold sections
-// site-wide. A safety timeout guarantees content is never left hidden if the
-// observer doesn't fire (reduced motion, slow device, older browser).
+// site-wide. Uses direct DOM manipulation instead of React state to avoid
+// re-render-induced flickering. SSR-safe: content is fully visible on the
+// server and during hydration; the hidden state is only applied after mount
+// so content is never permanently invisible if JS fails or is slow.
 export function RevealOnScroll({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [revealed, setRevealed] = useState(
-    () => typeof window !== "undefined" && !("IntersectionObserver" in window)
-  );
 
   useEffect(() => {
     const node = ref.current;
-    if (!node || !("IntersectionObserver" in window)) return;
+    if (!node) return;
+
+    // Apply hidden state now that we're mounted on the client
+    node.style.opacity = "0";
+    node.style.transform = "translateY(24px)";
+    node.style.willChange = "opacity, transform";
+
+    // Fallback: if no IntersectionObserver, reveal immediately without transition
+    if (!("IntersectionObserver" in window)) {
+      node.style.opacity = "1";
+      node.style.transform = "none";
+      return;
+    }
+
+    const reveal = () => {
+      node.style.transition = "opacity .7s ease, transform .7s ease";
+      node.style.opacity = "1";
+      node.style.transform = "none";
+      // Clean up will-change after animation completes to free GPU memory
+      node.addEventListener(
+        "transitionend",
+        () => {
+          node.style.willChange = "auto";
+        },
+        { once: true }
+      );
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setRevealed(true);
+            reveal();
             observer.unobserve(entry.target);
+            clearTimeout(safety);
           }
         });
       },
@@ -28,7 +54,7 @@ export function RevealOnScroll({ children }: { children: React.ReactNode }) {
     );
     observer.observe(node);
 
-    const safety = setTimeout(() => setRevealed(true), 1500);
+    const safety = setTimeout(reveal, 1500);
 
     return () => {
       observer.disconnect();
@@ -39,13 +65,12 @@ export function RevealOnScroll({ children }: { children: React.ReactNode }) {
   return (
     <div
       ref={ref}
-      style={
-        revealed
-          ? { opacity: 1, transform: "none", transition: "opacity .7s ease, transform .7s ease" }
-          : { opacity: 0, transform: "translateY(24px)" }
-      }
+      style={{
+        backfaceVisibility: "hidden",
+      }}
     >
       {children}
     </div>
   );
 }
+

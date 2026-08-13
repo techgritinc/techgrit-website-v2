@@ -18,41 +18,21 @@ const STEPS = [
 
 export default function NextSteps() {
   return (
-    <div style={{ borderTop: "1px solid var(--color-border-subtle)", paddingTop: 44 }}>
-      <h2 style={{ fontSize: "clamp(24px,2.8vw,32px)", fontWeight: 700, letterSpacing: "-0.03em", color: "var(--color-text-primary)", textAlign: "center", fontFamily: "var(--font-display)" }}>What happens next</h2>
-      <div className="grid grid-cols-1 tg-md:grid-cols-3" style={{ marginTop: 34, gap: 24 }}>
+    <div className="border-t border-border-subtle pt-[44px] leading-[normal]">
+      <h2 className="text-[clamp(24px,2.8vw,32px)] tracking-[-0.03em] text-center leading-[normal]">
+        What happens next
+      </h2>
+      <div className="grid grid-cols-1 tg-md:grid-cols-[repeat(3,1fr)] mt-[34px] gap-[24px]">
         {STEPS.map((step) => (
           <div
             key={step.number}
-            style={{
-              position: "relative",
-              background: "var(--color-glass)",
-              border: "1px solid var(--color-border)",
-              borderRadius: 18,
-              padding: "28px 26px",
-            }}
+            className="relative bg-glass border border-border rounded-[18px] px-[26px] py-[28px] leading-[normal]"
           >
-            <span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: 15,
-                fontWeight: 700,
-                color: "var(--color-amber-light)",
-              }}
-            >
+            <span className="text-[15px] font-bold text-amber-light leading-[normal] tracking-normal">
               {step.number}
             </span>
-            <h3 style={{ marginTop: 12, fontSize: 18, fontWeight: 700, color: "var(--color-text-primary)", fontFamily: "var(--font-display)" }}>
-              {step.title}
-            </h3>
-            <p
-              style={{
-                marginTop: 8,
-                fontSize: "14.5px",
-                lineHeight: 1.6,
-                color: "var(--color-text-muted)",
-              }}
-            >
+            <h3 className="mt-3 text-[18px] leading-[normal] tracking-normal">{step.title}</h3>
+            <p className="mt-2 text-[14.5px] leading-[1.6] text-white/[0.62] tracking-normal">
               {step.body}
             </p>
           </div>

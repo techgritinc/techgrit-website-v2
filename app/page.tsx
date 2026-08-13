@@ -24,7 +24,7 @@ export default function Home() {
       <TestimonialsSection />
       <CaseStudiesSection />
       <BlogSection />
-      <LifeGallery />
+      <LifeGallery showActions/>
       <FinalCta />
     </main>
   );

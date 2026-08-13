@@ -19,7 +19,16 @@ type MediaSlotProps = {
  * When `fill` is used, size the *parent* (a `relative` element with an
  * explicit height) — this component only fills that parent; it does not
  * establish its own size. */
-export default function MediaSlot({ src, alt, className, fill, width, height, sizes, style }: MediaSlotProps) {
+export default function MediaSlot({
+  src,
+  alt,
+  className,
+  fill,
+  width,
+  height,
+  sizes,
+  style,
+}: MediaSlotProps) {
   if (!src) {
     return (
       <div
@@ -41,9 +50,25 @@ export default function MediaSlot({ src, alt, className, fill, width, height, si
 
   if (fill) {
     return (
-      <Image src={src} alt={alt} fill sizes={sizes} style={style} className={["object-cover", className].filter(Boolean).join(" ")} />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes}
+        style={{ display: "block", ...style }}
+        className={["object-cover", className].filter(Boolean).join(" ")}
+      />
     );
   }
 
-  return <Image src={src} alt={alt} width={width ?? 400} height={height ?? 300} style={style} className={className} />;
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={width ?? 400}
+      height={height ?? 300}
+      style={style}
+      className={className}
+    />
+  );
 }

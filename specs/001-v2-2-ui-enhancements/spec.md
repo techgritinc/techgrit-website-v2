@@ -39,13 +39,13 @@ A prospective client visiting `/services` sees background ambient orbs and a her
 
 **Why this priority**: Services is a primary consideration page for prospects evaluating TechGrit; the expandable-card interaction is a new interaction pattern (not just a style pass) and is called out as its own deliverable.
 
-**Independent Test**: Load `/services`, expand/collapse each of the three top-level cards independently, and confirm nested related services appear/disappear correctly without affecting any other page.
+**Independent Test**: Load `/services`, expand each of the three top-level cards in turn — confirming each activation collapses whichever card was previously open (single-open accordion) — and confirm the activated card's content displays correctly without affecting any other page.
 
 **Acceptance Scenarios**:
 
-1. **Given** a visitor on `/services`, **When** the page loads, **Then** background ambient orbs are visible and the hero's top badge shows no dot indicator, with the ghost button using the updated reference styling.
-2. **Given** a visitor on `/services`, **When** they activate a top-level service card, **Then** it expands in place to reveal its related sub-services, and collapses again on a second activation.
-3. **Given** a visitor hovering a service card, **When** the pointer is over the card, **Then** the hover background matches the reference.
+1. **Given** a visitor on `/services`, **When** the page loads, **Then** background ambient orbs are visible, the hero's top badge shows no dot indicator with the ghost button using the updated reference styling, and the first service card ("01 · UI/UX Design") renders already expanded while the other two render collapsed.
+2. **Given** a visitor on `/services`, **When** they activate a top-level service card that is currently collapsed, **Then** it expands in place to reveal its content and any other card that was previously expanded collapses at the same time (single-open accordion — matching `TechGrit Services.dc.html`'s own accordion script), and activating an already-expanded card's header collapses it again.
+3. **Given** a visitor hovering a top-level service card's header, **When** the pointer is over it, **Then** no hover treatment is shown (matching the reference, which defines none there); **given** a visitor hovering an item inside an expanded card's approach-steps list or capability grid, **when** the pointer is over that item, **then** it shows the reference's border-color change and lift transform (no background-color change).
 4. **Given** a visitor scrolling to the closing CTA, **When** it renders, **Then** the card width and CTA button match the reference.
 
 ---
@@ -70,7 +70,7 @@ A visitor who clicks "Industries" in the nav still lands on the existing `/const
 
 ### User Story 4 - Insights: Case Studies hub and detail pages (Priority: P3)
 
-A visitor browsing case studies sees updated background ambient orbs and no hover borders on cards, a hero badge without a dot, a dark sticky filter bar (with a filter label) positioned below the featured article that actually filters the grid, a case-study detail page with background orbs, and a closing CTA with an updated background and a reusable Button component in place of a plain link.
+A visitor browsing case studies sees updated background ambient orbs and the reference's hover border-color treatment on cards, a hero badge without a dot, a dark sticky filter bar (with a filter label) positioned below the featured article that actually filters the grid, a case-study detail page with background orbs, and a closing CTA with an updated background and a reusable Button component in place of a plain link.
 
 **Why this priority**: Case studies are a mid-funnel trust-building surface; functional filtering is a genuinely new behavior (not just styling) and is scoped after the higher-traffic Home/Services/Industries pages.
 
@@ -78,10 +78,10 @@ A visitor browsing case studies sees updated background ambient orbs and no hove
 
 **Acceptance Scenarios**:
 
-1. **Given** a visitor on `/case-studies`, **When** the page loads, **Then** background ambient orbs match the reference and no card shows a hover border.
+1. **Given** a visitor on `/case-studies`, **When** the page loads, **Then** background ambient orbs match the reference, and hovering the featured card or a grid card shows the reference's border-color change alongside the lift transform.
 2. **Given** a visitor viewing the hero badge, **When** it renders, **Then** it shows no dot indicator.
 3. **Given** a visitor scrolling past the featured article, **When** they reach the filter bar and then continue scrolling, **Then** the bar has a dark background, a visible filter label, sits below the featured article, and remains stuck to the top of the viewport while filterable content scrolls beneath it.
-4. **Given** a visitor selecting a filter option, **When** the selection changes, **Then** the case-study grid updates to show only matching entries with no page reload.
+4. **Given** a visitor selecting a filter option, **When** the selection changes, **Then** the case-study grid updates to show only matching entries with no page reload, while the featured card above the grid remains visible regardless of which filter is active.
 5. **Given** a visitor selecting a filter option, **When** that selection matches zero case studies, **Then** the grid is replaced with a "no results" message and a control to clear/reset the filter back to "All", and the filter bar remains usable.
 6. **Given** a visitor on a case-study detail page, **When** it renders, **Then** background orbs are present and the closing CTA uses the shared Button component with an updated background.
 
@@ -126,23 +126,23 @@ A visitor on the About page sees badges without a dot indicator, eyebrows withou
 
 **Why this priority**: Small, self-contained styling changes with no new interactions.
 
-**Independent Test**: Load `/about` and confirm badge/eyebrow treatment and the image grid independently of any other page.
+**Independent Test**: Load `/about` and confirm badge/eyebrow treatment and the "Life at TechGrit" gallery grid independently of any other page.
 
 **Acceptance Scenarios**:
 
 1. **Given** a visitor on `/about`, **When** any badge renders, **Then** it shows no dot indicator.
 2. **Given** a visitor scrolling the page, **When** any eyebrow renders, **Then** it shows no leading accent symbol.
-3. **Given** a visitor viewing the imagery section, **When** it renders, **Then** the grid layout matches the reference.
+3. **Given** a visitor viewing the "Life at TechGrit" culture-photo gallery, **When** it renders, **Then** it uses the shared `LifeGallery.tsx` component with the reference's uniform equal-column grid (no `tall`/`wide`/`square` per-photo span variation), matching `TechGrit About.dc.html` exactly.
 
 ---
 
 ### User Story 8 - Careers page reference alignment (Priority: P4)
 
-A prospective candidate on the Careers page sees updated hero typography/colors/ghost button, an improved sticky filter behavior and alignment in Open Roles, an updated Apply form and ghost Apply-button styling, an updated Life at TechGrit image layout with a new "Inside TechGrit" badge, and refreshed supporting copy.
+A prospective candidate on the Careers page sees updated hero typography/colors/ghost button, an improved sticky filter behavior and alignment in Open Roles, an updated Apply form and ghost Apply-button styling — where clicking a role card's Apply button opens an application form modal scoped to that role — an updated Life at TechGrit image layout with a new "Inside TechGrit" badge, and refreshed supporting copy.
 
 **Why this priority**: Careers is an important but lower-traffic page than Home/Services/Industries/Insights; changes here are style and minor-interaction only.
 
-**Independent Test**: Load `/careers`, exercise the role filters and the Apply flow, and confirm the Life at TechGrit section independently of the homepage's copy of the same gallery.
+**Independent Test**: Load `/careers`, exercise the role filters and the Apply flow — including opening the Apply modal from a role card, triggering its oversized-file and missing-required-field validation, submitting it successfully, and closing/reopening it to confirm the reset — and confirm the Life at TechGrit section independently of the homepage's copy of the same gallery.
 
 **Acceptance Scenarios**:
 
@@ -150,6 +150,10 @@ A prospective candidate on the Careers page sees updated hero typography/colors/
 2. **Given** a visitor scrolling Open Roles, **When** they scroll past the filter row, **Then** it sticks with corrected alignment.
 3. **Given** a visitor opening the Apply form, **When** it renders, **Then** its fields and the ghost Apply button match the reference styling.
 4. **Given** a visitor viewing Life at TechGrit, **When** it renders, **Then** the image layout matches the reference and a new "Inside TechGrit" badge is present with updated supporting content.
+5. **Given** a visitor viewing a role card in Open Roles, **When** they click its "Apply" button, **Then** an application form modal opens showing that role's title in its header, with the reference's modal structure — a header (eyebrow label, role title, supporting text, and a close control) and a form containing Full name, Email, LinkedIn-or-portfolio-URL, a Resume file-upload control (PDF/DOC/DOCX, max 5MB), an optional message field, and a submit action — and the modal is dismissible via its close control or by clicking the overlay outside the modal card, without navigating away from the page.
+6. **Given** a visitor with the Apply modal open, **When** they submit the form without a required field (full name, email, or resume) completed, **Then** the modal shows a validation error message and remains open; **When** they submit with all required fields completed, **Then** the form is replaced with a success confirmation (a confirmation message and a close control) in place of the form, without navigating to a different page. This success confirmation is a client-side-only state transition — no data is sent to a backend, email service, or ATS.
+7. **Given** a visitor with the Apply modal open, **When** they select a resume file larger than 5MB, **Then** the modal immediately shows an over-size error message and clears the file selection, without waiting for form submission.
+8. **Given** a visitor closes the Apply modal after entering some field values, **When** they reopen it — for the same role or a different role's Apply button — **Then** every field and any prior error message is reset to blank.
 
 ---
 
@@ -165,6 +169,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 1. **Given** a visitor on `/contact`, **When** the page renders, **Then** a "Skip the Form" card is visible near the existing form with a gradient background matching the reference.
 2. **Given** a visitor submitting the existing contact form, **When** they submit, **Then** the existing client-side success behavior is unchanged.
+3. **Given** a visitor viewing the "Skip the Form" card, **When** they activate its "Book a call" action, **Then** no external Calendly widget is loaded and no live booking flow is triggered — the action is a static/placeholder target only.
 
 ---
 
@@ -173,7 +178,7 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 - When a Case Studies or Blog filter selection matches zero entries, a "no results" message replaces the grid, with a control to clear/reset the filter back to "All"; the sticky filter bar itself remains usable throughout.
 - How does the sticky filter bar (Case Studies / Blog) behave on short viewports where the bar plus header could consume most of the visible area?
 - When the "Trusted by our clients" strip is scrollable (logos overflow the container), is the scroll region reachable and operable via keyboard (arrow keys/tab) for keyboard-only and screen-reader users? (No reduced-motion handling is needed since the strip never auto-animates.)
-- What happens to the expanded/collapsed state of a Services card when the visitor resizes the viewport across the `md`/`lg` breakpoints mid-interaction?
+- When the visitor resizes the viewport across the `md`/`lg` breakpoints mid-interaction, a Services card's expanded/collapsed state MUST persist unchanged — only the expanded card's rendered height is recalculated (matching the reference's resize handler), no card is forced to collapse or re-expand as a result of the resize.
 - What happens if a visitor lands on a URL for one of the reference's other industry tabs (e.g. a FinTech- or Healthcare-specific path) that this feature does not build — is a standard 404 acceptable, or does it need a redirect to `/construction`?
 
 ## Clarifications
@@ -243,6 +248,21 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 - Q: The final CTA's outer container is currently `max-w-[1180px]`, but `TechGrit Homepage.dc.html`'s own final-CTA wrapper is `max-width:1280px` — the same width already used by every other homepage section. Does "the reference's card width" (FR-012) mean widening this outer container to 1280px? → A: Yes — widen to 1280px, matching the reference and every other homepage section's container width; the inner card's own padding/radius/blur already match the reference and stay unchanged.
 - Q: The reference's second CTA link ("Or explore our 6-week framework →") is `14.5px`/`600`/`rgba(255,255,255,0.7)` with its underline at `rgba(232,119,34,0.5)`, brightening to solid white only on hover. Today's implementation is `15.5px`/`text-primary` (solid white already, no hover state) with a `0.60`-opacity underline. Does FR-012's "clickable-text typography" cover this full treatment, or just the font-size? → A: Full treatment, reference-exact — corrected size, resting color (dimmer, not full white), a hover-to-white brighten (not present today), and the underline's opacity, matching the reference's own resting/hover distinction.
 - Q: The reference's literal link copy is "Or explore our 6-week framework →"; today's implementation uses different wording ("Explore how our 6-week framework can accelerate your next big bet →"). FR-012 only mentions typography, not copy. Should the link's text content also change to match the reference? → A: Yes — update the copy to the reference's exact wording, "Or explore our 6-week framework →", alongside the typography correction.
+- Q: Does successfully submitting the Careers Apply modal send/persist the application data anywhere (email, backend, ATS), or is the success confirmation a client-side-only state transition with no data persistence? → A: Client-side only, no persistence — matches the reference's own JS (a `setState` call with no `fetch`/network call) and this repo's existing Contact-form pattern (FR-040); no new backend or integration is introduced.
+- Q: When a visitor selects an Apply-modal resume file over 5MB, what should happen? → A: Immediately (on selection, not at submit time) show a specific "file is over 5MB" error message and clear the selected file, keeping the modal open — matching the reference's `onChange` handler exactly.
+- Q: When the Apply modal is reopened (same role or a different one), should the form fields reset to blank? → A: Yes — every open, regardless of which role's Apply button triggered it, clears name/email/link/message/file and any prior error, matching the reference's `openApplyFor` reset behavior.
+
+### Session 2026-08-10
+
+- Q: `TechGrit Case Studies.dc.html`'s actual section order is Hero → Sticky Filter Bar → Featured → Grid — the filter bar sits above/before the featured card, not below it, and starts sticking as soon as a visitor scrolls past the hero. FR-024 and Acceptance Scenario 3 currently describe the opposite order ("sits below the featured article", reached only after "scrolling past the featured article"). Should the requirement be corrected to match the reference's actual DOM order, or does the spec's existing order stand as a deliberate divergence? → A: The spec's existing order stands. This is a deliberate, approved divergence from `TechGrit Case Studies.dc.html`'s own DOM order — the filter bar is positioned after the featured card (below it), not between the hero and the featured card, and only begins sticking once a visitor scrolls past the featured card. This is intentional, not an oversight to reconcile with the reference file.
+- Q: `TechGrit Case Studies.dc.html`'s featured card and grid cards both change `border-color` on hover (e.g. `rgba(56,189,248,0.5)` for the featured card, `rgba(255,255,255,0.28)` for grid cards) — matching what `featured-case-study.tsx`/`case-studies-grid.tsx` already implement. FR-022 and Acceptance Scenario 1 instead say cards "MUST NOT show a hover border" / "no card shows a hover border". Which is correct? → A: The reference is correct and FR-022/AS1's "no hover border" language was in error — cards (both the featured card and grid cards) MUST keep the reference's hover border-color change exactly as already implemented; no code change is needed for this behavior.
+- Q: The reference's filter script applies its category logic to a shared `[data-cs-item]` selector that includes the featured card itself, so an unmatching category filter hides the featured card too. FR-024/AS4 only describe "the case-study grid" updating. Should the featured card also be hidden when the active filter doesn't match its category, or should it stay visible regardless of the selected filter? → A: The featured card stays visible regardless of the active filter — a deliberate divergence from the reference's shared filter logic. Only the grid beneath it responds to category selection.
+- Q: `TechGrit Case Studies.dc.html`'s filter bar includes a live `data-cs-count` element showing a running match count (e.g. "6 case studies") that updates on every filter change; FR-024 doesn't mention it. Should this count indicator be added to the Case Studies filter bar? → A: No — omitted from scope for the Case Studies filter bar. This decision applies specifically to Case Studies (this feature does not revisit Blog's own filter bar, FR-028, in this session).
+- Q: `TechGrit Services.dc.html`'s accordion script force-closes the other two top-level service cards whenever one is opened, but FR-013 said cards expand "independent of the other two cards' state." Which behavior is correct? → A: Single-open accordion, matching the reference exactly — opening a collapsed card collapses whichever other card was previously open, so at most one card is expanded at a time. FR-013 and User Story 2's Acceptance Scenario 2/Independent Test are corrected accordingly.
+- Q: The reference initializes with the first card ("01 · UI/UX Design") already expanded on page load; should `/services` match that initial state? → A: Yes — the first card renders expanded on initial load, the other two render collapsed, matching the reference exactly. FR-013 and Acceptance Scenario 1 are updated accordingly.
+- Q: The reference's resize handler only recalculates the open card's height, never forcing a collapse — should a Services card's expanded/collapsed state persist unchanged when the visitor resizes across the `md`/`lg` breakpoints mid-interaction (the previously-unresolved Edge Case)? → A: Yes — state persists across resize; only the expanded card's height is recalculated, matching the reference exactly. The Edge Cases entry is updated from an open question to this resolved requirement.
+- Q: FR-014 said "Service cards MUST show the reference's hover background color," but the reference's top-level accordion header defines no hover style at all — only nested capability/approach items (inside an expanded card's body) have a hover effect, and it's a border-color+lift change, not a background-color change. What should FR-014 require? → A: The top-level accordion card/header gets no hover treatment at all, matching the reference; the nested items' existing border-color+lift hover (already implemented in `service-detail-section.tsx`) is what FR-014 actually describes. FR-014 and User Story 2's Acceptance Scenario 3 are corrected accordingly.
+- Q: The hero's two CTAs ("Schedule a Consultation", "Explore Services") currently render as plain `<a className="btn ...">` links (`services-hero.tsx`) — should they instead render via the shared `Button` component (Primary/Ghost variants), matching the reference exactly? → A: Yes — both hero CTAs MUST use the shared `Button` component (primary variant for "Schedule a Consultation", ghost variant for "Explore Services"). FR-013b is updated accordingly.
 
 ### Session 2026-08-07
 
@@ -265,6 +285,11 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 - Q: FR-028's sticky/dark/labeled filter-bar requirement matches a shared `components/ui/FilterBar.tsx` primitive that was already built in Phase 1 specifically for this purpose (its own doc comment: "Not yet wired into any page in this slice") but has zero real consumers today — including Case Studies, whose own FR-024 needs the identical treatment but is out of scope for this session. Should Blog wire into that existing shared primitive, or build its own bespoke sticky/dark/labeled styling on `TopicFilter`? → A: Wire into the existing shared `components/ui/FilterBar.tsx` primitive — Blog becomes its first real consumer. A second, bespoke implementation would itself violate FR-044's "one consistent treatment, not a divergent per-page implementation" requirement for this exact treatment.
 - Q: `TechGrit Blog.dc.html`'s sticky filter bar (`data-blog-filter-bar`) is its own standalone element positioned between the Featured-post section and the Grid section, not nested inside the grid's own section — but today's `TopicFilter` renders inside `BlogPostGrid`, with `activeTopic` state owned by that same client component. Should the filter bar be promoted to its own sibling element matching the reference's DOM structure, with filter state lifted to a shared parent? → A: Yes — reference-exact placement. The filter bar (wrapped in the shared `FilterBar.tsx` from the prior answer) renders as its own element in `app/blog/page.tsx` between `<FeaturedPost>` and the post grid, with `activeTopic` state lifted out of `BlogPostGrid` into a shared parent so both the bar and the grid read/update the same state, preserving the bar's existing sticky behavior and filtering functionality.
 - Q: The reference's newsletter-panel background (`rgba(255,255,255,0.04)`) is byte-identical to the existing `--color-glass-4` token, already reused elsewhere in the app; the current implementation instead uses `bg-ink-mid` (`#000000`). Should FR-029 reuse `--color-glass-4`, or add a new dedicated single-job token at the same value (per this file's established "one job, one token" convention)? → A: Reuse `--color-glass-4` (`bg-glass-4`) — no new token. A new token at an already-existing value would itself violate FR-041/SC-006's no-duplicate-token rule.
+
+### Session 2026-08-07
+
+- Q: The reference's "Skip the Form" card wires its "Book a call" button to a real Calendly widget (loads Calendly's external `widget.js`/`widget.css` and calls `Calendly.initPopupWidget({url:'https://calendly.com/techgrit/30min'})`). Should this feature embed that real widget, wire a real external link, or ship a static/placeholder action? → A: Static/placeholder — the button/link MUST NOT embed Calendly's external widget script or otherwise introduce a new third-party dependency; it uses a placeholder target (e.g. `href="#"`), matching the existing "Book on Calendly" precedent already used on the Construction page (`app/construction/_data/construction-content.ts`'s `primaryCtaLink: "#"`). No live booking integration is introduced by this feature.
+- Q: For User Story 7's FR-034 ("The imagery/showcase section MUST use the reference's grid layout"), which About Us section does "imagery/showcase section" refer to — the single hero showcase image (`about-us-showcase.tsx`, which `TechGrit About.dc.html` itself renders as one full-width image with no grid at all) or the "Life at TechGrit" culture-photo gallery (`about-us-culture-gallery.tsx`)? → A: The "Life at TechGrit" culture-photo gallery. It MUST reuse the shared `LifeGallery.tsx` component already used by Home and Careers, replacing the page's current page-local asymmetric mosaic (`1.4fr/1fr/1fr` grid with `tall`/`wide`/`square` per-photo spans) with the reference's uniform equal-column grid — 4 columns, collapsing to 2 at ≤920px and 1 at ≤560px, with equal 3:4-aspect tiles and no per-photo span variation. The hero showcase image section is unaffected by FR-034.
 
 ## Requirements *(mandatory)*
 
@@ -298,10 +323,10 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 **Services Page**
 
-- **FR-013**: Each of the three top-level service cards MUST become expandable/collapsible in place to reveal its related sub-services, independent of the other two cards' state.
+- **FR-013**: Each of the three top-level service cards MUST become expandable/collapsible in place, implemented as a single-open accordion matching `TechGrit Services.dc.html`'s own accordion script: activating a collapsed card's header expands it and simultaneously collapses whichever other card was previously expanded (at most one card is expanded at any time), and activating the currently-expanded card's header collapses it. On initial page load, the first card ("01 · UI/UX Design") MUST render already expanded, matching the reference's initial state; the other two MUST render collapsed. Each card's expanded body reveals that service's supporting content exactly as structured today (an approach-steps list for UI/UX Design, a capability grid for Software Product Engineering and Quality Engineering) — not a list of separate "related services."
 - **FR-013a**: The Services page MUST show background ambient orbs matching the reference (no background orbs exist on this page today).
-- **FR-013b**: The Services hero's top badge MUST render without its current dot indicator, and its ghost button MUST use the updated reference styling.
-- **FR-014**: Service cards MUST show the reference's hover background color.
+- **FR-013b**: The Services hero's top badge MUST render without its current dot indicator, and both hero CTAs MUST render via the shared `Button` component (`components/ui/Button.tsx`) — primary variant for "Schedule a Consultation", ghost variant for "Explore Services" — matching the reference exactly, in place of the current plain `<a className="btn ...">` links.
+- **FR-014**: The top-level service accordion card/header MUST NOT show any hover treatment (matching the reference, which defines cursor:pointer only, no background-color, border, or lift on hover). Items nested inside an expanded card's approach-steps list or capability grid MUST keep the reference's hover treatment — a border-color change plus a lift (translateY) transform, not a background-color change — as already implemented today.
 - **FR-015**: The closing CTA section MUST use the reference's card width and CTA button styling.
 
 **Industries (`/construction`) Page** — no new route
@@ -316,9 +341,9 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 **Insights — Case Studies**
 
-- **FR-022**: Background ambient orbs across Case Studies pages MUST match the reference, and cards MUST NOT show a hover border.
+- **FR-022**: Background ambient orbs across Case Studies pages MUST match the reference, and cards (the featured card and grid cards) MUST keep the reference's hover border-color change (e.g. `rgba(56,189,248,0.5)` on the featured card, `rgba(255,255,255,0.28)` on grid cards) alongside their lift transform — see Clarifications Session 2026-08-10.
 - **FR-023**: The hero badge MUST render without a dot indicator.
-- **FR-024**: The filter bar MUST use a dark background, MUST display a filter label, MUST be positioned below the featured article, MUST remain fixed to the top of the viewport once scrolled to, and MUST functionally filter the case-study grid with no full page reload. When a filter selection matches zero entries, the grid MUST be replaced with a "no results" message and a control to clear/reset the filter back to "All"; the filter bar MUST remain usable while this message is shown.
+- **FR-024**: The filter bar MUST use a dark background, MUST display a filter label, MUST be positioned below the featured article (a deliberate, approved divergence from `TechGrit Case Studies.dc.html`'s own DOM order, which places the sticky filter bar between the hero and the featured card — see Clarifications Session 2026-08-10), MUST remain fixed to the top of the viewport once scrolled to, and MUST functionally filter the case-study grid with no full page reload. The featured card MUST remain visible regardless of the active filter — a deliberate divergence from the reference's own filter script, which applies its category logic to the featured card as well (see Clarifications Session 2026-08-10). The filter bar MUST NOT include a live match-count indicator (the reference's `data-cs-count` element is out of scope for this feature — see Clarifications Session 2026-08-10). When a filter selection matches zero entries, the grid MUST be replaced with a "no results" message and a control to clear/reset the filter back to "All"; the filter bar MUST remain usable while this message is shown.
 - **FR-025**: Case-study detail pages MUST show background ambient orbs matching the reference.
 - **FR-026**: The closing CTA section MUST use the reference's updated background and MUST use the shared reusable Button component in place of a plain link.
 
@@ -340,18 +365,20 @@ A visitor on the Contact page sees a new left-hand "Skip the Form" card offering
 
 - **FR-032**: Badges MUST render without a dot indicator anywhere on the page.
 - **FR-033**: Eyebrows MUST render without their leading accent symbol anywhere on the page (same toggle as FR-006/FR-017/FR-019).
-- **FR-034**: The imagery/showcase section MUST use the reference's grid layout.
+- **FR-034**: The "Life at TechGrit" culture-photo gallery section (not the single-image hero showcase, which the reference renders without a grid) MUST reuse the shared `LifeGallery.tsx` component already used by Home and Careers, replacing the page's current page-local asymmetric mosaic (`tall`/`wide`/`square` per-photo spans) with the reference's uniform equal-column grid — 4 columns, collapsing to 2 at ≤920px and 1 at ≤560px, with equal 3:4-aspect tiles and no per-photo span variation.
 
 **Careers Page**
 
 - **FR-035**: The hero MUST use the reference's typography, colors, and ghost-button styling.
 - **FR-036**: The Open Roles filter row MUST use the reference's sticky behavior and alignment.
-- **FR-037**: The Apply form MUST use the reference's field styling, and the ghost Apply button MUST use the reference's styling.
+- **FR-037**: The Apply form MUST use the reference's field styling, and the ghost Apply button MUST use the reference's styling. (FR-037a below governs the modal's own field set/structure/behavior once opened; FR-037 itself additionally covers the *trigger* button's own visual styling — currently unimplemented per `/speckit.analyze` finding C1, tracked as `Careers – T013` in tasks.md.)
+- **FR-037a**: Clicking a role card's ghost Apply button MUST open an application form modal scoped to that role (its title MUST appear in the modal header), matching the reference's modal structure exactly: a header with an eyebrow label, the role title, supporting text, and a close control; a form with Full name, Email, LinkedIn-or-portfolio-URL, a Resume file-upload control (accepting PDF/DOC/DOCX, max 5MB), an optional message field, and a submit action. The modal MUST be dismissible via its close control or by clicking the overlay outside the modal card, without navigating away from the page. Submitting with a required field (full name, email, or resume) missing MUST show a validation error message and keep the modal open; submitting with all required fields completed MUST replace the form with a success confirmation and a close control, in place of navigating to a different page. Submission MUST be a client-side-only state transition — no backend persistence or external integration (email, ATS) is introduced, consistent with the Contact form's existing behavior (FR-040).
+- **FR-037b**: Selecting a resume file larger than 5MB MUST immediately show a specific over-size error message and clear the selected file, rather than deferring that check to submit time. Opening the Apply modal — whether re-opening for the same role or switching to a different role's Apply button — MUST reset all fields (name, email, link, message, file) and clear any prior error, so no previously entered values or errors carry over between opens.
 - **FR-038**: The Life at TechGrit section on Careers MUST use the reference's image layout, MUST show a new "Inside TechGrit" badge, and MUST use updated supporting copy.
 
 **Contact Us Page**
 
-- **FR-039**: A new "Skip the Form" card MUST be added near the existing contact form, offering a direct scheduling path, using the reference's gradient background.
+- **FR-039**: A new "Skip the Form" card MUST be added near the existing contact form, offering a direct scheduling path, using the reference's gradient background. Its "Book a call" action MUST be a static/placeholder action (e.g. a non-navigating `href="#"`) and MUST NOT embed Calendly's external widget script or link out to a live Calendly booking URL — no new third-party dependency or live scheduling integration is introduced, consistent with the placeholder precedent already used by the Construction page's "Book on Calendly" CTA.
 - **FR-040**: The existing contact form's current client-side submission behavior MUST remain unchanged.
 
 **Cross-Cutting**
@@ -383,6 +410,7 @@ Not applicable — this feature changes presentation only. No new data entities,
 - **Revised (Clarifications, Session 2026-08-06)**: The "Construction Section" bullets in the original request (Ghost Button, icon replacement, "background image" removal, per-card-link removal) target the homepage's Industries preview grid (`app/_home-components/IndustriesSection.tsx`), NOT the standalone `/construction` deep-dive page — reversing this Assumption's prior text. "Background image" in the original request meant the per-card `MediaSlot` photo on each of the 3 Industries cards, not a section-level background. `/construction`'s own requirements remain FR-016 through FR-021, independent of FR-008. Per the separate Clarifications entry on the "INDUSTRIES PAGE" scope, no new `/industries` route is introduced — the nav's "Industries" item continues to open `/construction`.
 - The homepage's "Clients Section" refers to the existing "Trusted by our clients" logo strip currently rendered as part of the hero component; "move outside the Hero section" means promoting it to its own top-level section in the same document position shown in `TechGrit Homepage.dc.html`.
 - **Revised (Clarifications, Session 2026-08-06)**: The new homepage Blog section's 3 cards use `TechGrit Homepage.dc.html`'s own literal, reference-authored content (topic/title/excerpt/read-time/icon/gradient-tint) as a static homepage-local data set — not a dynamic pull from `app/blog/_data/blog-content.ts`'s 9 real posts, whose shape (no icon field, no featured/top-3 concept, placeholder `"#"` hrefs) doesn't support it. The "Life at TechGrit" gallery still reuses the gallery component already shared with Careers.
+- FR-038's "Inside TechGrit" badge on Careers' Life at TechGrit section renders via the shared `components/ui/Badge.tsx` pill component rather than the reference's plain colored text label (no pill/border) — a deliberate, already-implemented choice (plan.md/research.md) that reuses the existing `Badge` primitive per Principle III rather than introducing a one-off text treatment; FR-038 itself only requires a badge to be *present*, not a pixel-exact match to the reference's specific (non-pill) eyebrow treatment.
 - Case-study detail background orbs reuse whatever shared ambient-orb presentation already exists elsewhere in the app rather than introducing a new one.
 - `TechGrit Frameworks.dc.html` (present in `raw-files-v2` but not named anywhere in the page-wise request) is out of scope for this feature — its own "Framework Portfolio" section reuses the same scroll-pinned phase-panel pattern as Home's "How We Deliver" (informing FR-006's reusable-component prop shape, Clarifications Session 2026-08-05), but building `/frameworks` itself (the route `nav-config.ts` already links to, currently 404ing) remains a future feature's work.
 - Visual fidelity is judged at this repository's existing canonical breakpoints (desktop ≥1140px, tablet 560–1139px, mobile <560px), not arbitrary device sizes.

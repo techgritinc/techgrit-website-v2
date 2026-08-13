@@ -6,26 +6,20 @@ export function AboutUsOurRole({ section }: { section: OurRoleSection }) {
   const [before, after] = section.title.split(section.titleHighlight);
 
   return (
-    <section className="section">
-      <div className="tg-container" style={{ paddingInline: "var(--space-15)" }}>
+    <section className="relative">
+      <div className="mx-auto max-w-[1000px] px-[36px] py-[60px] text-center">
         <RevealOnScroll>
-          <div className="mx-auto text-center content-max-xl">
-            <SectionEyebrow>{section.eyebrow}</SectionEyebrow>
-            <h2
-              className="text-[length:var(--text-about-h2-base)] md:text-[length:var(--text-about-h2-md)] xl:text-[length:var(--text-values-h2-xl)]"
-              style={{ lineHeight: 1.1 }}
-            >
+            <SectionEyebrow showAccent={false} className="justify-center">
+              {section.eyebrow}
+            </SectionEyebrow>
+            <h2 className="text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
               {before}
-              <span className="text-gradient">{section.titleHighlight}</span>
+              <span className="bg-[linear-gradient(120deg,#F59E0B,#E87722)] bg-clip-text text-transparent">{section.titleHighlight}</span>
               {after}
             </h2>
-            <p
-              className="mx-auto content-max-lg"
-              style={{ marginTop: 22, fontSize: "var(--text-lg-sm)", lineHeight: 1.7 }}
-            >
+            <p className="mx-auto mt-[22px] max-w-[680px] text-[18px] leading-[1.7] text-secondary">
               {section.description}
             </p>
-          </div>
         </RevealOnScroll>
       </div>
     </section>

@@ -94,6 +94,7 @@
   --color-nav-hover: var(--color-nav-hover);
   --color-overlay-orange: var(--color-overlay-orange);
   --color-overlay-orange-soft: var(--color-overlay-orange-soft);
+  --color-overlay-amber-light-10: var(--color-overlay-amber-light-10);
   --color-overlay-teal: var(--color-overlay-teal);
   --color-overlay-blue-soft: var(--color-overlay-blue-soft);
   --color-border-faint: var(--color-border-faint);
@@ -235,6 +236,7 @@
   --color-text-68: var(--color-text-68);
   --color-text-64: var(--color-text-64);
   --color-text-60: var(--color-text-60);
+  --color-text-56: var(--color-text-56);
   --color-text-55: var(--color-text-55);
   --color-text-45: var(--color-text-45);
   --color-text-40: var(--color-text-40);
