@@ -30,8 +30,11 @@ export interface ShowcaseSection {
 }
 
 export interface ConcernsCard {
+  situationsLabel: string;
+  situations: string[];
   label: string;
   concerns: string[];
+  closingLead: string; // plain-weight sentence rendered above the bold closingStatement
   closingStatement: string;
 }
 
@@ -110,6 +113,9 @@ export interface PartnerSection {
   title: string;
   description: string;
   outcomes: PartnershipOutcome[];
+  closingLabel: string;
+  closingLead: string;
+  closingSupport: string;
 }
 
 export interface CultureGallerySection {

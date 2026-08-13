@@ -74,7 +74,7 @@ export const CONTACT_DETAILS: ContactDetail[] = [
 export const SOCIAL_LINKS: SocialLink[] = [
   { platform: "linkedin", href: "https://www.linkedin.com/company/techgrit-inc/", label: "TechGrit on LinkedIn" },
   { platform: "youtube", href: "https://www.youtube.com/@TechGritInc", label: "TechGrit on YouTube" },
-  { platform: "spotify", href: "https://open.spotify.com/show/techgrit-talks", label: "TechGrit Talks Podcast on Spotify" },
+  { platform: "spotify", href: "https://open.spotify.com/show/38ugZtGBKruL01KyFbEeVE", label: "TechGrit Talks Podcast on Spotify" },
 ];
 
 export const LEGAL_LINKS: LegalLink[] = [
