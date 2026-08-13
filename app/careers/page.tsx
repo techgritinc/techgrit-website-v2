@@ -15,11 +15,8 @@ export default function CareersPage() {
       <OpenRolesSection filters={careersPageContent.filters} roles={careersPageContent.roles} />
       <LifeGallery
         id="life"
-        variant="careers"
         heading={careersPageContent.lifeAtTechGrit.heading}
         description={careersPageContent.lifeAtTechGrit.description}
-        images={careersPageContent.lifeAtTechGrit.images}
-        columns={4}
       />
       <CareersCta content={careersPageContent.cta} />
     </>

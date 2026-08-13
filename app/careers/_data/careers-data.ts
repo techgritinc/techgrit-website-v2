@@ -1,4 +1,4 @@
-import type { LifeGalleryImage } from "../../_home-components/LifeGallery";
+
 
 export interface CollageImage {
   src: string;
@@ -48,7 +48,6 @@ export interface OpenRole {
 export interface LifeAtTechGritContent {
   heading: string;
   description: string;
-  images: LifeGalleryImage[];
 }
 
 export interface ClosingCtaContent {
@@ -201,36 +200,7 @@ export const careersPageContent: CareersPageContent = {
   lifeAtTechGrit: {
     heading: "Life at TechGrit.",
     description: "The people and the culture behind the engineering.",
-    images: [
-      {
-        src: "/assets/team/glasses.png",
-        alt: "Team portrait",
-        span: "default",
-        captionLabel: "The team",
-        caption: "Builders and designers behind the engineering.",
-      },
-      {
-        src: "/assets/team/rooftop.png",
-        alt: "Rooftop gathering",
-        span: "default",
-        captionLabel: "The office",
-        caption: "Rooftop breaks, real conversations.",
-      },
-      {
-        src: "/assets/team/painting.png",
-        alt: "Diwali painting",
-        span: "default",
-        captionLabel: "Craft",
-        caption: "We take craft seriously — inside & outside code.",
-      },
-      {
-        src: "/assets/team/diwali.png",
-        alt: "Diwali celebration",
-        span: "default",
-        captionLabel: "Together",
-        caption: "We celebrate wins — and Diwali — together.",
-      },
-    ],
+    
   },
   cta: {
     heading: "Don't see your exact role?",
