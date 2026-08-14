@@ -27,8 +27,8 @@ export function CaseStudiesHero() {
           className="mx-auto mt-[22px] max-w-[640px] text-[18px] leading-[29.7px] text-secondary"
           style={{ animationDelay: ".2s" }}
         >
-          Explore how we&apos;ve tackled complex challenges and delivered measurable results across
-          industries — from FinTech and construction to AI enablement.
+          Explore our diverse collection of case studies, highlighting innovative solutions across industries. 
+          See how we&apos;ve tackled complex challenges and delivered measurable results for our clients.
         </p>
       </div>
     </section>

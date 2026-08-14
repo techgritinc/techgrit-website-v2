@@ -46,12 +46,24 @@ export default async function CaseStudyDetailPage({ params }: Props) {
         />
       </div>
       <CaseStudyDetailHero caseStudy={caseStudy} />
-      <MetricsStrip metrics={caseStudy.narrative.metrics} />
+      {caseStudy.narrative?.metrics?.length ? (
+        <MetricsStrip metrics={caseStudy.narrative.metrics} />
+      ) : (
+        <div className="tg-container px-[var(--space-15)]">
+          <div className="border-b border-border-faint" />
+        </div>
+      )}
       <section>
         <div className="tg-container pt-[40px] pb-[30px] px-[var(--space-15)]">
-          <div className="grid grid-cols-1 tg-md:grid-cols-[1fr_280px] gap-[64px] items-start">
-            <CaseStudyNarrative sections={caseStudy.narrative.sections} />
-            <TeamPanel team={caseStudy.narrative.team} />
+          <div
+            className={
+              caseStudy.narrative?.team?.length
+                ? "grid grid-cols-1 tg-md:grid-cols-[1fr_280px] gap-[64px] items-start"
+                : "grid grid-cols-1"
+            }
+          >
+            <CaseStudyNarrative blocks={caseStudy.narrative?.blocks} />
+            {caseStudy.narrative?.team?.length ? <TeamPanel team={caseStudy.narrative.team} /> : null}
           </div>
         </div>
       </section>

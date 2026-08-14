@@ -16,30 +16,23 @@ export type TeamRole = {
   count: number;
 };
 
-export type IntegrationChip = {
-  label: string;
+// Generic, freely-composable narrative content block — every field optional,
+// blocks are rendered in array order with a fixed internal field order
+// (heading -> descriptions -> subheading -> paragraphs -> bullets -> pictures).
+export type NarrativeBlock = {
+  id: string;
+  heading?: string;
+  descriptions?: string[];
+  subheading?: string;
+  paragraphs?: string[];
+  bullets?: string[];
+  pictures?: string[];
 };
-
-export type ArchitectureFlow = {
-  nodes: [string, string, string];
-  integrations: IntegrationChip[];
-};
-
-export type NarrativeSection =
-  | { id: "background"; heading: string; paragraphs: string[] }
-  | {
-      id: "challenge";
-      heading: string;
-      intro: string;
-      painPoints: string[];
-    }
-  | { id: "architecture"; heading: string; intro: string; flow: ArchitectureFlow }
-  | { id: "solutions"; heading: string; paragraphs: string[] };
 
 export type CaseStudyNarrative = {
-  metrics: Metric[];
-  sections: NarrativeSection[];
-  team: TeamRole[];
+  metrics?: Metric[];
+  blocks?: NarrativeBlock[];
+  team?: TeamRole[];
   teamSize: number;
 };
 
@@ -55,5 +48,5 @@ export type CaseStudy = {
   featured: boolean;
   publishedDate: string;
   headlineMetric: Metric;
-  narrative: CaseStudyNarrative;
+  narrative?: CaseStudyNarrative;
 };
