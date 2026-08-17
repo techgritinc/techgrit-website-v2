@@ -3,4 +3,5 @@
 export const ROUTES = {
   caseStudies: "/case-studies",
   industriesConstruction: "/industries/construction",
+  contactUs: "/contact-us",
 } as const;

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Button from "@/components/ui/Button";
 import { ChevronIcon, HamburgerIcon } from "@/components/ui/icons";
+import { ROUTES } from "@/lib/routes";
 import type { HeaderData, HeaderMegaGroup } from "@/cms/types/header-types";
 
 const NAV_LINK_BASE =
@@ -24,7 +25,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
   // Header CTA is identical everywhere (FR-022): CMS button -> CMS url, except on the
   // Contact page itself, which targets its own in-page form section instead of navigating to
   // itself (the one reference-confirmed exception; no other page relabels/retargets the CTA).
-  const isContact = pathname === "/contact";
+  const isContact = pathname === ROUTES.contactUs;
   const cta = isContact ? { label: data.cta.label, href: "#form" } : data.cta;
 
   const [scrolled, setScrolled] = useState(false);

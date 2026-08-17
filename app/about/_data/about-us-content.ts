@@ -1,3 +1,4 @@
+import { ROUTES } from "@/lib/routes";
 import type { AboutUsPageContent } from "./types";
 
 // Content shape mirrors specs/001-about-us-page/contracts/about-us-page-response.json.
@@ -19,7 +20,7 @@ export const aboutUsContent: AboutUsPageContent = {
       subtitle:
         "For over a decade, TechGrit has helped ambitious teams turn complex technology decisions into real, working systems, guiding them from idea to execution with clarity and confidence.",
       primaryCtaLabel: "Start a Conversation",
-      primaryCtaLink: "/contact/",
+      primaryCtaLink: `${ROUTES.contactUs}/`,
       secondaryCtaLabel: "What we stand for",
       secondaryCtaLink: "#values",
     },

@@ -1,3 +1,4 @@
+import { ROUTES } from "@/lib/routes";
 import type { ServicesPageContent, SectionImage } from "./types";
 
 const svcUiux: SectionImage = { url: "/samples/svc-uiux.png", alternativeText: "UI/UX Design", width: 720, height: 460 };
@@ -20,7 +21,7 @@ export const servicesContent: ServicesPageContent = {
       subtitle:
         "From product design to engineering to quality, TechGrit delivers end-to-end services that turn complex ideas into reliable, scalable products, faster and at lower risk.",
       primaryCtaLabel: "Schedule a Consultation",
-      primaryCtaHref: "/contact",
+      primaryCtaHref: ROUTES.contactUs,
       secondaryCtaLabel: "Explore Services",
       secondaryCtaHref: "#svc-accordion",
     },
@@ -104,7 +105,7 @@ export const servicesContent: ServicesPageContent = {
       description:
         "Whether it's design, engineering, quality, or all three, we'll give you an honest assessment in a single working session. No pressure, no commitments.",
       ctaLabel: "Schedule a Consultation",
-      ctaHref: "/contact",
+      ctaHref: ROUTES.contactUs,
     },
   ],
 };
