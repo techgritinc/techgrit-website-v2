@@ -41,7 +41,7 @@ export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
     links: [
       { slug: "ind-healthtech", label: "HealthTech", href: "/#industries" },
       { slug: "ind-fintech", label: "FinTech", href: "/#industries" },
-      { slug: "ind-constructiontech", label: "ConstructionTech", href: "/construction" },
+      { slug: "ind-constructiontech", label: "ConstructionTech", href: "/industries/construction" },
       { slug: "ind-hitech", label: "HiTech", href: "/#industries" },
     ],
   },

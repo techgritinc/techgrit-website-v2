@@ -23,7 +23,7 @@ export default function IndustriesSection() {
               across key industries.
             </p>
           </div>
-          <Button href="/construction" variant="ghost" className="py-4! leading-[normal] text-[16px]">
+          <Button href="/industries/construction" variant="ghost" className="py-4! leading-[normal] text-[16px]">
             Explore Industry Solutions <span aria-hidden="true" className="text-orange text-[16px]">&rarr;</span>
           </Button>
         </div>

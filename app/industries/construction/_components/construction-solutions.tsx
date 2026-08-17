@@ -1,32 +1,6 @@
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { GlassCard, GlassCardIcon, GlassCardTitle, GlassCardDescription } from "@/components/ui/GlassCard";
-import type { SolutionsSection } from "../_data/types";
-import {
-  CheckSquareIcon,
-  TrendingUpIcon,
-  SmartphoneIcon,
-  ShieldCheckIcon,
-  DatabaseIcon,
-  LayersIcon,
-  LayoutDashboardIcon,
-  CreditCardIcon,
-} from "@/components/ui/icons";
-
-const SOLUTION_ICONS: Record<number, React.ComponentType<{ className?: string }>> = {
-  1: CheckSquareIcon,
-  2: TrendingUpIcon,
-  3: SmartphoneIcon,
-  4: ShieldCheckIcon,
-  5: DatabaseIcon,
-  6: LayersIcon,
-  7: LayoutDashboardIcon,
-  8: CreditCardIcon,
-};
-
-function SolutionIcon({ order }: { order: number }) {
-  const IconComponent = SOLUTION_ICONS[order] || LayersIcon;
-  return <IconComponent className="text-[var(--color-amber-light)]" />;
-}
+import type { SolutionsSection } from "@/cms/types/construction";
 
 export function ConstructionSolutions({ section }: { section: SolutionsSection }) {
   return (
@@ -43,17 +17,20 @@ export function ConstructionSolutions({ section }: { section: SolutionsSection }
               variant="constructionSolution"
               hoverBorderColor=""
             >
-              <GlassCardIcon
-                variant="constructionSolution"
-                wrapperClassName="border"
-                style={{
-                  background:
-                    "linear-gradient(140deg, color-mix(in srgb, var(--color-amber) 22%, transparent), color-mix(in srgb, var(--color-orange) 10%, transparent))",
-                  borderColor: "color-mix(in srgb, var(--color-amber) 30%, transparent)",
-                }}
-              >
-                <SolutionIcon order={solution.order} />
-              </GlassCardIcon>
+              {solution.icon ? (
+                <GlassCardIcon
+                  variant="constructionSolution"
+                  wrapperClassName="border"
+                  style={{
+                    background:
+                      "linear-gradient(140deg, color-mix(in srgb, var(--color-amber) 22%, transparent), color-mix(in srgb, var(--color-orange) 10%, transparent))",
+                    borderColor: "color-mix(in srgb, var(--color-amber) 30%, transparent)",
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- small CMS-hosted SVG, no next/image benefit */}
+                  <img src={solution.icon.url} alt={solution.icon.alt} width={20} height={20} />
+                </GlassCardIcon>
+              ) : null}
               <GlassCardTitle className="leading-[normal] tracking-[normal]" variant="constructionSolution">{solution.title}</GlassCardTitle>
               <GlassCardDescription variant="constructionSolution">{solution.description}</GlassCardDescription>
             </GlassCard>

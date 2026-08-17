@@ -239,7 +239,7 @@ export const INDUSTRY_CARDS: IndustryCard[] = [
     title: "Construction",
     description:
       "Develop smart construction management platforms that optimize planning, project tracking, and operational efficiency.",
-    href: "/construction",
+    href: "/industries/construction",
   },
 ];
 

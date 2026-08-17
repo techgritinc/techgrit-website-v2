@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 // instead of the old orbs jumping to new values in place.
 export function AmbientOrbs() {
   const pathname = usePathname();
-  if (pathname?.startsWith("/case-studies") || pathname?.startsWith("/construction")) return null;
+  if (pathname?.startsWith("/case-studies") || pathname?.startsWith("/industries/construction")) return null;
 
   // The homepage renders its own reference-exact 4-orb, all-warm-toned variant
   // below instead of the default 3-orb set (which includes a blue orb the

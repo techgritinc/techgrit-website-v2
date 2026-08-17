@@ -1,4 +1,4 @@
-import type { IntegrationsStripSection } from "../_data/types";
+import type { IntegrationsStripSection } from "@/cms/types/construction";
 
 export function ConstructionIntegrationsStrip({ section }: { section: IntegrationsStripSection }) {
   return (
