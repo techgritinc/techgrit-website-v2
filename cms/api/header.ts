@@ -50,13 +50,15 @@ function toHeaderIcon(icon: StrapiMedia | null): HeaderIcon | null {
 }
 
 // The CMS has no column-count field, so the mega-menu grid width is derived from
-// how many sections a group has, tuned to match each group's real section count.
-function pickColumns(itemCount: number): 2 | 3 | 4 {
-  if (itemCount <= 2) return 2;
-  if (itemCount === 3) return 3;
+// how many sections a group has. Matches the reference's own per-group column
+// classes exactly (TechGrit Homepage.dc.html): 2->3col, 3->3col, 4->4col, 5->3col,
+// 7->4col. The reference never uses a 2-column layout — even a 2-item group (About)
+// renders in the 3-column grid with one slot left empty, rather than stretching each
+// item to half the panel width.
+function pickColumns(itemCount: number): 3 | 4 {
   if (itemCount === 4) return 4;
-  if (itemCount === 5) return 3;
-  return 4;
+  if (itemCount >= 6) return 4;
+  return 3;
 }
 
 function toMegaGroup(navItem: StrapiNavItem): HeaderMegaGroup {

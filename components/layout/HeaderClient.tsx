@@ -12,7 +12,6 @@ const NAV_LINK_BASE =
   "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-3.5 py-[9px] text-sm font-semibold text-nav leading-[normal] transition-colors hover:bg-nav-hover hover:text-white aria-expanded:bg-nav-hover aria-expanded:text-white";
 
 const GRID_COLS_CLASS: Record<HeaderMegaGroup["columns"], string> = {
-  2: "grid-cols-2",
   3: "grid-cols-3",
   4: "grid-cols-4",
 };
@@ -32,6 +31,24 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  // Grace period before a mega-menu actually closes on mouse-leave, so moving the
+  // cursor from the trigger down into the panel (crossing the visual gap between
+  // them) doesn't prematurely close it — cleared immediately on re-entry.
+  const closeDropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openDropdownNow = (label: string) => {
+    if (closeDropdownTimeoutRef.current) {
+      clearTimeout(closeDropdownTimeoutRef.current);
+      closeDropdownTimeoutRef.current = null;
+    }
+    setOpenDropdown(label);
+  };
+
+  const scheduleDropdownClose = (label: string) => {
+    closeDropdownTimeoutRef.current = setTimeout(() => {
+      setOpenDropdown((current) => (current === label ? null : current));
+    }, 150);
+  };
 
   // Homepage-only: transparent over the hero, solid once the visitor scrolls.
   // Threshold (24px) and shrink (80px -> 70px) match the reference's own scroll
@@ -103,10 +120,8 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             return (
               <div
                 key={group.label}
-                onMouseEnter={() => setOpenDropdown(group.label)}
-                onMouseLeave={() =>
-                  setOpenDropdown((current) => (current === group.label ? null : current))
-                }
+                onMouseEnter={() => openDropdownNow(group.label)}
+                onMouseLeave={() => scheduleDropdownClose(group.label)}
               >
                 <Link
                   href={group.href}

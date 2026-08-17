@@ -50,7 +50,7 @@ export type HeaderMegaItem = {
 export type HeaderMegaGroup = {
   label: string;
   href: string;
-  columns: 2 | 3 | 4;
+  columns: 3 | 4;
   items: HeaderMegaItem[];
   cta?: HeaderCta;
 };

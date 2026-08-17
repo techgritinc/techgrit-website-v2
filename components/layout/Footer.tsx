@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getFooterData } from "@/cms/api/footer";
 import { LinkedInIcon, SpotifyIcon, YouTubeIcon } from "@/components/ui/icons";
-import { CONTACT_DETAILS, FOOTER_BRAND_DESCRIPTION, FOOTER_CTA, FOOTER_LINK_GROUPS, LEGAL_LINKS, SOCIAL_LINKS } from "./footer-config";
 import Button from "@/components/ui/Button";
 
 const SOCIAL_ICONS = {
@@ -10,10 +10,20 @@ const SOCIAL_ICONS = {
   spotify: SpotifyIcon,
 } as const;
 
-const [primaryGroup, ...secondaryGroups] = FOOTER_LINK_GROUPS;
-
-export default function Footer() {
-  const year = new Date().getFullYear();
+export default async function Footer() {
+  const data = await getFooterData();
+  const {
+    logo,
+    brandDescription,
+    cta,
+    linkGroups,
+    contactDetails,
+    socialLinks,
+    legalLinks,
+    followUsLabel,
+    copyrights,
+  } = data;
+  const [primaryGroup, ...secondaryGroups] = linkGroups;
 
   return (
     <footer className="relative overflow-hidden border-t border-white/[0.08] leading-[normal]">
@@ -38,21 +48,21 @@ export default function Footer() {
         >
           <div className="max-w-[460px]">
             <Image
-              src="/logos/techgrit-logo-white.png"
-              alt="TechGrit"
-              width={132}
-              height={44}
+              src={logo.url}
+              alt={logo.alt}
+              width={logo.width}
+              height={logo.height}
               className="mb-[22px] block h-[44px] w-auto"
             />
-            <p className="mb-[24px] text-[15.5px] leading-[1.6] text-text-66">{FOOTER_BRAND_DESCRIPTION}</p>
-            <Button href={FOOTER_CTA.href} size="footer-cta" data-lift-hover>
-              {FOOTER_CTA.label}
+            <p className="mb-[24px] text-[15.5px] leading-[1.6] text-text-66">{brandDescription}</p>
+            <Button href={cta.href} size="footer-cta" data-lift-hover>
+              {cta.label}
               <span aria-hidden="true" className="text-[15px]">&rarr;</span>
             </Button>
           </div>
 
           <div data-foot-contacts className="grid grid-cols-[1fr_1fr] content-start gap-[24px] max-tg-640:grid-cols-1">
-            {CONTACT_DETAILS.map((detail) => (
+            {contactDetails.map((detail) => (
               <div key={detail.href}>
                 <div className="mb-[8px] block text-[11px] font-[800] tracking-[0.14em] text-ghost uppercase">{detail.heading}</div>
                 <a
@@ -102,14 +112,14 @@ export default function Footer() {
 
             <div className="flex flex-wrap items-center justify-start gap-[20px] border-t border-white/[0.08] pb-[4px] pt-[22px] max-tg-1080:pt-[24px] max-tg-640:flex-col max-tg-640:items-start">
               <span className="inline-flex items-center gap-[10px] text-[11px] font-[800] uppercase tracking-[0.16em] text-text-faded after:inline-block after:h-[1px] after:w-[26px] after:bg-[image:var(--gradient-footer-follow-line)]">
-                Follow us
+                {followUsLabel}
               </span>
               <div className="flex items-center gap-[10px]">
-                {SOCIAL_LINKS.map((social) => {
-                  const Icon = SOCIAL_ICONS[social.platform];
+                {socialLinks.map((social) => {
+                  const Icon = social.platform ? SOCIAL_ICONS[social.platform] : null;
                   return (
                     <a
-                      key={social.platform}
+                      key={social.href}
                       href={social.href}
                       aria-label={social.label}
                       title={social.label}
@@ -118,7 +128,11 @@ export default function Footer() {
                       data-lift-hover
                       className="inline-flex h-[36px] w-[36px] items-center justify-center rounded-[10px] border border-white/[0.12] bg-white/[0.04] text-secondary transition-all duration-200 ease-[ease] hover:-translate-y-[2px] hover:border-orange/[0.55] hover:bg-orange/[0.15] hover:text-white"
                     >
-                      <Icon />
+                      {social.icon ? (
+                        <Image src={social.icon.url} alt={social.icon.alt} width={17} height={17} />
+                      ) : (
+                        Icon && <Icon />
+                      )}
                     </a>
                   );
                 })}
@@ -142,8 +156,8 @@ export default function Footer() {
           className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-center gap-[20px] px-[36px] py-[20px] max-tg-640:flex-col max-tg-640:items-start max-tg-640:gap-[14px]"
         >
           <div className="flex flex-wrap items-center justify-center gap-[22px]">
-            <span className="text-[12.5px] text-40">&copy; {year} TechGrit Inc. All rights reserved.</span>
-            {LEGAL_LINKS.map((legal) => (
+            <span className="text-[12.5px] text-40">{copyrights}</span>
+            {legalLinks.map((legal) => (
               <Link key={legal.href} href={legal.href} className="text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white">
                 {legal.label}
               </Link>
