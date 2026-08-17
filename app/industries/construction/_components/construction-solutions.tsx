@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { GlassCard, GlassCardIcon, GlassCardTitle, GlassCardDescription } from "@/components/ui/GlassCard";
 import type { SolutionsSection } from "@/cms/types/construction";
@@ -27,8 +28,12 @@ export function ConstructionSolutions({ section }: { section: SolutionsSection }
                     borderColor: "color-mix(in srgb, var(--color-amber) 30%, transparent)",
                   }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element -- small CMS-hosted SVG, no next/image benefit */}
-                  <img src={solution.icon.url} alt={solution.icon.alt} width={20} height={20} />
+                  <Image
+                    src={solution.icon.url}
+                    alt={solution.icon.alt || ""}
+                    width={20}
+                    height={20}
+                  />
                 </GlassCardIcon>
               ) : null}
               <GlassCardTitle className="leading-[normal] tracking-[normal]" variant="constructionSolution">{solution.title}</GlassCardTitle>

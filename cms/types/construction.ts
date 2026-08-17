@@ -1,9 +1,12 @@
 import type {
+  SectionIcon,
   StrapiCtaBannerSection,
   StrapiHeroSection,
   StrapiStatisticsSection,
 } from "../shared/reusable-sections";
 import type { StrapiMedia } from "./strapi-common";
+
+export type { SectionIcon } from "../shared/reusable-sections";
 
 // ---------------------------------------------------------------------------
 // Strapi-side raw shapes — construction-specific components (not reused by other pages,
@@ -140,11 +143,6 @@ export interface IntegrationsStripSection {
   order: number;
   label: string;
   partners: IntegrationPartner[];
-}
-
-export interface SectionIcon {
-  url: string;
-  alt: string;
 }
 
 export interface IndustryChallenge {

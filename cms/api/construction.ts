@@ -1,11 +1,10 @@
 import { fetchCms } from "./fetcher";
-import { mapCtaBanner, mapHeroFields, mapStatistics } from "../shared/reusable-sections";
+import { mapCtaBanner, mapHeroFields, mapSectionIcon, mapStatistics } from "../shared/reusable-sections";
 import type {
   StrapiCtaBannerSection,
   StrapiHeroSection,
   StrapiStatisticsSection,
 } from "../shared/reusable-sections";
-import { resolveMediaUrl } from "../utils/media";
 import type {
   AdvantageSection,
   ChallengesSection,
@@ -16,9 +15,7 @@ import type {
   IntegrationsStripSection,
   LifecycleDiagramSection,
   PageSectionEntry,
-  SectionIcon,
   SolutionsSection,
-  StrapiApproachStep,
   StrapiConstructionPage,
   StrapiConstructionSection,
   StrapiIntegrationsBannerSection,
@@ -65,11 +62,6 @@ function mapHero(
   };
 }
 
-function mapStepIcon(icon: StrapiApproachStep["icon"]): SectionIcon | null {
-  if (!icon) return null;
-  return { url: resolveMediaUrl(icon.url), alt: icon.alternativeText ?? "" };
-}
-
 function mapIntegrationsStrip(
   cms: StrapiIntegrationsBannerSection,
   order: number
@@ -109,7 +101,7 @@ function mapChallenges(cms: StrapiServiceDetailSection, order: number): Challeng
     challenges: cms.approachSteps.map((step, index) => ({
       order: index + 1,
       label: step.title,
-      icon: mapStepIcon(step.icon),
+      icon: mapSectionIcon(step.icon),
     })),
   };
 }
@@ -124,7 +116,7 @@ function mapSolutions(cms: StrapiServiceDetailSection, order: number): Solutions
       order: index + 1,
       title: step.title,
       description: step.subtitle ?? "",
-      icon: mapStepIcon(step.icon),
+      icon: mapSectionIcon(step.icon),
     })),
   };
 }

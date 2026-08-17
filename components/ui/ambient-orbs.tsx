@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
 
 // Site-wide decorative glow layer. Case-studies and Construction pages carry
 // their own accent-driven backgrounds and must not show this orb set (per
@@ -15,7 +16,8 @@ import { usePathname } from "next/navigation";
 // instead of the old orbs jumping to new values in place.
 export function AmbientOrbs() {
   const pathname = usePathname();
-  if (pathname?.startsWith("/case-studies") || pathname?.startsWith("/industries/construction")) return null;
+  if (pathname?.startsWith(ROUTES.caseStudies) || pathname?.startsWith(ROUTES.industriesConstruction))
+    return null;
 
   // The homepage renders its own reference-exact 4-orb, all-warm-toned variant
   // below instead of the default 3-orb set (which includes a blue orb the

@@ -1,6 +1,19 @@
 import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
 import type { StrapiMedia } from "../types/strapi-common";
 
+// Shared shape + mapper for any small CMS-hosted icon (SVG or otherwise) attached to a
+// repeatable item (approach steps, nav sections, etc.) — one place so every page maps
+// icons the same way instead of each re-writing the null-check + URL-resolve logic.
+export interface SectionIcon {
+  url: string;
+  alt: string;
+}
+
+export function mapSectionIcon(icon: StrapiMedia | null): SectionIcon | null {
+  if (!icon) return null;
+  return { url: resolveMediaUrl(icon.url), alt: icon.alternativeText ?? "" };
+}
+
 // Strapi shapes for the 3 "page-reusable-sections.*" components that are reused
 // verbatim across multiple pages (construction today; home/case-studies next) —
 // kept here once so every page's own cms/api/<page>.ts imports the same mapper
