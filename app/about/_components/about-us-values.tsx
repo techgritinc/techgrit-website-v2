@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ValuesSection } from "../_data/types";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
@@ -64,7 +65,11 @@ export function AboutUsValues({ section }: { section: ValuesSection }) {
                 </span>
                 <div>
                   <div className="flex items-center gap-[11px]">
-                    <ValueIcon order={value.order} />
+                    {value.icon ? (
+                      <Image src={value.icon.url} alt={value.icon.alt} width={19} height={19} aria-hidden="true" />
+                    ) : (
+                      <ValueIcon order={value.order} />
+                    )}
                     <h3 className="text-[19px] font-bold leading-normal tracking-[-0.01em] text-white">{value.title}</h3>
                   </div>
                   <p className="mt-[8px] text-[15px] leading-[1.6] text-white/58">

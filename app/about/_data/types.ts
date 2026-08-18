@@ -65,6 +65,7 @@ export interface CompanyValue {
   order: number;
   title: string;
   description: string;
+  icon?: { url: string; alt: string } | null; // CMS-sourced icon; static content has none — falls back to the hardcoded icon set in about-us-values.tsx
 }
 
 export interface ValuesSection {
@@ -124,6 +125,7 @@ export interface CultureGallerySection {
   eyebrow: string;
   title: string;
   subtitle: string;
+  images?: { id: string; src: string | null; alt: string }[]; // CMS-sourced photos; static content has none — falls back to the shared static set in LifeGallery.tsx
 }
 
 export interface FinalCtaSection {

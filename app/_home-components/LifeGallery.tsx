@@ -1,6 +1,7 @@
 import Button from "@/components/ui/Button";
 import MediaSlot from "@/components/ui/MediaSlot";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
+import { ROUTES } from "@/lib/routes";
 import { CULTURE_GALLERY_IMAGES } from "./home-data";
 
 export interface LifeGalleryImage {
@@ -14,15 +15,21 @@ interface LifeGalleryProps {
   id?: string;
   heading?: string;
   description?: string;
+  /** Defaults to the shared static eyebrow text (Home/Careers aren't CMS-driven yet); About passes the CMS's own badgeLabel. */
+  eyebrow?: string;
+  /** Defaults to the shared static photo set (Home/Careers aren't CMS-driven yet); About passes its own CMS-sourced photos. */
+  images?: LifeGalleryImage[];
   /** Home-only "Explore Careers" / "Meet the team" navigation row — Careers and About don't render it. */
   showActions?: boolean;
 }
 
-/** One shared "Life at TechGrit" section — identical grid and photo set on Home, Careers, and About. */
+/** One shared "Life at TechGrit" section — identical grid on Home, Careers, and About; the eyebrow/photos default to a static set but can be overridden by CMS-sourced data. */
 export default function LifeGallery({
   id,
   heading = "Life at TechGrit.",
   description = "The people and the culture behind the engineering.",
+  eyebrow = "Inside TechGrit",
+  images = CULTURE_GALLERY_IMAGES,
   showActions = false,
 }: LifeGalleryProps) {
   return (
@@ -30,7 +37,7 @@ export default function LifeGallery({
       <div className="mx-auto max-w-(--container-max) px-9 pt-[60px] pb-[80px] leading-normal" data-reveal>
         <div className="mx-auto mb-11 max-w-[680px] text-center">
           <SectionEyebrow showAccent={false} className="leading-normal !mb-[17px]">
-            Inside TechGrit
+            {eyebrow}
           </SectionEyebrow>
           <h2 className="font-display text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
             {heading}
@@ -39,7 +46,7 @@ export default function LifeGallery({
         </div>
 
         <div className="grid grid-cols-4 gap-4 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1" data-gallery>
-          {CULTURE_GALLERY_IMAGES.map((item) => (
+          {images.map((item) => (
             <figure
               key={item.id}
               className="relative m-0 aspect-[3/4] overflow-hidden rounded-xl border border-border-8 bg-glass-3  transition-transform duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:-translate-y-1"
@@ -54,7 +61,7 @@ export default function LifeGallery({
             <Button href="/careers" size="md" className="leading-normal text-[15.5px] px-[27px] py-[16px]">
               Explore Careers <span aria-hidden="true">&rarr;</span>
             </Button>
-            <Button href="/about" variant="ghost" size="md" className="leading-normal text-[16px] px-[27px] py-[15.5px]">
+            <Button href={ROUTES.about} variant="ghost" size="md" className="leading-normal text-[16px] px-[27px] py-[15.5px]">
               Meet the team{" "}
               <span aria-hidden="true" className="text-orange">
                 &rarr;

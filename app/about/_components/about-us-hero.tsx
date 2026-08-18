@@ -2,7 +2,9 @@ import type { HeroSection } from "../_data/types";
 import Button from "@/components/ui/Button";
 
 export function AboutUsHero({ section }: { section: HeroSection }) {
-  const [before, after] = section.title.split(section.titleHighlight);
+  const [before, after] = section.titleHighlight
+    ? section.title.split(section.titleHighlight)
+    : [section.title, ""];
 
   return (
     <section className="relative">
@@ -25,7 +27,7 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
           style={{ animationDelay: ".12s", lineHeight: 1.02, letterSpacing: "-0.04em", opacity: 0 }}
         >
           {before}
-          <span className="text-gradient">{section.titleHighlight}</span>
+          {section.titleHighlight ? <span className="text-gradient">{section.titleHighlight}</span> : null}
           {after}
         </h1>
         <p
@@ -48,14 +50,16 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
           >
             {section.primaryCtaLabel} <span aria-hidden="true" className="text-[17px]">&#8594;</span>
           </Button>
-          <Button
-            href={section.secondaryCtaLink}
-            variant="ghost"
-            size="hero"
-            className="!px-[26px] leading-[normal]"
-          >
-            {section.secondaryCtaLabel}
-          </Button>
+          {section.secondaryCtaLabel ? (
+            <Button
+              href={section.secondaryCtaLink}
+              variant="ghost"
+              size="hero"
+              className="!px-[26px] leading-[normal]"
+            >
+              {section.secondaryCtaLabel}
+            </Button>
+          ) : null}
         </div>
       </div>
     </section>
