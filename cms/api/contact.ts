@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchCms } from "./fetcher";
 import { resolveMediaUrl } from "../utils/media";
 import type {
@@ -146,7 +147,12 @@ function mapContactSections(rawSections: StrapiContactSection[]): ContactPageSec
 // Called from the Contact page's Server Component. Returns null only when the CMS itself
 // is unreachable — the page then renders a 404 (see page.tsx), matching the construction
 // page's own no-static-fallback pattern.
-export async function getContactPageContent(): Promise<ContactPageContent | null> {
+//
+// Wrapped in React's cache() because generateMetadata() and the page component each call
+// this independently — without memoization, one page request fires two identical CMS
+// requests. cache() scopes the memoized result to a single request's render pass (not
+// shared across requests), so only the first call actually hits the network.
+export const getContactPageContent = cache(async (): Promise<ContactPageContent | null> => {
   const data = await fetchCms<StrapiContactPage>(CONTACT_ENDPOINT);
   if (!data) return null;
 
@@ -157,4 +163,4 @@ export async function getContactPageContent(): Promise<ContactPageContent | null
     },
     sections: mapContactSections(data.sections),
   };
-}
+});
