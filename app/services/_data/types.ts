@@ -37,7 +37,7 @@ export interface CapabilityItem {
 }
 
 export type SupportingItemList =
-  | { kind: "orderedApproach"; items: ApproachStep[] }
+  | { kind: "orderedApproach"; label: string; items: ApproachStep[] }
   | { kind: "capabilityGrid"; items: CapabilityItem[] };
 
 export interface ServiceAccordionItem {
