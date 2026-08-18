@@ -58,7 +58,7 @@ export default function LifeGallery({
 
         {showActions && (
           <div className="mt-11 flex flex-wrap items-center justify-center gap-4">
-            <Button href="/careers" size="md" className="leading-normal text-[15.5px] px-[27px] py-[16px]">
+            <Button href={ROUTES.careers} size="md" className="leading-normal text-[15.5px] px-[27px] py-[16px]">
               Explore Careers <span aria-hidden="true">&rarr;</span>
             </Button>
             <Button href={ROUTES.about} variant="ghost" size="md" className="leading-normal text-[16px] px-[27px] py-[15.5px]">
