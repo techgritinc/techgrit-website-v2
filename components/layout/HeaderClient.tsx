@@ -45,6 +45,9 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
   };
 
   const scheduleDropdownClose = (label: string) => {
+    if (closeDropdownTimeoutRef.current) {
+      clearTimeout(closeDropdownTimeoutRef.current);
+    }
     closeDropdownTimeoutRef.current = setTimeout(() => {
       setOpenDropdown((current) => (current === label ? null : current));
     }, 150);
@@ -130,10 +133,20 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                   aria-expanded={isOpen}
                   onClick={(e) => {
                     // Mouse click navigates to the group's own page (FR-019a), matching the
-                    // reference's real <a href>. Touch (no hover preview) and keyboard (Enter)
-                    // open the panel first instead, per FR-019/FR-014.
+                    // reference's real <a href>. Touch (no hover preview) opens the panel
+                    // first instead, per FR-019.
                     const pointerType = (e.nativeEvent as PointerEvent).pointerType;
-                    if (pointerType !== "mouse") {
+                    if (pointerType === "touch") {
+                      e.preventDefault();
+                      setOpenDropdown((current) => (current === group.label ? null : group.label));
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    // Keyboard users have no hover preview either — Enter/Space opens the
+                    // panel first instead of navigating immediately, per FR-014. Handled
+                    // explicitly rather than inferred from pointerType, which isn't a
+                    // reliable signal for keyboard activation.
+                    if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
                       setOpenDropdown((current) => (current === group.label ? null : group.label));
                     }
