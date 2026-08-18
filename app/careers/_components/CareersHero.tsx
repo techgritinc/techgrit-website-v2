@@ -1,12 +1,11 @@
 import Button from "@/components/ui/Button";
 import MediaSlot from "@/components/ui/MediaSlot";
-import type { CareersHeroContent, CollageImage } from "../_data/careers-data";
+import type { CareersHeroContent, CollageImage } from "@/cms/types/careers-types";
 
 const COLLAGE_SPAN_CLASSES: Record<CollageImage["span"], string> = {
   tall: "row-span-2",
   default: "",
   wide: "col-span-2",
-  wide3: "col-span-2",
 };
 
 export function CareersHero({ content }: { content: CareersHeroContent }) {

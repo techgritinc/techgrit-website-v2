@@ -1,4 +1,4 @@
-import type { WhoYouAreSection } from "../_data/types";
+import type { WhoYouAreSection } from "@/cms/types/about-types";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 

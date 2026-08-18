@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import Button from "@/components/ui/Button";
 import { GlassCard, GlassCardDescription, GlassCardIcon, GlassCardTitle } from "@/components/ui/GlassCard";
+import { ROUTES } from "@/lib/routes";
 import { INDUSTRY_CARDS, type IndustryCard } from "./home-data";
 
 const HOVER_GLOW: Record<IndustryCard["id"], string> = {
@@ -23,7 +24,7 @@ export default function IndustriesSection() {
               across key industries.
             </p>
           </div>
-          <Button href="/construction" variant="ghost" className="py-4! leading-[normal] text-[16px]">
+          <Button href={ROUTES.industriesConstruction} variant="ghost" className="py-4! leading-[normal] text-[16px]">
             Explore Industry Solutions <span aria-hidden="true" className="text-orange text-[16px]">&rarr;</span>
           </Button>
         </div>

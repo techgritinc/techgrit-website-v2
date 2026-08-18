@@ -11,6 +11,7 @@ import {
   PromptToProductionIcon,
   SelfHealingIcon,
 } from "@/components/ui/icons";
+import { ROUTES } from "@/lib/routes";
 
 export type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
@@ -239,7 +240,7 @@ export const INDUSTRY_CARDS: IndustryCard[] = [
     title: "Construction",
     description:
       "Develop smart construction management platforms that optimize planning, project tracking, and operational efficiency.",
-    href: "/construction",
+    href: ROUTES.industriesConstruction,
   },
 ];
 
