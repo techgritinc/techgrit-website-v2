@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchCms } from "./fetcher";
 import { mapCtaBanner, mapHeroFields, mapSectionIcon, mapStatistics } from "../shared/reusable-sections";
 import type {
@@ -231,7 +232,12 @@ function mapAboutSections(rawSections: StrapiAboutSection[]): AboutPageSectionEn
 
 // Called from the About page's Server Component. Returns null only when the CMS itself is
 // unreachable — the page then renders a 404, matching Contact/Construction's pattern.
-export async function getAboutPageContent(): Promise<AboutPageContent | null> {
+//
+// Wrapped in React's cache() because generateMetadata() and the page component each call
+// this independently — without memoization, one page request fires two identical CMS
+// requests. cache() scopes the memoized result to a single request's render pass (not
+// shared across requests), so only the first call actually hits the network.
+export const getAboutPageContent = cache(async (): Promise<AboutPageContent | null> => {
   const data = await fetchCms<StrapiAboutPage>(ABOUT_ENDPOINT);
   if (!data) return null;
 
@@ -239,4 +245,4 @@ export async function getAboutPageContent(): Promise<AboutPageContent | null> {
     seo: { metaTitle: data.seo?.metaTitle ?? "", metaDescription: data.seo?.metaDescription ?? "" },
     sections: mapAboutSections(data.sections),
   };
-}
+});
