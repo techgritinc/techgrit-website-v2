@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ShowcaseSection } from "../_data/types";
+import type { ShowcaseSection } from "@/cms/types/about-types";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 export function AboutUsShowcase({ section }: { section: ShowcaseSection }) {

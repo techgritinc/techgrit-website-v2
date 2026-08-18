@@ -1,4 +1,4 @@
-import type { ProcessSection } from "../_data/types";
+import type { ProcessSection } from "@/cms/types/about-types";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
