@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchCms } from "./fetcher";
 import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
 import { mapCtaBanner, mapSectionIcon, mapStatistics } from "../shared/reusable-sections";
@@ -174,7 +175,12 @@ function findSection<T extends { __component: string }>(
 // Returns the full Careers page content in one shot — every section is CMS-driven, no
 // static fallback. Returns null when the CMS is unreachable or any required section is
 // missing, so the caller 404s rather than render a page with holes in it.
-export async function getCareersPageContent(): Promise<CareersPageContent | null> {
+//
+// Wrapped in React's cache() because generateMetadata() and the page component each call
+// this independently — without memoization, one page request fires two identical CMS
+// requests. cache() scopes the memoized result to a single request's render pass (not
+// shared across requests), so only the first call actually hits the network.
+export const getCareersPageContent = cache(async (): Promise<CareersPageContent | null> => {
   const data = await fetchCms<StrapiCareersPage>(CAREERS_ENDPOINT);
   if (!data) return null;
 
@@ -206,4 +212,4 @@ export async function getCareersPageContent(): Promise<CareersPageContent | null
     cta: mapCareersCta(ctaBanner),
     applicationForm: mapApplicationForm(applicationForm),
   };
-}
+});
