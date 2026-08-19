@@ -1,5 +1,5 @@
-import { fetchCms } from "./fetcher";
-import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
+import { fetchCms } from "../fetcher";
+import { pickMediaAsset, resolveMediaUrl } from "../../utils/media";
 import type {
   CtaBannerContent,
   HeroCollageTile,
@@ -20,7 +20,7 @@ import type {
   StrapiWebinarPageSection,
   StrapiWebinarRecordingSection,
   StrapiWebinarSignupSection,
-} from "../types/webinar-types";
+} from "../../types/webinar-types";
 
 const WEBINAR_ENDPOINT = "/api/pages/by-slug/webinar";
 

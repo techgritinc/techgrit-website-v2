@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getWebinarData } from "@/cms/api/webinar";
+import { getWebinarData } from "@/cms/api/insights/webinar";
 import { AnnouncementStrip } from "./_components/announcement-strip";
 import { HeroSection } from "./_components/hero-section";
 import { SessionsSection } from "./_components/sessions-section";
