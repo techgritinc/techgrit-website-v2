@@ -1,23 +1,24 @@
 import Image from "next/image";
+import Link from "next/link";
 import { GlassCard, GlassCardDescription, GlassCardTitle } from "@/components/ui/GlassCard";
 import Badge from "@/components/ui/Badge";
 import { accentHex, hexA } from "../_lib/accent";
 import type { BlogPost } from "../_data/types";
 
-export function BlogPostGrid({ posts, onReset }: { posts: BlogPost[]; onReset: () => void }) {
+export function BlogPostGrid({ posts }: { posts: BlogPost[] }) {
   return (
     <section>
       <div className="mx-auto max-w-(--container-max) px-9 pt-tg-11 pb-tg-21">
         {posts.length === 0 ? (
           <div className="mt-14 flex flex-col items-center gap-3 text-center">
             <p className="text-[15.5px] text-muted">No posts match this topic yet — check back soon.</p>
-            <button
-              type="button"
-              onClick={onReset}
+            <Link
+              href="/blog"
+              scroll={false}
               className="inline-flex items-center border-b border-border-orange-medium pb-[3px] text-14-5 font-semibold text-muted leading-[normal] transition-colors duration-200 hover:text-primary"
             >
               Reset filter
-            </button>
+            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-6 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
