@@ -22,7 +22,7 @@ export function mapSectionIcon(icon: StrapiMedia | null): SectionIcon | null {
 export type StrapiHeroSection = {
   __component: "page-reusable-sections.hero";
   title: string;
-  subtitle: string;
+  subtitle: string | null;
   primaryBtnLabel: string;
   primaryBtnLink: string;
   secondaryBtnLabel: string | null;
@@ -34,7 +34,7 @@ export type StrapiHeroSection = {
 
 export type StrapiStatItem = {
   title: string;
-  subtitle: string;
+  subtitle: string | null;
 };
 
 export type StrapiStatisticsSection = {
@@ -45,12 +45,13 @@ export type StrapiStatisticsSection = {
 export type StrapiCtaBannerSection = {
   __component: "page-reusable-sections.cta-banner";
   title: string;
-  subtitle: string;
-  badgeLabel: string;
+  subtitle: string | null;
+  badgeLabel: string | null;
+  highlightTitle: string | null;
   primaryCtaLabel: string;
   primaryCtaLink: string;
-  secondaryCtaLabel: string;
-  secondaryCtaLink: string;
+  secondaryCtaLabel: string | null;
+  secondaryCtaLink: string | null;
 };
 
 export type HeroFields = {
@@ -76,7 +77,7 @@ export function mapHeroFields(cms: StrapiHeroSection): HeroFields {
     titleHighlight: cms.highlightTitle && cms.title.includes(cms.highlightTitle)
       ? cms.highlightTitle
       : null,
-    subtitle: cms.subtitle,
+    subtitle: cms.subtitle ?? "",
     primaryCtaLabel: cms.primaryBtnLabel,
     primaryCtaLink: cms.primaryBtnLink,
     secondaryCtaLabel: cms.secondaryBtnLabel ?? "",
@@ -97,13 +98,14 @@ export function mapStatistics(cms: StrapiStatisticsSection): { order: number; va
   return cms.statistics.map((stat, index) => ({
     order: index + 1,
     value: stat.title,
-    label: stat.subtitle,
+    label: stat.subtitle ?? "",
   }));
 }
 
 export type CtaBannerFields = {
   eyebrow: string;
   title: string;
+  titleHighlight: string | null; // exact substring of `title` to render in the gradient accent; null = no highlight
   description: string;
   primaryCtaLabel: string;
   primaryCtaLink: string;
@@ -113,12 +115,86 @@ export type CtaBannerFields = {
 
 export function mapCtaBanner(cms: StrapiCtaBannerSection): CtaBannerFields {
   return {
-    eyebrow: cms.badgeLabel,
+    eyebrow: cms.badgeLabel ?? "",
     title: cms.title,
-    description: cms.subtitle,
+    titleHighlight:
+      cms.highlightTitle && cms.title.includes(cms.highlightTitle) ? cms.highlightTitle : null,
+    description: cms.subtitle ?? "",
     primaryCtaLabel: cms.primaryCtaLabel,
     primaryCtaLink: cms.primaryCtaLink,
-    secondaryCtaLabel: cms.secondaryCtaLabel,
-    secondaryCtaLink: cms.secondaryCtaLink,
+    secondaryCtaLabel: cms.secondaryCtaLabel ?? "",
+    secondaryCtaLink: cms.secondaryCtaLink ?? "",
+  };
+}
+
+// Case-study "card" shape — reused verbatim by both the Case Studies list page
+// (insights-case-studies.case-study-cards) and the Case Study detail page's
+// "More case studies" section (case-study-detailed-view.more-case-studys). Kept here
+// once, same reasoning as hero/stats/cta-banner above.
+
+export type StrapiCaseStudyCategory = {
+  id: number;
+  name: string;
+  slug: string;
+};
+
+export type StrapiCaseStudyItem = {
+  id: number;
+  title: string;
+  subtitle: string | null;
+  featuredValue: string;
+  featuredLabel: string;
+  ctaLabel: string | null;
+  ctaLink: string;
+  isFeatured: boolean;
+  case_study_category: StrapiCaseStudyCategory | null;
+  image: StrapiMedia[];
+};
+
+export interface CaseStudyCardImage {
+  url: string;
+  alt: string;
+}
+
+export interface CaseStudyCard {
+  order: number;
+  title: string;
+  subtitle: string;
+  featuredValue: string;
+  featuredLabel: string;
+  ctaLabel: string;
+  ctaLink: string;
+  isFeatured: boolean;
+  categoryName: string;
+  categorySlug: string;
+  image: CaseStudyCardImage | null;
+}
+
+// The CMS's own ctaLink is a bare `/<slug>/` (or a `/case-studies` placeholder for cards
+// with no detail page yet) — neither matches this app's actual `/case-studies/<slug>/`
+// detail route, so every card link is rebuilt from the slug instead of used verbatim.
+export function resolveCaseStudyHref(ctaLink: string): string {
+  const slug = ctaLink.replace(/\/+$/, "").split("/").filter(Boolean).pop();
+  if (!slug || slug === "case-studies") return "/case-studies/";
+  return `/case-studies/${slug}/`;
+}
+
+export function mapCaseStudyCard(item: StrapiCaseStudyItem, index: number): CaseStudyCard {
+  const asset = item.image[0] ? pickMediaAsset(item.image[0], ["small", "medium"]) : null;
+  return {
+    order: index + 1,
+    title: item.title,
+    subtitle: item.subtitle ?? "",
+    featuredValue: item.featuredValue,
+    featuredLabel: item.featuredLabel,
+    ctaLabel: item.ctaLabel ?? "View Case Study",
+    ctaLink: resolveCaseStudyHref(item.ctaLink),
+    isFeatured: item.isFeatured,
+    categoryName: item.case_study_category?.name ?? "",
+    categorySlug: item.case_study_category?.slug ?? "",
+    image:
+      asset && item.image[0]
+        ? { url: resolveMediaUrl(asset.url), alt: item.image[0].alternativeText ?? "" }
+        : null,
   };
 }

@@ -74,7 +74,7 @@ function mapCareersHero(cms: StrapiHeroSection): CareersHeroContent {
     heading: cms.title,
     headingHighlight:
       cms.highlightTitle && cms.title.includes(cms.highlightTitle) ? cms.highlightTitle : "",
-    lead: cms.subtitle,
+    lead: cms.subtitle ?? "",
     // primaryBtnLink/secondaryBtnLink are currently null in the CMS — flagged to the CMS
     // team; these in-page anchors are the only destinations either CTA has ever had.
     primaryCta: { label: cms.primaryBtnLabel, href: cms.primaryBtnLink ?? "#roles" },

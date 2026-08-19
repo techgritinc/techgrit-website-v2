@@ -3,9 +3,10 @@
 import { usePathname } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
 
-// Site-wide decorative glow layer. Case-studies and Construction pages carry
-// their own accent-driven backgrounds and must not show this orb set (per
-// their own reference files — Construction's second orb is amber, not blue).
+// Site-wide decorative glow layer. Construction carries its own accent-driven background
+// and must not show this orb set (per its own reference file — its second orb is amber,
+// not blue). The Case Studies *list* page (exact "/case-studies/") and *detail* route
+// ("/case-studies/<slug>/") each own their own dedicated set below.
 // Each returned variant carries an explicit `key` distinct from every other variant's key: without it,
 // a client-side route change between two pages with different orb sets (e.g. Home's 3 orbs -> Services'
 // 4 orbs) updates the existing <span> elements in place (same position in the tree, same element type)
@@ -16,8 +17,27 @@ import { ROUTES } from "@/lib/routes";
 // instead of the old orbs jumping to new values in place.
 export function AmbientOrbs() {
   const pathname = usePathname();
-  if (pathname?.startsWith(ROUTES.caseStudies) || pathname?.startsWith(ROUTES.industriesConstruction))
-    return null;
+  if (pathname?.startsWith(ROUTES.industriesConstruction)) return null;
+
+  if (pathname === "/case-studies/") {
+    return (
+      <div key="case-studies" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
+        <span className="absolute top-[-160px] right-[-120px] w-[560px] h-[560px] rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]" />
+        <span className="absolute top-[1100px] left-[-180px] w-[520px] h-[520px] rounded-full bg-overlay-orange-10 blur-[130px] animate-[tgorb_20s_ease-in-out_infinite_reverse]" />
+        <span className="absolute bottom-[-160px] left-[40%] w-[600px] h-[600px] rounded-full bg-overlay-teal-08 blur-[140px] animate-[tgorb_22s_ease-in-out_infinite]" />
+      </div>
+    );
+  }
+
+  // detail page's own 2-orb set (distinct from the list page's 3-orb set above).
+  if (pathname?.startsWith(ROUTES.caseStudies)) {
+    return (
+      <div key="case-study-detail" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
+        <span className="absolute top-[-160px] right-[-120px] w-[560px] h-[560px] rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]" />
+        <span className="absolute top-[35%] left-[-220px] w-[560px] h-[560px] rounded-full bg-overlay-amber-light-10 blur-[140px] animate-[tgorb_20s_ease-in-out_infinite_reverse]" />
+      </div>
+    );
+  }
 
   // The homepage renders its own reference-exact 4-orb, all-warm-toned variant
   // below instead of the default 3-orb set (which includes a blue orb the

@@ -1,4 +1,17 @@
-export function CaseStudiesHero() {
+export function CaseStudiesHero({
+  eyebrow,
+  title,
+  titleHighlight,
+  subtitle,
+}: {
+  eyebrow: string;
+  title: string;
+  titleHighlight: string | null;
+  subtitle: string;
+}) {
+  
+  const [before, after] = titleHighlight ? title.split(titleHighlight) : [title, ""];
+
   return (
     <section>
       <div className="mx-auto text-center max-w-[900px] pt-[84px] px-[var(--space-15)] pb-[30px]">
@@ -9,7 +22,7 @@ export function CaseStudiesHero() {
         >
           <span className="w-[var(--space-2)] h-[var(--space-2)] rounded-full bg-blue-light shadow-glow-blue-sm" />
           <span className="text-2xs font-bold tracking-wider text-strong uppercase">
-            Case Studies
+            {eyebrow}
           </span>
         </div>
         <h1
@@ -17,18 +30,20 @@ export function CaseStudiesHero() {
           className="text-[clamp(40px,5.4vw,58px)] leading-[1.04] tracking-[-0.035em]"
           style={{ animationDelay: ".12s" }}
         >
-          Our case study{" "}
-          <span className="bg-[linear-gradient(120deg,var(--color-blue-light),var(--color-blue))] bg-clip-text text-transparent">
-            portfolio.
-          </span>
+          {before}
+          {titleHighlight ? (
+            <span className="bg-[linear-gradient(120deg,var(--color-blue-light),var(--color-blue))] bg-clip-text text-transparent">
+              {titleHighlight}
+            </span>
+          ) : null}
+          {after}
         </h1>
         <p
           data-rise
           className="mx-auto mt-[22px] max-w-[640px] text-[18px] leading-[29.7px] text-secondary"
           style={{ animationDelay: ".2s" }}
         >
-          Explore our diverse collection of case studies, highlighting innovative solutions across industries. 
-          See how we&apos;ve tackled complex challenges and delivered measurable results for our clients.
+          {subtitle}
         </p>
       </div>
     </section>
