@@ -1,4 +1,5 @@
 import { fetchCms } from "./fetcher";
+import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
 import type {
   BlogAccentToken,
   BlogHeroContent,
@@ -8,6 +9,7 @@ import type {
   NewsletterPanelContent,
   PageSeo,
   PostAuthor,
+  PostImage,
 } from "@/app/blog/_data/types";
 import type {
   StrapiBlogAuthor,
@@ -17,6 +19,7 @@ import type {
   StrapiBlogPageSection,
   StrapiBlogPost,
   StrapiBlogSection,
+  StrapiMedia,
   StrapiTabFiltersSection,
 } from "../types/blog-types";
 
@@ -53,6 +56,7 @@ const DEFAULT_FEATURED_POST: FeaturedPost = {
   readTime: "9 min read",
   ctaLabel: "Read article",
   href: "#",
+  image: null,
 };
 
 const DEFAULT_TOPICS: string[] = ["All", "Engineering", "Modernization", "Product", "Methodology", "Industry", "Design"];
@@ -69,6 +73,7 @@ const DEFAULT_POSTS: BlogPost[] = [
     publishDate: "Oct 2",
     readTime: "7 min read",
     href: "#",
+    image: null,
   },
   {
     slug: "inside-orbitai-orchestrating-specialized-agents",
@@ -81,6 +86,7 @@ const DEFAULT_POSTS: BlogPost[] = [
     publishDate: "Sep 24",
     readTime: "8 min read",
     href: "#",
+    image: null,
   },
   {
     slug: "six-weeks-to-production-sprint-to-scale-playbook",
@@ -93,6 +99,7 @@ const DEFAULT_POSTS: BlogPost[] = [
     publishDate: "Sep 15",
     readTime: "6 min read",
     href: "#",
+    image: null,
   },
   {
     slug: "human-in-the-loop-governing-ai-generated-code",
@@ -105,6 +112,7 @@ const DEFAULT_POSTS: BlogPost[] = [
     publishDate: "Sep 6",
     readTime: "9 min read",
     href: "#",
+    image: null,
   },
   {
     slug: "fintech-compliance-ai-first-build-pipeline",
@@ -117,6 +125,7 @@ const DEFAULT_POSTS: BlogPost[] = [
     publishDate: "Aug 28",
     readTime: "7 min read",
     href: "#",
+    image: null,
   },
   {
     slug: "design-thinking-meets-agentic-delivery",
@@ -129,6 +138,7 @@ const DEFAULT_POSTS: BlogPost[] = [
     publishDate: "Aug 19",
     readTime: "5 min read",
     href: "#",
+    image: null,
   },
   {
     slug: "testing-strategies-agent-generated-codebases",
@@ -141,6 +151,7 @@ const DEFAULT_POSTS: BlogPost[] = [
     publishDate: "Aug 11",
     readTime: "8 min read",
     href: "#",
+    image: null,
   },
   {
     slug: "strangler-fig-pattern-revisited-ai-era",
@@ -153,6 +164,7 @@ const DEFAULT_POSTS: BlogPost[] = [
     publishDate: "Aug 3",
     readTime: "6 min read",
     href: "#",
+    image: null,
   },
   {
     slug: "shipping-trust-measuring-quality-beyond-coverage",
@@ -165,6 +177,7 @@ const DEFAULT_POSTS: BlogPost[] = [
     publishDate: "Jul 25",
     readTime: "7 min read",
     href: "#",
+    image: null,
   },
 ];
 
@@ -234,6 +247,22 @@ function toAuthor(author: StrapiBlogAuthor | null): PostAuthor {
   return { name, role: author?.designation ?? "", initials: initialsFromName(name) };
 }
 
+// Mirrors the Services precedent (`cms/api/services.ts`'s `toImage`) — pick the
+// smallest Strapi-generated format that's still adequate for where the image
+// renders, falling back to null so components keep their existing placeholder
+// treatment when a post has no image asset.
+function toImage(assets: StrapiMedia[], preferred: (keyof NonNullable<StrapiMedia["formats"]>)[]): PostImage | null {
+  const first = assets[0];
+  if (!first) return null;
+  const asset = pickMediaAsset(first, preferred);
+  return {
+    url: resolveMediaUrl(asset.url),
+    alternativeText: first.alternativeText ?? "",
+    width: asset.width,
+    height: asset.height,
+  };
+}
+
 function toHero(section: StrapiBlogHeroSection | undefined): BlogHeroContent {
   if (!section) return DEFAULT_HERO;
   return {
@@ -255,6 +284,7 @@ function toFeaturedPost(post: StrapiBlogPost | undefined): FeaturedPost {
     readTime,
     ctaLabel: post.ctaLabel,
     href: post.ctaLink,
+    image: toImage(post.assets, ["medium", "small"]),
   };
 }
 
@@ -273,6 +303,7 @@ function toGridPosts(section: StrapiBlogSection | undefined): BlogPost[] {
       publishDate: formatPublishDate(post.publishDatetime),
       readTime,
       href: post.ctaLink,
+      image: toImage(post.assets, ["small", "medium", "thumbnail"]),
     };
   });
 }

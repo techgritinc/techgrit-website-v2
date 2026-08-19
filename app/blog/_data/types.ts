@@ -13,6 +13,13 @@ export interface PostAuthor {
   initials: string;
 }
 
+export interface PostImage {
+  url: string;
+  alternativeText: string;
+  width: number;
+  height: number;
+}
+
 export interface BlogHeroContent {
   eyebrow: string;
   heading: string;
@@ -28,6 +35,7 @@ export interface FeaturedPost {
   readTime: string;
   ctaLabel: string;
   href: string;
+  image: PostImage | null;
 }
 
 export interface BlogPost {
@@ -40,6 +48,7 @@ export interface BlogPost {
   publishDate: string;
   readTime: string;
   href: string;
+  image: PostImage | null;
 }
 
 export interface NewsletterPanelContent {

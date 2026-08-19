@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { GlassCard, GlassCardDescription, GlassCardTitle } from "@/components/ui/GlassCard";
 import Badge from "@/components/ui/Badge";
 import { accentHex, hexA } from "../_lib/accent";
@@ -31,17 +32,35 @@ export function BlogPostGrid({ posts, onReset }: { posts: BlogPost[]; onReset: (
                   >
                     <div
                       className="relative flex h-[140px] shrink-0 items-end overflow-hidden border-b border-border-8 p-4"
-                      style={{ background: `linear-gradient(150deg, ${hexA(hex, 0.22)}, ${hexA(hex, 0.05)})` }}
+                      style={!post.image ? { background: `linear-gradient(150deg, ${hexA(hex, 0.22)}, ${hexA(hex, 0.05)})` } : undefined}
                     >
+                      {post.image && (
+                        <>
+                          <Image
+                            src={post.image.url}
+                            alt={post.image.alternativeText}
+                            fill
+                            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                            className="object-cover"
+                          />
+                          <div
+                            aria-hidden="true"
+                            className="absolute inset-0"
+                            style={{ background: `linear-gradient(150deg, ${hexA(hex, 0.35)}, rgba(0, 0, 0, 0.35))` }}
+                          />
+                        </>
+                      )}
                       <div
                         aria-hidden="true"
                         className="absolute -top-10 -right-[30px] size-tg-180 rounded-full blur-glow"
                         style={{ background: hexA(hex, 0.24) }}
                       />
-                      <div
-                        aria-hidden="true"
-                        className="absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1.4px)] [background-size:18px_18px]"
-                      />
+                      {!post.image && (
+                        <div
+                          aria-hidden="true"
+                          className="absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1.4px)] [background-size:18px_18px]"
+                        />
+                      )}
                       <Badge
                         tone="accent"
                         className="relative !gap-[7px] !px-[12px] !py-[6px] !text-[11px] !font-bold !tracking-[0.1em] leading-[normal]"

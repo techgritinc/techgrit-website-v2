@@ -1,3 +1,22 @@
+export type StrapiImageFormat = {
+  url: string;
+  width: number;
+  height: number;
+};
+
+export type StrapiMedia = {
+  url: string;
+  alternativeText: string | null;
+  width: number;
+  height: number;
+  formats: {
+    thumbnail?: StrapiImageFormat;
+    small?: StrapiImageFormat;
+    medium?: StrapiImageFormat;
+    large?: StrapiImageFormat;
+  } | null;
+};
+
 export type StrapiBlogHeroSection = {
   title: string;
   subtitle: string;
@@ -26,6 +45,7 @@ export type StrapiBlogPost = {
   ctaLabel: string;
   ctaLink: string;
   isFeatured: boolean;
+  assets: StrapiMedia[];
   blog_category: StrapiBlogCategory | null;
   author: StrapiBlogAuthor | null;
 };
