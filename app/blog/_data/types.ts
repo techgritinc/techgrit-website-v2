@@ -66,11 +66,16 @@ export interface PageSeo {
   metaDescription: string;
 }
 
+export interface Topic {
+  label: string;
+  value: string; // matches the CMS category slug, used to build the `?category=` filter link
+}
+
 export interface BlogPageContent {
   seo: PageSeo;
   hero: BlogHeroContent;
   featuredPost: FeaturedPost;
-  topics: string[];
+  topics: Topic[];
   posts: BlogPost[];
   newsletter: NewsletterPanelContent;
 }

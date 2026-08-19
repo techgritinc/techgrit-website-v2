@@ -1,5 +1,5 @@
-import { fetchCms } from "./fetcher";
-import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
+import { fetchCms } from "../fetcher";
+import { pickMediaAsset, resolveMediaUrl } from "../../utils/media";
 import type {
   BlogAccentToken,
   BlogHeroContent,
@@ -10,6 +10,7 @@ import type {
   PageSeo,
   PostAuthor,
   PostImage,
+  Topic,
 } from "@/app/blog/_data/types";
 import type {
   StrapiBlogAuthor,
@@ -21,7 +22,7 @@ import type {
   StrapiBlogSection,
   StrapiMedia,
   StrapiTabFiltersSection,
-} from "../types/blog-types";
+} from "../../types/blog-types";
 
 const BLOG_ENDPOINT = "/api/pages/by-slug/blog";
 
@@ -59,7 +60,15 @@ const DEFAULT_FEATURED_POST: FeaturedPost = {
   image: null,
 };
 
-const DEFAULT_TOPICS: string[] = ["All", "Engineering", "Modernization", "Product", "Methodology", "Industry", "Design"];
+const DEFAULT_TOPICS: Topic[] = [
+  { label: "All", value: "all" },
+  { label: "Engineering", value: "engineering" },
+  { label: "Modernization", value: "modernization" },
+  { label: "Product", value: "product" },
+  { label: "Methodology", value: "methodology" },
+  { label: "Industry", value: "industry" },
+  { label: "Design", value: "design" },
+];
 
 const DEFAULT_POSTS: BlogPost[] = [
   {
@@ -308,9 +317,9 @@ function toGridPosts(section: StrapiBlogSection | undefined): BlogPost[] {
   });
 }
 
-function toTopics(section: StrapiTabFiltersSection | undefined): string[] {
+function toTopics(section: StrapiTabFiltersSection | undefined): Topic[] {
   if (!section) return DEFAULT_TOPICS;
-  return section.TabItems.map((item) => item.label);
+  return section.TabItems.map((item) => ({ label: item.label, value: item.value }));
 }
 
 // `errorText`/`successText` are pure client-side validation copy with no CMS
@@ -333,8 +342,14 @@ function toNewsletter(section: StrapiBlogNewsletterSection | undefined): Newslet
 // with no rebuild. Each section degrades independently to its own default when
 // absent from the dynamic zone; the whole page degrades to DEFAULT_BLOG_DATA only
 // if the CMS is entirely unreachable.
-export async function getBlogData(): Promise<BlogPageContent> {
-  const data = await fetchCms<StrapiBlogPage>(BLOG_ENDPOINT);
+//
+// `category` is the CMS category slug (a Topic's `value`, e.g. "engineering") and is
+// forwarded straight to the API's own `?category=` filter — the CMS returns the grid's
+// `blogs[]` already filtered, while `hero`/`tab-filters`/`newsletter` come back
+// untouched, so no client-side filtering of the post list is needed or done here.
+export async function getBlogData(category?: string): Promise<BlogPageContent> {
+  const endpoint = category && category !== "all" ? `${BLOG_ENDPOINT}?category=${encodeURIComponent(category)}` : BLOG_ENDPOINT;
+  const data = await fetchCms<StrapiBlogPage>(endpoint);
   if (!data) return DEFAULT_BLOG_DATA;
 
   const sections = data.sections ?? [];
@@ -354,3 +369,4 @@ export async function getBlogData(): Promise<BlogPageContent> {
     newsletter: toNewsletter(newsletterSection),
   };
 }
+
