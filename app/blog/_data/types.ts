@@ -46,12 +46,19 @@ export interface NewsletterPanelContent {
   heading: string;
   copy: string;
   ctaLabel: string;
+  placeholder: string;
   helperText: string;
   errorText: string;
   successText: string;
 }
 
+export interface PageSeo {
+  metaTitle: string;
+  metaDescription: string;
+}
+
 export interface BlogPageContent {
+  seo: PageSeo;
   hero: BlogHeroContent;
   featuredPost: FeaturedPost;
   topics: string[];
