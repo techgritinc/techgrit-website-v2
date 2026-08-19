@@ -4,6 +4,8 @@ import Button from "@/components/ui/Button";
 import type { UpcomingSession } from "../_data/types";
 
 export function AnnouncementStrip({ session }: { session: UpcomingSession }) {
+  // Register Now always scrolls to this page's own Subscribe section — the CMS's
+  // ctaLink can't be relied on to point at an in-page anchor, so it's ignored here.
   function handleRegisterClick() {
     document.getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" });
   }
@@ -17,7 +19,7 @@ export function AnnouncementStrip({ session }: { session: UpcomingSession }) {
             {session.statusLabel}
           </span>
           <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-[14.5px] font-semibold text-strong max-tg-sm:whitespace-normal leading-[normal]">
-            {session.title} &middot; {session.date}, {session.time} {session.timezone}
+            {session.title} &middot; {session.when}
           </span>
           <Button
             size="sm"

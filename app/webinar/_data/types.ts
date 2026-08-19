@@ -24,11 +24,9 @@ export interface WebinarHeroContent {
 export interface UpcomingSession {
   statusLabel: string;
   title: string;
-  description: string;
-  date: string;
-  time: string;
-  timezone: string;
+  when: string;
   ctaLabel: string;
+  ctaLink: string;
 }
 
 export type ReleasedSessionAccent = "orange" | "blue" | "teal";
@@ -40,6 +38,7 @@ export interface ReleasedSession {
   title: string;
   description: string;
   ctaLabel: string;
+  ctaLink: string;
   accent: ReleasedSessionAccent;
   cardSize: ReleasedSessionCardSize;
 }
@@ -47,15 +46,32 @@ export interface ReleasedSession {
 export interface SubscribePanelContent {
   heading: string;
   copy: string;
+  namePlaceholder: string;
   formPlaceholder: string;
   ctaLabel: string;
   successText: string;
 }
 
+export interface CtaBannerContent {
+  badgeLabel: string | null;
+  heading: string;
+  headingHighlight: string | null;
+  subtitle: string;
+  ctaLabel: string;
+  ctaHref: string;
+}
+
+export interface PageSeo {
+  metaTitle: string;
+  metaDescription: string;
+}
+
 export interface WebinarPageContent {
+  seo: PageSeo;
   hero: WebinarHeroContent;
   sessionsHeading: string;
   upcomingSession: UpcomingSession;
   releasedSessions: ReleasedSession[];
   subscribePanel: SubscribePanelContent;
+  ctaBanner: CtaBannerContent;
 }
