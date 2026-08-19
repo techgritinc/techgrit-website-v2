@@ -1,5 +1,6 @@
 import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
 import type { StrapiMedia } from "../types/strapi-common";
+import { ROUTES, caseStudyDetailRoute } from "@/lib/routes";
 
 // Shared shape + mapper for any small CMS-hosted icon (SVG or otherwise) attached to a
 // repeatable item (approach steps, nav sections, etc.) — one place so every page maps
@@ -175,8 +176,8 @@ export interface CaseStudyCard {
 // detail route, so every card link is rebuilt from the slug instead of used verbatim.
 export function resolveCaseStudyHref(ctaLink: string): string {
   const slug = ctaLink.replace(/\/+$/, "").split("/").filter(Boolean).pop();
-  if (!slug || slug === "case-studies") return "/case-studies/";
-  return `/case-studies/${slug}/`;
+  if (!slug || slug === "case-studies") return `${ROUTES.caseStudies}/`;
+  return caseStudyDetailRoute(slug);
 }
 
 export function mapCaseStudyCard(item: StrapiCaseStudyItem, index: number): CaseStudyCard {

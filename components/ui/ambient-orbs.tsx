@@ -19,7 +19,7 @@ export function AmbientOrbs() {
   const pathname = usePathname();
   if (pathname?.startsWith(ROUTES.industriesConstruction)) return null;
 
-  if (pathname === "/case-studies/") {
+  if (pathname === `${ROUTES.caseStudies}/`) {
     return (
       <div key="case-studies" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
         <span className="absolute top-[-160px] right-[-120px] w-[560px] h-[560px] rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]" />

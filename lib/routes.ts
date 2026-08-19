@@ -7,3 +7,9 @@ export const ROUTES = {
   industriesConstruction: "/industries/construction",
   contactUs: "/contact-us",
 } as const;
+
+// Case Studies is the only route above with per-item detail pages — this builds that one
+// dynamic path so callers don't each re-concatenate `${ROUTES.caseStudies}/<slug>/` by hand.
+export function caseStudyDetailRoute(slug: string): string {
+  return `${ROUTES.caseStudies}/${slug}/`;
+}

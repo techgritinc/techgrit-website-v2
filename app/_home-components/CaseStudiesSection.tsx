@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { ROUTES } from "@/lib/routes";
 import { CASE_STUDIES } from "./home-data";
 
 export default function CaseStudiesSection() {
@@ -15,13 +16,13 @@ export default function CaseStudiesSection() {
             <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">See how we help teams win</div>
             <h2 className="mt-3.5 font-display text-[44px] font-bold leading-[1.04] tracking-[-0.03em] text-white">Case Studies &amp; Insights.</h2>
           </div>
-          <Button href="/case-studies" variant="ghost" size="nav" className="!px-[22px] !py-[13px] !text-[14.5px]">
+          <Button href={ROUTES.caseStudies} variant="ghost" size="nav" className="!px-[22px] !py-[13px] !text-[14.5px]">
             View all case studies <span aria-hidden="true" className="text-amber-light">&rarr;</span>
           </Button>
         </div>
 
         <div className="mt-11 leading-[normal] grid grid-cols-[1.3fr_1fr] gap-6 max-tg-md:grid-cols-1">
-          <Link href="/case-studies" style={{ display: "contents" }}>
+          <Link href={ROUTES.caseStudies} style={{ display: "contents" }}>
             <GlassCard
               variant="reimagine"
               hoverBorderColor=""
@@ -74,7 +75,7 @@ export default function CaseStudiesSection() {
 
           <div className="flex flex-col leading-[normal] gap-6">
             {others.map((study) => (
-              <Link key={study.title} href="/case-studies" style={{ display: "contents" }}>
+              <Link key={study.title} href={ROUTES.caseStudies} style={{ display: "contents" }}>
                 <GlassCard
                   variant="reimagine"
                   hoverBorderColor=""
