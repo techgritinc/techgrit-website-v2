@@ -45,7 +45,7 @@ export function AmbientOrbs() {
     );
   }
 
-  if (pathname?.startsWith("/contact")) {
+  if (pathname?.startsWith(ROUTES.contactUs)) {
     return (
       <div
         key="contact"

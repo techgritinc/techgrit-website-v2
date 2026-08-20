@@ -33,7 +33,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
   },
   brandDescription:
     "The AI-First Software Engine. From vision to industrial-grade production in weeks, not years.",
-  cta: { label: "Start a conversation", href: "/contact" },
+  cta: { label: "Start a conversation", href: ROUTES.contactUs },
   linkGroups: [
     {
       id: "what-we-do",
@@ -83,7 +83,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
         { slug: "our-story", label: "Our Story", href: "/about#our-story" },
         { slug: "leadership", label: "Leadership & Advisory", href: "/about#leadership" },
         { slug: "careers", label: "Careers", href: "/careers" },
-        { slug: "contact", label: "Contact", href: "/contact" },
+        { slug: "contact", label: "Contact", href: ROUTES.contactUs },
       ],
     },
   ],
