@@ -87,11 +87,11 @@ export function AmbientOrbs() {
   // (`TechGrit Careers.dc.html`/`TechGrit About.dc.html`/`TechGrit Services.dc.html` all use the same
   // top-right/mid-left/mid-right/bottom-center orange-amber-orange-orange geometry byte-for-byte).
   if (
-    pathname?.startsWith("/careers") ||
+    pathname?.startsWith(ROUTES.careers) ||
     pathname?.startsWith(ROUTES.about) ||
     pathname?.startsWith("/services")
   ) {
-    const className = pathname.startsWith("/careers")
+    const className = pathname.startsWith(ROUTES.careers)
       ? "bg-ambient-orbs-careers"
       : pathname.startsWith(ROUTES.about)
         ? "bg-ambient-orbs-about"

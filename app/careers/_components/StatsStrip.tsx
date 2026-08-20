@@ -1,4 +1,4 @@
-import type { Stat } from "../_data/careers-data";
+import type { Stat } from "@/cms/types/careers-types";
 
 export function StatsStrip({ stats }: { stats: Stat[] }) {
   return (
