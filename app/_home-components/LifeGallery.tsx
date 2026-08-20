@@ -61,7 +61,7 @@ export default function LifeGallery({
             <Button href={ROUTES.careers} size="md" className="leading-normal text-[15.5px] px-[27px] py-[16px]">
               Explore Careers <span aria-hidden="true">&rarr;</span>
             </Button>
-            <Button href={ROUTES.about} variant="ghost" size="md" className="leading-normal text-[16px] px-[27px] py-[15.5px]">
+            <Button href={ROUTES.aboutOurStory} variant="ghost" size="md" className="leading-normal text-[16px] px-[27px] py-[15.5px]">
               Meet the team{" "}
               <span aria-hidden="true" className="text-orange">
                 &rarr;

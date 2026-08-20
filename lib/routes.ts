@@ -2,6 +2,8 @@
 // Change a route here once instead of hunting down every hardcoded string that uses it.
 export const ROUTES = {
   about: "/about",
+  aboutOurStory: "/about/our-story",
+  aboutLeadership: "/about/leadership-advisory",
   careers: "/careers",
   caseStudies: "/case-studies",
   industriesConstruction: "/industries/construction",
@@ -12,4 +14,8 @@ export const ROUTES = {
 // dynamic path so callers don't each re-concatenate `${ROUTES.caseStudies}/<slug>/` by hand.
 export function caseStudyDetailRoute(slug: string): string {
   return `${ROUTES.caseStudies}/${slug}/`;
+}
+
+export function stripTrailingSlash(path: string): string {
+  return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
 }

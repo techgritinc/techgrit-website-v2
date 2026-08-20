@@ -80,8 +80,8 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       id: "company",
       heading: "Company",
       links: [
-        { slug: "our-story", label: "Our Story", href: ROUTES.about },
-        { slug: "leadership", label: "Leadership & Advisory", href: "/about#leadership" },
+        { slug: "our-story", label: "Our Story", href: ROUTES.aboutOurStory },
+        { slug: "leadership", label: "Leadership & Advisory", href: ROUTES.aboutLeadership },
         { slug: "careers", label: "Careers", href: ROUTES.careers },
         { slug: "contact", label: "Contact", href: ROUTES.contactUs },
       ],
