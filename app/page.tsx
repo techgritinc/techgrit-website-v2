@@ -1,3 +1,4 @@
+import { getHomeData } from "@/cms/api/home";
 import BlogSection from "@/app/_home-components/BlogSection";
 import CaseStudiesSection from "@/app/_home-components/CaseStudiesSection";
 import FinalCta from "@/app/_home-components/FinalCta";
@@ -11,21 +12,32 @@ import SubscribeBand from "@/app/_home-components/SubscribeBand";
 import TestimonialsSection from "@/app/_home-components/TestimonialsSection";
 import TrustedClients from "@/app/_home-components/TrustedClients";
 
-export default function Home() {
+export default async function Home() {
+  const data = await getHomeData();
+
   return (
     <main>
-      <Hero />
-      <TrustedClients />
-      <SubscribeBand />
-      <PlatformSection />
-      <MethodologySection />
-      <ReImagineSection />
-      <IndustriesSection />
-      <TestimonialsSection />
-      <CaseStudiesSection />
-      <BlogSection />
-      <LifeGallery showActions/>
-      <FinalCta />
+      <Hero data={data.hero} />
+      <TrustedClients data={data.trustedClients} />
+      <SubscribeBand data={data.newsletter} />
+      <PlatformSection data={data.deliveryEngine} />
+      <MethodologySection data={data.frameworkPhases} />
+      <ReImagineSection data={data.valueProposition} />
+      <IndustriesSection data={data.futureIndustry} />
+      <TestimonialsSection data={data.reviews} />
+      <CaseStudiesSection data={data.caseStudies} />
+      <BlogSection data={data.blogSection} />
+      <LifeGallery
+        showActions
+        heading={data.cultureGallery.title}
+        description={data.cultureGallery.subtitle}
+        images={data.cultureGallery.images}
+        primaryBtnLabel={data.cultureGallery.primaryBtn.label}
+        primaryBtnLink={data.cultureGallery.primaryBtn.href}
+        secondaryBtnLabel={data.cultureGallery.secondaryBtn.label}
+        secondaryBtnLink={data.cultureGallery.secondaryBtn.href}
+      />
+      <FinalCta data={data.ctaBanner} />
     </main>
   );
 }

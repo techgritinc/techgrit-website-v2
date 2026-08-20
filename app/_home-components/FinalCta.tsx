@@ -1,6 +1,9 @@
 import Button from "@/components/ui/Button";
+import type { CtaBannerData } from "@/cms/api/home/cta-banner";
 
-export default function FinalCta() {
+export default function FinalCta({ data }: { data: CtaBannerData }) {
+  const { badgeLabel, title, subtitle, primaryCta, secondaryCta } = data;
+
   return (
     <section id="contact" className="relative scroll-mt-(--nav-height)">
       <div className="mx-auto max-w-(--container-max) px-9 pt-14 pb-25">
@@ -10,26 +13,24 @@ export default function FinalCta() {
             className="absolute bottom-[-120px] left-1/2 h-[340px] w-[520px] -translate-x-1/2 rounded-full bg-overlay-orange-strong blur-glow-lg"
           />
           <div className="relative">
-            <div className="leading-[normal] text-[12.5px] font-bold tracking-widest text-orange uppercase">See how we help teams win</div>
+            <div className="leading-[normal] text-[12.5px] font-bold tracking-widest text-orange uppercase">{badgeLabel}</div>
             <h2 className="font-display mt-4 text-testimonial-stat tg-sm:text-[52px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
-              Let&rsquo;s scope your next engagement.
+              {title}
             </h2>
-            <p className="mx-auto mt-5.5 max-w-[600px] text-md tg-sm:text-lg-fixed leading-[1.6] text-secondary">
-              Whether you&rsquo;re building a new product, modernizing an existing platform, or evaluating where AI-engineering fits in your roadmap, we&rsquo;ll give you an honest assessment in a single working session. No sales deck. No commitments.
-            </p>
+            <p className="mx-auto mt-5.5 max-w-[600px] text-md tg-sm:text-lg-fixed leading-[1.6] text-secondary">{subtitle}</p>
             <div className="mt-9.5 flex flex-col items-center gap-5">
               <Button
-                href="mailto:support@techgrit.com?subject=OrbitAI%20Demo%20Request"
+                href={primaryCta.href}
                 size="lg"
                 className="!leading-[normal] !gap-[10px] !rounded-[13px] !px-[34px] !py-[15px] !text-[17px] !whitespace-normal hover:!shadow-btn-primary"
               >
-                Request an Engineering Review <span aria-hidden="true" className="text-[18px]">&rarr;</span>
+                {primaryCta.label} <span aria-hidden="true" className="text-[18px]">&rarr;</span>
               </Button>
               <a
-                href="#methodology"
+                href={secondaryCta.href}
                 className="inline-flex items-center gap-2 border-b border-border-orange-medium pb-[3px] text-14-5 font-semibold text-muted leading-[normal] transition-colors duration-200 hover:text-primary"
               >
-                Or explore our 6-week framework{" "}
+                {secondaryCta.label}{" "}
                 <span aria-hidden="true" className="text-orange">&rarr;</span>
               </a>
             </div>
