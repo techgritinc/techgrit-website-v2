@@ -1,27 +1,28 @@
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { CASE_STUDIES } from "./home-data";
+import type { CaseStudiesData } from "@/cms/api/home/case-studies";
 
-export default function CaseStudiesSection() {
-  const featured = CASE_STUDIES.find((study) => study.featured) ?? CASE_STUDIES[0];
-  const others = CASE_STUDIES.filter((study) => study !== featured);
+export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) {
+  const { badgeLabel, title, viewAllLabel, viewAllLink, caseStudies } = data;
+  const featured = caseStudies.find((study) => study.featured) ?? caseStudies[0];
+  const others = caseStudies.filter((study) => study !== featured);
 
   return (
     <section id="insights" className="scroll-mt-(--nav-height)">
       <div className="mx-auto max-w-(--container-max) px-9 py-20">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">See how we help teams win</div>
-            <h2 className="mt-3.5 font-display text-[44px] font-bold leading-[1.04] tracking-[-0.03em] text-white">Case Studies &amp; Insights.</h2>
+            <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">{badgeLabel}</div>
+            <h2 className="mt-3.5 font-display text-[44px] font-bold leading-[1.04] tracking-[-0.03em] text-white">{title}</h2>
           </div>
-          <Button href="/case-studies" variant="ghost" size="nav" className="!px-[22px] !py-[13px] !text-[14.5px]">
-            View all case studies <span aria-hidden="true" className="text-amber-light">&rarr;</span>
+          <Button href={viewAllLink} variant="ghost" size="nav" className="!px-[22px] !py-[13px] !text-[14.5px]">
+            {viewAllLabel} <span aria-hidden="true" className="text-amber-light">&rarr;</span>
           </Button>
         </div>
 
         <div className="mt-11 leading-[normal] grid grid-cols-[1.3fr_1fr] gap-6 max-tg-md:grid-cols-1">
-          <Link href="/case-studies" style={{ display: "contents" }}>
+          <Link href={featured.href} style={{ display: "contents" }}>
             <GlassCard
               variant="reimagine"
               hoverBorderColor=""
@@ -74,7 +75,7 @@ export default function CaseStudiesSection() {
 
           <div className="flex flex-col leading-[normal] gap-6">
             {others.map((study) => (
-              <Link key={study.title} href="/case-studies" style={{ display: "contents" }}>
+              <Link key={study.id} href={study.href} style={{ display: "contents" }}>
                 <GlassCard
                   variant="reimagine"
                   hoverBorderColor=""
