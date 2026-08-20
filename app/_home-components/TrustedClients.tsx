@@ -1,7 +1,7 @@
 import MediaSlot from "@/components/ui/MediaSlot";
-import { TRUSTED_CLIENT_LOGOS } from "./home-data";
+import type { TrustedClientsData } from "@/cms/api/home/trusted-clients";
 
-export default function TrustedClients() {
+export default function TrustedClients({ data }: { data: TrustedClientsData }) {
   return (
     <section aria-label="Trusted by our clients" className="relative z-raised border-t border-border-hairline-08 bg-ink">
       <div className="mx-auto max-w-[1280px] px-9 py-14">
@@ -10,9 +10,9 @@ export default function TrustedClients() {
           role="group"
           aria-label="Client logos"
           tabIndex={0}
-          className="mt-8 grid grid-cols-2 gap-x-4 gap-y-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center"
+          className="mt-8 grid grid-cols-2 gap-x-4 gap-y-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3"
         >
-          {TRUSTED_CLIENT_LOGOS.map((logo) => (
+          {data.logos.map((logo) => (
             <div
               key={logo.id}
               className="flex h-[74px] shrink-0 items-center justify-center rounded-lg bg-white px-4 shadow-[var(--shadow-card),0_0_0_1px_rgba(255,255,255,0.06)] transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-[3px] hover:shadow-[var(--shadow-card-hover),var(--shadow-orange-border)]"
