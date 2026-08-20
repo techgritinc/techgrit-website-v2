@@ -1,8 +1,7 @@
 import Button from "@/components/ui/Button";
 import MediaSlot from "@/components/ui/MediaSlot";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
-import { ROUTES } from "@/lib/routes";
-import { CULTURE_GALLERY_IMAGES } from "./home-data";
+import { DEFAULT_CULTURE_GALLERY_DATA } from "@/cms/api/home/culture-gallery";
 
 export interface LifeGalleryImage {
   /** Stable, content-independent identity for keying `.map()` renders (Principle III). */
@@ -18,9 +17,15 @@ interface LifeGalleryProps {
   /** Defaults to the shared static eyebrow text (Home/Careers aren't CMS-driven yet); About passes the CMS's own badgeLabel. */
   eyebrow?: string;
   /** Defaults to the shared static photo set (Home/Careers aren't CMS-driven yet); About passes its own CMS-sourced photos. */
-  images?: LifeGalleryImage[];
+  // images?: LifeGalleryImage[];
   /** Home-only "Explore Careers" / "Meet the team" navigation row — Careers and About don't render it. */
   showActions?: boolean;
+  /** CMS-driven overrides — Careers/About omit these and keep the static defaults below. */
+  images?: LifeGalleryImage[];
+  primaryBtnLabel?: string;
+  primaryBtnLink?: string;
+  secondaryBtnLabel?: string;
+  secondaryBtnLink?: string;
 }
 
 /** One shared "Life at TechGrit" section — identical grid on Home, Careers, and About; the eyebrow/photos default to a static set but can be overridden by CMS-sourced data. */
@@ -29,8 +34,13 @@ export default function LifeGallery({
   heading = "Life at TechGrit.",
   description = "The people and the culture behind the engineering.",
   eyebrow = "Inside TechGrit",
-  images = CULTURE_GALLERY_IMAGES,
+  // images = CULTURE_GALLERY_IMAGES,
   showActions = false,
+  images = DEFAULT_CULTURE_GALLERY_DATA.images,
+  primaryBtnLabel = DEFAULT_CULTURE_GALLERY_DATA.primaryBtn.label,
+  primaryBtnLink = DEFAULT_CULTURE_GALLERY_DATA.primaryBtn.href,
+  secondaryBtnLabel = DEFAULT_CULTURE_GALLERY_DATA.secondaryBtn.label,
+  secondaryBtnLink = DEFAULT_CULTURE_GALLERY_DATA.secondaryBtn.href,
 }: LifeGalleryProps) {
   return (
     <section id={id} className="relative scroll-mt-[96px]">
@@ -58,11 +68,11 @@ export default function LifeGallery({
 
         {showActions && (
           <div className="mt-11 flex flex-wrap items-center justify-center gap-4">
-            <Button href={ROUTES.careers} size="md" className="leading-normal text-[15.5px] px-[27px] py-[16px]">
-              Explore Careers <span aria-hidden="true">&rarr;</span>
+            <Button href={primaryBtnLink} size="md" className="leading-normal text-[15.5px] px-[27px] py-[16px]">
+              {primaryBtnLabel} <span aria-hidden="true">&rarr;</span>
             </Button>
-            <Button href={ROUTES.about} variant="ghost" size="md" className="leading-normal text-[16px] px-[27px] py-[15.5px]">
-              Meet the team{" "}
+            <Button href={secondaryBtnLink} variant="ghost" size="md" className="leading-normal text-[16px] px-[27px] py-[15.5px]">
+              {secondaryBtnLabel}{" "}
               <span aria-hidden="true" className="text-orange">
                 &rarr;
               </span>
