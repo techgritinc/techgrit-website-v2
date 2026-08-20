@@ -1,5 +1,6 @@
 import { fetchCms } from "./fetcher";
 import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
+import { ROUTES } from "@/lib/routes";
 import type {
   FooterContactDetail,
   FooterData,
@@ -62,7 +63,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       links: [
         { slug: "ind-healthtech", label: "HealthTech", href: "/#industries" },
         { slug: "ind-fintech", label: "FinTech", href: "/#industries" },
-        { slug: "ind-constructiontech", label: "ConstructionTech", href: "/construction" },
+        { slug: "ind-constructiontech", label: "ConstructionTech", href: ROUTES.industriesConstruction },
         { slug: "ind-hitech", label: "HiTech", href: "/#industries" },
       ],
     },

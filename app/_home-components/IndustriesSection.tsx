@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import { GlassCard, GlassCardDescription, GlassCardIcon, GlassCardTitle } from "@/components/ui/GlassCard";
+import { ROUTES } from "@/lib/routes";
 import type { FutureIndustryData } from "@/cms/api/home/future-industry";
 
 const ICON_BG: Record<string, string> = {

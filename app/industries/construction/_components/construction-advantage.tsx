@@ -1,5 +1,5 @@
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
-import type { AdvantageSection } from "../_data/types";
+import type { AdvantageSection } from "@/cms/types/construction";
 
 export function ConstructionAdvantage({ section }: { section: AdvantageSection }) {
   return (

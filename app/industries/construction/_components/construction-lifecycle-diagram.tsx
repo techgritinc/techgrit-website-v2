@@ -1,4 +1,4 @@
-import type { LifecycleDiagramSection } from "../_data/types";
+import type { LifecycleDiagramSection } from "@/cms/types/construction";
 
 const NODE_POSITIONS: React.CSSProperties[] = [
   { left: "2%", top: "9%" },

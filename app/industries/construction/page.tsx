@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { constructionContent } from "./_data/construction-content";
+import { notFound } from "next/navigation";
+import { getConstructionPageContent } from "@/cms/api/construction";
 import { ConstructionHero } from "./_components/construction-hero";
 import { ConstructionIntegrationsStrip } from "./_components/construction-integrations-strip";
 import { ConstructionChallenges } from "./_components/construction-challenges";
@@ -9,12 +10,18 @@ import { ConstructionAdvantage } from "./_components/construction-advantage";
 import { ConstructionImpact } from "./_components/construction-impact";
 import { FinalCta } from "@/components/ui/final-cta";
 
-export const metadata: Metadata = {
-  title: constructionContent.seo.metaTitle,
-  description: constructionContent.seo.metaDescription,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getConstructionPageContent();
+  if (!content) return {};
+  return { title: content.seo.metaTitle, description: content.seo.metaDescription };
+}
 
-export default function ConstructionPage() {
+export default async function ConstructionPage() {
+  const content = await getConstructionPageContent();
+  if (!content) notFound();
+
+  const sections = content.sections.filter((section) => section !== undefined);
+
   return (
     <main className="overflow-x-clip">
       {/* Page-local ambient orbs (reference-exact — the shared, globally-wired
@@ -29,7 +36,7 @@ export default function ConstructionPage() {
         <div style={{ position: "absolute", top: 1100, left: -180, width: 520, height: 520, borderRadius: "50%", background: "var(--color-overlay-amber)", filter: "blur(130px)", animation: "tgorb 20s ease-in-out infinite reverse" }} />
         <div style={{ position: "absolute", bottom: -160, left: "40%", width: 600, height: 600, borderRadius: "50%", background: "var(--color-overlay-amber-soft)", filter: "blur(140px)", animation: "tgorb 22s ease-in-out infinite" }} />
       </div>
-      {constructionContent.sections.map((section) => {
+      {sections.map((section) => {
         switch (section.type) {
           case "hero":
             return <ConstructionHero key={section.order} section={section} />;
