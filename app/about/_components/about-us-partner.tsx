@@ -1,4 +1,4 @@
-import type { PartnerSection } from "../_data/types";
+import type { PartnerSection } from "@/cms/types/about-types";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
@@ -20,8 +20,8 @@ export function AboutUsPartner({ section }: { section: PartnerSection }) {
               </p>
             </div>
             <div className="flex flex-col gap-[14px]">
-              {section.outcomes.map((outcome, index) => (
-                <div key={index} className="flex items-center gap-[14px] rounded-[14px] border border-white/10 bg-white/4 px-[22px] py-[20px]">
+              {section.outcomes.map((outcome) => (
+                <div key={outcome.order} className="flex items-center gap-[14px] rounded-[14px] border border-white/10 bg-white/4 px-[22px] py-[20px]">
                   <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-overlay-orange">
                     <svg
                       width="15"
@@ -49,9 +49,7 @@ export function AboutUsPartner({ section }: { section: PartnerSection }) {
             <span className="shrink-0 text-[13px] font-bold uppercase leading-normal tracking-[1.3px] text-amber-light">
               {section.closingLabel}
             </span>
-            <p className="text-[15.5px] leading-[1.6] text-white/80">
-              <strong className="font-semibold text-white">{section.closingLead}</strong> {section.closingSupport}
-            </p>
+            <p className="text-[15.5px] leading-[1.6] text-white/80">{section.closingText}</p>
           </div>
         </RevealOnScroll>
       </div>

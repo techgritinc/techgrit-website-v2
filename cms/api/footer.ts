@@ -71,7 +71,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       id: "insights",
       heading: "Insights",
       links: [
-        { slug: "case-studies", label: "Case Studies", href: "/case-studies" },
+        { slug: "case-studies", label: "Case Studies", href: ROUTES.caseStudies },
         { slug: "blog", label: "Blog", href: "/blog" },
         { slug: "webinar", label: "Webinar", href: "/webinar" },
       ],
@@ -80,7 +80,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       id: "company",
       heading: "Company",
       links: [
-        { slug: "our-story", label: "Our Story", href: "/about#our-story" },
+        { slug: "our-story", label: "Our Story", href: ROUTES.about },
         { slug: "leadership", label: "Leadership & Advisory", href: "/about#leadership" },
         { slug: "careers", label: "Careers", href: "/careers" },
         { slug: "contact", label: "Contact", href: ROUTES.contactUs },
