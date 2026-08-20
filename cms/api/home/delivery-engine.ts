@@ -34,7 +34,7 @@ export type StrapiDeliveryEngineSection = {
   subtitle: string;
   badgeLabel: string;
   features: StrapiFeature[];
-  aiDashboard: StrapiAiDashboard;
+  aiDashboard: StrapiAiDashboard | null;
   __component: "home.delivery-engine";
 };
 
@@ -110,13 +110,16 @@ export function toDeliveryEngine(section: StrapiDeliveryEngineSection): Delivery
     tone: index < 2 ? "blue" : "teal",
   }));
 
-  const metrics: DashboardMetric[] = section.aiDashboard.metrics.map((metric) => ({
+  // `aiDashboard` is an optional Strapi component on this section — the CMS can
+  // save the section without ever filling it in, so it degrades field-by-field
+  // to DEFAULT_DELIVERY_ENGINE_DATA.dashboard the same way `capabilities` does above.
+  const metrics: DashboardMetric[] = (section.aiDashboard?.metrics ?? []).map((metric) => ({
     id: String(metric.id),
     value: metric.value,
     label: metric.label,
   }));
 
-  const pipeline: PipelineAgent[] = section.aiDashboard.pipelines.progressPipeline.map((item, index) => ({
+  const pipeline: PipelineAgent[] = (section.aiDashboard?.pipelines?.progressPipeline ?? []).map((item, index) => ({
     id: String(item.id),
     label: item.name,
     percent: item.progress,
@@ -130,10 +133,10 @@ export function toDeliveryEngine(section: StrapiDeliveryEngineSection): Delivery
     subtitle: section.subtitle,
     capabilities: capabilities.length > 0 ? capabilities : DEFAULT_DELIVERY_ENGINE_DATA.capabilities,
     dashboard: {
-      title: section.aiDashboard.title,
-      badgeLabel: section.aiDashboard.badgeLabel,
-      footerText: section.aiDashboard.footerText,
-      deadline: section.aiDashboard.deadline,
+      title: section.aiDashboard?.title ?? DEFAULT_DELIVERY_ENGINE_DATA.dashboard.title,
+      badgeLabel: section.aiDashboard?.badgeLabel ?? DEFAULT_DELIVERY_ENGINE_DATA.dashboard.badgeLabel,
+      footerText: section.aiDashboard?.footerText ?? DEFAULT_DELIVERY_ENGINE_DATA.dashboard.footerText,
+      deadline: section.aiDashboard?.deadline ?? DEFAULT_DELIVERY_ENGINE_DATA.dashboard.deadline,
       metrics: metrics.length > 0 ? metrics : DEFAULT_DELIVERY_ENGINE_DATA.dashboard.metrics,
       pipeline: pipeline.length > 0 ? pipeline : DEFAULT_DELIVERY_ENGINE_DATA.dashboard.pipeline,
     },
