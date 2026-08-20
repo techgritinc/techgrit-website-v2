@@ -3,17 +3,10 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { CheckIcon, ChevronRightIcon, ClockIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
-import { TESTIMONIALS } from "./home-data";
+import type { ReviewsData } from "@/cms/api/home/reviews";
 
-type TestimonialMetric = { id: string; value: string; suffix: string; label: string };
-
-const TESTIMONIAL_METRICS: TestimonialMetric[] = [
-  { id: "projects-delivered", value: "500", suffix: "+", label: "Projects delivered" },
-  { id: "would-refer", value: "100", suffix: "%", label: "Would refer" },
-  { id: "avg-time-to-value", value: "6", suffix: "wk", label: "Avg. time to value" },
-];
-
-export default function TestimonialsSection() {
+export default function TestimonialsSection({ data }: { data: ReviewsData }) {
+  const { badgeLabel, title, subtitle, testimonials, metrics } = data;
   const trackRef = useRef<HTMLDivElement>(null);
   const dragState = useRef({ isDown: false, startX: 0, startScrollLeft: 0, moved: false });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -61,22 +54,20 @@ export default function TestimonialsSection() {
     };
   }, [openIndex]);
 
-  const current = openIndex !== null ? TESTIMONIALS[openIndex] : null;
+  const current = openIndex !== null ? testimonials[openIndex] : null;
 
   return (
     <section className="scroll-mt-24 relative">
       <div data-reveal className="mx-auto max-w-[1280px] px-9 pt-20 pb-6">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div className="max-w-[640px]">
-            <div className="text-2xs leading-[normal] font-bold tracking-widest text-orange uppercase">What our clients say</div>
-            <h2 className="mt-3.5 text-[42px] leading-[1.06]">15+ webinars on AI-first engineering. And counting.</h2>
-            <p className="mt-3.5 text-base leading-[1.55] text-muted">
-              Over the past two years, TechGrit has hosted more than 15 webinars on AI-first engineering practices.
-            </p>
+            <div className="text-2xs leading-[normal] font-bold tracking-widest text-orange uppercase">{badgeLabel}</div>
+            <h2 className="mt-3.5 text-[42px] leading-[1.06]">{title}</h2>
+            <p className="mt-3.5 text-base leading-[1.55] text-muted">{subtitle}</p>
           </div>
 
           <div className="flex items-center gap-8 max-tg-sm:gap-4 rounded-16 border border-border-8 bg-glass-3 px-tg-11 py-tg-8 max-tg-sm:px-4 max-tg-sm:py-3.5 backdrop-blur-md max-tg-sm:mx-auto">
-            {TESTIMONIAL_METRICS.map((metric, index) => (
+            {metrics.map((metric, index) => (
               <Fragment key={metric.id}>
                 {index > 0 && <div aria-hidden="true" className="h-9 w-px bg-border-14" />}
                 <div>
@@ -102,7 +93,7 @@ export default function TestimonialsSection() {
           className="flex cursor-grab gap-5.5 overflow-x-auto px-20 pt-6 pb-7 text-left select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           style={{ scrollSnapType: "x proximity", WebkitOverflowScrolling: "touch" }}
         >
-          {TESTIMONIALS.map((testimonial, index) => {
+          {testimonials.map((testimonial, index) => {
             if (testimonial.type === "video") {
               return (
                 <button
