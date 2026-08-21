@@ -62,6 +62,8 @@ Two workflows exist during the GitHub Pages -> VM migration, and only one may be
 
 The VM (AWS EC2, shared with the Strapi CMS and two other apps) runs the site under PM2 as `techgrit-site` on port 3002 (3000 and 3001 belong to call-summary and kaffeax-sales), bound to loopback, behind an nginx reverse proxy. `ecosystem.config.js` is the process definition; its `name` must match `APP_NAME` in the workflow, and its `PORT` must match the nginx `proxy_pass`.
 
+Every route renders dynamically (`ƒ` in the build output), because `cms/api/fetcher.ts` fetches with `cache: "no-store"`. So the site needs `CMS_API_URL` at runtime, and the deploy writes it to `.env` from the `dev` Environment on every run. `fetcher.ts` falls back to `http://localhost:1337`, which happens to be right on this VM — the workflow requires the value explicitly rather than leaning on that coincidence. Because nothing is prerendered, the CI build gate does not need the CMS reachable; `fetchCms` returns `null` on any failure.
+
 Two operational facts that are easy to get wrong:
 
 - **Deploy as `ubuntu`, never root.** This box runs two PM2 daemons — `ubuntu` owns `techgrit-site`, `call-summary`, and `kaffeax-sales`; root separately owns the CMS. Deploying as the wrong user puts the process in the wrong daemon, where `pm2 list` appears empty and reboot resurrection is configured elsewhere. The remote script asserts this and aborts.

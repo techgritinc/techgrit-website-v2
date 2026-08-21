@@ -88,16 +88,27 @@ jobs:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           APP_NAME: ${{ env.APP_NAME }}
           GIT_BRANCH: ${{ github.ref_name }}
+          # Origin of the Strapi API, no trailing /api -- cms/api/fetcher.ts appends
+          # each endpoint path itself.
+          CMS_API_URL: ${{ vars.CMS_API_URL }}
         run: |
           set -euo pipefail
           if [ -z "$DEPLOY_PATH" ]; then
             echo "::error::DEPLOY_PATH is not set in the 'dev' Environment."
             exit 1
           fi
+          # fetcher.ts falls back to http://localhost:1337, which happens to be
+          # correct on this VM. That coincidence would mask a missing value here and
+          # break the day the CMS moves, so require it explicitly.
+          if [ -z "$CMS_API_URL" ]; then
+            echo "::error::CMS_API_URL is not set in the 'dev' Environment."
+            exit 1
+          fi
           ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
             "DEPLOY_PATH='$DEPLOY_PATH' \
              APP_NAME='$APP_NAME' \
              GIT_BRANCH='$GIT_BRANCH' \
+             CMS_API_URL='$CMS_API_URL' \
              bash -s" <<'REMOTE'
           set -euo pipefail
 
@@ -126,6 +137,13 @@ jobs:
           git reset --hard "origin/$GIT_BRANCH"
           git clean -fd -e node_modules -e .next -e logs
           echo "    now at $(git rev-parse --short HEAD) -- $(git log -1 --pretty=%s)"
+
+          echo "==> Writing .env"
+          # Recreated each deploy so the GitHub Environment stays the single source
+          # of truth. Next loads .env for BOTH `next build` and `next start`, so this
+          # one file also covers a future static/ISR route that fetches at build time.
+          printf 'CMS_API_URL=%s\n' "$CMS_API_URL" > .env
+          chmod 600 .env
 
           echo "==> Installing dependencies"
           npm ci
