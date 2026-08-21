@@ -1,22 +1,12 @@
-import type { ComponentType } from "react";
+import Image from "next/image";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
-import { LayoutDashboardIcon, SvcStartupsIcon, OrbitAiIcon, HeartIcon } from "@/components/ui/icons";
-import type { RationaleIconName, RationaleTile, WhyItMattersSection } from "@/cms/types/leadership-types";
-
-
-const TILE_ICONS: Record<RationaleIconName, ComponentType<{ width: number; height: number }>> = {
-  enterprise: LayoutDashboardIcon,
-  startup: SvcStartupsIcon,
-  aiFirst: OrbitAiIcon,
-  longTerm: HeartIcon,
-};
+import type { RationaleTile, WhyItMattersSection } from "@/cms/types/leadership-types";
 
 function WhyItMattersTile({ tile }: { tile: RationaleTile }) {
-  const Icon = TILE_ICONS[tile.icon];
   return (
     <div className="flex items-start gap-4 rounded-xl border border-border-8 bg-glass-3 p-6 transition-colors duration-300 hover:border-[var(--color-border-orange-medium)] hover:bg-glass-4">
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[var(--color-overlay-orange-14)] text-orange">
-        <Icon width={20} height={20} />
+        {tile.icon ? <Image src={tile.icon.url} alt={tile.icon.alt} width={20} height={20} /> : null}
       </span>
       <div>
         <h3 className="text-[16.5px] leading-[normal] tracking-normal font-bold text-white">{tile.title}</h3>

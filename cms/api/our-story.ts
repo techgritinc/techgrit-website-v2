@@ -27,12 +27,12 @@ import type {
   StrapiServiceDetailSection,
   ValuesSection,
   WhoYouAreSection,
-} from "../types/about-types";
+} from "../types/our-story-types";
 
 // Populate paths follow Strapi v5's `on`-keyed dynamic-zone syntax, same convention as
 // cms/api/construction.ts and cms/api/contact.ts.
 const ABOUT_ENDPOINT =
-  "/api/pages/by-slug/about" +
+  "/api/pages/by-slug/our-story" +
   "?populate[seo][populate]=*" +
   "&populate[sections][on][page-reusable-sections.hero][populate]=backgroundImage" +
   "&populate[sections][on][about-us.audience-insight][populate][concernsCard][populate]=questions" +

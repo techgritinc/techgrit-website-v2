@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAboutPageContent } from "@/cms/api/about";
+import { getAboutPageContent } from "@/cms/api/our-story";
 import { AboutUsHero } from "./_components/about-us-hero";
 import { AboutUsShowcase } from "./_components/about-us-showcase";
 import { AboutUsWhoYouAre } from "./_components/about-us-who-you-are";

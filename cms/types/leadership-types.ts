@@ -19,19 +19,22 @@ export interface LeaderProfile {
 }
 
 
-export type RationaleIconName = "enterprise" | "startup" | "aiFirst" | "longTerm";
+export interface RationaleTileIcon {
+  url: string;
+  alt: string;
+}
 
 export interface RationaleTile {
   order: number;
-  icon: RationaleIconName;
+  icon: RationaleTileIcon | null;
   title: string;
   description: string;
 }
 
 export interface LeadershipHeroSection {
-  breadcrumbLabel: string;
-  breadcrumbHref: string;
-  currentLabel: string;
+  breadcrumbLabel: string | null;
+  breadcrumbHref: string | null;
+  currentLabel: string | null;
   badgeLabel: string;
   title: string;
   titleHighlight: string | null;
@@ -54,7 +57,7 @@ export interface LeadershipSeo {
   metaDescription: string;
 }
 
-// A flat named record, not the discriminated-union `sections[]` array about-types.ts
+// A flat named record, not the discriminated-union `sections[]` array our-story-types.ts
 // uses — this page's four sections are fixed in order by the reference (not
 // CMS-controlled), so a named record gives compile-time proof every section is
 // present instead of a `switch`-on-`type` dispatch in page.tsx.
