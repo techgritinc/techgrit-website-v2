@@ -1,0 +1,205 @@
+name: Deploy Site to VM
+
+# TRIGGER IS INTENTIONALLY workflow_dispatch ONLY.
+#
+# beta.techgrit.com still points at GitHub Pages, and deploy-pages.yml still fires on
+# push to dev. Adding `push` here now would mean two pipelines racing to publish the
+# same branch to two different places.
+#
+# Flip to `push: [dev]` as step 5 of the cutover -- in the SAME commit that removes the
+# trigger from deploy-pages.yml, never before.
+on:
+  workflow_dispatch:
+
+concurrency:
+  # Serialize deploys so two runs never fight over the VM working tree.
+  group: deploy-site-techgrit
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  # Must track /usr/bin/node on the VM (v20.20.2). Next 16 requires >=20.9.
+  NODE_VERSION: '20'
+  # Must match `name` in ecosystem.config.js.
+  APP_NAME: techgrit-site
+
+jobs:
+  build:
+    name: Build & verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # Builds what the VM will build, deliberately: `next build` rewrites .next/ in
+      # place under the running server, so a commit that fails to compile would take
+      # the site down rather than just fail to deploy. Failing here means the deploy
+      # job never opens an SSH connection.
+      - name: Build
+        run: npm run build
+
+  deploy:
+    name: Deploy to VM
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: dev
+
+    steps:
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+        run: |
+          set -euo pipefail
+          if [ -z "$SSH_PRIVATE_KEY" ] || [ -z "$SSH_HOST" ]; then
+            echo "::error::SSH_PRIVATE_KEY and/or SSH_HOST are not set in the 'dev' Environment."
+            exit 1
+          fi
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy (sync + install + build + pm2)
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          APP_NAME: ${{ env.APP_NAME }}
+          GIT_BRANCH: ${{ github.ref_name }}
+          # Strapi origin, no trailing /api -- cms/api/fetcher.ts appends endpoint paths.
+          CMS_API_URL: ${{ vars.CMS_API_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "$DEPLOY_PATH" ]; then
+            echo "::error::DEPLOY_PATH is not set in the 'dev' Environment."
+            exit 1
+          fi
+          # fetcher.ts falls back to http://localhost:1337, coincidentally correct on
+          # this VM -- that would mask a missing value here, so require it.
+          if [ -z "$CMS_API_URL" ]; then
+            echo "::error::CMS_API_URL is not set in the 'dev' Environment."
+            exit 1
+          fi
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+            "DEPLOY_PATH='$DEPLOY_PATH' \
+             APP_NAME='$APP_NAME' \
+             GIT_BRANCH='$GIT_BRANCH' \
+             CMS_API_URL='$CMS_API_URL' \
+             bash -s" <<'REMOTE'
+          set -euo pipefail
+
+          # Runs as root, in the same PM2 daemon as techgrit-cms.
+          echo "==> Running as $(whoami) on $(hostname)"
+          export PATH="/usr/local/bin:/usr/bin:$PATH"
+          echo "    node $(node --version)  npm $(npm --version)  pm2 $(pm2 --version)"
+
+          cd "$DEPLOY_PATH"
+
+          # Rollback anchor, printed before anything destructive happens.
+          echo "==> Currently deployed: $(git rev-parse --short HEAD) -- $(git log -1 --pretty=%s)"
+
+          echo "==> Syncing to origin/$GIT_BRANCH"
+          git fetch --prune origin "$GIT_BRANCH"
+          git reset --hard "origin/$GIT_BRANCH"
+          git clean -fd -e node_modules -e .next -e logs
+          echo "    now at $(git rev-parse --short HEAD) -- $(git log -1 --pretty=%s)"
+
+          # Next loads .env for both `next build` and `next start`, so one file covers
+          # runtime and any future route that fetches at build time.
+          echo "==> Writing .env"
+          printf 'CMS_API_URL=%s\n' "$CMS_API_URL" > .env
+          chmod 600 .env
+
+          echo "==> Installing dependencies"
+          npm ci
+
+          # Rewrites .next/ in place while the old process still serves from it, so
+          # visitors can 404 on hashed chunks for the ~2-4min this takes.
+          echo "==> Building"
+          NODE_ENV=production npm run build
+
+          mkdir -p logs
+
+          # `restart`, not `reload`: fork mode has no true zero-downtime reload.
+          echo "==> Restarting PM2 ($APP_NAME)"
+          if pm2 describe "$APP_NAME" > /dev/null 2>&1; then
+            pm2 restart "$APP_NAME" --update-env
+          else
+            echo "    $APP_NAME not registered with PM2 -- starting it."
+            pm2 start ecosystem.config.js --env production
+          fi
+
+          pm2 save
+          pm2 status "$APP_NAME"
+          REMOTE
+
+      - name: Health check
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+          APP_NAME: ${{ env.APP_NAME }}
+          APP_PORT: ${{ vars.PORT }}
+          # Set once nginx is up. Unset, only the app port is probed, so a broken
+          # proxy still reports a green deploy.
+          PROXY_HEALTH_URL: ${{ vars.PROXY_HEALTH_URL }}
+        run: |
+          set -euo pipefail
+          PORT="${APP_PORT:-3002}"
+
+          for attempt in $(seq 1 12); do
+            result="$(ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+              "direct=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 http://127.0.0.1:${PORT}/ 2>/dev/null) || direct=000; \
+               proxied=000; \
+               if [ -n '${PROXY_HEALTH_URL}' ]; then \
+                 proxied=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 '${PROXY_HEALTH_URL}' 2>/dev/null) || proxied=000; \
+               fi; \
+               echo \"\$direct \$proxied\"")"
+            direct="$(echo "$result" | awk '{print $1}')"
+            proxied="$(echo "$result" | awk '{print $2}')"
+
+            if [ "$direct" = "200" ]; then
+              echo "Site healthy on :${PORT} (HTTP $direct) after $attempt attempt(s)."
+              if [ -z "${PROXY_HEALTH_URL}" ]; then
+                echo "::warning::No PROXY_HEALTH_URL set -- nginx routing was NOT verified."
+              elif [ "$proxied" = "200" ]; then
+                echo "Proxy also healthy (HTTP $proxied)."
+              else
+                echo "::error::App is up but the proxy returned HTTP $proxied -- check nginx."
+                exit 1
+              fi
+              exit 0
+            fi
+            echo "Attempt $attempt/12: direct=$direct proxied=$proxied -- retrying in 10s..."
+            sleep 10
+          done
+
+          echo "::error::Site did not become healthy on port ${PORT} after 12 attempts."
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+            "pm2 logs $APP_NAME --lines 60 --nostream" || true
+          exit 1
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
