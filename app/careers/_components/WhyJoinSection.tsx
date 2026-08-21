@@ -1,25 +1,9 @@
-import {
-  LightningIcon,
-  BookIcon,
-  HomeIcon,
-  HeartIcon,
-  BarChartIcon,
-  UsersIcon,
-} from "@/components/ui/icons";
-import type { Benefit, BenefitIconName } from "../_data/careers-data";
+import Image from "next/image";
+import type { Benefit, BenefitIconName } from "@/cms/types/careers-types";
 
-const ICON_COMPONENTS: Record<
-  BenefitIconName,
-  (props: { className?: string }) => React.JSX.Element
-> = {
-  lightning: LightningIcon,
-  book: BookIcon,
-  home: HomeIcon,
-  heart: HeartIcon,
-  barChart: BarChartIcon,
-  users: UsersIcon,
-};
-
+// The CMS has no color field for benefits — each chip's accent color is derived from
+// `iconName` (itself derived by position, see cms/api/careers.ts), regardless of whether a
+// real CMS icon renders inside it.
 const ICON_ACCENT_CLASSES: Record<BenefitIconName, { bg: string; border: string; text: string }> = {
   lightning: {
     bg: "bg-overlay-orange-12",
@@ -51,8 +35,7 @@ export function WhyJoinSection({ heading, benefits }: { heading: string; benefit
 
         <div className="mt-[34px] grid grid-cols-3 gap-5 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
           {benefits.map((benefit) => {
-            const Icon = ICON_COMPONENTS[benefit.icon];
-            const accent = ICON_ACCENT_CLASSES[benefit.icon];
+            const accent = ICON_ACCENT_CLASSES[benefit.iconName];
 
             return (
               <div
@@ -62,7 +45,9 @@ export function WhyJoinSection({ heading, benefits }: { heading: string; benefit
                 <div
                   className={`flex h-[46px] w-[46px] items-center justify-center rounded-[12px] border ${accent.bg} ${accent.border} ${accent.text}`}
                 >
-                  <Icon className="h-[22px] w-[22px]" />
+                  {benefit.icon && (
+                    <Image src={benefit.icon.url} alt={benefit.icon.alt} width={22} height={22} />
+                  )}
                 </div>
                 <h3 className="font-body mt-4 text-[18.5px] font-bold leading-[normal] tracking-[0] text-white">
                   {benefit.title}

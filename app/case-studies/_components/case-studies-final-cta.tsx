@@ -1,5 +1,6 @@
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import Button from "@/components/ui/Button";
+import { ROUTES } from "@/lib/routes";
 
 export function CaseStudiesFinalCta({ variant = "list" }: { variant?: "list" | "detail" }) {
   return (
@@ -24,7 +25,7 @@ export function CaseStudiesFinalCta({ variant = "list" }: { variant?: "list" | "
               </p>
             </div>
             <Button
-              href="/contact"
+              href={ROUTES.contactUs}
               variant="primary"
               className="relative gap-[10px] text-[16px] !px-[30px] !py-[15px] !rounded-[12px] !min-h-[52px] whitespace-nowrap"
             >

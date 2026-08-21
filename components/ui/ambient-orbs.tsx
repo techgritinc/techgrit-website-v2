@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
 
 // Site-wide decorative glow layer. Case-studies and Construction pages carry
 // their own accent-driven backgrounds and must not show this orb set (per
@@ -15,7 +16,8 @@ import { usePathname } from "next/navigation";
 // instead of the old orbs jumping to new values in place.
 export function AmbientOrbs() {
   const pathname = usePathname();
-  if (pathname?.startsWith("/case-studies") || pathname?.startsWith("/construction")) return null;
+  if (pathname?.startsWith(ROUTES.caseStudies) || pathname?.startsWith(ROUTES.industriesConstruction))
+    return null;
 
   // The homepage renders its own reference-exact 4-orb, all-warm-toned variant
   // below instead of the default 3-orb set (which includes a blue orb the
@@ -43,7 +45,7 @@ export function AmbientOrbs() {
     );
   }
 
-  if (pathname?.startsWith("/contact")) {
+  if (pathname?.startsWith(ROUTES.contactUs)) {
     return (
       <div
         key="contact"
@@ -85,13 +87,13 @@ export function AmbientOrbs() {
   // (`TechGrit Careers.dc.html`/`TechGrit About.dc.html`/`TechGrit Services.dc.html` all use the same
   // top-right/mid-left/mid-right/bottom-center orange-amber-orange-orange geometry byte-for-byte).
   if (
-    pathname?.startsWith("/careers") ||
-    pathname?.startsWith("/about") ||
+    pathname?.startsWith(ROUTES.careers) ||
+    pathname?.startsWith(ROUTES.about) ||
     pathname?.startsWith("/services")
   ) {
-    const className = pathname.startsWith("/careers")
+    const className = pathname.startsWith(ROUTES.careers)
       ? "bg-ambient-orbs-careers"
-      : pathname.startsWith("/about")
+      : pathname.startsWith(ROUTES.about)
         ? "bg-ambient-orbs-about"
         : "bg-ambient-orbs-services";
     return (

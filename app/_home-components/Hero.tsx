@@ -1,9 +1,13 @@
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import AnimatedStat from "@/components/ui/AnimatedStat";
-import { DELIVERY_STATS } from "./home-data";
+import { splitHighlight } from "@/cms/utils/text";
+import type { HeroData } from "@/cms/api/home/hero";
 
-export default function Hero() {
+export default function Hero({ data }: { data: HeroData }) {
+  const { badge, title, highlightTitle, subtitle, primaryBtn, secondaryBtn, stats } = data;
+  const { before, highlight, after } = splitHighlight(title, highlightTitle);
+
   return (
     <section id="top" className="relative flex min-h-screen flex-col justify-center overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden bg-ink-deep">
@@ -23,7 +27,7 @@ export default function Hero() {
       <div className="relative z-raised mx-auto flex min-h-[60vh] w-full max-w-(--container-max) items-center px-4 tg-sm:px-9 pt-27 pb-10 tg-sm:pb-15">
         <div className="max-w-195">
           <a
-            href="/webinar"
+            href={badge.href}
             className="group opacity-0 [animation-delay:0.02s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mb-4 inline-flex max-w-full items-center gap-2 tg-sm:gap-5 rounded-full border border-border-orange-strong bg-[image:var(--gradient-live-badge)] py-1.5 tg-sm:py-3 pr-3.5 tg-sm:pr-7.5 pl-1.5 tg-sm:pl-3 leading-[normal] shadow-[var(--shadow-live-badge)] backdrop-blur-10 transition-transform"
           >
             <Badge tone="live" size="lg" className="shrink-0 max-tg-sm:gap-1.5 max-tg-sm:px-3 max-tg-sm:py-1.5 max-tg-sm:text-[10.5px]">
@@ -34,40 +38,39 @@ export default function Hero() {
                   className="absolute -inset-0.75 rounded-full border-2 border-border-green-85 animate-[tgLiveRipple_1.8s_cubic-bezier(0.2,0.7,0.2,1)_infinite] motion-reduce:animate-none"
                 />
               </span>
-              Live Webinar
+              {badge.label}
             </Badge>
-            <span className="text-xs tg-sm:text-base tracking-[-0.085px] font-semibold text-bright leading-tight">Orchestrating the AI-First SDLC</span>
+            <span className="text-xs tg-sm:text-base tracking-[-0.085px] font-semibold text-bright leading-tight">{badge.text}</span>
             <span aria-hidden="true" className="shrink-0 text-18 tg-sm:text-[20px] font-bold text-amber-light">
               &rarr;
             </span>
           </a>
 
           <h1 className="mt-5.5 opacity-0 [animation-delay:0.12s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100">
-            From strategic intent to
+            {before.trimEnd()}
             <br className="hidden tg-sm:inline" />
             {" "}
-            <span className="bg-[image:var(--gradient-brand-text)] bg-clip-text text-transparent">production-grade software,</span>
+            <span className="bg-[image:var(--gradient-brand-text)] bg-clip-text text-transparent">{highlight}</span>
             <br className="hidden tg-sm:inline" />
             {" "}
-            with full accountability.
+            {after.trimStart()}
           </h1>
 
           <p className="opacity-0 [animation-delay:0.2s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-4 tg-sm:mt-6.5 max-w-135 text-[16px] tg-sm:text-[18.5px] leading-[1.65] text-secondary">
-            For over a decade, mid-market enterprises have trusted TechGrit to turn complex technology decisions into real, 
-            working systems. We don&rsquo;t hand off a prototype and leave. We own the outcome, end to end.
+            {subtitle}
           </p>
 
           <div className="opacity-0 [animation-delay:0.28s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-9 flex flex-wrap items-center gap-4">
-            <Button href="#contact" size="hero" className="leading-[normal] !text-xs tg-sm:text-md">
-              Build Your AI-First Future <span aria-hidden="true" className="text-[17px]">&rarr;</span>
+            <Button href={primaryBtn.href} size="hero" className="leading-[normal] !text-xs tg-sm:text-md">
+              {primaryBtn.label} <span aria-hidden="true" className="text-[17px]">&rarr;</span>
             </Button>
-            <Button href="#methodology" variant="ghost" size="hero" className="px-6.5 leading-[normal] !text-xs tg-sm:text-md">
-              View the OrbitAI&trade; Methodology <span aria-hidden="true" className="text-[17px] text-orange">&rarr;</span>
+            <Button href={secondaryBtn.href} variant="ghost" size="hero" className="px-6.5 leading-[normal] !text-xs tg-sm:text-md">
+              {secondaryBtn.label} <span aria-hidden="true" className="text-[17px] text-orange">&rarr;</span>
             </Button>
           </div>
 
           <div className="opacity-0 [animation-delay:0.36s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-11.5 flex items-stretch gap-2.5 tg-sm:gap-8.5">
-            {DELIVERY_STATS.map((stat, i) => (
+            {stats.map((stat, i) => (
               <div key={stat.id} className={i > 0 ? "border-l border-border-strong pl-2.5 tg-sm:pl-8.5" : undefined}>
                 <div
                   className={[

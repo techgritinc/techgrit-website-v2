@@ -1,4 +1,5 @@
 import Button from "@/components/ui/Button";
+import { ROUTES } from "@/lib/routes";
 import type { TeamRole } from "../_data/types";
 
 export function TeamPanel({ team }: { team: TeamRole[] }) {
@@ -21,13 +22,13 @@ export function TeamPanel({ team }: { team: TeamRole[] }) {
           ))}
         </div>
         <Button
-  href="/contact"
-  variant="primary"
-  size="footer"
-  className="mt-[20px] w-full min-h-[44px]"
->
-  Start a project <span aria-hidden="true">&#8594;</span>
-</Button>
+          href={ROUTES.contactUs}
+          variant="primary"
+          size="footer"
+          className="mt-[20px] w-full min-h-[44px]"
+        >
+          Start a project <span aria-hidden="true">&#8594;</span>
+        </Button>
 
       </div>
     </aside>
