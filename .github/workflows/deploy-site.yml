@@ -1,0 +1,207 @@
+name: Deploy Site to VM
+
+# TRIGGER IS INTENTIONALLY workflow_dispatch ONLY.
+#
+# beta.techgrit.com still points at GitHub Pages, and deploy-pages.yml still fires on
+# push to dev. Adding `push` here now would mean two pipelines racing to publish the
+# same branch to two different places.
+#
+# Flip to `push: [dev]` as step 5 of the cutover -- in the SAME commit that removes the
+# trigger from deploy-pages.yml, never before.
+on:
+  workflow_dispatch:
+
+concurrency:
+  # Serialize deploys so two runs never fight over the VM working tree.
+  group: deploy-site-techgrit
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  # Must track /usr/bin/node on the VM (v20.20.2). Next 16 requires >=20.9.
+  NODE_VERSION: '20'
+  # Must match `name` in ecosystem.config.js.
+  APP_NAME: techgrit-site
+
+jobs:
+  build:
+    name: Build & verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # This job builds the same thing the VM will build a moment later, and that
+      # duplication is the point. `next build` rewrites .next/ IN PLACE underneath the
+      # running `next start`, so a commit that fails to compile would take the site
+      # down rather than merely failing to deploy. Failing here keeps the deploy job
+      # from ever opening an SSH connection.
+      - name: Build
+        run: npm run build
+
+  deploy:
+    name: Deploy to VM
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: dev
+
+    steps:
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+        run: |
+          set -euo pipefail
+          if [ -z "$SSH_PRIVATE_KEY" ] || [ -z "$SSH_HOST" ]; then
+            echo "::error::SSH_PRIVATE_KEY and/or SSH_HOST are not set in the 'dev' Environment."
+            exit 1
+          fi
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy (sync + install + build + pm2)
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          APP_NAME: ${{ env.APP_NAME }}
+          GIT_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [ -z "$DEPLOY_PATH" ]; then
+            echo "::error::DEPLOY_PATH is not set in the 'dev' Environment."
+            exit 1
+          fi
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+            "DEPLOY_PATH='$DEPLOY_PATH' \
+             APP_NAME='$APP_NAME' \
+             GIT_BRANCH='$GIT_BRANCH' \
+             bash -s" <<'REMOTE'
+          set -euo pipefail
+
+          # Identity first. This app must run under `ubuntu`, alongside call-summary
+          # and kaffeax-sales. The CMS runs under root's separate PM2 daemon; deploying
+          # this one as root would put it in the wrong daemon, where `pm2 list` as
+          # ubuntu shows nothing and reboot resurrection is configured separately.
+          echo "==> Running as $(whoami) on $(hostname)"
+          if [ "$(whoami)" = "root" ]; then
+            echo "::error::Deploying as root. SSH_USER must be 'ubuntu' -- see ecosystem.config.js."
+            exit 1
+          fi
+
+          export PATH="/usr/local/bin:/usr/bin:$PATH"
+
+          echo "==> Toolchain"
+          echo "    node $(node --version)  npm $(npm --version)  pm2 $(pm2 --version)"
+
+          cd "$DEPLOY_PATH"
+
+          # Rollback anchor, printed before anything destructive happens.
+          echo "==> Currently deployed: $(git rev-parse --short HEAD) -- $(git log -1 --pretty=%s)"
+
+          echo "==> Syncing to origin/$GIT_BRANCH"
+          git fetch --prune origin "$GIT_BRANCH"
+          git reset --hard "origin/$GIT_BRANCH"
+          git clean -fd -e node_modules -e .next -e logs
+          echo "    now at $(git rev-parse --short HEAD) -- $(git log -1 --pretty=%s)"
+
+          echo "==> Installing dependencies"
+          npm ci
+
+          echo "==> Building"
+          # This rewrites .next/ in place while the current process is still serving
+          # from it, so visitors mid-build can 404 on hashed chunks for the ~2-4min it
+          # takes. Acceptable for a low-traffic marketing site; revisit by shipping a
+          # prebuilt artifact if this ever carries real traffic.
+          NODE_ENV=production npm run build
+
+          mkdir -p logs
+
+          echo "==> Restarting PM2 ($APP_NAME)"
+          # `restart`, not `reload`: these apps run in fork mode, where reload does not
+          # actually deliver zero-downtime and silently behaves like a restart anyway.
+          if pm2 describe "$APP_NAME" > /dev/null 2>&1; then
+            pm2 restart "$APP_NAME" --update-env
+          else
+            echo "    $APP_NAME not registered with PM2 -- starting it."
+            pm2 start ecosystem.config.js --env production
+          fi
+
+          pm2 save
+          pm2 status "$APP_NAME"
+          REMOTE
+
+      - name: Health check
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+          APP_NAME: ${{ env.APP_NAME }}
+          APP_PORT: ${{ vars.PORT }}
+          # Set this to the site's own hostname once nginx is configured, e.g.
+          # https://beta-vm.techgrit.com/. Left unset, only the app port is probed and
+          # the proxy is NOT checked -- which is exactly how the CMS shipped a green
+          # deploy that served a 404 to every visitor.
+          PROXY_HEALTH_URL: ${{ vars.PROXY_HEALTH_URL }}
+        run: |
+          set -euo pipefail
+          PORT="${APP_PORT:-3002}"
+
+          for attempt in $(seq 1 12); do
+            result="$(ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+              "direct=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 http://127.0.0.1:${PORT}/ 2>/dev/null) || direct=000; \
+               proxied=000; \
+               if [ -n '${PROXY_HEALTH_URL}' ]; then \
+                 proxied=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 '${PROXY_HEALTH_URL}' 2>/dev/null) || proxied=000; \
+               fi; \
+               echo \"\$direct \$proxied\"")"
+            direct="$(echo "$result" | awk '{print $1}')"
+            proxied="$(echo "$result" | awk '{print $2}')"
+
+            if [ "$direct" = "200" ]; then
+              echo "Site healthy on :${PORT} (HTTP $direct) after $attempt attempt(s)."
+              if [ -z "${PROXY_HEALTH_URL}" ]; then
+                echo "::warning::No PROXY_HEALTH_URL set -- nginx routing was NOT verified."
+              elif [ "$proxied" = "200" ]; then
+                echo "Proxy also healthy (HTTP $proxied)."
+              else
+                echo "::error::App is up but the proxy returned HTTP $proxied -- check the nginx config."
+                exit 1
+              fi
+              exit 0
+            fi
+            echo "Attempt $attempt/12: direct=$direct proxied=$proxied -- retrying in 10s..."
+            sleep 10
+          done
+
+          echo "::error::Site did not become healthy on port ${PORT} after 12 attempts."
+          echo "::error::A wrong PORT variable looks identical to a crash here -- confirm it matches ecosystem.config.js."
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+            "pm2 logs $APP_NAME --lines 60 --nostream" || true
+          exit 1
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

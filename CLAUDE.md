@@ -18,7 +18,7 @@ There is no test framework in this repo (no Jest/Vitest/Playwright config, no `*
 
 `.husky/pre-commit` runs `npm run lint` then `npm run build` before every commit; both must stay green.
 
-`next.config.ts` is the stock empty scaffold — no custom Next.js config yet.
+`next.config.ts` sets `trailingSlash: true` and `images.unoptimized: true`. It carries no `output` key: the site is server-rendered by a long-running `next start` process on the VM behind nginx. It was `output: "export"` while the site was a static bundle on GitHub Pages — see Deployment below.
 
 ## Architecture
 
@@ -52,6 +52,22 @@ Brand system: dark surface by default (`--color-ink` family), white-on-dark text
 ### Spec-driven workflow (spec-kit)
 
 Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored as Copilot prompts in `.github/prompts/`): `speckit.jira` → `speckit.specify` → `speckit.clarify` → `speckit.plan` → `speckit.tasks` → `speckit.implement`, with `speckit.analyze`/`speckit.checklist`/`speckit.constitution`/`speckit.commit`/`speckit.taskstoissues` as utilities. Generated artifacts land in `specs/<feature-or-ticket-key>/` (`spec.md`, `plan.md`, `tasks.md`, `research.md`, `data-model.md`, `quickstart.md`). `.specify/memory/constitution.md` is the authoritative, versioned source for all the architecture rules above — consult it directly for full rationale/history rather than treating this file as a paraphrase substitute.
+
+## Deployment
+
+Two workflows exist during the GitHub Pages -> VM migration, and only one may be armed at a time.
+
+- `.github/workflows/deploy-pages.yml` — the incumbent. Fires on push to `dev`, builds a static export, publishes to GitHub Pages, served at `beta.techgrit.com` (see `CNAME`). **This only works while `next.config.ts` sets `output: "export"`, which it no longer does** — so Pages can still serve its last successful deployment, but it can no longer rebuild. Kept as the DNS-level rollback target until cutover completes.
+- `.github/workflows/deploy-site.yml` — the replacement. `workflow_dispatch` only, deliberately: arming its `push` trigger before the DNS flip would have two pipelines racing to publish `dev`. It builds on the runner as a gate, then over SSH does `git reset --hard` -> `npm ci` -> `npm run build` -> `pm2 restart` on the VM.
+
+The VM (AWS EC2, shared with the Strapi CMS and two other apps) runs the site under PM2 as `techgrit-site` on port 3002 (3000 and 3001 belong to call-summary and kaffeax-sales), bound to loopback, behind an nginx reverse proxy. `ecosystem.config.js` is the process definition; its `name` must match `APP_NAME` in the workflow, and its `PORT` must match the nginx `proxy_pass`.
+
+Two operational facts that are easy to get wrong:
+
+- **Deploy as `ubuntu`, never root.** This box runs two PM2 daemons — `ubuntu` owns `techgrit-site`, `call-summary`, and `kaffeax-sales`; root separately owns the CMS. Deploying as the wrong user puts the process in the wrong daemon, where `pm2 list` appears empty and reboot resurrection is configured elsewhere. The remote script asserts this and aborts.
+- **nginx `server_name` must be a hostname, never a bare IP.** A resize changes the public IP and silently breaks every block pinned to the old one — which is exactly how the CMS started returning 404s from the default server block.
+
+`npm run build` on the VM rewrites `.next/` in place underneath the running server, so a deploy briefly risks 404s on hashed chunks. That is an accepted trade for a low-traffic marketing site; revisit by shipping a prebuilt artifact if traffic grows.
 
 ## Active Technologies
 - TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (CSS-first `@theme`, no `tailwind.config.ts`)
