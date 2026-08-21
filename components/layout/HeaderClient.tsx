@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Button from "@/components/ui/Button";
 import { ChevronIcon, HamburgerIcon } from "@/components/ui/icons";
-import { ROUTES, stripTrailingSlash } from "@/lib/routes";
+import { ROUTES } from "@/lib/routes";
 import type { HeaderData, HeaderMegaGroup } from "@/cms/types/header-types";
 
 const NAV_LINK_BASE =
@@ -123,7 +123,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             // non-clickable everywhere (mouse, touch, keyboard); only its hover panel
             // opens (FR-007). Active-state highlighting is left exactly as it was
             // before this feature — no special-casing for About.
-            const isAboutGroup = stripTrailingSlash(group.href) === ROUTES.about;
+            const isAboutGroup = group.label === "About";
             const active = group.href === pathname;
             const isOpen = openDropdown === group.label;
             const triggerClassName = [NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ");
@@ -145,7 +145,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                   </button>
                 ) : (
                   <Link
-                    href={group.href}
+                    href={group.href ?? "#"}
                     className={triggerClassName}
                     aria-haspopup="menu"
                     aria-expanded={isOpen}
@@ -221,7 +221,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             return (
               <Link
                 key={link.label}
-                href={link.href}
+                href={link.href ?? "#"}
                 onClick={closeMenus}
                 className={[NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ")}
               >
@@ -282,7 +282,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             return (
               <Link
                 key={link.label}
-                href={link.href}
+                href={link.href ?? "#"}
                 onClick={closeMenus}
                 className="block border-t border-border-subtle px-9 py-4 text-[16px] font-bold text-orange"
               >
@@ -293,7 +293,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
           return (
             <Link
               key={link.label}
-              href={link.href}
+              href={link.href ?? "#"}
               onClick={closeMenus}
               className={[
                 "block border-t border-border-subtle px-9 py-3.5 text-[16px] font-semibold text-[rgba(255,255,255,0.85)]",

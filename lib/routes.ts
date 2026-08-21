@@ -15,7 +15,3 @@ export const ROUTES = {
 export function caseStudyDetailRoute(slug: string): string {
   return `${ROUTES.caseStudies}/${slug}/`;
 }
-
-export function stripTrailingSlash(path: string): string {
-  return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
-}

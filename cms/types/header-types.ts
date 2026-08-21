@@ -10,7 +10,7 @@ export type StrapiSection = {
 
 export type StrapiNavItem = {
   title: string;
-  url: string;
+  url: string | null;
   ctaLabel: string | null;
   ctaLink: string | null;
   sections: StrapiSection[];
@@ -49,7 +49,7 @@ export type HeaderMegaItem = {
 
 export type HeaderMegaGroup = {
   label: string;
-  href: string;
+  href: string | null;
   columns: 3 | 4;
   items: HeaderMegaItem[];
   cta?: HeaderCta;
@@ -57,7 +57,7 @@ export type HeaderMegaGroup = {
 
 export type HeaderPlainLink = {
   label: string;
-  href: string;
+  href: string | null;
 };
 
 export type HeaderData = {
