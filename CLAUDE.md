@@ -55,21 +55,21 @@ Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored 
 
 ## Deployment
 
-Two workflows exist during the GitHub Pages -> VM migration, and only one may be armed at a time.
+The site runs on an AWS EC2 VM (shared with the Strapi CMS and two other apps) under PM2 as `techgrit-site`, port 3002 bound to loopback, behind nginx. `ecosystem.config.js` is the process definition: its `name` must match `APP_NAME` in the workflow, and its `PORT` must match the nginx `proxy_pass`.
 
-- `.github/workflows/deploy-pages.yml` — the incumbent. Fires on push to `dev`, builds a static export, publishes to GitHub Pages, served at `beta.techgrit.com` (see `CNAME`). **This only works while `next.config.ts` sets `output: "export"`, which it no longer does** — so Pages can still serve its last successful deployment, but it can no longer rebuild. Kept as the DNS-level rollback target until cutover completes.
-- `.github/workflows/deploy-site.yml` — the replacement. `workflow_dispatch` only, deliberately: arming its `push` trigger before the DNS flip would have two pipelines racing to publish `dev`. It builds on the runner as a gate, then over SSH does `git reset --hard` -> `npm ci` -> `npm run build` -> `pm2 restart` on the VM.
+Every route renders dynamically (`ƒ` in the build output) because `cms/api/fetcher.ts` fetches with `cache: "no-store"`. The site therefore needs `CMS_API_URL`, which the deploy writes to `.env` from the `dev` Environment on each run. Nothing is prerendered, so the CI build gate does not need the CMS reachable — `fetchCms` returns `null` on any failure.
 
-The VM (AWS EC2, shared with the Strapi CMS and two other apps) runs the site under PM2 as `techgrit-site` on port 3002 (3000 and 3001 belong to call-summary and kaffeax-sales), bound to loopback, behind an nginx reverse proxy. `ecosystem.config.js` is the process definition; its `name` must match `APP_NAME` in the workflow, and its `PORT` must match the nginx `proxy_pass`.
+Two workflows exist during the GitHub Pages -> VM migration; only one may be armed:
 
-Every route renders dynamically (`ƒ` in the build output), because `cms/api/fetcher.ts` fetches with `cache: "no-store"`. So the site needs `CMS_API_URL` at runtime, and the deploy writes it to `.env` from the `dev` Environment on every run. `fetcher.ts` falls back to `http://localhost:1337`, which happens to be right on this VM — the workflow requires the value explicitly rather than leaning on that coincidence. Because nothing is prerendered, the CI build gate does not need the CMS reachable; `fetchCms` returns `null` on any failure.
+- `deploy-pages.yml` — the incumbent, fires on push to `dev`, serves `beta.techgrit.com` (see `CNAME`). It can no longer rebuild, since static export requires the `output: "export"` that `next.config.ts` has dropped. Pages keeps serving its last successful deployment, which is the rollback target until cutover completes.
+- `deploy-site.yml` — the replacement, `workflow_dispatch` only until the DNS flip. Builds on the runner as a gate, then over SSH does `git reset --hard` -> `npm ci` -> `npm run build` -> `pm2 restart`.
 
-Two operational facts that are easy to get wrong:
+Two things that are easy to get wrong:
 
-- **Deploy as `ubuntu`, never root.** This box runs two PM2 daemons — `ubuntu` owns `techgrit-site`, `call-summary`, and `kaffeax-sales`; root separately owns the CMS. Deploying as the wrong user puts the process in the wrong daemon, where `pm2 list` appears empty and reboot resurrection is configured elsewhere. The remote script asserts this and aborts.
-- **nginx `server_name` must be a hostname, never a bare IP.** A resize changes the public IP and silently breaks every block pinned to the old one — which is exactly how the CMS started returning 404s from the default server block.
+- **Deploy as root, never `ubuntu`.** Two PM2 daemons run here: root owns `techgrit-site` and `techgrit-cms`, `ubuntu` owns `call-summary` and `kaffeax-sales`. `pm2 list` shows a different set depending on who you are. The wrong user starts a second copy in the other daemon, competing for port 3002, and it reads as a crash rather than a duplicate.
+- **nginx `server_name` must be a hostname, never a bare IP.** A resize changes the public IP and silently breaks any block pinned to the old one — how the CMS came to serve 404s from the default server block.
 
-`npm run build` on the VM rewrites `.next/` in place underneath the running server, so a deploy briefly risks 404s on hashed chunks. That is an accepted trade for a low-traffic marketing site; revisit by shipping a prebuilt artifact if traffic grows.
+`npm run build` on the VM rewrites `.next/` in place under the running server, so a deploy briefly risks 404s on hashed chunks. Accepted for a low-traffic marketing site; revisit by shipping a prebuilt artifact if traffic grows.
 
 ## Active Technologies
 - TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (CSS-first `@theme`, no `tailwind.config.ts`)

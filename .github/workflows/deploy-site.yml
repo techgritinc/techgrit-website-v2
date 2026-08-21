@@ -47,11 +47,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # This job builds the same thing the VM will build a moment later, and that
-      # duplication is the point. `next build` rewrites .next/ IN PLACE underneath the
-      # running `next start`, so a commit that fails to compile would take the site
-      # down rather than merely failing to deploy. Failing here keeps the deploy job
-      # from ever opening an SSH connection.
+      # Builds what the VM will build, deliberately: `next build` rewrites .next/ in
+      # place under the running server, so a commit that fails to compile would take
+      # the site down rather than just fail to deploy. Failing here means the deploy
+      # job never opens an SSH connection.
       - name: Build
         run: npm run build
 
@@ -88,8 +87,7 @@ jobs:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           APP_NAME: ${{ env.APP_NAME }}
           GIT_BRANCH: ${{ github.ref_name }}
-          # Origin of the Strapi API, no trailing /api -- cms/api/fetcher.ts appends
-          # each endpoint path itself.
+          # Strapi origin, no trailing /api -- cms/api/fetcher.ts appends endpoint paths.
           CMS_API_URL: ${{ vars.CMS_API_URL }}
         run: |
           set -euo pipefail
@@ -97,9 +95,8 @@ jobs:
             echo "::error::DEPLOY_PATH is not set in the 'dev' Environment."
             exit 1
           fi
-          # fetcher.ts falls back to http://localhost:1337, which happens to be
-          # correct on this VM. That coincidence would mask a missing value here and
-          # break the day the CMS moves, so require it explicitly.
+          # fetcher.ts falls back to http://localhost:1337, coincidentally correct on
+          # this VM -- that would mask a missing value here, so require it.
           if [ -z "$CMS_API_URL" ]; then
             echo "::error::CMS_API_URL is not set in the 'dev' Environment."
             exit 1
@@ -112,19 +109,9 @@ jobs:
              bash -s" <<'REMOTE'
           set -euo pipefail
 
-          # Identity first. This app must run under `ubuntu`, alongside call-summary
-          # and kaffeax-sales. The CMS runs under root's separate PM2 daemon; deploying
-          # this one as root would put it in the wrong daemon, where `pm2 list` as
-          # ubuntu shows nothing and reboot resurrection is configured separately.
+          # Runs as root, in the same PM2 daemon as techgrit-cms.
           echo "==> Running as $(whoami) on $(hostname)"
-          if [ "$(whoami)" = "root" ]; then
-            echo "::error::Deploying as root. SSH_USER must be 'ubuntu' -- see ecosystem.config.js."
-            exit 1
-          fi
-
           export PATH="/usr/local/bin:/usr/bin:$PATH"
-
-          echo "==> Toolchain"
           echo "    node $(node --version)  npm $(npm --version)  pm2 $(pm2 --version)"
 
           cd "$DEPLOY_PATH"
@@ -138,28 +125,24 @@ jobs:
           git clean -fd -e node_modules -e .next -e logs
           echo "    now at $(git rev-parse --short HEAD) -- $(git log -1 --pretty=%s)"
 
+          # Next loads .env for both `next build` and `next start`, so one file covers
+          # runtime and any future route that fetches at build time.
           echo "==> Writing .env"
-          # Recreated each deploy so the GitHub Environment stays the single source
-          # of truth. Next loads .env for BOTH `next build` and `next start`, so this
-          # one file also covers a future static/ISR route that fetches at build time.
           printf 'CMS_API_URL=%s\n' "$CMS_API_URL" > .env
           chmod 600 .env
 
           echo "==> Installing dependencies"
           npm ci
 
+          # Rewrites .next/ in place while the old process still serves from it, so
+          # visitors can 404 on hashed chunks for the ~2-4min this takes.
           echo "==> Building"
-          # This rewrites .next/ in place while the current process is still serving
-          # from it, so visitors mid-build can 404 on hashed chunks for the ~2-4min it
-          # takes. Acceptable for a low-traffic marketing site; revisit by shipping a
-          # prebuilt artifact if this ever carries real traffic.
           NODE_ENV=production npm run build
 
           mkdir -p logs
 
+          # `restart`, not `reload`: fork mode has no true zero-downtime reload.
           echo "==> Restarting PM2 ($APP_NAME)"
-          # `restart`, not `reload`: these apps run in fork mode, where reload does not
-          # actually deliver zero-downtime and silently behaves like a restart anyway.
           if pm2 describe "$APP_NAME" > /dev/null 2>&1; then
             pm2 restart "$APP_NAME" --update-env
           else
@@ -178,10 +161,8 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
           APP_NAME: ${{ env.APP_NAME }}
           APP_PORT: ${{ vars.PORT }}
-          # Set this to the site's own hostname once nginx is configured, e.g.
-          # https://beta-vm.techgrit.com/. Left unset, only the app port is probed and
-          # the proxy is NOT checked -- which is exactly how the CMS shipped a green
-          # deploy that served a 404 to every visitor.
+          # Set once nginx is up. Unset, only the app port is probed, so a broken
+          # proxy still reports a green deploy.
           PROXY_HEALTH_URL: ${{ vars.PROXY_HEALTH_URL }}
         run: |
           set -euo pipefail
@@ -205,7 +186,7 @@ jobs:
               elif [ "$proxied" = "200" ]; then
                 echo "Proxy also healthy (HTTP $proxied)."
               else
-                echo "::error::App is up but the proxy returned HTTP $proxied -- check the nginx config."
+                echo "::error::App is up but the proxy returned HTTP $proxied -- check nginx."
                 exit 1
               fi
               exit 0
@@ -215,7 +196,6 @@ jobs:
           done
 
           echo "::error::Site did not become healthy on port ${PORT} after 12 attempts."
-          echo "::error::A wrong PORT variable looks identical to a crash here -- confirm it matches ecosystem.config.js."
           ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
             "pm2 logs $APP_NAME --lines 60 --nostream" || true
           exit 1
