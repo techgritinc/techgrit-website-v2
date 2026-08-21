@@ -31,11 +31,6 @@ export type StrapiHeroSection = {
   badgeLabel: string;
   highlightTitle: string | null;
   backgroundImage: StrapiMedia[];
-  // Only populated on sub-pages that need a breadcrumb (e.g. Leadership & Advisory) —
-  // most pages using this shared hero component leave all three null.
-  breadcrumbAncestorLabel?: string | null;
-  breadcrumbAncestorHref?: string | null;
-  breadcrumbCurrentLabel?: string | null;
 };
 
 export type StrapiStatItem = {
@@ -70,9 +65,6 @@ export type HeroFields = {
   secondaryCtaLabel: string;
   secondaryCtaLink: string;
   image: { url: string; alternativeText: string; width: number; height: number } | null;
-  breadcrumbAncestorLabel: string | null;
-  breadcrumbAncestorHref: string | null;
-  breadcrumbCurrentLabel: string | null;
 };
 
 export function mapHeroFields(cms: StrapiHeroSection): HeroFields {
@@ -91,9 +83,6 @@ export function mapHeroFields(cms: StrapiHeroSection): HeroFields {
     primaryCtaLink: cms.primaryBtnLink,
     secondaryCtaLabel: cms.secondaryBtnLabel ?? "",
     secondaryCtaLink: cms.secondaryBtnLink ?? "",
-    breadcrumbAncestorLabel: cms.breadcrumbAncestorLabel ?? null,
-    breadcrumbAncestorHref: cms.breadcrumbAncestorHref ?? null,
-    breadcrumbCurrentLabel: cms.breadcrumbCurrentLabel ?? null,
     image:
       asset && cms.backgroundImage[0]
         ? {

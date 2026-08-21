@@ -1,5 +1,4 @@
 import Button from "@/components/ui/Button";
-import Breadcrumb from "@/components/ui/Breadcrumb";
 import type { LeadershipHeroSection } from "@/cms/types/leadership-types";
 
 export function LeadershipHero({ section }: { section: LeadershipHeroSection }) {
@@ -13,17 +12,6 @@ export function LeadershipHero({ section }: { section: LeadershipHeroSection }) 
   return (
     <section>
       <div className="mx-auto flex max-w-[820px] flex-col items-center px-9 pt-[88px] pb-10 text-center">
-        {/* Breadcrumb and badge are forced onto their own line each (FR-013) —
-            they must never sit side by side at any viewport width. */}
-        {section.breadcrumbLabel && section.breadcrumbHref && section.currentLabel ? (
-          <div data-rise style={{ animationDelay: ".05s" }}>
-            <Breadcrumb
-              ancestorLabel={section.breadcrumbLabel}
-              ancestorHref={section.breadcrumbHref}
-              currentLabel={section.currentLabel}
-            />
-          </div>
-        ) : null}
         <div
           data-rise
           className="mt-5 inline-flex items-center gap-2.5 rounded-40 border border-[var(--color-border-orange-35)] bg-[var(--color-overlay-orange-10)] px-3.5 py-1.75"

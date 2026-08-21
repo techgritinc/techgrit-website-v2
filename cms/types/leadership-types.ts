@@ -32,9 +32,6 @@ export interface RationaleTile {
 }
 
 export interface LeadershipHeroSection {
-  breadcrumbLabel: string | null;
-  breadcrumbHref: string | null;
-  currentLabel: string | null;
   badgeLabel: string;
   title: string;
   titleHighlight: string | null;

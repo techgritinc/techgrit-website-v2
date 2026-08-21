@@ -131,9 +131,6 @@ export const getLeadershipPageContent = cache(async (): Promise<LeadershipPageCo
       metaDescription: data.seo?.metaDescription ?? "",
     },
     hero: {
-      breadcrumbLabel: heroFields.breadcrumbAncestorLabel,
-      breadcrumbHref: heroFields.breadcrumbAncestorHref,
-      currentLabel: heroFields.breadcrumbCurrentLabel,
       badgeLabel: heroFields.eyebrow,
       title: heroFields.title,
       titleHighlight: heroFields.titleHighlight,
