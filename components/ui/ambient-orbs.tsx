@@ -45,38 +45,23 @@ export function AmbientOrbs() {
 
   if (pathname?.startsWith("/contact")) {
     return (
-      <div
-        key="contact"
-        aria-hidden="true"
-        className="bg-ambient-orbs-contact"
-        style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}
-      >
-        <span
-          style={{
-            position: "absolute",
-            top: -160,
-            right: -120,
-            width: 560,
-            height: 560,
-            borderRadius: "50%",
-            background: "rgba(232, 119, 34, 0.13)",
-            filter: "blur(120px)",
-            animation: "tgorb 16s ease-in-out infinite",
-          }}
-        />
-        <span
-          style={{
-            position: "absolute",
-            bottom: -200,
-            left: -180,
-            width: 560,
-            height: 560,
-            borderRadius: "50%",
-            background: "rgba(247, 183, 51, 0.10)",
-            filter: "blur(140px)",
-            animation: "tgorb 20s ease-in-out infinite reverse",
-          }}
-        />
+      <div key="contact" aria-hidden="true" className="bg-ambient-orbs-contact fixed inset-0 z-0 pointer-events-none">
+        <span className="absolute -top-40 -right-30 h-140 w-140 rounded-full bg-overlay-orange-13 blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]" />
+        <span className="absolute -bottom-50 -left-45 h-140 w-140 rounded-full bg-overlay-amber-light-10 blur-[140px] animate-[tgorb_20s_ease-in-out_infinite_reverse]" />
+      </div>
+    );
+  }
+
+  // AI-Accelerated Modernization's own reference-exact 4-orb set (TechGrit AI Modernization.dc.html
+  // lines 141-146) — same geometry as the careers/about/services set below, but with a blue second
+  // orb (matching that reference file exactly) instead of amber, and slightly different opacities.
+  if (pathname?.startsWith("/what-we-do/")) {
+    return (
+      <div key="what-we-do" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
+        <span className="absolute -top-45 -right-35 h-155 w-155 rounded-full bg-overlay-orange-14 blur-[130px] animate-[tgorb_16s_ease-in-out_infinite]" />
+        <span className="absolute top-[35%] -left-55 h-140 w-140 rounded-full bg-overlay-blue-soft blur-[140px] animate-[tgorb_20s_ease-in-out_infinite_reverse]" />
+        <span className="absolute top-[60%] -right-40 h-130 w-130 rounded-full bg-overlay-orange-10 blur-[140px] animate-[tgorb_24s_ease-in-out_infinite_reverse]" />
+        <span className="absolute -bottom-50 left-[38%] h-165 w-165 rounded-full bg-overlay-orange-11 blur-[150px] animate-[tgorb_22s_ease-in-out_infinite]" />
       </div>
     );
   }
@@ -95,114 +80,20 @@ export function AmbientOrbs() {
         ? "bg-ambient-orbs-about"
         : "bg-ambient-orbs-services";
     return (
-      <div
-        key={className}
-        aria-hidden="true"
-        className={className}
-        style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}
-      >
-        <span
-          style={{
-            position: "absolute",
-            top: -180,
-            right: -140,
-            width: 620,
-            height: 620,
-            borderRadius: "50%",
-            background: "rgba(232, 119, 34, 0.18)",
-            filter: "blur(130px)",
-            animation: "tgorb 16s ease-in-out infinite",
-          }}
-        />
-        <span
-          style={{
-            position: "absolute",
-            top: "35%",
-            left: -220,
-            width: 560,
-            height: 560,
-            borderRadius: "50%",
-            background: "rgba(247, 183, 51, 0.10)",
-            filter: "blur(140px)",
-            animation: "tgorb 20s ease-in-out infinite reverse",
-          }}
-        />
-        <span
-          style={{
-            position: "absolute",
-            top: "60%",
-            right: -160,
-            width: 520,
-            height: 520,
-            borderRadius: "50%",
-            background: "rgba(232, 119, 34, 0.11)",
-            filter: "blur(140px)",
-            animation: "tgorb 24s ease-in-out infinite reverse",
-          }}
-        />
-        <span
-          style={{
-            position: "absolute",
-            bottom: -200,
-            left: "38%",
-            width: 660,
-            height: 660,
-            borderRadius: "50%",
-            background: "rgba(232, 119, 34, 0.13)",
-            filter: "blur(150px)",
-            animation: "tgorb 22s ease-in-out infinite",
-          }}
-        />
+      <div key={className} aria-hidden="true" className={`${className} fixed inset-0 z-0 pointer-events-none`}>
+        <span className="absolute -top-45 -right-35 h-155 w-155 rounded-full bg-overlay-orange-18 blur-[130px] animate-[tgorb_16s_ease-in-out_infinite]" />
+        <span className="absolute top-[35%] -left-55 h-140 w-140 rounded-full bg-overlay-amber-light-10 blur-[140px] animate-[tgorb_20s_ease-in-out_infinite_reverse]" />
+        <span className="absolute top-[60%] -right-40 h-130 w-130 rounded-full bg-overlay-orange-11 blur-[140px] animate-[tgorb_24s_ease-in-out_infinite_reverse]" />
+        <span className="absolute -bottom-50 left-[38%] h-165 w-165 rounded-full bg-overlay-orange-13 blur-[150px] animate-[tgorb_22s_ease-in-out_infinite]" />
       </div>
     );
   }
 
   return (
-    <div
-      key="default"
-      aria-hidden="true"
-      className="bg-ambient-orbs"
-      style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}
-    >
-      <span
-        style={{
-          position: "absolute",
-          top: -160,
-          right: -120,
-          width: 560,
-          height: 560,
-          borderRadius: "50%",
-          background: "rgba(232, 119, 34, 0.16)",
-          filter: "blur(120px)",
-          animation: "tgorb 16s ease-in-out infinite",
-        }}
-      />
-      <span
-        style={{
-          position: "absolute",
-          top: 900,
-          left: -180,
-          width: 520,
-          height: 520,
-          borderRadius: "50%",
-          background: "rgba(2, 132, 199, 0.10)",
-          filter: "blur(130px)",
-          animation: "tgorb 20s ease-in-out infinite reverse",
-        }}
-      />
-      <span
-        style={{
-          position: "absolute",
-          bottom: -160,
-          left: "40%",
-          width: 600,
-          height: 600,
-          borderRadius: "50%",
-          background: "rgba(245, 158, 11, 0.09)",
-          filter: "blur(140px)",
-          animation: "tgorb 22s ease-in-out infinite",
-        }}
-      />
+    <div key="default" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
+      <span className="absolute -top-40 -right-30 h-140 w-140 rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]" />
+      <span className="absolute top-225 -left-45 h-130 w-130 rounded-full bg-overlay-blue-soft blur-[130px] animate-[tgorb_20s_ease-in-out_infinite_reverse]" />
+      <span className="absolute -bottom-40 left-[40%] h-150 w-150 rounded-full bg-overlay-amber-09 blur-[140px] animate-[tgorb_22s_ease-in-out_infinite]" />
     </div>
   );
 }

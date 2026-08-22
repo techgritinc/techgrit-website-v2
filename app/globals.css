@@ -28,6 +28,7 @@
   --color-orange-hover:  var(--color-orange-hover);
   --color-amber:         var(--color-amber);
   --color-amber-light:   var(--color-amber-light);
+  --color-amber-badge:   var(--color-amber-badge);
   --color-blue:          var(--color-blue);
   --color-blue-light:    var(--color-blue-light);
   --color-blue-bright:   var(--color-blue-bright);
@@ -35,6 +36,7 @@
   --color-teal-light:    var(--color-teal-light);
   --color-teal-bright:   var(--color-teal-bright);
   --color-green:         var(--color-green);
+  --color-green-live:    var(--color-green-live);
 
   --color-surface-white: var(--color-surface-white);
   --color-surface-off:   var(--color-surface-off);
@@ -117,6 +119,11 @@
   --color-text-placeholder: var(--color-text-placeholder);
   --color-icon-stroke: var(--color-icon-stroke);
   --color-overlay-orange-22: var(--color-overlay-orange-22);
+  --color-overlay-orange-25: var(--color-overlay-orange-25);
+  --color-overlay-orange-8: var(--color-overlay-orange-8);
+  --color-overlay-orange-14: var(--color-overlay-orange-14);
+  --color-border-orange-22: var(--color-border-orange-22);
+  --color-border-orange-18: var(--color-border-orange-18);
   --color-overlay-orange-12: var(--color-overlay-orange-12);
   --color-overlay-amber-light-06: var(--color-overlay-amber-light-06);
   --color-ink-glass-35: var(--color-ink-glass-35);
@@ -377,6 +384,7 @@
   --color-overlay-blue: var(--color-overlay-blue);
   --color-overlay-amber: var(--color-overlay-amber);
   --color-overlay-amber-soft: var(--color-overlay-amber-soft);
+  --color-overlay-amber-09: var(--color-overlay-amber-09);
   --color-overlay-amber-12: var(--color-overlay-amber-12);
   --color-overlay-orange-strong: var(--color-overlay-orange-strong);
   --color-overlay-amber-strong: var(--color-overlay-amber-strong);

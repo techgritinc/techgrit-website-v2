@@ -90,3 +90,10 @@ Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored 
 
 ## Recent Changes
 - TMS-73: planning the Webinar Series page (`app/webinar/`) — hero with a 9-cell photo/decorative collage, a Sessions grid (one upcoming panel + released-session cards), and a Subscribe panel; extends `Badge`/`GlassCard` with new tone/variants instead of forking components, adds 20 new tokens to `tokens.css`/`globals.css`, and both "Register Now"/"Watch Now" are real `<button>` elements per an explicit clarification overriding the reference's own anchor-styled-as-button markup
+
+## Active Technologies
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-86)
+- N/A — AI-Accelerated Modernization page content is a static local TypeScript content module, no CMS/API integration this phase (TMS-86)
+
+## Recent Changes
+- TMS-86: planning the AI-Accelerated Modernization page at the new route `/what-we-do/ai-modernization` (`app/what-we-do/ai-modernization/`) — the first page under a "What We Do" route segment; adds 4 new shared `components/ui/` primitives (`ProcessSteps`, `IconTile`, `Faq`, and `Outcome` — the last built ahead of need per an explicit clarification, unused on this page), one new `GlassCard` variant for the bulleted capability card, one new `components/ui/ambient-orbs.tsx` pathname branch matching the reference's 4-orb geometry, and a 1-line `cms/api/footer.ts` href edit repointing "AI-Accelerated Modernization" from `/services#svc-modernization` to the new route

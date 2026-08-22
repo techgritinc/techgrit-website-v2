@@ -9,6 +9,7 @@
 !.claude/skills/
 raw-files
 raw-files-v2
+raw-files-v3
 
 # dependencies
 /node_modules

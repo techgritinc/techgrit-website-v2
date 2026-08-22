@@ -61,16 +61,26 @@ function pickColumns(itemCount: number): 3 | 4 {
   return 3;
 }
 
+// TMS-86: the CMS's own "AI-Accelerated Modernization" mega-menu entry still points at
+// the old /services anchor. Forced to the new static route here until the CMS entry
+// itself is updated (planned) — every other mega-menu item stays fully CMS-driven.
+//
+// `StrapiNavItem.url` and `StrapiSection.ctaLink` are typed as required strings, but
+// Strapi doesn't actually enforce that at runtime — the "About" nav item has shipped
+// with a null `url` despite having sections (observed live, 2026-08-21). An unguarded
+// null here reaches next/link's `href` prop and crashes the whole page (prop-type
+// error), so every href out of this mapping falls back to "/" rather than trusting
+// the CMS's own field to be non-null.
 function toMegaGroup(navItem: StrapiNavItem): HeaderMegaGroup {
   return {
     label: navItem.title,
-    href: navItem.url,
+    href: navItem.url ?? "/",
     columns: pickColumns(navItem.sections.length),
     items: navItem.sections.map((section) => ({
       icon: toHeaderIcon(section.icon),
       title: section.title,
       description: section.subtitle,
-      href: section.ctaLink,
+      href: (section.title === "AI-Accelerated Modernization" ? "/what-we-do/ai-modernization" : section.ctaLink) ?? "/",
     })),
     cta:
       navItem.ctaLabel && navItem.ctaLink
@@ -92,11 +102,11 @@ export async function getHeaderData(): Promise<HeaderData> {
     if (navItem.sections.length > 0) {
       megaGroups.push(toMegaGroup(navItem));
     } else {
-      plainLinks.push({ label: navItem.title, href: navItem.url });
+      plainLinks.push({ label: navItem.title, href: navItem.url ?? "/" });
     }
   }
 
-  const cta: HeaderCta = { label: data.TalktoUsBtnLabel, href: data.TalktoUsBtnUrl };
+  const cta: HeaderCta = { label: data.TalktoUsBtnLabel, href: data.TalktoUsBtnUrl ?? DEFAULT_HEADER_DATA.cta.href };
 
   return {
     logo: toHeaderLogo(data.logo),
