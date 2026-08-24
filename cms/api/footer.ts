@@ -52,7 +52,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       heading: "How We Work",
       links: [
         { slug: "orbit-ai", label: "Orbit AI Framework", href: "/how-we-work/orbit-ai-ecosystem" },
-        { slug: "engagement", label: "Engagement Models", href: "/frameworks#engagement" },
+        { slug: "engagement", label: "Engagement Models", href: "/how-we-work/engagement-models" },
         { slug: "discovery", label: "Discovery Sprints", href: "/frameworks#discovery" },
       ],
     },
