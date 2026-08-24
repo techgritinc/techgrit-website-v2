@@ -6,16 +6,23 @@ export interface ProcessStep {
 
 export interface ProcessStepsProps {
   steps: ProcessStep[];
+  /** Desktop (`lg`) column count. Defaults to `5` to preserve existing consumers' layout. */
+  columns?: number;
 }
+
+const LG_COLUMNS_CLASS: Record<number, string> = {
+  4: "lg:grid-cols-4",
+  5: "lg:grid-cols-5",
+};
 
 /**
  * Generic numbered process-step strip (assess → deliver style flows). The
  * containing section supplies its own eyebrow/heading; this component only
  * renders the step grid itself. No page-specific copy inside the component.
  */
-export function ProcessSteps({ steps }: ProcessStepsProps) {
+export function ProcessSteps({ steps, columns = 5 }: ProcessStepsProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
+    <div className={`grid grid-cols-1 gap-4 md:grid-cols-2 ${LG_COLUMNS_CLASS[columns] ?? LG_COLUMNS_CLASS[5]}`}>
       {steps.map((step) => (
         <div
           key={step.order}
