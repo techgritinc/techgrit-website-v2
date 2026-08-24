@@ -1,6 +1,6 @@
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { GlassCard, GlassCardTitle, GlassCardDescription } from "@/components/ui/GlassCard";
-import type { ImpactSection } from "../_data/types";
+import type { ImpactSection } from "@/cms/types/construction";
 
 export function ConstructionImpact({ section }: { section: ImpactSection }) {
   return (

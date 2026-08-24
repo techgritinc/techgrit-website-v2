@@ -1,9 +1,13 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
-import type { HeroSection } from "../_data/types";
+import type { HeroSection } from "@/cms/types/construction";
 
 export function ConstructionHero({ section }: { section: HeroSection }) {
-  const [before, after] = section.title.split(section.titleHighlight);
+  // titleHighlight is already verified server-side (cms/shared/reusable-sections.ts) to be
+  // a genuine substring of title, or null — split() here is always safe.
+  const [before, after] = section.titleHighlight
+    ? section.title.split(section.titleHighlight)
+    : [section.title, ""];
 
   return (
     <section>
@@ -44,7 +48,9 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
             style={{ animationDelay: ".12s" }}
           >
             {before}
-            <span className="text-gradient">{section.titleHighlight}</span>
+            {section.titleHighlight ? (
+              <span className="text-gradient">{section.titleHighlight}</span>
+            ) : null}
             {after}
           </h1>
           <p

@@ -5,11 +5,26 @@ import type { ChangeEvent, FormEvent, MouseEvent } from "react";
 import Button from "@/components/ui/Button";
 import FormField from "@/components/ui/FormField";
 import { UploadIcon } from "@/components/ui/icons";
+import type { ApplicationFormContent, JobFormField } from "@/cms/types/careers-types";
 
 export interface ApplicationContext {
   mode: "role" | "general";
   roleSlug: string | null;
   roleTitle: string | null;
+}
+
+const EMPTY_FIELD: JobFormField = {
+  label: "",
+  placeholder: null,
+  requiredMark: null,
+  acceptedFormatsAndSize: null,
+  uploadPromptText: null,
+};
+
+function requiredMarkNode(mark: JobFormField["requiredMark"]) {
+  if (mark === "*") return <span className="text-orange">*</span>;
+  if (mark === "optional") return <span className="font-medium text-text-40">- optional</span>;
+  return null;
 }
 
 type ApplicationFormValues = {
@@ -44,12 +59,23 @@ const TITLE_ID = "application-dialog-title";
 export function ApplicationDialog({
   isOpen,
   context,
+  content,
   onClose,
 }: {
   isOpen: boolean;
   context: ApplicationContext;
+  content: ApplicationFormContent;
   onClose: () => void;
 }) {
+  // Fixed CMS order: full name, email, LinkedIn/portfolio URL, resume, "why us" — the CMS's
+  // jobFormFields have no field-type discriminator, so each is rendered by position.
+  const [
+    nameField = EMPTY_FIELD,
+    emailField = EMPTY_FIELD,
+    urlField = EMPTY_FIELD,
+    resumeField = EMPTY_FIELD,
+    messageField = EMPTY_FIELD,
+  ] = content.fields;
   const [values, setValues] = useState<ApplicationFormValues>(EMPTY_VALUES);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [status, setStatus] = useState<SubmissionStatus>("idle");
@@ -235,7 +261,7 @@ export function ApplicationDialog({
             <div className="flex items-start justify-between gap-5 border-b border-border-8 px-8 pb-5 pt-7">
               <div>
                 <div className="text-[11.5px] font-bold tracking-[0.14em] text-amber-light uppercase">
-                  Apply
+                  {content.badgeLabel}
                 </div>
                 <h3
                   id={TITLE_ID}
@@ -243,10 +269,7 @@ export function ApplicationDialog({
                 >
                   {positionLabel}
                 </h3>
-                <p className="mt-1 text-[13.5px] text-text-55">
-                  A real person on our team reviews every application &mdash; usually within 2
-                  business days.
-                </p>
+                <p className="mt-1 text-[13.5px] text-text-55">{content.subtitle}</p>
               </div>
               <Button
                 variant="outline"
@@ -276,15 +299,15 @@ export function ApplicationDialog({
                 <FormField
                   label={
                     <>
-                      Full name <span className="text-orange">*</span>
+                      {nameField.label} {requiredMarkNode(nameField.requiredMark)}
                     </>
                   }
                   labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
                   hideLabel={false}
-                  required
+                  required={nameField.requiredMark === "*"}
                   type="text"
                   name="fullName"
-                  placeholder="Jane Doe"
+                  placeholder={nameField.placeholder ?? undefined}
                   value={values.fullName}
                   onChange={handleChange("fullName")}
                   inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
@@ -292,15 +315,15 @@ export function ApplicationDialog({
                 <FormField
                   label={
                     <>
-                      Email <span className="text-orange">*</span>
+                      {emailField.label} {requiredMarkNode(emailField.requiredMark)}
                     </>
                   }
                   labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
                   hideLabel={false}
-                  required
+                  required={emailField.requiredMark === "*"}
                   type="email"
                   name="email"
-                  placeholder="jane@email.com"
+                  placeholder={emailField.placeholder ?? undefined}
                   value={values.email}
                   onChange={handleChange("email")}
                   inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
@@ -308,12 +331,17 @@ export function ApplicationDialog({
               </div>
 
               <FormField
-                label="LinkedIn or portfolio URL"
+                label={
+                  <>
+                    {urlField.label} {requiredMarkNode(urlField.requiredMark)}
+                  </>
+                }
                 labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
                 hideLabel={false}
+                required={urlField.requiredMark === "*"}
                 type="url"
                 name="linkedInOrPortfolioUrl"
-                placeholder="https://linkedin.com/in/..."
+                placeholder={urlField.placeholder ?? undefined}
                 value={values.linkedInOrPortfolioUrl}
                 onChange={handleChange("linkedInOrPortfolioUrl")}
                 inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
@@ -321,12 +349,14 @@ export function ApplicationDialog({
 
               <div>
                 <label className="mb-1.5 block text-[12.5px] font-semibold text-text-70">
-                  Resume <span className="text-orange">*</span>{" "}
-                  <span className="font-medium text-text-40">- PDF, DOC, DOCX (max 5MB)</span>
+                  {resumeField.label} {requiredMarkNode(resumeField.requiredMark)}{" "}
+                  {resumeField.acceptedFormatsAndSize && (
+                    <span className="font-medium text-text-40">- {resumeField.acceptedFormatsAndSize}</span>
+                  )}
                 </label>
                 <label className="relative flex cursor-pointer items-center gap-[12px] rounded-[12px] border border-dashed border-[var(--color-border-24)] bg-glass-4 px-4 py-3.5 transition-colors hover:border-[var(--color-border-40)] hover:bg-glass-10">
                   <input
-                    required
+                    required={resumeField.requiredMark === "*"}
                     type="file"
                     accept={RESUME_ACCEPT}
                     onChange={handleResumeChange}
@@ -337,10 +367,10 @@ export function ApplicationDialog({
                   </span>
                   <span>
                     <span className="block text-[14px] font-bold text-white">
-                      {resumeFile ? resumeFile.name : "Click to upload your resume"}
+                      {resumeFile ? resumeFile.name : resumeField.uploadPromptText}
                     </span>
                     <span className="block text-[12px] text-text-55">
-                      {resumeFile ? "Click to replace file" : "PDF, DOC, or DOCX"}
+                      {resumeFile ? "Click to replace file" : resumeField.acceptedFormatsAndSize}
                     </span>
                   </span>
                 </label>
@@ -349,14 +379,14 @@ export function ApplicationDialog({
               <FormField
                 label={
                   <>
-                    Why TechGrit? <span className="font-medium text-text-40">- optional</span>
+                    {messageField.label} {requiredMarkNode(messageField.requiredMark)}
                   </>
                 }
                 labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
                 hideLabel={false}
                 multiline
                 name="message"
-                placeholder="A few sentences on what excites you — or something you'd love to build."
+                placeholder={messageField.placeholder ?? undefined}
                 rows={3}
                 value={values.message}
                 onChange={handleChange("message")}
@@ -374,11 +404,9 @@ export function ApplicationDialog({
                 variant="primary"
                 className="mt-1.5 !min-h-[52px] !gap-[9px] !rounded-[12px] !px-[24px] !py-[15px] !text-[15.5px]"
               >
-                Send application <span className="text-[16px]">&#8594;</span>
+                {content.ctaLabel} <span className="text-[16px]">&#8594;</span>
               </Button>
-              <p className="text-center text-[12px] text-text-40">
-                We only use your details to review your application &mdash; nothing else.
-              </p>
+              <p className="text-center text-[12px] text-text-40">{content.privacyNote}</p>
             </form>
           </div>
         )}
