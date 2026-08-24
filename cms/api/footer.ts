@@ -41,7 +41,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
         { slug: "svc-modernization", label: "AI-Accelerated Modernization", href: "/what-we-do/ai-modernization" },
         { slug: "svc-product", label: "Software Product Engineering", href: "/what-we-do/software-product-engineering" },
         { slug: "svc-data-ai", label: "Data & AI Engineering", href: "/what-we-do/data-ai-engineering" },
-        { slug: "svc-platform", label: "Platform Engineering", href: "/services#svc-platform" },
+        { slug: "svc-platform", label: "Platform Engineering", href: "/what-we-do/platform-engineering" },
         { slug: "svc-managed", label: "Managed Services", href: "/services#svc-managed" },
         { slug: "svc-strategy", label: "AI Strategy & Roadmap", href: "/services#svc-strategy" },
         { slug: "svc-startups", label: "Startups", href: "/services#svc-startups" },
