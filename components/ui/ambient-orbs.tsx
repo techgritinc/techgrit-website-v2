@@ -52,6 +52,22 @@ export function AmbientOrbs() {
     );
   }
 
+  // Orbit AI Ecosystem's own reference-exact 4-orb set (TechGrit Orbit AI.dc.html lines 140-145) —
+  // same top-right/mid-left/mid-right/bottom-center geometry as the sets below, but with its own
+  // distinct opacities (0.12/0.02/0.10/0.11); the near-transparent second orb uses the closest
+  // existing token (overlay-amber-04, 0.04) rather than adding a new 0.02 token for a barely
+  // perceptible difference on a 140px-blurred orb.
+  if (pathname?.startsWith("/how-we-work/")) {
+    return (
+      <div key="how-we-work" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
+        <span className="absolute -top-45 -right-35 h-155 w-155 rounded-full bg-overlay-orange-12 blur-[130px] animate-[tgorb_16s_ease-in-out_infinite]" />
+        <span className="absolute top-[35%] -left-55 h-140 w-140 rounded-full bg-overlay-amber-04 blur-[140px] animate-[tgorb_20s_ease-in-out_infinite_reverse]" />
+        <span className="absolute top-[60%] -right-40 h-130 w-130 rounded-full bg-overlay-orange-10 blur-[140px] animate-[tgorb_24s_ease-in-out_infinite_reverse]" />
+        <span className="absolute -bottom-50 left-[38%] h-165 w-165 rounded-full bg-overlay-orange-11 blur-[150px] animate-[tgorb_22s_ease-in-out_infinite]" />
+      </div>
+    );
+  }
+
   // AI-Accelerated Modernization's own reference-exact 4-orb set (TechGrit AI Modernization.dc.html
   // lines 141-146) — same geometry as the careers/about/services set below, but with a blue second
   // orb (matching that reference file exactly) instead of amber, and slightly different opacities.
