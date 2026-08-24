@@ -39,7 +39,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       heading: "What We Do",
       links: [
         { slug: "svc-modernization", label: "AI-Accelerated Modernization", href: "/what-we-do/ai-modernization" },
-        { slug: "svc-product", label: "Software Product Engineering", href: "/services#svc-product" },
+        { slug: "svc-product", label: "Software Product Engineering", href: "/what-we-do/software-product-engineering" },
         { slug: "svc-data-ai", label: "Data & AI Engineering", href: "/services#svc-data-ai" },
         { slug: "svc-platform", label: "Platform Engineering", href: "/services#svc-platform" },
         { slug: "svc-managed", label: "Managed Services", href: "/services#svc-managed" },
@@ -133,9 +133,10 @@ function detectPlatform(url: string): FooterSocialPlatform | null {
   return null;
 }
 
-// TMS-86: the CMS's own "AI-Accelerated Modernization" link still points at the old
-// /services anchor. Forced to the new static route here until the CMS entry itself is
-// updated (planned) — every other footer link stays fully CMS-driven.
+// TMS-86 / TMS-86-software-product-engineering: the CMS's own "AI-Accelerated
+// Modernization" and "Software Product Engineering" links still point at the old
+// /services anchors. Forced to their new static routes here until the CMS entries
+// themselves are updated (planned) — every other footer link stays fully CMS-driven.
 function toLinkGroup(menuItem: StrapiFooterMenuItem): FooterLinkGroup {
   return {
     id: String(menuItem.id),
@@ -143,7 +144,12 @@ function toLinkGroup(menuItem: StrapiFooterMenuItem): FooterLinkGroup {
     links: menuItem.items.map((item) => ({
       slug: String(item.id),
       label: item.title,
-      href: item.title === "AI-Accelerated Modernization" ? "/what-we-do/ai-modernization" : item.url,
+      href:
+        item.title === "AI-Accelerated Modernization"
+          ? "/what-we-do/ai-modernization"
+          : item.title === "Software Product Engineering"
+            ? "/what-we-do/software-product-engineering"
+            : item.url,
     })),
   };
 }

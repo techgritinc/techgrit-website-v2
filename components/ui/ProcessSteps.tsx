@@ -24,7 +24,7 @@ export function ProcessSteps({ steps }: ProcessStepsProps) {
           <span className="mb-3.5 inline-flex h-[38px] w-[38px] items-center justify-center rounded-md bg-[var(--color-overlay-orange-14)] text-[15px] font-extrabold text-orange">
             {String(step.order).padStart(2, "0")}
           </span>
-          <h4 className="text-[16.5px] font-bold tracking-[-0.01em] text-white">{step.title}</h4>
+          <h4 className="text-[16.5px] leading-[normal] font-bold tracking-[-0.01em] text-white">{step.title}</h4>
           <p className="mt-2 text-[13.5px] leading-[1.55] text-60">{step.description}</p>
         </div>
       ))}

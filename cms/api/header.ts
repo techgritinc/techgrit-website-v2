@@ -61,9 +61,11 @@ function pickColumns(itemCount: number): 3 | 4 {
   return 3;
 }
 
-// TMS-86: the CMS's own "AI-Accelerated Modernization" mega-menu entry still points at
-// the old /services anchor. Forced to the new static route here until the CMS entry
-// itself is updated (planned) — every other mega-menu item stays fully CMS-driven.
+// TMS-86 / TMS-86-software-product-engineering: the CMS's own "AI-Accelerated
+// Modernization" and "Software Product Engineering" mega-menu entries still point at
+// the old /services anchors. Forced to their new static routes here until the CMS
+// entries themselves are updated (planned) — every other mega-menu item stays fully
+// CMS-driven.
 //
 // `StrapiNavItem.url` and `StrapiSection.ctaLink` are typed as required strings, but
 // Strapi doesn't actually enforce that at runtime — the "About" nav item has shipped
@@ -80,7 +82,12 @@ function toMegaGroup(navItem: StrapiNavItem): HeaderMegaGroup {
       icon: toHeaderIcon(section.icon),
       title: section.title,
       description: section.subtitle,
-      href: (section.title === "AI-Accelerated Modernization" ? "/what-we-do/ai-modernization" : section.ctaLink) ?? "/",
+      href:
+        (section.title === "AI-Accelerated Modernization"
+          ? "/what-we-do/ai-modernization"
+          : section.title === "Software Product Engineering"
+            ? "/what-we-do/software-product-engineering"
+            : section.ctaLink) ?? "/",
     })),
     cta:
       navItem.ctaLabel && navItem.ctaLink
