@@ -46,6 +46,15 @@ function WatchNowGlyph({ compact = false }: { compact?: boolean }) {
   );
 }
 
+// Sessions with no functional destination (the local/default content) leave ctaLink
+// empty, so the button stays a no-op — a CMS-authored recording link opens in a new
+// tab, since it navigates away from this page entirely.
+function handleWatchNow(ctaLink: string) {
+  if (ctaLink.startsWith("http")) {
+    window.open(ctaLink, "_blank", "noopener,noreferrer");
+  }
+}
+
 function ReleasedCardHalf({ session }: { session: ReleasedSession }) {
   return (
     <GlassCard
@@ -58,6 +67,7 @@ function ReleasedCardHalf({ session }: { session: ReleasedSession }) {
       >
         <Button
           size="md"
+          onClick={() => handleWatchNow(session.ctaLink)}
           style={{ fontFamily: "Arial, sans-serif" }}
           className="!py-tg-3a !px-5 !text-[14px] !gap-[9px] !rounded-full !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
         >
@@ -93,6 +103,7 @@ function ReleasedCardFull({ session }: { session: ReleasedSession }) {
       >
         <Button
           size="sm"
+          onClick={() => handleWatchNow(session.ctaLink)}
           style={{ fontFamily: "Arial, sans-serif" }}
           className="!gap-2 !rounded-full !py-[10px] !px-tg-7 !text-[13.5px] !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
         >
