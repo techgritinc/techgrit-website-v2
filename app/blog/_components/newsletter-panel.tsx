@@ -57,7 +57,7 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
                       label="Email"
                       name="email"
                       type="email"
-                      placeholder="Your work email"
+                      placeholder={content.placeholder}
                       error={status === "error" ? content.errorText : undefined}
                       containerClassName="flex-1 min-w-[200px] flex flex-col [&_input]:!flex-1 [&_input]:!rounded-[12px] [&_input]:!px-[18px] [&_input]:!py-[15.5px] [&_input]:!text-[15px] [&_input::placeholder]:!font-normal max-sm:[&_p]:sr-only"
                     />

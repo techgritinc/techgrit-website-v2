@@ -13,6 +13,13 @@ export interface PostAuthor {
   initials: string;
 }
 
+export interface PostImage {
+  url: string;
+  alternativeText: string;
+  width: number;
+  height: number;
+}
+
 export interface BlogHeroContent {
   eyebrow: string;
   heading: string;
@@ -28,6 +35,7 @@ export interface FeaturedPost {
   readTime: string;
   ctaLabel: string;
   href: string;
+  image: PostImage | null;
 }
 
 export interface BlogPost {
@@ -40,21 +48,34 @@ export interface BlogPost {
   publishDate: string;
   readTime: string;
   href: string;
+  image: PostImage | null;
 }
 
 export interface NewsletterPanelContent {
   heading: string;
   copy: string;
   ctaLabel: string;
+  placeholder: string;
   helperText: string;
   errorText: string;
   successText: string;
 }
 
+export interface PageSeo {
+  metaTitle: string;
+  metaDescription: string;
+}
+
+export interface Topic {
+  label: string;
+  value: string; // matches the CMS category slug, used to build the `?category=` filter link
+}
+
 export interface BlogPageContent {
+  seo: PageSeo;
   hero: BlogHeroContent;
   featuredPost: FeaturedPost;
-  topics: string[];
+  topics: Topic[];
   posts: BlogPost[];
   newsletter: NewsletterPanelContent;
 }

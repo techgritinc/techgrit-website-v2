@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { GlassCard, GlassCardDescription, GlassCardTitle } from "@/components/ui/GlassCard";
 import { NetworkNodeIcon } from "@/components/ui/icons";
 import type { FeaturedPost as FeaturedPostContent } from "../_data/types";
@@ -39,15 +40,28 @@ export function FeaturedPost({ post }: { post: FeaturedPostContent }) {
             </div>
 
             <div className="relative flex min-h-tg-320 items-center justify-center overflow-hidden bg-[image:var(--gradient-blog-featured)]">
-              <div
-                aria-hidden="true"
-                className="absolute size-tg-300 rounded-full bg-overlay-orange-22 blur-glow-md"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 [background-image:radial-gradient(var(--color-glass-strong)_1px,transparent_1.5px)] [background-size:22px_22px]"
-              />
-              <NetworkNodeIcon className="relative" />
+              {post.image ? (
+                <Image
+                  src={post.image.url}
+                  alt={post.image.alternativeText}
+                  fill
+                  sizes="(min-width: 960px) 45vw, 100vw"
+                  priority
+                  className="object-cover"
+                />
+              ) : (
+                <>
+                  <div
+                    aria-hidden="true"
+                    className="absolute size-tg-300 rounded-full bg-overlay-orange-22 blur-glow-md"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 [background-image:radial-gradient(var(--color-glass-strong)_1px,transparent_1.5px)] [background-size:22px_22px]"
+                  />
+                  <NetworkNodeIcon className="relative" />
+                </>
+              )}
             </div>
           </GlassCard>
         </a>

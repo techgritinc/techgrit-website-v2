@@ -1,18 +1,11 @@
 import FilterBar from "@/components/ui/FilterBar";
 import { TopicFilter } from "./topic-filter";
+import type { Topic } from "../_data/types";
 
-export function BlogFilterBar({
-  topics,
-  activeTopic,
-  onSelect,
-}: {
-  topics: string[];
-  activeTopic: string;
-  onSelect: (topic: string) => void;
-}) {
+export function BlogFilterBar({ topics, activeCategory }: { topics: Topic[]; activeCategory: string }) {
   return (
     <FilterBar label="Filter">
-      <TopicFilter topics={topics} activeTopic={activeTopic} onSelect={onSelect} />
+      <TopicFilter topics={topics} activeCategory={activeCategory} />
     </FilterBar>
   );
 }
