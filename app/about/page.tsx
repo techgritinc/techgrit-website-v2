@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { aboutUsContent } from "./_data/about-us-content";
+import { notFound } from "next/navigation";
+import { getAboutPageContent } from "@/cms/api/about";
 import { AboutUsHero } from "./_components/about-us-hero";
 import { AboutUsShowcase } from "./_components/about-us-showcase";
 import { AboutUsWhoYouAre } from "./_components/about-us-who-you-are";
@@ -11,15 +12,21 @@ import { AboutUsPartner } from "./_components/about-us-partner";
 import LifeGallery from "@/app/_home-components/LifeGallery";
 import { FinalCta } from "@/components/ui/final-cta";
 
-export const metadata: Metadata = {
-  title: aboutUsContent.seo.metaTitle,
-  description: aboutUsContent.seo.metaDescription,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getAboutPageContent();
+  if (!content) return {};
+  return { title: content.seo.metaTitle, description: content.seo.metaDescription };
+}
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const content = await getAboutPageContent();
+  if (!content) notFound();
+
+  const sections = content.sections.filter((section) => section !== undefined);
+
   return (
     <main className="overflow-x-clip">
-      {aboutUsContent.sections.map((section) => {
+      {sections.map((section) => {
         switch (section.type) {
           case "hero":
             return <AboutUsHero key={section.order} section={section} />;
@@ -44,6 +51,8 @@ export default function AboutPage() {
                 id="life"
                 heading={section.title}
                 description={section.subtitle}
+                eyebrow={section.eyebrow}
+                images={section.photos}
               />
             );
           case "finalCta":
@@ -66,4 +75,3 @@ export default function AboutPage() {
     </main>
   );
 }
- 

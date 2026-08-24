@@ -1,21 +1,5 @@
-export type StrapiImageFormat = {
-  url: string;
-  width: number;
-  height: number;
-};
-
-export type StrapiMedia = {
-  url: string;
-  alternativeText: string | null;
-  width: number;
-  height: number;
-  formats: {
-    thumbnail?: StrapiImageFormat;
-    small?: StrapiImageFormat;
-    medium?: StrapiImageFormat;
-    large?: StrapiImageFormat;
-  } | null;
-};
+export type { StrapiImageFormat, StrapiMedia } from "./strapi-common";
+import type { StrapiMedia } from "./strapi-common";
 
 export type StrapiSection = {
   title: string;
