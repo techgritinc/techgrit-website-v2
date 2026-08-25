@@ -194,7 +194,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                         )}
                       </span>
                       <span className="flex flex-col min-w-0 mt-px">
-                        <span className="text-[14px] leading-[1.4] font-bold text-white">{item.title}</span>
+                        <span className="text-[14px] leading-[1.2] font-bold text-white">{item.title}</span>
                         <span className="mt-0.75 text-[11.5px] leading-[1.4] text-text-55 line-clamp-2">{item.description}</span>
                       </span>
                     </Link>

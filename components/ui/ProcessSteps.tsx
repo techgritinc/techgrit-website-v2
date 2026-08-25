@@ -10,9 +10,19 @@ export interface ProcessStepsProps {
   columns?: number;
 }
 
-const LG_COLUMNS_CLASS: Record<number, string> = {
-  4: "lg:grid-cols-4",
-  5: "lg:grid-cols-5",
+// The 5-column (default) path's breakpoints are 641px/921px, matching the shared
+// `[data-step-grid]` selector's own `@media(max-width:640px)`/`@media(max-width:920px)`
+// rules — confirmed identical (grid-template-columns:1fr / 1fr 1fr) across every "What
+// We Do" reference file (AI Strategy, AI Modernization, Managed Services, etc. — grep
+// verified) — rather than this project's canonical `md`=960px/`lg`=1140px breakpoints,
+// whose gap against the real 640px/920px edges produced a visible mismatch window when
+// toggling against the reference (TMS-86-ai-strategy-and-roadmap). The 4-column path
+// (Discovery Sprints, a different reference-file family with no `[data-step-grid]`
+// selector of its own) keeps the original md/lg breakpoints unchanged — not verified
+// against 641px/921px, so not assumed to need the same fix.
+const COLUMNS_CLASSES: Record<number, string> = {
+  4: "md:grid-cols-2 lg:grid-cols-4",
+  5: "min-[641px]:grid-cols-2 min-[921px]:grid-cols-5",
 };
 
 /**
@@ -22,7 +32,7 @@ const LG_COLUMNS_CLASS: Record<number, string> = {
  */
 export function ProcessSteps({ steps, columns = 5 }: ProcessStepsProps) {
   return (
-    <div className={`grid grid-cols-1 gap-4 md:grid-cols-2 ${LG_COLUMNS_CLASS[columns] ?? LG_COLUMNS_CLASS[5]}`}>
+    <div className={`grid grid-cols-1 gap-4 ${COLUMNS_CLASSES[columns] ?? COLUMNS_CLASSES[5]}`}>
       {steps.map((step) => (
         <div
           key={step.order}
