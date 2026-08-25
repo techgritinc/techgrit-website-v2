@@ -1,7 +1,25 @@
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import Button from "@/components/ui/Button";
 
-export function CaseStudiesFinalCta({ variant = "list" }: { variant?: "list" | "detail" }) {
+// No fallback content lives here — every field is required and comes from the caller.
+// The CMS-driven list page passes the real cta-banner section; the still-static detail
+// page (app/case-studies/[slug]/page.tsx) passes its own literal placeholder copy until
+// that page is migrated too. Either way, this component holds no content of its own.
+export function CaseStudiesFinalCta({
+  title,
+  titleHighlight,
+  description,
+  ctaLabel,
+  ctaLink,
+}: {
+  title: string;
+  titleHighlight: string | null;
+  description: string;
+  ctaLabel: string;
+  ctaLink: string;
+}) {
+  const [before, after] = titleHighlight ? title.split(titleHighlight) : [title, ""];
+
   return (
     <section>
       <div className="tg-container pt-[20px] pb-[90px] px-[var(--space-15)]">
@@ -15,20 +33,20 @@ export function CaseStudiesFinalCta({ variant = "list" }: { variant?: "list" | "
             />
             <div className="relative max-w-[620px]">
               <h2 className="text-[clamp(28px,3.4vw,40px)] leading-[1.08] tracking-[var(--ls-snug)]">
-                Step into an <span className="text-gradient">AI-first future.</span>
+                {before}
+                {titleHighlight ? <span className="text-gradient">{titleHighlight}</span> : null}
+                {after}
               </h2>
               <p className="mt-[14px] text-[16.5px] leading-[var(--lh-relaxed)] text-text-quiet">
-                {variant === "detail"
-                  ? "Explore how to leverage AI-driven insights and tools to gain a competitive edge and build a smarter tomorrow."
-                  : "The era of artificial intelligence is here. Explore how to leverage AI-driven insights and tools to gain a competitive edge and build a smarter tomorrow."}
+                {description}
               </p>
             </div>
             <Button
-              href="/contact"
+              href={ctaLink}
               variant="primary"
               className="relative gap-[10px] text-[16px] !px-[30px] !py-[15px] !rounded-[12px] !min-h-[52px] whitespace-nowrap"
             >
-              Get in Touch <span aria-hidden="true" className="text-[17px]">&#8594;</span>
+              {ctaLabel} <span aria-hidden="true" className="text-[17px]">&#8594;</span>
             </Button>
           </div>
         </RevealOnScroll>

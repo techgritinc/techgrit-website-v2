@@ -1,5 +1,6 @@
 import { pickMediaAsset, resolveMediaUrl } from "../../utils/media";
 import type { AnySection, StrapiMedia } from "./shared";
+import { ROUTES } from "@/lib/routes";
 
 export type StrapiCultureGallerySection = {
   id: number;
@@ -36,7 +37,7 @@ export const DEFAULT_CULTURE_GALLERY_DATA: CultureGalleryData = {
   subtitle: "The people and the culture behind the engineering.",
   badgeLabel: "Inside TechGrit",
   primaryBtn: { label: "Explore Careers", href: "/careers" },
-  secondaryBtn: { label: "Meet the team", href: "/about" },
+  secondaryBtn: { label: "Meet the team", href: ROUTES.aboutOurStory },
   images: [
     { id: "glasses", src: "/assets/team/glasses.png", alt: "TechGrit team member" },
     { id: "rooftop", src: "/assets/team/rooftop.png", alt: "TechGrit office rooftop" },
