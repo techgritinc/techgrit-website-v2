@@ -115,3 +115,10 @@ Two things that are easy to get wrong:
 
 ## Recent Changes
 - TMS-86: planning the AI-Accelerated Modernization page at the new route `/what-we-do/ai-modernization` (`app/what-we-do/ai-modernization/`) — the first page under a "What We Do" route segment; adds 4 new shared `components/ui/` primitives (`ProcessSteps`, `IconTile`, `Faq`, and `Outcome` — the last built ahead of need per an explicit clarification, unused on this page), one new `GlassCard` variant for the bulleted capability card, one new `components/ui/ambient-orbs.tsx` pathname branch matching the reference's 4-orb geometry, and a 1-line `cms/api/footer.ts` href edit repointing "AI-Accelerated Modernization" from `/services#svc-modernization` to the new route
+
+## Active Technologies
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-88)
+- N/A — Orbit AI Ecosystem page content is a static local TypeScript content module; a live CMS page exists for this feature's slug but is deliberately not read from, per explicit requester decision (TMS-88)
+
+## Recent Changes
+- TMS-88: planning the Orbit AI Ecosystem page at the new route `/how-we-work/orbit-ai` (`app/how-we-work/orbit-ai/`) — the first page under a "How We Work" route segment, built static (mirroring `app/construction/`'s pattern) rather than CMS-backed despite a live, fully-populated CMS page existing at `/api/pages/by-slug/orbit-ai-ecosystem` for this exact feature; introduces zero new shared components (all card shapes map onto `Hero`/`ContentBlock`/`GlassCard`/`IconTile`/`ProcessSteps`/`Outcome`/`FinalCta`), one backward-compatible prop extension (`ContentBlock`'s `chips`/`chipsLabel` become optional), one new `components/ui/ambient-orbs.tsx` pathname branch, and a 1-line `cms/api/footer.ts` href edit repointing "Orbit AI Framework" from `/frameworks#orbit-ai` to the new route
