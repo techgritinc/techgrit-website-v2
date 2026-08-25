@@ -22,6 +22,7 @@ export function FinalCta({
   descriptionMaxWidth = 600,
   maxWidth = 1180,
   paddingBottom = 110,
+  buttonRowGap = 15,
   primaryBtnClassName = "",
   secondaryBtnClassName = "",
   cardClassName = "",
@@ -44,6 +45,8 @@ export function FinalCta({
   descriptionMaxWidth?: number;
   maxWidth?: number;
   paddingBottom?: number | string;
+  /** Override the primary/secondary CTA button row's gap when a reference specifies one other than the 15px default. */
+  buttonRowGap?: number;
   primaryBtnClassName?: string;
   secondaryBtnClassName?: string;
   cardClassName?: string;
@@ -98,7 +101,7 @@ export function FinalCta({
               </p>
               <div
                 className="flex flex-wrap items-center justify-center"
-                style={{ marginTop: 34, gap: 15 }}
+                style={{ marginTop: 34, gap: buttonRowGap }}
               >
                 <Button
                   href={section.ctaLink}

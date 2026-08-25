@@ -98,7 +98,9 @@ function toMegaGroup(navItem: StrapiNavItem): HeaderMegaGroup {
               ? "/what-we-do/data-ai-engineering"
               : section.title === "Platform Engineering"
                 ? "/what-we-do/platform-engineering"
-                : section.ctaLink) ?? "/",
+                : section.title === "Managed Services"
+                  ? "/what-we-do/managed-services"
+                  : section.ctaLink) ?? "/",
     })),
     cta:
       navItem.ctaLabel && navItem.ctaLink
