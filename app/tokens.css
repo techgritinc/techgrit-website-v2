@@ -158,6 +158,7 @@
   --color-overlay-blue:   rgba(2, 132, 199, 0.12);   /* Ambient orb / bg glow */
   --color-overlay-blue-soft: rgba(2, 132, 199, 0.10); /* Ambient orb / bg glow */
   --color-overlay-teal:   rgba(15, 118, 110, 0.12);  /* Ambient orb / bg glow */
+  --color-overlay-teal-08: rgba(15, 118, 110, 0.08); /* Case-studies page ambient orb (third orb) */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
   --color-overlay-teal-light-12: rgba(45, 212, 191, 0.12); /* Why-Join benefit icon background — teal (Careers) */
   --color-overlay-amber-soft: rgba(245, 158, 11, 0.08); /* Ambient orb / bg glow — Construction page third orb (TMS-67) */
