@@ -10,6 +10,8 @@ type MediaSlotProps = {
   height?: number;
   sizes?: string;
   style?: CSSProperties;
+  /** Skip lazy-loading for above-the-fold images (e.g. a hero) so they don't pop in late. */
+  priority?: boolean;
 };
 
 /** Renders an image, or "Coming soon" text in its place when `src` is absent —
@@ -28,6 +30,7 @@ export default function MediaSlot({
   height,
   sizes,
   style,
+  priority,
 }: MediaSlotProps) {
   if (!src) {
     return (
@@ -55,6 +58,7 @@ export default function MediaSlot({
         alt={alt}
         fill
         sizes={sizes}
+        priority={priority}
         style={{ display: "block", ...style }}
         className={["object-cover", className].filter(Boolean).join(" ")}
       />
@@ -67,6 +71,7 @@ export default function MediaSlot({
       alt={alt}
       width={width ?? 400}
       height={height ?? 300}
+      priority={priority}
       style={style}
       className={className}
     />

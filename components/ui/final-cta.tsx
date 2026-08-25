@@ -14,6 +14,10 @@ export function FinalCta({
   tone = "orange",
   paddingTop = 40,
   titleLineHeight,
+  titleFontSize = "clamp(34px, 4.4vw, 48px)",
+  eyebrowColor: eyebrowColorOverride,
+  eyebrowWeight = "var(--fw-bold)",
+  descriptionLineHeight,
   maxWidth = 1180,
   paddingBottom = 110,
   primaryBtnClassName = "",
@@ -24,6 +28,14 @@ export function FinalCta({
   tone?: "orange" | "amber";
   paddingTop?: number | string;
   titleLineHeight?: number | string;
+  /** Override the title's clamp() when a reference specifies different values than the default. */
+  titleFontSize?: string;
+  /** Override the eyebrow's color when a reference wants a different tint than the tone default. */
+  eyebrowColor?: string;
+  /** Override the eyebrow's font-weight when a reference wants 800 instead of the 700 default. */
+  eyebrowWeight?: string;
+  /** Override the description's line-height when a reference specifies one explicitly. */
+  descriptionLineHeight?: number | string;
   maxWidth?: number;
   paddingBottom?: number | string;
   primaryBtnClassName?: string;
@@ -31,7 +43,7 @@ export function FinalCta({
   cardClassName?: string;
 }) {
   const glow = tone === "amber" ? "var(--color-overlay-amber-strong)" : "var(--color-overlay-orange-strong)";
-  const eyebrowColor = tone === "amber" ? "var(--color-amber-light)" : "var(--color-orange)";
+  const eyebrowColor = eyebrowColorOverride ?? (tone === "amber" ? "var(--color-amber-light)" : "var(--color-orange)");
   return (
     <section>
       <div className="mx-auto px-9 w-full" style={{ maxWidth: maxWidth, paddingTop: paddingTop, paddingBottom: paddingBottom }}>
@@ -57,7 +69,7 @@ export function FinalCta({
               <div
                 style={{
                   fontSize: "var(--text-2xs)",
-                  fontWeight: "var(--fw-bold)",
+                  fontWeight: eyebrowWeight,
                   letterSpacing: "var(--ls-widest)",
                   textTransform: "uppercase",
                   color: eyebrowColor,
@@ -66,10 +78,10 @@ export function FinalCta({
               >
                 {section.eyebrow}
               </div>
-              <h2 className="mt-4" style={{ fontSize: "clamp(34px, 4.4vw, 48px)", lineHeight: titleLineHeight }}>{section.title}</h2>
+              <h2 className="mt-4" style={{ fontSize: titleFontSize, lineHeight: titleLineHeight }}>{section.title}</h2>
               <p
                 className="mx-auto mt-5 text-[length:var(--text-18)]"
-                style={{ maxWidth: 600, color: "var(--color-text-secondary)" }}
+                style={{ maxWidth: 600, color: "var(--color-text-secondary)", lineHeight: descriptionLineHeight }}
               >
                 {section.description}
               </p>

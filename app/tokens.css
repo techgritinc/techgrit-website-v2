@@ -29,6 +29,7 @@
   --color-orange-deep:  #EA580C;  /* Burnt orange — mesh gradient depth only, not UI elements */
   --color-amber:        #F59E0B;  /* Solar Amber — gradient partner, outcomes, phases */
   --color-amber-light:  #F7B733;  /* Amber light — arrow icons, link accents */
+  --color-amber-badge:  #fdba74;  /* Hero eyebrow-badge text tint across the "What We Do" service-page family (TMS-86) — distinct literal from --color-amber-light */
   --color-orange-light: #fdba74;  /* Orange light — Leadership hero eyebrow label (TMS-65), distinct hue from amber-light */
   --color-yellow:       #FBBF24;  /* Construction Yellow — industry nav dot, Construction stat numbers, Construction page accents. rgb(251,191,36) */
 
@@ -40,6 +41,7 @@
   --color-teal-light:   #2dd4bf;  /* Teal light — accent on teal sections */
   --color-teal-bright:  #2DDFBF;  /* Teal bright — accent on teal sections */
   --color-green:        #34d399;  /* Success — live status, confirmation states */
+  --color-green-live:   #22c55e;  /* Distinct from --color-green: the hero "frameworks in every engagement" blinking status dot across the What We Do service page family (TMS-86) */
   --color-error:        #FB7185;  /* Error / danger — form validation messages (Blog contact form) */
   --color-purple:       #A78BFA;  /* Blog category accent — "Engineering" / "AI" article tags (violet) */
   --color-badge-text:   #08111F;  /* Text color ON orange gradient badges — near-black navy. FR-006a sanctioned exception: v2 itself still uses this navy value — do not repoint to black */
@@ -162,6 +164,7 @@
   --color-overlay-teal:   rgba(15, 118, 110, 0.12);  /* Ambient orb / bg glow */
   --color-overlay-teal-08: rgba(15, 118, 110, 0.08); /* Case-studies page ambient orb (third orb) */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
+  --color-overlay-amber-09: rgba(245, 158, 11, 0.09); /* Default ambient-orb set — third orb */
   --color-overlay-teal-light-12: rgba(45, 212, 191, 0.12); /* Why-Join benefit icon background — teal (Careers) */
   --color-overlay-amber-soft: rgba(245, 158, 11, 0.08); /* Ambient orb / bg glow — Construction page third orb (TMS-67) */
   --color-overlay-amber-12: rgba(245, 158, 11, 0.12); /* Lifecycle diagram panel decorative glow blob (TMS-67) */
@@ -240,6 +243,10 @@
   --color-border-24:          rgba(255, 255, 255, 0.24);  /* Apply-modal resume-upload dashed border */
   --color-border-40:          rgba(255, 255, 255, 0.40);  /* Apply-modal resume-upload dashed border, hover */
   --color-border-orange-35:   rgba(232, 119, 34, 0.35);   /* Apply-modal resume-upload icon chip border */
+  --color-border-orange-22:   rgba(232, 119, 34, 0.22);   /* Hero media-card border — "What We Do" service-page family (TMS-86) */
+  --color-border-orange-18:   rgba(232, 119, 34, 0.18);   /* Hero media-card bottom-divider — "What We Do" service-page family (TMS-86) */
+  --color-overlay-orange-25:  rgba(232, 119, 34, 0.25);   /* Hero media-card decorative blur corner — "What We Do" service-page family (TMS-86) */
+  --color-overlay-orange-8:   rgba(232, 119, 34, 0.08);   /* Strategies-band panel gradient — "What We Do" service-page family (TMS-86) */
   --color-overlay-orange-14:  rgba(232, 119, 34, 0.14);   /* Apply-modal resume-upload icon chip background */
   --color-border-green-45:    rgba(52, 211, 153, 0.45);   /* Apply-modal success-icon ring border */
   --color-overlay-green-15:   rgba(52, 211, 153, 0.15);   /* Apply-modal success-icon ring background */

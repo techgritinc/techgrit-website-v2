@@ -39,7 +39,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       id: "what-we-do",
       heading: "What We Do",
       links: [
-        { slug: "svc-modernization", label: "AI-Accelerated Modernization", href: "/services#svc-modernization" },
+        { slug: "svc-modernization", label: "AI-Accelerated Modernization", href: "/what-we-do/ai-modernization" },
         { slug: "svc-product", label: "Software Product Engineering", href: "/services#svc-product" },
         { slug: "svc-data-ai", label: "Data & AI Engineering", href: "/services#svc-data-ai" },
         { slug: "svc-platform", label: "Platform Engineering", href: "/services#svc-platform" },
@@ -134,6 +134,9 @@ function detectPlatform(url: string): FooterSocialPlatform | null {
   return null;
 }
 
+// TMS-86: the CMS's own "AI-Accelerated Modernization" link still points at the old
+// /services anchor. Forced to the new static route here until the CMS entry itself is
+// updated (planned) — every other footer link stays fully CMS-driven.
 function toLinkGroup(menuItem: StrapiFooterMenuItem): FooterLinkGroup {
   return {
     id: String(menuItem.id),
@@ -141,7 +144,7 @@ function toLinkGroup(menuItem: StrapiFooterMenuItem): FooterLinkGroup {
     links: menuItem.items.map((item) => ({
       slug: String(item.id),
       label: item.title,
-      href: item.url,
+      href: item.title === "AI-Accelerated Modernization" ? "/what-we-do/ai-modernization" : item.url,
     })),
   };
 }
