@@ -18,7 +18,7 @@ There is no test framework in this repo (no Jest/Vitest/Playwright config, no `*
 
 `.husky/pre-commit` runs `npm run lint` then `npm run build` before every commit; both must stay green.
 
-`next.config.ts` is the stock empty scaffold — no custom Next.js config yet.
+`next.config.ts` sets `trailingSlash: true` and `images.unoptimized: true`. It carries no `output` key: the site is server-rendered by a long-running `next start` process on the VM behind nginx. It was `output: "export"` while the site was a static bundle on GitHub Pages — see Deployment below.
 
 ## Architecture
 
@@ -52,6 +52,24 @@ Brand system: dark surface by default (`--color-ink` family), white-on-dark text
 ### Spec-driven workflow (spec-kit)
 
 Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored as Copilot prompts in `.github/prompts/`): `speckit.jira` → `speckit.specify` → `speckit.clarify` → `speckit.plan` → `speckit.tasks` → `speckit.implement`, with `speckit.analyze`/`speckit.checklist`/`speckit.constitution`/`speckit.commit`/`speckit.taskstoissues` as utilities. Generated artifacts land in `specs/<feature-or-ticket-key>/` (`spec.md`, `plan.md`, `tasks.md`, `research.md`, `data-model.md`, `quickstart.md`). `.specify/memory/constitution.md` is the authoritative, versioned source for all the architecture rules above — consult it directly for full rationale/history rather than treating this file as a paraphrase substitute.
+
+## Deployment
+
+The site runs on an AWS EC2 VM (shared with the Strapi CMS and two other apps) under PM2 as `techgrit-site`, port 3002 bound to loopback, behind nginx. `ecosystem.config.js` is the process definition: its `name` must match `APP_NAME` in the workflow, and its `PORT` must match the nginx `proxy_pass`.
+
+Every route renders dynamically (`ƒ` in the build output) because `cms/api/fetcher.ts` fetches with `cache: "no-store"`. The site therefore needs `CMS_API_URL`, which the deploy writes to `.env` from the `dev` Environment on each run. Nothing is prerendered, so the CI build gate does not need the CMS reachable — `fetchCms` returns `null` on any failure.
+
+Two workflows exist during the GitHub Pages -> VM migration; only one may be armed:
+
+- `deploy-pages.yml` — the incumbent, fires on push to `dev`, serves `beta.techgrit.com` (see `CNAME`). It can no longer rebuild, since static export requires the `output: "export"` that `next.config.ts` has dropped. Pages keeps serving its last successful deployment, which is the rollback target until cutover completes.
+- `deploy-site.yml` — the replacement, `workflow_dispatch` only until the DNS flip. Builds on the runner as a gate, then over SSH does `git reset --hard` -> `npm ci` -> `npm run build` -> `pm2 restart`.
+
+Two things that are easy to get wrong:
+
+- **Deploy as root, never `ubuntu`.** Two PM2 daemons run here: root owns `techgrit-site` and `techgrit-cms`, `ubuntu` owns `call-summary` and `kaffeax-sales`. `pm2 list` shows a different set depending on who you are. The wrong user starts a second copy in the other daemon, competing for port 3002, and it reads as a crash rather than a duplicate.
+- **nginx `server_name` must be a hostname, never a bare IP.** A resize changes the public IP and silently breaks any block pinned to the old one — how the CMS came to serve 404s from the default server block.
+
+`npm run build` on the VM rewrites `.next/` in place under the running server, so a deploy briefly risks 404s on hashed chunks. Accepted for a low-traffic marketing site; revisit by shipping a prebuilt artifact if traffic grows.
 
 ## Active Technologies
 - TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (CSS-first `@theme`, no `tailwind.config.ts`)
@@ -104,3 +122,10 @@ Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored 
 
 ## Recent Changes
 - TMS-86-software-product-engineering: planning the Software Product Engineering page at the new route `/what-we-do/software-product-engineering` (`app/what-we-do/software-product-engineering/`) — the second page in the "What We Do" family, spec directory disambiguated from the pre-existing `specs/TMS-86/` (AI-Accelerated Modernization). Introduces **zero** new shared `components/ui/` primitives or tokens — reuses `Hero`, `ContentBlock`, `GlassCard` (`serviceCapability` variant), `ProcessSteps`, `Faq`, `IconTile`, `final-cta`, and `MediaSlot` unmodified, following the sibling AI-Modernization page's exact file/folder architecture. Hero right-side card uses the `public/samples/svc-eng.png` image (unused elsewhere in the app) in place of the reference's four stat-tile callouts, matching the sibling page's own image-replacement treatment. Two 1-line nav-config edits repoint "Software Product Engineering" from `/services#svc-product` to the new route: `cms/api/footer.ts` and, unlike the sibling ticket's own conclusion, `cms/api/header.ts`'s `toMegaGroup()` special-case ternary too (confirmed necessary by direct inspection — that ternary already exists and live-overrides one CMS-supplied link).
+
+## Active Technologies
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-88)
+- N/A — Orbit AI Ecosystem page content is a static local TypeScript content module; a live CMS page exists for this feature's slug but is deliberately not read from, per explicit requester decision (TMS-88)
+
+## Recent Changes
+- TMS-88: planning the Orbit AI Ecosystem page at the new route `/how-we-work/orbit-ai` (`app/how-we-work/orbit-ai/`) — the first page under a "How We Work" route segment, built static (mirroring `app/construction/`'s pattern) rather than CMS-backed despite a live, fully-populated CMS page existing at `/api/pages/by-slug/orbit-ai-ecosystem` for this exact feature; introduces zero new shared components (all card shapes map onto `Hero`/`ContentBlock`/`GlassCard`/`IconTile`/`ProcessSteps`/`Outcome`/`FinalCta`), one backward-compatible prop extension (`ContentBlock`'s `chips`/`chipsLabel` become optional), one new `components/ui/ambient-orbs.tsx` pathname branch, and a 1-line `cms/api/footer.ts` href edit repointing "Orbit AI Framework" from `/frameworks#orbit-ai` to the new route

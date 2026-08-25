@@ -1,6 +1,6 @@
 import Button from "@/components/ui/Button";
 import { ClockIcon, LocationIcon } from "@/components/ui/icons";
-import type { AccentKey, OpenRole } from "../_data/careers-data";
+import type { AccentKey, OpenRole } from "@/cms/types/careers-types";
 
 const ACCENT_CLASSES: Record<AccentKey, string> = {
   orange: "bg-orange shadow-glow-role-orange",

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Button from "@/components/ui/Button";
 import { ApplicationDialog } from "./application-dialog";
 import type { ApplicationContext } from "./application-dialog";
-import type { ClosingCtaContent } from "../_data/careers-data";
+import type { ApplicationFormContent, ClosingCtaContent } from "@/cms/types/careers-types";
 
 const GENERAL_APPLICATION_CONTEXT: ApplicationContext = {
   mode: "general",
@@ -12,7 +12,13 @@ const GENERAL_APPLICATION_CONTEXT: ApplicationContext = {
   roleTitle: null,
 };
 
-export function CareersCta({ content }: { content: ClosingCtaContent }) {
+export function CareersCta({
+  content,
+  applicationForm,
+}: {
+  content: ClosingCtaContent;
+  applicationForm: ApplicationFormContent;
+}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [headingLead] = content.heading.split(content.headingHighlight);
@@ -50,6 +56,7 @@ export function CareersCta({ content }: { content: ClosingCtaContent }) {
       <ApplicationDialog
         isOpen={isDialogOpen}
         context={GENERAL_APPLICATION_CONTEXT}
+        content={applicationForm}
         onClose={() => setIsDialogOpen(false)}
       />
     </section>

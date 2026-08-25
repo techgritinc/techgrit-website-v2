@@ -1,5 +1,6 @@
 import { fetchCms } from "./fetcher";
 import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
+import { ROUTES } from "@/lib/routes";
 import type {
   HeaderCta,
   HeaderData,
@@ -26,7 +27,7 @@ export const DEFAULT_HEADER_DATA: HeaderData = {
     width: 148,
     height: 44,
   },
-  cta: { label: "Talk to Us", href: "/contact" },
+  cta: { label: "Talk to Us", href: ROUTES.contactUs },
   megaGroups: [],
   plainLinks: [],
 };
