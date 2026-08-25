@@ -1,22 +1,22 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import { BlogFilterBar } from "./blog-filter-bar";
 import { BlogPostGrid } from "./blog-post-grid";
-import type { BlogPost } from "../_data/types";
+import type { BlogPost, Topic } from "../_data/types";
 
-export function BlogFilterableSection({ topics, posts }: { topics: string[]; posts: BlogPost[] }) {
-  const [activeTopic, setActiveTopic] = useState("All");
-
-  const filteredPosts = useMemo(
-    () => (activeTopic === "All" ? posts : posts.filter((post) => post.topic === activeTopic)),
-    [activeTopic, posts],
-  );
-
+// `posts` arrives already filtered by the CMS's own `?category=` param (see
+// getBlogData in cms/api/insights/blog.ts) — no client-side filtering happens here.
+export function BlogFilterableSection({
+  topics,
+  posts,
+  activeCategory,
+}: {
+  topics: Topic[];
+  posts: BlogPost[];
+  activeCategory: string;
+}) {
   return (
     <>
-      <BlogFilterBar topics={topics} activeTopic={activeTopic} onSelect={setActiveTopic} />
-      <BlogPostGrid posts={filteredPosts} onReset={() => setActiveTopic("All")} />
+      <BlogFilterBar topics={topics} activeCategory={activeCategory} />
+      <BlogPostGrid posts={posts} />
     </>
   );
 }
