@@ -7,8 +7,8 @@ export interface ContentBlockProps {
   eyebrow: string;
   title: string;
   description: string;
-  chipsLabel: string;
-  chips: ContentBlockChip[];
+  chipsLabel?: string;
+  chips?: ContentBlockChip[];
 }
 
 /**
@@ -17,26 +17,28 @@ export interface ContentBlockProps {
  * service-page prototypes (see specs/TMS-86/research.md §4) — always exactly this
  * two-column shape, a label plus a chip list, never a different arrangement.
  *
- * When the CMS supplies no chips (an empty `chips` array — e.g. this page's "blockers"
- * field shipping null), the two-column grid would leave the right half blank and read
- * as broken. In that case the block instead centers itself as a single column, matching
- * this page's other centered section intros; the moment `chips` is populated again
- * (now or in the future), it automatically reverts to the left-aligned two-column layout.
+ * `chips` is optional because two callers render the no-chips shape: TMS-88's
+ * orbit-ai-ecosystem page omits `chips`/`chipsLabel` entirely when its "challenges"
+ * section has no chips, and TMS-86's ai-modernization page can pass an empty
+ * `chips` array when the CMS "blockers" field ships with no features. Either way
+ * the two-column grid would leave the right half blank and read as broken, so the
+ * block instead centers itself as a single column; the moment `chips` is populated
+ * again (now or in the future), it automatically reverts to the two-column layout.
  */
 export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }: ContentBlockProps) {
-  const hasChips = chips.length > 0;
+  const hasChips = Boolean(chips && chips.length > 0);
 
   if (!hasChips) {
     return (
       <section className="relative">
-        <div className="mx-auto max-w-[1280px] px-9 py-[60px] text-center">
+        <div className="mx-auto max-w-[820px] px-9 py-[60px] text-center">
           <div className="mb-3.5 text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
             {eyebrow}
           </div>
-          <h2 className="mx-auto max-w-[800px] text-[clamp(30px,3.4vw,40px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
+          <h2 className="text-[clamp(30px,3.4vw,40px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
             {title}
           </h2>
-          <p className="mx-auto mt-5 max-w-[640px] text-[16.5px] leading-[1.7] text-text-66">{description}</p>
+          <p className="mx-auto mt-5 whitespace-pre-line text-[16.5px] leading-[1.7] text-text-66">{description}</p>
         </div>
       </section>
     );
@@ -60,7 +62,7 @@ export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }:
               {chipsLabel}
             </div>
             <div className="flex flex-wrap gap-2.5">
-              {chips.map((chip) => (
+              {chips!.map((chip) => (
                 <span
                   key={chip.id}
                   className="inline-flex items-center gap-[8px] rounded-[30px] border border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.04)] px-[14px] py-[8px] h-[33px] text-[13px] font-[500] text-[rgba(255,255,255,0.78)]"

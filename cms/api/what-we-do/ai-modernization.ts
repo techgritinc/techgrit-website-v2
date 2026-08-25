@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchCms } from "../fetcher";
 import { resolveMediaUrl } from "../../utils/media";
 import type {
@@ -269,7 +270,12 @@ function toSection(raw: StrapiAiModernizationSection, order: number): AiModerniz
 // This page has no static fallback content: getAiModernizationData() returns null
 // when the CMS is unreachable or returns no usable sections, and the page itself
 // calls notFound() in that case.
-export async function getAiModernizationData(): Promise<AiModernizationPageContent | null> {
+//
+// Wrapped in React's cache() because generateMetadata() and the page component each call
+// this independently — without memoization, one page request fires two identical CMS
+// requests. cache() scopes the memoized result to a single request's render pass (not
+// shared across requests), so only the first call actually hits the network.
+export const getAiModernizationData = cache(async (): Promise<AiModernizationPageContent | null> => {
   const data = await fetchCms<StrapiAiModernizationPage>(AI_MODERNIZATION_ENDPOINT);
   if (!data) return null;
 
@@ -286,4 +292,4 @@ export async function getAiModernizationData(): Promise<AiModernizationPageConte
       : { metaTitle: "AI-Accelerated Modernization | TechGrit", metaDescription: "" },
     sections,
   };
-}
+});

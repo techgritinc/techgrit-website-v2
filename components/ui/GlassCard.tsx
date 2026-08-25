@@ -14,6 +14,7 @@ export type GlassCardVariant =
   | "constructionImpact"
   | "webinarUpcoming"
   | "webinarReleased"
+  | "leaderProfile"
   | "serviceCapability";
 
 interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
@@ -37,6 +38,7 @@ const CARD_VARIANTS: Record<GlassCardVariant, string> = {
   constructionImpact: "rounded-[20px] border-border-image bg-glass-4 px-7 py-8 hover:-translate-y-[6px]",
   webinarUpcoming: "rounded-3xl border-[var(--color-border-amber-30)] bg-[image:var(--gradient-webinar-upcoming)] px-9 py-[38px]",
   webinarReleased: "rounded-2xl border-border-image bg-glass-4 overflow-hidden hover:-translate-y-[5px]",
+  leaderProfile: "flex flex-col items-center rounded-3xl border-border bg-glass-4 px-8 py-10 text-center hover:-translate-y-[5px]",
   serviceCapability: "rounded-xl border-border-image bg-glass-4 p-tg-11 hover:-translate-y-tg-1",
 };
 
@@ -83,6 +85,7 @@ const ICON_VARIANTS: Record<GlassCardVariant, string> = {
   constructionImpact: "mb-5.5 h-13 w-13 rounded-md",
   webinarUpcoming: "mb-5.5 h-13 w-13 rounded-md",
   webinarReleased: "mb-5.5 h-13 w-13 rounded-md",
+  leaderProfile: "mb-6 h-27.5 w-27.5 rounded-full",
   serviceCapability: "", // unused — capability cards use a numbered eyebrow label, not an icon box
 };
 
@@ -117,6 +120,7 @@ const TITLE_VARIANTS: Record<GlassCardVariant, string> = {
   constructionImpact: "text-[18.5px]",
   webinarUpcoming: "text-[clamp(22px,2.6vw,30px)] font-bold text-white leading-[1.15] tracking-[-0.02em]",
   webinarReleased: "text-[18.5px] font-bold text-white leading-[1.3] tracking-normal",
+  leaderProfile: "text-[22px] font-bold text-white leading-[normal] tracking-[var(--ls-normal)]",
   serviceCapability: "text-[19px] leading-[normal] font-bold text-white tracking-[-0.01em]",
 };
 
@@ -148,6 +152,7 @@ const DESC_VARIANTS: Record<GlassCardVariant, string> = {
   constructionImpact: "mt-[10px] text-[14.5px] text-muted leading-[1.6]",
   webinarUpcoming: "mt-3 text-15-5 leading-[1.6] text-[var(--color-text-66)]",
   webinarReleased: "mt-2.5 text-[14.5px] leading-[1.6] text-muted",
+  leaderProfile: "mt-3.5 text-14 leading-[1.65] tracking-normal text-[var(--color-text-66)]",
   serviceCapability: "mt-2 text-[14.5px] leading-[1.55] text-muted",
 };
 
