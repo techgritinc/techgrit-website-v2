@@ -9,7 +9,7 @@ function WhyTile({ tile }: { tile: ValuePropositionTile }) {
         {tile.icon && <Image src={tile.icon.url} alt={tile.icon.alternativeText} width={20} height={20} />}
       </span>
       <div>
-        <h4 className="text-[16.5px] font-bold text-white">{tile.title}</h4>
+        <h4 className="text-[16.5px] leading-[normal] font-bold text-white">{tile.title}</h4>
         <p className="mt-1.5 text-[14px] leading-[1.55] text-60">{tile.description}</p>
       </div>
     </div>
