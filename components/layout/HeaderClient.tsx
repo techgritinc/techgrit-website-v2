@@ -119,12 +119,12 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
 
         <nav aria-label="Primary" className="hidden items-center gap-1 tg-lg:flex">
           {megaGroups.map((group) => {
-            // About no longer has a page of its own to navigate to — its group is
-            // non-clickable everywhere (mouse, touch, keyboard); only its hover panel
-            // opens (FR-007). Active-state highlighting is left exactly as it was
-            // before this feature — no special-casing for About.
-            const isAboutGroup = group.label === "About";
-            const active = group.href === pathname;
+            // All mega menu groups are non-clickable triggers that open the hover panel
+            // and do not trigger navigation on click (matching the reference design).
+            // The active highlight remains active if we are on the group path or any of its items.
+            const active =
+              group.href === pathname ||
+              group.items.some((item) => item.href === pathname);
             const isOpen = openDropdown === group.label;
             const triggerClassName = [NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ");
             return (
@@ -133,47 +133,15 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                 onMouseEnter={() => openDropdownNow(group.label)}
                 onMouseLeave={() => scheduleDropdownClose(group.label)}
               >
-                {isAboutGroup ? (
-                  <button
-                    type="button"
-                    className={triggerClassName}
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                    onClick={() => setOpenDropdown((current) => (current === group.label ? null : group.label))}
-                  >
-                    {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
-                  </button>
-                ) : (
-                  <Link
-                    href={group.href ?? "#"}
-                    className={triggerClassName}
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                    onClick={(e) => {
-                      // Mouse click navigates to the group's own page (FR-019a), matching the
-                      // reference's real <a href>. Touch (no hover preview) opens the panel
-                      // first instead, per FR-019.
-                      const pointerType = (e.nativeEvent as PointerEvent).pointerType;
-                      if (pointerType === "touch") {
-                        e.preventDefault();
-                        setOpenDropdown((current) => (current === group.label ? null : group.label));
-                      }
-                    }}
-                    onKeyDown={(e) => {
-                      // Keyboard users have no hover preview either — Enter/Space opens the
-                      // panel first instead of navigating immediately, per FR-014. Handled
-                      // explicitly rather than inferred from pointerType, which isn't a
-                      // reliable signal for keyboard activation.
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setOpenDropdown((current) => (current === group.label ? null : group.label));
-                      }
-                    }}
-                    suppressHydrationWarning
-                  >
-                    {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
-                  </Link>
-                )}
+                <button
+                  type="button"
+                  className={triggerClassName}
+                  aria-haspopup="menu"
+                  aria-expanded={isOpen}
+                  onClick={() => setOpenDropdown((current) => (current === group.label ? null : group.label))}
+                >
+                  {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
+                </button>
                 <div
                   role="menu"
                   className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid w-[min(940px,calc(100vw-40px))] -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"

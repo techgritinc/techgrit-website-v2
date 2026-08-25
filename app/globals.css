@@ -269,10 +269,24 @@
   --color-35: var(--color-text-35);
 
   /* Spacing */
+  --spacing-tg-1: var(--space-1);
+  --spacing-tg-1a: var(--space-1a);
+  --spacing-tg-1b: var(--space-1b);
+  --spacing-tg-0a: var(--space-0a);
   --spacing-tg-1c: var(--space-1c);
   --spacing-tg-2: var(--space-2);
   --spacing-tg-3: var(--space-3);
+  --spacing-tg-3a: var(--space-3a);
+  --spacing-tg-4: var(--space-4);
+  --spacing-tg-4a: var(--space-4a);
+  --spacing-tg-5: var(--space-5);
+  --spacing-tg-5a: var(--space-5a);
   --spacing-tg-6: var(--space-6);
+  --spacing-tg-7: var(--space-7);
+  --spacing-tg-8: var(--space-8);
+  --spacing-tg-9: var(--space-9);
+  --spacing-tg-9a: var(--space-9a);
+  --spacing-tg-10: var(--space-10);
   --spacing-tg-11: var(--space-11);
   --spacing-tg-12: var(--space-12);
   --spacing-tg-13: var(--space-13);
