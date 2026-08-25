@@ -94,7 +94,7 @@ export function Hero({
           <div>
             <div
               data-rise
-              className="mb-[24px] inline-flex items-center gap-[10px] rounded-[40px] border border-[rgba(232,119,34,0.35)] bg-[rgba(232,119,34,0.10)] px-[14px] py-[7px] h-[30px]"
+              className="mb-[24px] inline-flex items-center gap-[10px] rounded-[40px] border border-[rgba(232,119,34,0.35)] bg-[rgba(232,119,34,0.10)] px-[14px] py-[7px] min-h-[30px]"
               style={{ animationDelay: ".12s" }}
             >
               <span

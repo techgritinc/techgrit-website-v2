@@ -62,11 +62,18 @@ function pickColumns(itemCount: number): 3 | 4 {
   return 3;
 }
 
-// TMS-86 / TMS-86-software-product-engineering: the CMS's own "AI-Accelerated
-// Modernization" and "Software Product Engineering" mega-menu entries still point at
-// the old /services anchors. Forced to their new static routes here until the CMS
-// entries themselves are updated (planned) — every other mega-menu item stays fully
-// CMS-driven.
+// TMS-86 / TMS-86-software-product-engineering / TMS-86-data-and-ai-engineering: the
+// CMS's own "AI-Accelerated Modernization", "Software Product Engineering", and "Data
+// and AI Engineering" mega-menu entries still point at the old /services anchors.
+// Forced to their new static routes here until the CMS entries themselves are updated
+// (planned) — every other mega-menu item stays fully CMS-driven.
+//
+// The "Data and AI Engineering" title string above is taken from the design reference
+// (TechGrit Data AI.dc.html's nav markup) — unlike the two prior entries, it has not
+// been confirmed against a live CMS response. If the live CMS actually titles this
+// entry differently (e.g. "Data & AI Engineering", matching the footer's own label),
+// this case will silently fail to match and the mega-menu entry will keep resolving to
+// its stale CMS-supplied link. Verify against a live page load before relying on this.
 //
 // `StrapiNavItem.url` and `StrapiSection.ctaLink` are typed as required strings, but
 // Strapi doesn't actually enforce that at runtime — the "About" nav item has shipped
@@ -88,7 +95,9 @@ function toMegaGroup(navItem: StrapiNavItem): HeaderMegaGroup {
           ? "/what-we-do/ai-modernization"
           : section.title === "Software Product Engineering"
             ? "/what-we-do/software-product-engineering"
-            : section.ctaLink) ?? "/",
+            : section.title === "Data and AI Engineering"
+              ? "/what-we-do/data-ai-engineering"
+              : section.ctaLink) ?? "/",
     })),
     cta:
       navItem.ctaLabel && navItem.ctaLink

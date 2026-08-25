@@ -18,6 +18,8 @@ export function FinalCta({
   eyebrowColor: eyebrowColorOverride,
   eyebrowWeight = "var(--fw-bold)",
   descriptionLineHeight,
+  descriptionFontSize = "var(--text-18)",
+  descriptionMaxWidth = 600,
   maxWidth = 1180,
   paddingBottom = 110,
   primaryBtnClassName = "",
@@ -36,6 +38,10 @@ export function FinalCta({
   eyebrowWeight?: string;
   /** Override the description's line-height when a reference specifies one explicitly. */
   descriptionLineHeight?: number | string;
+  /** Override the description's font-size when a reference specifies one other than the --text-18 default. */
+  descriptionFontSize?: string;
+  /** Override the description's max-width when a reference specifies one other than 600px. */
+  descriptionMaxWidth?: number;
   maxWidth?: number;
   paddingBottom?: number | string;
   primaryBtnClassName?: string;
@@ -80,8 +86,13 @@ export function FinalCta({
               </div>
               <h2 className="mt-4" style={{ fontSize: titleFontSize, lineHeight: titleLineHeight }}>{section.title}</h2>
               <p
-                className="mx-auto mt-5 text-[length:var(--text-18)]"
-                style={{ maxWidth: 600, color: "var(--color-text-secondary)", lineHeight: descriptionLineHeight }}
+                className="mx-auto mt-5"
+                style={{
+                  maxWidth: descriptionMaxWidth,
+                  fontSize: descriptionFontSize,
+                  color: "var(--color-text-secondary)",
+                  lineHeight: descriptionLineHeight,
+                }}
               >
                 {section.description}
               </p>
