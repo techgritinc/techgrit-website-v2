@@ -18,8 +18,14 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
 
+    if (!name) {
+      setStatus("error");
+      setErrorMessage("Please enter your name.");
+      return;
+    }
     if (!EMAIL_PATTERN.test(email)) {
       setStatus("error");
       setErrorMessage("Please enter a valid email address.");
@@ -50,6 +56,14 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
             <p className="mt-3.75 text-[16px] leading-[25.6px] text-[var(--color-text-68)]">{content.copy}</p>
           </div>
           <form onSubmit={handleSubmit} noValidate className="relative flex flex-col gap-3">
+            <FormField
+              label="Full name"
+              name="name"
+              type="text"
+              required
+              placeholder={content.namePlaceholder}
+              inputClassName="!rounded-card !py-4 !px-tg-7 placeholder:!font-normal"
+            />
             <FormField
               label="Email address"
               name="email"

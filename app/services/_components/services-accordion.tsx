@@ -48,13 +48,13 @@ function ServiceImage({ item }: { item: ServiceAccordionItem }) {
 
 function ApproachSteps({ item }: { item: ServiceAccordionItem }) {
   if (item.supportingItems.kind !== "orderedApproach") return null;
-  const { items } = item.supportingItems;
+  const { items, label } = item.supportingItems;
   const accent = BADGE_COLOR[item.accentColor];
 
   return (
     <div className="mt-[36px]">
       <div className="mb-5 text-[13px] font-bold uppercase leading-[normal] tracking-[0.12em] text-dim">
-        Our approach
+        {label}
       </div>
       <div className="grid grid-cols-1 gap-x-[48px] border-b border-white/10 min-[921px]:grid-cols-3">
         {items.map((step) => (
@@ -221,7 +221,7 @@ export function ServicesAccordion({ section }: { section: AccordionSection }) {
         <RevealOnScroll>
           <div className="mb-9 text-center">
             <div className="mb-3 text-2xs font-bold uppercase leading-[normal] tracking-widest text-orange">
-              Our services
+              {section.eyebrow}
             </div>
             <h2 className="text-[clamp(30px,3.6vw,42px)] leading-[1.06]">{section.heading}</h2>
             <p className="mx-auto mt-3.5 max-w-[640px] text-text-66">
