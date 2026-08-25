@@ -101,7 +101,7 @@ export function Hero({
                 className="h-[7px] w-[7px] shrink-0 rounded-[50%] bg-[#E87722]"
                 style={{ boxShadow: "0 0 12px #E87722" }}
               />
-              <span className="text-[12px] font-[800] uppercase tracking-[0.14em] text-[#fdba74]">
+              <span className="text-[12px] leading-[normal] font-[800] uppercase tracking-[0.14em] text-[#fdba74]">
                 {eyebrow}
               </span>
             </div>
