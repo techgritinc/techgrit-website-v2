@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CASE_STUDIES } from "../_data/case-studies-content";
+import { getCaseStudyDetailPageContent } from "@/cms/api/case-study-detail";
 import { CaseStudyDetailHero } from "../_components/case-study-detail-hero";
 import { MetricsStrip } from "../_components/metrics-strip";
 import { CaseStudyNarrative } from "../_components/case-study-narrative";
@@ -10,53 +10,63 @@ import { CaseStudiesFinalCta } from "../_components/case-studies-final-cta";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return CASE_STUDIES.map((caseStudy) => ({ slug: caseStudy.slug }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const caseStudy = CASE_STUDIES.find((entry) => entry.slug === slug);
-  if (!caseStudy) return {};
+  const content = await getCaseStudyDetailPageContent(slug);
+  if (!content) return {};
 
   return {
-    title: `${caseStudy.cardTitle} | TechGrit Case Studies`,
-    description: caseStudy.description,
+    title: content.seo.metaTitle,
+    description: content.seo.metaDescription,
   };
 }
 
 export default async function CaseStudyDetailPage({ params }: Props) {
   const { slug } = await params;
-  const caseStudy = CASE_STUDIES.find((entry) => entry.slug === slug);
+  const content = await getCaseStudyDetailPageContent(slug);
 
-  if (!caseStudy) notFound();
+  if (!content) notFound();
+
+  const hero = content.sections.find((section) => section?.type === "hero");
+  const statistics = content.sections.find((section) => section?.type === "statistics");
+  const narrativeEntries = content.sections.filter((section) => section?.type === "narrativeBlock");
+  const moreCaseStudies = content.sections.find((section) => section?.type === "moreCaseStudies");
+  const finalCta = content.sections.find((section) => section?.type === "finalCta");
 
   return (
     <main>
-      {/* Ambient background orbs — matches reference Case Study detail page */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 pointer-events-none z-0"
-      >
-        <div
-          className="absolute top-[-160px] right-[-120px] w-[560px] h-[560px] rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]"
-        />
-        <div
-          className="absolute top-[35%] left-[-220px] w-[560px] h-[560px] rounded-full bg-[var(--color-overlay-amber-light-10)] blur-[140px] animate-[tgorb_20s_ease-in-out_infinite_reverse]"
-        />
-      </div>
-      <CaseStudyDetailHero caseStudy={caseStudy} />
-      <MetricsStrip metrics={caseStudy.narrative.metrics} />
+      {hero ? <CaseStudyDetailHero section={hero} /> : null}
+      {statistics && statistics.stats.length ? (
+        <MetricsStrip metrics={statistics.stats} />
+      ) : (
+        <div className="tg-container px-[var(--space-15)]">
+          <div className="border-b border-border-faint" />
+        </div>
+      )}
       <section>
         <div className="tg-container pt-[40px] pb-[30px] px-[var(--space-15)]">
-          <div className="grid grid-cols-1 tg-md:grid-cols-[1fr_280px] gap-[64px] items-start">
-            <CaseStudyNarrative sections={caseStudy.narrative.sections} />
-            <TeamPanel team={caseStudy.narrative.team} />
+          <div
+            className={
+              content.team?.members.length
+                ? "grid grid-cols-1 tg-md:grid-cols-[1fr_280px] gap-[64px] items-start"
+                : "grid grid-cols-1"
+            }
+          >
+            <CaseStudyNarrative entries={narrativeEntries} />
+            {content.team?.members.length ? <TeamPanel section={content.team} /> : null}
           </div>
         </div>
       </section>
-      <RelatedCaseStudies currentSlug={caseStudy.slug} />
-      <CaseStudiesFinalCta variant="detail" />
+      {moreCaseStudies ? <RelatedCaseStudies section={moreCaseStudies} /> : null}
+      {finalCta ? (
+        <CaseStudiesFinalCta
+          title={finalCta.title}
+          titleHighlight={finalCta.titleHighlight}
+          description={finalCta.description}
+          ctaLabel={finalCta.primaryCtaLabel}
+          ctaLink={finalCta.primaryCtaLink}
+        />
+      ) : null}
     </main>
   );
 }

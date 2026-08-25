@@ -1,21 +1,5 @@
-export type StrapiImageFormat = {
-  url: string;
-  width: number;
-  height: number;
-};
-
-export type StrapiMedia = {
-  url: string;
-  alternativeText: string | null;
-  width: number;
-  height: number;
-  formats: {
-    thumbnail?: StrapiImageFormat;
-    small?: StrapiImageFormat;
-    medium?: StrapiImageFormat;
-    large?: StrapiImageFormat;
-  } | null;
-};
+export type { StrapiImageFormat, StrapiMedia } from "./strapi-common";
+import type { StrapiMedia } from "./strapi-common";
 
 export type StrapiSection = {
   title: string;
@@ -26,7 +10,7 @@ export type StrapiSection = {
 
 export type StrapiNavItem = {
   title: string;
-  url: string;
+  url: string | null;
   ctaLabel: string | null;
   ctaLink: string | null;
   sections: StrapiSection[];
@@ -65,7 +49,7 @@ export type HeaderMegaItem = {
 
 export type HeaderMegaGroup = {
   label: string;
-  href: string;
+  href: string | null;
   columns: 3 | 4;
   items: HeaderMegaItem[];
   cta?: HeaderCta;
@@ -73,7 +57,7 @@ export type HeaderMegaGroup = {
 
 export type HeaderPlainLink = {
   label: string;
-  href: string;
+  href: string | null;
 };
 
 export type HeaderData = {

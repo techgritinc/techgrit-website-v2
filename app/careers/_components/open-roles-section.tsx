@@ -5,16 +5,18 @@ import { RoleFilters } from "./role-filters";
 import { RoleCard } from "./role-card";
 import { ApplicationDialog } from "./application-dialog";
 import type { ApplicationContext } from "./application-dialog";
-import type { DepartmentFilter, OpenRole } from "../_data/careers-data";
+import type { ApplicationFormContent, DepartmentFilter, OpenRole } from "@/cms/types/careers-types";
 
 const CLOSED_CONTEXT: ApplicationContext = { mode: "role", roleSlug: null, roleTitle: null };
 
 export function OpenRolesSection({
   filters,
   roles,
+  applicationForm,
 }: {
   filters: DepartmentFilter[];
   roles: OpenRole[];
+  applicationForm: ApplicationFormContent;
 }) {
   const [activeFilter, setActiveFilter] = useState<string>(filters[0]?.value ?? "all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -65,6 +67,7 @@ export function OpenRolesSection({
       <ApplicationDialog
         isOpen={isDialogOpen}
         context={applicationContext}
+        content={applicationForm}
         onClose={() => setIsDialogOpen(false)}
       />
     </section>
