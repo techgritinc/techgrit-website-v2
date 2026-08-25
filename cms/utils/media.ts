@@ -1,5 +1,5 @@
 import { CMS_API_URL } from "../api/fetcher";
-import type { StrapiImageFormat, StrapiMedia } from "../types/header-types";
+import type { StrapiImageFormat, StrapiMedia } from "../types/strapi-common";
 
 export function resolveMediaUrl(url: string): string {
   return url.startsWith("http") ? url : `${CMS_API_URL}${url}`;

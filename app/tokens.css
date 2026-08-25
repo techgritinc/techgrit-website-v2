@@ -30,6 +30,7 @@
   --color-amber:        #F59E0B;  /* Solar Amber — gradient partner, outcomes, phases */
   --color-amber-light:  #F7B733;  /* Amber light — arrow icons, link accents */
   --color-amber-badge:  #fdba74;  /* Hero eyebrow-badge text tint across the "What We Do" service-page family (TMS-86) — distinct literal from --color-amber-light */
+  --color-orange-light: #fdba74;  /* Orange light — Leadership hero eyebrow label (TMS-65), distinct hue from amber-light */
   --color-yellow:       #FBBF24;  /* Construction Yellow — industry nav dot, Construction stat numbers, Construction page accents. rgb(251,191,36) */
 
   /* Semantic accents */
@@ -155,11 +156,13 @@
   --color-overlay-orange: rgba(232, 119, 34, 0.16);  /* Ambient orb / bg glow */
   --color-overlay-orange-12: rgba(232, 119, 34, 0.12); /* Apply button hover background (Careers) */
   --color-overlay-orange-10: rgba(232, 119, 34, 0.10); /* Careers hero eyebrow badge background */
+  --color-overlay-orange-08: rgba(232, 119, 34, 0.08); /* Leadership profile LinkedIn pill hover fill (TMS-65) */
   --color-overlay-orange-strong: rgba(232, 119, 34, 0.28); /* CTA panel glow blob */
   --color-overlay-amber-strong: rgba(245, 158, 11, 0.28); /* CTA panel glow blob — amber tone (Construction, TMS-67) */
   --color-overlay-blue:   rgba(2, 132, 199, 0.12);   /* Ambient orb / bg glow */
   --color-overlay-blue-soft: rgba(2, 132, 199, 0.10); /* Ambient orb / bg glow */
   --color-overlay-teal:   rgba(15, 118, 110, 0.12);  /* Ambient orb / bg glow */
+  --color-overlay-teal-08: rgba(15, 118, 110, 0.08); /* Case-studies page ambient orb (third orb) */
   --color-overlay-amber:  rgba(245, 158, 11, 0.10);  /* Ambient orb / bg glow */
   --color-overlay-amber-09: rgba(245, 158, 11, 0.09); /* Default ambient-orb set — third orb */
   --color-overlay-teal-light-12: rgba(45, 212, 191, 0.12); /* Why-Join benefit icon background — teal (Careers) */
@@ -323,6 +326,7 @@
   --text-13-5: 13.5px; /* Footer site-map link text (TMS-63) */
   --text-15-5: 15.5px;
   --text-14-5: 14.5px; /* Webinar upcoming-session date/time text (TMS-73) */
+  --text-14: 14px; /* Leadership profile bio / why-it-matters tile description (TMS-65) — deliberately not --text-14-5, a 0.5px difference across long biography copy shifts wrap points */
   --text-21: 21px;
   --text-stat: 26px;
   --text-industry-title: 26px; /* Homepage Industries card title (v2.2 FR-008) — a dedicated token, deliberately not a reuse of --text-stat (single-job token for the Hero delivery-stat digit) */

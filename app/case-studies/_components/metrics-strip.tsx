@@ -1,7 +1,7 @@
-import type { Metric } from "../_data/types";
+import type { StatValue } from "@/cms/types/case-study-detail-types";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
-export function MetricsStrip({ metrics }: { metrics: Metric[] }) {
+export function MetricsStrip({ metrics }: { metrics: StatValue[] }) {
   return (
     <section>
       <div className="tg-container pt-[24px] pb-[var(--space-3)] px-[var(--space-15)]">
@@ -10,7 +10,7 @@ export function MetricsStrip({ metrics }: { metrics: Metric[] }) {
             className="grid grid-cols-4 gap-[18px] border-t border-b border-border-faint py-[30px]"
           >
             {metrics.map((metric) => (
-              <div key={metric.label}>
+              <div key={metric.order}>
                 <div className="font-display text-[34px] font-bold text-teal-light leading-[normal]">
                   {metric.value}
                 </div>
