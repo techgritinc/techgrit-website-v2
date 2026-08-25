@@ -1,4 +1,4 @@
-import type { DepartmentFilter } from "../_data/careers-data";
+import type { DepartmentFilter } from "@/cms/types/careers-types";
 
 import Button from "@/components/ui/Button";
 

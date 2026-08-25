@@ -1,8 +1,14 @@
-import type { CaseStudyAccent } from "./types";
+export type CaseStudyAccent =
+  | "blue-light" // #38bdf8 -> var(--color-blue-light)
+  | "blue" // #0284C7 -> var(--color-blue)
+  | "orange" // #E87722 -> var(--color-orange)
+  | "amber" // #F59E0B -> var(--color-amber)
+  | "teal-light" // #2dd4bf -> var(--color-teal-light)
+  | "yellow"; // #fbbf24 -> var(--color-yellow)
 
 // Maps each case-study accent to its design token — the single source of
 // truth for accent color everywhere a case-study card renders (metric
-// numbers, industry dots, cover gradients, glow blobs).
+// numbers, industry dots, badge tints).
 export const ACCENT_VAR: Record<CaseStudyAccent, string> = {
   "blue-light": "var(--color-blue-light)",
   blue: "var(--color-blue)",
@@ -12,37 +18,21 @@ export const ACCENT_VAR: Record<CaseStudyAccent, string> = {
   yellow: "var(--color-yellow)",
 };
 
-// Tints an accent token toward transparent — shared basis for badge fills,
-// cover gradients, and glow blobs so each isn't hand-derived per component.
+// Tints an accent token toward transparent — shared basis for badge fills
+// so it isn't hand-derived per component.
 export function accentMix(accent: CaseStudyAccent, percent: number): string {
   return `color-mix(in srgb, ${ACCENT_VAR[accent]} ${percent}%, transparent)`;
 }
 
-// Decorative panel background for the spotlighted featured card.
-export function accentPanelGradient(accent: CaseStudyAccent): string {
-  return `linear-gradient(150deg, ${accentMix(accent, 18)}, ${accentMix(accent, 6)})`;
-}
-
-// Light-tone accent to pair with each accent's deeper companion tone, used
-// by the featured card's two-hue panel gradient below.
-const ACCENT_COMPANION: Partial<Record<CaseStudyAccent, CaseStudyAccent>> = {
-  "blue-light": "blue",
+// The CMS has no per-card accent field — only a category slug — so accent is derived
+// from category here, once, for every card-rendering component to share.
+const CATEGORY_ACCENT: Record<string, CaseStudyAccent> = {
+  fintech: "blue-light",
+  marketplace: "orange",
+  "ai-enablement": "amber",
+  design: "yellow",
 };
 
-// Two-hue panel background for the spotlighted featured card (pairs an
-// accent's light tone with its deeper companion tone; falls back to a
-// single-hue mix for accents with no established companion).
-export function accentFeaturedPanelGradient(accent: CaseStudyAccent): string {
-  const companion = ACCENT_COMPANION[accent] ?? accent;
-  return `linear-gradient(150deg, ${accentMix(accent, 18)}, ${accentMix(companion, 6)})`;
-}
-
-// Cover background for teaser grid cards.
-export function accentCoverGradient(accent: CaseStudyAccent): string {
-  return `linear-gradient(150deg, ${accentMix(accent, 20)}, ${accentMix(accent, 4)})`;
-}
-
-// Soft circular glow blob layered over a cover/panel.
-export function accentGlow(accent: CaseStudyAccent): string {
-  return accentMix(accent, 22);
+export function categoryAccent(categorySlug: string): CaseStudyAccent {
+  return CATEGORY_ACCENT[categorySlug] ?? "teal-light";
 }
