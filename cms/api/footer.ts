@@ -1,5 +1,6 @@
 import { fetchCms } from "./fetcher";
 import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
+import { ROUTES } from "@/lib/routes";
 import type {
   FooterContactDetail,
   FooterData,
@@ -32,7 +33,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
   },
   brandDescription:
     "The AI-First Software Engine. From vision to industrial-grade production in weeks, not years.",
-  cta: { label: "Start a conversation", href: "/contact" },
+  cta: { label: "Start a conversation", href: ROUTES.contactUs },
   linkGroups: [
     {
       id: "what-we-do",
@@ -51,9 +52,9 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       id: "how-we-work",
       heading: "How We Work",
       links: [
-        { slug: "orbit-ai", label: "Orbit AI Framework", href: "/frameworks#orbit-ai" },
-        { slug: "engagement", label: "Engagement Models", href: "/frameworks#engagement" },
-        { slug: "discovery", label: "Discovery Sprints", href: "/frameworks#discovery" },
+        { slug: "orbit-ai", label: "Orbit AI Framework", href: "/how-we-work/orbit-ai-ecosystem" },
+        { slug: "engagement", label: "Engagement Models", href: "/how-we-work/engagement-models" },
+        { slug: "discovery", label: "Discovery Sprints", href: "/how-we-work/discovery-sprints" },
       ],
     },
     {
@@ -62,7 +63,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       links: [
         { slug: "ind-healthtech", label: "HealthTech", href: "/#industries" },
         { slug: "ind-fintech", label: "FinTech", href: "/#industries" },
-        { slug: "ind-constructiontech", label: "ConstructionTech", href: "/construction" },
+        { slug: "ind-constructiontech", label: "ConstructionTech", href: ROUTES.industriesConstruction },
         { slug: "ind-hitech", label: "HiTech", href: "/#industries" },
       ],
     },
@@ -70,7 +71,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       id: "insights",
       heading: "Insights",
       links: [
-        { slug: "case-studies", label: "Case Studies", href: "/case-studies" },
+        { slug: "case-studies", label: "Case Studies", href: ROUTES.caseStudies },
         { slug: "blog", label: "Blog", href: "/blog" },
         { slug: "webinar", label: "Webinar", href: "/webinar" },
       ],
@@ -79,10 +80,10 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
       id: "company",
       heading: "Company",
       links: [
-        { slug: "our-story", label: "Our Story", href: "/about#our-story" },
-        { slug: "leadership", label: "Leadership & Advisory", href: "/about#leadership" },
-        { slug: "careers", label: "Careers", href: "/careers" },
-        { slug: "contact", label: "Contact", href: "/contact" },
+        { slug: "our-story", label: "Our Story", href: ROUTES.aboutOurStory },
+        { slug: "leadership", label: "Leadership & Advisory", href: ROUTES.aboutLeadership },
+        { slug: "careers", label: "Careers", href: ROUTES.careers },
+        { slug: "contact", label: "Contact", href: ROUTES.contactUs },
       ],
     },
   ],

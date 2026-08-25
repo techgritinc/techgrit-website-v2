@@ -18,7 +18,7 @@ There is no test framework in this repo (no Jest/Vitest/Playwright config, no `*
 
 `.husky/pre-commit` runs `npm run lint` then `npm run build` before every commit; both must stay green.
 
-`next.config.ts` is the stock empty scaffold — no custom Next.js config yet.
+`next.config.ts` sets `trailingSlash: true` and `images.unoptimized: true`. It carries no `output` key: the site is server-rendered by a long-running `next start` process on the VM behind nginx. It was `output: "export"` while the site was a static bundle on GitHub Pages — see Deployment below.
 
 ## Architecture
 
@@ -52,6 +52,24 @@ Brand system: dark surface by default (`--color-ink` family), white-on-dark text
 ### Spec-driven workflow (spec-kit)
 
 Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored as Copilot prompts in `.github/prompts/`): `speckit.jira` → `speckit.specify` → `speckit.clarify` → `speckit.plan` → `speckit.tasks` → `speckit.implement`, with `speckit.analyze`/`speckit.checklist`/`speckit.constitution`/`speckit.commit`/`speckit.taskstoissues` as utilities. Generated artifacts land in `specs/<feature-or-ticket-key>/` (`spec.md`, `plan.md`, `tasks.md`, `research.md`, `data-model.md`, `quickstart.md`). `.specify/memory/constitution.md` is the authoritative, versioned source for all the architecture rules above — consult it directly for full rationale/history rather than treating this file as a paraphrase substitute.
+
+## Deployment
+
+The site runs on an AWS EC2 VM (shared with the Strapi CMS and two other apps) under PM2 as `techgrit-site`, port 3002 bound to loopback, behind nginx. `ecosystem.config.js` is the process definition: its `name` must match `APP_NAME` in the workflow, and its `PORT` must match the nginx `proxy_pass`.
+
+Every route renders dynamically (`ƒ` in the build output) because `cms/api/fetcher.ts` fetches with `cache: "no-store"`. The site therefore needs `CMS_API_URL`, which the deploy writes to `.env` from the `dev` Environment on each run. Nothing is prerendered, so the CI build gate does not need the CMS reachable — `fetchCms` returns `null` on any failure.
+
+Two workflows exist during the GitHub Pages -> VM migration; only one may be armed:
+
+- `deploy-pages.yml` — the incumbent, fires on push to `dev`, serves `beta.techgrit.com` (see `CNAME`). It can no longer rebuild, since static export requires the `output: "export"` that `next.config.ts` has dropped. Pages keeps serving its last successful deployment, which is the rollback target until cutover completes.
+- `deploy-site.yml` — the replacement, `workflow_dispatch` only until the DNS flip. Builds on the runner as a gate, then over SSH does `git reset --hard` -> `npm ci` -> `npm run build` -> `pm2 restart`.
+
+Two things that are easy to get wrong:
+
+- **Deploy as root, never `ubuntu`.** Two PM2 daemons run here: root owns `techgrit-site` and `techgrit-cms`, `ubuntu` owns `call-summary` and `kaffeax-sales`. `pm2 list` shows a different set depending on who you are. The wrong user starts a second copy in the other daemon, competing for port 3002, and it reads as a crash rather than a duplicate.
+- **nginx `server_name` must be a hostname, never a bare IP.** A resize changes the public IP and silently breaks any block pinned to the old one — how the CMS came to serve 404s from the default server block.
+
+`npm run build` on the VM rewrites `.next/` in place under the running server, so a deploy briefly risks 404s on hashed chunks. Accepted for a low-traffic marketing site; revisit by shipping a prebuilt artifact if traffic grows.
 
 ## Active Technologies
 - TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (CSS-first `@theme`, no `tailwind.config.ts`)
@@ -111,6 +129,20 @@ Feature work goes through `/speckit.*` commands (`.specify/commands/`, mirrored 
 
 ## Recent Changes
 - TMS-86-data-and-ai-engineering: planning the Data & AI Engineering page at the new route `/what-we-do/data-ai-engineering` (`app/what-we-do/data-ai-engineering/`) — the third page in the "What We Do" family, spec directory disambiguated from `specs/TMS-86/` (AI-Accelerated Modernization) and `specs/TMS-86-software-product-engineering/`. Both sibling pages have since been upgraded to a live CMS integration in their own separate, later tickets (confirmed by direct inspection of their current `page.tsx`); this ticket deliberately targets their *original* static-content shape instead, confirmed via `/speckit.clarify`. Introduces **zero** new shared `components/ui/` primitives, tokens, or icons — reuses `Hero`, `ContentBlock`, `GlassCard` (`serviceCapability` variant), `ProcessSteps`, `Faq`, `IconTile`, `final-cta`, and `MediaSlot` unmodified; all 15 icon slots this page needs (6 "why" tiles, 3 industries, 6 related-service links) resolve to existing `components/ui/icons.tsx` entries, including reusing `EradicateDebtIcon` for the "Software Product Engineering" related-service link — the exact substitute the AI-Modernization sibling's own related-services list already established for that same icon gap. Hero right-side card uses the `public/samples/svc-qa.png` image (per clarification — no unused asset thematically fits "Data & AI Engineering") in place of the reference's four stat-tile callouts, keeping the "AI IMPACT™ · OrbitAI™ · PRISM™ frameworks" caption beneath it (unlike the Software Product Engineering sibling, which dropped its equivalent caption). One deliberate content correction: the reference's "Capabilities" heading ("Five capabilities...") is corrected to "Six capabilities..." to match the six cards that actually render, per an explicit clarification answer. Two 1-line nav-config edits repoint "Data & AI Engineering" from `/services#svc-data-ai` to the new route: `cms/api/footer.ts` and `cms/api/header.ts`'s `toMegaGroup()` special-case ternary (extending the existing two-entry chain to a third).
+
+## Active Technologies
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-88)
+- N/A — Orbit AI Ecosystem page content is a static local TypeScript content module; a live CMS page exists for this feature's slug but is deliberately not read from, per explicit requester decision (TMS-88)
+
+## Recent Changes
+- TMS-88: planning the Orbit AI Ecosystem page at the new route `/how-we-work/orbit-ai` (`app/how-we-work/orbit-ai/`) — the first page under a "How We Work" route segment, built static (mirroring `app/construction/`'s pattern) rather than CMS-backed despite a live, fully-populated CMS page existing at `/api/pages/by-slug/orbit-ai-ecosystem` for this exact feature; introduces zero new shared components (all card shapes map onto `Hero`/`ContentBlock`/`GlassCard`/`IconTile`/`ProcessSteps`/`Outcome`/`FinalCta`), one backward-compatible prop extension (`ContentBlock`'s `chips`/`chipsLabel` become optional), one new `components/ui/ambient-orbs.tsx` pathname branch, and a 1-line `cms/api/footer.ts` href edit repointing "Orbit AI Framework" from `/frameworks#orbit-ai` to the new route
+
+## Active Technologies
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (005-discovery-sprints / TMS-88-discovery-sprints)
+- N/A — Discovery Sprints page content is a static local TypeScript content module, no CMS/API integration (005-discovery-sprints)
+
+## Recent Changes
+- 005-discovery-sprints: planning the Discovery Sprints page at the new route `/how-we-work/discovery-sprints` (`app/how-we-work/discovery-sprints/`), following `app/what-we-do/ai-modernization/`'s static (non-CMS) `page.tsx` + `_data/` + `_components/` pattern; introduces zero new shared components (every section maps onto `Hero`/`ContentBlock`/`GlassCard`/`Outcome`/`ProcessSteps`/`IconTile`/`Faq`/`FinalCta`), one backward-compatible prop addition (`ProcessSteps` gains an optional `columns` prop, default `5`, this page passes `4`), reuses the existing `/how-we-work/` `ambient-orbs.tsx` branch as-is (no new geometry needed — reference orb values already match), excludes the reference's "Related frameworks & services" section per explicit scope, replaces the reference's hero stat panel with a `Hero`/`MediaSlot` image per Clarification Q1, and a 1-line `cms/api/footer.ts` href edit repointing "Discovery Sprints" from `/frameworks#discovery` to the new route
 
 ## Active Technologies
 - TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-86-platform-engineering)

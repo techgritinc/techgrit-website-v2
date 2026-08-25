@@ -14,6 +14,10 @@ interface LifeGalleryProps {
   id?: string;
   heading?: string;
   description?: string;
+  /** Defaults to the shared static eyebrow text (Home/Careers aren't CMS-driven yet); About passes the CMS's own badgeLabel. */
+  eyebrow?: string;
+  /** Defaults to the shared static photo set (Home/Careers aren't CMS-driven yet); About passes its own CMS-sourced photos. */
+  // images?: LifeGalleryImage[];
   /** Home-only "Explore Careers" / "Meet the team" navigation row — Careers and About don't render it. */
   showActions?: boolean;
   /** CMS-driven overrides — Careers/About omit these and keep the static defaults below. */
@@ -24,11 +28,13 @@ interface LifeGalleryProps {
   secondaryBtnLink?: string;
 }
 
-/** One shared "Life at TechGrit" section — identical grid and photo set on Home, Careers, and About. */
+/** One shared "Life at TechGrit" section — identical grid on Home, Careers, and About; the eyebrow/photos default to a static set but can be overridden by CMS-sourced data. */
 export default function LifeGallery({
   id,
   heading = "Life at TechGrit.",
   description = "The people and the culture behind the engineering.",
+  eyebrow = "Inside TechGrit",
+  // images = CULTURE_GALLERY_IMAGES,
   showActions = false,
   images = DEFAULT_CULTURE_GALLERY_DATA.images,
   primaryBtnLabel = DEFAULT_CULTURE_GALLERY_DATA.primaryBtn.label,
@@ -41,7 +47,7 @@ export default function LifeGallery({
       <div className="mx-auto max-w-(--container-max) px-9 pt-[60px] pb-[80px] leading-normal" data-reveal>
         <div className="mx-auto mb-11 max-w-[680px] text-center">
           <SectionEyebrow showAccent={false} className="leading-normal !mb-[17px]">
-            Inside TechGrit
+            {eyebrow}
           </SectionEyebrow>
           <h2 className="font-display text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
             {heading}
