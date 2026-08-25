@@ -1,4 +1,4 @@
-import type { AchievementsSection } from "@/cms/types/about-types";
+import type { AchievementsSection } from "@/cms/types/our-story-types";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 export function AboutUsAchievements({ section }: { section: AchievementsSection }) {

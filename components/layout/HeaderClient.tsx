@@ -119,43 +119,61 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
 
         <nav aria-label="Primary" className="hidden items-center gap-1 tg-lg:flex">
           {megaGroups.map((group) => {
+            // About no longer has a page of its own to navigate to — its group is
+            // non-clickable everywhere (mouse, touch, keyboard); only its hover panel
+            // opens (FR-007). Active-state highlighting is left exactly as it was
+            // before this feature — no special-casing for About.
+            const isAboutGroup = group.label === "About";
             const active = group.href === pathname;
             const isOpen = openDropdown === group.label;
+            const triggerClassName = [NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ");
             return (
               <div
                 key={group.label}
                 onMouseEnter={() => openDropdownNow(group.label)}
                 onMouseLeave={() => scheduleDropdownClose(group.label)}
               >
-                <Link
-                  href={group.href}
-                  className={[NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ")}
-                  aria-haspopup="menu"
-                  aria-expanded={isOpen}
-                  onClick={(e) => {
-                    // Mouse click navigates to the group's own page (FR-019a), matching the
-                    // reference's real <a href>. Touch (no hover preview) opens the panel
-                    // first instead, per FR-019.
-                    const pointerType = (e.nativeEvent as PointerEvent).pointerType;
-                    if (pointerType === "touch") {
-                      e.preventDefault();
-                      setOpenDropdown((current) => (current === group.label ? null : group.label));
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    // Keyboard users have no hover preview either — Enter/Space opens the
-                    // panel first instead of navigating immediately, per FR-014. Handled
-                    // explicitly rather than inferred from pointerType, which isn't a
-                    // reliable signal for keyboard activation.
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setOpenDropdown((current) => (current === group.label ? null : group.label));
-                    }
-                  }}
-                  suppressHydrationWarning
-                >
-                  {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
-                </Link>
+                {isAboutGroup ? (
+                  <button
+                    type="button"
+                    className={triggerClassName}
+                    aria-haspopup="menu"
+                    aria-expanded={isOpen}
+                    onClick={() => setOpenDropdown((current) => (current === group.label ? null : group.label))}
+                  >
+                    {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
+                  </button>
+                ) : (
+                  <Link
+                    href={group.href ?? "#"}
+                    className={triggerClassName}
+                    aria-haspopup="menu"
+                    aria-expanded={isOpen}
+                    onClick={(e) => {
+                      // Mouse click navigates to the group's own page (FR-019a), matching the
+                      // reference's real <a href>. Touch (no hover preview) opens the panel
+                      // first instead, per FR-019.
+                      const pointerType = (e.nativeEvent as PointerEvent).pointerType;
+                      if (pointerType === "touch") {
+                        e.preventDefault();
+                        setOpenDropdown((current) => (current === group.label ? null : group.label));
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      // Keyboard users have no hover preview either — Enter/Space opens the
+                      // panel first instead of navigating immediately, per FR-014. Handled
+                      // explicitly rather than inferred from pointerType, which isn't a
+                      // reliable signal for keyboard activation.
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenDropdown((current) => (current === group.label ? null : group.label));
+                      }
+                    }}
+                    suppressHydrationWarning
+                  >
+                    {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
+                  </Link>
+                )}
                 <div
                   role="menu"
                   className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid w-[min(940px,calc(100vw-40px))] -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
@@ -203,7 +221,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             return (
               <Link
                 key={link.label}
-                href={link.href}
+                href={link.href ?? "#"}
                 onClick={closeMenus}
                 className={[NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ")}
               >
@@ -264,7 +282,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             return (
               <Link
                 key={link.label}
-                href={link.href}
+                href={link.href ?? "#"}
                 onClick={closeMenus}
                 className="block border-t border-border-subtle px-9 py-4 text-[16px] font-bold text-orange"
               >
@@ -275,7 +293,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
           return (
             <Link
               key={link.label}
-              href={link.href}
+              href={link.href ?? "#"}
               onClick={closeMenus}
               className={[
                 "block border-t border-border-subtle px-9 py-3.5 text-[16px] font-semibold text-[rgba(255,255,255,0.85)]",

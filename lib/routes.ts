@@ -2,6 +2,8 @@
 // Change a route here once instead of hunting down every hardcoded string that uses it.
 export const ROUTES = {
   about: "/about",
+  aboutOurStory: "/about/our-story",
+  aboutLeadership: "/about/leadership-advisory",
   careers: "/careers",
   caseStudies: "/case-studies",
   industriesConstruction: "/industries/construction",

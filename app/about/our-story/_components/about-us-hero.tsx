@@ -1,4 +1,4 @@
-import type { HeroSection } from "@/cms/types/about-types";
+import type { HeroSection } from "@/cms/types/our-story-types";
 import Button from "@/components/ui/Button";
 
 export function AboutUsHero({ section }: { section: HeroSection }) {
