@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getConstructionPageContent } from "@/cms/api/construction";
+import { getConstructionPageContent } from "@/cms/api/industries/construction";
 import { ConstructionHero } from "./_components/construction-hero";
 import { ConstructionIntegrationsStrip } from "./_components/construction-integrations-strip";
 import { ConstructionChallenges } from "./_components/construction-challenges";

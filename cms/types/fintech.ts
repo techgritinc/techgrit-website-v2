@@ -5,7 +5,6 @@ import type {
   ProductLifecycleSection,
   SolutionsWeSupportSection,
   StrapiModernizationChallengesSection,
-  StrapiModernizationFeature,
   StrapiProvenImpactSection,
   StrapiServiceDetailSection,
   WhatWeBuildSection,
@@ -31,47 +30,32 @@ export type {
 } from "../shared/industry-sections";
 
 // ---------------------------------------------------------------------------
-// Strapi-side raw shapes — healthcare-only. Every shape shared with other Industries pages
-// (service-detail, modernization-challenges, proven-impact) now lives in
-// ../shared/industry-sections.ts instead of being redeclared here.
+// Strapi-side raw shapes — FinTech has no Connected-Systems-equivalent section (excluded per
+// spec, and absent from the live CMS payload), so its section union is shorter than
+// Healthcare's. Every shape it does need is shared with Healthcare via ../shared/industry-sections.ts.
 // ---------------------------------------------------------------------------
-
-export type StrapiHealthCareSystemCategory = {
-  name: string;
-  features: StrapiModernizationFeature[];
-};
-
-export type StrapiHealthCareSystemSection = {
-  __component: "industries-construction.pd-health-care-system";
-  title: string;
-  subtitle: string | null;
-  badgeLabel: string;
-  categories: StrapiHealthCareSystemCategory[];
-};
 
 // Any other, truly unmapped component comes back with this shape and is ignored.
 export type StrapiUnmappedSection = { __component: string };
 
-export type StrapiHealthcareSection =
+export type StrapiFintechSection =
   | StrapiHeroSection
   | StrapiServiceDetailSection
   | StrapiModernizationChallengesSection
   | StrapiProvenImpactSection
-  | StrapiHealthCareSystemSection
   | StrapiCtaBannerSection
   | StrapiUnmappedSection;
 
-export type StrapiHealthcarePage = {
+export type StrapiFintechPage = {
   seo: {
     metaTitle: string | null;
     metaDescription: string | null;
   } | null;
-  sections: StrapiHealthcareSection[];
+  sections: StrapiFintechSection[];
 };
 
 // ---------------------------------------------------------------------------
-// Presentational shapes — what the page's components actually render. Produced by mapping
-// the Strapi shapes above; never sourced from static content.
+// Presentational shapes — what the page's components actually render.
 // ---------------------------------------------------------------------------
 
 export interface PageSeo {
@@ -93,28 +77,9 @@ export interface HeroSection {
   title: string;
   titleHighlight: string | null; // exact substring of `title` to render in the gradient accent; null = no highlight
   subtitle: string;
-  primaryCtaLabel: string; // the only CTA — FR-004
+  primaryCtaLabel: string; // the only CTA
   primaryCtaLink: string;
-  image: SectionImage | null; // null → defensive placeholder (FR-005)
-}
-
-// IconCard, WhatWeBuildSection, StepCard, ProductLifecycleSection, EngineeringServicesSection,
-// SolutionTile, SolutionsWeSupportSection, CapabilityCard, FeaturedCapabilitiesSection now live in
-// ../shared/industry-sections.ts (shared with FinTech) — re-exported below instead of redeclared.
-
-export interface SystemCategory {
-  order: number;
-  name: string;
-  items: string[];
-}
-
-export interface ConnectedSystemsSection {
-  type: "connectedSystems";
-  order: number;
-  eyebrow: string;
-  title: string;
-  description: string;
-  categories: SystemCategory[];
+  image: SectionImage | null; // null → defensive placeholder
 }
 
 export interface FinalCtaSection {
@@ -131,7 +96,7 @@ export interface FinalCtaSection {
 }
 
 // `| undefined` is explicit and load-bearing: with no static fallback, any section the CMS
-// doesn't return (or that fails to map) is genuinely absent, not defaulted (FR-003).
+// doesn't return (or that fails to map) is genuinely absent, not defaulted.
 export type PageSectionEntry =
   | HeroSection
   | WhatWeBuildSection
@@ -139,11 +104,10 @@ export type PageSectionEntry =
   | EngineeringServicesSection
   | SolutionsWeSupportSection
   | FeaturedCapabilitiesSection
-  | ConnectedSystemsSection
   | FinalCtaSection
   | undefined;
 
-export interface HealthcarePageContent {
+export interface FintechPageContent {
   seo: PageSeo;
   sections: PageSectionEntry[];
 }

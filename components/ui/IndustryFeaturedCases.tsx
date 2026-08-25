@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { GlassCard, GlassCardTitle, GlassCardDescription } from "@/components/ui/GlassCard";
-import type { FeaturedCapabilitiesSection } from "@/cms/types/healthcare";
+import type { FeaturedCapabilitiesSection } from "@/cms/shared/industry-sections";
 
-
-export function HealthcareFeaturedCapabilities({ section }: { section: FeaturedCapabilitiesSection }) {
+// Shared Industries-page "Featured Capabilities" / "Featured Case Studies" card grid —
+// generalized verbatim from Healthcare's original component. Both pages' CMS entries for this
+// section are the same `industries-construction.proven-impact` shape, so this single component
+// and its shared mapper (mapFeaturedCapabilities) cover both with no page-specific code.
+export function IndustryFeaturedCases({ section }: { section: FeaturedCapabilitiesSection }) {
   return (
     <section className="relative">
       <div className="mx-auto max-w-[1280px] px-9 pt-[70px] pb-[60px]" data-reveal>

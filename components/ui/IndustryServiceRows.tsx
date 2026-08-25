@@ -1,8 +1,13 @@
 import Image from "next/image";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
-import type { EngineeringServicesSection } from "@/cms/types/healthcare";
+import type { EngineeringServicesSection } from "@/cms/shared/industry-sections";
 
-export function HealthcareEngineeringServices({ section }: { section: EngineeringServicesSection }) {
+// Shared Industries-page engineering-services row list — generalized verbatim from
+// Healthcare's original component. Each row renders whichever icon the CMS supplies and no
+// icon slot when it supplies none — no fallback/placeholder of any kind (including the CMS's
+// own stepLabel), per Healthcare's own explicit "no fallback logic, ever" precedent. This is
+// intentionally uniform even though FinTech's data has zero icons across all 7 rows.
+export function IndustryServiceRows({ section }: { section: EngineeringServicesSection }) {
   return (
     <section className="relative">
       <div className="mx-auto max-w-[1280px] px-9 pt-15 pb-15" data-reveal>
