@@ -121,7 +121,7 @@ const TITLE_VARIANTS: Record<GlassCardVariant, string> = {
   webinarUpcoming: "text-[clamp(22px,2.6vw,30px)] font-bold text-white leading-[1.15] tracking-[-0.02em]",
   webinarReleased: "text-[18.5px] font-bold text-white leading-[1.3] tracking-normal",
   leaderProfile: "text-[22px] font-bold text-white leading-[normal] tracking-[var(--ls-normal)]",
-  serviceCapability: "text-[19px] font-bold text-white tracking-[-0.01em]",
+  serviceCapability: "text-[19px] leading-[normal] font-bold text-white tracking-[-0.01em]",
 };
 
 export function GlassCardTitle({ children, className = "", variant = "default" }: GlassCardTitleProps) {

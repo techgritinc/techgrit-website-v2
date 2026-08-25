@@ -117,6 +117,13 @@ Two things that are easy to get wrong:
 - TMS-86: planning the AI-Accelerated Modernization page at the new route `/what-we-do/ai-modernization` (`app/what-we-do/ai-modernization/`) — the first page under a "What We Do" route segment; adds 4 new shared `components/ui/` primitives (`ProcessSteps`, `IconTile`, `Faq`, and `Outcome` — the last built ahead of need per an explicit clarification, unused on this page), one new `GlassCard` variant for the bulleted capability card, one new `components/ui/ambient-orbs.tsx` pathname branch matching the reference's 4-orb geometry, and a 1-line `cms/api/footer.ts` href edit repointing "AI-Accelerated Modernization" from `/services#svc-modernization` to the new route
 
 ## Active Technologies
+- TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-86-software-product-engineering)
+- N/A — Software Product Engineering page content is a static local TypeScript content module, no CMS/API integration this phase (TMS-86-software-product-engineering)
+
+## Recent Changes
+- TMS-86-software-product-engineering: planning the Software Product Engineering page at the new route `/what-we-do/software-product-engineering` (`app/what-we-do/software-product-engineering/`) — the second page in the "What We Do" family, spec directory disambiguated from the pre-existing `specs/TMS-86/` (AI-Accelerated Modernization). Introduces **zero** new shared `components/ui/` primitives or tokens — reuses `Hero`, `ContentBlock`, `GlassCard` (`serviceCapability` variant), `ProcessSteps`, `Faq`, `IconTile`, `final-cta`, and `MediaSlot` unmodified, following the sibling AI-Modernization page's exact file/folder architecture. Hero right-side card uses the `public/samples/svc-eng.png` image (unused elsewhere in the app) in place of the reference's four stat-tile callouts, matching the sibling page's own image-replacement treatment. Two 1-line nav-config edits repoint "Software Product Engineering" from `/services#svc-product` to the new route: `cms/api/footer.ts` and, unlike the sibling ticket's own conclusion, `cms/api/header.ts`'s `toMegaGroup()` special-case ternary too (confirmed necessary by direct inspection — that ternary already exists and live-overrides one CMS-supplied link).
+
+## Active Technologies
 - TypeScript 5 (strict mode, per `tsconfig.json`) + Next.js 16.2.10 (App Router), React 19.2.4, Tailwind CSS v4 (TMS-88)
 - N/A — Orbit AI Ecosystem page content is a static local TypeScript content module; a live CMS page exists for this feature's slug but is deliberately not read from, per explicit requester decision (TMS-88)
 

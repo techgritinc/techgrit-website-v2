@@ -11,8 +11,8 @@ export interface IconTileProps {
 }
 
 const TITLE_CLASS: Record<"compact" | "default", string> = {
-  compact: "text-[14.5px] font-bold text-white",
-  default: "text-[16.5px] font-bold text-white",
+  compact: "text-[14.5px] leading-[normal] font-bold text-white",
+  default: "text-[16.5px] leading-[normal] font-bold text-white",
 };
 
 const DESC_CLASS: Record<"compact" | "default", string> = {
