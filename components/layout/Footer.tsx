@@ -12,6 +12,7 @@ const SOCIAL_ICONS = {
 
 export default async function Footer() {
   const data = await getFooterData();
+  if (!data) return null;
   const {
     logo,
     brandDescription,
