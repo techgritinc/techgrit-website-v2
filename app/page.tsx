@@ -19,12 +19,12 @@ export default async function Home() {
     <main>
       <Hero data={data.hero} />
       <TrustedClients data={data.trustedClients} />
-      <SubscribeBand data={data.newsletter} />
       <PlatformSection data={data.deliveryEngine} />
       <MethodologySection data={data.frameworkPhases} />
       <ReImagineSection data={data.valueProposition} />
       <IndustriesSection data={data.futureIndustry} />
       <TestimonialsSection data={data.reviews} />
+      <SubscribeBand data={data.newsletter} />
       <CaseStudiesSection data={data.caseStudies} />
       <BlogSection data={data.blogSection} />
       <LifeGallery

@@ -19,7 +19,7 @@ import type {
 } from "../types/footer-types";
 
 const FOOTER_ENDPOINT =
-  "/api/footer?populate[logo]=true&populate[footerContact]=true&populate[footerMenuItems][populate][items]=true&populate[socialLinks][populate][icon]=true&populate[legalLinks]=true";
+  "/api/footer?populate[logo]=true&populate[footerContact]=true&populate[footerMenuItems][populate][items]=true&populate[socialLinks][populate][icon]=true&populate[legalLinks][populate][document]=true";
 
 // Last-resort fallback if the CMS is genuinely unreachable — the footer degrades to
 // the same static content it shipped with before CMS integration, rather than
@@ -97,9 +97,9 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
     { platform: "spotify", href: "https://open.spotify.com/show/38ugZtGBKruL01KyFbEeVE", label: "TechGrit Talks Podcast on Spotify", icon: null },
   ],
   legalLinks: [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
-    { label: "Cookie Preferences", href: "/" },
+    { label: "Privacy Policy", href: "/privacy", isDocument: false },
+    { label: "Terms of Service", href: "/terms", isDocument: false },
+    { label: "Cookie Preferences", href: "/", isDocument: false },
   ],
   followUsLabel: "Follow us",
   copyrights: "© 2026 TechGrit Inc. All rights reserved.",
@@ -174,7 +174,9 @@ function toSocialLink(social: StrapiSocialLink): FooterSocialLink {
 }
 
 function toLegalLink(link: StrapiLegalLink): FooterLegalLink {
-  return { label: link.title, href: link.url };
+  return link.document
+    ? { label: link.title, href: resolveMediaUrl(link.document.url), isDocument: true }
+    : { label: link.title, href: link.url, isDocument: false };
 }
 
 // Called directly from the Footer Server Component (await getFooterData()) — runs
