@@ -1,7 +1,14 @@
-import type { StatValue } from "@/cms/types/case-study-detail-types";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
-export function MetricsStrip({ metrics }: { metrics: StatValue[] }) {
+export interface MetricItem {
+  order: number;
+  value: string;
+  label: string;
+}
+
+/** Proof-metrics strip — value/label pairs in a bordered horizontal row. Originated on the
+ * Case Study detail page; promoted here once Consumer Lending became a second consumer. */
+export function MetricsStrip({ metrics }: { metrics: MetricItem[] }) {
   return (
     <section>
       <div className="tg-container pt-[24px] pb-[var(--space-3)] px-[var(--space-15)]">
@@ -11,7 +18,7 @@ export function MetricsStrip({ metrics }: { metrics: StatValue[] }) {
           >
             {metrics.map((metric) => (
               <div key={metric.order}>
-                <div className="font-display text-[34px] font-bold text-teal-light leading-[normal]">
+                <div className="font-display text-[34px] font-bold text-orange leading-[normal]">
                   {metric.value}
                 </div>
                 <div className="mt-[4px] text-[13.5px] text-text-soft leading-[normal]">
