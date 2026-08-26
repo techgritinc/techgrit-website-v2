@@ -52,7 +52,6 @@ export type HeaderMegaGroup = {
   href: string | null;
   columns: 3 | 4;
   items: HeaderMegaItem[];
-  cta?: HeaderCta;
 };
 
 export type HeaderPlainLink = {
