@@ -11,7 +11,7 @@ import type {
   PostAuthor,
   PostImage,
   Topic,
-} from "@/app/blog/_data/types";
+} from "@/app/insights/blog/_data/types";
 import type {
   StrapiBlogAuthor,
   StrapiBlogHeroSection,

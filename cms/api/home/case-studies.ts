@@ -51,7 +51,7 @@ export const DEFAULT_CASE_STUDIES_DATA: CaseStudiesData = {
   badgeLabel: "See how we help teams win",
   title: "Case Studies & Insights.",
   viewAllLabel: "View all case studies",
-  viewAllLink: "/case-studies",
+  viewAllLink: "/insights/case-studies",
   caseStudies: [
     {
       id: "dotnet-migration",
@@ -63,7 +63,7 @@ export const DEFAULT_CASE_STUDIES_DATA: CaseStudiesData = {
       description:
         "An AI-assisted, human-governed delivery model shipped every ticket on a legacy .NET project on time, under constraints, and with full audit trails.",
       accentColor: "var(--color-blue)",
-      href: "/case-studies",
+      href: "/insights/case-studies",
     },
     {
       id: "b2b-marketplace",
@@ -74,7 +74,7 @@ export const DEFAULT_CASE_STUDIES_DATA: CaseStudiesData = {
       title: "A B2B marketplace that encodes trust into every trade",
       description: null,
       accentColor: "var(--color-orange)",
-      href: "/case-studies",
+      href: "/insights/case-studies",
     },
     {
       id: "crypto-data-api",
@@ -85,7 +85,7 @@ export const DEFAULT_CASE_STUDIES_DATA: CaseStudiesData = {
       title: "Secure crypto data API platform for financial advisors",
       description: null,
       accentColor: "var(--color-teal)",
-      href: "/case-studies",
+      href: "/insights/case-studies",
     },
     {
       id: "claude-enablement",
@@ -96,7 +96,7 @@ export const DEFAULT_CASE_STUDIES_DATA: CaseStudiesData = {
       title: "From overloaded to on-fire: Claude-powered enablement",
       description: null,
       accentColor: "var(--color-amber)",
-      href: "/case-studies",
+      href: "/insights/case-studies",
     },
   ],
 };

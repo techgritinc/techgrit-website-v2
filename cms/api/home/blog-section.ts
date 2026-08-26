@@ -49,7 +49,7 @@ export const DEFAULT_BLOG_SECTION_DATA: BlogSectionData = {
   badgeLabel: "From the blog",
   title: "Perspectives on AI-first delivery.",
   viewAllLabel: "Visit the blog",
-  viewAllLink: "/blog",
+  viewAllLink: "/insights/blog",
   posts: [
     {
       id: "ai-first-sdlc",
@@ -57,7 +57,7 @@ export const DEFAULT_BLOG_SECTION_DATA: BlogSectionData = {
       title: "From Copilot to Agentic: what changes when AI owns the SDLC.",
       excerpt: "Autonomous agents don't just suggest code — they own entire domains of the software lifecycle.",
       ctaLabel: "Read More",
-      ctaLink: "/blog",
+      ctaLink: "/insights/blog",
       image: null,
     },
     {
@@ -66,7 +66,7 @@ export const DEFAULT_BLOG_SECTION_DATA: BlogSectionData = {
       title: "Six weeks to production: what makes the Sprint-to-Scale framework work.",
       excerpt: "A look inside the four-phase framework that turns a prompt into a shipped product.",
       ctaLabel: "Read More",
-      ctaLink: "/blog",
+      ctaLink: "/insights/blog",
       image: null,
     },
     {
@@ -75,7 +75,7 @@ export const DEFAULT_BLOG_SECTION_DATA: BlogSectionData = {
       title: "The QA agent: what happens when tests write themselves.",
       excerpt: "Coverage moves from a lagging indicator to a real-time signal when quality is agent-owned.",
       ctaLabel: "Know More",
-      ctaLink: "/blog",
+      ctaLink: "/insights/blog",
       image: null,
     },
   ],
@@ -88,7 +88,7 @@ export function toBlogSection(section: StrapiBlogSection): BlogSectionData {
     title: post.title,
     excerpt: post.subtitle ?? "",
     ctaLabel: post.ctaLabel ?? "Read More",
-    ctaLink: post.ctaLink ?? "/blog",
+    ctaLink: post.ctaLink ?? "/insights/blog",
     image: toFeatureImage(post.assets),
   }));
 

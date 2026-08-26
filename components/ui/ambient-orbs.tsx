@@ -5,8 +5,8 @@ import { ROUTES } from "@/lib/routes";
 
 // Site-wide decorative glow layer. Construction carries its own accent-driven background
 // and must not show this orb set (per its own reference file — its second orb is amber,
-// not blue). The Case Studies *list* page (exact "/case-studies/") and *detail* route
-// ("/case-studies/<slug>/") each own their own dedicated set below.
+// not blue). The Case Studies *list* page (exact "/insights/case-studies/") and *detail* route
+// ("/insights/case-studies/<slug>/") each own their own dedicated set below.
 // Each returned variant carries an explicit `key` distinct from every other variant's key: without it,
 // a client-side route change between two pages with different orb sets (e.g. Home's 3 orbs -> Services'
 // 4 orbs) updates the existing <span> elements in place (same position in the tree, same element type)
@@ -51,7 +51,7 @@ export function AmbientOrbs() {
   // below instead of the default 3-orb set (which includes a blue orb the
   // homepage reference explicitly avoids) — see TechGrit Homepage.dc.html
   // lines 148-158 and plan.md's "Homepage ambient orbs" item.
-  if (pathname === "/" || pathname?.startsWith("/blog")) {
+  if (pathname === "/" || pathname?.startsWith("/insights/blog")) {
     return (
       <div key="home" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
         <span className="absolute -top-45 -right-35 h-155 w-155 rounded-full bg-overlay-orange-18 blur-[130px] animate-[tgorb_16s_ease-in-out_infinite]" />
@@ -64,7 +64,7 @@ export function AmbientOrbs() {
 
   // Webinar's own reference-exact 2-orb set (TechGrit Webinar.dc.html lines 110-113) —
   // the shared default's 3rd (amber) orb has no reference equivalent here (v2.2 FR-030b).
-  if (pathname === "/webinar/") {
+  if (pathname === "/insights/webinar/") {
     return (
       <div key="webinar" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
         <span className="absolute -top-40 -right-30 h-140 w-140 rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]" />

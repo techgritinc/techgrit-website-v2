@@ -43,7 +43,7 @@ export function pickHeroSection(sections: AnySection[]): StrapiHeroSection | und
 // Last-resort fallback if the CMS is genuinely unreachable — matches the
 // header/footer precedent of a "bare" rather than pixel-identical rare-case degrade.
 export const DEFAULT_HERO_DATA: HeroData = {
-  badge: { label: "Live Webinar", text: "Orchestrating the AI-First SDLC", href: "/webinar" },
+  badge: { label: "Live Webinar", text: "Orchestrating the AI-First SDLC", href: "/insights/webinar" },
   title: "From strategic intent to production-grade software, with full accountability.",
   highlightTitle: "production-grade software,",
   subtitle:

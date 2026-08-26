@@ -5,7 +5,7 @@ export const ROUTES = {
   aboutOurStory: "/about/our-story",
   aboutLeadership: "/about/leadership-advisory",
   careers: "/careers",
-  caseStudies: "/case-studies",
+  caseStudies: "/insights/case-studies",
   industriesConstruction: "/industries/construction",
   contactUs: "/contact-us",
 } as const;
