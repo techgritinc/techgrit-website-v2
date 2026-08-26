@@ -8,6 +8,8 @@ export interface IndustryHeroContent {
   subtitle: string;
   primaryCtaLabel: string;
   primaryCtaLink: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaLink?: string;
   image: { url: string; alternativeText: string; width: number; height: number } | null;
 }
 
@@ -53,6 +55,11 @@ export function IndustryHero({ section }: { section: IndustryHeroContent }) {
             <Button href={section.primaryCtaLink} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink">
               {section.primaryCtaLabel} <span aria-hidden="true" className="leading-[normal] text-[17px]">&#8594;</span>
             </Button>
+            {section.secondaryCtaLabel && section.secondaryCtaLink ? (
+              <Button href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] !whitespace-normal !shrink">
+                {section.secondaryCtaLabel}
+              </Button>
+            ) : null}
           </div>
         </div>
         <div data-rise className="relative order-1 md:order-2 [animation-delay:.24s]">

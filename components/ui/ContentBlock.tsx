@@ -24,6 +24,11 @@ export interface ContentBlockProps {
  * the two-column grid would leave the right half blank and read as broken, so the
  * block instead centers itself as a single column; the moment `chips` is populated
  * again (now or in the future), it automatically reverts to the two-column layout.
+ *
+ * The two-column grid collapses at 921px, matching the shared `[data-hero-row]`
+ * selector's own `@media(max-width:920px)` rule (identical across every "What We Do"
+ * reference file) rather than this project's canonical `md`=960px breakpoint
+ * (TMS-86-ai-strategy-and-roadmap — see Hero.tsx's matching fix/comment).
  */
 export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }: ContentBlockProps) {
   const hasChips = Boolean(chips && chips.length > 0);
@@ -47,7 +52,7 @@ export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }:
   return (
     <section className="relative">
       <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
-        <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-[0.9fr_1.1fr]">
+        <div className="grid grid-cols-1 items-start gap-16 min-[921px]:grid-cols-[0.9fr_1.1fr]">
           <div>
             <div className="mb-3.5 text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
               {eyebrow}
@@ -65,7 +70,7 @@ export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }:
               {chips!.map((chip) => (
                 <span
                   key={chip.id}
-                  className="inline-flex items-center gap-[8px] rounded-[30px] border border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.04)] px-[14px] py-[8px] h-[33px] text-[13px] font-[500] text-[rgba(255,255,255,0.78)]"
+                  className="inline-flex items-center gap-[8px] rounded-[30px] border border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.04)] px-[14px] py-[8px] h-[33px] text-[13px] leading-[normal] font-[500] text-[rgba(255,255,255,0.78)]"
                 >
                   <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-orange" />
                   {chip.label}

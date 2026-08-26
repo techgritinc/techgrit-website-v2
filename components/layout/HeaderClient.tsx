@@ -17,6 +17,16 @@ const GRID_COLS_CLASS: Record<HeaderMegaGroup["columns"], string> = {
   4: "grid-cols-4",
 };
 
+// next.config.ts sets trailingSlash: true, so usePathname() always resolves with a
+// trailing slash (e.g. "/what-we-do/ai-modernization/"), while every href built from
+// the CMS/ROUTES in this file is trailing-slash-free — a bare `===` never matches.
+// Normalize both sides before comparing ("/" is left alone; there's nothing to strip).
+function isCurrentPath(href: string | null | undefined, pathname: string | null): boolean {
+  if (!href || !pathname) return false;
+  const normalize = (path: string) => (path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path);
+  return normalize(href) === normalize(pathname);
+}
+
 export default function HeaderClient({ data }: { data: HeaderData }) {
   const pathname = usePathname();
   const { logo, megaGroups, plainLinks } = data;
@@ -25,7 +35,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
   // Header CTA is identical everywhere (FR-022): CMS button -> CMS url, except on the
   // Contact page itself, which targets its own in-page form section instead of navigating to
   // itself (the one reference-confirmed exception; no other page relabels/retargets the CTA).
-  const isContact = pathname === ROUTES.contactUs;
+  const isContact = isCurrentPath(ROUTES.contactUs, pathname);
   const cta = isContact ? { label: data.cta.label, href: "#form" } : data.cta;
 
   const [scrolled, setScrolled] = useState(false);
@@ -124,7 +134,12 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             // opens (FR-007). Active-state highlighting is left exactly as it was
             // before this feature — no special-casing for About.
             const isAboutGroup = group.label === "About";
-            const active = group.href === pathname;
+            // None of the mega-menu groups (About, What We Do, How We Work, Insights, ...)
+            // have a landing page of their own — `group.href` is whatever stray value the
+            // CMS's navItem.url happens to hold (often null, which the mapper falls back to
+            // "/"). Comparing that against pathname falsely highlighted the group on the
+            // homepage. A group is "active" when the current page is one of its own items.
+            const active = group.items.some((item) => isCurrentPath(item.href, pathname));
             const isOpen = openDropdown === group.label;
             const triggerClassName = [NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ");
             return (
@@ -150,20 +165,14 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                     aria-haspopup="menu"
                     aria-expanded={isOpen}
                     onClick={(e) => {
-                      // Mouse click navigates to the group's own page (FR-019a), matching the
-                      // reference's real <a href>. Touch (no hover preview) opens the panel
-                      // first instead, per FR-019.
-                      const pointerType = (e.nativeEvent as PointerEvent).pointerType;
-                      if (pointerType === "touch") {
-                        e.preventDefault();
-                        setOpenDropdown((current) => (current === group.label ? null : group.label));
-                      }
+                      // Clicking a mega-menu trigger only opens/closes its dropdown — it never
+                      // navigates. Hover still opens the panel on its own (see onMouseEnter above).
+                      e.preventDefault();
+                      setOpenDropdown((current) => (current === group.label ? null : group.label));
                     }}
                     onKeyDown={(e) => {
-                      // Keyboard users have no hover preview either — Enter/Space opens the
-                      // panel first instead of navigating immediately, per FR-014. Handled
-                      // explicitly rather than inferred from pointerType, which isn't a
-                      // reliable signal for keyboard activation.
+                      // Native <a> elements don't fire a click on Space (only Enter), so handle
+                      // it explicitly to keep keyboard toggling consistent with mouse/touch.
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
                         setOpenDropdown((current) => (current === group.label ? null : group.label));
@@ -179,49 +188,46 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                   className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid w-[min(940px,calc(100vw-40px))] -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
                     } ${GRID_COLS_CLASS[group.columns]}`}
                 >
-                  {group.items.map((item) => (
-                    <Link
-                      key={item.title}
-                      href={item.href}
-                      role="menuitem"
-                      tabIndex={isOpen ? 0 : -1}
-                      onClick={closeMenus}
-                      className="flex min-h-16 items-start gap-3 rounded-sm p-3 transition-[background-color,transform] duration-200 ease-out hover:-translate-y-px hover:bg-overlay-orange-12"
-                    >
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border-orange-soft bg-hover-orange-fill-14 text-amber-light">
-                        {item.icon && (
-                          <Image src={item.icon.url} alt={item.icon.alt} width={18} height={18} loading="eager" className="h-4.5 w-4.5" />
-                        )}
-                      </span>
-                      <span className="flex flex-col min-w-0 mt-px">
-                        <span className="text-[14px] leading-[1.4] font-bold text-white">{item.title}</span>
-                        <span className="mt-0.75 text-[11.5px] leading-[1.4] text-text-55 line-clamp-2">{item.description}</span>
-                      </span>
-                    </Link>
-                  ))}
-                  {group.cta && (
-                    <Link
-                      href={group.cta.href}
-                      tabIndex={isOpen ? 0 : -1}
-                      onClick={closeMenus}
-                      className="group col-span-full mt-1.5 flex items-center justify-between rounded-card border border-hover-orange-border-40 px-4.5 py-5.5 text-[12.5px] font-extrabold uppercase tracking-[0.08em] bg-[image:var(--gradient-mega-cta)] transition-[background-image,transform] duration-200 ease-out hover:-translate-y-px hover:bg-[image:var(--gradient-hover-orange-amber)]"
-                    >
-                      <span className="text-white">{group.cta.label}</span>
-                      <span aria-hidden="true" className="text-amber-light text-[15px] transition-transform duration-200 ease-out group-hover:translate-x-[4px]">
-                        &rarr;
-                      </span>
-                    </Link>
-                  )}
+                  {group.items.map((item) => {
+                    const itemActive = isCurrentPath(item.href, pathname);
+                    return (
+                      <Link
+                        key={item.title}
+                        href={item.href}
+                        role="menuitem"
+                        tabIndex={isOpen ? 0 : -1}
+                        aria-current={itemActive ? "page" : undefined}
+                        onClick={closeMenus}
+                        className={[
+                          "flex min-h-16 items-start gap-3 rounded-sm p-3 transition-[background-color,transform] duration-200 ease-out hover:-translate-y-px hover:bg-overlay-orange-12",
+                          itemActive && "bg-overlay-orange-12",
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                      >
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border-orange-soft bg-hover-orange-fill-14 text-amber-light">
+                          {item.icon && (
+                            <Image src={item.icon.url} alt={item.icon.alt} width={18} height={18} loading="eager" className="h-4.5 w-4.5" />
+                          )}
+                        </span>
+                        <span className="flex flex-col min-w-0 mt-px">
+                          <span className="text-[14px] leading-[1.2] font-bold text-white">{item.title}</span>
+                          <span className="mt-0.75 text-[11.5px] leading-[1.4] text-text-55 line-clamp-2">{item.description}</span>
+                        </span>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             );
           })}
           {plainLinks.map((link) => {
-            const active = link.href === pathname;
+            const active = isCurrentPath(link.href, pathname);
             return (
               <Link
                 key={link.label}
                 href={link.href ?? "#"}
+                aria-current={active ? "page" : undefined}
                 onClick={closeMenus}
                 className={[NAV_LINK_BASE, active && "bg-nav-hover text-white"].filter(Boolean).join(" ")}
               >
@@ -262,10 +268,11 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                 <Link
                   key={item.title}
                   href={item.href}
+                  aria-current={isCurrentPath(item.href, pathname) ? "page" : undefined}
                   onClick={closeMenus}
                   className={[
                     "block py-2.5 pr-9 pl-13 text-[14.5px] font-semibold text-muted transition-colors hover:text-white",
-                    item.href === pathname && "text-white",
+                    isCurrentPath(item.href, pathname) && "text-white",
                   ]
                     .filter(Boolean)
                     .join(" ")}
@@ -283,6 +290,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
               <Link
                 key={link.label}
                 href={link.href ?? "#"}
+                aria-current={isCurrentPath(link.href, pathname) ? "page" : undefined}
                 onClick={closeMenus}
                 className="block border-t border-border-subtle px-9 py-4 text-[16px] font-bold text-orange"
               >
@@ -294,10 +302,11 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             <Link
               key={link.label}
               href={link.href ?? "#"}
+              aria-current={isCurrentPath(link.href, pathname) ? "page" : undefined}
               onClick={closeMenus}
               className={[
                 "block border-t border-border-subtle px-9 py-3.5 text-[16px] font-semibold text-[rgba(255,255,255,0.85)]",
-                link.href === pathname && "text-white",
+                isCurrentPath(link.href, pathname) && "text-white",
               ]
                 .filter(Boolean)
                 .join(" ")}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getCaseStudyDetailPageContent } from "@/cms/api/case-study-detail";
 import { CaseStudyDetailHero } from "../_components/case-study-detail-hero";
-import { MetricsStrip } from "../_components/metrics-strip";
+import { MetricsStrip } from "@/components/ui/MetricsStrip";
 import { CaseStudyNarrative } from "../_components/case-study-narrative";
 import { TeamPanel } from "../_components/team-panel";
 import { RelatedCaseStudies } from "../_components/related-case-studies";
