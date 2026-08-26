@@ -44,7 +44,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
         { slug: "svc-data-ai", label: "Data & AI Engineering", href: "/what-we-do/data-ai-engineering" },
         { slug: "svc-platform", label: "Platform Engineering", href: "/what-we-do/platform-engineering" },
         { slug: "svc-managed", label: "Managed Services", href: "/what-we-do/managed-services" },
-        { slug: "svc-strategy", label: "AI Strategy & Roadmap", href: "/services#svc-strategy" },
+        { slug: "svc-strategy", label: "AI Strategy & Roadmap", href: "/what-we-do/ai-strategy-roadmap" },
         { slug: "svc-startups", label: "Startups", href: "/services#svc-startups" },
       ],
     },
@@ -134,10 +134,20 @@ function detectPlatform(url: string): FooterSocialPlatform | null {
   return null;
 }
 
-// TMS-86 / TMS-86-software-product-engineering: the CMS's own "AI-Accelerated
-// Modernization" and "Software Product Engineering" links still point at the old
-// /services anchors. Forced to their new static routes here until the CMS entries
-// themselves are updated (planned) — every other footer link stays fully CMS-driven.
+// TMS-86 / TMS-86-software-product-engineering / TMS-86-data-and-ai-engineering /
+// TMS-86-platform-engineering / TMS-86-managed-services / TMS-86-ai-strategy-and-
+// roadmap: the CMS's own "AI-Accelerated Modernization", "Software Product
+// Engineering", "Data and AI Engineering", "Platform Engineering", "Managed
+// Services", and "AI Strategy & Roadmap" links still point at the old /services
+// anchors. Forced to their new static routes here until the CMS entries themselves
+// are updated (planned) — every other footer link stays fully CMS-driven.
+//
+// The footer's own CMS menu item is titled "Data & AI Engineering" (confirmed live,
+// 2026-08-26) — a different literal string than the "Data and AI Engineering" title
+// cms/api/header.ts's toMegaGroup() matches on for the header mega-menu's entry.
+// These are two separate CMS content entries (header nav item vs. footer menu item)
+// that are not kept in sync with each other, not a typo in either file — match each
+// against its own actual title rather than assuming shared wording.
 function toLinkGroup(menuItem: StrapiFooterMenuItem): FooterLinkGroup {
   return {
     id: String(menuItem.id),
@@ -150,7 +160,15 @@ function toLinkGroup(menuItem: StrapiFooterMenuItem): FooterLinkGroup {
           ? "/what-we-do/ai-modernization"
           : item.title === "Software Product Engineering"
             ? "/what-we-do/software-product-engineering"
-            : item.url,
+            : item.title === "Data & AI Engineering"
+              ? "/what-we-do/data-ai-engineering"
+              : item.title === "Platform Engineering"
+                ? "/what-we-do/platform-engineering"
+                : item.title === "Managed Services"
+                  ? "/what-we-do/managed-services"
+                  : item.title === "AI Strategy & Roadmap"
+                    ? "/what-we-do/ai-strategy-roadmap"
+                    : item.url,
     })),
   };
 }

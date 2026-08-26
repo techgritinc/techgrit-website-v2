@@ -35,6 +35,13 @@ export interface HeroProps {
  * the sibling service-page prototypes (see specs/TMS-86/research.md §4) — the card's
  * chrome (padding, radius, gradient, decorative blur corner, caption divider) is owned
  * here; `media`/`mediaCaption` are the only page-specific slots.
+ *
+ * The two-column stack and the 44px/56px headline size both collapse at 921px, matching
+ * every "What We Do" reference file's own `@media(max-width:920px)` rule verbatim
+ * (confirmed via grep across all 18 raw-files-v3 .dc.html files) — not this project's
+ * canonical `md`=960px breakpoint, whose 40px gap against the real 920px edge produced a
+ * visible mismatch window when toggling against the reference (TMS-86-ai-strategy-and-
+ * roadmap).
  */
 // CMS content for `title`/`titleHighlight` isn't always exact-substring-consistent
 // (case and trailing punctuation can differ between the two fields), so a plain
@@ -90,7 +97,7 @@ export function Hero({
             ))}
           </div>
         )}
-        <div className="grid grid-cols-1 items-center gap-14 md:grid-cols-[1.15fr_0.85fr]">
+        <div className="grid grid-cols-1 items-center gap-14 min-[921px]:grid-cols-[1.15fr_0.85fr]">
           <div>
             <div
               data-rise
@@ -107,7 +114,7 @@ export function Hero({
             </div>
             <h1
               data-rise
-              className="font-bold text-white text-[44px] leading-[1.02] tracking-[-0.04em] md:text-[56px]"
+              className="font-bold text-white text-[44px] leading-[1.02] tracking-[-0.04em] min-[921px]:text-[56px]"
               style={{ animationDelay: ".18s" }}
             >
               {before}

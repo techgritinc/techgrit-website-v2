@@ -113,6 +113,23 @@ export function AmbientOrbs() {
     );
   }
 
+  // AI Strategy & Roadmap's own reference-exact 4-orb set (TechGrit AI Strategy.dc.html lines
+  // 141-146) — same geometry as the shared /what-we-do/ set below, but with an amber second orb
+  // (matching that reference file exactly) instead of blue. All four colors already exist as
+  // named tokens (orange/amber-12/orange-10/orange-11) — no new token needed (TMS-86-ai-strategy-
+  // and-roadmap; research.md §4). Checked before the generic /what-we-do/ branch so it matches
+  // first for this one route.
+  if (pathname === "/what-we-do/ai-strategy-roadmap/") {
+    return (
+      <div key="ai-strategy-roadmap" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
+        <span className="absolute -top-45 -right-35 h-155 w-155 rounded-full bg-overlay-orange blur-[130px] animate-[tgorb_16s_ease-in-out_infinite]" />
+        <span className="absolute top-[35%] -left-55 h-140 w-140 rounded-full bg-overlay-amber-12 blur-[140px] animate-[tgorb_20s_ease-in-out_infinite_reverse]" />
+        <span className="absolute top-[60%] -right-40 h-130 w-130 rounded-full bg-overlay-orange-10 blur-[140px] animate-[tgorb_24s_ease-in-out_infinite_reverse]" />
+        <span className="absolute -bottom-50 left-[38%] h-165 w-165 rounded-full bg-overlay-orange-11 blur-[150px] animate-[tgorb_22s_ease-in-out_infinite]" />
+      </div>
+    );
+  }
+
   // AI-Accelerated Modernization's own reference-exact 4-orb set (TechGrit AI Modernization.dc.html
   // lines 141-146) — same geometry as the careers/about/services set below, but with a blue second
   // orb (matching that reference file exactly) instead of amber, and slightly different opacities.
