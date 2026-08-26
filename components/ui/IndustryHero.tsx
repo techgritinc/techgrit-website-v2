@@ -1,9 +1,18 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
-import type { HeroSection } from "@/cms/types/healthcare";
 
-export function HealthcareHero({ section }: { section: HeroSection }) {
-  
+export interface IndustryHeroContent {
+  eyebrow: string;
+  title: string;
+  titleHighlight: string | null;
+  subtitle: string;
+  primaryCtaLabel: string;
+  primaryCtaLink: string;
+  image: { url: string; alternativeText: string; width: number; height: number } | null;
+}
+
+
+export function IndustryHero({ section }: { section: IndustryHeroContent }) {
   const [before, after] = section.titleHighlight
     ? section.title.split(section.titleHighlight)
     : [section.title, ""];

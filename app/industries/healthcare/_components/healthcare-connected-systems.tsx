@@ -6,7 +6,7 @@ export function HealthcareConnectedSystems({ section }: { section: ConnectedSyst
     <section className="relative">
       <div className="mx-auto max-w-[1280px] px-9 pt-10 pb-15" data-reveal>
         <div className="rounded-[22px] border border-border-orange-18 bg-[image:linear-gradient(160deg,var(--color-overlay-orange-8),var(--color-glass-hairline))] p-9">
-          <div className="mx-auto mb-8 max-w-[600px] text-center">
+          <div className="mx-auto mb-8 max-w-[800px] text-center">
             <SectionEyebrow tone="amber" showAccent={false} className="leading-[normal]">
               {section.eyebrow}
             </SectionEyebrow>

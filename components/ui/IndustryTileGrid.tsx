@@ -1,7 +1,9 @@
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
-import type { SolutionsWeSupportSection } from "@/cms/types/healthcare";
+import type { SolutionsWeSupportSection } from "@/cms/shared/industry-sections";
 
-export function HealthcareSolutionsWeSupport({ section }: { section: SolutionsWeSupportSection }) {
+// Shared Industries-page title-only tile grid ("... Solutions We Support") — generalized
+// verbatim from Healthcare's original component.
+export function IndustryTileGrid({ section }: { section: SolutionsWeSupportSection }) {
   return (
     <section className="relative">
       <div className="mx-auto max-w-[1280px] px-9 py-15" data-reveal>

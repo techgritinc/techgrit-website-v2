@@ -1,8 +1,10 @@
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { GlassCard, GlassCardIcon, GlassCardTitle, GlassCardDescription } from "@/components/ui/GlassCard";
-import type { ProductLifecycleSection } from "@/cms/types/healthcare";
+import type { ProductLifecycleSection } from "@/cms/shared/industry-sections";
 
-export function HealthcareProductLifecycle({ section }: { section: ProductLifecycleSection }) {
+// Shared Industries-page numbered step card-grid ("AI Across the ... Product Lifecycle") —
+// generalized verbatim from Healthcare's original component.
+export function IndustryStepGrid({ section }: { section: ProductLifecycleSection }) {
   return (
     <section className="relative">
       <div className="mx-auto max-w-[1280px] px-9 pt-[50px] pb-[30px]" data-reveal>

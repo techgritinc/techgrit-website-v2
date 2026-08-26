@@ -404,9 +404,24 @@
    * Used for padding, gaps, margins across all pages.
    * Named after the px value for clarity.
    * ---------------------------------------------------------- */
+  --space-1:   4px;
+  --space-1a:  6px;
+  --space-1b:  7px; /* Methodology mobile phase-rail gap */
+  --space-1c:  5px;
   --space-2:   8px;
+  --space-0a:  3px;
   --space-3:   10px;
+  --space-3a:  11px;
+  --space-4:   12px;
+  --space-4a:  13px;
+  --space-5:   14px;
+  --space-5a:  15px;  /* Methodology phase-title margin-top */
   --space-6:   16px;
+  --space-7:   18px;
+  --space-8:   20px;
+  --space-9:   22px;
+  --space-9a:  23px;
+  --space-10:  24px;
   --space-11:  26px;
   --space-12:  28px;
   --space-13:  30px;

@@ -1,25 +1,27 @@
 import { cache } from "react";
-import { fetchCms } from "./fetcher";
-import { mapCtaBanner, mapHeroFields, mapSectionIcon } from "../shared/reusable-sections";
-import type { StrapiCtaBannerSection, StrapiHeroSection } from "../shared/reusable-sections";
+import { fetchCms } from "../fetcher";
+import { mapCtaBanner, mapHeroFields } from "../../shared/reusable-sections";
+import type { StrapiCtaBannerSection, StrapiHeroSection } from "../../shared/reusable-sections";
+import {
+  mapEngineeringServices,
+  mapFeaturedCapabilities,
+  mapProductLifecycle,
+  mapSolutionsWeSupport,
+  mapWhatWeBuild,
+} from "../../shared/industry-sections";
 import type {
   ConnectedSystemsSection,
-  EngineeringServicesSection,
-  FeaturedCapabilitiesSection,
   FinalCtaSection,
   HealthcarePageContent,
   HeroSection,
   PageSectionEntry,
-  ProductLifecycleSection,
-  SolutionsWeSupportSection,
   StrapiHealthCareSystemSection,
   StrapiHealthcarePage,
   StrapiHealthcareSection,
   StrapiModernizationChallengesSection,
   StrapiProvenImpactSection,
   StrapiServiceDetailSection,
-  WhatWeBuildSection,
-} from "../types/healthcare";
+} from "../../types/healthcare";
 
 
 const HEALTHCARE_ENDPOINT =
@@ -59,86 +61,9 @@ function mapHero(cms: StrapiHeroSection, order: number): HeroSection {
   };
 }
 
-function mapWhatWeBuild(cms: StrapiServiceDetailSection, order: number): WhatWeBuildSection {
-  return {
-    type: "whatWeBuild",
-    order,
-    eyebrow: cms.serviceLabel,
-    title: cms.title,
-    cards: cms.approachSteps.map((step, index) => ({
-      order: index + 1,
-      title: step.title,
-      description: step.subtitle ?? "",
-      icon: mapSectionIcon(step.icon),
-    })),
-  };
-}
-
-function mapProductLifecycle(cms: StrapiServiceDetailSection, order: number): ProductLifecycleSection {
-  return {
-    type: "productLifecycle",
-    order,
-    eyebrow: cms.serviceLabel,
-    title: cms.title,
-    description: cms.subtitle ?? "",
-    cards: cms.approachSteps.map((step, index) => ({
-      order: index + 1,
-      stepLabel: step.stepLabel ?? String(index + 1),
-      title: step.title,
-      description: step.subtitle ?? "",
-    })),
-  };
-}
-
-function mapEngineeringServices(cms: StrapiServiceDetailSection, order: number): EngineeringServicesSection {
-  return {
-    type: "engineeringServices",
-    order,
-    eyebrow: cms.serviceLabel,
-    title: cms.title,
-    cards: cms.approachSteps.map((step, index) => ({
-      order: index + 1,
-      title: step.title,
-      description: step.subtitle ?? "",
-      icon: mapSectionIcon(step.icon), // no fallback when null — FR-019/research.md §5
-    })),
-  };
-}
-
-function mapFeaturedCapabilities(cms: StrapiProvenImpactSection, order: number): FeaturedCapabilitiesSection {
-  return {
-    type: "featuredCapabilities",
-    order,
-    eyebrow: cms.badgeLabel,
-    title: cms.title,
-    cards: cms.caseStudyCards.map((card, index) => ({
-      order: index + 1,
-      metric: card.name ?? "",
-      label: card.caseLabel ?? "",
-      title: card.title,
-      description: card.subtitle,
-      linkLabel: card.ctaLabel,
-      link: card.ctaLink,
-    })),
-  };
-}
-
-function mapSolutionsWeSupport(
-  cms: StrapiModernizationChallengesSection,
-  order: number
-): SolutionsWeSupportSection {
-  return {
-    type: "solutionsWeSupport",
-    order,
-    eyebrow: cms.eyebrow ?? "",
-    title: cms.title,
-    subtitle: cms.subtitle ?? "",
-    tiles: cms.blockers.features.map((feature, index) => ({
-      order: index + 1,
-      title: feature.title,
-    })),
-  };
-}
+// mapWhatWeBuild, mapProductLifecycle, mapEngineeringServices, mapSolutionsWeSupport, and
+// mapFeaturedCapabilities are now shared (imported above from ../shared/industry-sections) —
+// this page's titles need no override, so they're called with no titleOverride argument.
 
 function mapConnectedSystems(cms: StrapiHealthCareSystemSection, order: number): ConnectedSystemsSection {
   return {
