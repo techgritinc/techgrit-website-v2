@@ -21,12 +21,7 @@ export function ConstructionSolutions({ section }: { section: SolutionsSection }
               {solution.icon ? (
                 <GlassCardIcon
                   variant="constructionSolution"
-                  wrapperClassName="border"
-                  style={{
-                    background:
-                      "linear-gradient(140deg, color-mix(in srgb, var(--color-amber) 22%, transparent), color-mix(in srgb, var(--color-orange) 10%, transparent))",
-                    borderColor: "color-mix(in srgb, var(--color-amber) 30%, transparent)",
-                  }}
+                  wrapperClassName="bg-[image:var(--gradient-step-badge)] border border-border-step-badge text-amber-light"
                 >
                   <Image
                     src={solution.icon.url}

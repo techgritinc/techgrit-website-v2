@@ -149,6 +149,7 @@ function mapImpact(cms: StrapiProvenImpactSection, order: number): ImpactSection
       label: card.caseLabel,
       title: card.title,
       description: card.subtitle,
+      linkLabel: card.ctaLabel,
       link: card.ctaLink,
     })),
   };
