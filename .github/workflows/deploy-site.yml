@@ -1,14 +1,11 @@
 name: Deploy Site to VM
 
-# TRIGGER IS INTENTIONALLY workflow_dispatch ONLY.
-#
-# beta.techgrit.com still points at GitHub Pages, and deploy-pages.yml still fires on
-# push to dev. Adding `push` here now would mean two pipelines racing to publish the
-# same branch to two different places.
-#
-# Flip to `push: [dev]` as step 5 of the cutover -- in the SAME commit that removes the
-# trigger from deploy-pages.yml, never before.
+# This is the only deploy pipeline. GitHub Pages is fully decommissioned:
+# deploy-pages.yml, CNAME, and public/CNAME were deleted when the site moved to the
+# VM, so nothing else publishes this branch.
 on:
+  push:
+    branches: [dev]
   workflow_dispatch:
 
 concurrency:

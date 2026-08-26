@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { GlassCard, GlassCardTitle, GlassCardDescription } from "@/components/ui/GlassCard";
 import type { ImpactSection } from "@/cms/types/construction";
@@ -43,12 +44,13 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
                   {caseStudy.title}
                 </GlassCardTitle>
                 <GlassCardDescription variant="constructionImpact">{caseStudy.description}</GlassCardDescription>
-                <span
+                <Link
+                  href={caseStudy.link}
                   className="mt-[18px] inline-flex items-center"
                   style={{ gap: 7, fontSize: "var(--text-xs)", fontWeight: "var(--fw-bold)", color: "var(--color-amber-light)" }}
                 >
-                  Read case study <span aria-hidden="true">&rarr;</span>
-                </span>
+                  {caseStudy.linkLabel} <span aria-hidden="true">&rarr;</span>
+                </Link>
               </GlassCard>
             ))}
           </div>

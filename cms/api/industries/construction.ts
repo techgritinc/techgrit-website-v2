@@ -1,11 +1,11 @@
 import { cache } from "react";
-import { fetchCms } from "./fetcher";
-import { mapCtaBanner, mapHeroFields, mapSectionIcon, mapStatistics } from "../shared/reusable-sections";
+import { fetchCms } from "../fetcher";
+import { mapCtaBanner, mapHeroFields, mapSectionIcon, mapStatistics } from "../../shared/reusable-sections";
 import type {
   StrapiCtaBannerSection,
   StrapiHeroSection,
   StrapiStatisticsSection,
-} from "../shared/reusable-sections";
+} from "../../shared/reusable-sections";
 import type {
   AdvantageSection,
   ChallengesSection,
@@ -23,7 +23,7 @@ import type {
   StrapiOrbitDiagramSection,
   StrapiProvenImpactSection,
   StrapiServiceDetailSection,
-} from "../types/construction";
+} from "../../types/construction";
 
 // NOTE: populate paths for the dynamic zone follow Strapi v5's `on`-keyed syntax. Verify
 // against the real instance — the sample response this was built from didn't include the
@@ -149,6 +149,7 @@ function mapImpact(cms: StrapiProvenImpactSection, order: number): ImpactSection
       label: card.caseLabel,
       title: card.title,
       description: card.subtitle,
+      linkLabel: card.ctaLabel,
       link: card.ctaLink,
     })),
   };
