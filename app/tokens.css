@@ -176,6 +176,8 @@
   --color-overlay-green-12: rgba(52, 211, 153, 0.12); /* Blog newsletter success-state background */
   --color-overlay-orange-10: rgba(232, 119, 34, 0.10); /* Webinar hero eyebrow badge background (TMS-73) */
   --color-overlay-orange-06: rgba(232, 119, 34, 0.06); /* Webinar hero collage spin-ring tile background (TMS-73) */
+  --color-overlay-orange-07: rgba(232, 119, 34, 0.07); /* Startups page growth-journey highlighted-stage card background (TMS-86-startups) */
+  --color-overlay-orange-04: rgba(232, 119, 34, 0.04); /* Startups page growth-journey default-stage card background (TMS-86-startups) */
   --color-overlay-amber-04: rgba(245, 158, 11, 0.04); /* Webinar hero collage play-triangle tile background (TMS-73) */
   --color-overlay-blue-light-06: rgba(56, 189, 248, 0.06); /* Webinar hero collage pulse-dot tile background (TMS-73) */
   --color-overlay-blue-light-18: rgba(56, 189, 248, 0.18); /* Webinar hero collage pulse-dot tile inner circle background (TMS-73) */

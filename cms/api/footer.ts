@@ -45,7 +45,7 @@ export const DEFAULT_FOOTER_DATA: FooterData = {
         { slug: "svc-platform", label: "Platform Engineering", href: "/what-we-do/platform-engineering" },
         { slug: "svc-managed", label: "Managed Services", href: "/what-we-do/managed-services" },
         { slug: "svc-strategy", label: "AI Strategy & Roadmap", href: "/what-we-do/ai-strategy-roadmap" },
-        { slug: "svc-startups", label: "Startups", href: "/services#svc-startups" },
+        { slug: "svc-startups", label: "Startups", href: "/what-we-do/startups" },
       ],
     },
     {
@@ -136,11 +136,11 @@ function detectPlatform(url: string): FooterSocialPlatform | null {
 
 // TMS-86 / TMS-86-software-product-engineering / TMS-86-data-and-ai-engineering /
 // TMS-86-platform-engineering / TMS-86-managed-services / TMS-86-ai-strategy-and-
-// roadmap: the CMS's own "AI-Accelerated Modernization", "Software Product
-// Engineering", "Data and AI Engineering", "Platform Engineering", "Managed
-// Services", and "AI Strategy & Roadmap" links still point at the old /services
-// anchors. Forced to their new static routes here until the CMS entries themselves
-// are updated (planned) — every other footer link stays fully CMS-driven.
+// roadmap / TMS-86-startups: the CMS's own "AI-Accelerated Modernization", "Software
+// Product Engineering", "Data and AI Engineering", "Platform Engineering", "Managed
+// Services", "AI Strategy & Roadmap", and "Startups" links still point at the old
+// /services anchors. Forced to their new static routes here until the CMS entries
+// themselves are updated (planned) — every other footer link stays fully CMS-driven.
 //
 // The footer's own CMS menu item is titled "Data & AI Engineering" (confirmed live,
 // 2026-08-26) — a different literal string than the "Data and AI Engineering" title
@@ -168,7 +168,9 @@ function toLinkGroup(menuItem: StrapiFooterMenuItem): FooterLinkGroup {
                   ? "/what-we-do/managed-services"
                   : item.title === "AI Strategy & Roadmap"
                     ? "/what-we-do/ai-strategy-roadmap"
-                    : item.url,
+                    : item.title === "Startups"
+                      ? "/what-we-do/startups"
+                      : item.url,
     })),
   };
 }
