@@ -75,10 +75,10 @@ function pickColumns(itemCount: number): 3 | 4 {
 // this case will silently fail to match and the mega-menu entry will keep resolving to
 // its stale CMS-supplied link. Verify against a live page load before relying on this.
 //
-// TMS-86-ai-strategy-and-roadmap: same caveat applies to the "AI Strategy & Roadmap"
-// case below — its title string is taken from the design reference's shared nav markup
-// (every "What We Do" .dc.html file's identical mega-menu block), not confirmed against
-// a live CMS response.
+// TMS-86-ai-strategy-and-roadmap / TMS-86-startups: same caveat applies to the "AI
+// Strategy & Roadmap" and "Startups" cases below — both title strings are taken from
+// the design reference's shared nav markup (every "What We Do" .dc.html file's
+// identical mega-menu block), not confirmed against a live CMS response.
 //
 // `StrapiNavItem.url` and `StrapiSection.ctaLink` are typed as required strings, but
 // Strapi doesn't actually enforce that at runtime — the "About" nav item has shipped
@@ -108,7 +108,9 @@ function toMegaGroup(navItem: StrapiNavItem): HeaderMegaGroup {
                   ? "/what-we-do/managed-services"
                   : section.title === "AI Strategy & Roadmap"
                     ? "/what-we-do/ai-strategy-roadmap"
-                    : section.ctaLink) ?? "/",
+                    : section.title === "Startups"
+                      ? "/what-we-do/startups"
+                      : section.ctaLink) ?? "/",
     })),
     cta:
       navItem.ctaLabel && navItem.ctaLink
