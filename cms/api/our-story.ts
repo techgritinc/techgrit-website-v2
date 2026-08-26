@@ -169,8 +169,14 @@ function mapCultureGallery(cms: StrapiCultureGallerySection, order: number): Cul
     title: cms.title,
     subtitle: cms.subtitle,
     photos: cms.image.map((media) => {
-      const asset = pickMediaAsset(media, ["medium", "small"]);
-      return { id: String(media.url), src: resolveMediaUrl(asset.url), alt: media.alternativeText ?? "" };
+      const isVideo = media.mime?.startsWith("video/") ?? false;
+      const src = isVideo ? media.url : pickMediaAsset(media, ["medium", "small"]).url;
+      return {
+        id: String(media.url),
+        src: resolveMediaUrl(src),
+        alt: media.alternativeText ?? "",
+        type: isVideo ? ("video" as const) : ("image" as const),
+      };
     }),
   };
 }

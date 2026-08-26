@@ -8,6 +8,7 @@ export interface LifeGalleryImage {
   id: string;
   src: string | null;
   alt: string;
+  type?: "image" | "video";
 }
 
 interface LifeGalleryProps {
@@ -61,7 +62,20 @@ export default function LifeGallery({
               key={item.id}
               className="relative m-0 aspect-[3/4] overflow-hidden rounded-xl border border-border-8 bg-glass-3  transition-transform duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:-translate-y-1"
             >
-              <MediaSlot src={item.src} alt={item.alt} fill sizes="(max-width: 960px) 50vw, 25vw" />
+              {item.type === "video" ? (
+                <video
+                  src={item.src ?? undefined}
+                  aria-label={item.alt}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                />
+              ) : (
+                <MediaSlot src={item.src} alt={item.alt} fill sizes="(max-width: 960px) 50vw, 25vw" />
+              )}
             </figure>
           ))}
         </div>

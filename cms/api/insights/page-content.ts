@@ -47,7 +47,7 @@ type StrapiReviewsSection = {
   testimonial: {
     id: number;
     reviwerDescription: string;
-    mediaType: "Video" | null;
+    mediaType: string | null;
     ratings: number | null;
     video: StrapiMedia | null;
     authors: { name: string; designation: string | null }[];
@@ -154,7 +154,7 @@ function toReviews(section: StrapiReviewsSection): ReviewsData {
     const name = author?.name ?? "TechGrit Client";
     return {
       id: String(item.id),
-      type: item.mediaType === "Video" ? "video" : "text",
+      type: item.video ? "video" : "text",
       quote: item.reviwerDescription,
       name,
       role: author?.designation ?? "",

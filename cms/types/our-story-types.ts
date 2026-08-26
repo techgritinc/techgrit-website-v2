@@ -222,6 +222,7 @@ export interface CultureGalleryPhoto {
   id: string;
   src: string | null;
   alt: string;
+  type?: "image" | "video";
 }
 
 export interface CultureGallerySection {

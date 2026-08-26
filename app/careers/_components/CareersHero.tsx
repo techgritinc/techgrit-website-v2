@@ -60,6 +60,7 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                     muted
                     loop
                     playsInline
+                    preload="auto"
                   />
                 ) : (
                   <MediaSlot src={image.src} alt={image.alt} fill sizes="(max-width: 960px) 50vw, 25vw" />
