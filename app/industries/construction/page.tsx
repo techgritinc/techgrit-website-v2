@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getConstructionPageContent } from "@/cms/api/construction";
+import { getConstructionPageContent } from "@/cms/api/industries/construction";
 import { ConstructionHero } from "./_components/construction-hero";
 import { ConstructionIntegrationsStrip } from "./_components/construction-integrations-strip";
 import { ConstructionChallenges } from "./_components/construction-challenges";
@@ -24,18 +24,6 @@ export default async function ConstructionPage() {
 
   return (
     <main className="overflow-x-clip">
-      {/* Page-local ambient orbs (reference-exact — the shared, globally-wired
-          AmbientOrbs component excludes /construction so this page's amber
-          second/third orbs render instead of its blue variant; see
-          specs/TMS-67/research.md §13). */}
-      <div
-        aria-hidden="true"
-        style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}
-      >
-        <div style={{ position: "absolute", top: -160, right: -120, width: 560, height: 560, borderRadius: "50%", background: "var(--color-overlay-orange)", filter: "blur(120px)", animation: "tgorb 16s ease-in-out infinite" }} />
-        <div style={{ position: "absolute", top: 1100, left: -180, width: 520, height: 520, borderRadius: "50%", background: "var(--color-overlay-amber)", filter: "blur(130px)", animation: "tgorb 20s ease-in-out infinite reverse" }} />
-        <div style={{ position: "absolute", bottom: -160, left: "40%", width: 600, height: 600, borderRadius: "50%", background: "var(--color-overlay-amber-soft)", filter: "blur(140px)", animation: "tgorb 22s ease-in-out infinite" }} />
-      </div>
       {sections.map((section) => {
         switch (section.type) {
           case "hero":

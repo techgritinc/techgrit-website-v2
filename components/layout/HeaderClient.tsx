@@ -148,7 +148,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                 onMouseEnter={() => openDropdownNow(group.label)}
                 onMouseLeave={() => scheduleDropdownClose(group.label)}
               >
-                {isAboutGroup ? (
+                                {isAboutGroup ? (
                   <button
                     type="button"
                     className={triggerClassName}
