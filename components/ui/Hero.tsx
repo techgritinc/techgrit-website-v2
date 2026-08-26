@@ -19,7 +19,8 @@ export interface HeroProps {
   /** Exact substring of `title` rendered via the shared `.text-gradient` span. */
   titleHighlight: string;
   subtitle: string;
-  primaryCta: HeroCta;
+  /** Optional — some pages' hero sections ship with no CTA fields from the CMS at all. */
+  primaryCta?: HeroCta;
   secondaryCta?: HeroCta;
   /** Right-card main content — this page: an image; other "What We Do" pages: a stat grid, etc. */
   media: ReactNode;
@@ -128,20 +129,24 @@ export function Hero({
             >
               {subtitle}
             </p>
-            <div
-              data-rise
-              className="mt-8 flex flex-wrap items-center gap-3.5"
-              style={{ animationDelay: ".34s" }}
-            >
-              <Button href={primaryCta.href} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink !px-[26px] !py-[15px] !min-h-[52px]">
-                {primaryCta.label} <span aria-hidden="true" className="text-[17px] leading-[normal]">&#8594;</span>
-              </Button>
-              {secondaryCta && (
-                <Button href={secondaryCta.href} variant="ghost" size="hero" className="leading-[normal] !text-[15px] !px-[22px] !py-[14px]">
-                  {secondaryCta.label}
-                </Button>
-              )}
-            </div>
+            {(primaryCta || secondaryCta) && (
+              <div
+                data-rise
+                className="mt-8 flex flex-wrap items-center gap-3.5"
+                style={{ animationDelay: ".34s" }}
+              >
+                {primaryCta && (
+                  <Button href={primaryCta.href} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink !px-[26px] !py-[15px] !min-h-[52px]">
+                    {primaryCta.label} <span aria-hidden="true" className="text-[17px] leading-[normal]">&#8594;</span>
+                  </Button>
+                )}
+                {secondaryCta && (
+                  <Button href={secondaryCta.href} variant="ghost" size="hero" className="leading-[normal] !text-[15px] !px-[22px] !py-[14px]">
+                    {secondaryCta.label}
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
           <div data-rise className="relative leading-[normal]" style={{ animationDelay: ".35s" }}>
             <div
