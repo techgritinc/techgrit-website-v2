@@ -59,10 +59,9 @@ The site runs on an AWS EC2 VM (shared with the Strapi CMS and two other apps) u
 
 Every route renders dynamically (`ƒ` in the build output) because `cms/api/fetcher.ts` fetches with `cache: "no-store"`. The site therefore needs `CMS_API_URL`, which the deploy writes to `.env` from the `dev` Environment on each run. Nothing is prerendered, so the CI build gate does not need the CMS reachable — `fetchCms` returns `null` on any failure.
 
-Two workflows exist during the GitHub Pages -> VM migration; only one may be armed:
+`deploy-site.yml` is the one and only deploy pipeline: it fires on push to `dev` (plus `workflow_dispatch`), builds on the runner as a gate, then over SSH does `git reset --hard` -> `npm ci` -> `npm run build` -> `pm2 restart`.
 
-- `deploy-pages.yml` — the incumbent, fires on push to `dev`, serves `beta.techgrit.com` (see `CNAME`). It can no longer rebuild, since static export requires the `output: "export"` that `next.config.ts` has dropped. Pages keeps serving its last successful deployment, which is the rollback target until cutover completes.
-- `deploy-site.yml` — the replacement, `workflow_dispatch` only until the DNS flip. Builds on the runner as a gate, then over SSH does `git reset --hard` -> `npm ci` -> `npm run build` -> `pm2 restart`.
+The GitHub Pages migration is complete and Pages is fully decommissioned — `deploy-pages.yml`, `CNAME`, and `public/CNAME` are deleted. Pages could not have rebuilt anyway once `next.config.ts` dropped `output: "export"`: its `upload-pages-artifact` step failed with `tar: out: Cannot open`, since a dynamic build writes `.next/`, not `out/`. There is therefore no Pages rollback target — rolling back means redeploying an earlier commit through `deploy-site.yml`.
 
 Two things that are easy to get wrong:
 

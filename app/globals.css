@@ -495,6 +495,8 @@
   --gradient-ghost-hover: var(--gradient-ghost-hover);
   --color-border-ghost: var(--color-border-ghost);
   --color-border-ghost-hover: var(--color-border-ghost-hover);
+  --gradient-step-badge: var(--gradient-step-badge);
+  --color-border-step-badge: var(--color-step-badge-border);
   --shadow-btn-ghost: var(--shadow-btn-ghost);
   --blur-ghost: var(--blur-ghost);
 

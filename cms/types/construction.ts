@@ -44,6 +44,7 @@ export type StrapiCaseStudyCard = {
   caseLabel: string;
   title: string;
   subtitle: string;
+  ctaLabel: string;
   ctaLink: string;
 };
 
@@ -211,6 +212,7 @@ export interface CaseStudySummary {
   label: string;
   title: string;
   description: string;
+  linkLabel: string;
   link: string;
 }
 
