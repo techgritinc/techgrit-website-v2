@@ -289,6 +289,8 @@
   --gradient-divider-blue:   linear-gradient(90deg, rgba(56, 189, 248, 0), rgba(56, 189, 248, 0.4), rgba(56, 189, 248, 0)); /* Services accordion body divider — blue accent (User Story 2) */
   --gradient-divider-orange: linear-gradient(90deg, rgba(232, 119, 34, 0), rgba(232, 119, 34, 0.4), rgba(232, 119, 34, 0)); /* Services accordion body divider — orange accent (User Story 2) */
   --gradient-divider-teal:   linear-gradient(90deg, rgba(45, 212, 191, 0), rgba(45, 212, 191, 0.4), rgba(45, 212, 191, 0)); /* Services accordion body divider — teal accent (User Story 2) */
+  --gradient-step-badge: linear-gradient(140deg, color-mix(in srgb, var(--color-amber) 22%, transparent), color-mix(in srgb, var(--color-orange) 10%, transparent)); /* Step badge gradient for Healthcare/Construction solution cards */
+  --color-step-badge-border: color-mix(in srgb, var(--color-amber) 30%, transparent); /* Step badge border color */
 
   /* ----------------------------------------------------------
    * 6. TYPOGRAPHY

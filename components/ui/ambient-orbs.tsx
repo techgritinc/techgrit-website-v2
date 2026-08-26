@@ -17,7 +17,15 @@ import { ROUTES } from "@/lib/routes";
 // instead of the old orbs jumping to new values in place.
 export function AmbientOrbs() {
   const pathname = usePathname();
-  if (pathname?.startsWith(ROUTES.industriesConstruction)) return null;
+  if (pathname?.startsWith("/industries")) {
+    return (
+      <div key="industries" aria-hidden="true" className="bg-ambient-orbs fixed inset-0 z-0 pointer-events-none">
+        <span className="absolute top-[-160px] right-[-120px] w-[560px] h-[560px] rounded-full bg-overlay-orange blur-[120px] animate-[tgorb_16s_ease-in-out_infinite]" />
+        <span className="absolute top-[1100px] left-[-180px] w-[520px] h-[520px] rounded-full bg-overlay-amber blur-[130px] animate-[tgorb_20s_ease-in-out_infinite_reverse]" />
+        <span className="absolute bottom-[-160px] left-[40%] w-[600px] h-[600px] rounded-full bg-overlay-amber-soft blur-[140px] animate-[tgorb_22s_ease-in-out_infinite]" />
+      </div>
+    );
+  }
 
   if (pathname === `${ROUTES.caseStudies}/`) {
     return (
