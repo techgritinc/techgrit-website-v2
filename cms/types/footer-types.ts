@@ -26,6 +26,7 @@ export type StrapiFooterContact = {
 export type StrapiLegalLink = {
   title: string;
   url: string;
+  document: StrapiMedia | null;
 };
 
 export type StrapiFooterMenuLink = {
@@ -107,6 +108,7 @@ export type FooterContactDetail = {
 export type FooterLegalLink = {
   label: string;
   href: string;
+  isDocument: boolean;
 };
 
 export type FooterData = {

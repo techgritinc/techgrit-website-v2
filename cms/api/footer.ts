@@ -18,7 +18,7 @@ import type {
 } from "../types/footer-types";
 
 const FOOTER_ENDPOINT =
-  "/api/footer?populate[logo]=true&populate[footerContact]=true&populate[footerMenuItems][populate][items]=true&populate[socialLinks][populate][icon]=true&populate[legalLinks]=true";
+  "/api/footer?populate[logo]=true&populate[footerContact]=true&populate[footerMenuItems][populate][items]=true&populate[socialLinks][populate][icon]=true&populate[legalLinks][populate][document]=true";
 
 // The footer renders the logo at a fixed 44px height, same as the header, so the
 // small "thumbnail" format (245x73) is the right asset — not the ~3286x982 original.
@@ -108,7 +108,9 @@ function toSocialLink(social: StrapiSocialLink): FooterSocialLink {
 }
 
 function toLegalLink(link: StrapiLegalLink): FooterLegalLink {
-  return { label: link.title, href: link.url };
+  return link.document
+    ? { label: link.title, href: resolveMediaUrl(link.document.url), isDocument: true }
+    : { label: link.title, href: link.url, isDocument: false };
 }
 
 // Called directly from the Footer Server Component (await getFooterData()) — runs

@@ -113,7 +113,7 @@ export function toReviews(section: StrapiReviewsSection, metricsStat: StrapiStat
     const author = item.authors[0];
     return {
       id: String(item.id),
-      type: item.mediaType === "Video" ? "video" : "text",
+      type: item.video ? "video" : "text",
       quote: item.reviwerDescription,
       name: author?.name ?? "TechGrit Client",
       role: author?.designation ?? "",

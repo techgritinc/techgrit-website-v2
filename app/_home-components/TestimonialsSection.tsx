@@ -66,20 +66,22 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
             <p className="mt-3.5 text-base leading-[1.55] text-muted">{subtitle}</p>
           </div>
 
-          <div className="flex items-center gap-8 max-tg-sm:gap-4 rounded-16 border border-border-8 bg-glass-3 px-tg-11 py-tg-8 max-tg-sm:px-4 max-tg-sm:py-3.5 backdrop-blur-md max-tg-sm:mx-auto">
-            {metrics.map((metric, index) => (
-              <Fragment key={metric.id}>
-                {index > 0 && <div aria-hidden="true" className="h-9 w-px bg-border-14" />}
-                <div>
-                  <div className="font-display text-testimonial-stat font-bold tracking-[var(--ls-normal)] text-primary leading-[normal]">
-                    {metric.value}
-                    <span className="text-amber-light">{metric.suffix}</span>
+          {metrics.length > 0 && (
+            <div className="flex items-center gap-8 max-tg-sm:gap-4 rounded-16 border border-border-8 bg-glass-3 px-tg-11 py-tg-8 max-tg-sm:px-4 max-tg-sm:py-3.5 backdrop-blur-md max-tg-sm:mx-auto">
+              {metrics.map((metric, index) => (
+                <Fragment key={metric.id}>
+                  {index > 0 && <div aria-hidden="true" className="h-9 w-px bg-border-14" />}
+                  <div>
+                    <div className="font-display text-testimonial-stat font-bold tracking-[var(--ls-normal)] text-primary leading-[normal]">
+                      {metric.value}
+                      <span className="text-amber-light">{metric.suffix}</span>
+                    </div>
+                    <div className="mt-0.5 text-11 font-bold tracking-label text-dim uppercase leading-[normal]">{metric.label}</div>
                   </div>
-                  <div className="mt-0.5 text-11 font-bold tracking-label text-dim uppercase leading-[normal]">{metric.label}</div>
-                </div>
-              </Fragment>
-            ))}
-          </div>
+                </Fragment>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -103,10 +105,26 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   className="relative h-[340px] w-[380px] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
                   style={{ scrollSnapAlign: "start" }}
                 >
-                  <div aria-hidden="true" className="absolute inset-0 [background:radial-gradient(circle_at_72%_22%,rgba(255,255,255,0.28),transparent_60%)]" />
-                  <div aria-hidden="true" className="font-display absolute -top-6 right-3 text-[140px] leading-none font-bold tracking-[-0.06em] text-text-13">
-                    {testimonial.initials}
-                  </div>
+                  {testimonial.videoUrl ? (
+                    <video
+                      src={testimonial.videoUrl}
+                      aria-hidden="true"
+                      className="absolute inset-0 h-full w-full object-cover"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                    />
+                  ) : (
+                    <>
+                      <div aria-hidden="true" className="absolute inset-0 [background:radial-gradient(circle_at_72%_22%,rgba(255,255,255,0.28),transparent_60%)]" />
+                      <div aria-hidden="true" className="font-display absolute -top-6 right-3 text-[140px] leading-none font-bold tracking-[-0.06em] text-text-13">
+                        {testimonial.initials}
+                      </div>
+                    </>
+                  )}
+                  <div aria-hidden="true" className="absolute inset-0 [background:linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.55))]" />
                   <QuoteIcon
                     aria-hidden="true"
                     width={76}

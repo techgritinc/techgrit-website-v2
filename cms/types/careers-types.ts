@@ -136,6 +136,7 @@ export interface PageSeo {
 export interface CollageImage {
   src: string;
   alt: string;
+  type: "image" | "video";
   span: "tall" | "default" | "wide";
 }
 

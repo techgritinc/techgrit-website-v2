@@ -623,7 +623,7 @@ export function PhaseImpactIcon(props: IconProps) {
   );
 }
 
-// Webinar (app/webinar/_components/)
+// Webinar (app/insights/webinar/_components/)
 
 /** Upcoming-session date/time row. */
 export function ClockIcon(props: IconProps) {
@@ -646,7 +646,7 @@ export function ClockIcon(props: IconProps) {
   );
 }
 
-// Blog (app/blog/_components/)
+// Blog (app/insights/blog/_components/)
 
 /** Featured-post panel decorative network-node glyph. */
 export function NetworkNodeIcon(props: IconProps) {

@@ -51,7 +51,20 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                 key={index}
                 className={`relative overflow-hidden rounded-[18px] border border-border-image ${COLLAGE_SPAN_CLASSES[image.span]}`}
               >
-                <MediaSlot src={image.src} alt={image.alt} fill sizes="(max-width: 960px) 50vw, 25vw" />
+                {image.type === "video" ? (
+                  <video
+                    src={image.src}
+                    aria-label={image.alt}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                  />
+                ) : (
+                  <MediaSlot src={image.src} alt={image.alt} fill sizes="(max-width: 960px) 50vw, 25vw" />
+                )}
               </div>
             ))}
           </div>

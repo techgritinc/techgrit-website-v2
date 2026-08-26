@@ -15,7 +15,7 @@ export type StrapiCultureGallerySection = {
   __component: "page-reusable-sections.culture-gallery";
 };
 
-export type CultureGalleryImage = { id: string; src: string | null; alt: string };
+export type CultureGalleryImage = { id: string; src: string | null; alt: string; type?: "image" | "video" };
 
 export type CultureGalleryData = {
   title: string;
@@ -48,8 +48,14 @@ export const DEFAULT_CULTURE_GALLERY_DATA: CultureGalleryData = {
 
 export function toCultureGallery(section: StrapiCultureGallerySection): CultureGalleryData {
   const images: CultureGalleryImage[] = section.image.map((media) => {
-    const asset = pickMediaAsset(media, ["medium", "small"]);
-    return { id: String(media.id), src: resolveMediaUrl(asset.url), alt: media.alternativeText ?? "" };
+    const isVideo = media.mime?.startsWith("video/") ?? false;
+    const src = isVideo ? media.url : pickMediaAsset(media, ["medium", "small"]).url;
+    return {
+      id: String(media.id),
+      src: resolveMediaUrl(src),
+      alt: media.alternativeText ?? "",
+      type: isVideo ? ("video" as const) : ("image" as const),
+    };
   });
 
   return {

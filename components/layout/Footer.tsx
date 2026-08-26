@@ -158,11 +158,24 @@ export default async function Footer() {
         >
           <div className="flex flex-wrap items-center justify-center gap-[22px]">
             <span className="text-[12.5px] text-40">{copyrights}</span>
-            {legalLinks.map((legal) => (
-              <Link key={legal.href} href={legal.href} className="text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white">
-                {legal.label}
-              </Link>
-            ))}
+            {legalLinks.map((legal) =>
+              legal.isDocument ? (
+                <a
+                  key={legal.href}
+                  href={legal.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white"
+                >
+                  {legal.label}
+                </a>
+              ) : (
+                <Link key={legal.href} href={legal.href} className="text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white">
+                  {legal.label}
+                </Link>
+              )
+            )}
           </div>
         </div>
       </div>

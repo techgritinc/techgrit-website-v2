@@ -172,7 +172,7 @@ export interface CaseStudyCard {
 }
 
 // The CMS's own ctaLink is a bare `/<slug>/` (or a `/case-studies` placeholder for cards
-// with no detail page yet) — neither matches this app's actual `/case-studies/<slug>/`
+// with no detail page yet) — neither matches this app's actual `/insights/case-studies/<slug>/`
 // detail route, so every card link is rebuilt from the slug instead of used verbatim.
 export function resolveCaseStudyHref(ctaLink: string): string {
   const slug = ctaLink.replace(/\/+$/, "").split("/").filter(Boolean).pop();

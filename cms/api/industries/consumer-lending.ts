@@ -1,6 +1,5 @@
 import { fetchCms } from "../fetcher";
 import { mapHeroFields, mapStatistics, mapCtaBanner } from "../../shared/reusable-sections";
-import { ROUTES } from "@/lib/routes";
 import type {
   StrapiCapabilitiesSection,
   StrapiChallengesSection,
@@ -41,8 +40,7 @@ const CONSUMER_LENDING_ENDPOINT = "/api/pages/by-slug/consumer-lending";
 // Both `primaryBtnLink` and `secondaryBtnLink` ship null in the live CMS data while their
 // labels ("Start a conversation" / "See where we work") are populated. Primary falls back to
 // `/contact-us/` — the same destination the shared Footer's own "Start a conversation" CTA uses
-// for this exact label (`cms/api/footer.ts`'s `DEFAULT_FOOTER_DATA.cta`), not a fabricated
-// route. Secondary falls back to the Domain depth section's own in-page anchor, matching the
+// for this exact label, not a fabricated route. Secondary falls back to the Domain depth section's own in-page anchor, matching the
 // reference content's intent (its equivalent button links to "#lifecycle") now that this page
 // has a real Domain depth section to point at.
 function toHeroSection(section: StrapiHeroSection, order: number): HeroSection {

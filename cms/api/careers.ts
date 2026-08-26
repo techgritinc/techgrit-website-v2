@@ -63,11 +63,15 @@ const JOB_TYPE_LABELS: Record<string, string> = {
 const COLLAGE_SPAN_BY_INDEX: CollageImage["span"][] = ["tall", "default", "default", "wide"];
 
 function mapCareersHero(cms: StrapiHeroSection): CareersHeroContent {
-  const images = cms.backgroundImage.slice(0, 4).map((media, index) => ({
-    src: resolveMediaUrl(pickMediaAsset(media, ["medium", "small"]).url),
-    alt: media.alternativeText ?? "",
-    span: COLLAGE_SPAN_BY_INDEX[index] ?? "default",
-  }));
+  const images = cms.backgroundImage.slice(0, 4).map((media, index) => {
+    const isVideo = media.mime?.startsWith("video/") ?? false;
+    return {
+      src: isVideo ? resolveMediaUrl(media.url) : resolveMediaUrl(pickMediaAsset(media, ["medium", "small"]).url),
+      alt: media.alternativeText ?? "",
+      type: isVideo ? ("video" as const) : ("image" as const),
+      span: COLLAGE_SPAN_BY_INDEX[index] ?? "default",
+    };
+  });
 
   return {
     eyebrow: cms.badgeLabel,
@@ -118,8 +122,14 @@ function mapCareersCultureGallery(cms: StrapiCultureGallerySection) {
     heading: cms.title,
     description: cms.subtitle,
     images: cms.image.map((media) => {
-      const asset = pickMediaAsset(media, ["medium", "small"]);
-      return { id: String(media.url), src: resolveMediaUrl(asset.url), alt: media.alternativeText ?? "" };
+      const isVideo = media.mime?.startsWith("video/") ?? false;
+      const src = isVideo ? media.url : pickMediaAsset(media, ["medium", "small"]).url;
+      return {
+        id: String(media.url),
+        src: resolveMediaUrl(src),
+        alt: media.alternativeText ?? "",
+        type: isVideo ? ("video" as const) : ("image" as const),
+      };
     }),
   };
 }

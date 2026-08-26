@@ -6,7 +6,7 @@ export function TopicFilter({ topics, activeCategory }: { topics: Topic[]; activ
     <div className="flex items-center gap-2.5 flex-nowrap" role="group" aria-label="Filter posts by topic">
       {topics.map((topic) => {
         const active = topic.value === activeCategory;
-        const href = topic.value === "all" ? "/blog" : `/blog?category=${topic.value}`;
+        const href = topic.value === "all" ? "/insights/blog" : `/insights/blog?category=${topic.value}`;
         return (
           <Link
             key={topic.value}

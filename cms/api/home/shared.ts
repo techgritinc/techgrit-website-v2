@@ -12,6 +12,7 @@ export type StrapiMedia = {
   alternativeText: string | null;
   width: number;
   height: number;
+  mime?: string;
   formats: {
     thumbnail?: StrapiImageFormat;
     small?: StrapiImageFormat;

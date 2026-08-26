@@ -10,7 +10,7 @@ import type {
   UpcomingSession,
   WebinarHeroContent,
   WebinarPageContent,
-} from "@/app/webinar/_data/types";
+} from "@/app/insights/webinar/_data/types";
 import type {
   StrapiUpcomingWebinarSection,
   StrapiWebinarCtaBannerSection,

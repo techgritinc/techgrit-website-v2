@@ -13,7 +13,7 @@ export function BlogPostGrid({ posts }: { posts: BlogPost[] }) {
           <div className="mt-14 flex flex-col items-center gap-3 text-center">
             <p className="text-[15.5px] text-muted">No posts match this topic yet — check back soon.</p>
             <Link
-              href="/blog"
+              href="/insights/blog"
               scroll={false}
               className="inline-flex items-center border-b border-border-orange-medium pb-[3px] text-14-5 font-semibold text-muted leading-[normal] transition-colors duration-200 hover:text-primary"
             >
