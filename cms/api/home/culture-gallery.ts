@@ -30,8 +30,10 @@ export function pickCultureGallerySection(sections: AnySection[]): StrapiCulture
   return sections.find((s): s is StrapiCultureGallerySection => s.__component === "page-reusable-sections.culture-gallery");
 }
 
-// Also used directly by app/_home-components/LifeGallery.tsx as its default `images`
-// prop, since that component is shared with Careers/About (which don't fetch CMS data).
+// NOT used as a homepage CMS-fallback (the homepage always renders whatever the CMS
+// returns, empty or not) — used only as app/_home-components/LifeGallery.tsx's own
+// default `images`/button props, since that shared component also renders on
+// Careers/About, which are static pages that don't fetch this CMS endpoint at all.
 export const DEFAULT_CULTURE_GALLERY_DATA: CultureGalleryData = {
   title: "Life at TechGrit.",
   subtitle: "The people and the culture behind the engineering.",
@@ -64,6 +66,6 @@ export function toCultureGallery(section: StrapiCultureGallerySection): CultureG
     badgeLabel: section.badgeLabel,
     primaryBtn: { label: section.primaryBtnLabel, href: section.primaryBtnLink },
     secondaryBtn: { label: section.secondaryBtnLabel, href: section.secondaryBtnLink },
-    images: images.length > 0 ? images : DEFAULT_CULTURE_GALLERY_DATA.images,
+    images,
   };
 }

@@ -10,6 +10,8 @@ export type StrapiTestimonial = {
   reviwerDescription: string;
   mediaType: "Video" | null;
   ratings: number | null;
+  videoDuration: string | null;
+  verificationStatus: string | null;
   video: StrapiMedia | null;
   authors: StrapiTestimonialAuthor[];
 };
@@ -32,6 +34,8 @@ export type Testimonial = {
   initials: string;
   rating?: number;
   videoUrl?: string | null;
+  videoDuration?: string;
+  verified: boolean;
 };
 
 export type TestimonialMetric = { id: string; value: string; suffix?: string; label: string };
@@ -48,64 +52,13 @@ export function pickReviewsSection(sections: AnySection[]): StrapiReviewsSection
   return sections.find((s): s is StrapiReviewsSection => s.__component === "home.reviews");
 }
 
-export const DEFAULT_REVIEWS_DATA: ReviewsData = {
-  badgeLabel: "What our clients say",
-  title: "15+ webinars on AI-first engineering. And counting.",
-  subtitle: "Over the past two years, TechGrit has hosted more than 15 webinars on AI-first engineering practices.",
-  testimonials: [
-    { id: "daniel-shore", type: "video", quote: "From prototype to production in six weeks.", name: "Daniel Shore", role: "Head of Growth, Lineflow", initials: "DS", videoUrl: null },
-    {
-      id: "jonas-berg",
-      type: "text",
-      quote: "Their design-thinking mindset combined with deep AI knowledge helped us go from prototype to production fast, without the usual handoffs.",
-      name: "Jonas Berg",
-      role: "Founder, FrameOps",
-      initials: "JB",
-      rating: 5,
-    },
-    {
-      id: "priya-nair",
-      type: "text",
-      quote: "Simple, thoughtful changes doubled activation, and it only took weeks. The OrbitAI workflow is the real deal.",
-      name: "Priya Nair",
-      role: "VP Engineering, Northwind FinTech",
-      initials: "PN",
-      rating: 5,
-    },
-    {
-      id: "marcus-lee",
-      type: "text",
-      quote: "TechGrit owned the outcome end to end. We shipped a modernized platform without ever taking the product down.",
-      name: "Marcus Lee",
-      role: "CTO, Atlas Build",
-      initials: "ML",
-      rating: 5,
-    },
-    { id: "sara-whitman", type: "video", quote: "AI agents, with real engineer oversight.", name: "Sara Whitman", role: "Product Lead, Meridian Health", initials: "SW", videoUrl: null },
-    {
-      id: "devin-park",
-      type: "text",
-      quote: "Real users, real data, real ROI in six weeks. Their agentic build process changed how our team ships software.",
-      name: "Devin Park",
-      role: "COO, Northstar Logistics",
-      initials: "DP",
-      rating: 5,
-    },
-  ],
-  metrics: [
-    { id: "projects-delivered", value: "500", suffix: "+", label: "Projects delivered" },
-    { id: "would-refer", value: "100", suffix: "%", label: "Would refer" },
-    { id: "avg-time-to-value", value: "6", suffix: "wk", label: "Avg. time to value" },
-  ],
-};
-
 // Two-letter initials from a display name, for the testimonial avatar badge —
-// "Arjun Rao" -> "AR", falling back to "TG" (TechGrit) when a name is absent.
+// "Arjun Rao" -> "AR"; empty when a name is absent.
 function toInitials(name: string | undefined): string {
-  if (!name) return "TG";
+  if (!name) return "";
   const parts = name.trim().split(/\s+/).filter(Boolean);
   const letters = parts.slice(0, 2).map((part) => part[0]?.toUpperCase() ?? "");
-  return letters.join("") || "TG";
+  return letters.join("");
 }
 
 export function toReviews(section: StrapiReviewsSection, metricsStat: StrapiStatisticsSection | undefined): ReviewsData {
@@ -115,11 +68,14 @@ export function toReviews(section: StrapiReviewsSection, metricsStat: StrapiStat
       id: String(item.id),
       type: item.video ? "video" : "text",
       quote: item.reviwerDescription,
-      name: author?.name ?? "TechGrit Client",
+      name: author?.name ?? "",
       role: author?.designation ?? "",
       initials: toInitials(author?.name),
       rating: item.ratings ?? undefined,
       videoUrl: item.video ? resolveMediaUrl(item.video.url) : null,
+      // CMS stores duration as "2.14"-style (minutes.seconds) — display as "2:14".
+      videoDuration: item.videoDuration ? item.videoDuration.replace(".", ":") : undefined,
+      verified: item.verificationStatus === "Verified",
     };
   });
 
@@ -137,7 +93,7 @@ export function toReviews(section: StrapiReviewsSection, metricsStat: StrapiStat
     badgeLabel: section.badgeLabel,
     title: section.title,
     subtitle: section.subtitle,
-    testimonials: testimonials.length > 0 ? testimonials : DEFAULT_REVIEWS_DATA.testimonials,
-    metrics: metrics.length > 0 ? metrics : DEFAULT_REVIEWS_DATA.metrics,
+    testimonials,
+    metrics,
   };
 }

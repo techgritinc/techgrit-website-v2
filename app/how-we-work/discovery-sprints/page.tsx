@@ -82,7 +82,7 @@ export default async function DiscoverySprintsPage() {
           case "faq":
             return (
               <section key={section.order} className="relative">
-                <div className="mx-auto max-w-[960px] px-9 py-[60px]">
+                <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
                   <div className="mb-8">
                     <div className="mb-3 text-[12.5px] font-extrabold uppercase tracking-[0.16em] text-orange">
                       {section.eyebrow}

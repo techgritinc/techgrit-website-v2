@@ -20,17 +20,6 @@ export function pickTrustedClientsSection(sections: AnySection[]): StrapiTrusted
   return sections.find((s): s is StrapiTrustedClientsSection => s.__component === "home.trusted-clients");
 }
 
-export const DEFAULT_TRUSTED_CLIENTS_DATA: TrustedClientsData = {
-  logos: [
-    { id: "evolve", src: "/logos/client-evolve.png", alt: "Evolve", height: 28 },
-    { id: "sunnyday", src: "/logos/client-sunnyday.png", alt: "Sunny Day Fund", height: 44 },
-    { id: "bcbs", src: "/logos/client-bcbs.png", alt: "BlueCross BlueShield", height: 36 },
-    { id: "aqua", src: "/logos/client-aqua.png", alt: "AquA Finance", height: 44 },
-    { id: "commsai", src: "/logos/client-commsai.png", alt: "CommsAI", height: 40 },
-    { id: "turnqey", src: "/logos/client-turnqey.png", alt: "Turnqey", height: 28 },
-  ],
-};
-
 // The reference renders each logo at `height: Xpx, width: auto` with a *different*
 // height per client (28/44/36/44/40/28) so that every logo reads at a comparable
 // visual size despite very different aspect ratios (a wide wordmark vs. a round
@@ -65,5 +54,5 @@ export function toTrustedClients(section: StrapiTrustedClientsSection): TrustedC
       height: heightForLogo(alt),
     };
   });
-  return { logos: logos.length > 0 ? logos : DEFAULT_TRUSTED_CLIENTS_DATA.logos };
+  return { logos };
 }
