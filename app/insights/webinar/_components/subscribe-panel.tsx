@@ -13,7 +13,8 @@ type SubscribeStatus = "idle" | "error" | "success";
 
 export function SubscribePanel({ content }: { content: SubscribePanelContent }) {
   const [status, setStatus] = useState<SubscribeStatus>("idle");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -25,14 +26,12 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
 
     const nameResult = validateName("Name").safeParse(rawName);
     if (!nameResult.success) {
-      setStatus("error");
-      setErrorMessage(nameResult.error.issues[0].message);
+      setNameError(nameResult.error.issues[0].message);
       return;
     }
     const emailResult = validateEmail.safeParse(rawEmail);
     if (!emailResult.success) {
-      setStatus("error");
-      setErrorMessage(emailResult.error.issues[0].message);
+      setEmailError(emailResult.error.issues[0].message);
       return;
     }
 
@@ -45,21 +44,18 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
     setIsSubmitting(false);
 
     if (!result.ok) {
-      setStatus("error");
-      setErrorMessage("Something went wrong. Please try again.");
+      setEmailError("Something went wrong. Please try again.");
       return;
     }
 
-    setErrorMessage(null);
     setStatus("success");
     formElement.reset();
   }
 
   function handleInputChange() {
-    if (status !== "idle") {
-      setStatus("idle");
-      setErrorMessage(null);
-    }
+    if (status !== "idle") setStatus("idle");
+    setNameError(null);
+    setEmailError(null);
   }
 
   return (
@@ -88,6 +84,8 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
               required
               placeholder={content.namePlaceholder}
               onChange={handleInputChange}
+              error={nameError}
+              reserveErrorSpace
               inputClassName="!rounded-card !py-4 !px-tg-7 placeholder:!font-normal"
             />
             <FormField
@@ -97,6 +95,8 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
               required
               placeholder={content.formPlaceholder}
               onChange={handleInputChange}
+              error={emailError}
+              reserveErrorSpace
               inputClassName="!rounded-card !py-4 !px-tg-7 placeholder:!font-normal"
             />
             <Button
@@ -107,16 +107,9 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
             >
               {status === "success" ? "Subscribed ✓" : content.ctaLabel}
             </Button>
-            <div className="!mt-3.5 min-h-[22px]">
-              {status === "success" && (
-                <p className="text-sm font-semibold text-teal-light leading-[normal]">{content.successText}</p>
-              )}
-              {status === "error" && errorMessage && (
-                <p role="alert" className="text-sm font-semibold text-error leading-[normal]">
-                  {errorMessage}
-                </p>
-              )}
-            </div>
+            {status === "success" && (
+              <p className="!mt-3.5 text-sm font-semibold text-teal-light leading-[normal]">{content.successText}</p>
+            )}
           </form>
         </GlassCard>
       </div>

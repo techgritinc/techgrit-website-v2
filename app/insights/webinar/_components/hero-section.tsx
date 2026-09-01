@@ -15,7 +15,8 @@ type SubscribeStatus = "idle" | "error" | "success";
 
 export function HeroSection({ content }: { content: WebinarHeroContent }) {
   const [status, setStatus] = useState<SubscribeStatus>("idle");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -27,14 +28,12 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
 
     const nameResult = validateName("Name").safeParse(rawName);
     if (!nameResult.success) {
-      setStatus("error");
-      setErrorMessage(nameResult.error.issues[0].message);
+      setNameError(nameResult.error.issues[0].message);
       return;
     }
     const emailResult = validateEmail.safeParse(rawEmail);
     if (!emailResult.success) {
-      setStatus("error");
-      setErrorMessage(emailResult.error.issues[0].message);
+      setEmailError(emailResult.error.issues[0].message);
       return;
     }
 
@@ -47,21 +46,18 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
     setIsSubmitting(false);
 
     if (!result.ok) {
-      setStatus("error");
-      setErrorMessage("Something went wrong. Please try again.");
+      setEmailError("Something went wrong. Please try again.");
       return;
     }
 
-    setErrorMessage(null);
     setStatus("success");
     formElement.reset();
   }
 
   function handleInputChange() {
-    if (status !== "idle") {
-      setStatus("idle");
-      setErrorMessage(null);
-    }
+    if (status !== "idle") setStatus("idle");
+    setNameError(null);
+    setEmailError(null);
   }
 
   const [before, after] = content.heading.split(content.headingHighlight);
@@ -111,6 +107,8 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
               required
               placeholder={content.namePlaceholder}
               onChange={handleInputChange}
+              error={nameError}
+              reserveErrorSpace
               containerClassName="min-w-[220px] flex-1"
               inputClassName="!rounded-card !py-tg-5a !px-tg-7 placeholder:!font-normal !h-[52px] placeholder:!text-white/36"
             />
@@ -121,6 +119,8 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
               required
               placeholder={content.formPlaceholder}
               onChange={handleInputChange}
+              error={emailError}
+              reserveErrorSpace
               containerClassName="min-w-[220px] flex-1"
               inputClassName="!rounded-card !py-tg-5a !px-tg-7 placeholder:!font-normal !h-[52px] placeholder:!text-white/36"
             />
@@ -134,16 +134,9 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
             </Button>
           </form>
 
-          <div className="mt-3.5 min-h-[22px]">
-            {status === "success" && (
-              <p className="text-xs font-semibold text-teal-light leading-[normal]">{content.successText}</p>
-            )}
-            {status === "error" && errorMessage && (
-              <p role="alert" className="text-sm font-semibold text-error">
-                {errorMessage}
-              </p>
-            )}
-          </div>
+          {status === "success" && (
+            <p className="mt-3.5 text-xs font-semibold text-teal-light leading-[normal]">{content.successText}</p>
+          )}
         </div>
         <div data-rise className="motion-reduce:!opacity-100" style={{ animationDelay: ".24s" }}>
           <HeroCollage tiles={content.collage} />
