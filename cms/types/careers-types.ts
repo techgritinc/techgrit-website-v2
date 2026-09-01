@@ -184,6 +184,7 @@ export interface OpenRole {
   location: string;
   type: string;
   accent: AccentKey;
+  ctaLabel: string;
 }
 
 export interface LifeAtTechGritContent {
@@ -209,6 +210,7 @@ export interface JobFormField {
   // Populated only on the Resume field.
   acceptedFormatsAndSize: string | null;
   uploadPromptText: string | null;
+  icon: SectionIcon | null;
 }
 
 export interface ApplicationFormContent {

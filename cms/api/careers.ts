@@ -113,6 +113,7 @@ function mapCareersRoles(cms: StrapiJobsSection): OpenRole[] {
       location: job.workmode,
       type: JOB_TYPE_LABELS[job.jobType] ?? job.jobType,
       accent: ACCENT_BY_CATEGORY_SLUG[job.job_category.slug] ?? "orange",
+      ctaLabel: job.ctaLabel,
     }));
 }
 
@@ -160,6 +161,7 @@ function mapJobFormField(field: StrapiApplicationFormSection["jobFormFields"][nu
     requiredMark: requiredMark === "*" || requiredMark === "optional" ? requiredMark : null,
     acceptedFormatsAndSize: field.acceptedFormatsAndSize,
     uploadPromptText: field.uploadPromptText,
+    icon: mapSectionIcon(field.icon),
   };
 }
 

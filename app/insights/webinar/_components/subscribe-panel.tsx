@@ -5,36 +5,61 @@ import type { FormEvent } from "react";
 import Button from "@/components/ui/Button";
 import FormField from "@/components/ui/FormField";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { submitFormSubmission } from "@/cms/api/form-submissions";
+import { validateName, validateEmail } from "@/lib/validations";
 import type { SubscribePanelContent } from "../_data/types";
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type SubscribeStatus = "idle" | "error" | "success";
 
 export function SubscribePanel({ content }: { content: SubscribePanelContent }) {
   const [status, setStatus] = useState<SubscribeStatus>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const name = String(form.get("name") ?? "").trim();
-    const email = String(form.get("email") ?? "").trim();
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    const rawName = String(form.get("name") ?? "");
+    const rawEmail = String(form.get("email") ?? "");
 
-    if (!name) {
+    const nameResult = validateName("Name").safeParse(rawName);
+    if (!nameResult.success) {
       setStatus("error");
-      setErrorMessage("Please enter your name.");
+      setErrorMessage(nameResult.error.issues[0].message);
       return;
     }
-    if (!EMAIL_PATTERN.test(email)) {
+    const emailResult = validateEmail.safeParse(rawEmail);
+    if (!emailResult.success) {
       setStatus("error");
-      setErrorMessage("Please enter a valid email address.");
+      setErrorMessage(emailResult.error.issues[0].message);
       return;
     }
 
-    // Client-side only — no backend/email-CRM call (spec.md FR-015).
+    setIsSubmitting(true);
+    const result = await submitFormSubmission({
+      name: nameResult.data,
+      email: emailResult.data,
+      category: "webinar",
+    });
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setStatus("error");
+      setErrorMessage("Something went wrong. Please try again.");
+      return;
+    }
+
     setErrorMessage(null);
     setStatus("success");
+    formElement.reset();
+  }
+
+  function handleInputChange() {
+    if (status !== "idle") {
+      setStatus("idle");
+      setErrorMessage(null);
+    }
   }
 
   return (
@@ -62,6 +87,7 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
               type="text"
               required
               placeholder={content.namePlaceholder}
+              onChange={handleInputChange}
               inputClassName="!rounded-card !py-4 !px-tg-7 placeholder:!font-normal"
             />
             <FormField
@@ -70,23 +96,27 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
               type="email"
               required
               placeholder={content.formPlaceholder}
+              onChange={handleInputChange}
               inputClassName="!rounded-card !py-4 !px-tg-7 placeholder:!font-normal"
             />
             <Button
               type="submit"
+              disabled={isSubmitting}
               style={{ fontFamily: "Arial, sans-serif" }}
               className="w-full font-bold !text-[16px] !rounded-card !shadow-btn-subscribe leading-[normal] py-4!"
             >
               {status === "success" ? "Subscribed ✓" : content.ctaLabel}
             </Button>
-            {status === "success" && (
-              <p className="text-sm font-semibold text-teal-light !mt-3.5 leading-[normal]">{content.successText}</p>
-            )}
-            {status === "error" && errorMessage && (
-              <p role="alert" className="text-sm font-semibold text-error !mt-3.5 leading-[normal]">
-                {errorMessage}
-              </p>
-            )}
+            <div className="!mt-3.5 min-h-[22px]">
+              {status === "success" && (
+                <p className="text-sm font-semibold text-teal-light leading-[normal]">{content.successText}</p>
+              )}
+              {status === "error" && errorMessage && (
+                <p role="alert" className="text-sm font-semibold text-error leading-[normal]">
+                  {errorMessage}
+                </p>
+              )}
+            </div>
           </form>
         </GlassCard>
       </div>
