@@ -26,25 +26,27 @@ export default function Hero({ data }: { data: HeroData }) {
 
       <div className="relative z-raised mx-auto flex min-h-[60vh] w-full max-w-(--container-max) items-center px-4 tg-sm:px-9 pt-27 pb-10 tg-sm:pb-15">
         <div className="max-w-195">
-          <a
-            href={badge.href}
-            className="group opacity-0 [animation-delay:0.02s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mb-4 inline-flex max-w-full items-center gap-2 tg-sm:gap-5 rounded-full border border-border-orange-strong bg-[image:var(--gradient-live-badge)] py-1.5 tg-sm:py-3 pr-3.5 tg-sm:pr-7.5 pl-1.5 tg-sm:pl-3 leading-[normal] shadow-[var(--shadow-live-badge)] backdrop-blur-10 transition-transform"
-          >
-            <Badge tone="live" size="lg" className="shrink-0 max-tg-sm:gap-1.5 max-tg-sm:px-3 max-tg-sm:py-1.5 max-tg-sm:text-[10.5px]">
-              <span className="relative inline-flex h-2.75 w-2.75 shrink-0">
-                <span className="absolute inset-0 rounded-full bg-green shadow-[var(--shadow-glow-green)]" />
-                <span
-                  aria-hidden="true"
-                  className="absolute -inset-0.75 rounded-full border-2 border-border-green-85 animate-[tgLiveRipple_1.8s_cubic-bezier(0.2,0.7,0.2,1)_infinite] motion-reduce:animate-none"
-                />
+          {badge && (
+            <a
+              href={badge.href}
+              className="group opacity-0 [animation-delay:0.02s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mb-4 inline-flex max-w-full items-center gap-2 tg-sm:gap-5 rounded-full border border-border-orange-strong bg-[image:var(--gradient-live-badge)] py-1.5 tg-sm:py-3 pr-3.5 tg-sm:pr-7.5 pl-1.5 tg-sm:pl-3 leading-[normal] shadow-[var(--shadow-live-badge)] backdrop-blur-10 transition-transform"
+            >
+              <Badge tone="live" size="lg" className="shrink-0 max-tg-sm:gap-1.5 max-tg-sm:px-3 max-tg-sm:py-1.5 max-tg-sm:text-[10.5px]">
+                <span className="relative inline-flex h-2.75 w-2.75 shrink-0">
+                  <span className="absolute inset-0 rounded-full bg-green shadow-[var(--shadow-glow-green)]" />
+                  <span
+                    aria-hidden="true"
+                    className="absolute -inset-0.75 rounded-full border-2 border-border-green-85 animate-[tgLiveRipple_1.8s_cubic-bezier(0.2,0.7,0.2,1)_infinite] motion-reduce:animate-none"
+                  />
+                </span>
+                {badge.label}
+              </Badge>
+              <span className="text-xs tg-sm:text-base tracking-[-0.085px] font-semibold text-bright leading-tight">{badge.text}</span>
+              <span aria-hidden="true" className="shrink-0 text-18 tg-sm:text-[20px] font-bold text-amber-light">
+                &rarr;
               </span>
-              {badge.label}
-            </Badge>
-            <span className="text-xs tg-sm:text-base tracking-[-0.085px] font-semibold text-bright leading-tight">{badge.text}</span>
-            <span aria-hidden="true" className="shrink-0 text-18 tg-sm:text-[20px] font-bold text-amber-light">
-              &rarr;
-            </span>
-          </a>
+            </a>
+          )}
 
           <h1 className="mt-5.5 opacity-0 [animation-delay:0.12s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100">
             {before.trimEnd()}
@@ -78,9 +80,7 @@ export default function Hero({ data }: { data: HeroData }) {
                     i < 3 ? "gap-0.5" : "gap-2",
                   ].join(" ")}
                 >
-                  <span className={stat.gradient ? "bg-[image:var(--gradient-brand-text)] bg-clip-text text-transparent" : undefined}>
-                    {stat.count !== undefined ? <AnimatedStat target={stat.count} /> : stat.staticValue}
-                  </span>
+                  <span>{stat.count !== undefined ? <AnimatedStat target={stat.count} /> : stat.staticValue}</span>
                   {stat.suffix && (
                     <span className={stat.suffixClassName?.replace("text-stat", "text-[12px] tg-sm:text-stat")}>
                       {stat.suffix}

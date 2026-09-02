@@ -49,6 +49,8 @@ type StrapiReviewsSection = {
     reviwerDescription: string;
     mediaType: string | null;
     ratings: number | null;
+    videoDuration: string | null;
+    verificationStatus: string | null;
     video: StrapiMedia | null;
     authors: { name: string; designation: string | null }[];
   }[];
@@ -161,6 +163,8 @@ function toReviews(section: StrapiReviewsSection): ReviewsData {
       initials: toInitials(name),
       rating: item.ratings ?? undefined,
       videoUrl: item.video ? resolveMediaUrl(item.video.url) : null,
+      videoDuration: item.videoDuration ? item.videoDuration.replace(".", ":") : undefined,
+      verified: item.verificationStatus === "Verified",
     };
   });
 

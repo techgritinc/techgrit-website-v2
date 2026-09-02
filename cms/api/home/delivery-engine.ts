@@ -1,5 +1,5 @@
 import type { AnySection, HomeIcon, StrapiMedia } from "./shared";
-import { toIcon } from "./shared";
+import { toFeatureImage, toIcon } from "./shared";
 
 export type StrapiFeature = {
   id: number;
@@ -33,6 +33,7 @@ export type StrapiDeliveryEngineSection = {
   title: string;
   subtitle: string;
   badgeLabel: string;
+  image: StrapiMedia[];
   features: StrapiFeature[];
   aiDashboard: StrapiAiDashboard | null;
   __component: "home.delivery-engine";
@@ -49,6 +50,9 @@ export type DeliveryEngineData = {
   title: string;
   subtitle: string;
   capabilities: PlatformCapability[];
+  // The CMS's `image` field for this section — the right-side visual to show when
+  // the CMS hasn't populated the (separate, optional) `aiDashboard` sub-component.
+  image: HomeIcon | null;
   dashboard: {
     title: string;
     badgeLabel: string;
@@ -62,37 +66,6 @@ export type DeliveryEngineData = {
 export function pickDeliveryEngineSection(sections: AnySection[]): StrapiDeliveryEngineSection | undefined {
   return sections.find((s): s is StrapiDeliveryEngineSection => s.__component === "home.delivery-engine");
 }
-
-export const DEFAULT_DELIVERY_ENGINE_DATA: DeliveryEngineData = {
-  badgeLabel: "Meet OrbitAI™",
-  title: "Our Architectural Frameworks",
-  subtitle:
-    "Competitors sell hours. We sell outcomes, powered by OrbitAI, our orchestration layer that automates the grind so our engineers focus on strategy, architecture, and innovation.",
-  capabilities: [
-    { title: "OrbitAI™", description: "AI-assisted software delivery orchestrated across the entire SDLC", icon: null, tone: "blue" },
-    { title: "4D™", description: "A structured engineering methodology for successful software delivery.", icon: null, tone: "blue" },
-    { title: "PRISM™", description: "Understand your legacy systems before you modernize them.", icon: null, tone: "teal" },
-    { title: "AI IMPACT™", description: "Discover where AI delivers measurable business value.", icon: null, tone: "teal" },
-  ],
-  dashboard: {
-    title: "OrbitAI Console",
-    badgeLabel: "LIVE",
-    footerText: "Prompt → Production · 0 handoffs",
-    deadline: "Shipping in 6 weeks",
-    metrics: [
-      { id: "throughput", value: "10x", label: "Throughput" },
-      { id: "coverage", value: "98%", label: "Coverage" },
-      { id: "cycle", value: "6 wk", label: "Cycle" },
-    ],
-    pipeline: [
-      { id: "ui-agent", label: "UI Agent", percent: 94, color: "var(--color-blue-bright)", delay: "0s" },
-      { id: "logic-agent", label: "Logic Agent", percent: 81, color: "var(--color-blue-bright)", delay: "0.5s" },
-      { id: "data-agent", label: "Data Agent", percent: 88, color: "var(--color-teal-bright)", delay: "1s" },
-      { id: "qa-agent", label: "QA Agent", percent: 67, color: "var(--color-amber)", delay: "1.5s" },
-      { id: "cicd-agent", label: "CI/CD Agent", percent: 97, color: "var(--color-orange)", delay: "2s" },
-    ],
-  },
-};
 
 const PIPELINE_PALETTE = [
   "var(--color-blue-bright)",
@@ -111,8 +84,8 @@ export function toDeliveryEngine(section: StrapiDeliveryEngineSection): Delivery
   }));
 
   // `aiDashboard` is an optional Strapi component on this section — the CMS can
-  // save the section without ever filling it in, so it degrades field-by-field
-  // to DEFAULT_DELIVERY_ENGINE_DATA.dashboard the same way `capabilities` does above.
+  // save the section without ever filling it in, in which case these fields are
+  // simply empty/blank rather than backfilled with placeholder content.
   const metrics: DashboardMetric[] = (section.aiDashboard?.metrics ?? []).map((metric) => ({
     id: String(metric.id),
     value: metric.value,
@@ -131,14 +104,15 @@ export function toDeliveryEngine(section: StrapiDeliveryEngineSection): Delivery
     badgeLabel: section.badgeLabel,
     title: section.title,
     subtitle: section.subtitle,
-    capabilities: capabilities.length > 0 ? capabilities : DEFAULT_DELIVERY_ENGINE_DATA.capabilities,
+    capabilities,
+    image: toFeatureImage(section.image),
     dashboard: {
-      title: section.aiDashboard?.title ?? DEFAULT_DELIVERY_ENGINE_DATA.dashboard.title,
-      badgeLabel: section.aiDashboard?.badgeLabel ?? DEFAULT_DELIVERY_ENGINE_DATA.dashboard.badgeLabel,
-      footerText: section.aiDashboard?.footerText ?? DEFAULT_DELIVERY_ENGINE_DATA.dashboard.footerText,
-      deadline: section.aiDashboard?.deadline ?? DEFAULT_DELIVERY_ENGINE_DATA.dashboard.deadline,
-      metrics: metrics.length > 0 ? metrics : DEFAULT_DELIVERY_ENGINE_DATA.dashboard.metrics,
-      pipeline: pipeline.length > 0 ? pipeline : DEFAULT_DELIVERY_ENGINE_DATA.dashboard.pipeline,
+      title: section.aiDashboard?.title ?? "",
+      badgeLabel: section.aiDashboard?.badgeLabel ?? "",
+      footerText: section.aiDashboard?.footerText ?? "",
+      deadline: section.aiDashboard?.deadline ?? "",
+      metrics,
+      pipeline,
     },
   };
 }

@@ -47,60 +47,6 @@ export function pickCaseStudiesSection(sections: AnySection[]): StrapiCaseStudie
   return sections.find((s): s is StrapiCaseStudiesSection => s.__component === "home.case-studies-insights");
 }
 
-export const DEFAULT_CASE_STUDIES_DATA: CaseStudiesData = {
-  badgeLabel: "See how we help teams win",
-  title: "Case Studies & Insights.",
-  viewAllLabel: "View all case studies",
-  viewAllLink: "/insights/case-studies",
-  caseStudies: [
-    {
-      id: "dotnet-migration",
-      featured: true,
-      industry: "FinTech",
-      metric: "2.5M",
-      metricLabel: "lines migrated to .NET 10",
-      title: "Migrating 2.5M lines to .NET 10 — without taking the product down",
-      description:
-        "An AI-assisted, human-governed delivery model shipped every ticket on a legacy .NET project on time, under constraints, and with full audit trails.",
-      accentColor: "var(--color-blue)",
-      href: "/insights/case-studies",
-    },
-    {
-      id: "b2b-marketplace",
-      featured: false,
-      industry: "Marketplace",
-      metric: "100%",
-      metricLabel: "auditable trades",
-      title: "A B2B marketplace that encodes trust into every trade",
-      description: null,
-      accentColor: "var(--color-orange)",
-      href: "/insights/case-studies",
-    },
-    {
-      id: "crypto-data-api",
-      featured: false,
-      industry: "FinTech",
-      metric: "Live",
-      metricLabel: "compliant insights",
-      title: "Secure crypto data API platform for financial advisors",
-      description: null,
-      accentColor: "var(--color-teal)",
-      href: "/insights/case-studies",
-    },
-    {
-      id: "claude-enablement",
-      featured: false,
-      industry: "AI Enablement",
-      metric: "10x",
-      metricLabel: "faster onboarding",
-      title: "From overloaded to on-fire: Claude-powered enablement",
-      description: null,
-      accentColor: "var(--color-amber)",
-      href: "/insights/case-studies",
-    },
-  ],
-};
-
 const CASE_STUDY_ACCENTS = ["var(--color-blue)", "var(--color-orange)", "var(--color-teal)", "var(--color-amber)"];
 
 export function toCaseStudies(section: StrapiCaseStudiesSection): CaseStudiesData {
@@ -121,6 +67,6 @@ export function toCaseStudies(section: StrapiCaseStudiesSection): CaseStudiesDat
     title: section.title,
     viewAllLabel: section.viewAllCaseStudyLabel,
     viewAllLink: section.viewAllCaseStudyLink,
-    caseStudies: caseStudies.length > 0 ? caseStudies : DEFAULT_CASE_STUDIES_DATA.caseStudies,
+    caseStudies,
   };
 }
