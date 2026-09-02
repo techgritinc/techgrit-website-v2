@@ -6,6 +6,7 @@ import type { CaseStudiesData } from "@/cms/api/home/case-studies";
 export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) {
   const { badgeLabel, title, viewAllLabel, viewAllLink, caseStudies } = data;
   const featured = caseStudies.find((study) => study.featured) ?? caseStudies[0];
+  if (!featured) return null;
   const others = caseStudies.filter((study) => study !== featured);
 
   return (

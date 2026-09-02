@@ -139,13 +139,15 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       <span className="h-[7px] w-[7px] rounded-full bg-white" />
                       VIDEO
                     </div>
-                    <div
-                      className="inline-flex items-center gap-tg-1c rounded-2xl bg-badge-ink-40 py-[5px] px-[11px] text-[11px] font-bold text-bright backdrop-blur-sm leading-[normal]"
-                      style={{ fontFamily: "Arial" }}
-                    >
-                      <ClockIcon width={10} height={10} strokeWidth={2.5} />
-                      2:14
-                    </div>
+                    {testimonial.videoDuration && (
+                      <div
+                        className="inline-flex items-center gap-tg-1c rounded-2xl bg-badge-ink-40 py-[5px] px-[11px] text-[11px] font-bold text-bright backdrop-blur-sm leading-[normal]"
+                        style={{ fontFamily: "Arial" }}
+                      >
+                        <ClockIcon width={10} height={10} strokeWidth={2.5} />
+                        {testimonial.videoDuration}
+                      </div>
+                    )}
                   </div>
                   <div className="absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2">
                     <div
@@ -202,12 +204,14 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                 />
                 <div className="relative mb-4 flex items-center justify-between gap-tg-4">
                   <div className="flex gap-0.5 text-[14px] tracking-[2px] text-amber leading-[normal]">
-                    {"★★★★★".slice(0, testimonial.rating ?? 5)}
+                    {"★★★★★".slice(0, testimonial.rating ?? 0)}
                   </div>
-                  <div className="inline-flex items-center gap-tg-1c text-3xs font-bold tracking-wider text-green uppercase leading-[normal]">
-                    <CheckIcon width={11} height={11} />
-                    Verified
-                  </div>
+                  {testimonial.verified && (
+                    <div className="inline-flex items-center gap-tg-1c text-3xs font-bold tracking-wider text-green uppercase leading-[normal]">
+                      <CheckIcon width={11} height={11} />
+                      Verified
+                    </div>
+                  )}
                 </div>
                 <p className="relative flex-1 text-[15px] leading-[23.25px] font-normal text-primary">&ldquo;{testimonial.quote}&rdquo;</p>
                 <div className="relative mt-4 pt-4 border-t border-border-8 flex items-center gap-3">

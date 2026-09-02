@@ -5,6 +5,9 @@ export type StrapiNewsletterFormField = {
   placeholder: string;
 };
 
+// The CMS nests the actual newsletter fields under a `Newsletter` sub-component,
+// inside an outer dynamic-zone entry named `home.tga-ifirst-engineer` (its own
+// top-level `title`/`subtitle` power the section heading rendered above the card).
 export type StrapiNewsletterSection = {
   id: number;
   title: string;
@@ -14,6 +17,9 @@ export type StrapiNewsletterSection = {
     title: string;
     subtitle: string;
     ctaLabel: string;
+    ctaLink: string | null;
+    extraTitle: string | null;
+    highlightTitle: string | null;
     ctaFormFields: StrapiNewsletterFormField[];
   };
   __component: "home.tga-ifirst-engineer";
@@ -33,19 +39,6 @@ export type NewsletterData = {
 export function pickNewsletterSection(sections: AnySection[]): StrapiNewsletterSection | undefined {
   return sections.find((s): s is StrapiNewsletterSection => s.__component === "home.tga-ifirst-engineer");
 }
-
-export const DEFAULT_NEWSLETTER_DATA: NewsletterData = {
-  sectionTitle: "15+ webinars on AI-first engineering. And counting.",
-  sectionSubtitle:
-    "Over the past two years, TechGrit has hosted more than 15 webinars on AI-first engineering practices.",
-  title: "Stay ahead of the legacy.",
-  subtitle: "Subscribe to be the first to know when we announce our next session.",
-  ctaLabel: "Submit",
-  fields: [
-    { id: "name", placeholder: "Name" },
-    { id: "email", placeholder: "Business Email" },
-  ],
-};
 
 export function toNewsletter(section: StrapiNewsletterSection): NewsletterData {
   return {

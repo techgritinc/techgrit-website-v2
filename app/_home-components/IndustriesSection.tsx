@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import Image from "next/image";
-import Button from "@/components/ui/Button";
 import { GlassCard, GlassCardDescription, GlassCardIcon, GlassCardTitle } from "@/components/ui/GlassCard";
 import type { FutureIndustryData } from "@/cms/api/home/future-industry";
 
@@ -17,7 +16,7 @@ const HOVER_GLOW: Record<string, string> = {
 };
 
 export default function IndustriesSection({ data }: { data: FutureIndustryData }) {
-  const { title, subtitle, exploreLabel, exploreLink, industries } = data;
+  const { title, subtitle, industries } = data;
 
   return (
     <section id="industries" className="scroll-mt-(--nav-height)">
@@ -27,15 +26,12 @@ export default function IndustriesSection({ data }: { data: FutureIndustryData }
             <h2 className="max-w-140 text-[44px] leading-[46.64px]">{title}</h2>
             <p className="mt-4 max-w-[540px] text-[17px] leading-[27.2px] text-muted">{subtitle}</p>
           </div>
-          <Button href={exploreLink} variant="ghost" className="py-4! leading-[normal] text-[16px]">
-            {exploreLabel} <span aria-hidden="true" className="text-orange text-[16px]">&rarr;</span>
-          </Button>
         </div>
 
-        <div className="mt-12 grid grid-cols-3 gap-6 max-tg-sm:grid-cols-1 tg-sm:max-tg-lg:grid-cols-2">
+        <div className="mt-12 grid grid-cols-4 gap-6 max-tg-sm:grid-cols-1 tg-sm:max-tg-lg:grid-cols-2">
           {industries.map((industry, index) => {
-            const isLast = index === industries.length - 1;
-            const tabletCenterClass = isLast
+            const isOrphan = index === industries.length - 1 && industries.length % 2 !== 0;
+            const tabletCenterClass = isOrphan
               ? "tg-sm:max-tg-lg:col-span-2 tg-sm:max-tg-lg:justify-self-center tg-sm:max-tg-lg:w-[calc(50%-12px)]"
               : "";
             const card = (

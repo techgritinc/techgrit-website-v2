@@ -48,50 +48,6 @@ export function pickFrameworkPhasesSection(sections: AnySection[]): StrapiFramew
   return sections.find((s): s is StrapiFrameworkPhasesSection => s.__component === "page-reusable-sections.framework-phases");
 }
 
-export const DEFAULT_FRAMEWORK_PHASES_DATA: FrameworkPhasesData = {
-  eyebrow: "How we deliver",
-  title: "The 6-Week Sprint-to-Scale Framework.",
-  highlightTitle: "Sprint-to-Scale",
-  phases: [
-    {
-      n: 1,
-      week: "Week 1",
-      title: "Discovery & Architecture",
-      description: "Agreed technical blueprint, defined AI workflows, and shared success criteria, before a line of code is written. ",
-      deliverables: ["Technical architecture blueprint", "Defined AI agent workflows", "Shared success criteria"],
-      icon: null,
-      badgeIcon: null,
-    },
-    {
-      n: 2,
-      week: "Weeks 2 to 4",
-      title: "Agentic Build",
-      description: "Parallel development across UI, business logic, and data layers, governed by our framework agents with engineer oversight.",
-      deliverables: ["Parallel UI, logic and data build", "OrbitAI agent orchestration", "Engineer oversight on every PR"],
-      icon: null,
-      badgeIcon: null,
-    },
-    {
-      n: 3,
-      week: "Week 5",
-      title: "Hardening & Scale Review",
-      description: "Security validation, load testing, and enterprise readiness checks. Nothing ships without passing these gates.",
-      deliverables: ["Security validation", "Load and scale testing", "Enterprise-readiness gates"],
-      icon: null,
-      badgeIcon: null,
-    },
-    {
-      n: 4,
-      week: "Week 6",
-      title: "Production Launch",
-      description: "Live deployment, real users, and a documented handover; including runbooks, architecture diagrams, and support transition.",
-      deliverables: ["Live production deployment", "Runbooks and architecture docs", "Full support transition"],
-      icon: null,
-      badgeIcon: null,
-    },
-  ],
-};
-
 export function toFrameworkPhases(section: StrapiFrameworkPhasesSection): FrameworkPhasesData {
   const phases: FrameworkPhase[] = section.Phases.map((phase, index) => {
     const deliverables = phase.frameworkPhaseDeliverables;
@@ -110,6 +66,6 @@ export function toFrameworkPhases(section: StrapiFrameworkPhasesSection): Framew
     eyebrow: section.badgeLabel,
     title: section.title,
     highlightTitle: section.highlightTitle,
-    phases: phases.length > 0 ? phases : DEFAULT_FRAMEWORK_PHASES_DATA.phases,
+    phases,
   };
 }

@@ -49,6 +49,13 @@ export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }:
     );
   }
 
+  // Two independent top-to-bottom stacks placed side by side, rather than a
+  // fixed-width grid — each pill keeps its original natural single-line size;
+  // a forced 50/50 grid column can be narrower than a long chip's label and
+  // force it to wrap, which a column of auto-width pills never does.
+  const midpoint = Math.ceil(chips!.length / 2);
+  const chipColumns = [chips!.slice(0, midpoint), chips!.slice(midpoint)];
+
   return (
     <section className="relative">
       <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
@@ -66,15 +73,19 @@ export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }:
             <div className="mb-4.5 text-[12px] leading-[normal] font-extrabold uppercase tracking-[0.14em] text-dim">
               {chipsLabel}
             </div>
-            <div className="flex flex-wrap gap-2.5">
-              {chips!.map((chip) => (
-                <span
-                  key={chip.id}
-                  className="inline-flex items-center gap-[8px] rounded-[30px] border border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.04)] px-[14px] py-[8px] h-[33px] text-[13px] leading-[normal] font-[500] text-[rgba(255,255,255,0.78)]"
-                >
-                  <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-orange" />
-                  {chip.label}
-                </span>
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:gap-x-6">
+              {chipColumns.map((column, columnIndex) => (
+                <div key={columnIndex} className="flex flex-col items-start gap-2.5">
+                  {column.map((chip) => (
+                    <span
+                      key={chip.id}
+                      className="inline-flex items-center gap-[8px] rounded-pill border border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.04)] px-[14px] py-[8px] h-[33px] text-[13px] leading-[normal] font-[500] text-[rgba(255,255,255,0.78)]"
+                    >
+                      <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-orange" />
+                      {chip.label}
+                    </span>
+                  ))}
+                </div>
               ))}
             </div>
           </div>
