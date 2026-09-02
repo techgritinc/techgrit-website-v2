@@ -36,10 +36,25 @@ export type StrapiCaseStudyCardsSection = {
   case_studies: StrapiCaseStudyItem[];
 };
 
+export type StrapiNewsletterFormField = {
+  id: number;
+  placeholder: string;
+};
+
+export type StrapiNewsletterSection = {
+  __component: "page-reusable-sections.newsletter";
+  title: string;
+  subtitle: string;
+  ctaLabel: string;
+  extraTitle: string;
+  ctaFormFields: StrapiNewsletterFormField[];
+};
+
 export type StrapiCaseStudiesSection =
   | StrapiHeroSection
   | StrapiTabFiltersSection
   | StrapiCaseStudyCardsSection
+  | StrapiNewsletterSection
   | StrapiCtaBannerSection
   | StrapiUnmappedSection;
 
@@ -86,12 +101,24 @@ export interface CaseStudiesFinalCtaSection extends CtaBannerFields {
   order: number;
 }
 
+export interface CaseStudiesNewsletterSection {
+  type: "newsletter";
+  order: number;
+  heading: string;
+  copy: string;
+  ctaLabel: string;
+  placeholder: string;
+  helperText: string;
+  successText: string;
+}
+
 // `| undefined` is explicit and load-bearing: with no static fallback, any section the CMS
 // doesn't return (or that fails to map) is genuinely absent, not defaulted.
 export type CaseStudiesPageSectionEntry =
   | CaseStudiesHeroSection
   | CaseStudiesTabFiltersSection
   | CaseStudyCardsSection
+  | CaseStudiesNewsletterSection
   | CaseStudiesFinalCtaSection
   | undefined;
 

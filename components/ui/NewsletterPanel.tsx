@@ -5,20 +5,45 @@ import type { FormEvent } from "react";
 import Button from "@/components/ui/Button";
 import FormField from "@/components/ui/FormField";
 import { CheckIcon } from "@/components/ui/icons";
-import type { NewsletterPanelContent } from "../_data/types";
+import { submitFormSubmission } from "@/cms/api/form-submissions";
+import { validateEmail } from "@/lib/validations";
 
 type Status = "idle" | "error" | "success";
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function NewsletterPanel({ content }: { content: NewsletterPanelContent }) {
+export interface NewsletterPanelContent {
+  heading: string;
+  copy: string;
+  ctaLabel: string;
+  placeholder: string;
+  helperText: string;
+  successText: string;
+}
+
+/** Shared email-subscribe panel — same UI as the Blog page's newsletter panel, reused
+ * by any page whose CMS section is shaped like `page-reusable-sections.newsletter`. */
+export function NewsletterPanel({ content, category }: { content: NewsletterPanelContent; category: string }) {
   const [status, setStatus] = useState<Status>("idle");
+  const [errorText, setErrorText] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const email = String(form.get("email") ?? "").trim();
+    const rawEmail = String(form.get("email") ?? "");
 
-    if (!EMAIL_PATTERN.test(email)) {
+    const emailResult = validateEmail.safeParse(rawEmail);
+    if (!emailResult.success) {
+      setErrorText(emailResult.error.issues[0].message);
+      setStatus("error");
+      return;
+    }
+
+    setIsSubmitting(true);
+    const result = await submitFormSubmission({ email: emailResult.data, category });
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setErrorText("Something went wrong. Please try again.");
       setStatus("error");
       return;
     }
@@ -58,19 +83,20 @@ export function NewsletterPanel({ content }: { content: NewsletterPanelContent }
                       name="email"
                       type="email"
                       placeholder={content.placeholder}
-                      error={status === "error" ? content.errorText : undefined}
+                      error={status === "error" ? errorText : undefined}
                       containerClassName="flex-1 min-w-[200px] flex flex-col [&_input]:!flex-1 [&_input]:!rounded-[12px] [&_input]:!px-[18px] [&_input]:!py-[15.5px] [&_input]:!text-[15px] [&_input::placeholder]:!font-normal max-sm:[&_p]:sr-only"
                     />
                     <Button
-                      style={{fontFamily: "Arial"}}
+                      style={{ fontFamily: "Arial" }}
                       type="submit"
+                      disabled={isSubmitting}
                       className="!leading-[normal] gap-[9px] !py-[16px] !px-tg-11 !text-15-5 !shadow-btn-subscribe !rounded-[12px] active:!shadow-btn-subscribe"
                     >
                       {content.ctaLabel} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
                     </Button>
                     {status === "error" && (
                       <p aria-hidden="true" className="w-full text-[12.5px] sm:mt-tg-3a text-error sm:hidden">
-                        {content.errorText}
+                        {errorText}
                       </p>
                     )}
                   </form>

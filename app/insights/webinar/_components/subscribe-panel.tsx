@@ -5,36 +5,57 @@ import type { FormEvent } from "react";
 import Button from "@/components/ui/Button";
 import FormField from "@/components/ui/FormField";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { submitFormSubmission } from "@/cms/api/form-submissions";
+import { validateName, validateEmail } from "@/lib/validations";
 import type { SubscribePanelContent } from "../_data/types";
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type SubscribeStatus = "idle" | "error" | "success";
 
 export function SubscribePanel({ content }: { content: SubscribePanelContent }) {
   const [status, setStatus] = useState<SubscribeStatus>("idle");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const name = String(form.get("name") ?? "").trim();
-    const email = String(form.get("email") ?? "").trim();
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    const rawName = String(form.get("name") ?? "");
+    const rawEmail = String(form.get("email") ?? "");
 
-    if (!name) {
-      setStatus("error");
-      setErrorMessage("Please enter your name.");
+    const nameResult = validateName("Name").safeParse(rawName);
+    if (!nameResult.success) {
+      setNameError(nameResult.error.issues[0].message);
       return;
     }
-    if (!EMAIL_PATTERN.test(email)) {
-      setStatus("error");
-      setErrorMessage("Please enter a valid email address.");
+    const emailResult = validateEmail.safeParse(rawEmail);
+    if (!emailResult.success) {
+      setEmailError(emailResult.error.issues[0].message);
       return;
     }
 
-    // Client-side only — no backend/email-CRM call (spec.md FR-015).
-    setErrorMessage(null);
+    setIsSubmitting(true);
+    const result = await submitFormSubmission({
+      name: nameResult.data,
+      email: emailResult.data,
+      category: "webinar",
+    });
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setEmailError("Something went wrong. Please try again.");
+      return;
+    }
+
     setStatus("success");
+    formElement.reset();
+  }
+
+  function handleInputChange() {
+    if (status !== "idle") setStatus("idle");
+    setNameError(null);
+    setEmailError(null);
   }
 
   return (
@@ -62,6 +83,9 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
               type="text"
               required
               placeholder={content.namePlaceholder}
+              onChange={handleInputChange}
+              error={nameError}
+              reserveErrorSpace
               inputClassName="!rounded-card !py-4 !px-tg-7 placeholder:!font-normal"
             />
             <FormField
@@ -70,22 +94,21 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
               type="email"
               required
               placeholder={content.formPlaceholder}
+              onChange={handleInputChange}
+              error={emailError}
+              reserveErrorSpace
               inputClassName="!rounded-card !py-4 !px-tg-7 placeholder:!font-normal"
             />
             <Button
               type="submit"
+              disabled={isSubmitting}
               style={{ fontFamily: "Arial, sans-serif" }}
               className="w-full font-bold !text-[16px] !rounded-card !shadow-btn-subscribe leading-[normal] py-4!"
             >
               {status === "success" ? "Subscribed ✓" : content.ctaLabel}
             </Button>
             {status === "success" && (
-              <p className="text-sm font-semibold text-teal-light !mt-3.5 leading-[normal]">{content.successText}</p>
-            )}
-            {status === "error" && errorMessage && (
-              <p role="alert" className="text-sm font-semibold text-error !mt-3.5 leading-[normal]">
-                {errorMessage}
-              </p>
+              <p className="!mt-3.5 text-sm font-semibold text-teal-light leading-[normal]">{content.successText}</p>
             )}
           </form>
         </GlassCard>
