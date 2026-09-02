@@ -89,7 +89,9 @@ export function BlogPostGrid({ posts }: { posts: BlogPost[] }) {
                         <div className="min-w-0">
                           <div className="truncate text-[13.5px] font-bold text-primary leading-[normal]">{post.author.name}</div>
                           <div className="text-[12.5px] text-dim leading-[normal]">
-                            {post.publishDate} &middot; {post.readTime}
+                            {post.publishDate}
+                            {post.publishDate && post.readTime && " · "}
+                            {post.readTime}
                           </div>
                         </div>
                       </div>
