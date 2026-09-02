@@ -46,8 +46,8 @@ export default function BlogSection({ data }: { data: BlogSectionData }) {
                     <div className="flex items-center gap-tg-3 text-blog-meta font-bold tracking-blog-meta uppercase leading-[normal]">
                       <span className={variant.topicColorClass}>{post.topic}</span>
                     </div>
-                    <GlassCardTitle variant="blogTeaser">{post.title}</GlassCardTitle>
-                    <GlassCardDescription variant="blogTeaser">{post.excerpt}</GlassCardDescription>
+                    <GlassCardTitle variant="blogTeaser" title={post.title}>{post.title}</GlassCardTitle>
+                    <GlassCardDescription variant="blogTeaser" title={post.excerpt}>{post.excerpt}</GlassCardDescription>
                     <div className={`mt-tg-6 inline-flex items-center gap-tg-1b text-[14px] leading-[normal] font-bold ${variant.topicColorClass}`}>
                       {post.ctaLabel} <span aria-hidden="true">&rarr;</span>
                     </div>

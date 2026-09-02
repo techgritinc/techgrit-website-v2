@@ -71,12 +71,14 @@ export function BlogPostGrid({ posts }: { posts: BlogPost[] }) {
                       </Badge>
                     </div>
                     <div className="flex flex-1 flex-col px-6 pt-6 pb-[26px]">
-                      <GlassCardTitle variant="blogCard" className="!mt-0 leading-[1.32] tracking-[normal]">
+                      <GlassCardTitle variant="blogCard" title={post.title} className="!mt-0 leading-[1.32] tracking-[normal]">
                         {post.title}
                       </GlassCardTitle>
-                      <GlassCardDescription variant="blogCard" className="flex-1 text-muted">
-                        {post.excerpt}
-                      </GlassCardDescription>
+                      <div className="flex-1">
+                        <GlassCardDescription variant="blogCard" title={post.excerpt} className="text-muted">
+                          {post.excerpt}
+                        </GlassCardDescription>
+                      </div>
                       <div className="mt-[20px] flex items-center gap-tg-3a border-t border-border-8 pt-4">
                         <div
                           className="leading-[normal] flex size-tg-14 shrink-0 items-center justify-center rounded-full text-[12.5px] font-bold text-badge-text"
