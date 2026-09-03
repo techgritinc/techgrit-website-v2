@@ -17,10 +17,10 @@ export function FeaturedPost({ post }: { post: FeaturedPostContent }) {
               <span className="self-start inline-flex items-center gap-2 rounded-full bg-overlay-orange px-3 py-1.5 text-12 font-bold tracking-wider text-amber-light uppercase">
                 {post.topic}
               </span>
-              <GlassCardTitle variant="blogFeatured" className="!mt-0 leading-[var(--lh-snug)]">
+              <GlassCardTitle variant="blogFeatured" title={post.title} className="!mt-0 leading-[var(--lh-snug)]">
                 {post.title}
               </GlassCardTitle>
-              <GlassCardDescription variant="blogFeatured" className="!mt-0">
+              <GlassCardDescription variant="blogFeatured" title={post.excerpt} className="!mt-0">
                 {post.excerpt}
               </GlassCardDescription>
               <div className="mt-2 flex items-center gap-3.5">
@@ -30,7 +30,9 @@ export function FeaturedPost({ post }: { post: FeaturedPostContent }) {
                 <div className="leading-[normal]">
                   <div className="text-[14.5px] leading-[normal] font-bold text-primary">{post.author.name}</div>
                   <div className="text-[13px] leading-[normal] text-muted">
-                    {post.author.role} &middot; {post.readTime}
+                    {post.author.role}
+                    {post.author.role && post.readTime && " · "}
+                    {post.readTime}
                   </div>
                 </div>
               </div>

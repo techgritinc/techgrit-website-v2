@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { CaseStudyCard } from "@/cms/types/case-studies-types";
 import { ACCENT_VAR, categoryAccent } from "../_data/accent";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard, GlassCardDescription, GlassCardTitle } from "@/components/ui/GlassCard";
 import MediaSlot from "@/components/ui/MediaSlot";
 
 export function CaseStudiesGrid({ caseStudies }: { caseStudies: CaseStudyCard[] }) {
@@ -38,12 +38,22 @@ export function CaseStudiesGrid({ caseStudies }: { caseStudies: CaseStudyCard[] 
                         />
                         {caseStudy.categoryName}
                       </span>
-                      <h3 className="mt-3 text-[18.5px] font-bold text-primary leading-[1.3] tracking-normal">
+                      <GlassCardTitle
+                        variant="blogCard"
+                        title={caseStudy.title}
+                        className="!mt-3 text-primary leading-[1.3] tracking-normal"
+                      >
                         {caseStudy.title}
-                      </h3>
-                      <p className="flex-1 mt-[9px] text-[14.5px] leading-[var(--lh-relaxed)] text-text-soft">
-                        {caseStudy.subtitle}
-                      </p>
+                      </GlassCardTitle>
+                      <div className="flex-1">
+                        <GlassCardDescription
+                          variant="blogCard"
+                          title={caseStudy.subtitle}
+                          className="!mt-[9px] leading-[var(--lh-relaxed)] text-text-soft"
+                        >
+                          {caseStudy.subtitle}
+                        </GlassCardDescription>
+                      </div>
                       <span className="inline-flex items-center mt-[18px] gap-[7px] text-[14px] font-bold text-amber-light">
                         {caseStudy.ctaLabel} <span aria-hidden="true">&#8594;</span>
                       </span>

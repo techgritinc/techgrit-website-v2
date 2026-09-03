@@ -68,8 +68,9 @@ function initialsFromName(name: string): string {
     .join("");
 }
 
-function formatPublishDate(iso: string): string {
-  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date(iso));
+function formatPublishDate(iso: string | null): string {
+  if (!iso) return "";
+  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(iso));
 }
 
 function toAuthor(author: StrapiBlogAuthor | null): PostAuthor {

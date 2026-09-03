@@ -28,7 +28,10 @@ export function RelatedCaseStudies({ section }: { section: MoreCaseStudiesSectio
                       <span aria-hidden="true" className="w-[8px] h-[8px] rounded-full shrink-0" style={{ background: accentColor }} />
                       {caseStudy.categoryName}
                     </span>
-                    <h3 className="mt-[12px] text-[17px] font-bold text-primary leading-[1.3] tracking-[normal]">
+                    <h3
+                      title={caseStudy.title}
+                      className="mt-[12px] line-clamp-2 min-h-[44.2px] text-[17px] font-bold text-primary leading-[1.3] tracking-[normal]"
+                    >
                       {caseStudy.title}
                     </h3>
                     <span className="inline-flex items-center mt-[14px] gap-[7px] text-[13.5px] font-bold text-amber-light">
