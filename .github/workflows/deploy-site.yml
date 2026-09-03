@@ -1,8 +1,14 @@
 name: Deploy Site to VM
 
-# This is the only deploy pipeline. GitHub Pages is fully decommissioned:
-# deploy-pages.yml, CNAME, and public/CNAME were deleted when the site moved to the
-# VM, so nothing else publishes this branch.
+# This is the only deploy pipeline. deploy-pages.yml was deleted when the site moved
+# to the VM, so nothing else publishes this branch. (CNAME / public/CNAME are kept but
+# inert -- only a Pages build ever reads them.)
+#
+# The VM does not build. `next.config.ts` sets output: "standalone", so CI builds once
+# and ships the traced artifact -- matching how call-summary and kaffeax-sales are
+# already deployed on this box (22 traced modules there vs 293 full ones here before
+# this change). That removes ~780M of node_modules + .next from the VM and closes the
+# window where `next build` rewrote .next/ in place under the running server.
 on:
   push:
     branches: [dev]
@@ -24,7 +30,7 @@ env:
 
 jobs:
   build:
-    name: Build & verify
+    name: Build & package
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -44,12 +50,40 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # Builds what the VM will build, deliberately: `next build` rewrites .next/ in
-      # place under the running server, so a commit that fails to compile would take
-      # the site down rather than just fail to deploy. Failing here means the deploy
-      # job never opens an SSH connection.
+      # This is now the only build that happens -- its output is what runs in
+      # production, so a compile failure stops the deploy before any SSH connection.
       - name: Build
         run: npm run build
+
+      # Next traces server dependencies into .next/standalone but deliberately does
+      # NOT copy public/ or .next/static -- missing this step yields correct HTML with
+      # no CSS or images, which is the classic standalone deploy failure.
+      - name: Package standalone artifact
+        run: |
+          set -euo pipefail
+          if [ ! -f .next/standalone/server.js ]; then
+            echo '::error::.next/standalone/server.js missing -- is output: "standalone" set in next.config.ts?'
+            exit 1
+          fi
+          rm -rf artifact
+          mkdir -p artifact
+          cp -a .next/standalone/. artifact/
+          mkdir -p artifact/.next/static
+          cp -a .next/static/. artifact/.next/static/
+          if [ -d public ]; then
+            mkdir -p artifact/public
+            cp -a public/. artifact/public/
+          fi
+          tar -czf site.tar.gz -C artifact .
+          echo "Uncompressed: $(du -sh artifact | cut -f1)  tarball: $(du -sh site.tar.gz | cut -f1)"
+          echo "Traced modules: $(ls artifact/node_modules 2>/dev/null | wc -l)"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-standalone
+          path: site.tar.gz
+          retention-days: 7
 
   deploy:
     name: Deploy to VM
@@ -59,6 +93,11 @@ jobs:
     environment: dev
 
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-standalone
+
       - name: Configure SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -74,9 +113,29 @@ jobs:
           chmod 700 ~/.ssh
           printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          # A malformed/public/passphrased secret and a key that is simply absent from
+          # the server's authorized_keys both surface as "Permission denied (publickey)".
+          # Deriving the public half here separates them: failing means the secret is
+          # bad; succeeding means compare the printed key against
+          # `cat ~<SSH_USER>/.ssh/authorized_keys` on the VM.
+          if ! ssh-keygen -y -P '' -f ~/.ssh/deploy_key > ~/.ssh/deploy_key.pub; then
+            echo "::error::SSH_PRIVATE_KEY is not a usable passphrase-less private key (truncated, CRLF line endings, a public key pasted by mistake, or passphrase-protected)."
+            exit 1
+          fi
+          echo "Deploy key fingerprint: $(ssh-keygen -lf ~/.ssh/deploy_key.pub)"
           ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
-      - name: Deploy (sync + install + build + pm2)
+      - name: Copy artifact to VM
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+        run: |
+          set -euo pipefail
+          scp -i ~/.ssh/deploy_key -P "$SSH_PORT" site.tar.gz \
+            "$SSH_USER@$SSH_HOST:/tmp/techgrit-site.tar.gz"
+
+      - name: Deploy (unpack + pm2)
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
@@ -109,46 +168,77 @@ jobs:
           # Runs as root, in the same PM2 daemon as techgrit-cms.
           echo "==> Running as $(whoami) on $(hostname)"
           export PATH="/usr/local/bin:/usr/bin:$PATH"
-          echo "    node $(node --version)  npm $(npm --version)  pm2 $(pm2 --version)"
+          echo "    node $(node --version)  pm2 $(pm2 --version)"
 
           cd "$DEPLOY_PATH"
+          echo "==> Disk before: $(df -h --output=avail / | tail -1 | tr -d ' ') available"
 
           # Rollback anchor, printed before anything destructive happens.
           echo "==> Currently deployed: $(git rev-parse --short HEAD) -- $(git log -1 --pretty=%s)"
 
+          # Reclaim BEFORE the git sync, deliberately. The VM no longer builds, so the
+          # full dependency tree and old build output (~780M) are dead weight -- and on
+          # the first run after this change the disk is at 100%, where `git fetch`
+          # itself dies with "No space left on device". Freeing first makes the deploy
+          # self-sufficient instead of needing a manual cleanup.
+          #
+          # This is also where first-run downtime begins: the old process is still
+          # `./node_modules/.bin/next start`, so removing node_modules under it breaks
+          # it ~1min before the new artifact takes over. Only ever happens once; later
+          # runs no-op here and are a ~2s PM2 restart.
+          if [ -d node_modules ] || [ -d .next ]; then
+            echo "==> Removing build-only leftovers (VM no longer builds)"
+            rm -rf node_modules .next
+            echo "    freed -- now $(df -h --output=avail / | tail -1 | tr -d ' ') available"
+          fi
+
+          # The repo is still synced -- not to build from, but because
+          # ecosystem.config.js is version-controlled and read below.
           echo "==> Syncing to origin/$GIT_BRANCH"
           git fetch --prune origin "$GIT_BRANCH"
           git reset --hard "origin/$GIT_BRANCH"
-          git clean -fd -e node_modules -e .next -e logs
+          git clean -fd -e logs -e .env -e .artifact -e .artifact.old
           echo "    now at $(git rev-parse --short HEAD) -- $(git log -1 --pretty=%s)"
 
-          # Next loads .env for both `next build` and `next start`, so one file covers
-          # runtime and any future route that fetches at build time.
+          echo "==> Unpacking artifact"
+          rm -rf .artifact.new
+          mkdir -p .artifact.new
+          tar -xzf /tmp/techgrit-site.tar.gz -C .artifact.new
+          rm -f /tmp/techgrit-site.tar.gz
+          test -f .artifact.new/server.js
+          test -d .artifact.new/.next/static
+
+          # server.js resolves .env relative to its own directory, so it goes inside
+          # the artifact. ecosystem.config.js also passes CMS_API_URL through PM2's env
+          # as a second path, because fetchCms fails soft and a missing value would
+          # render empty sections rather than error.
           echo "==> Writing .env"
-          printf 'CMS_API_URL=%s\n' "$CMS_API_URL" > .env
+          printf 'CMS_API_URL=%s\n' "$CMS_API_URL" > .artifact.new/.env
+          chmod 600 .artifact.new/.env
+          cp .artifact.new/.env .env
           chmod 600 .env
 
-          echo "==> Installing dependencies"
-          npm ci
-
-          # Rewrites .next/ in place while the old process still serves from it, so
-          # visitors can 404 on hashed chunks for the ~2-4min this takes.
-          echo "==> Building"
-          NODE_ENV=production npm run build
+          # Swap, keeping the previous artifact for a fast manual rollback:
+          #   mv .artifact .artifact.bad && mv .artifact.old .artifact \
+          #     && pm2 restart techgrit-site
+          echo "==> Activating"
+          rm -rf .artifact.old
+          if [ -d .artifact ]; then mv .artifact .artifact.old; fi
+          mv .artifact.new .artifact
 
           mkdir -p logs
 
-          # `restart`, not `reload`: fork mode has no true zero-downtime reload.
-          echo "==> Restarting PM2 ($APP_NAME)"
-          if pm2 describe "$APP_NAME" > /dev/null 2>&1; then
-            pm2 restart "$APP_NAME" --update-env
-          else
-            echo "    $APP_NAME not registered with PM2 -- starting it."
-            pm2 start ecosystem.config.js --env production
-          fi
+          # `script` changed from ./node_modules/.bin/next to .artifact/server.js, and
+          # `pm2 restart` reuses the old in-memory definition -- so delete and start
+          # from the ecosystem file to guarantee the new entry point is picked up.
+          echo "==> (Re)starting PM2 ($APP_NAME)"
+          export CMS_API_URL
+          pm2 delete "$APP_NAME" 2>/dev/null || true
+          pm2 start ecosystem.config.js --env production
 
           pm2 save
           pm2 status "$APP_NAME"
+          echo "==> Disk after: $(df -h --output=avail / | tail -1 | tr -d ' ') available"
           REMOTE
 
       - name: Health check
@@ -199,4 +289,4 @@ jobs:
 
       - name: Cleanup SSH key
         if: always()
-        run: rm -f ~/.ssh/deploy_key
+        run: rm -f ~/.ssh/deploy_key ~/.ssh/deploy_key.pub
