@@ -15,6 +15,7 @@ export interface WebinarHeroContent {
   heading: string;
   headingHighlight: string;
   lead: string;
+  namePlaceholder: string;
   formPlaceholder: string;
   formCtaLabel: string;
   successText: string;
@@ -68,10 +69,10 @@ export interface PageSeo {
 
 export interface WebinarPageContent {
   seo: PageSeo;
-  hero: WebinarHeroContent;
+  hero?: WebinarHeroContent;
   sessionsHeading: string;
-  upcomingSession: UpcomingSession;
+  upcomingSession?: UpcomingSession;
   releasedSessions: ReleasedSession[];
-  subscribePanel: SubscribePanelContent;
-  ctaBanner: CtaBannerContent;
+  subscribePanel?: SubscribePanelContent;
+  ctaBanner?: CtaBannerContent;
 }

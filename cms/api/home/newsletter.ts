@@ -7,8 +7,7 @@ export type StrapiNewsletterFormField = {
 
 // The CMS nests the actual newsletter fields under a `Newsletter` sub-component,
 // inside an outer dynamic-zone entry named `home.tga-ifirst-engineer` (its own
-// top-level `title`/`subtitle` duplicate the reviews section's copy and aren't
-// used by this mapper — SubscribeBand only renders the nested `Newsletter` data).
+// top-level `title`/`subtitle` power the section heading rendered above the card).
 export type StrapiNewsletterSection = {
   id: number;
   title: string;
@@ -29,6 +28,8 @@ export type StrapiNewsletterSection = {
 export type NewsletterField = { id: string; placeholder: string };
 
 export type NewsletterData = {
+  sectionTitle: string;
+  sectionSubtitle: string;
   title: string;
   subtitle: string;
   ctaLabel: string;
@@ -41,9 +42,14 @@ export function pickNewsletterSection(sections: AnySection[]): StrapiNewsletterS
 
 export function toNewsletter(section: StrapiNewsletterSection): NewsletterData {
   return {
+    sectionTitle: section.title,
+    sectionSubtitle: section.subtitle.trim(),
     title: section.Newsletter.title,
     subtitle: section.Newsletter.subtitle,
     ctaLabel: section.Newsletter.ctaLabel,
-    fields: section.Newsletter.ctaFormFields.map((field) => ({ id: String(field.id), placeholder: field.placeholder })),
+    fields: section.Newsletter.ctaFormFields.map((field) => ({
+      id: String(field.id),
+      placeholder: field.placeholder,
+    })),
   };
 }

@@ -57,7 +57,6 @@ export interface NewsletterPanelContent {
   ctaLabel: string;
   placeholder: string;
   helperText: string;
-  errorText: string;
   successText: string;
 }
 
@@ -73,9 +72,9 @@ export interface Topic {
 
 export interface BlogPageContent {
   seo: PageSeo;
-  hero: BlogHeroContent;
-  featuredPost: FeaturedPost;
+  hero?: BlogHeroContent;
+  featuredPost?: FeaturedPost;
   topics: Topic[];
   posts: BlogPost[];
-  newsletter: NewsletterPanelContent;
+  newsletter?: NewsletterPanelContent;
 }

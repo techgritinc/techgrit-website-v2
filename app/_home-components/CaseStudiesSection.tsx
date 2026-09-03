@@ -61,11 +61,11 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
                   </span>
                   <span className="pb-3 text-[15px] text-text-60">{featured.metricLabel}</span>
                 </div>
-                <h3 className="mt-1.5 font-display text-[clamp(23px,2.5vw,28px)] font-bold leading-[1.2] tracking-[-0.02em] text-white">
+                <h3 title={featured.title} className="mt-1.5 line-clamp-2 font-display text-[clamp(23px,2.5vw,28px)] font-bold leading-[1.2] tracking-[-0.02em] text-white">
                   {featured.title}
                 </h3>
                 {featured.description && (
-                  <p className="max-w-[460px] text-15-5 leading-[1.6] text-text-64">{featured.description}</p>
+                  <p title={featured.description} className="line-clamp-2 max-w-[460px] text-15-5 leading-[1.6] text-text-64">{featured.description}</p>
                 )}
                 <span className="mt-1.5 inline-flex items-center gap-2 text-[15px] font-bold text-amber-light">
                   Read case study <span aria-hidden="true" className="text-[17px]">&rarr;</span>
@@ -95,7 +95,7 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
                     </span>
                     <span className="shrink-0 text-[18px] leading-[normal] text-amber-light transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
                   </div>
-                  <h3 className="font-display text-[16.5px] font-bold leading-[21.45px] tracking-[normal] text-white">{study.title}</h3>
+                  <h3 title={study.title} className="line-clamp-2 min-h-[42.9px] font-display text-[16.5px] font-bold leading-[21.45px] tracking-[normal] text-white">{study.title}</h3>
                   <div className="flex items-baseline gap-[9px]">
                     <span className="font-display text-[22px] font-bold leading-[normal] tracking-normal" style={{ color: study.accentColor }}>
                       {study.metric}

@@ -41,7 +41,7 @@ export type StrapiBlogPost = {
   id: number;
   title: string;
   subtitle: string;
-  publishDatetime: string;
+  publishDatetime: string | null;
   ctaLabel: string;
   ctaLink: string;
   isFeatured: boolean;

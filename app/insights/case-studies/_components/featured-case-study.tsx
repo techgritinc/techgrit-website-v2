@@ -37,10 +37,16 @@ export function FeaturedCaseStudy({ caseStudy }: { caseStudy: CaseStudyCard }) {
                     {caseStudy.featuredLabel}
                   </span>
                 </div>
-                <h2 className="text-[clamp(26px,2.8vw,32px)] font-bold leading-[1.15] tracking-[-0.02em]">
+                <h2
+                  title={caseStudy.title}
+                  className="line-clamp-2 text-[clamp(26px,2.8vw,32px)] font-bold leading-[1.15] tracking-[-0.02em]"
+                >
                   {caseStudy.title}
                 </h2>
-                <p className="max-w-[520px] text-[15.5px] leading-[var(--lh-relaxed)] text-text-dimmer">
+                <p
+                  title={caseStudy.subtitle}
+                  className="line-clamp-2 max-w-[520px] text-[15.5px] leading-[var(--lh-relaxed)] text-text-dimmer"
+                >
                   {caseStudy.subtitle}
                 </p>
                 <span className="inline-flex items-center mt-1.5 gap-2 text-[15px] font-bold text-amber-light leading-[normal]">

@@ -35,9 +35,9 @@ export function RoleCard({ role, onApply }: { role: OpenRole; onApply: (role: Op
         variant="ghost"
         onClick={() => onApply(role)}
         style={{fontFamily:"Arial"}}
-        className="!shrink-0 !rounded-[12px] !px-[22px] !py-[12px] !text-[14.5px] !text-white leading-[normal] hover:!border-border-ghost-hover hover:!bg-[image:var(--gradient-ghost-hover)] w-[109.432px] h-[42.8646px]"
+        className="!shrink-0 !rounded-[12px] !px-[22px] !py-[12px] !text-[14.5px] !text-white leading-[normal] w-[109.432px] h-[42.8646px]"
       >
-        Apply <span className="text-[15px] text-amber-light">&#8594;</span>
+        {role.ctaLabel} <span className="text-[15px] text-amber-light">&#8594;</span>
       </Button>
     </div>
   );

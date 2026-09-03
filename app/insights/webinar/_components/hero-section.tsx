@@ -7,30 +7,57 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import FormField from "@/components/ui/FormField";
 import { PlayIcon } from "@/components/ui/icons";
+import { submitFormSubmission } from "@/cms/api/form-submissions";
+import { validateName, validateEmail } from "@/lib/validations";
 import type { WebinarHeroContent, HeroCollageTile } from "../_data/types";
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type SubscribeStatus = "idle" | "error" | "success";
 
 export function HeroSection({ content }: { content: WebinarHeroContent }) {
   const [status, setStatus] = useState<SubscribeStatus>("idle");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const email = String(form.get("email") ?? "").trim();
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    const rawName = String(form.get("name") ?? "");
+    const rawEmail = String(form.get("email") ?? "");
 
-    if (!EMAIL_PATTERN.test(email)) {
-      setStatus("error");
-      setErrorMessage("Please enter a valid email address.");
+    const nameResult = validateName("Name").safeParse(rawName);
+    if (!nameResult.success) {
+      setNameError(nameResult.error.issues[0].message);
+      return;
+    }
+    const emailResult = validateEmail.safeParse(rawEmail);
+    if (!emailResult.success) {
+      setEmailError(emailResult.error.issues[0].message);
       return;
     }
 
-    // Client-side only — no backend/email-CRM call (spec.md FR-015).
-    setErrorMessage(null);
+    setIsSubmitting(true);
+    const result = await submitFormSubmission({
+      name: nameResult.data,
+      email: emailResult.data,
+      category: "webinar",
+    });
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setEmailError("Something went wrong. Please try again.");
+      return;
+    }
+
     setStatus("success");
+    formElement.reset();
+  }
+
+  function handleInputChange() {
+    if (status !== "idle") setStatus("idle");
+    setNameError(null);
+    setEmailError(null);
   }
 
   const [before, after] = content.heading.split(content.headingHighlight);
@@ -74,29 +101,41 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
             style={{ animationDelay: ".28s" }}
           >
             <FormField
+              label="Full name"
+              name="name"
+              type="text"
+              required
+              placeholder={content.namePlaceholder}
+              onChange={handleInputChange}
+              error={nameError}
+              reserveErrorSpace
+              containerClassName="min-w-[220px] flex-1"
+              inputClassName="!rounded-card !py-tg-5a !px-tg-7 placeholder:!font-normal !h-[52px] placeholder:!text-white/36"
+            />
+            <FormField
               label="Email address"
               name="email"
               type="email"
               required
               placeholder={content.formPlaceholder}
+              onChange={handleInputChange}
+              error={emailError}
+              reserveErrorSpace
               containerClassName="min-w-[220px] flex-1"
               inputClassName="!rounded-card !py-tg-5a !px-tg-7 placeholder:!font-normal !h-[52px] placeholder:!text-white/36"
             />
             <Button
               type="submit"
+              disabled={isSubmitting}
               style={{ fontFamily: "Arial, sans-serif" }}
-              className="!py-tg-5a !px-tg-11 !text-[15.5px] !shadow-btn-subscribe !h-[52px] leading-[normal]"
+              className="!py-tg-5a !px-tg-11 !text-[15.5px] !shadow-btn-subscribe !h-[52px] !w-full basis-full leading-[normal]"
             >
               {status === "success" ? "Subscribed ✓" : content.formCtaLabel}
             </Button>
           </form>
+
           {status === "success" && (
             <p className="mt-3.5 text-xs font-semibold text-teal-light leading-[normal]">{content.successText}</p>
-          )}
-          {status === "error" && errorMessage && (
-            <p role="alert" className="mt-3 text-sm font-semibold text-error">
-              {errorMessage}
-            </p>
           )}
         </div>
         <div data-rise className="motion-reduce:!opacity-100" style={{ animationDelay: ".24s" }}>

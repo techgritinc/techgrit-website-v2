@@ -5,6 +5,8 @@ import Image from "next/image";
 import Button from "@/components/ui/Button";
 import FormField from "@/components/ui/FormField";
 import { CheckIcon } from "@/components/ui/icons";
+import { submitFormSubmission } from "@/cms/api/form-submissions";
+import { validateName, validateEmail, validateCompany, validateProjectInfo } from "@/lib/validations";
 import type { BookCallBannerSection, ContactFormSection, ContactHeroSection } from "@/cms/types/contact-types";
 
 /* Contact-form-specific field styling — passed to FormField via inputBaseClassName
@@ -28,17 +30,10 @@ type ContactHeroFormProps = {
 export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFormProps) {
   const [topic, setTopic] = useState(form.inquiryOptions[0]?.title ?? "");
   const [values, setValues] = useState<Record<number, string>>({});
+  const [fieldErrors, setFieldErrors] = useState<Record<number, string | null>>({});
   const [sent, setSent] = useState(false);
-
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSent(true);
-  }
-
-  function handleReset() {
-    setSent(false);
-    setValues({});
-  }
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // titleHighlight is already verified server-side (cms/api/contact.ts) to be a genuine
   // substring of title, or null — split() here is always safe.
@@ -49,6 +44,77 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
   const singleLineFields = form.fields.filter((field) => !field.multiline);
   const multilineFields = form.fields.filter((field) => field.multiline);
   const firstName = (values[singleLineFields[0]?.order ?? -1] ?? "").trim().split(" ")[0];
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setErrorMessage(null);
+
+    const nameField = singleLineFields[0];
+    const emailField = singleLineFields[1];
+    const companyField = singleLineFields[2];
+    const projectField = multilineFields[0];
+
+    const rawName = (values[nameField?.order ?? -1] ?? "").trim();
+    const nameResult = validateName("Name").safeParse(rawName);
+    if (!nameResult.success) {
+      setFieldErrors({ [nameField.order]: nameResult.error.issues[0].message });
+      return;
+    }
+
+    const rawEmail = (values[emailField?.order ?? -1] ?? "").trim();
+    const emailResult = validateEmail.safeParse(rawEmail);
+    if (!emailResult.success) {
+      setFieldErrors({ [emailField.order]: emailResult.error.issues[0].message });
+      return;
+    }
+
+    // Company stays optional — only validated (for length) when the user actually fills it in.
+    let validatedCompany: string | undefined;
+    if (companyField) {
+      const rawCompany = (values[companyField.order] ?? "").trim();
+      if (rawCompany) {
+        const companyResult = validateCompany().safeParse(rawCompany);
+        if (!companyResult.success) {
+          setFieldErrors({ [companyField.order]: companyResult.error.issues[0].message });
+          return;
+        }
+        validatedCompany = companyResult.data;
+      }
+    }
+
+    const rawProject = (values[projectField?.order ?? -1] ?? "").trim();
+    const projectResult = validateProjectInfo.safeParse(rawProject);
+    if (!projectResult.success) {
+      setFieldErrors({ [projectField.order]: projectResult.error.issues[0].message });
+      return;
+    }
+
+    setFieldErrors({});
+    setIsSubmitting(true);
+    const result = await submitFormSubmission({
+      name: nameResult.data,
+      email: emailResult.data,
+      company: validatedCompany,
+      projectInfo: projectResult.data,
+      inquiryOptions: [topic],
+      category: "contact",
+    });
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setErrorMessage("Something went wrong. Please try again.");
+      return;
+    }
+
+    setSent(true);
+  }
+
+  function handleReset() {
+    setSent(false);
+    setValues({});
+    setFieldErrors({});
+    setErrorMessage(null);
+  }
 
   return (
     <div className="grid grid-cols-1 tg-md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] gap-8.5 tg-md:gap-15 items-start leading-[normal]">
@@ -211,7 +277,7 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
               })}
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
               {/* First two single-line fields share a row (matches the reference's name+email
                   pairing); any further single-line fields each get their own full-width row. */}
               <div className="grid grid-cols-1 tg-sm:grid-cols-2 gap-4">
@@ -225,9 +291,12 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
                     required
                     placeholder={field.placeholder}
                     value={values[field.order] ?? ""}
-                    onChange={(e) =>
-                      setValues((prev) => ({ ...prev, [field.order]: e.target.value }))
-                    }
+                    onChange={(e) => {
+                      setValues((prev) => ({ ...prev, [field.order]: e.target.value }));
+                      setFieldErrors((prev) => ({ ...prev, [field.order]: null }));
+                    }}
+                    error={fieldErrors[field.order]}
+                    reserveErrorSpace
                   />
                 ))}
               </div>
@@ -241,9 +310,12 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
                   inputBaseClassName={CONTACT_INPUT_BASE}
                   placeholder={field.placeholder}
                   value={values[field.order] ?? ""}
-                  onChange={(e) =>
-                    setValues((prev) => ({ ...prev, [field.order]: e.target.value }))
-                  }
+                  onChange={(e) => {
+                    setValues((prev) => ({ ...prev, [field.order]: e.target.value }));
+                    setFieldErrors((prev) => ({ ...prev, [field.order]: null }));
+                  }}
+                  error={fieldErrors[field.order]}
+                  reserveErrorSpace
                 />
               ))}
 
@@ -259,14 +331,29 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
                     required
                     placeholder={field.placeholder}
                     value={values[field.order] ?? ""}
-                    onChange={(e) =>
-                      setValues((prev) => ({ ...prev, [field.order]: e.target.value }))
-                    }
-                    inputClassName="resize-y min-h-[108px]"
+                    onChange={(e) => {
+                      setValues((prev) => ({ ...prev, [field.order]: e.target.value }));
+                      setFieldErrors((prev) => ({ ...prev, [field.order]: null }));
+                    }}
+                    error={fieldErrors[field.order]}
+                    reserveErrorSpace
+                    inputClassName="resize-none min-h-[108px] modal-scrollbar"
                   />
                 ))}
 
-              <Button type="submit" variant="primary" size="hero" className="w-full mt-1">
+              
+              <div className="min-h-[12px]">
+                {errorMessage && (
+                  <div
+                    role="alert"
+                    className="px-3 py-2.5 text-[13px] font-semibold text-error-light"
+                  >
+                    {errorMessage}
+                  </div>
+                )}
+              </div>
+
+              <Button type="submit" variant="primary" size="hero" disabled={isSubmitting} className="w-full mt-1">
                 {form.submitLabel} <span className="text-[17px]">&#8594;</span>
               </Button>
               <p className="text-[12.5px] text-white/45 text-center leading-[1.5]">

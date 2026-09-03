@@ -43,10 +43,10 @@ export function EngagementModelsCapabilities({ section }: { section: Capabilitie
                 </ul>
                 {card.outcomeLabel && card.outcomeText && (
                   <div className="mt-3.5 flex items-center gap-2 border-t border-border-8 pt-3">
-                    <span className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-text-45">
+                    <span className="text-[11px] font-extrabold tracking-[0.12em] text-orange">
                       {card.outcomeLabel}
                     </span>
-                    <span className="text-[13px] font-bold text-amber-light">{card.outcomeText}</span>
+                    <span className="text-[13px] leading-[normal] tracking-[normal] text-60">{card.outcomeText}</span>
                   </div>
                 )}
               </GlassCard>

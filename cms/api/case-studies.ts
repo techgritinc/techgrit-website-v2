@@ -5,6 +5,7 @@ import type { StrapiCtaBannerSection, StrapiHeroSection } from "../shared/reusab
 import type {
   CaseStudiesFinalCtaSection,
   CaseStudiesHeroSection,
+  CaseStudiesNewsletterSection,
   CaseStudiesPageContent,
   CaseStudiesPageSectionEntry,
   CaseStudiesTabFiltersSection,
@@ -12,6 +13,7 @@ import type {
   StrapiCaseStudiesPage,
   StrapiCaseStudiesSection,
   StrapiCaseStudyCardsSection,
+  StrapiNewsletterSection,
   StrapiTabFiltersSection,
 } from "../types/case-studies-types";
 
@@ -24,7 +26,12 @@ const CASE_STUDIES_ENDPOINT =
   "&populate[sections][on][page-reusable-sections.tab-filters][populate]=TabItems" +
   "&populate[sections][on][insights-case-studies.case-study-cards][populate][case_studies][populate][image]=true" +
   "&populate[sections][on][insights-case-studies.case-study-cards][populate][case_studies][populate][case_study_category]=true" +
+  "&populate[sections][on][page-reusable-sections.newsletter][populate]=ctaFormFields" +
   "&populate[sections][on][page-reusable-sections.cta-banner][populate]=true";
+
+// `successText` is pure client-side copy with no CMS field to source from — same
+// precedent as the Blog page's own newsletter mapper.
+const NEWSLETTER_SUCCESS_TEXT = "You're subscribed — talk soon.";
 
 function mapHero(cms: StrapiHeroSection, order: number): CaseStudiesHeroSection {
   const fields = mapHeroFields(cms);
@@ -59,6 +66,19 @@ function mapCaseStudyCards(cms: StrapiCaseStudyCardsSection, order: number): Cas
   };
 }
 
+function mapNewsletter(cms: StrapiNewsletterSection, order: number): CaseStudiesNewsletterSection {
+  return {
+    type: "newsletter",
+    order,
+    heading: cms.title,
+    copy: cms.subtitle,
+    ctaLabel: cms.ctaLabel,
+    placeholder: cms.ctaFormFields[0]?.placeholder ?? "",
+    helperText: cms.extraTitle,
+    successText: NEWSLETTER_SUCCESS_TEXT,
+  };
+}
+
 // Walks the CMS's real section order, converting each recognized entry into its
 // presentation-ready shape. A section that's missing or unrecognized is left out entirely
 // — there is no static fallback to substitute in its place.
@@ -73,6 +93,8 @@ function mapCaseStudiesSections(rawSections: StrapiCaseStudiesSection[]): CaseSt
           return mapTabFilters(section as StrapiTabFiltersSection, order);
         case "insights-case-studies.case-study-cards":
           return mapCaseStudyCards(section as StrapiCaseStudyCardsSection, order);
+        case "page-reusable-sections.newsletter":
+          return mapNewsletter(section as StrapiNewsletterSection, order);
         case "page-reusable-sections.cta-banner":
           return {
             type: "finalCta",
