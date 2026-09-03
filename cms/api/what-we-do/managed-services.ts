@@ -19,15 +19,11 @@ import type {
   FaqSection,
   FinalCtaSection,
   HeroSection,
-  IndustriesSection,
   IntroSection,
   LifecycleSection,
-  ManagedServiceStrategy,
   ManagedServicesPageContent,
   ManagedServicesSection,
-  OutcomeSection,
   SectionImage,
-  StrategiesSection,
   ValuePropositionTile,
   WhySection,
 } from "@/app/what-we-do/managed-services/_data/types";
@@ -130,22 +126,6 @@ function toLifecycleSection(section: StrapiServiceDetailSection, order: number):
   };
 }
 
-function toStrategiesSection(section: StrapiServiceDetailSection, order: number): StrategiesSection {
-  const strategies: ManagedServiceStrategy[] = section.approachSteps.map((step, index) => ({
-    order: index + 1,
-    name: step.title,
-    description: step.subtitle ?? "",
-  }));
-
-  return {
-    type: "strategies",
-    order,
-    eyebrow: section.serviceLabel ?? "",
-    title: section.title,
-    strategies,
-  };
-}
-
 // `extraTitle` carries a real supporting statement on this page's own "why" occurrence
 // (none of the sibling "What We Do" pages' own service-detail sections had this field
 // populated, so their type files never declared it) — surfaced as `statement`.
@@ -167,47 +147,12 @@ function toWhySection(section: StrapiServiceDetailSection, order: number): WhySe
   };
 }
 
-// The CMS doesn't currently supply a destination for any industry card on this page —
-// render a plain (non-clickable) tile when absent rather than guessing a route, same
-// precedent as every sibling "What We Do" page's own industries mapping.
-function toIndustriesSection(section: StrapiServiceDetailSection, order: number): IndustriesSection {
-  return {
-    type: "industries",
-    order,
-    eyebrow: section.serviceLabel ?? "",
-    title: section.title,
-    industries: section.approachSteps.map((step, index) => ({
-      order: index + 1,
-      icon: toIconImage(step.icon),
-      name: step.title,
-      description: step.subtitle ?? "",
-    })),
-  };
-}
-
-// An occurrence of `service-detail` with zero `approachSteps` is a plain heading +
-// description block (the Outcome primitive), not a tile grid — same distinction every
-// sibling "What We Do" page's own mapper already makes for its own "Why TechGrit?" block.
-function toOutcomeSection(section: StrapiServiceDetailSection, order: number): OutcomeSection {
-  return {
-    type: "outcome",
-    order,
-    eyebrow: section.serviceLabel ?? undefined,
-    heading: section.title,
-    description: section.subtitle ?? "",
-  };
-}
-
 function toServiceDetailSection(section: StrapiServiceDetailSection, order: number): ManagedServicesSection | null {
   switch (section.variant) {
     case "PD-modernizationLifecycle":
       return toLifecycleSection(section, order);
-    case "PD-strategiesWeSupport":
-      return toStrategiesSection(section, order);
     case "PD-whyAI-assistedModernization":
-      return section.approachSteps.length > 0 ? toWhySection(section, order) : toOutcomeSection(section, order);
-    case "PD-IndustriesWeModernize":
-      return toIndustriesSection(section, order);
+      return section.approachSteps.length > 0 ? toWhySection(section, order) : null;
     default:
       return null;
   }

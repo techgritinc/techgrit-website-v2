@@ -3,14 +3,11 @@ import { notFound } from "next/navigation";
 import { getManagedServicesData } from "@/cms/api/what-we-do/managed-services";
 import { Hero } from "@/components/ui/Hero";
 import { ContentBlock } from "@/components/ui/ContentBlock";
-import { Outcome } from "@/components/ui/Outcome";
 import { FinalCta } from "@/components/ui/final-cta";
 import MediaSlot from "@/components/ui/MediaSlot";
 import { ManagedServicesCapabilities } from "./_components/managed-services-capabilities";
 import { ManagedServicesLifecycle } from "./_components/managed-services-lifecycle";
-import { ManagedServicesStrategies } from "./_components/managed-services-strategies";
 import { ManagedServicesWhy } from "./_components/managed-services-why";
-import { ManagedServicesIndustries } from "./_components/managed-services-industries";
 import { ManagedServicesFaq } from "./_components/managed-services-faq";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -77,25 +74,8 @@ export default async function ManagedServicesPage() {
             return <ManagedServicesCapabilities key={section.order} section={section} />;
           case "lifecycle":
             return <ManagedServicesLifecycle key={section.order} section={section} />;
-          case "strategies":
-            return <ManagedServicesStrategies key={section.order} section={section} />;
           case "why":
             return <ManagedServicesWhy key={section.order} section={section} />;
-          case "industries":
-            return <ManagedServicesIndustries key={section.order} section={section} />;
-          case "outcome":
-            return (
-              <section key={section.order} className="relative">
-                <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
-                  {section.eyebrow && (
-                    <div className="mb-3 text-[12.5px] font-extrabold uppercase tracking-[0.16em] text-orange">
-                      {section.eyebrow}
-                    </div>
-                  )}
-                  <Outcome heading={section.heading} description={section.description} className="whitespace-pre-line" />
-                </div>
-              </section>
-            );
           case "faq":
             return <ManagedServicesFaq key={section.order} section={section} />;
           default:
