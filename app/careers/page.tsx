@@ -28,13 +28,13 @@ export default async function CareersPage() {
         roles={content.roles}
         applicationForm={content.applicationForm}
       />
-      <LifeGallery
+      {/* <LifeGallery
         id="life"
         heading={content.lifeAtTechGrit.heading}
         description={content.lifeAtTechGrit.description}
         eyebrow={content.lifeAtTechGrit.eyebrow}
         images={content.lifeAtTechGrit.images}
-      />
+      /> */}
       <CareersCta content={content.cta} applicationForm={content.applicationForm} />
     </>
   );

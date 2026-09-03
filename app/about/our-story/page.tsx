@@ -53,6 +53,7 @@ export default async function AboutPage() {
                 description={section.subtitle}
                 eyebrow={section.eyebrow}
                 images={section.photos}
+                autoScroll
               />
             );
           case "finalCta":
