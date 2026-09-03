@@ -1,5 +1,6 @@
 import { fetchCms } from "../fetcher";
 import { mapHeroFields, mapStatistics, mapCtaBanner } from "../../shared/reusable-sections";
+import { mapConnectedSystems } from "../../shared/industry-sections";
 import type {
   StrapiCapabilitiesSection,
   StrapiChallengesSection,
@@ -110,10 +111,11 @@ function toDomainDepthSection(section: StrapiLendingLifecycleSection, order: num
   };
 }
 
-// Used 3x (badgeLabel: "The ecosystem" / "Our work" / "Operating context") — `role` lets one
-// renderer handle all three instead of three near-identical components.
+// Used 2x (badgeLabel: "Our work" / "Operating context") — `role` lets one renderer handle
+// both instead of two near-identical components. "The ecosystem" moved onto its own
+// `industries-construction.pd-health-care-system` component — see toConnectedSystemsSection.
 function toCapabilitiesSection(section: StrapiCapabilitiesSection, order: number): CapabilitiesSection {
-  const role = section.badgeLabel === "Our work" ? "ourWork" : section.badgeLabel === "Operating context" ? "operatingContext" : "ecosystem";
+  const role = section.badgeLabel === "Our work" ? "ourWork" : "operatingContext";
   const capabilities: Capability[] = section.capabilityCard.map((card, index) => ({
     id: String(card.id),
     order: index + 1,
@@ -222,6 +224,8 @@ function toSection(raw: StrapiConsumerLendingSection, order: number): ConsumerLe
       return toDomainDepthSection(raw, order);
     case "page-reusable-sections.pd-modernization-capabilities":
       return toCapabilitiesSection(raw, order);
+    case "industries-construction.pd-health-care-system":
+      return mapConnectedSystems(raw, order);
     case "page-reusable-sections.service-detail":
       return toServiceDetailSection(raw, order);
     case "page-reusable-sections.pd-faq":

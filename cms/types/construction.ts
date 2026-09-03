@@ -4,9 +4,11 @@ import type {
   StrapiHeroSection,
   StrapiStatisticsSection,
 } from "../shared/reusable-sections";
+import type { ConnectedSystemsSection, StrapiHealthCareSystemSection } from "../shared/industry-sections";
 import type { StrapiMedia } from "./strapi-common";
 
 export type { SectionIcon } from "../shared/reusable-sections";
+export type { ConnectedSystemsSection, StrapiHealthCareSystemSection } from "../shared/industry-sections";
 
 // ---------------------------------------------------------------------------
 // Strapi-side raw shapes — construction-specific components (not reused by other pages,
@@ -85,6 +87,7 @@ export type StrapiConstructionSection =
   | StrapiServiceDetailSection
   | StrapiOrbitDiagramSection
   | StrapiProvenImpactSection
+  | StrapiHealthCareSystemSection
   | StrapiCtaBannerSection
   | StrapiUnmappedSection;
 
@@ -248,6 +251,7 @@ export type PageSectionEntry =
   | LifecycleDiagramSection
   | AdvantageSection
   | ImpactSection
+  | ConnectedSystemsSection
   | FinalCtaSection
   | undefined;
 
