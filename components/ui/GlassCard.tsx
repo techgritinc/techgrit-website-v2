@@ -39,7 +39,7 @@ const CARD_VARIANTS: Record<GlassCardVariant, string> = {
   webinarUpcoming: "rounded-3xl border-[var(--color-border-amber-30)] bg-[image:var(--gradient-webinar-upcoming)] px-9 py-[38px]",
   webinarReleased: "rounded-2xl border-border-image bg-glass-4 overflow-hidden hover:-translate-y-[5px]",
   leaderProfile: "flex flex-col items-center rounded-3xl border-border bg-glass-4 px-8 py-10 text-center hover:-translate-y-[5px]",
-  serviceCapability: "rounded-xl border-border-image bg-glass-4 p-tg-11 hover:-translate-y-tg-1",
+  serviceCapability: "flex flex-col rounded-xl border-border-image bg-glass-4 p-tg-11 hover:-translate-y-tg-1",
 };
 
 export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(function GlassCard(

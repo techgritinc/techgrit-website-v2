@@ -52,8 +52,15 @@ export function ConsumerLendingCapabilities({ section }: { section: Capabilities
                     </ul>
                   )
                 )}
-                {capability.metricLabel && <div className="mt-3.5 text-[22px] font-bold text-white">{capability.metricLabel}</div>}
-                {capability.note && <p className="mt-1.5 text-[13px] leading-[1.5] text-60 italic">{capability.note}</p>}
+                <div className="flex-1" />
+                {(capability.metricLabel || capability.note) && (
+                  <div className="mt-4 border-t border-border-8 pt-3">
+                    {capability.metricLabel && <div className="text-[22px] font-bold text-white">{capability.metricLabel}</div>}
+                    {capability.note && (
+                      <p className="mt-1.5 line-clamp-2 min-h-[40px] text-[13px] leading-[1.5] text-60 italic">{capability.note}</p>
+                    )}
+                  </div>
+                )}
               </GlassCard>
             ))}
           </div>
