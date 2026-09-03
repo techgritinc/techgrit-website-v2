@@ -34,8 +34,9 @@ export function OrbitAiCapabilities({ section }: { section: CapabilitiesSection 
                     </li>
                   ))}
                 </ul>
+                <div className="flex-1" />
                 {card.outcomeLabel && card.outcomeText && (
-                  <p className="mt-3.5 border-t border-border-8 pt-3 text-[13px] leading-[normal] tracking-[normal] text-60">
+                  <p className="mt-4 line-clamp-2 min-h-[40px] border-t border-border-8 pt-3 text-[13px] leading-[normal] tracking-[normal] text-60">
                     <span className="font-bold text-orange">{card.outcomeLabel}</span> {card.outcomeText}
                   </p>
                 )}

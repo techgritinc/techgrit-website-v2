@@ -77,20 +77,6 @@ export interface LifecycleSection {
   stages: LifecycleStage[];
 }
 
-export interface ManagedServiceStrategy {
-  order: number;
-  name: string;
-  description: string;
-}
-
-export interface StrategiesSection {
-  type: "strategies";
-  order: number;
-  eyebrow: string;
-  title: string;
-  strategies: ManagedServiceStrategy[];
-}
-
 export interface ValuePropositionTile {
   order: number;
   icon: SectionImage | null;
@@ -105,32 +91,6 @@ export interface WhySection {
   title: string;
   statement?: string; // this page's own occurrence carries a populated `extraTitle` supporting statement
   tiles: ValuePropositionTile[];
-}
-
-export interface IndustryCard {
-  order: number;
-  icon: SectionImage | null;
-  name: string;
-  description: string;
-  href?: string; // the CMS doesn't currently supply a destination for any industry card on this page
-}
-
-export interface IndustriesSection {
-  type: "industries";
-  order: number;
-  eyebrow: string;
-  title: string;
-  industries: IndustryCard[];
-}
-
-// Plain heading + description block — the second "Why Choose TechGrit?" service-detail
-// occurrence on this page, which carries no approachSteps at all.
-export interface OutcomeSection {
-  type: "outcome";
-  order: number;
-  eyebrow?: string;
-  heading: string;
-  description: string;
 }
 
 export interface FaqItem {
@@ -165,10 +125,7 @@ export type ManagedServicesSection =
   | IntroSection
   | CapabilitiesSection
   | LifecycleSection
-  | StrategiesSection
   | WhySection
-  | IndustriesSection
-  | OutcomeSection
   | FaqSection
   | FinalCtaSection;
 

@@ -3,6 +3,7 @@ import { fetchCms } from "../fetcher";
 import { mapCtaBanner, mapHeroFields } from "../../shared/reusable-sections";
 import type { StrapiCtaBannerSection, StrapiHeroSection } from "../../shared/reusable-sections";
 import {
+  mapConnectedSystems,
   mapEngineeringServices,
   mapFeaturedCapabilities,
   mapProductLifecycle,
@@ -10,7 +11,6 @@ import {
   mapWhatWeBuild,
 } from "../../shared/industry-sections";
 import type {
-  ConnectedSystemsSection,
   FinalCtaSection,
   HealthcarePageContent,
   HeroSection,
@@ -64,21 +64,6 @@ function mapHero(cms: StrapiHeroSection, order: number): HeroSection {
 // mapWhatWeBuild, mapProductLifecycle, mapEngineeringServices, mapSolutionsWeSupport, and
 // mapFeaturedCapabilities are now shared (imported above from ../shared/industry-sections) —
 // this page's titles need no override, so they're called with no titleOverride argument.
-
-function mapConnectedSystems(cms: StrapiHealthCareSystemSection, order: number): ConnectedSystemsSection {
-  return {
-    type: "connectedSystems",
-    order,
-    eyebrow: cms.badgeLabel,
-    title: cms.title,
-    description: cms.subtitle ?? "",
-    categories: cms.categories.map((category, index) => ({
-      order: index + 1,
-      name: category.name,
-      items: category.features.map((feature) => feature.title),
-    })),
-  };
-}
 
 // --- Orchestration: fetch, parse, assemble. ---
 

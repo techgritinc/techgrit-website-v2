@@ -56,6 +56,22 @@ export type StrapiProvenImpactSection = {
   caseStudyCards: StrapiCaseStudyCard[];
 };
 
+// Category+pill-items shape (Strapi's internal component name — "health-care-system" —
+// is generic despite the name; it's reused as-is for Construction's "Common Integrations
+// We Support" and Healthcare's "Connected Systems", both the same category/items shape).
+export type StrapiSystemCategory = {
+  name: string;
+  features: StrapiModernizationFeature[];
+};
+
+export type StrapiHealthCareSystemSection = {
+  __component: "industries-construction.pd-health-care-system";
+  title: string;
+  subtitle: string | null;
+  badgeLabel: string | null;
+  categories: StrapiSystemCategory[];
+};
+
 // --- Presentation shapes ---
 
 export interface IconCard {
@@ -130,6 +146,21 @@ export interface FeaturedCapabilitiesSection {
   cards: CapabilityCard[];
 }
 
+export interface SystemCategory {
+  order: number;
+  name: string;
+  items: string[];
+}
+
+export interface ConnectedSystemsSection {
+  type: "connectedSystems";
+  order: number;
+  eyebrow: string;
+  title: string;
+  description: string;
+  categories: SystemCategory[];
+}
+
 // --- Mappers ---
 
 export function mapWhatWeBuild(cms: StrapiServiceDetailSection, order: number): WhatWeBuildSection {
@@ -200,6 +231,24 @@ export function mapSolutionsWeSupport(
     tiles: cms.blockers.features.map((feature, index) => ({
       order: index + 1,
       title: feature.title,
+    })),
+  };
+}
+
+export function mapConnectedSystems(
+  cms: StrapiHealthCareSystemSection,
+  order: number
+): ConnectedSystemsSection {
+  return {
+    type: "connectedSystems",
+    order,
+    eyebrow: cms.badgeLabel ?? "",
+    title: cms.title,
+    description: cms.subtitle ?? "",
+    categories: cms.categories.map((category, index) => ({
+      order: index + 1,
+      name: category.name,
+      items: category.features.map((feature) => feature.title),
     })),
   };
 }

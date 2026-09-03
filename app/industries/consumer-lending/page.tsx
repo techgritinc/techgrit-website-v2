@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getConsumerLendingPageContent } from "@/cms/api/industries/consumer-lending";
 import { IndustryHero } from "@/components/ui/IndustryHero";
 import { MetricsStrip } from "@/components/ui/MetricsStrip";
+import { ConnectedSystems } from "@/components/ui/ConnectedSystems";
 import { Faq } from "@/components/ui/Faq";
 import { FinalCta } from "@/components/ui/final-cta";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
@@ -36,6 +37,8 @@ export default async function ConsumerLendingPage() {
             return <ConsumerLendingDomainDepth key={section.order} section={section} />;
           case "capabilities":
             return <ConsumerLendingCapabilities key={section.order} section={section} />;
+          case "connectedSystems":
+            return <ConnectedSystems key={section.order} section={section} />;
           case "appliedAi":
           case "howWeWork":
             return <ConsumerLendingSimpleCards key={section.order} section={section} />;

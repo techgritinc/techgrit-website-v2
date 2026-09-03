@@ -211,7 +211,7 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
                 {bookCall.subtitle}
               </div>
             </div>
-            <Button href={bookCall.ctaLink || "#"} variant="primary" size="nav">
+            <Button href={bookCall.ctaLink || "#"} variant="primary" size="nav" target="_blank" rel="noopener noreferrer">
               {bookCall.ctaLabel}{" "}
               <span aria-hidden="true" className="text-[15px]">
                 &#8594;

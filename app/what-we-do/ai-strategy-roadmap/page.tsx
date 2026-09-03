@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { getAiStrategyRoadmapData } from "@/cms/api/what-we-do/ai-strategy-roadmap";
 import { Hero } from "@/components/ui/Hero";
 import { ContentBlock } from "@/components/ui/ContentBlock";
-import { Outcome } from "@/components/ui/Outcome";
 import { FinalCta } from "@/components/ui/final-cta";
 import MediaSlot from "@/components/ui/MediaSlot";
 import { AiStrategyRoadmapCapabilities } from "./_components/ai-strategy-roadmap-capabilities";
@@ -80,19 +79,6 @@ export default async function AiStrategyRoadmapPage() {
             return <AiStrategyRoadmapWhy key={section.order} section={section} />;
           case "advisorySegments":
             return <AiStrategyRoadmapAdvisorySegments key={section.order} section={section} />;
-          case "outcome":
-            return (
-              <section key={section.order} className="relative">
-                <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
-                  {section.eyebrow && (
-                    <div className="mb-3 text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
-                      {section.eyebrow}
-                    </div>
-                  )}
-                  <Outcome heading={section.heading} description={section.description} className="whitespace-pre-line" />
-                </div>
-              </section>
-            );
           case "faq":
             return <AiStrategyRoadmapFaq key={section.order} section={section} />;
           default:

@@ -1,3 +1,7 @@
+import type { ConnectedSystemsSection } from "@/cms/shared/industry-sections";
+
+export type { ConnectedSystemsSection };
+
 export interface PageSeo {
   metaTitle: string;
   metaDescription: string;
@@ -91,7 +95,10 @@ export interface Capability {
   bullets: CapabilityBullet[];
 }
 
-export type CapabilitiesRole = "ecosystem" | "ourWork" | "operatingContext";
+// "ecosystem" no longer flows through here — "The ecosystem" moved onto its own
+// `industries-construction.pd-health-care-system` component, rendered as a
+// ConnectedSystemsSection (shared with Healthcare/Construction) instead.
+export type CapabilitiesRole = "ourWork" | "operatingContext";
 
 export interface CapabilitiesSection {
   type: "capabilities";
@@ -181,6 +188,7 @@ export type ConsumerLendingSection =
   | IntroSection
   | DomainDepthSection
   | CapabilitiesSection
+  | ConnectedSystemsSection
   | AppliedAiSection
   | InstitutionalSection
   | QuoteSection
