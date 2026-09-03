@@ -23,7 +23,6 @@ import type {
   HeroSection,
   IntroSection,
   LifecycleSection,
-  OutcomeSection,
   AiStrategyRoadmapPageContent,
   AiStrategyRoadmapSection,
   SectionImage,
@@ -160,25 +159,6 @@ function toAdvisorySegmentsSection(section: StrapiServiceDetailSection, order: n
   };
 }
 
-// The "PD-strategiesWeSupport" occurrence on this page's dynamic zone ships zero
-// `approachSteps` — just a heading + a multi-paragraph description — so it renders via
-// the generic Outcome primitive, same precedent as the sibling "What We Do" pages' own
-// "Why Choose TechGrit?" block (their own `PD-whyAI-assistedModernization` occurrence
-// with zero approachSteps). Unlike those siblings' own `PD-strategiesWeSupport`
-// occurrence (which always ships real approachSteps and renders as a tile grid via a
-// dedicated Strategies component), this page's occurrence has never shipped with items —
-// only the Outcome path is wired here; a populated `approachSteps` would need a real
-// Strategies component added later, not assumed speculatively now.
-function toOutcomeSection(section: StrapiServiceDetailSection, order: number): OutcomeSection {
-  return {
-    type: "outcome",
-    order,
-    eyebrow: section.serviceLabel ?? undefined,
-    heading: section.title,
-    description: section.subtitle ?? "",
-  };
-}
-
 function toServiceDetailSection(section: StrapiServiceDetailSection, order: number): AiStrategyRoadmapSection | null {
   switch (section.variant) {
     case "PD-modernizationLifecycle":
@@ -187,8 +167,6 @@ function toServiceDetailSection(section: StrapiServiceDetailSection, order: numb
       return toWhySection(section, order);
     case "PD-IndustriesWeModernize":
       return toAdvisorySegmentsSection(section, order);
-    case "PD-strategiesWeSupport":
-      return toOutcomeSection(section, order);
     default:
       return null;
   }
