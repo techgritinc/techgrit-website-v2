@@ -34,8 +34,9 @@ export function SoftwareProductEngineeringCapabilities({ section }: { section: C
                     </li>
                   ))}
                 </ul>
+                <div className="flex-1" />
                 {capability.note && (
-                  <p className="mt-3.5 text-[13px] leading-[1.5] text-60 italic">{capability.note}</p>
+                  <p className="mt-4 line-clamp-2 min-h-[40px] border-t border-border-8 pt-3 text-[13px] leading-[1.5] text-60 italic">{capability.note}</p>
                 )}
               </GlassCard>
             ))}

@@ -22,7 +22,6 @@ export type AiStrategyRoadmapSection =
   | LifecycleSection
   | WhySection
   | AdvisorySegmentsSection
-  | OutcomeSection
   | FaqSection
   | FinalCtaSection;
 
@@ -123,17 +122,6 @@ export interface AdvisorySegmentsSection {
   eyebrow: string;
   title: string;
   cards: AdvisorySegmentCard[];
-}
-
-// Plain heading + description block — the "PD-strategiesWeSupport" service-detail
-// occurrence, which carries real title/subtitle prose but zero approachSteps (same
-// shape/precedent as the sibling "What We Do" pages' own "Why Choose TechGrit?" block).
-export interface OutcomeSection {
-  type: "outcome";
-  order: number;
-  eyebrow?: string;
-  heading: string;
-  description: string;
 }
 
 export interface FaqItem {

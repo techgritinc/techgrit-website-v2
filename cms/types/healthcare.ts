@@ -1,11 +1,12 @@
 import type { StrapiCtaBannerSection, StrapiHeroSection } from "../shared/reusable-sections";
 import type {
+  ConnectedSystemsSection,
   EngineeringServicesSection,
   FeaturedCapabilitiesSection,
   ProductLifecycleSection,
   SolutionsWeSupportSection,
+  StrapiHealthCareSystemSection,
   StrapiModernizationChallengesSection,
-  StrapiModernizationFeature,
   StrapiProvenImpactSection,
   StrapiServiceDetailSection,
   WhatWeBuildSection,
@@ -15,6 +16,7 @@ export type { SectionIcon } from "../shared/reusable-sections";
 export type {
   StrapiApproachStep,
   StrapiCaseStudyCard,
+  StrapiHealthCareSystemSection,
   StrapiModernizationChallengesSection,
   StrapiModernizationFeature,
   StrapiProvenImpactSection,
@@ -28,6 +30,8 @@ export type {
   SolutionsWeSupportSection,
   CapabilityCard,
   FeaturedCapabilitiesSection,
+  SystemCategory,
+  ConnectedSystemsSection,
 } from "../shared/industry-sections";
 
 // ---------------------------------------------------------------------------
@@ -35,19 +39,6 @@ export type {
 // (service-detail, modernization-challenges, proven-impact) now lives in
 // ../shared/industry-sections.ts instead of being redeclared here.
 // ---------------------------------------------------------------------------
-
-export type StrapiHealthCareSystemCategory = {
-  name: string;
-  features: StrapiModernizationFeature[];
-};
-
-export type StrapiHealthCareSystemSection = {
-  __component: "industries-construction.pd-health-care-system";
-  title: string;
-  subtitle: string | null;
-  badgeLabel: string;
-  categories: StrapiHealthCareSystemCategory[];
-};
 
 // Any other, truly unmapped component comes back with this shape and is ignored.
 export type StrapiUnmappedSection = { __component: string };
@@ -99,23 +90,9 @@ export interface HeroSection {
 }
 
 // IconCard, WhatWeBuildSection, StepCard, ProductLifecycleSection, EngineeringServicesSection,
-// SolutionTile, SolutionsWeSupportSection, CapabilityCard, FeaturedCapabilitiesSection now live in
-// ../shared/industry-sections.ts (shared with FinTech) — re-exported below instead of redeclared.
-
-export interface SystemCategory {
-  order: number;
-  name: string;
-  items: string[];
-}
-
-export interface ConnectedSystemsSection {
-  type: "connectedSystems";
-  order: number;
-  eyebrow: string;
-  title: string;
-  description: string;
-  categories: SystemCategory[];
-}
+// SolutionTile, SolutionsWeSupportSection, CapabilityCard, FeaturedCapabilitiesSection,
+// SystemCategory, ConnectedSystemsSection now live in ../shared/industry-sections.ts (shared
+// with Construction) — re-exported above instead of redeclared.
 
 export interface FinalCtaSection {
   type: "finalCta";

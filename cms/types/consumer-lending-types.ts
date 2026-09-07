@@ -1,8 +1,10 @@
 export type { StrapiMedia } from "./ai-modernization-types";
 import type { StrapiMedia } from "./ai-modernization-types";
 import type { StrapiHeroSection, StrapiStatisticsSection, StrapiCtaBannerSection } from "../shared/reusable-sections";
+import type { ConnectedSystemsSection, StrapiHealthCareSystemSection } from "../shared/industry-sections";
 
 export type { StrapiHeroSection, StrapiStatisticsSection, StrapiCtaBannerSection };
+export type { ConnectedSystemsSection, StrapiHealthCareSystemSection };
 
 export type StrapiFeature = {
   id: number;
@@ -66,8 +68,9 @@ export type StrapiCapabilityCard = {
   features: StrapiFeature[];
 };
 
-// Used three times in this page's dynamic zone (The ecosystem, Our work, Operating context) —
-// `badgeLabel` distinguishes which, since all three share this one `__component`.
+// Used twice in this page's dynamic zone (Our work, Operating context) — `badgeLabel`
+// distinguishes which. "The ecosystem" moved onto its own `industries-construction.pd-health-
+// care-system` component (shared with Healthcare/Construction), no longer one of these three.
 export type StrapiCapabilitiesSection = {
   title: string;
   subtitle: string;
@@ -116,6 +119,7 @@ export type StrapiConsumerLendingSection =
   | StrapiChallengesSection
   | StrapiLendingLifecycleSection
   | StrapiCapabilitiesSection
+  | StrapiHealthCareSystemSection
   | StrapiServiceDetailSection
   | StrapiFaqSection
   | StrapiCtaBannerSection;

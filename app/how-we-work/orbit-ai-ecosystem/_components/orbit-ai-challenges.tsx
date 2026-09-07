@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ResultCard } from "@/components/ui/ResultCard";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import type { ChallengesSection } from "@/cms/types/orbit-ai-ecosystem-types";
 
@@ -35,11 +36,7 @@ export function OrbitAiChallenges({ section }: { section: ChallengesSection }) {
               </div>
             ))}
           </div>
-          {section.extraTitle && (
-            <div className="mx-auto mt-6 max-w-[820px] rounded-xl border border-border-8 bg-glass-3 px-6 py-5 text-center">
-              <p className="text-[15.5px] leading-[1.6] tracking-[normal] text-text-66">{section.extraTitle}</p>
-            </div>
-          )}
+          {section.extraTitle && <ResultCard description={section.extraTitle} />}
         </RevealOnScroll>
       </div>
     </section>
