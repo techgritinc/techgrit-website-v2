@@ -42,6 +42,7 @@ export type StrapiTabFiltersSection = {
   __component: "page-reusable-sections.tab-filters";
   title: string;
   subtitle: string | null;
+  TabTitle: string;
   TabItems: StrapiTabItem[];
 };
 
@@ -59,6 +60,8 @@ export type StrapiJob = {
   ctaLink: string;
   isActive: boolean;
   job_category: StrapiJobCategory;
+  locationIcon: StrapiMedia | null;
+  clockIcon: StrapiMedia | null;
 };
 
 export type StrapiJobsSection = {
@@ -168,11 +171,19 @@ export interface Benefit {
 
 export interface WhyJoinContent {
   heading: string;
+  subtitle: string;
 }
 
 export interface DepartmentFilter {
   value: string;
   label: string;
+  isDefault: boolean;
+}
+
+export interface OpenRolesContent {
+  heading: string;
+  subtitle: string;
+  filterLabel: string;
 }
 
 export type AccentKey = "orange" | "yellow" | "teal" | "blue";
@@ -185,6 +196,10 @@ export interface OpenRole {
   type: string;
   accent: AccentKey;
   ctaLabel: string;
+  ctaLink: string;
+  // CMS-hosted per-job icons; null falls back to the local LocationIcon/ClockIcon glyphs.
+  locationIcon: SectionIcon | null;
+  clockIcon: SectionIcon | null;
 }
 
 export interface LifeAtTechGritContent {
@@ -199,6 +214,7 @@ export interface ClosingCtaContent {
   headingHighlight: string;
   copy: string;
   ctaLabel: string;
+  ctaLink: string | null;
 }
 
 export interface JobFormField {
@@ -230,6 +246,7 @@ export interface CareersPageContent {
   stats: Stat[];
   whyJoin: WhyJoinContent;
   benefits: Benefit[];
+  openRoles: OpenRolesContent;
   filters: DepartmentFilter[];
   roles: OpenRole[];
   lifeAtTechGrit: LifeAtTechGritContent;

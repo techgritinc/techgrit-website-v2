@@ -13,6 +13,7 @@ import type {
   DepartmentFilter,
   JobFormField,
   OpenRole,
+  OpenRolesContent,
   StrapiApplicationFormSection,
   StrapiCareersCtaBannerSection,
   StrapiCareersPage,
@@ -97,7 +98,11 @@ function mapCareersBenefits(cms: StrapiServiceDetailSection): Benefit[] {
 }
 
 function mapCareersFilters(cms: StrapiTabFiltersSection): DepartmentFilter[] {
-  return cms.TabItems.map((tab) => ({ value: tab.value, label: tab.label }));
+  return cms.TabItems.map((tab) => ({ value: tab.value, label: tab.label, isDefault: tab.isDefault }));
+}
+
+function mapOpenRolesHeading(cms: StrapiTabFiltersSection): OpenRolesContent {
+  return { heading: cms.title, subtitle: cms.subtitle ?? "", filterLabel: cms.TabTitle };
 }
 
 // isActive:false jobs are closed postings the CMS keeps on record — not shown. Individual
@@ -114,6 +119,9 @@ function mapCareersRoles(cms: StrapiJobsSection): OpenRole[] {
       type: JOB_TYPE_LABELS[job.jobType] ?? job.jobType,
       accent: ACCENT_BY_CATEGORY_SLUG[job.job_category.slug] ?? "orange",
       ctaLabel: job.ctaLabel,
+      ctaLink: job.ctaLink,
+      locationIcon: mapSectionIcon(job.locationIcon),
+      clockIcon: mapSectionIcon(job.clockIcon),
     }));
 }
 
@@ -146,6 +154,7 @@ function mapCareersCta(cms: StrapiCareersCtaBannerSection) {
       cms.highlightTitle && fields.title.includes(cms.highlightTitle) ? cms.highlightTitle : "exact role?",
     copy: fields.description,
     ctaLabel: fields.primaryCtaLabel,
+    ctaLink: fields.primaryCtaLink,
   };
 }
 
@@ -216,8 +225,9 @@ export const getCareersPageContent = cache(async (): Promise<CareersPageContent 
     },
     hero: mapCareersHero(hero),
     stats: mapStatistics(statistics).map(({ value, label }) => ({ value, label })),
-    whyJoin: { heading: whyJoin.title },
+    whyJoin: { heading: whyJoin.title, subtitle: whyJoin.subtitle ?? "" },
     benefits: mapCareersBenefits(whyJoin),
+    openRoles: mapOpenRolesHeading(tabFilters),
     filters: mapCareersFilters(tabFilters),
     roles: mapCareersRoles(jobsSection),
     lifeAtTechGrit: mapCareersCultureGallery(cultureGallery),

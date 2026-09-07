@@ -107,7 +107,7 @@ export type FooterContactDetail = {
 
 export type FooterLegalLink = {
   label: string;
-  href: string;
+  href: string | null;
   isDocument: boolean;
 };
 
