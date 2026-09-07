@@ -6,6 +6,7 @@ import type {
   StrapiHeroSection,
   StrapiStatisticsSection,
 } from "../../shared/reusable-sections";
+import { mapConnectedSystems } from "../../shared/industry-sections";
 import type {
   AdvantageSection,
   ChallengesSection,
@@ -19,6 +20,7 @@ import type {
   SolutionsSection,
   StrapiConstructionPage,
   StrapiConstructionSection,
+  StrapiHealthCareSystemSection,
   StrapiIntegrationsBannerSection,
   StrapiOrbitDiagramSection,
   StrapiProvenImpactSection,
@@ -36,6 +38,7 @@ const CONSTRUCTION_ENDPOINT =
   "&populate[sections][on][industries-construction.integrations-banner][populate]=partners" +
   "&populate[sections][on][industries-construction.orbit-diagram][populate][centerNode][populate]=steps" +
   "&populate[sections][on][industries-construction.proven-impact][populate]=caseStudyCards" +
+  "&populate[sections][on][industries-construction.pd-health-care-system][populate][categories][populate]=features" +
   "&populate[sections][on][page-reusable-sections.cta-banner][populate]=true" +
   "&populate[sections][on][page-reusable-sections.service-detail][populate]=approachSteps";
 
@@ -199,6 +202,8 @@ function mapConstructionSections(
           return mapLifecycleDiagram(section as StrapiOrbitDiagramSection, order);
         case "industries-construction.proven-impact":
           return mapImpact(section as StrapiProvenImpactSection, order);
+        case "industries-construction.pd-health-care-system":
+          return mapConnectedSystems(section as StrapiHealthCareSystemSection, order);
         case "page-reusable-sections.cta-banner":
           return {
             type: "finalCta",

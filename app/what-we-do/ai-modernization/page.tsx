@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { getAiModernizationData } from "@/cms/api/what-we-do/ai-modernization";
 import { Hero } from "@/components/ui/Hero";
 import { ContentBlock } from "@/components/ui/ContentBlock";
-import { Outcome } from "@/components/ui/Outcome";
 import { AiModernizationCapabilities } from "./_components/ai-modernization-capabilities";
 import { AiModernizationLifecycle } from "./_components/ai-modernization-lifecycle";
 import { AiModernizationStrategies } from "./_components/ai-modernization-strategies";
@@ -84,13 +83,18 @@ export default async function AiModernizationPage() {
           case "outcome":
             return (
               <section key={section.order} className="relative">
-                <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+                <div className="mx-auto max-w-[1280px] px-9 py-[60px] text-center">
                   {section.eyebrow && (
                     <div className="mb-3 text-[12.5px] font-extrabold uppercase tracking-[0.16em] text-orange">
                       {section.eyebrow}
                     </div>
                   )}
-                  <Outcome heading={section.heading} description={section.description} className="whitespace-pre-line" />
+                  <h2 className="text-[clamp(28px,3.2vw,38px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
+                    {section.heading}
+                  </h2>
+                  <p className="mx-auto mt-3.5 max-w-[640px] whitespace-pre-line text-[16.5px] leading-[1.6] text-text-66">
+                    {section.description}
+                  </p>
                 </div>
               </section>
             );

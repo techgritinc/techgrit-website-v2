@@ -7,7 +7,7 @@ import { IndustryStepGrid } from "@/components/ui/IndustryStepGrid";
 import { IndustryServiceRows } from "@/components/ui/IndustryServiceRows";
 import { IndustryTileGrid } from "@/components/ui/IndustryTileGrid";
 import { IndustryFeaturedCases } from "@/components/ui/IndustryFeaturedCases";
-import { HealthcareConnectedSystems } from "./_components/healthcare-connected-systems";
+import { ConnectedSystems } from "@/components/ui/ConnectedSystems";
 import { FinalCta } from "@/components/ui/final-cta";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -39,7 +39,7 @@ export default async function HealthcarePage() {
           case "featuredCapabilities":
             return <IndustryFeaturedCases key={section.order} section={section} />;
           case "connectedSystems":
-            return <HealthcareConnectedSystems key={section.order} section={section} />;
+            return <ConnectedSystems key={section.order} section={section} />;
           case "finalCta":
             return (
               <FinalCta
