@@ -107,10 +107,20 @@ function toSocialLink(social: StrapiSocialLink): FooterSocialLink {
   };
 }
 
-function toLegalLink(link: StrapiLegalLink): FooterLegalLink {
-  return link.document
-    ? { label: link.title, href: resolveMediaUrl(link.document.url), isDocument: true }
-    : { label: link.title, href: link.url, isDocument: false };
+// A legal link with neither a document nor a URL has nowhere to point. Rendering it
+// would hand next/link a null `href`, which throws inside Next's own URL formatter
+// ("Cannot destructure property 'auth' of 'e' as it is null") and — because the
+// Footer sits in the root layout — 500s every route on the site. Drop such links
+// instead (returns null, filtered out by the caller), mirroring header.ts's own
+// "never trust a CMS URL field to be non-null" rule.
+function toLegalLink(link: StrapiLegalLink): FooterLegalLink | null {
+  if (link.document?.url) {
+    return { label: link.title, href: resolveMediaUrl(link.document.url), isDocument: true };
+  }
+  if (link.url) {
+    return { label: link.title, href: link.url, isDocument: false };
+  }
+  return null;
 }
 
 // Called directly from the Footer Server Component (await getFooterData()) — runs
@@ -129,8 +139,9 @@ export async function getFooterData(): Promise<FooterData | null> {
     linkGroups: data.footerMenuItems.map(toLinkGroup),
     contactDetails: data.footerContact.map(toContactDetail),
     socialLinks: data.socialLinks.map(toSocialLink),
-    legalLinks: data.legalLinks.map(toLegalLink),
+    legalLinks: data.legalLinks.map(toLegalLink).filter((link): link is FooterLegalLink => link !== null),
     followUsLabel: data.followUsLabel,
     copyrights: data.copyrights,
   };
 }
+ 
