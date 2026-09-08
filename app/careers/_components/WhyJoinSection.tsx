@@ -25,13 +25,24 @@ const ICON_ACCENT_CLASSES: Record<BenefitIconName, { bg: string; border: string;
   users: { bg: "bg-overlay-blue", border: "border-border-blue-light-30", text: "text-blue-light" },
 };
 
-export function WhyJoinSection({ heading, benefits }: { heading: string; benefits: Benefit[] }) {
+export function WhyJoinSection({
+  heading,
+  subtitle,
+  benefits,
+}: {
+  heading: string;
+  subtitle: string;
+  benefits: Benefit[];
+}) {
   return (
     <section>
       <div className="mx-auto max-w-[1280px] px-9 pt-14 pb-[30px]">
         <h2 className="font-body max-w-[680px] text-[clamp(28px,3.4vw,40px)] font-bold leading-[normal] tracking-[-0.03em] text-white">
           {heading}
         </h2>
+        {subtitle && (
+          <p className="mt-4 max-w-[680px] text-[17px] leading-[1.6] text-text-60">{subtitle}</p>
+        )}
 
         <div className="mt-[34px] grid grid-cols-3 gap-5 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
           {benefits.map((benefit) => {

@@ -1,26 +1,7 @@
-"use client";
-
-import { useState } from "react";
 import Button from "@/components/ui/Button";
-import { ApplicationDialog } from "./application-dialog";
-import type { ApplicationContext } from "./application-dialog";
-import type { ApplicationFormContent, ClosingCtaContent } from "@/cms/types/careers-types";
+import type { ClosingCtaContent } from "@/cms/types/careers-types";
 
-const GENERAL_APPLICATION_CONTEXT: ApplicationContext = {
-  mode: "general",
-  roleSlug: null,
-  roleTitle: null,
-};
-
-export function CareersCta({
-  content,
-  applicationForm,
-}: {
-  content: ClosingCtaContent;
-  applicationForm: ApplicationFormContent;
-}) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+export function CareersCta({ content }: { content: ClosingCtaContent }) {
   const [headingLead] = content.heading.split(content.headingHighlight);
 
   return (
@@ -45,20 +26,13 @@ export function CareersCta({
           </div>
 
           <Button
-            onClick={() => setIsDialogOpen(true)}
+            href={content.ctaLink ?? undefined}
             className="!h-[52px] !w-[226.594px] !gap-[10px] !rounded-[12px] !px-[30px] !py-[15px] !text-[18px]"
           >
             {content.ctaLabel} <span className="text-[17px] font-normal">&#8594;</span>
           </Button>
         </div>
       </div>
-
-      <ApplicationDialog
-        isOpen={isDialogOpen}
-        context={GENERAL_APPLICATION_CONTEXT}
-        content={applicationForm}
-        onClose={() => setIsDialogOpen(false)}
-      />
     </section>
   );
 }
