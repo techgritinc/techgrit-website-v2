@@ -33,6 +33,12 @@ jobs:
     name: Build & package
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      # NEXT_PUBLIC_* vars are inlined into the client bundle by `next build`, so this
+      # has to reach the build job itself -- not just the later deploy-to-VM job, which
+      # is too late for anything client-side. Non-secret (it ships to every browser
+      # regardless), so a plain repo Actions *variable* is enough, no Environment needed.
+      NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
 
     steps:
       - name: Checkout

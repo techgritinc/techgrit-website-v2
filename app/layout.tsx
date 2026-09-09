@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Carlito } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import CookieBanner from "@/components/layout/CookieBanner";
+import CookieSettingsProvider from "@/components/layout/CookieSettingsProvider";
+import GoogleAnalytics from "@/components/layout/GoogleAnalytics";
 import { AmbientOrbs } from "@/components/ui/ambient-orbs";
 import "./globals.css";
 
@@ -45,12 +48,16 @@ export default function RootLayout({
       className={`${carlitoBody.variable} ${carlitoDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AmbientOrbs />
-        <div className="relative flex min-h-full flex-1 flex-col" style={{ zIndex: 1 }}>
-          <Header />
-          {children}
-          <Footer />
-        </div>
+        <CookieSettingsProvider>
+          <GoogleAnalytics />
+          <AmbientOrbs />
+          <div className="relative flex min-h-full flex-1 flex-col" style={{ zIndex: 1 }}>
+            <Header />
+            {children}
+            <Footer />
+          </div>
+          <CookieBanner />
+        </CookieSettingsProvider>
       </body>
     </html>
   );
