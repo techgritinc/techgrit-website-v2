@@ -3,6 +3,10 @@ import Link from "next/link";
 import { getFooterData } from "@/cms/api/footer";
 import { LinkedInIcon, SpotifyIcon, YouTubeIcon } from "@/components/ui/icons";
 import Button from "@/components/ui/Button";
+import CookiePreferencesLink from "./CookiePreferencesLink";
+
+const LEGAL_LINK_CLASSNAME =
+  "text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white";
 
 const SOCIAL_ICONS = {
   linkedin: LinkedInIcon,
@@ -159,6 +163,19 @@ export default async function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-[22px]">
             <span className="text-[12.5px] text-40">{copyrights}</span>
             {legalLinks.map((legal) => {
+              // "Cookie Preferences" isn't a real page — it reopens the Advanced Cookie
+              // Settings modal, so it's matched by label rather than trusting the CMS's
+              // own `url` for this one entry (see CookiePreferencesLink.tsx).
+              if (legal.label === "Cookie Preferences") {
+                return (
+                  <CookiePreferencesLink
+                    key="cookie-preferences"
+                    label={legal.label}
+                    className={LEGAL_LINK_CLASSNAME}
+                  />
+                );
+              }
+
               if (!legal.href) {
                 return (
                   <span key={legal.label} className="text-[12.5px] text-dim cursor-default" aria-disabled="true">
@@ -166,6 +183,7 @@ export default async function Footer() {
                   </span>
                 );
               }
+
               return legal.isDocument ? (
                 <a
                   key={legal.label}
@@ -173,12 +191,12 @@ export default async function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   download
-                  className="text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white"
+                  className={LEGAL_LINK_CLASSNAME}
                 >
                   {legal.label}
                 </a>
               ) : (
-                <Link key={legal.label} href={legal.href} className="text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white">
+                <Link key={legal.label} href={legal.href} className={LEGAL_LINK_CLASSNAME}>
                   {legal.label}
                 </Link>
               );

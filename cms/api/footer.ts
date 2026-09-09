@@ -107,13 +107,22 @@ function toSocialLink(social: StrapiSocialLink): FooterSocialLink {
   };
 }
 
-// A legal link with neither a document nor a URL has nowhere to point. Rendering it
-// would hand next/link a null `href`, which throws inside Next's own URL formatter
-// ("Cannot destructure property 'auth' of 'e' as it is null") and — because the
-// Footer sits in the root layout — 500s every route on the site. Drop such links
-// instead (returns null, filtered out by the caller), mirroring header.ts's own
-// "never trust a CMS URL field to be non-null" rule.
+// "Cookie Preferences" is a deliberate exception: it has no document/URL in the CMS
+// by design, because it isn't a real page — Footer.tsx matches it by label and swaps
+// in a button that reopens the Advanced Cookie Settings modal instead of a link (see
+// Footer.tsx / CookiePreferencesLink.tsx). It must survive this mapping with a null
+// href so that label match downstream still sees it in `legalLinks`.
+//
+// Any other legal link with neither a document nor a URL has nowhere to point.
+// Rendering it would hand next/link a null `href`, which throws inside Next's own
+// URL formatter ("Cannot destructure property 'auth' of 'e' as it is null") and —
+// because the Footer sits in the root layout — 500s every route on the site. Drop
+// such links instead (returns null, filtered out by the caller), mirroring
+// header.ts's own "never trust a CMS URL field to be non-null" rule.
 function toLegalLink(link: StrapiLegalLink): FooterLegalLink | null {
+  if (link.title === "Cookie Preferences") {
+    return { label: link.title, href: null, isDocument: false };
+  }
   if (link.document?.url) {
     return { label: link.title, href: resolveMediaUrl(link.document.url), isDocument: true };
   }
