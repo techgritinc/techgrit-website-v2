@@ -1,50 +1,42 @@
 import { cache } from "react";
 import { fetchCms } from "./fetcher";
-import { mapCaseStudyCard, mapCtaBanner, mapSectionIcon, mapStatistics } from "../shared/reusable-sections";
+import { mapCtaBanner, mapSectionIcon, mapStatistics } from "../shared/reusable-sections";
 import type { StrapiCtaBannerSection, StrapiStatisticsSection } from "../shared/reusable-sections";
 import { resolveMediaUrl, pickMediaAsset } from "../utils/media";
+import { ROUTES } from "@/lib/routes";
 import type { StrapiMedia } from "../types/strapi-common";
 import type {
   CaseStudyDetailPageContent,
   CaseStudyDetailSectionEntry,
+  CaseStudyImage,
+  CaseStudyTable,
   DetailHeroSection,
   FinalCtaSection,
-  MoreCaseStudiesSection,
   NarrativeBlockEntry,
-  NarrativeImage,
+  ResponsibilitySection,
+  TechStackSection,
   StatisticsSection,
-  StrapiCaseStudyDetailHeroSection,
   StrapiCaseStudyDetailPage,
   StrapiCaseStudyDetailSection,
   StrapiContentSectionItem,
   StrapiContentSectionsSection,
-  StrapiMoreCaseStudysSection,
+  StrapiKeyResponsibilitiesSection,
+  StrapiServiceDetailSection,
+  StrapiSummarySection,
   StrapiTeamCompositionSection,
   TeamCompositionSection,
 } from "../types/case-study-detail-types";
 
-// NOTE: populate paths for the dynamic zone follow Strapi v5's `on`-keyed syntax, same
-// convention as cms/api/case-studies.ts / construction.ts — verify against the live instance.
+// The case-study COLLECTION endpoint, not /api/pages/by-slug — a case study's detail content
+// lives on the case-study record itself. This route deep-populates on the server, so it needs
+// no populate params of its own (unlike every other page fetcher in this folder).
 function caseStudyDetailEndpoint(slug: string): string {
-  return (
-    `/api/pages/by-slug/${encodeURIComponent(slug)}` +
-    "?populate[seo][populate]=*" +
-    "&populate[sections][on][case-study-detailed-view.case-studie-hero][populate][image]=true" +
-    "&populate[sections][on][case-study-detailed-view.case-studie-hero][populate][publishedDateIcon]=true" +
-    "&populate[sections][on][page-reusable-sections.statistics][populate]=statistics" +
-    "&populate[sections][on][case-study-detailed-view.content-section][populate][ContentSection][populate][architectureImage]=true" +
-    "&populate[sections][on][case-study-detailed-view.content-section][populate][ContentSection][populate][features][populate][icon]=true" +
-    "&populate[sections][on][case-study-detailed-view.content-section][populate][ContentSection][populate][features][populate][image]=true" +
-    "&populate[sections][on][case-study-detailed-view.team-composition][populate]=members" +
-    "&populate[sections][on][case-study-detailed-view.more-case-studys][populate][case_studies][populate][image]=true" +
-    "&populate[sections][on][case-study-detailed-view.more-case-studys][populate][case_studies][populate][case_study_category]=true" +
-    "&populate[sections][on][page-reusable-sections.cta-banner][populate]=true"
-  );
+  return `/api/case-studies/by-slug/${encodeURIComponent(slug)}`;
 }
 
-// e.g. "2024-11-26T00:00:00.000Z" -> "26 Nov, 2024" — matches the previous static copy's format.
-// `iso` can be null (unset in the CMS); `new Date(null)` silently resolves to the Unix epoch
-// rather than throwing, so this needs its own explicit guard rather than relying on a crash.
+// e.g. "2024-11-26T00:00:00.000Z" -> "26 Nov, 2024" — matches the previous static copy's
+// format. `iso` can be null (unset in the CMS); `new Date(null)` silently resolves to the
+// Unix epoch rather than throwing, so this needs its own explicit guard.
 function formatPublishedDate(iso: string | null): string {
   if (!iso) return "";
   const date = new Date(iso);
@@ -53,22 +45,33 @@ function formatPublishedDate(iso: string | null): string {
   return `${day} ${month}, ${date.getUTCFullYear()}`;
 }
 
-function mapHero(cms: StrapiCaseStudyDetailHeroSection, order: number): DetailHeroSection {
-  const asset = cms.image[0] ? pickMediaAsset(cms.image[0], ["medium", "large"]) : null;
+// Carries the CMS's own intrinsic dimensions through to the component, so images render at
+// their real aspect ratio rather than a hardcoded box.
+function mapImage(asset: StrapiMedia, preferred: ("small" | "medium" | "large")[]): CaseStudyImage {
+  const picked = pickMediaAsset(asset, preferred);
+  return {
+    url: resolveMediaUrl(picked.url),
+    alt: asset.alternativeText ?? "",
+    width: picked.width,
+    height: picked.height,
+  };
+}
+
+// Hero data is top-level on this endpoint rather than a dynamic-zone component. The CMS
+// leaves the back-link label/url unset, so both fall back to this app's own list route —
+// they're navigation constants, not content.
+function mapHero(cms: StrapiCaseStudyDetailPage): DetailHeroSection {
   return {
     type: "hero",
-    order,
-    categoryLabel: cms.caseStudyLabel,
+    caseStudyLabel: cms.caseStudyLabel ?? "",
     title: cms.title,
     subtitle: cms.subtitle ?? "",
     publishedDate: formatPublishedDate(cms.publishedDate),
     publishedDateIcon: mapSectionIcon(cms.publishedDateIcon),
-    allCaseStudiesLabel: cms.allCaseStudiesLabel,
-    allCaseStudiesUrl: cms.allCaseStudiesUrl,
-    image:
-      asset && cms.image[0]
-        ? { url: resolveMediaUrl(asset.url), alt: cms.image[0].alternativeText ?? "" }
-        : null,
+    categoryLabel: cms.case_study_category?.name ?? "",
+    allCaseStudiesLabel: cms.allCaseStudiesLabel ?? "All Case Studies",
+    allCaseStudiesUrl: cms.allCaseStudiesUrl ?? `${ROUTES.caseStudies}/`,
+    image: cms.image[0] ? mapImage(cms.image[0], ["medium", "large"]) : null,
   };
 }
 
@@ -83,8 +86,38 @@ function splitParagraphs(subtitle: string | null): string[] {
     .filter(Boolean);
 }
 
-function mapNarrativeImage(asset: StrapiMedia): NarrativeImage {
-  return { url: resolveMediaUrl(asset.url), alt: asset.alternativeText ?? "" };
+function normalizeKey(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+// A table arrives as parallel `columns` (header labels) and `rows` (one object per row), but
+// the row keys line up with neither the labels nor their order: columns
+// ["Category", "System", "Role in the Platform"] come with row keys ["role","system","category"],
+// while ["Outcome", "What Changed"] come with ["outcome","whatChanged"]. So a key is matched to
+// a label by normalized prefix ("roleintheplatform".startsWith("role")), longest match first so
+// a short key can't shadow a more specific one, with the row's own key order as a last resort.
+// A new table whose keys don't share a prefix with their label would fall back to that order.
+function normalizeTable(
+  columns: { label: string }[] | null,
+  rows: Record<string, string>[] | null
+): CaseStudyTable | null {
+  if (!columns?.length || !rows?.length) return null;
+
+  const headers = columns.map((column) => column.label.trim());
+  const rowKeys = Object.keys(rows[0]);
+
+  const keyForColumn = headers.map((header, headerIndex) => {
+    const normalizedHeader = normalizeKey(header);
+    const matches = rowKeys
+      .filter((key) => normalizedHeader.startsWith(normalizeKey(key)))
+      .sort((a, b) => b.length - a.length);
+    return matches[0] ?? rowKeys[headerIndex];
+  });
+
+  return {
+    headers,
+    rows: rows.map((row) => keyForColumn.map((key) => (key ? row[key] ?? "" : ""))),
+  };
 }
 
 // One item from the CMS's flexible "ContentSection" list. `paragraphs`/`features`/`images`
@@ -94,17 +127,80 @@ function mapContentSectionItem(item: StrapiContentSectionItem, index: number): N
   return {
     type: "narrativeBlock",
     order: index + 1,
-    title: item.title,
-    subheading: item.subheading ?? null,
+    title: item.title.trim(),
     paragraphs: splitParagraphs(item.subtitle),
+    extraTitle: item.extraTitle?.trim() || null,
     features: item.features.map((feature, featureIndex) => ({
       order: featureIndex + 1,
-      title: feature.title,
+      // `?? ""` rather than assuming a title: a picture/description-only feature can leave
+      // this null (see the type's own comment) — `null.trim()` is exactly what crashed the
+      // sprint-velocity case study before this guard existed.
+      title: feature.title?.trim() ?? "",
       subtitle: feature.subtitle,
+      description: feature.description?.length ? feature.description : null,
+      table: normalizeTable(feature.columns, feature.rows),
+      ctaLabel: feature.ctaLabel,
+      ctaLink: feature.ctaLink,
       icon: mapSectionIcon(feature.icon),
-      images: feature.image.map(mapNarrativeImage),
+      images: feature.image.map((asset) => mapImage(asset, ["small", "medium"])),
     })),
-    images: item.architectureImage.map(mapNarrativeImage),
+    images: item.architectureImage.map((asset) => mapImage(asset, ["medium", "large"])),
+  };
+}
+
+// job-detailed-view.summary is a plain title + prose block. It carries no features, images
+// or pull-quote, so it maps onto the same NarrativeBlockEntry shape a prose-only
+// content-section item produces rather than needing a section type (and component) of its own.
+function mapSummary(cms: StrapiSummarySection, order: number): NarrativeBlockEntry {
+  return {
+    type: "narrativeBlock",
+    order,
+    title: cms.title.trim(),
+    paragraphs: splitParagraphs(cms.subtitle),
+    extraTitle: null,
+    features: [],
+    images: [],
+  };
+}
+
+// page-reusable-sections.service-detail's "approach steps" (tool name + role, e.g. "GitHub
+// Copilot" / "Inline code completions...") render as a numbered-badge card grid — the same
+// treatment components/ui/IndustryStepGrid.tsx already gives this exact CMS shape on the
+// Industries pages — rather than the plain-prose treatment every other narrative section
+// uses. subtitle/extraTitle/ctaLabel/ctaLink/serviceLabel/variant/image are unset on every
+// case study observed so far and have no home in TechStackSection — if the CMS starts
+// populating them, they'll need a real slot mapped in here rather than staying silently
+// dropped the way this whole section was before this mapper existed.
+function mapServiceDetail(cms: StrapiServiceDetailSection, order: number): TechStackSection {
+  return {
+    type: "techStack",
+    order,
+    title: cms.title.trim(),
+    cards: cms.approachSteps.map((step, stepIndex) => ({
+      order: stepIndex + 1,
+      stepLabel: step.stepLabel ?? String(stepIndex + 1),
+      icon: mapSectionIcon(step.icon),
+      title: step.title?.trim() ?? "",
+      subtitle: step.subtitle,
+    })),
+  };
+}
+
+// Same shape the Job Detail page maps (see cms/api/job-detail.ts) — the rich-text tree is
+// passed through untouched and rendered by components/ui/BlocksContent.tsx.
+function mapKeyResponsibilities(
+  cms: StrapiKeyResponsibilitiesSection,
+  order: number
+): ResponsibilitySection {
+  return {
+    type: "responsibilityList",
+    order,
+    title: cms.title.trim(),
+    extraTitle: cms.extraTitle?.trim() || null,
+    groups: cms.ResponsibilityGroup.map((group) => ({
+      heading: group.name ? group.name.trim() : null,
+      items: group.ResponsibilityItems.map((item) => item.subtitle),
+    })),
   };
 }
 
@@ -118,16 +214,6 @@ function mapTeamComposition(cms: StrapiTeamCompositionSection): TeamCompositionS
       role: member.role,
       count: member.count,
     })),
-  };
-}
-
-function mapMoreCaseStudies(cms: StrapiMoreCaseStudysSection, order: number): MoreCaseStudiesSection {
-  return {
-    type: "moreCaseStudies",
-    order,
-    title: cms.title,
-    subtitle: cms.subtitle,
-    caseStudies: cms.case_studies.map(mapCaseStudyCard),
   };
 }
 
@@ -145,9 +231,11 @@ function parseCaseStudyDetailSections(rawSections: StrapiCaseStudyDetailSection[
 }
 
 // Step 2: walk the CMS's real section order, converting each recognized entry into its
-// presentation-ready shape. A section that's missing or unrecognized is left out entirely
-// — there is no static fallback to substitute in its place. team-composition is excluded
-// here since it's consumed separately (see parseCaseStudyDetailSections above).
+// presentation-ready shape. Order is load-bearing here: prose sections (key-responsibilities)
+// and content-sections interleave, so they must render in the CMS's sequence rather than
+// being grouped by type. A section that's missing or unrecognized is left out entirely —
+// there is no static fallback. team-composition is excluded here since it's consumed
+// separately (see parseCaseStudyDetailSections above).
 //
 // flatMap (not map) because "content-section" is one raw CMS entry that expands into
 // however many narrative-block entries its ContentSection array holds — every other case
@@ -159,8 +247,6 @@ function mapCaseStudyDetailSections(
     .flatMap((section, index): CaseStudyDetailSectionEntry[] => {
       const order = index + 1;
       switch (section.__component) {
-        case "case-study-detailed-view.case-studie-hero":
-          return [mapHero(section as StrapiCaseStudyDetailHeroSection, order)];
         case "page-reusable-sections.statistics":
           return [
             {
@@ -171,8 +257,12 @@ function mapCaseStudyDetailSections(
           ];
         case "case-study-detailed-view.content-section":
           return (section as StrapiContentSectionsSection).ContentSection.map(mapContentSectionItem);
-        case "case-study-detailed-view.more-case-studys":
-          return [mapMoreCaseStudies(section as StrapiMoreCaseStudysSection, order)];
+        case "job-detailed-view.key-responsibilities":
+          return [mapKeyResponsibilities(section as StrapiKeyResponsibilitiesSection, order)];
+        case "job-detailed-view.summary":
+          return [mapSummary(section as StrapiSummarySection, order)];
+        case "page-reusable-sections.service-detail":
+          return [mapServiceDetail(section as StrapiServiceDetailSection, order)];
         case "page-reusable-sections.cta-banner":
           return [
             {
@@ -189,8 +279,9 @@ function mapCaseStudyDetailSections(
 }
 
 // Called from the Case Study detail page's Server Component, keyed per slug. Returns null
-// when the CMS itself is unreachable OR the slug doesn't exist — the page then renders a
-// 404 (see [slug]/page.tsx), matching the list page's own no-static-fallback pattern.
+// when the CMS itself is unreachable OR the slug doesn't exist (the endpoint 404s) — the page
+// then renders a 404 (see [slug]/page.tsx), matching the list page's own
+// no-static-fallback pattern.
 //
 // Wrapped in React's cache() because generateMetadata() and the page component each call
 // this independently with the same slug — without memoization, one page request fires two
@@ -202,13 +293,14 @@ export const getCaseStudyDetailPageContent = cache(
     const data = await fetchCms<StrapiCaseStudyDetailPage>(caseStudyDetailEndpoint(slug));
     if (!data) return null;
 
-    const parsed = parseCaseStudyDetailSections(data.sections);
+    const parsed = parseCaseStudyDetailSections(data.sections ?? []);
 
     return {
       seo: {
         metaTitle: data.seo?.metaTitle ?? "",
         metaDescription: data.seo?.metaDescription ?? "",
       },
+      hero: mapHero(data),
       sections: mapCaseStudyDetailSections(parsed),
       team: parsed.teamCms ? mapTeamComposition(parsed.teamCms) : null,
     };

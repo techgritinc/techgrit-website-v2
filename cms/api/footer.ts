@@ -8,7 +8,6 @@ import type {
   FooterLinkGroup,
   FooterLogo,
   FooterSocialLink,
-  FooterSocialPlatform,
   StrapiFooterContact,
   StrapiFooterData,
   StrapiFooterMenuItem,
@@ -37,16 +36,6 @@ function toFooterIcon(icon: StrapiMedia | null): FooterIcon | null {
   return { url: resolveMediaUrl(icon.url), alt: icon.alternativeText ?? "" };
 }
 
-// The CMS has no explicit "platform" field on a social link — the icon to render is
-// derived from the link's own domain, matching the reference's fixed
-// linkedin/youtube/spotify icon set. Falls back to null (no matching icon) for
-// anything else.
-function detectPlatform(url: string): FooterSocialPlatform | null {
-  if (url.includes("linkedin.com")) return "linkedin";
-  if (url.includes("youtube.com")) return "youtube";
-  if (url.includes("spotify.com")) return "spotify";
-  return null;
-}
 
 // TMS-86 / TMS-86-software-product-engineering / TMS-86-data-and-ai-engineering /
 // TMS-86-platform-engineering / TMS-86-managed-services / TMS-86-ai-strategy-and-
@@ -100,7 +89,6 @@ function toContactDetail(contact: StrapiFooterContact): FooterContactDetail {
 
 function toSocialLink(social: StrapiSocialLink): FooterSocialLink {
   return {
-    platform: detectPlatform(social.url),
     href: social.url,
     label: social.title,
     icon: toFooterIcon(social.icon),

@@ -92,10 +92,7 @@ export type FooterLinkGroup = {
   links: FooterLink[];
 };
 
-export type FooterSocialPlatform = "linkedin" | "youtube" | "spotify";
-
 export type FooterSocialLink = {
-  platform: FooterSocialPlatform | null;
   href: string;
   label: string;
   icon: FooterIcon | null;
