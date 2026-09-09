@@ -1,18 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getFooterData } from "@/cms/api/footer";
-import { LinkedInIcon, SpotifyIcon, YouTubeIcon } from "@/components/ui/icons";
 import Button from "@/components/ui/Button";
 import CookiePreferencesLink from "./CookiePreferencesLink";
 
 const LEGAL_LINK_CLASSNAME =
   "text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white";
-
-const SOCIAL_ICONS = {
-  linkedin: LinkedInIcon,
-  youtube: YouTubeIcon,
-  spotify: SpotifyIcon,
-} as const;
 
 export default async function Footer() {
   const data = await getFooterData();
@@ -120,9 +113,7 @@ export default async function Footer() {
                 {followUsLabel}
               </span>
               <div className="flex items-center gap-[10px]">
-                {socialLinks.map((social) => {
-                  const Icon = social.platform ? SOCIAL_ICONS[social.platform] : null;
-                  return (
+                {socialLinks.map((social) =>(
                     <a
                       key={social.href}
                       href={social.href}
@@ -133,14 +124,11 @@ export default async function Footer() {
                       data-lift-hover
                       className="inline-flex h-[36px] w-[36px] items-center justify-center rounded-[10px] border border-white/[0.12] bg-white/[0.04] text-secondary transition-all duration-200 ease-[ease] hover:-translate-y-[2px] hover:border-orange/[0.55] hover:bg-orange/[0.15] hover:text-white"
                     >
-                      {social.icon ? (
+                      {social.icon && (
                         <Image src={social.icon.url} alt={social.icon.alt} width={17} height={17} />
-                      ) : (
-                        Icon && <Icon />
                       )}
                     </a>
-                  );
-                })}
+                  ))}
               </div>
             </div>
           </div>

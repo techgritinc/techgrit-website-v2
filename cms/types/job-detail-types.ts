@@ -1,38 +1,19 @@
 import type { SectionIcon, StrapiCtaBannerSection, CtaBannerFields } from "../shared/reusable-sections";
 import type { ApplicationFormContent, JobFormField, StrapiJobFormField } from "./careers-types";
-import type { StrapiMedia } from "./strapi-common";
+import type { StrapiBlocksContent, StrapiMedia } from "./strapi-common";
 
-// ---------------------------------------------------------------------------
-// Strapi Blocks (rich text) — the CMS's bullet/paragraph fields on this page come back
-// as this tree structure, not plain strings. Only the node/mark shapes actually observed
-// in the live CMS response are modeled (list / list-item / text with an optional bold
-// mark) — see components/ui/BlocksContent.tsx for the renderer.
-// ---------------------------------------------------------------------------
-
-export type StrapiBlocksText = {
-  type: "text";
-  text: string;
-  bold?: boolean;
-};
-
-export type StrapiBlocksListItem = {
-  type: "list-item";
-  children: StrapiBlocksText[];
-};
-
-export type StrapiBlocksList = {
-  type: "list";
-  format: "ordered" | "unordered";
-  children: StrapiBlocksListItem[];
-};
-
-export type StrapiBlocksParagraph = {
-  type: "paragraph";
-  children: StrapiBlocksText[];
-};
-
-export type StrapiBlocksNode = StrapiBlocksList | StrapiBlocksParagraph;
-export type StrapiBlocksContent = StrapiBlocksNode[];
+// Strapi Blocks (rich text) shapes moved to ./strapi-common.ts once the case-study detail
+// page needed the same tree — re-exported here so this page's existing imports keep working.
+export type {
+  StrapiBlocksText,
+  StrapiBlocksLink,
+  StrapiBlocksInline,
+  StrapiBlocksListItem,
+  StrapiBlocksList,
+  StrapiBlocksParagraph,
+  StrapiBlocksNode,
+  StrapiBlocksContent,
+} from "./strapi-common";
 
 // ---------------------------------------------------------------------------
 // Strapi-side raw shapes — the job-detailed-view.* component family, plus the two

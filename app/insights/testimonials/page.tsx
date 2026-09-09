@@ -19,8 +19,8 @@ export default async function TestimonialsPage() {
     <main className="overflow-x-clip">
       <InsightsHero section={content.hero} />
       <AiModernizationWhy section={content.why} />
-      <LeadershipProfiles profiles={content.profiles} />
-      <TestimonialsSection data={content.reviews} />
+      <LeadershipProfiles title={content.profilesTitle} subtitle={content.profilesSubtitle} profiles={content.profiles} />
+      {content.reviews && <TestimonialsSection data={content.reviews} />}
     </main>
   );
 }

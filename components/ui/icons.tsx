@@ -93,21 +93,6 @@ export function UploadIcon(props: IconProps) {
   );
 }
 
-export function YouTubeIcon(props: IconProps) {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M23.5 7.2a3 3 0 0 0-2.1-2.1C19.6 4.6 12 4.6 12 4.6s-7.6 0-9.4.5A3 3 0 0 0 .5 7.2C0 9 0 12 0 12s0 3 .5 4.8a3 3 0 0 0 2.1 2.1c1.8.5 9.4.5 9.4.5s7.6 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.8.5-4.8.5-4.8s0-3-.5-4.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z" />
-    </svg>
-  );
-}
-
-export function SpotifyIcon(props: IconProps) {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.7 0 12 0zm5.5 17.3a.8.8 0 0 1-1 .3c-2.9-1.8-6.5-2.2-10.8-1.2a.8.8 0 0 1-.3-1.4c4.7-1 8.7-.6 12 1.3.3.2.4.7.1 1zm1.5-3.2a.9.9 0 0 1-1.3.3c-3.3-2-8.4-2.6-12.3-1.4a.9.9 0 1 1-.5-1.8c4.5-1.4 10.2-.7 14 1.6.5.3.6.9.1 1.3zm.1-3.3C15 8.4 8.7 8.2 5 9.4a1.1 1.1 0 1 1-.7-2.2c4.4-1.3 11.4-1.1 15.9 1.6a1.1 1.1 0 1 1-1.1 1.9z" />
-    </svg>
-  );
-}
 
 export function MailIcon(props: IconProps) {
   return (

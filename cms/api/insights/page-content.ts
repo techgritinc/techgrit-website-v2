@@ -29,6 +29,8 @@ type StrapiServiceDetailSection = {
 
 type StrapiLeadershipTeamSection = {
   __component: "about-us.leadership-team";
+  title: string | null;
+  subtitle: string | null;
   cards: {
     id: number;
     name: string;
@@ -69,8 +71,10 @@ export type InsightsPageContent = {
   seo: { metaTitle: string; metaDescription: string };
   hero: HeroSection;
   why: WhySection;
+  profilesTitle: string;
+  profilesSubtitle: string;
   profiles: LeaderProfile[];
-  reviews: ReviewsData;
+  reviews: ReviewsData | null;
 };
 
 function toInitials(name: string): string {
@@ -191,13 +195,15 @@ export const getInsightsPageContent = cache(async (slug: "whitepapers" | "testim
   );
   const reviews = data.sections.find((section): section is StrapiReviewsSection => section.__component === "home.reviews");
 
-  if (!hero || !why || !team || !reviews) return null;
+  if (!hero || !why || !team) return null;
 
   return {
     seo: { metaTitle: data.seo?.metaTitle ?? data.seo?.metaDescription ?? hero.title, metaDescription: data.seo?.metaDescription ?? hero.subtitle ?? "" },
     hero: toHero(hero),
     why: toWhy(why),
+    profilesTitle: team.title ?? "",
+    profilesSubtitle: team.subtitle ?? "",
     profiles: toProfiles(team),
-    reviews: toReviews(reviews),
+    reviews: reviews ? toReviews(reviews) : null,
   };
 });
