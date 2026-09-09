@@ -176,9 +176,17 @@ export default async function Footer() {
                 );
               }
 
+              if (!legal.href) {
+                return (
+                  <span key={legal.label} className="text-[12.5px] text-dim cursor-default" aria-disabled="true">
+                    {legal.label}
+                  </span>
+                );
+              }
+
               return legal.isDocument ? (
                 <a
-                  key={legal.href}
+                  key={legal.label}
                   href={legal.href}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -188,7 +196,7 @@ export default async function Footer() {
                   {legal.label}
                 </a>
               ) : (
-                <Link key={legal.href} href={legal.href} className={LEGAL_LINK_CLASSNAME}>
+                <Link key={legal.label} href={legal.href} className={LEGAL_LINK_CLASSNAME}>
                   {legal.label}
                 </Link>
               );

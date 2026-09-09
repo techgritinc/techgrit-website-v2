@@ -25,7 +25,10 @@ export type StrapiFooterContact = {
 
 export type StrapiLegalLink = {
   title: string;
-  url: string;
+  // Not enforced as required by Strapi — the "Cookie Preferences" link shipped with
+  // both `url` and `document` null (observed live, 2026-09-07), which took the whole
+  // site down via a null <Link href>. Typed as nullable so the mapper must guard it.
+  url: string | null;
   document: StrapiMedia | null;
 };
 
@@ -107,7 +110,7 @@ export type FooterContactDetail = {
 
 export type FooterLegalLink = {
   label: string;
-  href: string;
+  href: string | null;
   isDocument: boolean;
 };
 
