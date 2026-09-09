@@ -3,11 +3,12 @@ import { notFound } from "next/navigation";
 import { getCaseStudyDetailPageContent } from "@/cms/api/case-study-detail";
 import { CaseStudyDetailHero } from "../_components/case-study-detail-hero";
 import { MetricsStrip } from "@/components/ui/MetricsStrip";
-import { CaseStudyNarrativeBlock } from "../_components/case-study-narrative";
-import { CaseStudyResponsibilitySection } from "../_components/case-study-responsibility-section";
-import { CaseStudyTechStack } from "../_components/case-study-tech-stack";
+import { ArticleCapabilityGrid } from "@/components/ui/ArticleCapabilityGrid";
+import { ArticleNarrativeBlock } from "@/components/ui/ArticleNarrative";
+import { ArticleResponsibilitySection } from "@/components/ui/ArticleResponsibilitySection";
+import { ArticleTechStack } from "@/components/ui/ArticleTechStack";
 import { TeamPanel } from "../_components/team-panel";
-import { CaseStudiesFinalCta } from "../_components/case-studies-final-cta";
+import { FinalCtaBanner } from "@/components/ui/FinalCtaBanner";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -35,7 +36,8 @@ export default async function CaseStudyDetailPage({ params }: Props) {
     (section) =>
       section?.type === "narrativeBlock" ||
       section?.type === "responsibilityList" ||
-      section?.type === "techStack"
+      section?.type === "techStack" ||
+      section?.type === "capabilityGrid"
   );
   const hasTeam = Boolean(content.team?.members.length);
 
@@ -62,11 +64,13 @@ export default async function CaseStudyDetailPage({ params }: Props) {
               {bodySections.map((section, index) => (
                 <RevealOnScroll key={`${section?.type}-${index}`}>
                   {section?.type === "responsibilityList" ? (
-                    <CaseStudyResponsibilitySection section={section} />
+                    <ArticleResponsibilitySection section={section} />
                   ) : section?.type === "techStack" ? (
-                    <CaseStudyTechStack section={section} />
+                    <ArticleTechStack section={section} />
+                  ) : section?.type === "capabilityGrid" ? (
+                    <ArticleCapabilityGrid section={section} />
                   ) : section?.type === "narrativeBlock" ? (
-                    <CaseStudyNarrativeBlock entry={section} />
+                    <ArticleNarrativeBlock entry={section} />
                   ) : null}
                 </RevealOnScroll>
               ))}
@@ -76,7 +80,7 @@ export default async function CaseStudyDetailPage({ params }: Props) {
         </div>
       </section>
       {finalCta ? (
-        <CaseStudiesFinalCta
+        <FinalCtaBanner
           title={finalCta.title}
           titleHighlight={finalCta.titleHighlight}
           description={finalCta.description}

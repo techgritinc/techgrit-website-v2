@@ -2,12 +2,13 @@ import Image from "next/image";
 import { GlassCard, GlassCardDescription, GlassCardTitle } from "@/components/ui/GlassCard";
 import { NetworkNodeIcon } from "@/components/ui/icons";
 import type { FeaturedPost as FeaturedPostContent } from "../_data/types";
+import { CardLink } from "@/components/ui/CardLink";
 
 export function FeaturedPost({ post }: { post: FeaturedPostContent }) {
   return (
     <section>
       <div className="mx-auto max-w-(--container-max) px-9 pt-tg-11 pb-tg-4">
-        <a href={post.href} style={{ display: "contents" }}>
+        <CardLink href={post.href} style={{ display: "contents" }}>
           <GlassCard
             variant="blogFeatured"
             hoverBorderColor=""
@@ -66,7 +67,7 @@ export function FeaturedPost({ post }: { post: FeaturedPostContent }) {
               )}
             </div>
           </GlassCard>
-        </a>
+        </CardLink>
       </div>
     </section>
   );

@@ -1,26 +1,28 @@
 import { cache } from "react";
 import { fetchCms } from "./fetcher";
 import { mapCtaBanner, mapSectionIcon, mapStatistics } from "../shared/reusable-sections";
+import {
+  formatPublishedDate,
+  mapCapabilityGrid,
+  mapContentSectionItem,
+  mapImage,
+  mapKeyResponsibilities,
+  mapServiceDetail,
+  mapSummary,
+} from "../shared/article-sections";
 import type { StrapiCtaBannerSection, StrapiStatisticsSection } from "../shared/reusable-sections";
-import { resolveMediaUrl, pickMediaAsset } from "../utils/media";
 import { ROUTES } from "@/lib/routes";
-import type { StrapiMedia } from "../types/strapi-common";
 import type {
   CaseStudyDetailPageContent,
   CaseStudyDetailSectionEntry,
-  CaseStudyImage,
-  CaseStudyTable,
   DetailHeroSection,
   FinalCtaSection,
-  NarrativeBlockEntry,
-  ResponsibilitySection,
-  TechStackSection,
   StatisticsSection,
   StrapiCaseStudyDetailPage,
   StrapiCaseStudyDetailSection,
-  StrapiContentSectionItem,
   StrapiContentSectionsSection,
   StrapiKeyResponsibilitiesSection,
+  StrapiPdModernizationCapabilitiesSection,
   StrapiServiceDetailSection,
   StrapiSummarySection,
   StrapiTeamCompositionSection,
@@ -32,29 +34,6 @@ import type {
 // no populate params of its own (unlike every other page fetcher in this folder).
 function caseStudyDetailEndpoint(slug: string): string {
   return `/api/case-studies/by-slug/${encodeURIComponent(slug)}`;
-}
-
-// e.g. "2024-11-26T00:00:00.000Z" -> "26 Nov, 2024" — matches the previous static copy's
-// format. `iso` can be null (unset in the CMS); `new Date(null)` silently resolves to the
-// Unix epoch rather than throwing, so this needs its own explicit guard.
-function formatPublishedDate(iso: string | null): string {
-  if (!iso) return "";
-  const date = new Date(iso);
-  const day = date.getUTCDate().toString().padStart(2, "0");
-  const month = date.toLocaleString("en-US", { month: "short", timeZone: "UTC" });
-  return `${day} ${month}, ${date.getUTCFullYear()}`;
-}
-
-// Carries the CMS's own intrinsic dimensions through to the component, so images render at
-// their real aspect ratio rather than a hardcoded box.
-function mapImage(asset: StrapiMedia, preferred: ("small" | "medium" | "large")[]): CaseStudyImage {
-  const picked = pickMediaAsset(asset, preferred);
-  return {
-    url: resolveMediaUrl(picked.url),
-    alt: asset.alternativeText ?? "",
-    width: picked.width,
-    height: picked.height,
-  };
 }
 
 // Hero data is top-level on this endpoint rather than a dynamic-zone component. The CMS
@@ -72,135 +51,6 @@ function mapHero(cms: StrapiCaseStudyDetailPage): DetailHeroSection {
     allCaseStudiesLabel: cms.allCaseStudiesLabel ?? "All Case Studies",
     allCaseStudiesUrl: cms.allCaseStudiesUrl ?? `${ROUTES.caseStudies}/`,
     image: cms.image[0] ? mapImage(cms.image[0], ["medium", "large"]) : null,
-  };
-}
-
-// The CMS sends one `subtitle` string with blank-line-separated paragraphs instead of an
-// array — split here once so the component only ever deals with a paragraph list. A
-// bullet-only or picture-only item has no prose at all, so `subtitle` is null there.
-function splitParagraphs(subtitle: string | null): string[] {
-  if (!subtitle) return [];
-  return subtitle
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean);
-}
-
-function normalizeKey(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
-}
-
-// A table arrives as parallel `columns` (header labels) and `rows` (one object per row), but
-// the row keys line up with neither the labels nor their order: columns
-// ["Category", "System", "Role in the Platform"] come with row keys ["role","system","category"],
-// while ["Outcome", "What Changed"] come with ["outcome","whatChanged"]. So a key is matched to
-// a label by normalized prefix ("roleintheplatform".startsWith("role")), longest match first so
-// a short key can't shadow a more specific one, with the row's own key order as a last resort.
-// A new table whose keys don't share a prefix with their label would fall back to that order.
-function normalizeTable(
-  columns: { label: string }[] | null,
-  rows: Record<string, string>[] | null
-): CaseStudyTable | null {
-  if (!columns?.length || !rows?.length) return null;
-
-  const headers = columns.map((column) => column.label.trim());
-  const rowKeys = Object.keys(rows[0]);
-
-  const keyForColumn = headers.map((header, headerIndex) => {
-    const normalizedHeader = normalizeKey(header);
-    const matches = rowKeys
-      .filter((key) => normalizedHeader.startsWith(normalizeKey(key)))
-      .sort((a, b) => b.length - a.length);
-    return matches[0] ?? rowKeys[headerIndex];
-  });
-
-  return {
-    headers,
-    rows: rows.map((row) => keyForColumn.map((key) => (key ? row[key] ?? "" : ""))),
-  };
-}
-
-// One item from the CMS's flexible "ContentSection" list. `paragraphs`/`features`/`images`
-// can each be empty — the component decides its rendered treatment from whichever ones are
-// populated, so no "kind" flag is needed here; every item is mapped identically.
-function mapContentSectionItem(item: StrapiContentSectionItem, index: number): NarrativeBlockEntry {
-  return {
-    type: "narrativeBlock",
-    order: index + 1,
-    title: item.title.trim(),
-    paragraphs: splitParagraphs(item.subtitle),
-    extraTitle: item.extraTitle?.trim() || null,
-    features: item.features.map((feature, featureIndex) => ({
-      order: featureIndex + 1,
-      // `?? ""` rather than assuming a title: a picture/description-only feature can leave
-      // this null (see the type's own comment) — `null.trim()` is exactly what crashed the
-      // sprint-velocity case study before this guard existed.
-      title: feature.title?.trim() ?? "",
-      subtitle: feature.subtitle,
-      description: feature.description?.length ? feature.description : null,
-      table: normalizeTable(feature.columns, feature.rows),
-      ctaLabel: feature.ctaLabel,
-      ctaLink: feature.ctaLink,
-      icon: mapSectionIcon(feature.icon),
-      images: feature.image.map((asset) => mapImage(asset, ["small", "medium"])),
-    })),
-    images: item.architectureImage.map((asset) => mapImage(asset, ["medium", "large"])),
-  };
-}
-
-// job-detailed-view.summary is a plain title + prose block. It carries no features, images
-// or pull-quote, so it maps onto the same NarrativeBlockEntry shape a prose-only
-// content-section item produces rather than needing a section type (and component) of its own.
-function mapSummary(cms: StrapiSummarySection, order: number): NarrativeBlockEntry {
-  return {
-    type: "narrativeBlock",
-    order,
-    title: cms.title.trim(),
-    paragraphs: splitParagraphs(cms.subtitle),
-    extraTitle: null,
-    features: [],
-    images: [],
-  };
-}
-
-// page-reusable-sections.service-detail's "approach steps" (tool name + role, e.g. "GitHub
-// Copilot" / "Inline code completions...") render as a numbered-badge card grid — the same
-// treatment components/ui/IndustryStepGrid.tsx already gives this exact CMS shape on the
-// Industries pages — rather than the plain-prose treatment every other narrative section
-// uses. subtitle/extraTitle/ctaLabel/ctaLink/serviceLabel/variant/image are unset on every
-// case study observed so far and have no home in TechStackSection — if the CMS starts
-// populating them, they'll need a real slot mapped in here rather than staying silently
-// dropped the way this whole section was before this mapper existed.
-function mapServiceDetail(cms: StrapiServiceDetailSection, order: number): TechStackSection {
-  return {
-    type: "techStack",
-    order,
-    title: cms.title.trim(),
-    cards: cms.approachSteps.map((step, stepIndex) => ({
-      order: stepIndex + 1,
-      stepLabel: step.stepLabel ?? String(stepIndex + 1),
-      icon: mapSectionIcon(step.icon),
-      title: step.title?.trim() ?? "",
-      subtitle: step.subtitle,
-    })),
-  };
-}
-
-// Same shape the Job Detail page maps (see cms/api/job-detail.ts) — the rich-text tree is
-// passed through untouched and rendered by components/ui/BlocksContent.tsx.
-function mapKeyResponsibilities(
-  cms: StrapiKeyResponsibilitiesSection,
-  order: number
-): ResponsibilitySection {
-  return {
-    type: "responsibilityList",
-    order,
-    title: cms.title.trim(),
-    extraTitle: cms.extraTitle?.trim() || null,
-    groups: cms.ResponsibilityGroup.map((group) => ({
-      heading: group.name ? group.name.trim() : null,
-      items: group.ResponsibilityItems.map((item) => item.subtitle),
-    })),
   };
 }
 
@@ -263,6 +113,8 @@ function mapCaseStudyDetailSections(
           return [mapSummary(section as StrapiSummarySection, order)];
         case "page-reusable-sections.service-detail":
           return [mapServiceDetail(section as StrapiServiceDetailSection, order)];
+        case "page-reusable-sections.pd-modernization-capabilities":
+          return [mapCapabilityGrid(section as StrapiPdModernizationCapabilitiesSection, order)];
         case "page-reusable-sections.cta-banner":
           return [
             {

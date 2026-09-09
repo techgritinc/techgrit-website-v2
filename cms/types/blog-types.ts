@@ -41,10 +41,11 @@ export type StrapiBlogPost = {
   id: number;
   title: string;
   subtitle: string;
+  slug: string | null;
   publishDatetime: string | null;
-  ctaLabel: string;
-  ctaLink: string;
-  isFeatured: boolean;
+  ctaLabel: string | null;
+  ctaLink: string | null;
+  isFeatured: boolean | null;
   assets: StrapiMedia[];
   blog_category: StrapiBlogCategory | null;
   author: StrapiBlogAuthor | null;
@@ -57,6 +58,12 @@ export type StrapiBlogSection = {
   blogs: StrapiBlogPost[];
   __component: "home.blog-section";
 };
+
+export type StrapiBlogReadTimeEntry = {
+  slug: string | null;
+  sections: { readTime?: string | null }[] | null;
+};
+
 
 export type StrapiTabItem = {
   id: number;

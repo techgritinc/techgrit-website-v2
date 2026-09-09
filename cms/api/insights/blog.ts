@@ -1,7 +1,7 @@
 import { fetchCms } from "../fetcher";
 import { pickMediaAsset, resolveMediaUrl } from "../../utils/media";
+import { resolveBlogHref } from "../../shared/reusable-sections";
 import type {
-  BlogAccentToken,
   BlogHeroContent,
   BlogPageContent,
   BlogPost,
@@ -13,6 +13,7 @@ import type {
 } from "@/app/insights/blog/_data/types";
 import type {
   StrapiBlogAuthor,
+  StrapiBlogReadTimeEntry,
   StrapiBlogHeroSection,
   StrapiBlogNewsletterSection,
   StrapiBlogPage,
@@ -25,9 +26,7 @@ import type {
 
 const BLOG_ENDPOINT = "/api/pages/by-slug/blog";
 
-// The CMS carries no accent field on a post — accents cycle by grid position,
-// matching the Services precedent of cycling a fixed palette by index.
-const ACCENTS: BlogAccentToken[] = ["blue-light", "orange", "amber", "teal-light", "blue", "yellow", "purple"];
+const BLOG_READ_TIMES_ENDPOINT = "/api/blogs?populate=sections&pagination%5BpageSize%5D=100";
 
 // `successText` is pure client-side copy — the CMS's newsletter component has no such
 // field, so there's nothing to fetch (same precedent as cms/api/case-studies.ts).
@@ -49,14 +48,16 @@ function pickNewsletterSection(sections: StrapiBlogPageSection[]): StrapiBlogNew
   return sections.find((s): s is StrapiBlogNewsletterSection => s.__component === "page-reusable-sections.newsletter");
 }
 
-// The CMS's own `readTime` field is a mistyped datetime, not a display string —
-// the real "N min read" text is embedded in `subtitle` after " · ". Split it back
-// into the excerpt/readTime pair the page components expect.
-function splitExcerptAndReadTime(subtitle: string): { excerpt: string; readTime: string } {
-  const separator = " · ";
-  const index = subtitle.lastIndexOf(separator);
-  if (index === -1) return { excerpt: subtitle, readTime: "" };
-  return { excerpt: subtitle.slice(0, index), readTime: subtitle.slice(index + separator.length) };
+
+async function fetchReadTimes(): Promise<Map<string, string>> {
+  // fetchCms already unwraps Strapi's `{ data }` envelope, so this resolves to the array.
+  const posts = await fetchCms<StrapiBlogReadTimeEntry[]>(BLOG_READ_TIMES_ENDPOINT);
+  const entries = new Map<string, string>();
+  for (const entry of posts ?? []) {
+    const readTime = entry.sections?.find((section) => section.readTime)?.readTime;
+    if (entry.slug && readTime) entries.set(entry.slug, readTime);
+  }
+  return entries;
 }
 
 function initialsFromName(name: string): string {
@@ -104,36 +105,38 @@ function toHero(section: StrapiBlogHeroSection | undefined): BlogHeroContent | u
   };
 }
 
-function toFeaturedPost(post: StrapiBlogPost | undefined): FeaturedPost | undefined {
+function toFeaturedPost(
+  post: StrapiBlogPost | undefined,
+  readTimes: Map<string, string>
+): FeaturedPost | undefined {
   if (!post) return undefined;
-  const { excerpt, readTime } = splitExcerptAndReadTime(post.subtitle);
   return {
     topic: `Featured · ${post.blog_category?.name ?? ""}`,
     title: post.title,
-    excerpt,
+    excerpt: post.subtitle,
     author: toAuthor(post.author),
-    readTime,
-    ctaLabel: post.ctaLabel,
-    href: post.ctaLink,
+    readTime: (post.slug && readTimes.get(post.slug)) || "",
+    ctaLabel: post.ctaLabel ?? "Read more",
+    href: resolveBlogHref(post.ctaLink, post.slug),
     image: toImage(post.assets, ["medium", "small"]),
   };
 }
 
-function toGridPosts(section: StrapiBlogSection | undefined): BlogPost[] {
+function toGridPosts(section: StrapiBlogSection | undefined, readTimes: Map<string, string>): BlogPost[] {
   if (!section) return [];
-  return section.blogs.map((post, index) => {
-    const { excerpt, readTime } = splitExcerptAndReadTime(post.subtitle);
+  return section.blogs.map((post) => {
     const author = toAuthor(post.author);
     return {
-      slug: String(post.id),
+      slug: post.slug,
+      id: String(post.id),
       topic: post.blog_category?.name ?? "",
-      accent: ACCENTS[index % ACCENTS.length],
+      categorySlug: post.blog_category?.slug ?? "",
       title: post.title,
-      excerpt,
+      excerpt: post.subtitle,
       author: { name: author.name, initials: author.initials },
       publishDate: formatPublishDate(post.publishDatetime),
-      readTime,
-      href: post.ctaLink,
+      readTime: (post.slug && readTimes.get(post.slug)) || "",
+      href: resolveBlogHref(post.ctaLink, post.slug),
       image: toImage(post.assets, ["small", "medium", "thumbnail"]),
     };
   });
@@ -141,7 +144,8 @@ function toGridPosts(section: StrapiBlogSection | undefined): BlogPost[] {
 
 function toTopics(section: StrapiTabFiltersSection | undefined): Topic[] {
   if (!section) return [];
-  return section.TabItems.map((item) => ({ label: item.label, value: item.value }));
+  // `isDefault` comes back as `null` (not `false`) on every non-default tab.
+  return section.TabItems.map((item) => ({ label: item.label, value: item.value, isDefault: Boolean(item.isDefault) }));
 }
 
 function toNewsletter(section: StrapiBlogNewsletterSection | undefined): NewsletterPanelContent | undefined {
@@ -167,10 +171,18 @@ function toNewsletter(section: StrapiBlogNewsletterSection | undefined): Newslet
 // forwarded straight to the API's own `?category=` filter — the CMS returns the grid's
 // `blogs[]` already filtered, while `hero`/`tab-filters`/`newsletter` come back
 // untouched, so no client-side filtering of the post list is needed or done here.
+function blogEndpoint(category?: string): string {
+  return category && category !== "all" ? `${BLOG_ENDPOINT}?category=${encodeURIComponent(category)}` : BLOG_ENDPOINT;
+}
+
 export async function getBlogData(category?: string): Promise<BlogPageContent | null> {
-  const endpoint = category && category !== "all" ? `${BLOG_ENDPOINT}?category=${encodeURIComponent(category)}` : BLOG_ENDPOINT;
-  const data = await fetchCms<StrapiBlogPage>(endpoint);
+  let data = await fetchCms<StrapiBlogPage>(blogEndpoint(category));
   if (!data) return null;
+
+  const initialDefault = toTopics(pickTabFiltersSection(data.sections ?? [])).find((t) => t.isDefault)?.value;
+  if (!category && initialDefault && initialDefault !== "all") {
+    data = (await fetchCms<StrapiBlogPage>(blogEndpoint(initialDefault))) ?? data;
+  }
 
   const sections = data.sections ?? [];
   const heroSection = pickHeroSection(sections);
@@ -179,13 +191,19 @@ export async function getBlogData(category?: string): Promise<BlogPageContent | 
   const gridSection = blogSections.find((s) => s !== featuredSection) ?? blogSections[0];
   const tabFiltersSection = pickTabFiltersSection(sections);
   const newsletterSection = pickNewsletterSection(sections);
+  const topics = toTopics(tabFiltersSection);
+  const readTimes = await fetchReadTimes();
 
   return {
     seo: { metaTitle: data.seo?.metaTitle ?? "", metaDescription: data.seo?.metaDescription ?? "" },
     hero: toHero(heroSection),
-    featuredPost: toFeaturedPost(featuredSection?.blogs.find((b) => b.isFeatured)),
-    topics: toTopics(tabFiltersSection),
-    posts: toGridPosts(gridSection),
+    featuredPost: toFeaturedPost(
+      featuredSection?.blogs.find((b) => b.isFeatured),
+      readTimes
+    ),
+    topics,
+    defaultCategory: topics.find((topic) => topic.isDefault)?.value ?? topics[0]?.value ?? "all",
+    posts: toGridPosts(gridSection, readTimes),
     newsletter: toNewsletter(newsletterSection),
   };
 }

@@ -1,9 +1,9 @@
 import type { ResponsibilitySection } from "@/cms/types/case-study-detail-types";
 import { BlocksContent } from "@/components/ui/BlocksContent";
 import { ResultCard } from "@/components/ui/ResultCard";
-import { NarrativeHeading } from "./case-study-narrative";
+import { NarrativeHeading } from "./ArticleNarrative";
 
-export function CaseStudyResponsibilitySection({ section }: { section: ResponsibilitySection }) {
+export function ArticleResponsibilitySection({ section }: { section: ResponsibilitySection }) {
   return (
     <div>
       <NarrativeHeading id={`narrative-${section.order}`}>{section.title}</NarrativeHeading>
