@@ -5,7 +5,7 @@ import { NewsletterPanel } from "@/components/ui/NewsletterPanel";
 import { CaseStudiesHero } from "./_components/case-studies-hero";
 import { FeaturedCaseStudy } from "./_components/featured-case-study";
 import { CaseStudiesFilterSection } from "./_components/case-studies-filter-section";
-import { CaseStudiesFinalCta } from "./_components/case-studies-final-cta";
+import { FinalCtaBanner } from "@/components/ui/FinalCtaBanner";
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getCaseStudiesPageContent();
@@ -56,7 +56,7 @@ export default async function CaseStudiesPage() {
         />
       ) : null}
       {finalCta ? (
-        <CaseStudiesFinalCta
+        <FinalCtaBanner
           title={finalCta.title}
           titleHighlight={finalCta.titleHighlight}
           description={finalCta.description}

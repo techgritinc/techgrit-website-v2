@@ -1,23 +1,35 @@
-/** Orange-gridded data table for CMS-supplied `columns` + `rows` content.
- *
- * Presentational only: it takes an already-reconciled header row + cell matrix, so
- * lining CMS row keys up with their column labels stays in the mapper (see
- * normalizeTable() in cms/api/case-study-detail.ts) rather than leaking into markup.
- *
- * Header cells sit at the --text-h4 floor (18px) rather than the full clamp, which would
- * tower over the 15.5px body copy the table sits among; cell text matches the surrounding
- * narrative body size exactly.
- */
+import type { TableColumnTone } from "@/cms/types/case-study-detail-types";
+
+const TONE_CLASS: Record<TableColumnTone, string> = {
+  muted: "text-text-soft",
+  accent: "text-teal-light",
+  positive: "text-green",
+};
+
+function columnTones(
+  headers: string[],
+  cmsTones: (TableColumnTone | null)[] | undefined,
+): (string | null)[] {
+  return headers.map((_, index) => {
+    const tone = cmsTones?.[index];
+    return tone ? TONE_CLASS[tone] : null;
+  });
+}
+
 export function DataTable({
   headers,
   rows,
   caption,
+  columnTones: cmsTones,
 }: {
   headers: string[];
   rows: string[][];
   caption?: string;
+  columnTones?: (TableColumnTone | null)[];
 }) {
   if (!headers.length || !rows.length) return null;
+
+  const tones = columnTones(headers, cmsTones);
 
   return (
     // The table keeps a min-width so three columns of prose don't crush on small screens —
@@ -59,9 +71,11 @@ export function DataTable({
                 <td
                   key={cellIndex}
                   className={[
-                    // Every cell is body copy at the same tone — only the header row is
-                    // white; a bolded-white first column read as a second header.
-                    "px-[18px] py-[14px] align-top text-[15.5px] leading-[1.7] text-secondary",
+                    // Body copy at one tone by default — only the header row is white; a
+                    // bolded-white first column read as a second header. A comparison
+                    // table's own columns override that tone (see columnTones).
+                    "px-[18px] py-[14px] align-top text-[15.5px] leading-[1.7]",
+                    tones[cellIndex] ?? "text-secondary",
                     cellIndex > 0 ? "border-l border-border-orange-30" : "",
                   ]
                     .filter(Boolean)

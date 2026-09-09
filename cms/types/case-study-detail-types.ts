@@ -37,7 +37,7 @@ export type StrapiContentSectionFeature = {
   // A table is modeled as parallel `columns` (header labels) + `rows` (one object per row).
   // Row object keys do NOT reliably match the column labels — see normalizeTable() in
   // cms/api/case-study-detail.ts for how the two are lined up.
-  columns: { label: string }[] | null;
+  columns: { label: string; tone?: string | null }[] | null;
   rows: Record<string, string>[] | null;
   ctaLabel: string | null;
   ctaLink: string | null;
@@ -83,6 +83,25 @@ export type StrapiServiceDetailSection = {
   ctaLink: string | null;
   image: StrapiMedia[];
   approachSteps: StrapiApproachStep[];
+};
+
+export type StrapiCapabilityCard = {
+  id: number;
+  categoryLabel: string | null;
+  title: string;
+  subtitle: string | null;
+  note: string | null;
+  image: StrapiMedia[];
+  structureInfo: string | null;
+  features: StrapiContentSectionFeature[];
+};
+
+export type StrapiPdModernizationCapabilitiesSection = {
+  __component: "page-reusable-sections.pd-modernization-capabilities";
+  title: string;
+  subtitle: string | null;
+  badgeLabel: string | null;
+  capabilityCard: StrapiCapabilityCard[];
 };
 
 // The same component the Job Detail page renders (job-detailed-view.key-responsibilities),
@@ -136,6 +155,7 @@ export type StrapiCaseStudyDetailSection =
   | StrapiKeyResponsibilitiesSection
   | StrapiSummarySection
   | StrapiServiceDetailSection
+  | StrapiPdModernizationCapabilitiesSection
   | StrapiTeamCompositionSection
   | StrapiCtaBannerSection
   | StrapiUnmappedSection;
@@ -197,8 +217,12 @@ export interface StatisticsSection {
 
 // A table flattened to a header row + cell matrix, so the DataTable component stays
 // presentational and the column/row-key reconciliation lives in the mapper.
+export type TableColumnTone = "muted" | "accent" | "positive";
+
 export interface CaseStudyTable {
   headers: string[];
+  // Parallel to `headers`; null where the CMS supplied no tone for that column.
+  tones: (TableColumnTone | null)[];
   rows: string[][];
 }
 
@@ -267,6 +291,27 @@ export interface TechStackSection {
   cards: TechStackCard[];
 }
 
+export interface CapabilityCardBullet {
+  order: number;
+  text: string;
+}
+
+export interface CapabilityCard {
+  order: number;
+  title: string;
+  subtitle: string | null;
+  note: string | null;
+  bullets: CapabilityCardBullet[];
+}
+
+export interface CapabilityGridSection {
+  type: "capabilityGrid";
+  order: number;
+  title: string;
+  subtitle: string | null;
+  cards: CapabilityCard[];
+}
+
 export interface TeamMemberRole {
   order: number;
   role: string;
@@ -290,6 +335,7 @@ export type CaseStudyDetailSectionEntry =
   | NarrativeBlockEntry
   | ResponsibilitySection
   | TechStackSection
+  | CapabilityGridSection
   | FinalCtaSection
   | undefined;
 

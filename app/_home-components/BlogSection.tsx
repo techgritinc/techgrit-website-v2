@@ -1,5 +1,6 @@
 import Button from "@/components/ui/Button";
 import { GlassCard, GlassCardDescription, GlassCardTitle } from "@/components/ui/GlassCard";
+import { CardLink } from "@/components/ui/CardLink";
 import MediaSlot from "@/components/ui/MediaSlot";
 import type { BlogSectionData } from "@/cms/api/home/blog-section";
 
@@ -33,7 +34,7 @@ export default function BlogSection({ data }: { data: BlogSectionData }) {
           {posts.map((post, index) => {
             const variant = VARIANTS[index % VARIANTS.length];
             return (
-              <a key={post.id} href={post.ctaLink}>
+              <CardLink key={post.id} href={post.ctaLink}>
                 <GlassCard
                   variant="blogTeaser"
                   hoverBorderColor=""
@@ -53,7 +54,7 @@ export default function BlogSection({ data }: { data: BlogSectionData }) {
                     </div>
                   </div>
                 </GlassCard>
-              </a>
+              </CardLink>
             );
           })}
         </div>

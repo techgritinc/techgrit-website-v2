@@ -5,7 +5,7 @@ import Button from "@/components/ui/Button";
 // The CMS-driven list page passes the real cta-banner section; the still-static detail
 // page (app/insights/case-studies/[slug]/page.tsx) passes its own literal placeholder copy until
 // that page is migrated too. Either way, this component holds no content of its own.
-export function CaseStudiesFinalCta({
+export function FinalCtaBanner({
   title,
   titleHighlight,
   description,

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { GlassCard, GlassCardIcon, GlassCardTitle, GlassCardDescription } from "@/components/ui/GlassCard";
 import type { TechStackCard as TechStackCardData, TechStackSection } from "@/cms/types/case-study-detail-types";
-import { NarrativeHeading } from "./case-study-narrative";
+import { NarrativeHeading } from "./ArticleNarrative";
 
 
 function TechStackBadge({ card }: { card: TechStackCardData }) {
@@ -26,7 +26,7 @@ function TechStackBadge({ card }: { card: TechStackCardData }) {
   );
 }
 
-export function CaseStudyTechStack({ section }: { section: TechStackSection }) {
+export function ArticleTechStack({ section }: { section: TechStackSection }) {
   return (
     <div>
       <NarrativeHeading id={`narrative-${section.order}`}>{section.title}</NarrativeHeading>
