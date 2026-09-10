@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchCms } from "./fetcher";
 import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
 import type {
@@ -125,7 +126,12 @@ function toLegalLink(link: StrapiLegalLink): FooterLegalLink | null {
 // no rebuild, and the browser never sees a loading state for this data. No fallback
 // data: if the CMS is unreachable or has no logo configured, this returns null and
 // the Footer renders nothing rather than substituting hardcoded content.
-export async function getFooterData(): Promise<FooterData | null> {
+//
+// Wrapped in React's cache() (same reasoning as getConstructionPageContent) — the
+// Footer is present on every route via the root layout, so memoizing this per-request
+// means a page that also happens to read footer data elsewhere in its render pass
+// doesn't trigger a second identical CMS request.
+export const getFooterData = cache(async (): Promise<FooterData | null> => {
   const data = await fetchCms<StrapiFooterData>(FOOTER_ENDPOINT);
   if (!data || !data.logo) return null;
 
@@ -140,5 +146,4 @@ export async function getFooterData(): Promise<FooterData | null> {
     followUsLabel: data.followUsLabel,
     copyrights: data.copyrights,
   };
-}
- 
+});

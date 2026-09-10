@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
+import AutoplayVideo from "@/components/ui/AutoplayVideo";
 import { CheckIcon, ChevronRightIcon, ClockIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
 import type { ReviewsData } from "@/cms/api/home/reviews";
 
@@ -10,6 +11,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragState = useRef({ isDown: false, startX: 0, startScrollLeft: 0, moved: false });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [modalVideoContainer, setModalVideoContainer] = useState<HTMLDivElement | null>(null);
 
   function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     const track = trackRef.current;
@@ -106,15 +108,11 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   style={{ scrollSnapAlign: "start" }}
                 >
                   {testimonial.videoUrl ? (
-                    <video
+                    <AutoplayVideo
                       src={testimonial.videoUrl}
-                      aria-hidden="true"
                       className="absolute inset-0 h-full w-full object-cover"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      preload="auto"
+                      previewClassName="h-full w-full"
+                      portalTarget={openIndex === index ? modalVideoContainer : undefined}
                     />
                   ) : (
                     <>
@@ -261,7 +259,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
             </button>
             <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
               {current.videoUrl ? (
-                <video src={current.videoUrl} controls autoPlay className="h-full w-full" />
+                <div ref={setModalVideoContainer} className="h-full w-full" />
               ) : (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[image:var(--gradient-testimonial-placeholder)]">
                   <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white-96 shadow-card">
