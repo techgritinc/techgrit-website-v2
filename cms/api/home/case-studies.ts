@@ -1,4 +1,5 @@
 import type { AnySection } from "./shared";
+import { resolveCaseStudyHref } from "../../shared/reusable-sections";
 
 export type StrapiCaseStudyCategory = { id: number; name: string };
 
@@ -59,7 +60,7 @@ export function toCaseStudies(section: StrapiCaseStudiesSection): CaseStudiesDat
     title: study.title,
     description: study.subtitle,
     accentColor: CASE_STUDY_ACCENTS[index % CASE_STUDY_ACCENTS.length],
-    href: study.ctaLink,
+    href: resolveCaseStudyHref(study.ctaLink),
   }));
 
   return {

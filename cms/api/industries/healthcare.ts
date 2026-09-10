@@ -34,14 +34,19 @@ const HEALTHCARE_ENDPOINT =
   "&populate[sections][on][industries-construction.pd-health-care-system][populate][categories][populate]=features" +
   "&populate[sections][on][page-reusable-sections.cta-banner][populate]=true";
 
-// The 3 identical "service-detail" entries are disambiguated by `serviceLabel`, NOT `variant` —
-// two of them ("AI Across the Healthcare Product Lifecycle" and "Our HealthTech Engineering
-// Services") share the same variant, "PD-modernizationLifecycle" (research.md §2). "Featured
-// Capabilities" is no longer one of these — it moved to its own `proven-impact` component.
-const SERVICE_LABELS = {
-  whatWeBuild: "What We Build",
-  productLifecycle: "Healthcare Product Lifecycle",
-  engineeringServices: "HealthTech Engineering Services",
+// The 3 identical "service-detail" entries are disambiguated by the CMS's own `variant`
+// field — same pattern as cms/api/industries/construction.ts. They used to collide
+// ("AI Across the Healthcare Product Lifecycle" and "Our HealthTech Engineering Services"
+// both carried "PD-modernizationLifecycle"), which forced matching on the editor-facing
+// `serviceLabel` instead — meaning renaming a section's label in the CMS silently deleted
+// the whole section. Fixed by giving each section a distinct `variant` in the CMS
+// (2026-09-10); `serviceLabel` is now purely display content (the eyebrow text), safe to
+// rename freely. "Featured Capabilities" is no longer one of these — it moved to its own
+// `proven-impact` component.
+const SERVICE_VARIANTS = {
+  whatWeBuild: "challanges",
+  productLifecycle: "solutions",
+  engineeringServices: "advantage",
 } as const;
 
 // --- Per-section mappers: each converts one Strapi shape into its presentation shape. ---
@@ -101,12 +106,11 @@ function mapHealthcareSections(
           } satisfies FinalCtaSection;
         case "page-reusable-sections.service-detail": {
           const detail = section as StrapiServiceDetailSection;
-          if (detail.serviceLabel === SERVICE_LABELS.whatWeBuild) return mapWhatWeBuild(detail, order);
-          if (detail.serviceLabel === SERVICE_LABELS.productLifecycle)
-            return mapProductLifecycle(detail, order);
-          if (detail.serviceLabel === SERVICE_LABELS.engineeringServices)
+          if (detail.variant === SERVICE_VARIANTS.whatWeBuild) return mapWhatWeBuild(detail, order);
+          if (detail.variant === SERVICE_VARIANTS.productLifecycle) return mapProductLifecycle(detail, order);
+          if (detail.variant === SERVICE_VARIANTS.engineeringServices)
             return mapEngineeringServices(detail, order);
-          return undefined; // unrecognized serviceLabel — skip rather than guess
+          return undefined; // unrecognized variant — skip rather than guess
         }
         default:
           return undefined;
