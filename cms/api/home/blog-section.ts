@@ -1,5 +1,6 @@
 import type { AnySection, HomeIcon, StrapiMedia } from "./shared";
 import { toFeatureImage } from "./shared";
+import { resolveBlogHref } from "../../shared/reusable-sections";
 
 export type StrapiBlogCategory = { id: number; name: string };
 
@@ -7,6 +8,7 @@ export type StrapiBlogPost = {
   id: number;
   title: string;
   subtitle: string | null;
+  slug: string | null;
   ctaLabel: string | null;
   ctaLink: string | null;
   assets: StrapiMedia[];
@@ -29,7 +31,7 @@ export type BlogTeaserPost = {
   title: string;
   excerpt: string;
   ctaLabel: string;
-  ctaLink: string;
+  ctaLink: string | null;
   image: HomeIcon | null;
 };
 
@@ -52,7 +54,7 @@ export function toBlogSection(section: StrapiBlogSection): BlogSectionData {
     title: post.title,
     excerpt: post.subtitle ?? "",
     ctaLabel: post.ctaLabel ?? "",
-    ctaLink: post.ctaLink ?? "",
+    ctaLink: resolveBlogHref(post.ctaLink, post.slug),
     image: toFeatureImage(post.assets),
   }));
 

@@ -30,16 +30,18 @@ const FINTECH_ENDPOINT =
   "&populate[sections][on][industries-construction.proven-impact][populate]=caseStudyCards" +
   "&populate[sections][on][page-reusable-sections.cta-banner][populate]=true";
 
-// The 3 "service-detail" entries are disambiguated by `serviceLabel`, NOT `variant` — the
-// product-lifecycle and engineering-services entries share the same variant,
-// "PD-modernizationLifecycle" (mirrors cms/api/healthcare.ts, research.md §2). The raw
-// `serviceLabel` value below is a literal CMS copy-paste artifact from Healthcare — it's only
-// used here as a match key, never rendered (the displayed titles are corrected via
-// titleOverride, see research.md §4).
-const SERVICE_LABELS = {
-  whatWeBuild: "What We Build",
-  productLifecycle: "Lifecycle",
-  engineeringServices: "HealthTech Engineering Services",
+// The 3 "service-detail" entries are disambiguated by the CMS's own `variant` field — same
+// pattern as cms/api/industries/construction.ts and cms/api/industries/healthcare.ts. Matching
+// on `serviceLabel` (this page's own copy-paste artifact from Healthcare — one entry's
+// `serviceLabel` was literally "HealthTech Engineering Services" on the FinTech page) meant
+// renaming that label in the CMS would silently delete the whole section, the same bug fixed
+// on Healthcare. `variant` was already distinct per entry here (challanges/solutions/advantage),
+// so no CMS change was needed to make this switch. The displayed titles are still corrected via
+// titleOverride below — that's unrelated to matching and stays as-is.
+const SERVICE_VARIANTS = {
+  whatWeBuild: "challanges",
+  productLifecycle: "solutions",
+  engineeringServices: "advantage",
 } as const;
 
 const TITLE_OVERRIDES = {
@@ -91,12 +93,12 @@ function mapFintechSections(parsed: ReturnType<typeof parseFintechSections>): Pa
           } satisfies FinalCtaSection;
         case "page-reusable-sections.service-detail": {
           const detail = section as StrapiServiceDetailSection;
-          if (detail.serviceLabel === SERVICE_LABELS.whatWeBuild) return mapWhatWeBuild(detail, order);
-          if (detail.serviceLabel === SERVICE_LABELS.productLifecycle)
+          if (detail.variant === SERVICE_VARIANTS.whatWeBuild) return mapWhatWeBuild(detail, order);
+          if (detail.variant === SERVICE_VARIANTS.productLifecycle)
             return mapProductLifecycle(detail, order, TITLE_OVERRIDES.productLifecycle);
-          if (detail.serviceLabel === SERVICE_LABELS.engineeringServices)
+          if (detail.variant === SERVICE_VARIANTS.engineeringServices)
             return mapEngineeringServices(detail, order, TITLE_OVERRIDES.engineeringServices);
-          return undefined; // unrecognized serviceLabel — skip rather than guess
+          return undefined; // unrecognized variant — skip rather than guess
         }
         default:
           return undefined;

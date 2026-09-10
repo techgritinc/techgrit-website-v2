@@ -30,6 +30,42 @@ export type StrapiSeo = {
 
 export type StrapiUnmappedSection = { __component: string };
 
+export type StrapiBlocksText = {
+  type: "text";
+  text: string;
+  bold?: boolean;
+};
+
+// Inline link inside a paragraph's or list-item's children, e.g. a "Contact TechGrit"
+// anchor mid-sentence. `url` is whatever the CMS editor entered (a site-relative
+// "/contact-us/" or an absolute URL).
+export type StrapiBlocksLink = {
+  type: "link";
+  url: string;
+  children: StrapiBlocksText[];
+};
+
+export type StrapiBlocksInline = StrapiBlocksText | StrapiBlocksLink;
+
+export type StrapiBlocksListItem = {
+  type: "list-item";
+  children: StrapiBlocksInline[];
+};
+
+export type StrapiBlocksList = {
+  type: "list";
+  format: "ordered" | "unordered";
+  children: StrapiBlocksListItem[];
+};
+
+export type StrapiBlocksParagraph = {
+  type: "paragraph";
+  children: StrapiBlocksInline[];
+};
+
+export type StrapiBlocksNode = StrapiBlocksList | StrapiBlocksParagraph;
+export type StrapiBlocksContent = StrapiBlocksNode[];
+
 export interface PageSeo {
   metaTitle: string;
   metaDescription: string;

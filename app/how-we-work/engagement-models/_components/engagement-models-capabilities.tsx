@@ -41,13 +41,11 @@ export function EngagementModelsCapabilities({ section }: { section: Capabilitie
                     </li>
                   ))}
                 </ul>
+                <div className="flex-1" />
                 {card.outcomeLabel && card.outcomeText && (
-                  <div className="mt-3.5 flex items-center gap-2 border-t border-border-8 pt-3">
-                    <span className="text-[11px] font-extrabold tracking-[0.12em] text-orange">
-                      {card.outcomeLabel}
-                    </span>
-                    <span className="text-[13px] leading-[normal] tracking-[normal] text-60">{card.outcomeText}</span>
-                  </div>
+                  <p className="mt-4 line-clamp-2 min-h-[40px] border-t border-border-8 pt-3 text-[13px] leading-[normal] tracking-[normal] text-60">
+                    <span className="font-bold text-orange">{card.outcomeLabel}</span> {card.outcomeText}
+                  </p>
                 )}
               </GlassCard>
             ))}

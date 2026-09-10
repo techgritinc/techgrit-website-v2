@@ -22,20 +22,20 @@ export default async function CareersPage() {
     <>
       <CareersHero content={content.hero} />
       <StatsStrip stats={content.stats} />
-      <WhyJoinSection heading={content.whyJoin.heading} benefits={content.benefits} />
-      <OpenRolesSection
-        filters={content.filters}
-        roles={content.roles}
-        applicationForm={content.applicationForm}
+      <WhyJoinSection
+        heading={content.whyJoin.heading}
+        subtitle={content.whyJoin.subtitle}
+        benefits={content.benefits}
       />
-      {/* <LifeGallery
+      <OpenRolesSection content={content.openRoles} filters={content.filters} roles={content.roles} />
+      <LifeGallery
         id="life"
         heading={content.lifeAtTechGrit.heading}
         description={content.lifeAtTechGrit.description}
         eyebrow={content.lifeAtTechGrit.eyebrow}
         images={content.lifeAtTechGrit.images}
-      /> */}
-      <CareersCta content={content.cta} applicationForm={content.applicationForm} />
+      />
+      <CareersCta content={content.cta} />
     </>
   );
 }

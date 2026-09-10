@@ -9,7 +9,6 @@ import type {
   FooterLinkGroup,
   FooterLogo,
   FooterSocialLink,
-  FooterSocialPlatform,
   StrapiFooterContact,
   StrapiFooterData,
   StrapiFooterMenuItem,
@@ -38,16 +37,6 @@ function toFooterIcon(icon: StrapiMedia | null): FooterIcon | null {
   return { url: resolveMediaUrl(icon.url), alt: icon.alternativeText ?? "" };
 }
 
-// The CMS has no explicit "platform" field on a social link — the icon to render is
-// derived from the link's own domain, matching the reference's fixed
-// linkedin/youtube/spotify icon set. Falls back to null (no matching icon) for
-// anything else.
-function detectPlatform(url: string): FooterSocialPlatform | null {
-  if (url.includes("linkedin.com")) return "linkedin";
-  if (url.includes("youtube.com")) return "youtube";
-  if (url.includes("spotify.com")) return "spotify";
-  return null;
-}
 
 // TMS-86 / TMS-86-software-product-engineering / TMS-86-data-and-ai-engineering /
 // TMS-86-platform-engineering / TMS-86-managed-services / TMS-86-ai-strategy-and-
@@ -101,17 +90,35 @@ function toContactDetail(contact: StrapiFooterContact): FooterContactDetail {
 
 function toSocialLink(social: StrapiSocialLink): FooterSocialLink {
   return {
-    platform: detectPlatform(social.url),
     href: social.url,
     label: social.title,
     icon: toFooterIcon(social.icon),
   };
 }
 
-function toLegalLink(link: StrapiLegalLink): FooterLegalLink {
-  return link.document
-    ? { label: link.title, href: resolveMediaUrl(link.document.url), isDocument: true }
-    : { label: link.title, href: link.url, isDocument: false };
+// "Cookie Preferences" is a deliberate exception: it has no document/URL in the CMS
+// by design, because it isn't a real page — Footer.tsx matches it by label and swaps
+// in a button that reopens the Advanced Cookie Settings modal instead of a link (see
+// Footer.tsx / CookiePreferencesLink.tsx). It must survive this mapping with a null
+// href so that label match downstream still sees it in `legalLinks`.
+//
+// Any other legal link with neither a document nor a URL has nowhere to point.
+// Rendering it would hand next/link a null `href`, which throws inside Next's own
+// URL formatter ("Cannot destructure property 'auth' of 'e' as it is null") and —
+// because the Footer sits in the root layout — 500s every route on the site. Drop
+// such links instead (returns null, filtered out by the caller), mirroring
+// header.ts's own "never trust a CMS URL field to be non-null" rule.
+function toLegalLink(link: StrapiLegalLink): FooterLegalLink | null {
+  if (link.title === "Cookie Preferences") {
+    return { label: link.title, href: null, isDocument: false };
+  }
+  if (link.document?.url) {
+    return { label: link.title, href: resolveMediaUrl(link.document.url), isDocument: true };
+  }
+  if (link.url) {
+    return { label: link.title, href: link.url, isDocument: false };
+  }
+  return null;
 }
 
 // Called directly from the Footer Server Component (await getFooterData()) — runs
@@ -135,7 +142,7 @@ export const getFooterData = cache(async (): Promise<FooterData | null> => {
     linkGroups: data.footerMenuItems.map(toLinkGroup),
     contactDetails: data.footerContact.map(toContactDetail),
     socialLinks: data.socialLinks.map(toSocialLink),
-    legalLinks: data.legalLinks.map(toLegalLink),
+    legalLinks: data.legalLinks.map(toLegalLink).filter((link): link is FooterLegalLink => link !== null),
     followUsLabel: data.followUsLabel,
     copyrights: data.copyrights,
   };

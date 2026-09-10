@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { CaseStudyCard } from "@/cms/types/case-studies-types";
-import { ACCENT_VAR, accentMix, categoryAccent } from "../_data/accent";
+import { ACCENT_VAR, accentMix, categoryAccent } from "@/lib/accent";
 import { RevealOnScroll } from "@/components/ui/reveal-on-scroll";
 import { GlassCard } from "@/components/ui/GlassCard";
 import MediaSlot from "@/components/ui/MediaSlot";

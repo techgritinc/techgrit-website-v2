@@ -34,20 +34,21 @@ export interface FeaturedPost {
   author: PostAuthor;
   readTime: string;
   ctaLabel: string;
-  href: string;
+  href: string | null;
   image: PostImage | null;
 }
 
 export interface BlogPost {
-  slug: string;
+  slug: string | null;
+  id: string;
   topic: string;
-  accent: BlogAccentToken;
+  categorySlug: string;
   title: string;
   excerpt: string;
   author: Pick<PostAuthor, "name" | "initials">;
   publishDate: string;
   readTime: string;
-  href: string;
+  href: string | null;
   image: PostImage | null;
 }
 
@@ -68,6 +69,7 @@ export interface PageSeo {
 export interface Topic {
   label: string;
   value: string; // matches the CMS category slug, used to build the `?category=` filter link
+  isDefault: boolean;
 }
 
 export interface BlogPageContent {
@@ -75,6 +77,7 @@ export interface BlogPageContent {
   hero?: BlogHeroContent;
   featuredPost?: FeaturedPost;
   topics: Topic[];
+  defaultCategory: string;
   posts: BlogPost[];
   newsletter?: NewsletterPanelContent;
 }

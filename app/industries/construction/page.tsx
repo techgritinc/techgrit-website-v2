@@ -8,6 +8,7 @@ import { ConstructionSolutions } from "./_components/construction-solutions";
 import { ConstructionLifecycleDiagram } from "./_components/construction-lifecycle-diagram";
 import { ConstructionAdvantage } from "./_components/construction-advantage";
 import { ConstructionImpact } from "./_components/construction-impact";
+import { ConnectedSystems } from "@/components/ui/ConnectedSystems";
 import { FinalCta } from "@/components/ui/final-cta";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -40,6 +41,8 @@ export default async function ConstructionPage() {
             return <ConstructionAdvantage key={section.order} section={section} />;
           case "impact":
             return <ConstructionImpact key={section.order} section={section} />;
+          case "connectedSystems":
+            return <ConnectedSystems key={section.order} section={section} />;
           case "finalCta":
             return (
               <FinalCta

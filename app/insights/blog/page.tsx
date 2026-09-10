@@ -29,7 +29,12 @@ export default async function BlogPage({
     <main>
       {content.hero ? <BlogHero content={content.hero} /> : null}
       {content.featuredPost ? <FeaturedPost post={content.featuredPost} /> : null}
-      <BlogFilterableSection topics={content.topics} posts={content.posts} activeCategory={category ?? "all"} />
+      <BlogFilterableSection
+        topics={content.topics}
+        posts={content.posts}
+        activeCategory={category ?? content.defaultCategory}
+        defaultCategory={content.defaultCategory}
+      />
       {content.newsletter ? <NewsletterPanel content={content.newsletter} category="blog" /> : null}
     </main>
   );

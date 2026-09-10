@@ -1,14 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getFooterData } from "@/cms/api/footer";
-import { LinkedInIcon, SpotifyIcon, YouTubeIcon } from "@/components/ui/icons";
 import Button from "@/components/ui/Button";
+import CookiePreferencesLink from "./CookiePreferencesLink";
 
-const SOCIAL_ICONS = {
-  linkedin: LinkedInIcon,
-  youtube: YouTubeIcon,
-  spotify: SpotifyIcon,
-} as const;
+const LEGAL_LINK_CLASSNAME =
+  "text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white";
 
 export default async function Footer() {
   const data = await getFooterData();
@@ -116,9 +113,7 @@ export default async function Footer() {
                 {followUsLabel}
               </span>
               <div className="flex items-center gap-[10px]">
-                {socialLinks.map((social) => {
-                  const Icon = social.platform ? SOCIAL_ICONS[social.platform] : null;
-                  return (
+                {socialLinks.map((social) =>(
                     <a
                       key={social.href}
                       href={social.href}
@@ -129,14 +124,11 @@ export default async function Footer() {
                       data-lift-hover
                       className="inline-flex h-[36px] w-[36px] items-center justify-center rounded-[10px] border border-white/[0.12] bg-white/[0.04] text-secondary transition-all duration-200 ease-[ease] hover:-translate-y-[2px] hover:border-orange/[0.55] hover:bg-orange/[0.15] hover:text-white"
                     >
-                      {social.icon ? (
+                      {social.icon && (
                         <Image src={social.icon.url} alt={social.icon.alt} width={17} height={17} />
-                      ) : (
-                        Icon && <Icon />
                       )}
                     </a>
-                  );
-                })}
+                  ))}
               </div>
             </div>
           </div>
@@ -158,24 +150,45 @@ export default async function Footer() {
         >
           <div className="flex flex-wrap items-center justify-center gap-[22px]">
             <span className="text-[12.5px] text-40">{copyrights}</span>
-            {legalLinks.map((legal) =>
-              legal.isDocument ? (
+            {legalLinks.map((legal) => {
+              // "Cookie Preferences" isn't a real page — it reopens the Advanced Cookie
+              // Settings modal, so it's matched by label rather than trusting the CMS's
+              // own `url` for this one entry (see CookiePreferencesLink.tsx).
+              if (legal.label === "Cookie Preferences") {
+                return (
+                  <CookiePreferencesLink
+                    key="cookie-preferences"
+                    label={legal.label}
+                    className={LEGAL_LINK_CLASSNAME}
+                  />
+                );
+              }
+
+              if (!legal.href) {
+                return (
+                  <span key={legal.label} className="text-[12.5px] text-dim cursor-default" aria-disabled="true">
+                    {legal.label}
+                  </span>
+                );
+              }
+
+              return legal.isDocument ? (
                 <a
-                  key={legal.href}
+                  key={legal.label}
                   href={legal.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   download
-                  className="text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white"
+                  className={LEGAL_LINK_CLASSNAME}
                 >
                   {legal.label}
                 </a>
               ) : (
-                <Link key={legal.href} href={legal.href} className="text-[12.5px] text-dim transition-colors duration-200 ease-[ease] hover:text-white">
+                <Link key={legal.label} href={legal.href} className={LEGAL_LINK_CLASSNAME}>
                   {legal.label}
                 </Link>
-              )
-            )}
+              );
+            })}
           </div>
         </div>
       </div>

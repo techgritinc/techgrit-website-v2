@@ -100,19 +100,21 @@ export function Hero({
         )}
         <div className="grid grid-cols-1 items-center gap-14 min-[921px]:grid-cols-[1.15fr_0.85fr]">
           <div>
-            <div
-              data-rise
-              className="mb-[24px] inline-flex items-center gap-[10px] rounded-[40px] border border-[rgba(232,119,34,0.35)] bg-[rgba(232,119,34,0.10)] px-[14px] py-[7px] min-h-[30px]"
-              style={{ animationDelay: ".12s" }}
-            >
-              <span
-                className="h-[7px] w-[7px] shrink-0 rounded-[50%] bg-[#E87722]"
-                style={{ boxShadow: "0 0 12px #E87722" }}
-              />
-              <span className="text-[12px] leading-[normal] font-[800] uppercase tracking-[0.14em] text-[#fdba74]">
-                {eyebrow}
-              </span>
-            </div>
+            {eyebrow?.trim() && (
+              <div
+                data-rise
+                className="mb-[24px] inline-flex items-center gap-[10px] rounded-[40px] border border-[rgba(232,119,34,0.35)] bg-[rgba(232,119,34,0.10)] px-[14px] py-[7px] min-h-[30px]"
+                style={{ animationDelay: ".12s" }}
+              >
+                <span
+                  className="h-[7px] w-[7px] shrink-0 rounded-[50%] bg-[#E87722]"
+                  style={{ boxShadow: "0 0 12px #E87722" }}
+                />
+                <span className="text-[12px] leading-[normal] font-[800] uppercase tracking-[0.14em] text-[#fdba74]">
+                  {eyebrow}
+                </span>
+              </div>
+            )}
             <h1
               data-rise
               className="font-bold text-white text-[44px] leading-[1.02] tracking-[-0.04em] min-[921px]:text-[56px]"

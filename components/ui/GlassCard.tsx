@@ -39,7 +39,7 @@ const CARD_VARIANTS: Record<GlassCardVariant, string> = {
   webinarUpcoming: "rounded-3xl border-[var(--color-border-amber-30)] bg-[image:var(--gradient-webinar-upcoming)] px-9 py-[38px]",
   webinarReleased: "rounded-2xl border-border-image bg-glass-4 overflow-hidden hover:-translate-y-[5px]",
   leaderProfile: "flex flex-col items-center rounded-3xl border-border bg-glass-4 px-8 py-10 text-center hover:-translate-y-[5px]",
-  serviceCapability: "rounded-xl border-border-image bg-glass-4 p-tg-11 hover:-translate-y-tg-1",
+  serviceCapability: "flex flex-col rounded-xl border-border-image bg-glass-4 p-tg-11 hover:-translate-y-tg-1",
 };
 
 export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(function GlassCard(
@@ -118,7 +118,7 @@ const TITLE_VARIANTS: Record<GlassCardVariant, string> = {
   blogTeaser: "mt-tg-4 line-clamp-2 min-h-[50.16px] text-[19px] font-bold text-white tracking-[normal] leading-[1.32]",
   constructionChallenge: "text-15-5 font-bold text-primary leading-[1.3]",
   constructionSolution: "text-[19px]",
-  constructionImpact: "text-[18.5px]",
+  constructionImpact: "line-clamp-2 text-[18.5px]",
   webinarUpcoming: "text-[clamp(22px,2.6vw,30px)] font-bold text-white leading-[1.15] tracking-[-0.02em]",
   webinarReleased: "text-[18.5px] font-bold text-white leading-[1.3] tracking-normal",
   leaderProfile: "text-[22px] font-bold text-white leading-[normal] tracking-[var(--ls-normal)]",
@@ -151,7 +151,7 @@ const DESC_VARIANTS: Record<GlassCardVariant, string> = {
   blogTeaser: "mt-tg-3 line-clamp-2 min-h-[46.4px] text-[14.5px] leading-[1.6] text-muted",
   constructionChallenge: "mt-2 text-sm text-faint leading-[1.6]",
   constructionSolution: "mt-[10px] text-[14.5px] text-muted leading-[1.6]",
-  constructionImpact: "mt-[10px] text-[14.5px] text-muted leading-[1.6]",
+  constructionImpact: "mt-[10px] line-clamp-2 text-[14.5px] text-muted leading-[1.6]",
   webinarUpcoming: "mt-3 text-15-5 leading-[1.6] text-[var(--color-text-66)]",
   webinarReleased: "mt-2.5 text-[14.5px] leading-[1.6] text-muted",
   leaderProfile: "mt-3.5 text-14 leading-[1.65] tracking-normal text-[var(--color-text-66)]",
