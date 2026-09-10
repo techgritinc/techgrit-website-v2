@@ -17,6 +17,7 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
                 key={caseStudy.order}
                 variant="constructionImpact"
                 hoverBorderColor=""
+                className="flex h-full flex-col"
               >
                 <div
                   className="leading-[normal] text-[36px] sm:text-[40px]"
@@ -40,13 +41,19 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
                 >
                   {caseStudy.label}
                 </div>
-                <GlassCardTitle variant="constructionImpact" className="mt-[14px] tracking-[normal] text-[16px] md:text-[18.5px]">
+                <GlassCardTitle
+                  variant="constructionImpact"
+                  title={caseStudy.title}
+                  className="mt-[14px] tracking-[normal] text-[16px] md:text-[18.5px]"
+                >
                   {caseStudy.title}
                 </GlassCardTitle>
-                <GlassCardDescription variant="constructionImpact">{caseStudy.description}</GlassCardDescription>
+                <GlassCardDescription variant="constructionImpact" title={caseStudy.description}>
+                  {caseStudy.description}
+                </GlassCardDescription>
                 <Link
                   href={caseStudy.link}
-                  className="mt-[18px] inline-flex items-center"
+                  className="mt-auto inline-flex items-center pt-[18px]"
                   style={{ gap: 7, fontSize: "var(--text-xs)", fontWeight: "var(--fw-bold)", color: "var(--color-amber-light)" }}
                 >
                   {caseStudy.linkLabel} <span aria-hidden="true">&rarr;</span>

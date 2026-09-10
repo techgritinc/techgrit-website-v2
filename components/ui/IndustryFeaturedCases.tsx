@@ -17,7 +17,12 @@ export function IndustryFeaturedCases({ section }: { section: FeaturedCapabiliti
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-[22px]">
           {section.cards.map((card) => (
-            <GlassCard key={card.order} variant="constructionImpact" hoverBorderColor="">
+            <GlassCard
+              key={card.order}
+              variant="constructionImpact"
+              hoverBorderColor=""
+              className="flex h-full flex-col"
+            >
               {card.metric ? (
                 <div className="leading-[normal] text-[36px] sm:text-[40px] font-display font-bold text-amber-light tracking-[-0.02em]">
                   {card.metric}
@@ -28,13 +33,19 @@ export function IndustryFeaturedCases({ section }: { section: FeaturedCapabiliti
                   {card.label}
                 </div>
               ) : null}
-              <GlassCardTitle variant="constructionImpact" className="mt-[14px] tracking-[normal] text-[16px] md:text-[18.5px]">
+              <GlassCardTitle
+                variant="constructionImpact"
+                title={card.title}
+                className="mt-[14px] tracking-[normal] text-[16px] md:text-[18.5px]"
+              >
                 {card.title}
               </GlassCardTitle>
-              <GlassCardDescription variant="constructionImpact">{card.description}</GlassCardDescription>
+              <GlassCardDescription variant="constructionImpact" title={card.description}>
+                {card.description}
+              </GlassCardDescription>
               <Link
                 href={card.link}
-                className="mt-[18px] inline-flex items-center gap-[7px] text-xs font-bold text-amber-light"
+                className="mt-auto inline-flex items-center gap-[7px] pt-[18px] text-xs font-bold text-amber-light"
               >
                 {card.linkLabel} <span aria-hidden="true">&rarr;</span>
               </Link>
