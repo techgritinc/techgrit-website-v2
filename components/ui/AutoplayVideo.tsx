@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface AutoplayVideoProps {
@@ -30,12 +30,7 @@ const NEAR_VIEWPORT_MARGIN = "200px";
  * changing it on open/close would make React tear down and recreate the <video>
  * (losing playback position and re-requesting the file) instead of moving it. */
 export default function AutoplayVideo({ src, className, previewClassName, portalTarget }: AutoplayVideoProps) {
-  const [portalHost] = useState<HTMLDivElement | null>(() => {
-    if (typeof document === "undefined") return null;
-    const el = document.createElement("div");
-    el.style.display = "contents";
-    return el;
-  });
+  const [portalHost, setPortalHost] = useState<HTMLDivElement | null>(null);
   const [localSlot, setLocalSlot] = useState<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
@@ -43,6 +38,28 @@ export default function AutoplayVideo({ src, className, previewClassName, portal
 
   const isPreviewing = Boolean(portalTarget);
   const activeContainer = portalTarget ?? localSlot;
+
+  const hasCreatedPortalHost = useRef(false);
+
+  // Piggybacks portalHost creation onto the localSlot ref callback rather than
+  // a lazy useState initializer keyed on `typeof document` (SSR has no
+  // `document`, so that would make the server output permanently disagree
+  // with the client's very first render, which already has `document` and
+  // would render the portaled <video> immediately — a hydration mismatch),
+  // and rather than an effect (ref callbacks never run during SSR either, but
+  // calling setState straight in a bare mount effect is a flagged anti-pattern
+  // — react-hooks/set-state-in-effect). useCallback keeps this ref's identity
+  // stable across renders so React doesn't re-invoke it (and re-run the
+  // create-once guard) on every re-render of this component.
+  const setLocalSlotRef = useCallback((node: HTMLDivElement | null) => {
+    setLocalSlot(node);
+    if (node && !hasCreatedPortalHost.current) {
+      hasCreatedPortalHost.current = true;
+      const el = document.createElement("div");
+      el.style.display = "contents";
+      setPortalHost(el);
+    }
+  }, []);
 
   // Move the stable `portalHost` node itself, rather than re-targeting the portal.
   useEffect(() => {
@@ -63,7 +80,10 @@ export default function AutoplayVideo({ src, className, previewClassName, portal
 
   useEffect(() => {
     const node = videoRef.current;
-    if (!node || isPreviewing) return;
+    // `portalHost` (and therefore this <video>) doesn't exist on the very first
+    // commit — see the ref callback above — so this must re-run once it's created,
+    // or the observer never gets attached at all.
+    if (!portalHost || !node || isPreviewing) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -78,7 +98,7 @@ export default function AutoplayVideo({ src, className, previewClassName, portal
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, [isPreviewing]);
+  }, [isPreviewing, portalHost]);
 
   useEffect(() => {
     if (!isPreviewing) return;
@@ -109,7 +129,7 @@ export default function AutoplayVideo({ src, className, previewClassName, portal
 
   return (
     <>
-      <div ref={setLocalSlot} className="contents" />
+      <div ref={setLocalSlotRef} className="contents" />
       {portalHost && createPortal(video, portalHost)}
     </>
   );
