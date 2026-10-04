@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchCms } from "../fetcher";
 import { pickStatisticsSections } from "./statistics";
 import { pickHeroSection, toHero, toHeroStats } from "./hero";
@@ -73,7 +74,11 @@ export type HomeData = {
 // Server Component calls notFound()), and any individual section absent from the
 // dynamic zone is simply omitted from the returned object — the page renders only
 // what the CMS actually supplies, nothing backfilled.
-export async function getHomeData(): Promise<HomeData | null> {
+//
+// Wrapped in React's cache() (same reasoning as getConstructionPageContent) — if the
+// homepage's own generateMetadata() or any other render-pass caller ever needs this
+// same data, it's memoized per-request so only the first call actually hits the CMS.
+export const getHomeData = cache(async (): Promise<HomeData | null> => {
   const data = await fetchCms<StrapiHomeData>(HOME_ENDPOINT);
   if (!data) return null;
 
@@ -110,4 +115,4 @@ export async function getHomeData(): Promise<HomeData | null> {
     cultureGallery: cultureGallerySection ? toCultureGallery(cultureGallerySection) : undefined,
     ctaBanner: ctaBannerSection ? toCtaBanner(ctaBannerSection) : undefined,
   };
-}
+});

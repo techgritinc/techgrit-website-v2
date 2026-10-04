@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchCms } from "./fetcher";
 import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
 import type {
@@ -102,7 +103,12 @@ function toMegaGroup(navItem: StrapiNavItem): HeaderMegaGroup {
 // rebuild, and the browser never sees a loading state for this data. No fallback
 // data: if the CMS is unreachable or has no logo configured, this returns null and
 // the Header renders nothing rather than substituting hardcoded nav content.
-export async function getHeaderData(): Promise<HeaderData | null> {
+//
+// Wrapped in React's cache() (same reasoning as getConstructionPageContent) — the
+// Header is present on every route via the root layout, so memoizing this per-request
+// means a page that also happens to read header data elsewhere in its render pass
+// doesn't trigger a second identical CMS request.
+export const getHeaderData = cache(async (): Promise<HeaderData | null> => {
   const data = await fetchCms<StrapiHeaderData>(HEADER_ENDPOINT);
   if (!data || !data.logo) return null;
 
@@ -124,4 +130,4 @@ export async function getHeaderData(): Promise<HeaderData | null> {
     megaGroups,
     plainLinks,
   };
-}
+});
