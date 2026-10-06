@@ -17,7 +17,7 @@ export default async function WhitepapersPage() {
 
   return (
     <main className="overflow-x-clip">
-      <InsightsHero section={content.hero} />
+      <InsightsHero section={content.hero} centered />
       <AiModernizationWhy section={content.why} />
       <LeadershipProfiles title={content.profilesTitle} subtitle={content.profilesSubtitle} profiles={content.profiles} />
       {content.reviews && <TestimonialsSection data={content.reviews} />}
