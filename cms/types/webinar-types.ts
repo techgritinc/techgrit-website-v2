@@ -57,6 +57,7 @@ export type StrapiWebinarRecordingItem = {
   statusLabel: string;
   ctaLabel: string;
   ctaLink: string;
+  thumbnail: StrapiMedia | null;
 };
 
 export type StrapiWebinarRecordingSection = {

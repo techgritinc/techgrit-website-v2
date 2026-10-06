@@ -40,6 +40,7 @@ export interface ReleasedSession {
   description: string;
   ctaLabel: string;
   ctaLink: string;
+  image: { url: string; alt: string } | null;
   accent: ReleasedSessionAccent;
   cardSize: ReleasedSessionCardSize;
 }

@@ -120,7 +120,7 @@ const TITLE_VARIANTS: Record<GlassCardVariant, string> = {
   constructionSolution: "text-[19px]",
   constructionImpact: "line-clamp-2 text-[18.5px]",
   webinarUpcoming: "text-[clamp(22px,2.6vw,30px)] font-bold text-white leading-[1.15] tracking-[-0.02em]",
-  webinarReleased: "text-[18.5px] font-bold text-white leading-[1.3] tracking-normal",
+  webinarReleased: "line-clamp-2 min-h-[48.1px] text-[18.5px] font-bold text-white leading-[1.3] tracking-normal",
   leaderProfile: "text-[22px] font-bold text-white leading-[normal] tracking-[var(--ls-normal)]",
   serviceCapability: "text-[19px] leading-[normal] font-bold text-white tracking-[-0.01em]",
 };
@@ -153,7 +153,7 @@ const DESC_VARIANTS: Record<GlassCardVariant, string> = {
   constructionSolution: "mt-[10px] text-[14.5px] text-muted leading-[1.6]",
   constructionImpact: "mt-[10px] line-clamp-2 text-[14.5px] text-muted leading-[1.6]",
   webinarUpcoming: "mt-3 text-15-5 leading-[1.6] text-[var(--color-text-66)]",
-  webinarReleased: "mt-2.5 text-[14.5px] leading-[1.6] text-muted",
+  webinarReleased: "mt-2.5 line-clamp-2 min-h-[46.4px] text-[14.5px] leading-[1.6] text-muted",
   leaderProfile: "mt-3.5 text-14 leading-[1.65] tracking-normal text-[var(--color-text-66)]",
   serviceCapability: "mt-2 text-[14.5px] leading-[1.55] text-muted",
 };
