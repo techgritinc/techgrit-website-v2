@@ -3,13 +3,8 @@
 import { GlassCard, GlassCardTitle, GlassCardDescription } from "@/components/ui/GlassCard";
 import { PlayIcon } from "@/components/ui/icons";
 import Button from "@/components/ui/Button";
-import type { ReleasedSession, ReleasedSessionAccent } from "../_data/types";
-
-const RELEASED_ACCENT_COVER: Record<ReleasedSessionAccent, string> = {
-  orange: "bg-[image:var(--gradient-webinar-released-orange)]",
-  blue: "bg-[image:var(--gradient-webinar-released-blue)]",
-  teal: "bg-[image:var(--gradient-webinar-released-teal)]",
-};
+import MediaSlot from "@/components/ui/MediaSlot";
+import type { ReleasedSession } from "../_data/types";
 
 export function SessionsSection({
   heading,
@@ -62,14 +57,18 @@ function ReleasedCardHalf({ session }: { session: ReleasedSession }) {
       hoverBorderColor=""
       className="flex min-w-0 flex-col"
     >
-      <div
-        className={`relative flex h-40 items-center justify-center border-b border-border-8 ${RELEASED_ACCENT_COVER[session.accent]}`}
-      >
+      <div className="relative flex aspect-video items-center justify-center overflow-hidden border-b border-border-8">
+        <MediaSlot
+          src={session.image?.url}
+          alt={session.image?.alt ?? session.title}
+          fill
+          sizes="(max-width: 960px) 100vw, 50vw"
+        />
         <Button
           size="md"
           onClick={() => handleWatchNow(session.ctaLink)}
           style={{ fontFamily: "Arial, sans-serif" }}
-          className="!py-tg-3a !px-5 !text-[14px] !gap-[9px] !rounded-full !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
+          className="relative z-10 !py-tg-3a !px-5 !text-[14px] !gap-[9px] !rounded-full !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
         >
           {session.ctaLabel}
           <WatchNowGlyph />
@@ -79,10 +78,10 @@ function ReleasedCardHalf({ session }: { session: ReleasedSession }) {
         <span className="text-12 font-bold tracking-wider text-amber-light leading-[normal] uppercase">
           {session.statusLabel}
         </span>
-        <GlassCardTitle variant="webinarReleased" className="mt-1.75">
+        <GlassCardTitle variant="webinarReleased" title={session.title} className="mt-1.75">
           {session.title}
         </GlassCardTitle>
-        <GlassCardDescription variant="webinarReleased" className="mt-[9px] text-white/60">
+        <GlassCardDescription variant="webinarReleased" title={session.description} className="mt-[9px] text-white/60">
           {session.description}
         </GlassCardDescription>
       </div>
@@ -97,15 +96,18 @@ function ReleasedCardFull({ session }: { session: ReleasedSession }) {
       hoverBorderColor=""
       className="flex flex-col gap-7 p-2 tg-md:col-span-2 tg-sm:flex-row tg-sm:items-center"
     >
-      <div
-        className={`relative flex w-full shrink-0 items-center justify-center self-stretch rounded-lg tg-sm:w-[var(--size-220)] ${RELEASED_ACCENT_COVER[session.accent]}`}
-        style={{ minHeight: "var(--size-150)" }}
-      >
+      <div className="relative flex aspect-video w-full shrink-0 items-center justify-center overflow-hidden rounded-lg tg-sm:w-[var(--size-220)]">
+        <MediaSlot
+          src={session.image?.url}
+          alt={session.image?.alt ?? session.title}
+          fill
+          sizes="(max-width: 640px) 100vw, 220px"
+        />
         <Button
           size="sm"
           onClick={() => handleWatchNow(session.ctaLink)}
           style={{ fontFamily: "Arial, sans-serif" }}
-          className="!gap-2 !rounded-full !py-[10px] !px-tg-7 !text-[13.5px] !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
+          className="relative z-10 !gap-2 !rounded-full !py-[10px] !px-tg-7 !text-[13.5px] !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
         >
           {session.ctaLabel}
           <WatchNowGlyph compact />
@@ -115,10 +117,14 @@ function ReleasedCardFull({ session }: { session: ReleasedSession }) {
         <span className="text-12 font-bold tracking-wider text-amber-light leading-[normal] uppercase">
           {session.statusLabel}
         </span>
-        <GlassCardTitle variant="webinarReleased" className="mt-1.25">
+        <GlassCardTitle variant="webinarReleased" title={session.title} className="mt-1.25">
           {session.title}
         </GlassCardTitle>
-        <GlassCardDescription variant="webinarReleased" className="mt-2! text-white/60">
+        <GlassCardDescription
+          variant="webinarReleased"
+          title={session.description}
+          className="mt-2! text-white/60"
+        >
           {session.description}
         </GlassCardDescription>
       </div>

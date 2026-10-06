@@ -122,6 +122,12 @@ function toReleasedSessions(section: StrapiWebinarRecordingSection | undefined):
     description: item.subtitle,
     ctaLabel: item.ctaLabel,
     ctaLink: item.ctaLink,
+    image: item.thumbnail
+      ? {
+          url: resolveMediaUrl(pickMediaAsset(item.thumbnail, ["medium", "small"]).url),
+          alt: item.thumbnail.alternativeText ?? item.title,
+        }
+      : null,
     accent: RELEASED_ACCENTS[index % RELEASED_ACCENTS.length],
     cardSize: index % 3 === 2 ? "full" : "half",
   }));
