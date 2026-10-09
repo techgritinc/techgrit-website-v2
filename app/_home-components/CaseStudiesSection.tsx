@@ -11,11 +11,11 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
 
   return (
     <section id="insights" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 py-20">
+      <div className="mx-auto max-w-(--container-max) px-9 py-20 max-tg-sm:py-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">{badgeLabel}</div>
-            <h2 className="mt-3.5 font-display text-[44px] font-bold leading-[1.04] tracking-[-0.03em] text-white">{title}</h2>
+            <h2 className="mt-3.5 font-display text-[44px] max-tg-sm:text-[30px] font-bold leading-[1.04] tracking-[-0.03em] text-white">{title}</h2>
           </div>
           <Button href={viewAllLink} variant="ghost" size="nav" className="!px-[22px] !py-[13px] !text-[14.5px]">
             {viewAllLabel} <span aria-hidden="true" className="text-amber-light">&rarr;</span>

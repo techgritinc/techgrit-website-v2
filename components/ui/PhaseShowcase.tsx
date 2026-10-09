@@ -99,6 +99,20 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
       id="methodology"
       className="scroll-mt-(--nav-height) [--phase-title-size:15px] max-tg-sm:[--phase-title-size:13px] [--phase-week-size:11.5px] max-tg-sm:[--phase-week-size:9.5px]"
     >
+      {/* Mobile-only intro — lives in normal flow ABOVE the pinned track so it
+          scrolls out of view first, leaving the pinned stage (phase rail + card)
+          the full viewport height. The in-stage copy below is hidden on mobile
+          (max-tg-sm:hidden), so desktop/tablet keep the original pinned layout. */}
+      <div className="hidden max-tg-sm:block px-tg-17 pt-10 pb-1 text-center">
+        <SectionEyebrow showAccent={false} className="mb-2! leading-[normal]">
+          {eyebrow}
+        </SectionEyebrow>
+        <h2 className="mx-auto max-w-205 leading-8.5 text-[clamp(30px,4vw,44px)]">{heading}</h2>
+        {description && (
+          <p className="mx-auto mt-3 text-xs leading-[1.65] text-muted">{description}</p>
+        )}
+      </div>
+
       <div ref={trackRef} className="relative" style={{ height: "420vh" }}>
         <div
           ref={stageRef}
@@ -106,21 +120,23 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
           style={{ position: "absolute", top: 0, left: 0, right: 0 }}
         >
           <div className="mx-auto w-full max-w-7xl px-tg-15 max-tg-md:px-tg-17">
-            <div className="text-center">
-              <SectionEyebrow showAccent={false} className="mb-3.5! max-tg-sm:mb-2! leading-[normal]">
-                {eyebrow}
-              </SectionEyebrow>
+            <div className="max-tg-sm:hidden">
+              <div className="text-center">
+                <SectionEyebrow showAccent={false} className="mb-3.5! max-tg-sm:mb-2! leading-[normal]">
+                  {eyebrow}
+                </SectionEyebrow>
+              </div>
+              <h2 className="mx-auto max-w-205 text-center leading-[46.2px] max-tg-sm:leading-8.5 text-[clamp(30px,4vw,44px)]">
+                {heading}
+              </h2>
+              {description && (
+                <p className="mx-auto mt-4.5 max-w-170 text-center text-[17.5px] leading-[1.65] text-muted max-tg-sm:text-xs max-tg-sm:mt-3">
+                  {description}
+                </p>
+              )}
             </div>
-            <h2 className="mx-auto max-w-205 text-center leading-[46.2px] max-tg-sm:leading-8.5 text-[clamp(30px,4vw,44px)]">
-              {heading}
-            </h2>
-            {description && (
-              <p className="mx-auto mt-4.5 max-w-170 text-center text-[17.5px] leading-[1.65] text-muted max-tg-sm:text-xs max-tg-sm:mt-3">
-                {description}
-              </p>
-            )}
 
-            <div className="relative mt-10 max-tg-sm:mt-4">
+            <div className="relative mt-10 max-tg-sm:mt-1">
               <div
                 aria-hidden="true"
                 className="absolute top-7.25 max-tg-sm:top-5 right-[12.5%] left-[12.5%] h-0.75 rounded-full bg-[rgba(255,255,255,0.1)]"
@@ -192,10 +208,10 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
                   ))}
                 </div>
               </div>
-              <div className="relative flex min-h-75 items-center justify-center overflow-hidden border-l border-border-subtle bg-[linear-gradient(150deg,rgba(232,119,34,0.18),rgba(10,24,34,0.15))] max-tg-sm:min-h-30">
-                <div aria-hidden="true" className="absolute h-60 w-60 max-tg-sm:h-36 max-tg-sm:w-36 rounded-full bg-overlay-orange-22 blur-glow" />
+              <div className="relative flex min-h-75 items-center justify-center overflow-hidden border-l border-border-subtle bg-[linear-gradient(150deg,rgba(232,119,34,0.18),rgba(10,24,34,0.15))] max-tg-sm:min-h-20 max-tg-sm:border-l-0 max-tg-sm:border-t max-tg-sm:bg-none max-tg-sm:justify-start max-tg-sm:px-5">
+                <div aria-hidden="true" className="absolute h-60 w-60 max-tg-sm:h-20 max-tg-sm:w-20 rounded-full bg-overlay-orange-22 blur-glow max-tg-sm:hidden" />
                 <div
-                  className="relative z-10 flex h-42.5 w-42.5 max-tg-sm:h-22 max-tg-sm:w-22 [&>svg]:max-tg-sm:h-11 [&>svg]:max-tg-sm:w-11 items-center justify-center rounded-full text-white shadow-[var(--shadow-phase-badge-glow)]"
+                  className="relative z-10 flex h-42.5 w-42.5 max-tg-sm:h-11 max-tg-sm:w-11 [&>img]:max-tg-sm:h-6 [&>img]:max-tg-sm:w-6 [&>svg]:max-tg-sm:h-6 [&>svg]:max-tg-sm:w-6 items-center justify-center rounded-full text-white shadow-[var(--shadow-phase-badge-glow)]"
                   style={{ background: "var(--gradient-phase-node)" }}
                 >
                   {active.badgeIcon}

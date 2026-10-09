@@ -17,7 +17,7 @@ export default function BlogSection({ data }: { data: BlogSectionData }) {
 
   return (
     <section id="blog" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 pt-tg-21 pb-20">
+      <div className="mx-auto max-w-(--container-max) px-9 pt-tg-21 pb-20 max-tg-sm:pb-10">
         <div className="mb-tg-15 flex flex-wrap items-end justify-between gap-6">
           <div>
             <div className="text-2xs leading-[normal] font-bold tracking-widest text-orange uppercase">{badgeLabel}</div>
@@ -30,11 +30,18 @@ export default function BlogSection({ data }: { data: BlogSectionData }) {
           </Button>
         </div>
 
-        <div className="grid grid-cols-3 gap-6 max-tg-md:grid-cols-1">
+        {/* Desktop: 3-col grid. Tablet: 1-col. Mobile: horizontal manual-scroll
+            carousel (hidden scrollbar, full-bleed, snap) — mirrors the
+            TestimonialsSection pattern so blog teasers don't stack tall. */}
+        <div className="grid grid-cols-3 gap-6 max-tg-md:grid-cols-1 max-tg-sm:flex max-tg-sm:gap-4 max-tg-sm:overflow-x-auto max-tg-sm:-mx-9 max-tg-sm:px-4 max-tg-sm:pb-2 max-tg-sm:snap-x max-tg-sm:snap-proximity scrollbar-none">
           {posts.map((post, index) => {
             const variant = VARIANTS[index % VARIANTS.length];
             return (
-              <CardLink key={post.id} href={post.ctaLink}>
+              <CardLink
+                key={post.id}
+                href={post.ctaLink}
+                className="max-tg-sm:w-[80vw] max-tg-sm:shrink-0 max-tg-sm:snap-start"
+              >
                 <GlassCard
                   variant="blogTeaser"
                   hoverBorderColor=""

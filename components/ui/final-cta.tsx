@@ -125,7 +125,7 @@ export function FinalCta({
                     &#8594;
                   </span>
                 </Button>
-                {section.secondaryCta && (
+                {section.secondaryCta?.label && section.secondaryCta.link && (
                   <Button
                     href={section.secondaryCta.link}
                     className={`leading-[normal] text-[16px] ${secondaryBtnClassName}`}

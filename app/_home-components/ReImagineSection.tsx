@@ -34,10 +34,10 @@ export default function ReImagineSection({ data }: { data: ValuePropositionData 
 
   return (
     <section>
-      <div className="mx-auto max-w-(--container-max) px-9 pt-20 pb-20">
+      <div className="mx-auto max-w-(--container-max) px-9 pt-20 pb-20 max-tg-sm:py-10">
         <div className="text-center">
-          <h2 className="inline-flex flex-wrap items-center justify-center gap-5 text-[48px] leading-[1.06]">
-            <span className="text-primary">{before}</span>
+          <h2 className="inline-flex flex-wrap items-center justify-center gap-5 text-[48px] max-tg-sm:text-[30px] leading-[1.06]">
+            <span className="text-primary max-tg-sm:basis-full">{before}</span>
             <PlayIcon width={46} height={46} className="text-orange drop-shadow-[0_0_14px_rgba(232,119,34,0.6)]" />
             <span className="bg-[image:var(--gradient-brand-text)] bg-clip-text text-transparent">{highlightTitle}</span>
             {after}
