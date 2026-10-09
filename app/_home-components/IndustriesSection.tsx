@@ -20,10 +20,10 @@ export default function IndustriesSection({ data }: { data: FutureIndustryData }
 
   return (
     <section id="industries" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 py-20">
+      <div className="mx-auto max-w-(--container-max) px-9 py-20 max-tg-sm:py-10">
         <div className="flex flex-wrap items-end justify-between gap-7.5">
           <div>
-            <h2 className="max-w-140 text-[44px] leading-[46.64px]">{title}</h2>
+            <h2 className="max-w-140 text-[44px] max-tg-sm:text-[30px] leading-[46.64px] max-tg-sm:leading-[1.2]">{title}</h2>
             <p className="mt-4 max-w-[540px] text-[17px] leading-[27.2px] text-muted">{subtitle}</p>
           </div>
         </div>

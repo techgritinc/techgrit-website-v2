@@ -60,11 +60,11 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
 
   return (
     <section className="scroll-mt-24 relative">
-      <div data-reveal className="mx-auto max-w-[1280px] px-9 pt-20 pb-6">
+      <div data-reveal className="mx-auto max-w-[1280px] px-9 pt-20 pb-6 max-tg-sm:pt-10">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div className="max-w-[640px]">
             <div className="text-2xs leading-[normal] font-bold tracking-widest text-orange uppercase">{badgeLabel}</div>
-            <h2 className="mt-3.5 text-[42px] leading-[1.06]">{title}</h2>
+            <h2 className="mt-3.5 text-[42px] max-tg-sm:text-[30px] leading-[1.06]">{title}</h2>
             <p className="mt-3.5 text-base leading-[1.55] text-muted">{subtitle}</p>
           </div>
 
@@ -94,7 +94,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
           onPointerLeave={endDrag}
-          className="flex cursor-grab gap-5.5 overflow-x-auto px-20 pt-6 pb-7 text-left select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex cursor-grab gap-5.5 max-tg-sm:gap-3 overflow-x-auto px-20 max-tg-sm:px-4 pt-6 pb-7 text-left select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           style={{ scrollSnapType: "x proximity", WebkitOverflowScrolling: "touch" }}
         >
           {testimonials.map((testimonial, index) => {
@@ -104,7 +104,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   key={testimonial.id}
                   type="button"
                   onClick={() => openLightbox(index)}
-                  className="relative h-[340px] w-[380px] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
+                  className="relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
                   style={{ scrollSnapAlign: "start" }}
                 >
                   {testimonial.videoUrl ? (
@@ -122,7 +122,6 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       </div>
                     </>
                   )}
-                  <div aria-hidden="true" className="absolute inset-0 [background:linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.55))]" />
                   <QuoteIcon
                     aria-hidden="true"
                     width={76}
@@ -157,17 +156,17 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       <PlayIcon className="text-orange" />
                     </div>
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 bg-[image:var(--gradient-testimonial-fade)] px-6 pt-8.5 pb-5.5">
+                  <div className="absolute inset-x-0 bottom-0 px-6 pt-8.5 pb-5.5">
                     <div
                       className="mb-2.5 flex gap-0.5 text-[13px] tracking-[2px] leading-[normal] text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]"
                       style={{ fontFamily: "Arial" }}
                     >
-                      {"★★★★★"}
+                      {/* {"★★★★★"} */}
                     </div>
                     <p
                       className="text-[15.5px] leading-[1.45] font-semibold text-white"
                       style={{ fontFamily: "Arial" }}
-                    >&ldquo;{testimonial.quote}&rdquo;</p>
+                    >{testimonial.quote}</p>
                     <div className="mt-[14px] flex items-center gap-[11px]">
                       <div className="font-display flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] text-[14px] font-bold text-orange">
                         {testimonial.initials}
@@ -191,7 +190,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
             return (
               <div
                 key={testimonial.id}
-                className="relative flex h-[340px] w-[380px] shrink-0 flex-col overflow-hidden rounded-[20px] border border-border-image bg-[image:var(--gradient-testimonial-card)] pt-[26px] px-[26px] pb-[24px] backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-text"
+                className="relative flex h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 flex-col overflow-hidden rounded-[20px] border border-border-image bg-[image:var(--gradient-testimonial-card)] pt-[26px] px-[26px] pb-[24px] backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-text"
                 style={{ scrollSnapAlign: "start" }}
               >
                 <QuoteIcon
@@ -211,7 +210,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                     </div>
                   )}
                 </div>
-                <p className="relative flex-1 text-[15px] leading-[23.25px] font-normal text-primary">&ldquo;{testimonial.quote}&rdquo;</p>
+                <p className="relative flex-1 text-[15px] leading-[23.25px] font-normal text-primary">{testimonial.quote}</p>
                 <div className="relative mt-4 pt-4 border-t border-border-8 flex items-center gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-phase-node)] font-display text-[15px] font-bold text-white shadow-testimonial-avatar">
                     {testimonial.initials}
@@ -226,10 +225,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
           })}
         </div>
 
-        <div aria-hidden="true" className="pointer-events-none absolute top-0 right-0 bottom-0 w-[140px] bg-[image:var(--gradient-testimonial-edge)]" />
-        <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 bottom-0 w-20 bg-[image:var(--gradient-testimonial-edge-left)]" />
-
-        <div className="mt-1.5 flex items-center justify-center gap-[9px] text-[13px] text-muted font-semibold tracking-04 text-text-55">
+        {/* <div className="mt-1.5 flex items-center justify-center gap-[9px] text-[13px] text-muted font-semibold tracking-04 text-text-55">
           <span className="motion-safe:animate-[tgnudgex_1.4s_ease-in-out_infinite]">
             <ChevronRightIcon className="text-orange" />
           </span>
@@ -237,7 +233,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
           <span className="motion-safe:animate-[tgnudgex_1.4s_ease-in-out_infinite]">
             <ChevronRightIcon className="text-orange" />
           </span>
-        </div>
+        </div> */}
       </div>
 
       {current && (

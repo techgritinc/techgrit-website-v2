@@ -24,7 +24,7 @@ export default function Hero({ data }: { data: HeroData }) {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0)_20%,rgba(0,0,0,0)_60%,rgba(0,0,0,0.92)_100%)]" />
       </div>
 
-      <div className="relative z-raised mx-auto flex min-h-[60vh] w-full max-w-(--container-max) items-center px-4 tg-sm:px-9 pt-27 pb-10 tg-sm:pb-15">
+      <div className="relative z-raised mx-auto flex min-h-[60vh] w-full max-w-(--container-max) items-center px-9 pt-27 pb-10 tg-sm:pb-15">
         <div className="max-w-195">
           {badge && (
             <a

@@ -58,9 +58,9 @@ export default function SubscribeBand({ data }: { data: NewsletterData }) {
 
   return (
     <section id="webinars" className="relative z-overlay scroll-mt-[90px]">
-      <div className="mx-auto max-w-[1280px] px-9 py-20">
+      <div className="mx-auto max-w-[1280px] px-9 py-20 max-tg-sm:py-10">
         <div className="mb-8">
-          <h2 className="max-w-140 text-[44px] leading-[46.64px]">{data.sectionTitle}</h2>
+          <h2 className="max-w-140 text-[44px] max-tg-sm:text-[30px] leading-[46.64px] max-tg-sm:leading-[1.2]">{data.sectionTitle}</h2>
           <p className="mt-4 max-w-[540px] whitespace-pre-line text-[17px] leading-[27.2px] text-muted">
             {data.sectionSubtitle}
           </p>

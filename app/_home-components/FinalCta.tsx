@@ -6,7 +6,7 @@ export default function FinalCta({ data }: { data: CtaBannerData }) {
 
   return (
     <section id="contact" className="relative scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 pt-14 pb-25">
+      <div className="mx-auto max-w-(--container-max) px-9 pt-14 pb-25 max-tg-sm:pt-10 max-tg-sm:pb-10">
         <div className="relative overflow-hidden rounded-[28px] border border-border bg-glass-4 px-10 py-20 max-tg-sm:py-10 text-center backdrop-blur-cta">
           <div
             aria-hidden="true"
@@ -14,7 +14,7 @@ export default function FinalCta({ data }: { data: CtaBannerData }) {
           />
           <div className="relative">
             <div className="leading-[normal] text-[12.5px] font-bold tracking-widest text-orange uppercase">{badgeLabel}</div>
-            <h2 className="font-display mt-4 text-testimonial-stat tg-sm:text-[52px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
+            <h2 className="font-display mt-4 text-testimonial-stat max-tg-sm:text-[30px] tg-sm:text-[52px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
               {title}
             </h2>
             <p className="mx-auto mt-5.5 max-w-[600px] text-md tg-sm:text-lg-fixed leading-[1.6] text-secondary">{subtitle}</p>

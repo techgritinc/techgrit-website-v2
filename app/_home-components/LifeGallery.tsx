@@ -152,7 +152,7 @@ export default function LifeGallery({
 
   return (
     <section id={id} className="relative scroll-mt-[96px]">
-      <div className="mx-auto max-w-(--container-max) px-9 pt-[60px] pb-[80px] leading-normal" data-reveal>
+      <div className="mx-auto max-w-(--container-max) px-9 pt-[60px] pb-[80px] max-tg-sm:pt-10 max-tg-sm:pb-10 leading-normal" data-reveal>
         <div className="mx-auto mb-11 max-w-[680px] text-center">
           <SectionEyebrow showAccent={false} className="leading-normal !mb-[17px]">
             {eyebrow}

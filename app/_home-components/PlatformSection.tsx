@@ -2,11 +2,6 @@ import Image from "next/image";
 import MediaSlot from "@/components/ui/MediaSlot";
 import type { DeliveryEngineData } from "@/cms/api/home/delivery-engine";
 
-const CAPABILITY_TONE = {
-  blue: { iconBg: "bg-[rgba(2,132,199,0.16)]", iconColor: "text-blue-light" },
-  teal: { iconBg: "bg-[rgba(15,118,110,0.2)]", iconColor: "text-teal-light" },
-} as const;
-
 const METRIC_COLORS = ["text-amber-light", "text-blue-light", "text-teal-light"];
 
 export default function PlatformSection({ data }: { data: DeliveryEngineData }) {
@@ -15,29 +10,26 @@ export default function PlatformSection({ data }: { data: DeliveryEngineData }) 
 
   return (
     <section id="platform" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto grid max-w-(--container-max) grid-cols-[1fr_1.05fr] items-center gap-tg-20 px-9 py-[96px] max-tg-md:py-[76px] max-tg-sm:py-[56px] max-tg-md:grid-cols-1 max-tg-md:gap-tg-17">
+      <div className="mx-auto grid max-w-(--container-max) grid-cols-[1fr_1.05fr] items-center gap-tg-20 px-9 py-[96px] max-tg-md:py-[76px] max-tg-sm:py-10 max-tg-md:grid-cols-1 max-tg-md:gap-tg-17">
         <div>
           <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">{badgeLabel}</div>
-          <h2 className="mt-3 text-[46px] font-bold tracking-[var(--ls-snug)] text-white leading-[1.04]">{title}</h2>
+          <h2 className="mt-3 text-[46px] max-tg-sm:text-[30px] font-bold tracking-[var(--ls-snug)] text-white leading-[1.04]">{title}</h2>
           <p className="mt-5 max-w-110 text-[17.5px] leading-[1.65] text-muted">{subtitle}</p>
 
           <div className="mt-8.5 flex flex-col gap-5.5">
-            {capabilities.map((capability) => {
-              const tone = CAPABILITY_TONE[capability.tone];
-              return (
-                <div key={capability.title} className="flex items-start gap-3.5">
-                  <div className={`flex h-10.5 w-10.5 shrink-0 items-center justify-center rounded-[11px] ${tone.iconBg}`}>
-                    {capability.icon && (
-                      <Image src={capability.icon.url} alt={capability.icon.alt} width={20} height={20} className={tone.iconColor} />
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="text-[17px] tracking-normal leading-[normal] text-white">{capability.title}</h3>
-                    <p className="mt-1.25 text-[14px] leading-[1.5] text-faint">{capability.description}</p>
-                  </div>
+            {capabilities.map((capability) => (
+              <div key={capability.title} className="flex items-start gap-3.5">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[var(--color-overlay-orange-14)] text-orange">
+                  {capability.icon && (
+                    <Image src={capability.icon.url} alt={capability.icon.alt} width={20} height={20} />
+                  )}
                 </div>
-              );
-            })}
+                <div>
+                  <h3 className="text-[17px] tracking-normal leading-[normal] text-white">{capability.title}</h3>
+                  <p className="mt-1.25 text-[14px] leading-[1.5] text-faint">{capability.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
