@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import CookieBanner from "@/components/layout/CookieBanner";
 import CookieSettingsProvider from "@/components/layout/CookieSettingsProvider";
 import GoogleAnalytics from "@/components/layout/GoogleAnalytics";
-import { AmbientOrbs } from "@/components/ui/ambient-orbs";
+import AmbientOrbs from "@/components/ui/ambient-orbs-lazy";
 import "./globals.css";
 
 // v2 collapses the body/display split into one family (Calibri, metrically-substituted

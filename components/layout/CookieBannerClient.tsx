@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import Button from "@/components/ui/Button";
-import CookieSettingsModal from "./CookieSettingsModal";
+
+const CookieSettingsModal = dynamic(() => import("./CookieSettingsModal"), { ssr: false });
 import { useCookieSettings } from "./CookieSettingsProvider";
 import {
   CONSENT_COOKIE,
