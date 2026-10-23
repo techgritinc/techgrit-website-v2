@@ -6,10 +6,10 @@ import CaseStudiesSection from "@/app/_home-components/CaseStudiesSection";
 import FinalCta from "@/app/_home-components/FinalCta";
 import Hero from "@/app/_home-components/Hero";
 import IndustriesSection from "@/app/_home-components/IndustriesSection";
-import MethodologySection from "@/app/_home-components/MethodologySection";
 import PlatformSection from "@/app/_home-components/PlatformSection";
 import TrustedClients from "@/app/_home-components/TrustedClients";
 
+const MethodologySection = dynamic(() => import("@/app/_home-components/MethodologySection"));
 const ReImagineSection = dynamic(() => import("@/app/_home-components/ReImagineSection"));
 const TestimonialsSection = dynamic(() => import("@/app/_home-components/TestimonialsSection"));
 const SubscribeBand = dynamic(() => import("@/app/_home-components/SubscribeBand"));
