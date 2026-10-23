@@ -4,7 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CookieBanner from "@/components/layout/CookieBanner";
 import CookieSettingsProvider from "@/components/layout/CookieSettingsProvider";
-import GoogleAnalytics from "@/components/layout/GoogleAnalytics";
+import GoogleAnalytics from "@/components/layout/GoogleAnalyticsLazy";
 import AmbientOrbs from "@/components/ui/ambient-orbs-lazy";
 import "./globals.css";
 
@@ -47,6 +47,9 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${carlitoBody.variable} ${carlitoDisplay.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://techgritwebsitedev.blob.core.windows.net" />
+      </head>
       <body className="min-h-full flex flex-col">
         <CookieSettingsProvider>
           <GoogleAnalytics />
