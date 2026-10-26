@@ -25,6 +25,9 @@ export default function AnimatedStat({ target, durationMs = 1100 }: AnimatedStat
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
+          // The animation ends on `target` by itself; leaving the safety timer armed
+          // would write the final value mid-count and the next frame would undo it.
+          clearTimeout(safety);
           const start = performance.now();
           const step = (now: number) => {
             const progress = Math.min(1, (now - start) / durationMs);

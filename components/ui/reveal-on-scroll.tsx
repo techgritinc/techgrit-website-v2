@@ -51,6 +51,9 @@ export function RevealOnScroll({ children }: { children: React.ReactNode }) {
     }
 
     const reveal = () => {
+      // The shared observer's callback only calls `reveal`, so cancelling the safety
+      // timer here (as the per-instance observer used to) covers both paths.
+      clearTimeout(safety);
       node.style.transition = "opacity .7s ease, transform .7s ease";
       node.style.opacity = "1";
       node.style.transform = "none";
