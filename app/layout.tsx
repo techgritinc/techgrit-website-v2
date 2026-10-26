@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Carlito } from "next/font/google";
 import Header from "@/components/layout/Header";
+import { getHeaderData } from "@/cms/api/header";
 import Footer from "@/components/layout/Footer";
 import CookieBanner from "@/components/layout/CookieBanner";
 import CookieSettingsProvider from "@/components/layout/CookieSettingsProvider";
@@ -36,20 +37,33 @@ export const metadata: Metadata = {
 };
 
 
-export default function RootLayout({
+// The media host is whatever origin the CMS returns for uploads (resolveMediaUrl in
+// cms/utils/media.ts), not a configured value, so the preconnect target is derived from
+// the header logo — the LCP image. getHeaderData() is react-cache()d, so this shares the
+// one fetch Header already makes for the same request.
+async function getMediaOrigin(): Promise<string | null> {
+  const header = await getHeaderData();
+  if (!header) return null;
+  try {
+    return new URL(header.logo.url).origin;
+  } catch {
+    return null;
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const mediaOrigin = await getMediaOrigin();
   return (
     <html
       lang="en"
       data-scroll-behavior="smooth"
       className={`${carlitoBody.variable} ${carlitoDisplay.variable} h-full antialiased`}
     >
-      <head>
-        <link rel="preconnect" href="https://techgritwebsitedev.blob.core.windows.net" />
-      </head>
+      <head>{mediaOrigin && <link rel="preconnect" href={mediaOrigin} />}</head>
       <body className="min-h-full flex flex-col">
         <CookieSettingsProvider>
           <GoogleAnalytics />
