@@ -61,5 +61,14 @@ export default function AnimatedStat({ target, durationMs = 1100 }: AnimatedStat
     };
   }, [target, durationMs]);
 
-  return <span ref={ref}>0</span>;
+  // The animated span only ever shows an in-between number (or 0 before JS), so it is
+  // hidden from assistive tech; the real value is in the server HTML as sr-only text.
+  return (
+    <>
+      <span className="sr-only">{target}</span>
+      <span ref={ref} aria-hidden="true">
+        0
+      </span>
+    </>
+  );
 }

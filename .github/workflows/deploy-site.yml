@@ -33,6 +33,9 @@ jobs:
     name: Build & package
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Declared so the build job can read the same `dev` Environment variables the deploy
+    # job uses (CMS_API_URL below) instead of keeping a second copy at repo level.
+    environment: dev
     env:
       # NEXT_PUBLIC_* vars are inlined into the client bundle by `next build`, so this
       # has to reach the build job itself -- not just the later deploy-to-VM job, which
@@ -42,10 +45,8 @@ jobs:
       # cms/api/fetcher.ts caches CMS responses (revalidate: 60), so `next build` now
       # prerenders pages with real CMS data. Without this the build falls back to
       # http://localhost:1337, every fetch fails, and notFound() is baked into the
-      # artifact. Must be the same public URL the deploy job writes to the VM's .env.
-      # Needs to exist as a repo-level Actions variable (or be moved to an Environment
-      # this job declares) -- the 'dev' Environment variable is only visible to the
-      # deploy job.
+      # artifact. Comes from the `dev` Environment (declared on this job), the same
+      # variable the deploy job writes to the VM's .env, so both always match.
       CMS_API_URL: ${{ vars.CMS_API_URL }}
 
     steps:
@@ -67,7 +68,7 @@ jobs:
       - name: Verify CMS is reachable for prerendering
         run: |
           if [ -z "$CMS_API_URL" ]; then
-            echo "::error::CMS_API_URL is not set for the build job (repo-level Actions variable)."
+            echo "::error::CMS_API_URL is not set in the 'dev' Environment variables."
             exit 1
           fi
           status=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$CMS_API_URL/api/pages/by-slug/home" || true)
