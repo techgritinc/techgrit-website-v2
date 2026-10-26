@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import Button from "@/components/ui/Button";
-import CookieSettingsModal from "./CookieSettingsModal";
 import { useCookieSettings } from "./CookieSettingsProvider";
 import {
   CONSENT_COOKIE,
@@ -11,6 +11,8 @@ import {
   type CookiePreferences,
 } from "@/lib/cookie-consent";
 import type { CookieBannerData } from "@/cms/types/cookie-types";
+
+const CookieSettingsModal = dynamic(() => import("./CookieSettingsModal"), { ssr: false });
 
 export default function CookieBannerClient({ data }: { data: CookieBannerData }) {
   const [visible, setVisible] = useState(false);
@@ -61,14 +63,18 @@ export default function CookieBannerClient({ data }: { data: CookieBannerData })
         </div>
       )}
 
-      <CookieSettingsModal
-        isOpen={settingsOpen}
-        onClose={closeSettings}
-        onSave={handleSaveSettings}
-        title={data.settingsTitle}
-        saveLabel={data.saveLabel}
-        options={data.options}
-      />
+      {/* Mounted only while open: next/dynamic fetches its chunk on first render, so an
+          always-rendered modal would download it on every page load instead of on click. */}
+      {settingsOpen && (
+        <CookieSettingsModal
+          isOpen={settingsOpen}
+          onClose={closeSettings}
+          onSave={handleSaveSettings}
+          title={data.settingsTitle}
+          saveLabel={data.saveLabel}
+          options={data.options}
+        />
+      )}
     </>
   );
 }

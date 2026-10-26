@@ -123,6 +123,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             width={logo.width}
             height={logo.height}
             priority
+            fetchPriority="high"
             className="h-11 w-auto block"
           />
         </Link>
@@ -161,6 +162,10 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                 ) : (
                   <Link
                     href={group.href ?? "#"}
+                    // The trigger never navigates (onClick preventDefaults), and its href
+                    // (/insights, /industries, /how-we-work) has no page — prefetching it
+                    // 404s and logs console errors.
+                    prefetch={false}
                     className={triggerClassName}
                     aria-haspopup="menu"
                     aria-expanded={isOpen}

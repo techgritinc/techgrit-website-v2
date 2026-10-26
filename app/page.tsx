@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { getHomeData } from "@/cms/api/home";
 import BlogSection from "@/app/_home-components/BlogSection";
@@ -5,13 +6,14 @@ import CaseStudiesSection from "@/app/_home-components/CaseStudiesSection";
 import FinalCta from "@/app/_home-components/FinalCta";
 import Hero from "@/app/_home-components/Hero";
 import IndustriesSection from "@/app/_home-components/IndustriesSection";
-import LifeGallery from "@/app/_home-components/LifeGallery";
-import MethodologySection from "@/app/_home-components/MethodologySection";
 import PlatformSection from "@/app/_home-components/PlatformSection";
-import ReImagineSection from "@/app/_home-components/ReImagineSection";
-import SubscribeBand from "@/app/_home-components/SubscribeBand";
-import TestimonialsSection from "@/app/_home-components/TestimonialsSection";
 import TrustedClients from "@/app/_home-components/TrustedClients";
+
+const MethodologySection = dynamic(() => import("@/app/_home-components/MethodologySection"));
+const ReImagineSection = dynamic(() => import("@/app/_home-components/ReImagineSection"));
+const TestimonialsSection = dynamic(() => import("@/app/_home-components/TestimonialsSection"));
+const SubscribeBand = dynamic(() => import("@/app/_home-components/SubscribeBand"));
+const LifeGallery = dynamic(() => import("@/app/_home-components/LifeGallery"));
 
 export default async function Home() {
   const data = await getHomeData();

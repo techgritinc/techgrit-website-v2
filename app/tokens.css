@@ -65,7 +65,7 @@
   --color-text-muted:     rgba(255, 255, 255, 0.62); /* Supporting copy */
   --color-text-faint:     rgba(255, 255, 255, 0.58); /* Icon captions, sub-labels */
   --color-text-dim:       rgba(255, 255, 255, 0.50); /* Stat labels, console captions (TMS-62) */
-  --color-text-ghost:     rgba(255, 255, 255, 0.42); /* Section labels, eyebrow text */
+  --color-text-ghost:     rgba(255, 255, 255, 0.47); /* Section labels, eyebrow text */
   --color-text-placeholder: rgba(255, 255, 255, 0.30); /* Form placeholder text */
   --color-text-nav:       rgba(255, 255, 255, 0.80); /* Nav links default */
   --color-text-nav-sub:   rgba(255, 255, 255, 0.82); /* Nav dropdown links */
@@ -85,9 +85,9 @@
   --color-text-60:        rgba(255, 255, 255, 0.60);
   --color-text-56:        rgba(255, 255, 255, 0.56); /* Services accordion approach-step description text (User Story 2) */
   --color-text-55:        rgba(255, 255, 255, 0.55);
-  --color-text-40:        rgba(255, 255, 255, 0.40);
-  --color-text-45:        rgba(255, 255, 255, 0.45); /* Blog newsletter helper text — default state */
-  --color-text-32:        rgba(255, 255, 255, 0.32);
+  --color-text-40:        rgba(255, 255, 255, 0.47);
+  --color-text-45:        rgba(255, 255, 255, 0.47); /* Blog newsletter helper text — default state */
+  --color-text-32:        rgba(255, 255, 255, 0.47);
   --color-text-35:        rgba(255, 255, 255, 0.35); /* Homepage Blog teaser card meta dot separator (v2.2 FR-010) */
   --color-text-64:        rgba(255, 255, 255, 0.64); /* Case study card description text */
   --color-text-68:        rgba(255, 255, 255, 0.68); /* Careers "Life at TechGrit" paragraph copy */

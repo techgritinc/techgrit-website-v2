@@ -8,7 +8,7 @@ export const CMS_API_URL = process.env.CMS_API_URL ?? "http://localhost:1337";
 // vs "didn't" rather than duplicating fetch/parse/error-handling per endpoint.
 export async function fetchCms<T>(endpoint: string): Promise<T | null> {
   try {
-    const res = await fetch(`${CMS_API_URL}${endpoint}`, { cache: "no-store" });
+    const res = await fetch(`${CMS_API_URL}${endpoint}`, { next: { revalidate: 60 } });
     if (!res.ok) return null;
 
     const json: { data: T | null } = await res.json();

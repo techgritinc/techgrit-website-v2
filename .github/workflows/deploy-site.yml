@@ -33,12 +33,21 @@ jobs:
     name: Build & package
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Declared so the build job can read the same `dev` Environment variables the deploy
+    # job uses (CMS_API_URL below) instead of keeping a second copy at repo level.
+    environment: dev
     env:
       # NEXT_PUBLIC_* vars are inlined into the client bundle by `next build`, so this
       # has to reach the build job itself -- not just the later deploy-to-VM job, which
       # is too late for anything client-side. Non-secret (it ships to every browser
       # regardless), so a plain repo Actions *variable* is enough, no Environment needed.
       NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
+      # cms/api/fetcher.ts caches CMS responses (revalidate: 60), so `next build` now
+      # prerenders pages with real CMS data. Without this the build falls back to
+      # http://localhost:1337, every fetch fails, and notFound() is baked into the
+      # artifact. Comes from the `dev` Environment (declared on this job), the same
+      # variable the deploy job writes to the VM's .env, so both always match.
+      CMS_API_URL: ${{ vars.CMS_API_URL }}
 
     steps:
       - name: Checkout
@@ -55,6 +64,18 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Verify CMS is reachable for prerendering
+        run: |
+          if [ -z "$CMS_API_URL" ]; then
+            echo "::error::CMS_API_URL is not set in the 'dev' Environment variables."
+            exit 1
+          fi
+          status=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$CMS_API_URL/api/pages/by-slug/home" || true)
+          if [ "$status" != "200" ]; then
+            echo "::error::CMS returned HTTP ${status:-000} for /api/pages/by-slug/home -- refusing to prerender a 404 into the artifact."
+            exit 1
+          fi
 
       # This is now the only build that happens -- its output is what runs in
       # production, so a compile failure stops the deploy before any SSH connection.
