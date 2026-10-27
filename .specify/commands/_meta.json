@@ -1,0 +1,113 @@
+{
+  "speckit.analyze": {
+    "description": "Perform a non-destructive cross-artifact consistency and quality analysis across spec.md, plan.md, and tasks.md after task generation.",
+    "phase": "Utility",
+    "handoffs": [],
+    "tools": []
+  },
+  "speckit.checklist": {
+    "description": "Generate a custom checklist for the current feature based on user requirements.",
+    "phase": "Utility",
+    "handoffs": [],
+    "tools": []
+  },
+  "speckit.clarify": {
+    "description": "Identify underspecified areas in the current feature spec by asking up to 5 highly targeted clarification questions and encoding answers back into the spec. (Phase 1: Spec)",
+    "phase": "Phase 1: Spec",
+    "handoffs": [],
+    "tools": []
+  },
+  "speckit.commit": {
+    "description": "Review changes, generate a commit message, push to remote, and create a pull request.",
+    "phase": "Utility",
+    "handoffs": [],
+    "tools": []
+  },
+  "speckit.constitution": {
+    "description": "Create or update the project constitution from interactive or provided principle inputs, ensuring all dependent templates stay in sync.",
+    "phase": "Setup",
+    "handoffs": [
+      {
+        "label": "Build Specification",
+        "target": "speckit.specify",
+        "prompt": "Implement the feature specification based on the updated constitution. I want to build...",
+        "send": true
+      }
+    ],
+    "tools": []
+  },
+  "speckit.implement": {
+    "description": "Execute the implementation plan by processing and executing all tasks defined in tasks.md",
+    "phase": "Phase 2: Plan",
+    "handoffs": [],
+    "tools": []
+  },
+  "speckit.jira": {
+    "description": "Pull JIRA tickets via MCP and auto-generate specs/<KEY>/jira.json and spec.md for each feature. (Phase 1: Spec)",
+    "phase": "Phase 1: Spec",
+    "handoffs": [],
+    "tools": ["mcp:atlassian/jira_search", "mcp:atlassian/jira_get_issue"]
+  },
+  "speckit.plan": {
+    "description": "Generate the technical plan and tasks from a reviewed spec. (Phase 2: Plan)",
+    "phase": "Phase 2: Plan",
+    "handoffs": [
+      {
+        "label": "Analyze For Consistency",
+        "target": "speckit.analyze",
+        "prompt": "Run a project analysis for consistency",
+        "send": true
+      },
+      {
+        "label": "Implement Project",
+        "target": "speckit.implement",
+        "prompt": "Start the implementation in phases",
+        "send": true
+      },
+      {
+        "label": "Create Checklist",
+        "target": "speckit.checklist",
+        "prompt": "Create a checklist for the following domain..."
+      }
+    ],
+    "tools": []
+  },
+  "speckit.specify": {
+    "description": "Create or update the feature specification from a natural language feature description. (Phase 1: Spec)",
+    "phase": "Phase 1: Spec",
+    "handoffs": [
+      {
+        "label": "Clarify Spec Requirements",
+        "target": "speckit.clarify",
+        "prompt": "Clarify specification requirements",
+        "send": true
+      }
+    ],
+    "tools": []
+  },
+  "speckit.tasks": {
+    "description": "Generate an actionable, dependency-ordered tasks.md for the feature based on available design artifacts.",
+    "phase": "Phase 2: Plan",
+    "handoffs": [
+      {
+        "label": "Analyze For Consistency",
+        "target": "speckit.analyze",
+        "prompt": "Run a project analysis for consistency",
+        "send": true
+      },
+      {
+        "label": "Implement Project",
+        "target": "speckit.implement",
+        "prompt": "Start the implementation in phases",
+        "send": true
+      }
+    ],
+    "tools": []
+  },
+  "speckit.taskstoissues": {
+    "description": "Convert existing tasks into actionable, dependency-ordered GitHub issues for the feature based on available design artifacts.",
+    "phase": "Utility",
+    "handoffs": [],
+    "tools": ["mcp:github/github-mcp-server/issue_write"]
+  }
+}

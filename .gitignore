@@ -1,5 +1,16 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+
+# local only, do not push
+# Ignore .claude contents by default (personal settings, session state)...
+.claude/*
+# ...but track shared, team-wide project skills vendored into the repo
+# (see .specify/memory/constitution.md Principle VI).
+!.claude/skills/
+raw-files
+raw-files-v2
+raw-files-v3
+
 # dependencies
 /node_modules
 /.pnp
@@ -32,6 +43,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...but the committed template, which holds only placeholders, never real values
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +52,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.env
