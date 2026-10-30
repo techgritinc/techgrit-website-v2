@@ -1,15 +1,7 @@
-"use client";
-
 import Button from "@/components/ui/Button";
 import type { UpcomingSession } from "../_data/types";
 
 export function AnnouncementStrip({ session }: { session: UpcomingSession }) {
-  // Register Now always scrolls to this page's own Subscribe section — the CMS's
-  // ctaLink can't be relied on to point at an in-page anchor, so it's ignored here.
-  function handleRegisterClick() {
-    document.getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" });
-  }
-
   return (
     <div className="relative z-20">
       <div className="tg-container !px-9" style={{ marginTop: 16 }}>
@@ -23,7 +15,9 @@ export function AnnouncementStrip({ session }: { session: UpcomingSession }) {
           </span>
           <Button
             size="sm"
-            onClick={handleRegisterClick}
+            href={session.ctaLink}
+            target="_blank"
+            rel="noopener noreferrer"
             className="!gap-2 !rounded-[10px] !py-[9px] !text-[13.5px] max-tg-sm:!w-full max-tg-sm:!justify-center leading-[normal] !shadow-nav-btn !hover:shadow-none hover:translate-y-0!"
           >
             {session.ctaLabel} <span className="text-[14px]">&#8594;</span>
