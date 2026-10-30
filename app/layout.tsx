@@ -31,6 +31,9 @@ export const metadata: Metadata = {
   title: "TechGrit — AI-First Software Engineering Partner",
   description:
     "TechGrit is an AI-first software engineering partner. We build scalable, production-grade software with OrbitAI — our agentic delivery platform.",
+    verification: {
+      "google": "Aef9w5rQAD0VMCsWNDmLa_8tOZq5Zp7O2-nZKR1CokA"
+    },
   icons: {
     icon: "/icons/favicon.png",
   },

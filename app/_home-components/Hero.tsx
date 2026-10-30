@@ -5,14 +5,15 @@ import { splitHighlight } from "@/cms/utils/text";
 import type { HeroData } from "@/cms/api/home/hero";
 
 export default function Hero({ data }: { data: HeroData }) {
-  const { badge, title, highlightTitle, subtitle, primaryBtn, secondaryBtn, stats } = data;
+  const { badge, title, highlightTitle, subtitle, primaryBtn, secondaryBtn, background, stats } = data;
   const { before, highlight, after } = splitHighlight(title, highlightTitle);
 
   return (
     <section id="top" className="relative flex min-h-screen flex-col justify-center overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden bg-ink-deep">
         <video
-          src="/assets/hero/wave.mp4"
+          src={background.videoSrc}
+          poster={background.posterSrc}
           autoPlay
           muted
           loop
