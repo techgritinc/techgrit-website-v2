@@ -1,4 +1,5 @@
-import type { AnySection } from "./shared";
+import { resolveMediaUrl } from "../../utils/media";
+import type { AnySection, StrapiMedia } from "./shared";
 import type { StrapiStatistic } from "./statistics";
 import { parseStatValue } from "./statistics";
 
@@ -11,8 +12,13 @@ export type StrapiHeroSection = {
   secondaryBtnLabel: string;
   secondaryBtnLink: string;
   highlightTitle: string;
+  backgroundImage?: StrapiMedia[] | null;
   __component: "page-reusable-sections.hero";
 };
+
+// Bundled with the site, so the hero still has a background when the CMS hero has no
+// video in `backgroundImage`.
+export const HERO_FALLBACK_VIDEO = "/assets/hero/wave.mp4";
 
 export type HeroStat = {
   id: string;
@@ -32,6 +38,7 @@ export type HeroData = {
   subtitle: string;
   primaryBtn: { label: string; href: string };
   secondaryBtn: { label: string; href: string };
+  background: { videoSrc: string; posterSrc?: string };
   stats: HeroStat[];
 };
 
@@ -57,6 +64,21 @@ export function toHeroStats(statistics: StrapiStatistic[] | undefined): HeroStat
   });
 }
 
+// The CMS field is named backgroundImage but accepts videos too: the first video is the
+// hero background and the first image its poster (shown until the video can play). The
+// poster is only used alongside a CMS video, so an image meant for something else never
+// sits over the bundled fallback video.
+function toHeroBackground(media: StrapiMedia[] | null | undefined): HeroData["background"] {
+  const items = media ?? [];
+  const video = items.find((m) => m.mime?.startsWith("video/"));
+  if (!video) return { videoSrc: HERO_FALLBACK_VIDEO };
+  const poster = items.find((m) => m.mime?.startsWith("image/"));
+  return {
+    videoSrc: resolveMediaUrl(video.url),
+    posterSrc: poster ? resolveMediaUrl(poster.url) : undefined,
+  };
+}
+
 export function toHero(section: StrapiHeroSection, badgeStat: StrapiStatistic | undefined): HeroData {
   return {
     badge: badgeStat ? { label: badgeStat.title, text: badgeStat.subtitle ?? "", href: badgeStat.ctaLink ?? "" } : undefined,
@@ -65,6 +87,7 @@ export function toHero(section: StrapiHeroSection, badgeStat: StrapiStatistic | 
     subtitle: section.subtitle,
     primaryBtn: { label: section.primaryBtnLabel, href: section.primaryBtnLink },
     secondaryBtn: { label: section.secondaryBtnLabel, href: section.secondaryBtnLink },
+    background: toHeroBackground(section.backgroundImage),
     stats: [],
   };
 }
