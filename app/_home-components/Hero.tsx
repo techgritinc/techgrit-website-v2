@@ -30,6 +30,8 @@ export default function Hero({ data }: { data: HeroData }) {
           {badge && (
             <a
               href={badge.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group opacity-0 [animation-delay:0.02s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mb-4 inline-flex max-w-full items-center gap-2 tg-sm:gap-5 rounded-full border border-border-orange-strong bg-[image:var(--gradient-live-badge)] py-1.5 tg-sm:py-3 pr-3.5 tg-sm:pr-7.5 pl-1.5 tg-sm:pl-3 leading-[normal] shadow-[var(--shadow-live-badge)] backdrop-blur-10 transition-transform"
             >
               <Badge tone="live" size="lg" className="shrink-0 max-tg-sm:gap-1.5 max-tg-sm:px-3 max-tg-sm:py-1.5 max-tg-sm:text-[10.5px]">
