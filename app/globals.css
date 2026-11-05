@@ -1291,6 +1291,24 @@
     }
   }
 
+  /* Count-up numbers (AnimatedStat). The server HTML carries the real value so it is
+     visible with JavaScript off. Where scripting is on, hide it until AnimatedStat has
+     hydrated and set data-ready, otherwise the final value would paint and then drop to
+     0 before counting up. visibility (not display) keeps the box, so there is no layout
+     shift. tgcounterfallback un-hides it after 3s if the script never arrives. */
+  @media (scripting: enabled) {
+    [data-counter]:not([data-ready]) {
+      visibility: hidden;
+      animation: tgcounterfallback 0s 3s forwards;
+    }
+  }
+
+  @keyframes tgcounterfallback {
+    to {
+      visibility: visible;
+    }
+  }
+
   /* Liquid mesh orb movements (Hero Crazy background) */
   @keyframes tgm1 {
 
