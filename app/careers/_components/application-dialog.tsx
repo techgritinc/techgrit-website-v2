@@ -196,6 +196,7 @@ export function ApplicationDialog({
       message: validatedMessage,
       resume: resumeResult.data,
       category: "careers",
+      position: context.mode === "role" ? (context.roleTitle ?? undefined) : "General Application",
     });
     setIsSubmitting(false);
 

@@ -1,6 +1,7 @@
 "use server";
 
 import { CMS_API_URL } from "./fetcher";
+import { sendCareersNotification } from "@/lib/notify-careers";
 
 export type FormSubmissionPayload = {
   name?: string;
@@ -36,6 +37,8 @@ export type CareersApplicationPayload = {
   message?: string;
   resume: File;
   category: string;
+  /** Role title — used only for the HR notification e-mail, NOT sent to the CMS. */
+  position?: string;
 };
 
 // Instead, use Strapi's documented two-step flow: upload the file to /api/upload
@@ -45,7 +48,7 @@ export async function submitCareersApplication(
   payload: CareersApplicationPayload
 ): Promise<FormSubmissionResult> {
   try {
-    const { resume, ...fields } = payload;
+    const { resume, position, ...fields } = payload;
 
     const uploadBody = new FormData();
     uploadBody.append("files", resume, resume.name);
@@ -56,7 +59,7 @@ export async function submitCareersApplication(
     });
     if (!uploadRes.ok) return { ok: false };
 
-    const uploaded: { id: number }[] = await uploadRes.json();
+    const uploaded: { id: number; url?: string }[] = await uploadRes.json();
     const fileId = uploaded[0]?.id;
     if (!fileId) return { ok: false };
 
@@ -66,6 +69,19 @@ export async function submitCareersApplication(
       body: JSON.stringify({ data: { ...fields, resume: [fileId] } }),
     });
     if (!res.ok) return { ok: false };
+
+    // Saved in the CMS — now notify HR. Fails soft, so the candidate still sees success
+    // even if the e-mail cannot be sent.
+    const resumePath = uploaded[0]?.url;
+    await sendCareersNotification({
+      position: position || "General Application",
+      name: fields.name,
+      email: fields.email,
+      linkedinUrl: fields.linkedinUrl,
+      message: fields.message,
+      resume,
+      resumeUrl: resumePath ? new URL(resumePath, CMS_API_URL).toString() : undefined,
+    });
     return { ok: true };
   } catch {
     return { ok: false };
