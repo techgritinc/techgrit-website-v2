@@ -175,6 +175,15 @@ jobs:
           GIT_BRANCH: ${{ github.ref_name }}
           # Strapi origin, no trailing /api -- cms/api/fetcher.ts appends endpoint paths.
           CMS_API_URL: ${{ vars.PROD_CMS_API_URL }}
+          # Microsoft Graph credentials for the careers-application e-mail
+          # (lib/graph-mail.ts, lib/notify-careers.ts). Runtime-only, so they reach the VM's
+          # .env and never the build job. Read from the `prod` Environment (this job's), so
+          # no PROD_ prefix. Shipped as a file, not on the ssh command line.
+          MS_GRAPH_TENANT_ID: ${{ secrets.MS_GRAPH_TENANT_ID }}
+          MS_GRAPH_CLIENT_ID: ${{ secrets.MS_GRAPH_CLIENT_ID }}
+          MS_GRAPH_CLIENT_SECRET: ${{ secrets.MS_GRAPH_CLIENT_SECRET }}
+          MS_GRAPH_SENDER: ${{ vars.MS_GRAPH_SENDER }}
+          CAREERS_NOTIFY_TO: ${{ vars.CAREERS_NOTIFY_TO }}
         run: |
           set -euo pipefail
           if [ -z "$DEPLOY_PATH" ]; then
@@ -187,6 +196,33 @@ jobs:
             echo "::error::PROD_CMS_API_URL is not set in the repo's Actions variables."
             exit 1
           fi
+          # The app skips the careers e-mail (logged) when any of these is missing and still
+          # saves the application, so a missing value would otherwise deploy green and HR
+          # would silently get nothing. Refuse to deploy instead. Checked before any SSH
+          # step, so the running release is untouched.
+          missing=""
+          for v in MS_GRAPH_TENANT_ID MS_GRAPH_CLIENT_ID MS_GRAPH_CLIENT_SECRET MS_GRAPH_SENDER CAREERS_NOTIFY_TO; do
+            if [ -z "${!v}" ]; then missing="$missing $v"; fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing in the 'prod' Environment:$missing -- refusing to deploy without the careers e-mail config."
+            exit 1
+          fi
+          # Build the .env locally and scp it: the client secret must not appear on the
+          # ssh command line (visible in the VM's process list and shell history).
+          ( umask 077
+            ENV_FILE="$(mktemp)"
+            {
+              printf 'CMS_API_URL=%s\n' "$CMS_API_URL"
+              printf 'MS_GRAPH_TENANT_ID=%s\n' "$MS_GRAPH_TENANT_ID"
+              printf 'MS_GRAPH_CLIENT_ID=%s\n' "$MS_GRAPH_CLIENT_ID"
+              printf 'MS_GRAPH_CLIENT_SECRET=%s\n' "$MS_GRAPH_CLIENT_SECRET"
+              printf 'MS_GRAPH_SENDER=%s\n' "$MS_GRAPH_SENDER"
+              printf 'CAREERS_NOTIFY_TO=%s\n' "$CAREERS_NOTIFY_TO"
+            } > "$ENV_FILE"
+            scp -i ~/.ssh/deploy_key -P "$SSH_PORT" "$ENV_FILE" \
+              "$SSH_USER@$SSH_HOST:/tmp/techgrit-site.env"
+            rm -f "$ENV_FILE" )
           ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
             "DEPLOY_PATH='$DEPLOY_PATH' \
              APP_NAME='$APP_NAME' \
@@ -243,7 +279,9 @@ jobs:
           # as a second path, because fetchCms fails soft and a missing value would
           # render empty sections rather than error.
           echo "==> Writing .env"
-          printf 'CMS_API_URL=%s\n' "$CMS_API_URL" > .artifact.new/.env
+          # The file was uploaded by the runner (CMS_API_URL + MS_GRAPH_* + CAREERS_NOTIFY_TO).
+          test -f /tmp/techgrit-site.env
+          mv /tmp/techgrit-site.env .artifact.new/.env
           chmod 600 .artifact.new/.env
           cp .artifact.new/.env .env
           chmod 600 .env
