@@ -6,7 +6,6 @@ import { z } from "zod";
 import { CMS_API_URL } from "./fetcher";
 import { getJobDetailContent } from "./job-detail";
 import { sendCareersNotification } from "@/lib/notify-careers";
-import { envPositiveInt } from "@/lib/env";
 import { takeRequest, type RateLimit } from "@/lib/rate-limit";
 import { validateEmail, validateLinkedinUrl, validateMessage, validateName, validateResume } from "@/lib/validations";
 
@@ -72,10 +71,15 @@ const careersApplicationSchema = z.object({
 
 // Per-IP limit stops one sender flooding HR; the global cap keeps the HR mailbox well
 // under Microsoft Graph's ~30 messages/minute throttle even if IPs rotate.
-// Optional env overrides (server-only, read at runtime); unset/invalid uses the default.
-const RATE_WINDOW_MS = envPositiveInt("CAREERS_RATE_WINDOW_MS", 10 * 60 * 1000);
-const MAX_PER_IP = envPositiveInt("CAREERS_MAX_PER_IP", 5);
-const MAX_GLOBAL = envPositiveInt("CAREERS_MAX_GLOBAL", 60);
+// The values come from .env (server-only, read at runtime) and are required: a missing or
+// invalid one throws, which the caller's try/catch logs and reports as a failed submission.
+function positiveIntEnv(name: string): number {
+  const value = Number(process.env[name]);
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error(`${name} must be set to a positive number in .env`);
+  }
+  return Math.floor(value);
+}
 
 // nginx (the only proxy in front of the app) must set X-Real-IP to $remote_addr, which
 // overwrites any client-sent value. Fallback: the LAST X-Forwarded-For entry, the one
@@ -89,7 +93,10 @@ async function clientIp(): Promise<string | null> {
 }
 
 function rateLimitsFor(ip: string | null): RateLimit[] {
-  const global: RateLimit = { key: "careers:global", limit: MAX_GLOBAL, windowMs: RATE_WINDOW_MS };
+  const windowMs = positiveIntEnv("CAREERS_RATE_WINDOW_MS");
+  const maxPerIp = positiveIntEnv("CAREERS_MAX_PER_IP");
+  const maxGlobal = positiveIntEnv("CAREERS_MAX_GLOBAL");
+  const global: RateLimit = { key: "careers:global", limit: maxGlobal, windowMs };
   // No client IP means the proxy isn't forwarding it. Lumping every such request into
   // one shared "unknown" bucket would let 5 submissions lock everyone out, so fall back
   // to the global cap alone and say so in the log.
@@ -97,7 +104,7 @@ function rateLimitsFor(ip: string | null): RateLimit[] {
     console.warn("[careers] no X-Real-IP / X-Forwarded-For header — per-IP limit skipped; check nginx");
     return [global];
   }
-  return [{ key: `careers:ip:${ip}`, limit: MAX_PER_IP, windowMs: RATE_WINDOW_MS }, global];
+  return [{ key: `careers:ip:${ip}`, limit: maxPerIp, windowMs }, global];
 }
 
 // The HR e-mail's role label comes from the CMS, never from the client. Never throws:
