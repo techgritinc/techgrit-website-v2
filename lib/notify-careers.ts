@@ -1,4 +1,5 @@
 import { isGraphMailConfigured, sendGraphMail } from "./graph-mail";
+import { isHttpUrl } from "./validations";
 
 /**
  * Careers "Apply Now" notification to HR, sent through Microsoft Graph (lib/graph-mail.ts).
@@ -6,8 +7,22 @@ import { isGraphMailConfigured, sendGraphMail } from "./graph-mail";
  * Called from cms/api/form-submissions.ts only AFTER the application is saved in the CMS,
  * so the CMS stays the record of truth and an e-mail problem never fails the candidate's
  * submission (fails soft: logs and returns false).
- * Recipient: CAREERS_NOTIFY_TO (comma-separated allowed), default hr@techgrit.com.
+ * Recipient: CAREERS_NOTIFY_TO (comma-separated allowed), default careers@techgrit.com.
  */
+const DEFAULT_RECIPIENT = "careers@techgrit.com";
+
+// Unset, empty, or only separators (e.g. ",") all fall back to the default, so a config
+// typo can never produce an empty recipient list (Graph would reject the mail with a 400).
+function careersRecipients(): string[] {
+  const raw = process.env.CAREERS_NOTIFY_TO;
+  const parsed = (raw ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (parsed.length > 0) return parsed;
+  if (raw?.trim()) console.warn(`[careers-notify] CAREERS_NOTIFY_TO has no addresses; using ${DEFAULT_RECIPIENT}`);
+  return [DEFAULT_RECIPIENT];
+}
 export type CareersNotification = {
   position: string;
   name: string;
@@ -35,10 +50,10 @@ export async function sendCareersNotification(n: CareersNotification): Promise<b
   }
 
   try {
-    const to = (process.env.CAREERS_NOTIFY_TO || "hr@techgrit.com")
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
+    const to = careersRecipients();
+    // Defense in depth: only http(s) links ever reach an href in HR's inbox.
+    const linkedinUrl = n.linkedinUrl && isHttpUrl(n.linkedinUrl) ? n.linkedinUrl : undefined;
+    const resumeUrl = n.resumeUrl && isHttpUrl(n.resumeUrl) ? n.resumeUrl : undefined;
 
     const position = oneLine(n.position);
     const name = oneLine(n.name);
@@ -48,13 +63,13 @@ export async function sendCareersNotification(n: CareersNotification): Promise<b
       ["Position", escapeHtml(position)],
       ["Name", escapeHtml(name)],
       ["Email", `<a href="mailto:${escapeHtml(n.email)}">${escapeHtml(n.email)}</a>`],
-      ["LinkedIn / portfolio", n.linkedinUrl ? `<a href="${escapeHtml(n.linkedinUrl)}">${escapeHtml(n.linkedinUrl)}</a>` : "—"],
+      ["LinkedIn / portfolio", linkedinUrl ? `<a href="${escapeHtml(linkedinUrl)}">${escapeHtml(linkedinUrl)}</a>` : "—"],
       ["Why TechGrit?", n.message ? escapeHtml(n.message).replace(/\n/g, "<br>") : "—"],
       [
         "Resume",
         // File name only, linked to the CMS copy when available (the file is also attached when small enough).
-        n.resumeUrl
-          ? `<a href="${escapeHtml(n.resumeUrl)}">${escapeHtml(n.resume.name)}</a>`
+        resumeUrl
+          ? `<a href="${escapeHtml(resumeUrl)}">${escapeHtml(n.resume.name)}</a>`
           : escapeHtml(n.resume.name),
       ],
     ];
