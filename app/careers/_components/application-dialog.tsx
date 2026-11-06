@@ -50,7 +50,9 @@ const EMPTY_VALUES: ApplicationFormValues = {
 };
 
 const TITLE_ID = "application-dialog-title";
-const HONEYPOT_NAME = "website";
+// Deliberately meaningless: browsers and password managers autofill fields with common
+// names like "website", which would make the server silently drop a real application.
+const HONEYPOT_NAME = "tg_hp_q7x2";
 
 // Fixed-height slot, always rendered, so a field's neighbors don't jump when its
 // error message appears/disappears.
@@ -201,12 +203,16 @@ export function ApplicationDialog({
       resume: resumeResult.data,
       // The server looks the role title up from this slug; the client never sends a title.
       roleSlug: context.mode === "role" ? (context.roleSlug ?? undefined) : undefined,
-      website: typeof honeypot === "string" ? honeypot : undefined,
+      trap: typeof honeypot === "string" ? honeypot : undefined,
     });
     setIsSubmitting(false);
 
     if (!result.ok) {
-      setSubmitError("Something went wrong. Please try again.");
+      setSubmitError(
+        result.reason === "rate_limited"
+          ? "We've received a lot of applications in a short time. Please try again in a few minutes."
+          : "Something went wrong. Please try again."
+      );
       return;
     }
 
@@ -356,12 +362,13 @@ export function ApplicationDialog({
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="flex flex-col gap-3.5 px-8 pb-7 pt-[22px]"
+              className="relative flex flex-col gap-3.5 px-8 pb-7 pt-[22px]"
             >
-              {/* Honeypot — invisible, skipped by keyboard and screen readers. */}
-              <div aria-hidden="true" className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
+              {/* Honeypot — invisible, skipped by keyboard and screen readers. The form is
+                  `relative` so this absolute wrapper is anchored to it, not to the page. */}
+              <div aria-hidden="true" className="pointer-events-none absolute left-0 top-0 h-px w-px overflow-hidden opacity-0">
                 <label>
-                  Website
+                  Leave this field empty
                   <input type="text" name={HONEYPOT_NAME} tabIndex={-1} autoComplete="off" defaultValue="" />
                 </label>
               </div>
