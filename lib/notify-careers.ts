@@ -1,4 +1,3 @@
-import { envPositiveInt } from "./env";
 import { isGraphMailConfigured, sendGraphMail } from "./graph-mail";
 import { isHttpUrl } from "./validations";
 
@@ -9,21 +8,19 @@ import { isHttpUrl } from "./validations";
  * so the CMS stays the record of truth and an e-mail problem never fails the candidate's
  * submission (fails soft: logs a "[careers-notify] ALERT" line and returns false — grep
  * the PM2 error log for that tag to find applications HR was not e-mailed about).
- * Recipient: CAREERS_NOTIFY_TO (comma-separated allowed), default careers@techgrit.com.
+ * Recipient: CAREERS_NOTIFY_TO from .env (comma-separated allowed). Required, no default.
  */
-const DEFAULT_RECIPIENT = "careers@techgrit.com";
 
-// Unset, empty, or only separators (e.g. ",") all fall back to the default, so a config
-// typo can never produce an empty recipient list (Graph would reject the mail with a 400).
+// Unset, empty, or only separators (e.g. ",") throw, so a config typo can never produce an
+// empty recipient list (Graph would reject the mail with a 400). The caller's try/catch
+// logs the "[careers-notify] ALERT" line.
 function careersRecipients(): string[] {
-  const raw = process.env.CAREERS_NOTIFY_TO;
-  const parsed = (raw ?? "")
+  const parsed = (process.env.CAREERS_NOTIFY_TO ?? "")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  if (parsed.length > 0) return parsed;
-  if (raw?.trim()) console.warn(`[careers-notify] CAREERS_NOTIFY_TO has no addresses; using ${DEFAULT_RECIPIENT}`);
-  return [DEFAULT_RECIPIENT];
+  if (parsed.length === 0) throw new Error("CAREERS_NOTIFY_TO must list at least one address in .env");
+  return parsed;
 }
 export type CareersNotification = {
   position: string;
@@ -39,13 +36,18 @@ export type CareersNotification = {
 // Graph's single-request sendMail limit is ~4 MB for the whole JSON body, and base64 makes
 // a file ~4/3 bigger: 3 MiB becomes ~4.2 MB (rejected), 2.5 MiB ~3.5 MB (fits). Only attach
 // the resume when it is at or under this size; larger files are linked instead.
-// CAREERS_MAX_ATTACHMENT_BYTES can LOWER the limit, never raise it past the safe ceiling,
-// because a higher value would make Graph reject the whole e-mail.
+// The limit comes from CAREERS_MAX_ATTACHMENT_BYTES in .env (required). It can lower the
+// limit but never raise it past this safe ceiling, because a higher value would make Graph
+// reject the whole e-mail. The ceiling is a fixed Graph constraint, not a tunable.
 const GRAPH_SAFE_ATTACHMENT_BYTES = Math.floor(2.5 * 1024 * 1024);
-const MAX_ATTACHMENT_BYTES = Math.min(
-  envPositiveInt("CAREERS_MAX_ATTACHMENT_BYTES", GRAPH_SAFE_ATTACHMENT_BYTES),
-  GRAPH_SAFE_ATTACHMENT_BYTES
-);
+
+function maxAttachmentBytes(): number {
+  const value = Number(process.env.CAREERS_MAX_ATTACHMENT_BYTES);
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error("CAREERS_MAX_ATTACHMENT_BYTES must be set to a positive number in .env");
+  }
+  return Math.min(Math.floor(value), GRAPH_SAFE_ATTACHMENT_BYTES);
+}
 
 const escapeHtml = (v: string) =>
   v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -66,7 +68,7 @@ export async function sendCareersNotification(n: CareersNotification): Promise<b
 
     const position = oneLine(n.position);
     const name = oneLine(n.name);
-    const attach = n.resume.size <= MAX_ATTACHMENT_BYTES;
+    const attach = n.resume.size <= maxAttachmentBytes();
 
     const rows: [string, string][] = [
       ["Position", escapeHtml(position)],

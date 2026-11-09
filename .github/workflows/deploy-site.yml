@@ -180,6 +180,10 @@ jobs:
           MS_GRAPH_CLIENT_SECRET: ${{ secrets.MS_GRAPH_CLIENT_SECRET }}
           MS_GRAPH_SENDER: ${{ vars.MS_GRAPH_SENDER }}
           CAREERS_NOTIFY_TO: ${{ vars.CAREERS_NOTIFY_TO }}
+          CAREERS_RATE_WINDOW_MS: ${{ vars.CAREERS_RATE_WINDOW_MS }}
+          CAREERS_MAX_PER_IP: ${{ vars.CAREERS_MAX_PER_IP }}
+          CAREERS_MAX_GLOBAL: ${{ vars.CAREERS_MAX_GLOBAL }}
+          CAREERS_MAX_ATTACHMENT_BYTES: ${{ vars.CAREERS_MAX_ATTACHMENT_BYTES }}
         run: |
           set -euo pipefail
           if [ -z "$DEPLOY_PATH" ]; then
@@ -197,7 +201,7 @@ jobs:
           # would silently get nothing. Refuse to deploy instead. Checked before any SSH
           # step, so the running release is untouched.
           missing=""
-          for v in MS_GRAPH_TENANT_ID MS_GRAPH_CLIENT_ID MS_GRAPH_CLIENT_SECRET MS_GRAPH_SENDER CAREERS_NOTIFY_TO; do
+          for v in MS_GRAPH_TENANT_ID MS_GRAPH_CLIENT_ID MS_GRAPH_CLIENT_SECRET MS_GRAPH_SENDER CAREERS_NOTIFY_TO CAREERS_RATE_WINDOW_MS CAREERS_MAX_PER_IP CAREERS_MAX_GLOBAL CAREERS_MAX_ATTACHMENT_BYTES; do
             if [ -z "${!v}" ]; then missing="$missing $v"; fi
           done
           if [ -n "$missing" ]; then
@@ -215,6 +219,10 @@ jobs:
               printf 'MS_GRAPH_CLIENT_SECRET=%s\n' "$MS_GRAPH_CLIENT_SECRET"
               printf 'MS_GRAPH_SENDER=%s\n' "$MS_GRAPH_SENDER"
               printf 'CAREERS_NOTIFY_TO=%s\n' "$CAREERS_NOTIFY_TO"
+              printf 'CAREERS_RATE_WINDOW_MS=%s\n' "$CAREERS_RATE_WINDOW_MS"
+              printf 'CAREERS_MAX_PER_IP=%s\n' "$CAREERS_MAX_PER_IP"
+              printf 'CAREERS_MAX_GLOBAL=%s\n' "$CAREERS_MAX_GLOBAL"
+              printf 'CAREERS_MAX_ATTACHMENT_BYTES=%s\n' "$CAREERS_MAX_ATTACHMENT_BYTES"
             } > "$ENV_FILE"
             scp -i ~/.ssh/deploy_key -P "$SSH_PORT" "$ENV_FILE" \
               "$SSH_USER@$SSH_HOST:/tmp/techgrit-site.env"
@@ -275,7 +283,7 @@ jobs:
           # as a second path, because fetchCms fails soft and a missing value would
           # render empty sections rather than error.
           echo "==> Writing .env"
-          # The file was uploaded by the runner (CMS_API_URL + MS_GRAPH_* + CAREERS_NOTIFY_TO).
+          # The file was uploaded by the runner (CMS_API_URL + MS_GRAPH_* + CAREERS_*).
           test -f /tmp/techgrit-site.env
           mv /tmp/techgrit-site.env .artifact.new/.env
           chmod 600 .artifact.new/.env
