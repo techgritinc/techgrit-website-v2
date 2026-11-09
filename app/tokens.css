@@ -48,6 +48,12 @@
   --tg-accent-tint-rgb:  255 123 0;    /* accent/tint-NN */
   --tg-amber-rgb:        255 170 0;
   --tg-success-rgb:      51 199 90;    /* status/success-NN */
+  /* Theme-independent channels. NOT redefined in the [data-theme="light"] block —
+   * use them (via bg-pure-black/NN, text-pure-white, ...) for anything that sits on
+   * a fixed surface: modal scrims, overlays on photos/video, toggle knobs. Tailwind's
+   * white/black are remapped to the theme channels in globals.css and DO flip. */
+  --tg-pure-white-rgb:   255 255 255;
+  --tg-pure-black-rgb:   0 0 0;
 
   --tg-gradient-text: linear-gradient(120deg, #FFAA00, #FF7B00); /* Linear Primary — gradient text on dark */
   --tg-gradient-glow: linear-gradient(135deg, rgba(42, 167, 255, 0.55), rgba(255, 138, 31, 0.45) 50%, rgba(20, 20, 30, 0.06)); /* Figma "Gradinet" glow paint */

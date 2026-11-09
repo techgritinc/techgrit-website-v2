@@ -58,7 +58,7 @@ function CookieToggle({
       <span
         aria-hidden="true"
         className={[
-          "absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform duration-200",
+          "absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-pure-white shadow-[0_1px_3px_rgb(var(--tg-pure-black-rgb)/0.3)] transition-transform duration-200",
           checked ? "translate-x-[20px]" : "translate-x-0",
         ].join(" ")}
       />

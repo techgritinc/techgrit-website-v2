@@ -28,6 +28,9 @@
   --color-white:         rgb(var(--tg-contrast-rgb));
   --color-black:         rgb(var(--tg-page-rgb));
   --color-on-brand:      var(--color-badge-text);
+  /* Fixed colours that never flip with the theme — scrims, overlays on media, knobs. */
+  --color-pure-white:    rgb(var(--tg-pure-white-rgb));
+  --color-pure-black:    rgb(var(--tg-pure-black-rgb));
   --color-section-alt:   var(--tg-bg-section-alt);
   --color-raised:        var(--tg-bg-raised);
   --color-ink-deep:      var(--color-ink-deep);

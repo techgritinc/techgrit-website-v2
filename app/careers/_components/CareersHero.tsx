@@ -108,7 +108,7 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                         previewClassName="h-full w-full"
                         portalTarget={previewIndex === index ? modalVideoContainer : undefined}
                       />
-                      <div aria-hidden="true" className="absolute inset-0 bg-black/15 transition-colors duration-200 hover:bg-black/30" />
+                      <div aria-hidden="true" className="absolute inset-0 bg-pure-black/15 transition-colors duration-200 hover:bg-pure-black/30" />
                       <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] shadow-[0_10px_24px_rgba(0,0,0,0.4)]">
                           <PlayIcon className="text-orange" width={18} height={18} />
@@ -142,6 +142,9 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
           role="dialog"
           aria-modal="true"
           aria-label={`${previewImage.alt || "Video"} preview`}
+          // Backdrop is dark in both themes (--color-modal-backdrop), so pin the dark theme
+          // for the close button inside it.
+          data-theme="dark"
           className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-modal-backdrop p-6 backdrop-blur-md"
         >
           <div onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[900px]">

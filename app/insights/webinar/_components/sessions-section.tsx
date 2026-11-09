@@ -34,9 +34,9 @@ export function SessionsSection({
 function WatchNowGlyph({ compact = false }: { compact?: boolean }) {
   return (
     <span
-      className={`flex items-center justify-center rounded-full bg-white/25 ${compact ? "h-5 w-5" : "h-[22px] w-[22px]"}`}
+      className={`flex items-center justify-center rounded-full bg-on-brand/15 ${compact ? "h-5 w-5" : "h-[22px] w-[22px]"}`}
     >
-      <PlayIcon width={compact ? 10 : 11} height={compact ? 10 : 11} fill="white" />
+      <PlayIcon width={compact ? 10 : 11} height={compact ? 10 : 11} className="text-on-brand" />
     </span>
   );
 }

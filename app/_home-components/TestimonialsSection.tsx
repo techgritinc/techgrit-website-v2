@@ -220,7 +220,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                 </div>
                 <p className="relative flex-1 text-[15px] leading-[23.25px] font-normal text-primary">{testimonial.quote}</p>
                 <div className="relative mt-4 pt-4 border-t border-border-8 flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-phase-node)] font-display text-[15px] font-bold text-white shadow-testimonial-avatar">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-phase-node)] font-display text-[15px] font-bold text-on-brand shadow-testimonial-avatar">
                     {testimonial.initials}
                   </div>
                   <div>
@@ -250,6 +250,9 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
           role="dialog"
           aria-modal="true"
           aria-label={`${current.name} testimonial`}
+          // Backdrop is dark in both themes (--color-modal-backdrop), so pin the dark theme
+          // for the close button / placeholder inside it.
+          data-theme="dark"
           className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-modal-backdrop p-6 backdrop-blur-md"
         >
           <div onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[900px]">

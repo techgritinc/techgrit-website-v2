@@ -91,7 +91,7 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
                 opacity={0.9}
                 style={{ transformOrigin: "550px 150px", animation: "tgpulsecore 4s ease-in-out infinite" }}
               />
-              <text className="leading-normal" x={550} y={145} textAnchor="middle" fill="#fff" fontFamily="var(--font-display)" fontWeight={700} fontSize={19}>
+              <text className="leading-normal" x={550} y={145} textAnchor="middle" fill="var(--color-badge-text)" fontFamily="var(--font-display)" fontWeight={700} fontSize={19}>
                 {section.engineLabel}
               </text>
               <text
@@ -99,7 +99,7 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
                 x={550}
                 y={166}
                 textAnchor="middle"
-                fill="rgba(255,255,255,0.85)"
+                fill="color-mix(in srgb, var(--color-badge-text) 85%, transparent)"
                 fontFamily="var(--font-body)"
                 fontWeight={600}
                 fontSize={12}
