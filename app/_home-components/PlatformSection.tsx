@@ -10,22 +10,22 @@ export default function PlatformSection({ data }: { data: DeliveryEngineData }) 
 
   return (
     <section id="platform" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto grid max-w-(--container-max) grid-cols-[1fr_1.05fr] items-center gap-tg-20 px-9 py-[96px] max-tg-md:py-[76px] max-tg-sm:py-10 max-tg-md:grid-cols-1 max-tg-md:gap-tg-17">
+      <div className="mx-auto grid max-w-(--container-max) grid-cols-[1fr_1.05fr] items-center gap-tg-20 px-(--container-padding) py-[96px] max-tg-md:py-[80px] max-tg-sm:py-10 max-tg-md:grid-cols-1 max-tg-md:gap-tg-17">
         <div>
-          <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">{badgeLabel}</div>
-          <h2 className="mt-3 text-[46px] max-tg-sm:text-[30px] font-bold tracking-[var(--ls-snug)] text-white leading-[1.04]">{title}</h2>
-          <p className="mt-5 max-w-110 text-[17.5px] leading-[1.65] text-muted">{subtitle}</p>
+          <div className="text-[14px] font-bold tracking-widest text-orange uppercase leading-[normal]">{badgeLabel}</div>
+          <h2 className="mt-3 text-[48px] max-tg-sm:text-[32px] font-bold tracking-[var(--ls-snug)] text-white leading-[1.04]">{title}</h2>
+          <p className="mt-5 max-w-110 text-[18px] leading-[1.65] text-muted">{subtitle}</p>
 
           <div className="mt-8.5 flex flex-col gap-5.5">
             {capabilities.map((capability) => (
               <div key={capability.title} className="flex items-start gap-3.5">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[var(--color-overlay-orange-14)] text-orange">
                   {capability.icon && (
-                    <Image src={capability.icon.url} alt={capability.icon.alt} width={20} height={20} />
+                    <Image className="tg-icon" src={capability.icon.url} alt={capability.icon.alt} width={20} height={20} />
                   )}
                 </div>
                 <div>
-                  <h3 className="text-[17px] tracking-normal leading-[normal] text-white">{capability.title}</h3>
+                  <h3 className="text-[16px] tracking-normal leading-[normal] text-white">{capability.title}</h3>
                   <p className="mt-1.25 text-[14px] leading-[1.5] text-faint">{capability.description}</p>
                 </div>
               </div>
@@ -36,7 +36,7 @@ export default function PlatformSection({ data }: { data: DeliveryEngineData }) 
         <div className="relative">
           <div
             aria-hidden="true"
-            className="absolute -inset-y-[6%] -inset-x-[4%] z-0 bg-[radial-gradient(circle_at_62%_40%,rgba(232,119,34,0.22),transparent_64%)] blur-[34px]"
+            className="absolute -inset-y-[6%] -inset-x-[4%] z-0 bg-[radial-gradient(circle_at_62%_40%,rgb(var(--tg-accent-tint-rgb)/0.22),transparent_64%)] blur-[34px]"
           />
           {hasDashboard ? (
             <div className="relative z-1 overflow-hidden rounded-xl border border-border bg-console-bg shadow-[var(--shadow-console-card)] backdrop-blur-lg">
@@ -83,8 +83,8 @@ export default function PlatformSection({ data }: { data: DeliveryEngineData }) 
               </div>
 
               <div className="mt-tg-2 flex items-center justify-between border-t border-border-8 px-tg-8 py-tg-4a max-tg-sm:px-tg-3 max-tg-sm:py-tg-3">
-                <span className="text-12 leading-[normal] text-dim max-tg-sm:text-[10.5px] max-tg-sm:tracking-tight">{dashboard.footerText}</span>
-                <span className="text-12 leading-[normal] font-bold text-green max-tg-sm:text-[10.5px]">{dashboard.deadline}</span>
+                <span className="text-12 leading-[normal] text-dim max-tg-sm:text-[14px] max-tg-sm:tracking-tight">{dashboard.footerText}</span>
+                <span className="text-12 leading-[normal] font-bold text-green max-tg-sm:text-[14px]">{dashboard.deadline}</span>
               </div>
             </div>
           ) : (

@@ -113,7 +113,7 @@ export default function CookieSettingsModal({
         {options.map((option) => (
           <div key={option.id} className="flex items-start justify-between gap-6 py-5 first:pt-0">
             <div>
-              <p className="mb-1.5 text-[15px] font-bold text-primary">{option.title}</p>
+              <p className="mb-1.5 text-[14px] font-bold text-primary">{option.title}</p>
               <p className="text-sm leading-[1.6] text-text-66">{option.description}</p>
             </div>
             <CookieToggle

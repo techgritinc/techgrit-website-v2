@@ -15,8 +15,8 @@ import type { SectionIcon } from "@/cms/shared/reusable-sections";
 function MetaItem({ icon, value }: { icon: SectionIcon | null; value: string }) {
   return (
     <div className="flex flex-col items-center text-center">
-      {icon ? <Image src={icon.url} alt={icon.alt} width={30} height={30} className="text-orange" /> : null}
-      <div className="mt-[10px] text-[13.5px] text-text-soft leading-[normal]">{value}</div>
+      {icon ? <Image src={icon.url} alt={icon.alt} width={30} height={30} className="tg-icon text-orange" /> : null}
+      <div className="mt-[8px] text-[14px] text-text-soft leading-[normal]">{value}</div>
     </div>
   );
 }
@@ -34,16 +34,16 @@ export function JobDetailHeader({
 
   return (
     <header>
-      <div className="tg-container px-[var(--space-15)] pt-[56px] pb-[24px]">
+      <div className="tg-container px-[var(--space-15)] pt-[48px] pb-[24px]">
         <SectionEyebrow>{header.badgeLabel}</SectionEyebrow>
         <h1 className="text-[clamp(34px,4.4vw,52px)] leading-[1.05] tracking-[-0.035em]">{header.title}</h1>
-        <Button variant="primary" size="md" className="mt-[26px]" onClick={() => setIsDialogOpen(true)}>
+        <Button variant="primary" size="md" className="mt-[24px]" onClick={() => setIsDialogOpen(true)}>
           {header.ctaLabel}
         </Button>
       </div>
 
       <div className="tg-container px-[var(--space-15)] pb-[var(--space-3)]">
-        <div className="grid grid-cols-3 gap-[18px] border-t border-b border-border-faint py-[30px]">
+        <div className="grid grid-cols-3 gap-[16px] border-t border-b border-border-faint py-[32px]">
           <MetaItem icon={header.jobTypeIcon} value={header.jobType} />
           <MetaItem icon={header.locationIcon} value={header.location} />
           <MetaItem icon={header.calendarIcon} value={`${header.publishedDateLabel}: ${header.publishedDate}`} />

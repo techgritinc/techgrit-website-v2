@@ -13,7 +13,7 @@ export default function TrustedClients({ data }: { data: TrustedClientsData }) {
 
   return (
     <section aria-label="Trusted by our clients" className="relative z-raised border-t border-border-hairline-08 bg-ink">
-      <div className="mx-auto max-w-[1280px] px-9 py-14 max-tg-sm:py-10">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-14 max-tg-sm:py-10">
         <div className="text-center text-12 font-bold tracking-24 text-ghost uppercase">Trusted by our clients</div>
 
         {/* ===== OPTION A: AUTO-SCROLL MARQUEE (active) ===== */}
@@ -31,7 +31,7 @@ export default function TrustedClients({ data }: { data: TrustedClientsData }) {
               <li
                 key={`${logo.id}-${index}`}
                 aria-hidden={index >= data.logos.length}
-                className="mr-4 flex h-[74px] shrink-0 items-center justify-center rounded-lg bg-white px-4 shadow-[var(--shadow-card),0_0_0_1px_rgba(255,255,255,0.06)] transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-[3px] hover:shadow-[var(--shadow-card-hover),var(--shadow-orange-border)]"
+                className="mr-4 flex h-[74px] shrink-0 items-center justify-center rounded-lg bg-logo-tile px-4 shadow-[var(--shadow-card),0_0_0_1px_rgb(var(--tg-contrast-rgb)/0.06)] transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-[3px] hover:shadow-[var(--shadow-card-hover),var(--shadow-orange-border)]"
               >
                 <MediaSlot
                   src={logo.src}

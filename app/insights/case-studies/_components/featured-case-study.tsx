@@ -11,7 +11,7 @@ export function FeaturedCaseStudy({ caseStudy }: { caseStudy: CaseStudyCard }) {
 
   return (
     <section>
-      <div className="tg-container pt-[30px] pb-[10px] px-[var(--space-15)]">
+      <div className="tg-container pt-[32px] pb-[8px] px-[var(--space-15)]">
         <RevealOnScroll>
           <Link href={caseStudy.ctaLink} style={{ display: "contents" }}>
             <GlassCard
@@ -21,19 +21,19 @@ export function FeaturedCaseStudy({ caseStudy }: { caseStudy: CaseStudyCard }) {
             >
               <div className="flex flex-col justify-center gap-4 px-11 py-12">
                 <span
-                  className="inline-flex items-center self-start gap-2 text-[12px] font-bold tracking-[0.1em] uppercase leading-none py-2 px-3 rounded-[30px]"
+                  className="inline-flex items-center self-start gap-2 text-[14px] font-bold tracking-[0.1em] uppercase leading-none py-2 px-3 rounded-[30px]"
                   style={{ background: accentMix(accent, 12), color: accentColor }}
                 >
                   Featured &middot; {caseStudy.categoryName}
                 </span>
                 <div className="flex flex-wrap items-end gap-3.5">
                   <span
-                    className="font-display text-[54px] font-bold leading-none tracking-[var(--ls-snug)]"
+                    className="font-display text-[48px] font-bold leading-none tracking-[var(--ls-snug)]"
                     style={{ color: accentColor }}
                   >
                     {caseStudy.featuredValue}
                   </span>
-                  <span className="pb-2 text-[15px] text-text-soft leading-[normal]">
+                  <span className="pb-2 text-[14px] text-text-soft leading-[normal]">
                     {caseStudy.featuredLabel}
                   </span>
                 </div>
@@ -45,12 +45,12 @@ export function FeaturedCaseStudy({ caseStudy }: { caseStudy: CaseStudyCard }) {
                 </h2>
                 <p
                   title={caseStudy.subtitle}
-                  className="line-clamp-2 max-w-[520px] text-[15.5px] leading-[var(--lh-relaxed)] text-text-dimmer"
+                  className="line-clamp-2 max-w-[520px] text-[16px] leading-[var(--lh-relaxed)] text-text-dimmer"
                 >
                   {caseStudy.subtitle}
                 </p>
-                <span className="inline-flex items-center mt-1.5 gap-2 text-[15px] font-bold text-amber-light leading-[normal]">
-                  {caseStudy.ctaLabel} <span aria-hidden="true" className="text-[17px]">&#8594;</span>
+                <span className="inline-flex items-center mt-1.5 gap-2 text-[14px] font-bold text-amber-light leading-[normal]">
+                  {caseStudy.ctaLabel} <span aria-hidden="true" className="text-[16px]">&#8594;</span>
                 </span>
               </div>
               <div className="relative min-h-[300px]">

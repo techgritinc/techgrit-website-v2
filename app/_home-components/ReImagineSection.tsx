@@ -34,15 +34,15 @@ export default function ReImagineSection({ data }: { data: ValuePropositionData 
 
   return (
     <section>
-      <div className="mx-auto max-w-(--container-max) px-9 pt-20 pb-20 max-tg-sm:py-10">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-20 pb-20 max-tg-sm:py-10">
         <div className="text-center">
-          <h2 className="inline-flex flex-wrap items-center justify-center gap-5 text-[48px] max-tg-sm:text-[30px] leading-[1.06]">
+          <h2 className="inline-flex flex-wrap items-center justify-center gap-5 text-[48px] max-tg-sm:text-[32px] leading-[1.06]">
             <span className="text-primary max-tg-sm:basis-full">{before}</span>
-            <PlayIcon width={46} height={46} className="text-orange drop-shadow-[0_0_14px_rgba(232,119,34,0.6)]" />
+            <PlayIcon width={46} height={46} className="text-orange drop-shadow-[0_0_14px_rgb(var(--tg-accent-tint-rgb)/0.6)]" />
             <span className="bg-[image:var(--gradient-brand-text)] bg-clip-text text-transparent">{highlightTitle}</span>
             {after}
           </h2>
-          <p className="mx-auto mt-4.5 max-w-[680px] text-[17px] leading-[27.2px] text-muted">{subtitle}</p>
+          <p className="mx-auto mt-4.5 max-w-[680px] text-[16px] leading-[27.2px] text-muted">{subtitle}</p>
         </div>
 
         <div className="mt-tg-19 grid grid-cols-3 gap-tg-9 max-tg-md:grid-cols-1">
@@ -55,7 +55,7 @@ export default function ReImagineSection({ data }: { data: ValuePropositionData 
             >
               <GlassCardIcon variant="reimagineDiff">
                 {item.icon ? (
-                  <Image src={item.icon.url} alt={item.icon.alt} width={26} height={26} />
+                  <Image className="tg-icon" src={item.icon.url} alt={item.icon.alt} width={26} height={26} />
                 ) : (
                   <ReimagineSparkleIcon width={26} height={26} className="text-orange" />
                 )}
@@ -90,14 +90,14 @@ export default function ReImagineSection({ data }: { data: ValuePropositionData 
             {comparisonBanner.metrics.map((metric, index) => (
               <div key={metric.label} className={index > 0 ? "" : "mb-6"}>
                 <div
-                  className={`mb-[9px] flex justify-between text-xs leading-[normal] font-bold ${index === 0 ? "text-text-55" : "text-orange"}`}
+                  className={`mb-[8px] flex justify-between text-xs leading-[normal] font-bold ${index === 0 ? "text-text-55" : "text-orange"}`}
                 >
                   <span>{metric.label}</span>
                   <span>{metric.displayValue}</span>
                 </div>
                 <div className="h-3.5 rounded-full bg-glass-10">
                   <div
-                    className={`h-full rounded-full transition-[width] duration-[1100ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] ${index === 0 ? "bg-border-22" : "bg-[linear-gradient(90deg,var(--color-amber),var(--color-orange))] shadow-[0_0_18px_rgba(232,119,34,0.6)]"}`}
+                    className={`h-full rounded-full transition-[width] duration-[1100ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] ${index === 0 ? "bg-border-22" : "bg-[linear-gradient(90deg,var(--color-amber),var(--color-orange))] shadow-[0_0_18px_rgb(var(--tg-accent-tint-rgb)/0.6)]"}`}
                     style={{ width: revealed ? `${metric.barPercent}%` : "0%" }}
                   />
                 </div>

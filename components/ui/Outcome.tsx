@@ -13,8 +13,8 @@ export interface OutcomeProps {
 export function Outcome({ heading, description, className = "" }: OutcomeProps) {
   return (
     <div className={className}>
-      <h3 className="text-[22px] font-bold tracking-[-0.02em] text-white">{heading}</h3>
-      <p className="mt-2.5 text-[15.5px] leading-[1.6] text-text-66">{description}</p>
+      <h3 className="text-[20px] font-bold tracking-[-0.02em] text-white">{heading}</h3>
+      <p className="mt-2.5 text-[16px] leading-[1.6] text-text-66">{description}</p>
     </div>
   );
 }

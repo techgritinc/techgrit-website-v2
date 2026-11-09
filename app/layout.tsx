@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Carlito } from "next/font/google";
+import { Outfit } from "next/font/google";
 import Header from "@/components/layout/Header";
 import { getHeaderData } from "@/cms/api/header";
 import Footer from "@/components/layout/Footer";
@@ -9,23 +9,19 @@ import GoogleAnalytics from "@/components/layout/GoogleAnalyticsLazy";
 import AmbientOrbs from "@/components/ui/ambient-orbs-lazy";
 import "./globals.css";
 
-// v2 collapses the body/display split into one family (Calibri, metrically-substituted
-// by Carlito on non-Windows systems); both CSS variables are still exposed per FR-009/FR-022
-const carlitoBody = Carlito({
-  variable: "--font-calibri-body",
+// Figma StyleGuide (TechGrit Website 2026.fig, SG 07/08): every TG/* text style is set
+// in Outfit, so body and display share one family through --font-outfit.
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const carlitoDisplay = Carlito({
-  variable: "--font-calibri-display",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
+// Runs synchronously in <head> before first paint, so a saved light/dark choice never
+// flashes the default theme (Next guide: preventing-flash-before-hydration). Light is the
+// server default (primary theme); ThemeToggle writes the same "tg-theme" key.
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("tg-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`;
 
 export const metadata: Metadata = {
   title: "TechGrit — AI-First Software Engineering Partner",
@@ -64,9 +60,14 @@ export default async function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${carlitoBody.variable} ${carlitoDisplay.variable} h-full antialiased`}
+      data-theme="light"
+      suppressHydrationWarning
+      className={`${outfit.variable} h-full antialiased`}
     >
-      <head>{mediaOrigin && <link rel="preconnect" href={mediaOrigin} />}</head>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {mediaOrigin && <link rel="preconnect" href={mediaOrigin} />}
+      </head>
       <body className="min-h-full flex flex-col">
         <CookieSettingsProvider>
           <GoogleAnalytics />

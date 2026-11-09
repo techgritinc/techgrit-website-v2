@@ -82,9 +82,9 @@ export default async function DiscoverySprintsPage() {
           case "faq":
             return (
               <section key={section.order} className="relative">
-                <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+                <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
                   <div className="mb-8">
-                    <div className="mb-3 text-[12.5px] font-extrabold uppercase tracking-[0.16em] text-orange">
+                    <div className="mb-3 text-[14px] font-extrabold uppercase tracking-[0.16em] text-orange">
                       {section.eyebrow}
                     </div>
                     <h2 className="text-[clamp(28px,3.2vw,38px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
@@ -107,8 +107,8 @@ export default async function DiscoverySprintsPage() {
                 eyebrowWeight="var(--fw-extrabold)"
                 descriptionLineHeight={1.6}
                 maxWidth={1280}
-                primaryBtnClassName="!py-[15px] !px-[32px] !min-h-[52px] !rounded-[13px] !whitespace-normal !h-auto !shrink"
-                secondaryBtnClassName="!py-[15px] !px-[26px] !rounded-[13px]"
+                primaryBtnClassName="!py-[16px] !px-[32px] !min-h-[52px] !rounded-[13px] !whitespace-normal !h-auto !shrink"
+                secondaryBtnClassName="!py-[16px] !px-[24px] !rounded-[13px]"
                 cardClassName="!p-[80px_40px]"
                 section={{
                   eyebrow: section.badgeLabel,

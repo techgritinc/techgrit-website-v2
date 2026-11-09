@@ -3,7 +3,7 @@ import type { IntegrationsStripSection } from "@/cms/types/construction";
 export function ConstructionIntegrationsStrip({ section }: { section: IntegrationsStripSection }) {
   return (
     <section>
-      <div className="mx-auto max-w-[1280px] px-9 pt-[18px] pb-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[16px] pb-[64px]">
         <div
           className="flex flex-wrap items-center justify-between"
           style={{
@@ -26,13 +26,13 @@ export function ConstructionIntegrationsStrip({ section }: { section: Integratio
           >
             {section.label}
           </span>
-          <div className="flex flex-wrap items-center gap-[14px] sm:gap-[34px] leading-[normal]">
+          <div className="flex flex-wrap items-center gap-[12px] sm:gap-[32px] leading-[normal]">
             {section.partners.map((partner) => (
               <span
                 key={partner.order}
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: 21,
+                  fontSize: 20,
                   fontWeight: "var(--fw-bold)",
                   color: "var(--color-text-muted)",
                   letterSpacing: "-0.01em",

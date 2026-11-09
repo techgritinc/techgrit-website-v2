@@ -13,7 +13,7 @@ export function RoleFilters({
 }) {
   return (
     <div
-      className="flex items-center gap-[10px]"
+      className="flex items-center gap-[8px]"
       role="group"
       aria-label="Filter roles by department"
     >
@@ -27,8 +27,8 @@ export function RoleFilters({
             onClick={() => onSelect(filter.value)}
             className={
               active
-                ? "!shrink-0 !whitespace-nowrap !rounded-[30px] !border !border-orange/60 !bg-orange/[0.16] !px-[15px] !py-[9px] !text-[13.5px] !font-bold !text-white leading-[normal]"
-                : "!shrink-0 !whitespace-nowrap !rounded-[30px] !border !border-white/[0.14] !bg-white/[0.04] !px-[15px] !py-[9px] !text-[13.5px] !font-bold !text-white/70 leading-[normal]"
+                ? "!shrink-0 !whitespace-nowrap !rounded-[30px] !border !border-orange/60 !bg-orange/[0.16] !px-[16px] !py-[8px] !text-[14px] !font-bold !text-white leading-[normal]"
+                : "!shrink-0 !whitespace-nowrap !rounded-[30px] !border !border-white/[0.14] !bg-white/[0.04] !px-[16px] !py-[8px] !text-[14px] !font-bold !text-white/70 leading-[normal]"
             }
           >
             {filter.label}

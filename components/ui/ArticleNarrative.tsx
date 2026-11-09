@@ -14,7 +14,7 @@ export function NarrativeHeading({ id, children }: { id: string; children: React
   return (
     <h2
       id={id}
-      className="text-[26px] font-bold tracking-[var(--ls-normal)] scroll-mt-[100px] leading-[normal]"
+      className="text-[24px] font-bold tracking-[var(--ls-normal)] scroll-mt-[100px] leading-[normal]"
     >
       {children}
     </h2>
@@ -23,9 +23,9 @@ export function NarrativeHeading({ id, children }: { id: string; children: React
 
 function NarrativeBullets({ paragraphs }: { paragraphs: string[] }) {
   return (
-    <div className="flex flex-col gap-[14px] mt-[16px]">
+    <div className="flex flex-col gap-[12px] mt-[16px]">
       {paragraphs.map((paragraph, index) => (
-        <p key={index} className="text-[16.5px] leading-[1.75] text-secondary">
+        <p key={index} className="text-[16px] leading-[1.75] text-secondary">
           {paragraph}
         </p>
       ))}
@@ -42,7 +42,7 @@ function NarrativeFeatureImages({
 }) {
   if (variant === "panel") {
     return (
-      <div className="mt-[18px] flex flex-col gap-[14px]">
+      <div className="mt-[16px] flex flex-col gap-[12px]">
         {images.map((image, index) => (
           <div
             key={index}
@@ -63,7 +63,7 @@ function NarrativeFeatureImages({
   }
 
   return (
-    <div className="mt-[12px] flex flex-wrap gap-[10px]">
+    <div className="mt-[12px] flex flex-wrap gap-[8px]">
       {images.map((image, index) => (
         <div key={index} className="rounded-lg overflow-hidden border border-border-faint">
           <Image
@@ -89,14 +89,14 @@ function NarrativeFeatureRow({
   const isPanel = variant === "panel";
 
   return (
-    <div className="flex items-start gap-[14px]">
+    <div className="flex items-start gap-[12px]">
       {feature.icon ? (
         <Image
           src={feature.icon.url}
           alt={feature.icon.alt}
           width={20}
           height={20}
-          className="shrink-0 mt-[6px]"
+          className="tg-icon shrink-0 mt-[4px]"
         />
       ) : null}
       <div className="flex-1 min-w-0">
@@ -109,11 +109,11 @@ function NarrativeFeatureRow({
               <h3 className="text-[24px] leading-[1.25]">{feature.title}</h3>
             </div>
           ) : (
-            <h3 className="text-[17px] font-semibold leading-[1.45]">{feature.title}</h3>
+            <h3 className="text-[16px] font-semibold leading-[1.45]">{feature.title}</h3>
           )
         ) : null}
         {feature.subtitle ? (
-          <p className="mt-[8px] text-[15.5px] leading-[1.7] text-secondary">{feature.subtitle}</p>
+          <p className="mt-[8px] text-[16px] leading-[1.7] text-secondary">{feature.subtitle}</p>
         ) : null}
 
         {/* Figure sits directly under the heading, ahead of the prose — the image is what
@@ -123,7 +123,7 @@ function NarrativeFeatureRow({
           <NarrativeFeatureImages images={feature.images} variant={variant} />
         ) : null}
         {feature.description ? (
-          <div className="mt-[12px] flex flex-col gap-[10px]">
+          <div className="mt-[12px] flex flex-col gap-[8px]">
             <BlocksContent content={feature.description} />
           </div>
         ) : null}
@@ -140,7 +140,7 @@ function NarrativeFeatureRow({
         {feature.ctaLink && feature.ctaLabel ? (
           <Link
             href={feature.ctaLink}
-            className="mt-[10px] inline-flex items-center gap-[8px] text-[14px] font-semibold text-amber-light"
+            className="mt-[8px] inline-flex items-center gap-[8px] text-[14px] font-semibold text-amber-light"
           >
             {feature.ctaLabel} <span aria-hidden="true">&#8594;</span>
           </Link>
@@ -171,7 +171,7 @@ function NarrativeFeatures({
 }) {
   if (features.length >= 2 && features.every(isBareMetricFeature)) {
     return (
-      <div className="mt-[22px]">
+      <div className="mt-[20px]">
         <MetricsGrid
           metrics={features.map((feature) => ({
             order: feature.order,
@@ -185,7 +185,7 @@ function NarrativeFeatures({
   }
 
   return (
-    <div className="flex flex-col gap-[26px] mt-[22px]">
+    <div className="flex flex-col gap-[24px] mt-[20px]">
       {features.map((feature) => (
         <NarrativeFeatureRow key={feature.order} feature={feature} variant={variant} />
       ))}
@@ -198,7 +198,7 @@ function NarrativePictures({ images }: { images: CaseStudyImage[] }) {
     const image = images[0];
     return (
       <div
-        className="mt-[22px] mx-auto rounded-2xl overflow-hidden border border-border-faint"
+        className="mt-[20px] mx-auto rounded-2xl overflow-hidden border border-border-faint"
         style={{ maxWidth: `min(100%, ${image.width}px)` }}
       >
         <Image
@@ -213,7 +213,7 @@ function NarrativePictures({ images }: { images: CaseStudyImage[] }) {
   }
 
   return (
-    <div className="mt-[22px] grid grid-cols-2 max-tg-sm:grid-cols-1 gap-[16px]">
+    <div className="mt-[20px] grid grid-cols-2 max-tg-sm:grid-cols-1 gap-[16px]">
       {images.map((image, index) => (
         <div key={index} className="rounded-2xl overflow-hidden border border-border-faint">
           <Image

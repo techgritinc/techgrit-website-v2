@@ -15,9 +15,9 @@ export default function MethodologySection({ data }: { data: FrameworkPhasesData
     <PhaseShowcase
       phases={data.phases.map((phase) => ({
         ...phase,
-        icon: phase.icon ? <Image src={phase.icon.url} alt={phase.icon.alt} width={28} height={28} /> : null,
+        icon: phase.icon ? <Image className="tg-icon" src={phase.icon.url} alt={phase.icon.alt} width={28} height={28} /> : null,
         badgeIcon: phase.badgeIcon ? (
-          <Image src={phase.badgeIcon.url} alt={phase.badgeIcon.alt} width={82} height={82} />
+          <Image className="tg-icon" src={phase.badgeIcon.url} alt={phase.badgeIcon.alt} width={82} height={82} />
         ) : null,
       }))}
       eyebrow={data.eyebrow}

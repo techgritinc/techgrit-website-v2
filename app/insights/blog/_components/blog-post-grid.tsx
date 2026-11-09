@@ -10,7 +10,7 @@ import { CardLink } from "@/components/ui/CardLink";
 export function BlogPostGrid({ posts }: { posts: BlogPost[] }) {
   return (
     <section>
-      <div className="mx-auto max-w-(--container-max) px-9 pt-tg-11 pb-tg-21">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-tg-11 pb-tg-21">
         <div className="grid grid-cols-3 gap-6 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
           {posts.map((post) => {
             const accent = categoryAccent(post.categorySlug);
@@ -45,7 +45,7 @@ export function BlogPostGrid({ posts }: { posts: BlogPost[] }) {
                     )}
                     <Badge
                       tone="accent"
-                      className="relative !gap-[7px] !px-[12px] !py-[6px] !text-[11px] !font-bold !tracking-[0.1em] leading-[normal]"
+                      className="relative"
                       style={{
                         color: "var(--color-text-primary)",
                         background: accentMix(accent, 32),
@@ -55,7 +55,7 @@ export function BlogPostGrid({ posts }: { posts: BlogPost[] }) {
                       {post.topic}
                     </Badge>
                   </div>
-                  <div className="flex flex-1 flex-col px-6 pt-6 pb-[26px]">
+                  <div className="flex flex-1 flex-col px-6 pt-6 pb-[24px]">
                     <GlassCardTitle
                       variant="blogCard"
                       title={post.title}
@@ -74,16 +74,16 @@ export function BlogPostGrid({ posts }: { posts: BlogPost[] }) {
                     </div>
                     <div className="mt-[20px] flex items-center gap-tg-3a border-t border-border-8 pt-4">
                       <div
-                        className="leading-[normal] flex size-tg-14 shrink-0 items-center justify-center rounded-full text-[12.5px] font-bold text-badge-text"
+                        className="leading-[normal] flex size-tg-14 shrink-0 items-center justify-center rounded-full text-[14px] font-bold text-badge-text"
                         style={{ background: `linear-gradient(135deg, ${ACCENT_VAR[accent]}, ${accentMix(accent, 60)})` }}
                       >
                         {post.author.initials}
                       </div>
                       <div className="min-w-0">
-                        <div className="truncate text-[13.5px] font-bold text-primary leading-[normal]">
+                        <div className="truncate text-[14px] font-bold text-primary leading-[normal]">
                           {post.author.name}
                         </div>
-                        <div className="text-[12.5px] text-dim leading-[normal]">
+                        <div className="text-[14px] text-dim leading-[normal]">
                           {post.publishDate}
                           {post.publishDate && post.readTime && " · "}
                           {post.readTime}

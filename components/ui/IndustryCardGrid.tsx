@@ -9,8 +9,8 @@ import type { WhatWeBuildSection } from "@/cms/shared/industry-sections";
 export function IndustryCardGrid({ section }: { section: WhatWeBuildSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-[90px] pb-[60px]" data-reveal>
-        <div className="mb-[38px] max-w-[760px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[96px] pb-[64px]" data-reveal>
+        <div className="mb-[40px] max-w-[760px]">
           <SectionEyebrow showAccent={false} className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
           <h2 className="text-[clamp(30px,3.8vw,42px)] leading-[1.08] tracking-[-0.03em]">{section.title}</h2>
           {section.description ? (
@@ -19,12 +19,12 @@ export function IndustryCardGrid({ section }: { section: WhatWeBuildSection }) {
             </p>
           ) : null}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[18px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[16px]">
           {section.cards.map((card) => (
             <GlassCard key={card.order} variant="constructionChallenge" hoverBorderColor="">
               {card.icon ? (
                 <GlassCardIcon variant="constructionChallenge" wrapperClassName="bg-overlay-orange">
-                  <Image src={card.icon.url} alt={card.icon.alt || ""} width={20} height={20} />
+                  <Image className="tg-icon" src={card.icon.url} alt={card.icon.alt || ""} width={20} height={20} />
                 </GlassCardIcon>
               ) : null}
               <GlassCardTitle variant="constructionChallenge" className="tracking-normal">{card.title}</GlassCardTitle>

@@ -10,7 +10,7 @@ import type { EngineeringServicesSection } from "@/cms/shared/industry-sections"
 export function IndustryServiceRows({ section }: { section: EngineeringServicesSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-15 pb-15" data-reveal>
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-15 pb-15" data-reveal>
         <div className="grid grid-cols-1 items-start gap-14 md:grid-cols-[0.8fr_1.2fr]">
           <div className="-mt-0.75">
             <SectionEyebrow showAccent={false} className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
@@ -21,11 +21,11 @@ export function IndustryServiceRows({ section }: { section: EngineeringServicesS
               <div key={card.order} className="flex gap-5.5 border-b border-border-faint py-6.5">
                 <span className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-[10px] bg-overlay-amber">
                   {card.icon ? (
-                    <Image src={card.icon.url} alt={card.icon.alt || ""} width={18} height={18} />
+                    <Image className="tg-icon" src={card.icon.url} alt={card.icon.alt || ""} width={18} height={18} />
                   ) : null}
                 </span>
                 <div>
-                  <h3 className="leading-[normal] tracking-[normal] text-[19px]">{card.title}</h3>
+                  <h3 className="leading-[normal] tracking-[normal] text-[18px]">{card.title}</h3>
                   <p className="mt-1.75 text-sm leading-[1.6] text-60">{card.description}</p>
                 </div>
               </div>

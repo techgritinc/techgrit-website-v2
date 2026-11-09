@@ -42,7 +42,7 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
 
   return (
     <section>
-      <div className="mx-auto grid max-w-[1280px] grid-cols-[1.05fr_0.95fr] items-center gap-14 px-9 pt-[74px] pb-[30px] max-tg-md:grid-cols-1 max-tg-md:gap-9">
+      <div className="mx-auto grid max-w-(--container-max) grid-cols-[1.05fr_0.95fr] items-center gap-14 px-(--container-padding) pt-[80px] pb-[32px] max-tg-md:grid-cols-1 max-tg-md:gap-9">
         <div>
           <div
             data-rise
@@ -61,11 +61,11 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
 
           <p data-rise className="mt-5 max-w-[500px] text-[18px] leading-[1.65] text-secondary [animation-delay:.2s]">{content.lead}</p>
 
-          <div data-rise className="mt-[30px] flex flex-wrap gap-3.5 [animation-delay:.28s]">
-            <Button href={content.primaryCta.href} variant="primary" size="hero" className="min-h-[52px] !px-7 !py-[15px] !text-[16px] !font-bold leading-[normal]">
-              {content.primaryCta.label} <span aria-hidden="true" className="text-[17px]">&#8594;</span>
+          <div data-rise className="mt-[32px] flex flex-wrap gap-3.5 [animation-delay:.28s]">
+            <Button href={content.primaryCta.href} variant="primary" size="hero" className="min-h-[52px] !px-7 !py-[16px] leading-[normal]">
+              {content.primaryCta.label} <span aria-hidden="true" className="text-[16px]">&#8594;</span>
             </Button>
-            <Button href={content.secondaryCta.href} variant="ghost" size="hero" className="min-h-[52px] !px-[26px] !py-4 !text-[16px] !font-bold leading-[normal]">
+            <Button href={content.secondaryCta.href} variant="ghost" size="hero" className="min-h-[52px] !px-[24px] !py-4 leading-[normal]">
               {content.secondaryCta.label}
             </Button>
           </div>

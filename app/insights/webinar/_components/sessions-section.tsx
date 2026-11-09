@@ -67,21 +67,20 @@ function ReleasedCardHalf({ session }: { session: ReleasedSession }) {
         <Button
           size="md"
           onClick={() => handleWatchNow(session.ctaLink)}
-          style={{ fontFamily: "Arial, sans-serif" }}
-          className="relative z-10 !py-tg-3a !px-5 !text-[14px] !gap-[9px] !rounded-full !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
+          className="relative z-10 !py-tg-3a !px-5 !text-[14px] !gap-[8px] !rounded-full !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
         >
           {session.ctaLabel}
           <WatchNowGlyph />
         </Button>
       </div>
-      <div className="px-[26px] pt-6 pb-[26px] -mt-0.5!">
+      <div className="px-[24px] pt-6 pb-[24px] -mt-0.5!">
         <span className="text-12 font-bold tracking-wider text-amber-light leading-[normal] uppercase">
           {session.statusLabel}
         </span>
         <GlassCardTitle variant="webinarReleased" title={session.title} className="mt-1.75">
           {session.title}
         </GlassCardTitle>
-        <GlassCardDescription variant="webinarReleased" title={session.description} className="mt-[9px] text-white/60">
+        <GlassCardDescription variant="webinarReleased" title={session.description} className="mt-[8px] text-white/60">
           {session.description}
         </GlassCardDescription>
       </div>
@@ -106,14 +105,13 @@ function ReleasedCardFull({ session }: { session: ReleasedSession }) {
         <Button
           size="sm"
           onClick={() => handleWatchNow(session.ctaLink)}
-          style={{ fontFamily: "Arial, sans-serif" }}
-          className="relative z-10 !gap-2 !rounded-full !py-[10px] !px-tg-7 !text-[13.5px] !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
+          className="relative z-10 !gap-2 !rounded-full !py-[8px] !px-tg-7 !text-[14px] !shadow-none hover:!shadow-none hover:!translate-y-0 leading-[normal]"
         >
           {session.ctaLabel}
           <WatchNowGlyph compact />
         </Button>
       </div>
-      <div className="-mt-0.5! px-[18px] pb-[18px] tg-sm:px-0 tg-sm:py-[18px] tg-sm:pr-[26px]">
+      <div className="-mt-0.5! px-[16px] pb-[16px] tg-sm:px-0 tg-sm:py-[16px] tg-sm:pr-[24px]">
         <span className="text-12 font-bold tracking-wider text-amber-light leading-[normal] uppercase">
           {session.statusLabel}
         </span>
