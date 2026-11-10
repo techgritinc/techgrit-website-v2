@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { fetchCms } from "../fetcher";
 import { resolveMediaUrl } from "../../utils/media";
+import { parseYouTubeId } from "../../utils/youtube";
 import type { StrapiMedia, StrapiSeo } from "../../types/strapi-common";
 import type { LeaderProfile } from "../../types/leadership-types";
 import type { ReviewsData, Testimonial } from "../home/reviews";
@@ -54,6 +55,7 @@ type StrapiReviewsSection = {
     videoDuration: string | null;
     verificationStatus: string | null;
     video: StrapiMedia | null;
+    videoLink?: string | null;
     authors: { name: string; designation: string | null }[];
   }[];
 };
@@ -158,15 +160,17 @@ function toReviews(section: StrapiReviewsSection): ReviewsData {
   const testimonials: Testimonial[] = section.testimonial.map((item) => {
     const author = item.authors[0];
     const name = author?.name ?? "TechGrit Client";
+    const youtubeId = parseYouTubeId(item.videoLink);
     return {
       id: String(item.id),
-      type: item.video ? "video" : "text",
+      type: youtubeId || item.video ? "video" : "text",
       quote: item.reviwerDescription,
       name,
       role: author?.designation ?? "",
       initials: toInitials(name),
       rating: item.ratings ?? undefined,
-      videoUrl: item.video ? resolveMediaUrl(item.video.url) : null,
+      youtubeId,
+      videoUrl: !youtubeId && item.video ? resolveMediaUrl(item.video.url) : null,
       videoDuration: item.videoDuration ? item.videoDuration.replace(".", ":") : undefined,
       verified: item.verificationStatus === "Verified",
     };

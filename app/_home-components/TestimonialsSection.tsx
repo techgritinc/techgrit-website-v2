@@ -3,8 +3,9 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
-import { CheckIcon, ChevronRightIcon, ClockIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
+import { CheckIcon, ClockIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
 import type { ReviewsData } from "@/cms/api/home/reviews";
+import { disableYouTubeCaptions, youTubePlayerSrc, youTubePreviewSrc } from "@/cms/utils/youtube";
 
 export default function TestimonialsSection({ data }: { data: ReviewsData }) {
   const { badgeLabel, title, subtitle, testimonials, metrics } = data;
@@ -107,7 +108,19 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   className="relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
                   style={{ scrollSnapAlign: "start" }}
                 >
-                  {testimonial.videoUrl ? (
+                  {testimonial.youtubeId ? (
+                    <iframe
+                      src={youTubePreviewSrc(testimonial.youtubeId)}
+                      onLoad={disableYouTubeCaptions}
+                      title=""
+                      aria-hidden="true"
+                      tabIndex={-1}
+                      loading="lazy"
+                      allow="autoplay; encrypted-media; picture-in-picture"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-full max-w-none -translate-x-1/2 -translate-y-1/2 border-0"
+                    />
+                  ) : testimonial.videoUrl ? (
                     <AutoplayVideo
                       src={testimonial.videoUrl}
                       className="absolute inset-0 h-full w-full object-cover"
@@ -254,7 +267,17 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
               <CloseIcon />
             </button>
             <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
-              {current.videoUrl ? (
+              {current.youtubeId ? (
+                <iframe
+                  src={youTubePlayerSrc(current.youtubeId)}
+                  onLoad={disableYouTubeCaptions}
+                  title={`${current.name} testimonial video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full border-0"
+                />
+              ) : current.videoUrl ? (
                 <div ref={setModalVideoContainer} className="h-full w-full" />
               ) : (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[image:var(--gradient-testimonial-placeholder)]">
