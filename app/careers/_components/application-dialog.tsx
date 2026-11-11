@@ -50,6 +50,9 @@ const EMPTY_VALUES: ApplicationFormValues = {
 };
 
 const TITLE_ID = "application-dialog-title";
+// Deliberately meaningless: browsers and password managers autofill fields with common
+// names like "website", which would make the server silently drop a real application.
+const HONEYPOT_NAME = "tg_hp_q7x2";
 
 // Fixed-height slot, always rendered, so a field's neighbors don't jump when its
 // error message appears/disappears.
@@ -144,6 +147,9 @@ export function ApplicationDialog({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitError(null);
+    // Honeypot: hidden from people, so only bots fill it. Passed to the server, which
+    // silently drops the submission.
+    const honeypot = new FormData(event.currentTarget).get(HONEYPOT_NAME);
 
     const nameResult = validateName("Full name").safeParse(values.fullName);
     if (!nameResult.success) {
@@ -195,12 +201,18 @@ export function ApplicationDialog({
       linkedinUrl: trimmedUrl || undefined,
       message: validatedMessage,
       resume: resumeResult.data,
-      category: "careers",
+      // The server looks the role title up from this slug; the client never sends a title.
+      roleSlug: context.mode === "role" ? (context.roleSlug ?? undefined) : undefined,
+      trap: typeof honeypot === "string" ? honeypot : undefined,
     });
     setIsSubmitting(false);
 
     if (!result.ok) {
-      setSubmitError("Something went wrong. Please try again.");
+      setSubmitError(
+        result.reason === "rate_limited"
+          ? "We've received a lot of applications in a short time. Please try again in a few minutes."
+          : "Something went wrong. Please try again."
+      );
       return;
     }
 
@@ -350,8 +362,16 @@ export function ApplicationDialog({
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="flex flex-col gap-3.5 px-8 pb-7 pt-[20px]"
+              className="relative flex flex-col gap-3.5 px-8 pb-7 pt-[20px]"
             >
+              {/* Honeypot — invisible, skipped by keyboard and screen readers. The form is
+                  `relative` so this absolute wrapper is anchored to it, not to the page. */}
+              <div aria-hidden="true" className="pointer-events-none absolute left-0 top-0 h-px w-px overflow-hidden opacity-0">
+                <label>
+                  Leave this field empty
+                  <input type="text" name={HONEYPOT_NAME} tabIndex={-1} autoComplete="off" defaultValue="" />
+                </label>
+              </div>
               <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 ">
                 <div>
                   <FormField
