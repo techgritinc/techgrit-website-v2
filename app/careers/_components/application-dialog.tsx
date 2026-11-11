@@ -318,17 +318,17 @@ export function ApplicationDialog({
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <h3 id={TITLE_ID} className="mt-[22px] text-[24px] font-bold tracking-[-0.01em] text-white">
+            <h3 id={TITLE_ID} className="mt-[20px] text-[24px] font-bold tracking-[-0.01em] text-white">
               Application received.
             </h3>
-            <p className="mx-auto mt-3 max-w-[360px] text-[15.5px] leading-[1.55] text-text-70">
+            <p className="mx-auto mt-3 max-w-[360px] text-[16px] leading-[1.55] text-text-70">
               {thanksLine} &mdash; a hiring lead is going to read your note and get back within{" "}
               <strong>2 business days</strong>.
             </p>
             <Button
               variant="outline"
               onClick={onClose}
-              className="mt-[26px] !inline-flex !items-center !gap-2 !rounded-[11px] !border !border-[var(--color-border-15)] !bg-glass !px-[22px] !py-3 !text-[14.5px] !font-bold !text-white !transition-colors hover:!border-[var(--color-border-15)] hover:!bg-glass-10 hover:!-translate-y-0 active:!translate-y-0"
+              className="mt-[24px] !inline-flex !items-center !gap-2 !rounded-[11px] !border !border-[var(--color-border-15)] !bg-glass !px-[20px] !py-3 !text-white !transition-colors hover:!border-[var(--color-border-15)] hover:!bg-glass-10 hover:!-translate-y-0 active:!translate-y-0"
             >
               Close
             </Button>
@@ -337,16 +337,16 @@ export function ApplicationDialog({
           <>
             <div className="shrink-0 flex items-start justify-between gap-5 border-b border-border-8 px-8 pb-5 pt-7">
               <div>
-                <div className="text-[11.5px] font-bold tracking-[0.14em] text-amber-light uppercase">
+                <div className="text-[14px] font-bold tracking-[0.14em] text-amber-light uppercase">
                   {content.badgeLabel}
                 </div>
                 <h3
                   id={TITLE_ID}
-                  className="font-display mt-1.5 text-[22px] font-bold leading-[1.2] tracking-[-0.01em] text-white"
+                  className="font-display mt-1.5 text-[20px] font-bold leading-[1.2] tracking-[-0.01em] text-white"
                 >
                   {positionLabel}
                 </h3>
-                <p className="mt-1 text-[13.5px] text-text-55">{content.subtitle}</p>
+                <p className="mt-1 text-[14px] text-text-55">{content.subtitle}</p>
               </div>
               <Button
                 variant="outline"
@@ -362,7 +362,7 @@ export function ApplicationDialog({
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="relative flex flex-col gap-3.5 px-8 pb-7 pt-[22px]"
+              className="relative flex flex-col gap-3.5 px-8 pb-7 pt-[20px]"
             >
               {/* Honeypot — invisible, skipped by keyboard and screen readers. The form is
                   `relative` so this absolute wrapper is anchored to it, not to the page. */}
@@ -380,7 +380,7 @@ export function ApplicationDialog({
                         {nameField.label} {requiredMarkNode(nameField.requiredMark)}
                       </>
                     }
-                    labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
+                    labelClassName="mb-1.5 block text-[14px] font-semibold text-text-70"
                     hideLabel={false}
                     required={nameField.requiredMark === "*"}
                     type="text"
@@ -390,7 +390,7 @@ export function ApplicationDialog({
                     onChange={handleChange("fullName")}
                     error={nameError}
                     reserveErrorSpace
-                    inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
+                    inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[12px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
                   />
                 </div>
                 <div>
@@ -400,7 +400,7 @@ export function ApplicationDialog({
                         {emailField.label} {requiredMarkNode(emailField.requiredMark)}
                       </>
                     }
-                    labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
+                    labelClassName="mb-1.5 block text-[14px] font-semibold text-text-70"
                     hideLabel={false}
                     required={emailField.requiredMark === "*"}
                     type="email"
@@ -410,7 +410,7 @@ export function ApplicationDialog({
                     onChange={handleChange("email")}
                     error={emailError}
                     reserveErrorSpace
-                    inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
+                    inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[12px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
                   />
                 </div>
               </div>
@@ -422,7 +422,7 @@ export function ApplicationDialog({
                       {urlField.label} {requiredMarkNode(urlField.requiredMark)}
                     </>
                   }
-                  labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
+                  labelClassName="mb-1.5 block text-[14px] font-semibold text-text-70"
                   hideLabel={false}
                   required={urlField.requiredMark === "*"}
                   type="url"
@@ -432,12 +432,12 @@ export function ApplicationDialog({
                   onChange={handleChange("linkedInOrPortfolioUrl")}
                   error={urlError}
                   reserveErrorSpace
-                  inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
+                  inputClassName="!w-full !rounded-[10px] !border !border-border-strong !bg-glass !px-[12px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
                 />
               </div>
 
               <div>
-                <label className="mb-1.5 block text-[12.5px] font-semibold text-text-70">
+                <label className="mb-1.5 block text-[14px] font-semibold text-text-70">
                   {resumeField.label} {resumeField.requiredMark === "*" && REQUIRED_ASTERISK}
                   {requiredMarkNode(resumeField.requiredMark)}
                 </label>
@@ -451,7 +451,7 @@ export function ApplicationDialog({
                   />
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-[var(--color-border-orange-35)] bg-[var(--color-overlay-orange-14)] text-amber-light">
                     {resumeField.icon ? (
-                      <Image src={resumeField.icon.url} alt={resumeField.icon.alt} width={18} height={18} />
+                      <Image className="tg-icon" src={resumeField.icon.url} alt={resumeField.icon.alt} width={18} height={18} />
                     ) : (
                       <UploadIcon className="h-[18px] w-[18px]" />
                     )}
@@ -460,7 +460,7 @@ export function ApplicationDialog({
                     <span className="block text-[14px] font-bold text-white">
                       {resumeFile ? resumeFile.name : resumeField.uploadPromptText}
                     </span>
-                    <span className="block text-[12px] text-text-55">
+                    <span className="block text-[14px] text-text-55">
                       {resumeFile ? "Click to replace file" : resumeField.acceptedFormatsAndSize}
                     </span>
                   </span>
@@ -474,7 +474,7 @@ export function ApplicationDialog({
                     {messageField.label} {requiredMarkNode(messageField.requiredMark)}
                   </>
                 }
-                labelClassName="mb-1.5 block text-[12.5px] font-semibold text-text-70"
+                labelClassName="mb-1.5 block text-[14px] font-semibold text-text-70"
                 hideLabel={false}
                 multiline
                 name="message"
@@ -484,12 +484,12 @@ export function ApplicationDialog({
                 onChange={handleChange("message")}
                 error={messageError}
                 reserveErrorSpace
-                inputClassName="!min-h-[88px] !max-h-[88px] !w-full resize-none modal-scrollbar !rounded-[10px] !border !border-border-strong !bg-glass !px-[14px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
+                inputClassName="!min-h-[88px] !max-h-[88px] !w-full resize-none modal-scrollbar !rounded-[10px] !border !border-border-strong !bg-glass !px-[12px] !py-[12px] !text-[16px] sm:!text-[14px] !text-white !outline-none !transition-colors placeholder:!text-[var(--color-text-35)] focus:!border-orange focus:!bg-glass"
               />
 
               <div className="min-h-[18px]">
                 {submitError && (
-                  <p role="alert" className="text-center text-[13px] font-semibold text-error leading-[normal]">
+                  <p role="alert" className="text-center text-[14px] font-semibold text-error leading-[normal]">
                     {submitError}
                   </p>
                 )}
@@ -499,11 +499,11 @@ export function ApplicationDialog({
                 type="submit"
                 variant="primary"
                 disabled={isSubmitting}
-                className="mt-1.5 !min-h-[52px] !gap-[9px] !rounded-[12px] !px-[24px] !py-[15px] !text-[15.5px]"
+                className="mt-1.5 !min-h-[52px] !gap-[8px] !rounded-[12px] !px-[24px] !py-[16px]"
               >
                 {content.ctaLabel} <span className="text-[16px]">&#8594;</span>
               </Button>
-              <p className="text-center text-[12px] text-text-40">{content.privacyNote}</p>
+              <p className="text-center text-[14px] text-text-40">{content.privacyNote}</p>
             </form>
             </div>
           </>

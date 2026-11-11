@@ -15,8 +15,8 @@ export function TopicFilter({ topics, activeCategory }: { topics: Topic[]; activ
             aria-current={active ? "page" : undefined}
             className={
               active
-                ? "leading-[normal] cursor-pointer rounded-full border border-border-orange-strong bg-[image:var(--gradient-brand)] px-tg-7 py-tg-3 text-[13.5px] font-bold tracking-01 whitespace-nowrap text-primary shadow-chip-active transition-all duration-200 ease-out"
-                : "leading-[normal] cursor-pointer rounded-full border border-border-14 bg-glass-4 px-tg-7 py-tg-3 text-[13.5px] font-bold tracking-01 whitespace-nowrap text-secondary transition-all duration-200 ease-out"
+                ? "leading-[normal] cursor-pointer rounded-full border border-border-orange-strong bg-[image:var(--gradient-brand)] px-tg-7 py-tg-3 text-[14px] font-bold tracking-01 whitespace-nowrap text-on-brand shadow-chip-active transition-all duration-200 ease-out"
+                : "leading-[normal] cursor-pointer rounded-full border border-border-14 bg-glass-4 px-tg-7 py-tg-3 text-[14px] font-bold tracking-01 whitespace-nowrap text-secondary transition-all duration-200 ease-out"
             }
           >
             {topic.label}

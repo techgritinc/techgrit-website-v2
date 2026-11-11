@@ -25,16 +25,16 @@ export function ConsumerLendingDomainDepth({ section }: { section: DomainDepthSe
 
   return (
     <section id="domain-depth" className="relative scroll-mt-24">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <div className="mb-9 text-center">
-            <div className="mb-3 text-[12.5px] font-extrabold uppercase leading-[normal] tracking-[0.16em] text-orange">
+            <div className="mb-3 text-[14px] font-extrabold uppercase leading-[normal] tracking-[0.16em] text-orange">
               {section.eyebrow}
             </div>
             <h2 className="text-[clamp(28px,3.2vw,38px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
               {section.title}
             </h2>
-            <p className="mx-auto mt-3.5 max-w-[640px] text-[16.5px] leading-[1.6] text-text-66">
+            <p className="mx-auto mt-3.5 max-w-[640px] text-[16px] leading-[1.6] text-text-66">
               {section.description}
             </p>
           </div>
@@ -75,8 +75,8 @@ export function ConsumerLendingDomainDepth({ section }: { section: DomainDepthSe
             className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-[0.9fr_1.1fr]"
           >
             <div>
-              <h3 className="text-[22px] leading-[1.2] font-bold text-white">{activeStage.title}</h3>
-              <p className="mt-3.5 text-[15.5px] leading-[1.65] text-text-66">{activeStage.description}</p>
+              <h3 className="text-[20px] leading-[1.2] font-bold text-white">{activeStage.title}</h3>
+              <p className="mt-3.5 text-[16px] leading-[1.65] text-text-66">{activeStage.description}</p>
             </div>
             <div className="grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
               {activeStage.points.map((point) => (
@@ -85,7 +85,7 @@ export function ConsumerLendingDomainDepth({ section }: { section: DomainDepthSe
                   className="flex items-center gap-2.5 rounded-full border border-border-8 bg-glass-3 px-4 py-2.5"
                 >
                   <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-orange" />
-                  <span className="text-[13.5px] leading-[1.4] text-70">{point.text}</span>
+                  <span className="text-[14px] leading-[1.4] text-70">{point.text}</span>
                 </div>
               ))}
             </div>

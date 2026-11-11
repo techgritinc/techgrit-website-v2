@@ -22,7 +22,7 @@ export function SectionEyebrow({
   return (
     <div className={`mb-4 inline-flex items-center gap-3 ${className || ""}`.trim()} style={style}>
       {showAccent && <span style={{ width: 24, height: 2, background: color }} />}
-      <span className="eyebrow" style={{ color, fontSize: 12.5, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" }}>
+      <span className="eyebrow" style={{ color, fontSize: 14, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" }}>
         {children}
       </span>
     </div>

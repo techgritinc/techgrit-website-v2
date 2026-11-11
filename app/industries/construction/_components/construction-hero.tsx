@@ -12,7 +12,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
   return (
     <section>
       <div
-        className="mx-auto max-w-[1280px] px-9 pt-[78px] pb-[26px] grid grid-cols-1 items-center gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-16"
+        className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[80px] pb-[24px] grid grid-cols-1 items-center gap-10 md:grid-cols-[1.05fr_0.95fr] md:gap-16"
       >
         <div className="order-1">
           <div
@@ -35,7 +35,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
                 fontSize: "var(--text-2xs)",
                 fontWeight: "var(--fw-bold)",
                 letterSpacing: "0.08em",
-                color: "rgba(255,255,255,0.92)",
+                color: "rgb(var(--tg-contrast-rgb)/0.92)",
                 textTransform: "uppercase",
               }}
             >
@@ -44,7 +44,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
           </div>
           <h1
             data-rise
-            className="text-[38px] leading-[1.04] md:text-[54px] tracking-[-1.89px]"
+            className="text-[40px] leading-[1.04] md:text-[48px] tracking-[-1.89px]"
             style={{ animationDelay: ".12s" }}
           >
             {before}
@@ -72,9 +72,9 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
             style={{ animationDelay: ".3s", marginTop: 34, gap: 15 }}
           >
             <Button href={section.primaryCtaLink} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink">
-              {section.primaryCtaLabel} <span aria-hidden="true" className="leading-[normal] text-[17px]">&#8594;</span>
+              {section.primaryCtaLabel} <span aria-hidden="true" className="leading-[normal] text-[16px]">&#8594;</span>
             </Button>
-            <Button href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] px-[26px]">
+            <Button href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] px-[24px]">
               {section.secondaryCtaLabel}
             </Button>
           </div>
@@ -116,7 +116,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0"
-              style={{ background: "linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.55))" }}
+              style={{ background: "linear-gradient(180deg, rgb(var(--tg-page-rgb)/0) 45%, rgb(var(--tg-page-rgb)/0.55))" }}
             />
             <div className="absolute flex leading-[normal]" style={{ left: 20, bottom: 18, right: 20, gap: 10 }}>
               {section.stats.map((stat) => (
@@ -135,7 +135,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
                     style={{
                       fontFamily: "var(--font-display)",
                       fontWeight: "var(--fw-bold)",
-                      fontSize: 22,
+                      fontSize: 20,
                       color: "var(--color-amber-light)",
                     }}
                   >
@@ -143,7 +143,7 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
                   </div>
                   <div
                     style={{
-                      fontSize: 11.5,
+                      fontSize: 14,
                       fontWeight: "var(--fw-semibold)",
                       color: "var(--color-text-secondary)",
                     }}

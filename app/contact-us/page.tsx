@@ -37,7 +37,7 @@ export default async function ContactPage() {
 
   const heroFormBlock = (
     <section id="form" className="relative">
-      <div className="max-w-[1280px] mx-auto px-9 pt-[74px] pb-[50px]">
+      <div className="max-w-(--container-max) mx-auto px-(--container-padding) pt-[80px] pb-[48px]">
         <ContactHeroForm hero={hero} form={form} bookCall={bookCall} />
       </div>
     </section>
@@ -45,7 +45,7 @@ export default async function ContactPage() {
 
   const nextStepsBlock = nextSteps && (
     <section className="relative">
-      <div className="max-w-[1280px] mx-auto px-9 pt-[30px] pb-[80px]">
+      <div className="max-w-(--container-max) mx-auto px-(--container-padding) pt-[32px] pb-[80px]">
         <NextSteps section={nextSteps} />
       </div>
     </section>

@@ -17,7 +17,7 @@ type FormFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "classN
 };
 
 export const INPUT_BASE =
-  "w-full rounded-[10px] border bg-glass-strong px-4 py-3.5 text-base sm:text-sm leading-[normal] font-normal text-primary outline-none transition-colors placeholder:!font-light focus:bg-glass-hover focus:border-border-orange-strong";
+  "w-full rounded-[14px] border border-border-18 bg-glass-strong px-[18px] py-[15px] text-base leading-[normal] font-normal text-primary outline-none transition-colors placeholder:text-[var(--color-text-placeholder)] placeholder:font-normal focus:bg-glass-hover focus:border-[var(--tg-accent-solid)] focus:shadow-[0_0_0_3px_rgb(var(--tg-accent-solid-rgb)/0.20)] disabled:opacity-50";
 
 export const REQUIRED_ASTERISK = <span className="text-orange"> *</span>;
 
@@ -50,7 +50,7 @@ export default function FormField({
         className={
           hideLabel
             ? "sr-only"
-            : labelClassName || "mb-2 block text-[13.5px] font-bold text-text-60"
+            : labelClassName || "mb-2 block text-[14px] font-bold text-text-60"
         }
       >
         {label}

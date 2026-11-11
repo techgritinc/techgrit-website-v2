@@ -11,7 +11,7 @@ export function LeadershipHero({ section }: { section: LeadershipHeroSection }) 
 
   return (
     <section>
-      <div className="mx-auto flex max-w-[820px] flex-col items-center px-9 pt-[88px] pb-10 text-center">
+      <div className="mx-auto flex max-w-[820px] flex-col items-center px-9 pt-[80px] pb-10 text-center">
         <div
           data-rise
           className="mt-5 inline-flex items-center gap-2.5 rounded-40 border border-[var(--color-border-orange-35)] bg-[var(--color-overlay-orange-10)] px-3.5 py-1.75"
@@ -24,7 +24,7 @@ export function LeadershipHero({ section }: { section: LeadershipHeroSection }) 
         </div>
         <h1
           data-rise
-          className="mt-6 text-[38px] leading-[var(--lh-tight)] tracking-[-0.04em] font-bold text-white md:text-[56px]"
+          className="mt-6 text-[40px] leading-[var(--lh-tight)] tracking-[-0.04em] font-bold text-white md:text-[48px]"
           style={{ animationDelay: ".18s" }}
         >
           {before}
@@ -44,7 +44,7 @@ export function LeadershipHero({ section }: { section: LeadershipHeroSection }) 
           style={{ animationDelay: ".34s" }}
         >
           <Button href={section.primaryCtaLink} variant="primary" size="hero" className="leading-[normal] tracking-normal">
-            {section.primaryCtaLabel} <span aria-hidden="true" className="text-[17px] leading-[normal] tracking-normal">&#8594;</span>
+            {section.primaryCtaLabel} <span aria-hidden="true" className="text-[16px] leading-[normal] tracking-normal">&#8594;</span>
           </Button>
           <Button href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] tracking-normal">
             {section.secondaryCtaLabel}

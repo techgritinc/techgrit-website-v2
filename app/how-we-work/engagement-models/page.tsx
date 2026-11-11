@@ -72,8 +72,8 @@ export default async function EngagementModelsPage() {
                 eyebrowWeight="var(--fw-extrabold)"
                 descriptionLineHeight={1.6}
                 maxWidth={1280}
-                primaryBtnClassName="!py-[15px] !px-[32px] !min-h-[52px] !rounded-[13px] !whitespace-normal !h-auto !shrink"
-                secondaryBtnClassName="!py-[15px] !px-[26px] !rounded-[13px]"
+                primaryBtnClassName="!py-[16px] !px-[32px] !min-h-[52px] !rounded-[13px] !whitespace-normal !h-auto !shrink"
+                secondaryBtnClassName="!py-[16px] !px-[24px] !rounded-[13px]"
                 cardClassName="!p-[80px_40px]"
                 section={{
                   eyebrow: section.badgeLabel ?? "",

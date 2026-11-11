@@ -64,11 +64,11 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
         <GlassCard
           variant="blogFeatured"
           hoverBorderColor=""
-          className="relative grid grid-cols-1 items-center gap-10 overflow-hidden !rounded-[26px] !px-12 !py-[54px] !backdrop-blur-[12px] hover:!translate-y-0 tg-md:grid-cols-[1.2fr_1fr]"
+          className="relative grid grid-cols-1 items-center gap-10 overflow-hidden !rounded-[26px] !px-12 !py-[48px] !backdrop-blur-[12px] hover:!translate-y-0 tg-md:grid-cols-[1.2fr_1fr]"
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -bottom-[120px] left-[30%] h-[320px] w-[480px] rounded-full bg-[rgba(232,119,34,0.2)] blur-glow-100"
+            className="pointer-events-none absolute -bottom-[120px] left-[30%] h-[320px] w-[480px] rounded-full bg-[rgb(var(--tg-accent-tint-rgb)/0.2)] blur-glow-100"
           />
           <div className="relative">
             <h2 className="text-[length:var(--text-webinar-newsletter-heading)] leading-[var(--lh-newsletter-heading)] tracking-[-0.03em]">
@@ -102,8 +102,7 @@ export function SubscribePanel({ content }: { content: SubscribePanelContent }) 
             <Button
               type="submit"
               disabled={isSubmitting}
-              style={{ fontFamily: "Arial, sans-serif" }}
-              className="w-full font-bold !text-[16px] !rounded-card !shadow-btn-subscribe leading-[normal] py-4!"
+              className="w-full !rounded-card !shadow-btn-subscribe leading-[normal] py-4!"
             >
               {status === "success" ? "Subscribed ✓" : content.ctaLabel}
             </Button>

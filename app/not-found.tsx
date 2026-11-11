@@ -4,7 +4,7 @@ import { ROUTES } from "@/lib/routes";
 export default function NotFound() {
   return (
     <section className="relative flex flex-1 items-center justify-center">
-      <div className="mx-auto max-w-[640px] px-9 py-[110px] text-center">
+      <div className="mx-auto max-w-[640px] px-9 py-[120px] text-center">
         <div
           data-rise
           style={{ animationDelay: ".12s" }}
@@ -21,15 +21,15 @@ export default function NotFound() {
           We can&apos;t find that page. 
         </h1>
 
-        <p data-rise style={{ animationDelay: ".28s" }} className="mx-auto mt-4 max-w-[440px] text-[17px] leading-[1.65] text-secondary">
+        <p data-rise style={{ animationDelay: ".28s" }} className="mx-auto mt-4 max-w-[440px] text-[16px] leading-[1.65] text-secondary">
           The page you&apos;re looking for may have been moved, renamed, or never existed. Let&apos;s get you back on track.
         </p>
 
         <div data-rise style={{ animationDelay: ".36s" }} className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
-          <Button href="/" variant="primary" size="hero" className="min-h-[52px] !px-7 !py-[15px] !text-[16px] !font-bold leading-[normal]">
+          <Button href="/" variant="primary" size="hero" className="min-h-[52px] !px-7 !py-[16px] leading-[normal]">
             Back to home
           </Button>
-          <Button href={ROUTES.contactUs} variant="ghost" size="hero" className="min-h-[52px] !px-[26px] !py-4 !text-[16px] !font-bold leading-[normal]">
+          <Button href={ROUTES.contactUs} variant="ghost" size="hero" className="min-h-[52px] !px-[24px] !py-4 leading-[normal]">
             Contact us
           </Button>
         </div>

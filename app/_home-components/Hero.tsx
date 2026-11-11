@@ -21,11 +21,11 @@ export default function Hero({ data }: { data: HeroData }) {
           preload="metadata"
           className="absolute inset-0 h-full w-full object-cover object-[64%_46%]"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.95)_0%,rgba(0,0,0,0.74)_30%,rgba(0,0,0,0.26)_56%,rgba(0,0,0,0)_80%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0)_20%,rgba(0,0,0,0)_60%,rgba(0,0,0,0.92)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgb(var(--tg-page-rgb)/0.95)_0%,rgb(var(--tg-page-rgb)/0.74)_30%,rgb(var(--tg-page-rgb)/0.26)_56%,rgb(var(--tg-page-rgb)/0)_80%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--tg-page-rgb)/0.5)_0%,rgb(var(--tg-page-rgb)/0)_20%,rgb(var(--tg-page-rgb)/0)_60%,rgb(var(--tg-page-rgb)/0.92)_100%)]" />
       </div>
 
-      <div className="relative z-raised mx-auto flex min-h-[60vh] w-full max-w-(--container-max) items-center px-9 pt-27 pb-10 tg-sm:pb-15">
+      <div className="relative z-raised mx-auto flex min-h-[60vh] w-full max-w-(--container-max) items-center px-(--container-padding) pt-27 pb-10 tg-sm:pb-15">
         <div className="max-w-195">
           {badge && (
             <a
@@ -34,7 +34,7 @@ export default function Hero({ data }: { data: HeroData }) {
               rel="noopener noreferrer"
               className="group opacity-0 [animation-delay:0.02s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mb-4 inline-flex max-w-full items-center gap-2 tg-sm:gap-5 rounded-full border border-border-orange-strong bg-[image:var(--gradient-live-badge)] py-1.5 tg-sm:py-3 pr-3.5 tg-sm:pr-7.5 pl-1.5 tg-sm:pl-3 leading-[normal] shadow-[var(--shadow-live-badge)] backdrop-blur-10 transition-transform"
             >
-              <Badge tone="live" size="lg" className="shrink-0 max-tg-sm:gap-1.5 max-tg-sm:px-3 max-tg-sm:py-1.5 max-tg-sm:text-[10.5px]">
+              <Badge tone="live" size="sm" className="shrink-0">
                 <span className="relative inline-flex h-2.75 w-2.75 shrink-0">
                   <span className="absolute inset-0 rounded-full bg-green shadow-[var(--shadow-glow-green)]" />
                   <span
@@ -61,16 +61,16 @@ export default function Hero({ data }: { data: HeroData }) {
             {after.trimStart()}
           </h1>
 
-          <p className="opacity-0 [animation-delay:0.2s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-4 tg-sm:mt-6.5 max-w-135 text-[16px] tg-sm:text-[18.5px] leading-[1.65] text-secondary">
+          <p className="opacity-0 [animation-delay:0.2s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-4 tg-sm:mt-6.5 max-w-135 text-[16px] tg-sm:text-[18px] leading-[1.65] text-secondary">
             {subtitle}
           </p>
 
           <div className="opacity-0 [animation-delay:0.28s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-9 flex flex-wrap items-center gap-4">
-            <Button href={primaryBtn.href} size="hero" className="leading-[normal] !text-xs tg-sm:text-md">
-              {primaryBtn.label} <span aria-hidden="true" className="text-[17px]">&rarr;</span>
+            <Button href={primaryBtn.href} size="hero" className="leading-[normal]">
+              {primaryBtn.label} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
             </Button>
-            <Button href={secondaryBtn.href} variant="ghost" size="hero" className="px-6.5 leading-[normal] !text-xs tg-sm:text-md">
-              {secondaryBtn.label} <span aria-hidden="true" className="text-[17px] text-orange">&rarr;</span>
+            <Button href={secondaryBtn.href} variant="ghost" size="hero" className="px-6.5 leading-[normal]">
+              {secondaryBtn.label} <span aria-hidden="true" className="text-[16px] text-orange">&rarr;</span>
             </Button>
           </div>
 
@@ -85,17 +85,17 @@ export default function Hero({ data }: { data: HeroData }) {
                 >
                   <span>{stat.count !== undefined ? <AnimatedStat target={stat.count} /> : stat.staticValue}</span>
                   {stat.suffix && (
-                    <span className={stat.suffixClassName?.replace("text-stat", "text-[12px] tg-sm:text-stat")}>
+                    <span className={stat.suffixClassName?.replace("text-stat", "text-[14px] tg-sm:text-stat")}>
                       {stat.suffix}
                     </span>
                   )}
                   {stat.postSuffix && (
-                    <span className={stat.postSuffixClassName?.replace("text-stat", "text-[12px] tg-sm:text-stat")}>
+                    <span className={stat.postSuffixClassName?.replace("text-stat", "text-[14px] tg-sm:text-stat")}>
                       {stat.postSuffix}
                     </span>
                   )}
                 </div>
-                <div className="mt-1 text-[8.5px] leading-tight tg-sm:text-12 font-bold tracking-stat text-dim uppercase">{stat.label}</div>
+                <div className="mt-1 text-[14px] leading-tight tg-sm:text-12 font-bold tracking-stat text-dim uppercase">{stat.label}</div>
               </div>
             ))}
           </div>

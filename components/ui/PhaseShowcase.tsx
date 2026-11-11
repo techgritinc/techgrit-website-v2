@@ -92,6 +92,20 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
   }, [phaseCount]);
 
   const active = phases[activeIndex];
+  // The rail runs behind the 32px nodes; mask it so it stops 6px short of each node's edge
+  // instead of showing through the (transparent) outlined circles.
+  const railGap = 22; // node radius 16px + 6px breathing room
+  const railMask = (() => {
+    const stops: string[] = [];
+    for (let i = 0; i < phaseCount; i += 1) {
+      const c = phaseCount > 1 ? (i / (phaseCount - 1)) * 100 : 0;
+      stops.push(`black calc(${c}% - ${i === 0 ? 0 : railGap}px)`);
+      stops.push(`transparent calc(${c}% - ${i === 0 ? 0 : railGap}px)`);
+      stops.push(`transparent calc(${c}% + ${i === phaseCount - 1 ? 0 : railGap}px)`);
+      stops.push(`black calc(${c}% + ${i === phaseCount - 1 ? 0 : railGap}px)`);
+    }
+    return `linear-gradient(to right, ${stops.join(", ")})`;
+  })();
   const railFillPercent = (activeIndex / Math.max(phaseCount - 1, 1)) * 100;
 
   return (
@@ -130,7 +144,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
                 {heading}
               </h2>
               {description && (
-                <p className="mx-auto mt-4.5 max-w-170 text-center text-[17.5px] leading-[1.65] text-muted max-tg-sm:text-xs max-tg-sm:mt-3">
+                <p className="mx-auto mt-4.5 max-w-170 text-center text-[18px] leading-[1.65] text-muted max-tg-sm:text-xs max-tg-sm:mt-3">
                   {description}
                 </p>
               )}
@@ -139,13 +153,16 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
             <div className="relative mt-10 max-tg-sm:mt-1">
               <div
                 aria-hidden="true"
-                className="absolute top-7.25 max-tg-sm:top-5 right-[12.5%] left-[12.5%] h-0.75 rounded-full bg-[rgba(255,255,255,0.1)]"
+                className="absolute top-[15px] right-[12.5%] left-[12.5%] h-[2px] rounded-full bg-[rgb(var(--tg-contrast-rgb)/0.14)]"
+                style={{ maskImage: railMask, WebkitMaskImage: railMask }}
               />
               <div
                 aria-hidden="true"
-                className="absolute top-7.25 max-tg-sm:top-5 left-[12.5%] h-0.75 w-[75%] rounded-full transition-[clip-path] duration-500"
+                className="absolute top-[15px] left-[12.5%] h-[2px] w-[75%] rounded-full transition-[clip-path] duration-[1200ms]"
                 style={{
                   background: "var(--gradient-brand)",
+                  maskImage: railMask,
+                  WebkitMaskImage: railMask,
                   clipPath: `inset(0 ${100 - railFillPercent}% 0 0)`,
                 }}
               />
@@ -162,26 +179,23 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
                       className="flex cursor-pointer flex-col items-center border-none bg-transparent p-0 text-center"
                     >
                       <div
-                        className={`flex h-14.5 w-14.5 max-tg-sm:h-10 max-tg-sm:w-10 items-center justify-center rounded-full border transition-all duration-300 ${
-                          isTodo ? "border-border-18 bg-black text-text-70" : "border-border-30 text-primary"
-                        } ${isActive ? "scale-[1.08] shadow-phase-active" : "scale-100 shadow-phase-ring"}`}
+                        className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-300 [&>img]:h-5 [&>img]:w-5 [&>svg]:h-5 [&>svg]:w-5 ${
+                          isTodo ? "border-[rgb(var(--tg-contrast-rgb)/0.18)] bg-transparent text-text-70" : "tg-on-brand border-transparent text-on-brand"
+                        }`}
                         style={isTodo ? undefined : { background: "var(--gradient-phase-node)" }}
                       >
                         {phase.icon}
                       </div>
                       <div
-                        className={`mt-tg-5a leading-[normal] font-bold transition-colors duration-300 ${isActive ? "text-primary" : "text-text-60"}`} 
-                        style={{ fontSize: "var(--phase-title-size, 15px)", fontFamily: "arial" }}
-                      >
-                        {phase.title}
-                      </div>
-                      <div
-                        className={`mt-1 font-bold leading-[normal] tracking-[1.15px] whitespace-nowrap uppercase transition-colors duration-300 ${
-                          isActive ? "text-amber-light" : "text-text-40"
-                        }`} 
-                        style={{ fontSize: "var(--phase-week-size, 11.5px)", fontFamily: "arial" }}
+                        className="mt-3 text-[14px] leading-5 font-medium text-text-60 transition-colors duration-300"
+                        style={{ transitionDelay: `${index * 150}ms` }}
                       >
                         {phase.week}
+                      </div>
+                      <div
+                        className={`mt-1 text-[18px] leading-[26px] font-semibold transition-colors duration-300 ${isActive || !isTodo ? "text-primary" : "text-text-60"}`}
+                      >
+                        {phase.title}
                       </div>
                     </button>
                   );
@@ -191,7 +205,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
 
             <div
               key={active.n}
-              className="mt-8 grid grid-cols-[1.25fr_0.75fr] max-tg-sm:grid-cols-1 overflow-hidden rounded-3xl border border-[rgba(255,255,255,0.1)] bg-glass-4 shadow-glass backdrop-blur-md motion-safe:animate-[tgPhaseIn_0.45s_cubic-bezier(.2,.7,.2,1)]"
+              className="mt-8 grid grid-cols-[1.25fr_0.75fr] max-tg-sm:grid-cols-1 overflow-hidden rounded-3xl border border-[rgb(var(--tg-contrast-rgb)/0.1)] bg-glass-4 shadow-glass backdrop-blur-md motion-safe:animate-[tgPhaseIn_0.45s_cubic-bezier(.2,.7,.2,1)]"
             >
               <div className="py-tg-16a px-tg-17 tg-sm:py-10 tg-sm:px-11 max-tg-sm:py-5 max-tg-sm:px-5">
                 <div className="text-12 max-tg-sm:text-3xs font-bold tracking-hint text-amber-light uppercase">{active.week}</div>
@@ -203,15 +217,15 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-overlay-orange">
                         <CheckIcon className="text-amber-light" strokeWidth={3} />
                       </span>
-                      <span className="text-[15px] max-tg-sm:text-3xs leading-[normal] text-text-85">{item}</span>
+                      <span className="text-[14px] max-tg-sm:text-3xs leading-[normal] text-text-85">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="relative flex min-h-75 items-center justify-center overflow-hidden border-l border-border-subtle bg-[linear-gradient(150deg,rgba(232,119,34,0.18),rgba(10,24,34,0.15))] max-tg-sm:min-h-20 max-tg-sm:border-l-0 max-tg-sm:border-t max-tg-sm:bg-none max-tg-sm:justify-start max-tg-sm:px-5">
+              <div className="relative flex min-h-75 items-center justify-center overflow-hidden border-l border-border-subtle bg-[linear-gradient(150deg,rgb(var(--tg-accent-tint-rgb)/0.18),rgb(var(--tg-page-rgb)/0.15))] max-tg-sm:min-h-20 max-tg-sm:border-l-0 max-tg-sm:border-t max-tg-sm:bg-none max-tg-sm:justify-start max-tg-sm:px-5">
                 <div aria-hidden="true" className="absolute h-60 w-60 max-tg-sm:h-20 max-tg-sm:w-20 rounded-full bg-overlay-orange-22 blur-glow max-tg-sm:hidden" />
                 <div
-                  className="relative z-10 flex h-42.5 w-42.5 max-tg-sm:h-11 max-tg-sm:w-11 [&>img]:max-tg-sm:h-6 [&>img]:max-tg-sm:w-6 [&>svg]:max-tg-sm:h-6 [&>svg]:max-tg-sm:w-6 items-center justify-center rounded-full text-white shadow-[var(--shadow-phase-badge-glow)]"
+                  className="relative z-10 flex h-42.5 w-42.5 max-tg-sm:h-11 max-tg-sm:w-11 [&>img]:max-tg-sm:h-6 [&>img]:max-tg-sm:w-6 [&>svg]:max-tg-sm:h-6 [&>svg]:max-tg-sm:w-6 tg-on-brand items-center justify-center rounded-full text-on-brand shadow-[var(--shadow-phase-badge-glow)]"
                   style={{ background: "var(--gradient-phase-node)" }}
                 >
                   {active.badgeIcon}

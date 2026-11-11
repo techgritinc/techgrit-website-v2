@@ -52,8 +52,8 @@ function ApproachSteps({ item }: { item: ServiceAccordionItem }) {
   const accent = BADGE_COLOR[item.accentColor];
 
   return (
-    <div className="mt-[36px]">
-      <div className="mb-5 text-[13px] font-bold uppercase leading-[normal] tracking-[0.12em] text-dim">
+    <div className="mt-[32px]">
+      <div className="mb-5 text-[14px] font-bold uppercase leading-[normal] tracking-[0.12em] text-dim">
         {label}
       </div>
       <div className="grid grid-cols-1 gap-x-[48px] border-b border-white/10 min-[921px]:grid-cols-3">
@@ -69,7 +69,7 @@ function ApproachSteps({ item }: { item: ServiceAccordionItem }) {
               {String(step.stepNumber).padStart(2, "0")}
             </span>
             <div>
-              <h3 className="text-[16.5px] font-bold leading-[normal] text-white tracking-[normal]">{step.title}</h3>
+              <h3 className="text-[16px] font-bold leading-[normal] text-white tracking-[normal]">{step.title}</h3>
               <p className="mt-1.5 text-[14px] leading-[1.55] text-text-56">
                 {step.description}
               </p>
@@ -90,9 +90,9 @@ function CapabilityGrid({ item }: { item: ServiceAccordionItem }) {
       {items.map((capability) => (
         <div
           key={capability.title}
-          className="rounded-[16px] border border-border-image bg-glass-4 p-[22px]"
+          className="rounded-[16px] border border-border-image bg-glass-4 p-[20px]"
         >
-          <h3 className="text-[16.5px] font-bold text-white leading-[normal] tracking-[normal]">{capability.title}</h3>
+          <h3 className="text-[16px] font-bold text-white leading-[normal] tracking-[normal]">{capability.title}</h3>
           <p className="mt-2 text-[14px] leading-[1.55] text-text-60">
             {capability.description}
           </p>
@@ -151,7 +151,7 @@ function AccordionItem({ item, isOpen, onToggle }: { item: ServiceAccordionItem;
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="grid w-full cursor-pointer appearance-none grid-cols-[auto_1fr_auto] items-center gap-6 border-0 bg-transparent px-[30px] py-[26px] text-left outline-none"
+        className="grid w-full cursor-pointer appearance-none grid-cols-[auto_1fr_auto] items-center gap-6 border-0 bg-transparent px-[32px] py-[24px] text-left outline-none"
         style={{
           ["--badge-bg" as string]: BADGE_BG[item.accentColor],
           ["--badge-color" as string]: BADGE_COLOR[item.accentColor],
@@ -164,7 +164,7 @@ function AccordionItem({ item, isOpen, onToggle }: { item: ServiceAccordionItem;
           <div className="text-12 leading-[normal] font-bold uppercase tracking-[var(--ls-hint)] text-[var(--badge-color)]">
             {item.categoryLabel}
           </div>
-          <div className="mt-1.5 text-[22px] font-bold leading-[1.2] tracking-[var(--ls-normal)] text-white">
+          <div className="mt-1.5 text-[20px] font-bold leading-[1.2] tracking-[var(--ls-normal)] text-white">
             {item.heading}
           </div>
         </div>
@@ -181,22 +181,22 @@ function AccordionItem({ item, isOpen, onToggle }: { item: ServiceAccordionItem;
         className="overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(.2,.7,.2,1)]"
         style={{ maxHeight }}
       >
-        <div ref={innerRef} className="px-[30px] pb-[34px]">
+        <div ref={innerRef} className="px-[32px] pb-[32px]">
           <div className="mb-7 h-px" style={{ background: DIVIDER_GRADIENT[item.accentColor] }} />
-          <div className="grid grid-cols-1 items-center gap-[48px] max-[920px]:gap-[34px] min-[921px]:grid-cols-2">
+          <div className="grid grid-cols-1 items-center gap-[48px] max-[920px]:gap-[32px] min-[921px]:grid-cols-2">
             {item.accentColor === "orange" ? (
               <>
                 <div className="order-2">
                   <ServiceImage item={item} />
                 </div>
                 <div className="order-1">
-                  <p className="text-[16.5px] leading-[1.7]">{item.description}</p>
+                  <p className="text-[16px] leading-[1.7]">{item.description}</p>
                 </div>
               </>
             ) : (
               <>
                 <div>
-                  <p className="text-[16.5px] leading-[1.7]">{item.description}</p>
+                  <p className="text-[16px] leading-[1.7]">{item.description}</p>
                 </div>
                 <div>
                   <ServiceImage item={item} />
@@ -217,7 +217,7 @@ export function ServicesAccordion({ section }: { section: AccordionSection }) {
 
   return (
     <section id="svc-accordion" className="relative scroll-mt-24 leading-[normal]">
-      <div className="tg-container max-[920px]:px-9 pt-[30px] pb-15 leading-[normal]">
+      <div className="tg-container max-[920px]:px-9 pt-[32px] pb-15 leading-[normal]">
         <RevealOnScroll>
           <div className="mb-9 text-center">
             <div className="mb-3 text-2xs font-bold uppercase leading-[normal] tracking-widest text-orange">

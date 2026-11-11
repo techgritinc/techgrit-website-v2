@@ -77,11 +77,11 @@ export function Hero({
 
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-[88px] pb-10">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[80px] pb-10">
         {crumbs.length > 0 && (
           <div
             data-rise
-            className="mb-5 inline-flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.08em] text-text-55"
+            className="mb-5 inline-flex items-center gap-2 text-[14px] font-bold uppercase tracking-[0.08em] text-text-55"
             style={{ animationDelay: ".05s" }}
           >
             {crumbs.map((crumb, i) => (
@@ -103,21 +103,21 @@ export function Hero({
             {eyebrow?.trim() && (
               <div
                 data-rise
-                className="mb-[24px] inline-flex items-center gap-[10px] rounded-[40px] border border-[rgba(232,119,34,0.35)] bg-[rgba(232,119,34,0.10)] px-[14px] py-[7px] min-h-[30px]"
+                className="mb-[24px] inline-flex items-center gap-[8px] rounded-[40px] border border-[rgb(var(--tg-accent-solid-rgb)/0.35)] bg-[rgb(var(--tg-accent-tint-rgb)/0.10)] px-[12px] py-[8px] min-h-[30px]"
                 style={{ animationDelay: ".12s" }}
               >
                 <span
-                  className="h-[7px] w-[7px] shrink-0 rounded-[50%] bg-[#E87722]"
-                  style={{ boxShadow: "0 0 12px #E87722" }}
+                  className="h-[7px] w-[7px] shrink-0 rounded-[50%] bg-orange"
+                  style={{ boxShadow: "0 0 12px var(--color-orange)" }}
                 />
-                <span className="text-[12px] leading-[normal] font-[800] uppercase tracking-[0.14em] text-[#fdba74]">
+                <span className="text-[14px] leading-[normal] font-[800] uppercase tracking-[0.14em] text-amber-badge">
                   {eyebrow}
                 </span>
               </div>
             )}
             <h1
               data-rise
-              className="font-bold text-white text-[44px] leading-[1.02] tracking-[-0.04em] min-[921px]:text-[56px]"
+              className="font-bold text-white text-[40px] leading-[1.02] tracking-[-0.04em] min-[921px]:text-[48px]"
               style={{ animationDelay: ".18s" }}
             >
               {before}
@@ -126,7 +126,7 @@ export function Hero({
             </h1>
             <p
               data-rise
-              className="mt-[22px] max-w-[600px] text-[18px] leading-[1.65] text-secondary"
+              className="mt-[20px] max-w-[600px] text-[18px] leading-[1.65] text-secondary"
               style={{ animationDelay: ".26s" }}
             >
               {subtitle}
@@ -138,12 +138,12 @@ export function Hero({
                 style={{ animationDelay: ".34s" }}
               >
                 {primaryCta && (
-                  <Button href={primaryCta.href} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink !px-[26px] !py-[15px] !min-h-[52px]">
-                    {primaryCta.label} <span aria-hidden="true" className="text-[17px] leading-[normal]">&#8594;</span>
+                  <Button href={primaryCta.href} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink !px-[24px] !py-[16px] !min-h-[52px]">
+                    {primaryCta.label} <span aria-hidden="true" className="text-[16px] leading-[normal]">&#8594;</span>
                   </Button>
                 )}
                 {secondaryCta && (
-                  <Button href={secondaryCta.href} variant="ghost" size="hero" className="leading-[normal] !text-[15px] !px-[22px] !py-[14px]">
+                  <Button href={secondaryCta.href} variant="ghost" size="hero" className="leading-[normal] !px-[20px] !py-[12px]">
                     {secondaryCta.label}
                   </Button>
                 )}
@@ -154,12 +154,12 @@ export function Hero({
             <div
               className={[
                 "relative overflow-hidden rounded-4xl border border-border-orange-22",
-                mediaFill ? "" : "p-[34px]",
+                mediaFill ? "" : "p-[32px]",
               ].join(" ")}
               style={
                 mediaFill
                   ? undefined
-                  : { background: "linear-gradient(160deg, var(--color-overlay-orange-10), rgba(245,158,11,0.02))" }
+                  : { background: "linear-gradient(160deg, var(--color-overlay-orange-10), rgb(var(--tg-amber-rgb)/0.02))" }
               }
             >
               {!mediaFill && (
@@ -181,7 +181,7 @@ export function Hero({
                     className="h-2 w-2 shrink-0 rounded-full bg-green-live"
                     style={{ animation: "tgblink 2s ease-in-out infinite" }}
                   />
-                  <span className="text-[12.5px] font-semibold text-text-75">{mediaCaption}</span>
+                  <span className="text-[14px] font-semibold text-text-75">{mediaCaption}</span>
                 </div>
               )}
             </div>

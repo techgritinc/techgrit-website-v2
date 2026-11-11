@@ -105,6 +105,9 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                 <button
                   key={testimonial.id}
                   type="button"
+                  // Sits on video footage, which looks the same in both themes — pin the dark
+                  // theme so the text/badges stay white-on-dark in light mode too (see tokens.css).
+                  data-theme="dark"
                   onClick={() => openLightbox(index)}
                   className="relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
                   style={{ scrollSnapAlign: "start" }}
@@ -126,6 +129,11 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       </div>
                     </>
                   )}
+                  {/* Deepens the lower part of the footage (both themes) so the white text stays clear of the captions burned into the videos. */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-[image:var(--gradient-testimonial-video-scrim-deep)]"
+                  />
                   <QuoteIcon
                     aria-hidden="true"
                     width={76}
@@ -160,7 +168,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       <PlayIcon className="text-orange" />
                     </div>
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 px-6 pt-8.5 pb-5.5">
+                  <div className="absolute inset-x-0 bottom-0 bg-[image:var(--gradient-testimonial-video-scrim)] px-6 pt-8.5 pb-5.5">
                     <div
                       className="mb-2.5 flex gap-0.5 text-[13px] tracking-[2px] leading-[normal] text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]"
                       style={{ fontFamily: "Arial" }}
@@ -250,6 +258,9 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
           role="dialog"
           aria-modal="true"
           aria-label={`${current.name} testimonial`}
+          // Backdrop is dark in both themes (--color-modal-backdrop), so pin the dark theme
+          // for the close button / placeholder inside it.
+          data-theme="dark"
           className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-modal-backdrop p-6 backdrop-blur-md"
         >
           <div onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[900px]">

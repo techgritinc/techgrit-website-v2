@@ -12,7 +12,7 @@ type Status = "idle" | "success";
 
 
 const ERROR_BANNER_CLASSES =
-  "mt-2 w-full text-white bg-overlay-orange border border-orange rounded-[8px] px-[13px] py-2.5 text-[14px] leading-[normal] font-semibold";
+  "mt-2 w-full text-white bg-overlay-orange border border-orange rounded-[8px] px-[12px] py-2.5 text-[14px] leading-[normal] font-semibold";
 
 export default function SubscribeBand({ data }: { data: NewsletterData }) {
   const [namePlaceholder, emailPlaceholder] = data.fields.map((field) => field.placeholder);
@@ -58,15 +58,15 @@ export default function SubscribeBand({ data }: { data: NewsletterData }) {
 
   return (
     <section id="webinars" className="relative z-overlay scroll-mt-[90px]">
-      <div className="mx-auto max-w-[1280px] px-9 py-20 max-tg-sm:py-10">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-20 max-tg-sm:py-10">
         <div className="mb-8">
-          <h2 className="max-w-140 text-[44px] max-tg-sm:text-[30px] leading-[46.64px] max-tg-sm:leading-[1.2]">{data.sectionTitle}</h2>
-          <p className="mt-4 max-w-[540px] whitespace-pre-line text-[17px] leading-[27.2px] text-muted">
+          <h2 className="max-w-140 text-[40px] max-tg-sm:text-[32px] leading-[46.64px] max-tg-sm:leading-[1.2]">{data.sectionTitle}</h2>
+          <p className="mt-4 max-w-[540px] whitespace-pre-line text-[16px] leading-[27.2px] text-muted">
             {data.sectionSubtitle}
           </p>
         </div>
 
-        <div className="glass-card px-11 py-[38px]">
+        <div className="glass-card px-11 py-[40px]">
           <div className="grid grid-cols-[0.8fr_1.4fr] items-center gap-10 max-tg-md:grid-cols-1 max-tg-md:gap-11">
             <div>
               <h3 className="text-[length:var(--text-blog-newsletter-heading)] leading-[var(--lh-newsletter-heading)]">
@@ -76,7 +76,7 @@ export default function SubscribeBand({ data }: { data: NewsletterData }) {
             </div>
 
             {status === "success" ? (
-              <div className="w-full tg-sm:w-auto tg-sm:min-w-[300px] rounded-card border border-teal bg-[rgba(15,118,110,0.18)] px-[30px] py-5 text-center">
+              <div className="w-full tg-sm:w-auto tg-sm:min-w-[300px] rounded-card border border-teal bg-[rgba(15,118,110,0.18)] px-[32px] py-5 text-center">
                 <div className="text-2xl text-green">&#10003;</div>
                 <div className="mt-1 text-[16px] leading-[normal] font-bold text-primary">Thanks for submitting!</div>
               </div>
@@ -92,7 +92,7 @@ export default function SubscribeBand({ data }: { data: NewsletterData }) {
                   error={nameError}
                   errorClassName={ERROR_BANNER_CLASSES}
                   containerClassName="flex-1 tg-sm:flex-[1_1_0px] min-w-0 w-full"
-                  inputClassName="!px-[18px] !py-[15px] !min-h-[52px]"
+                  inputClassName="!px-[16px] !py-[16px] !min-h-[52px]"
                 />
                 <FormField
                   label={emailPlaceholder ?? "Business Email"}
@@ -104,12 +104,12 @@ export default function SubscribeBand({ data }: { data: NewsletterData }) {
                   error={emailError}
                   errorClassName={ERROR_BANNER_CLASSES}
                   containerClassName="flex-1 tg-sm:flex-[2_1_0px] min-w-0 w-full"
-                  inputClassName="!px-[18px] !py-[15px] !min-h-[52px]"
+                  inputClassName="!px-[16px] !py-[16px] !min-h-[52px]"
                 />
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="shrink-0 w-full tg-sm:w-auto !px-[24px] !py-[15px] !min-h-[52px] !gap-[7px] !rounded-[10px] !shadow-nav-btn"
+                  className="shrink-0 w-full tg-sm:w-auto !px-[24px] !py-[16px] !min-h-[52px] !gap-[8px] !rounded-[10px] !shadow-nav-btn"
                 >
                   {data.ctaLabel} <span aria-hidden="true" className="inline-block leading-none">&#8594;</span>
                 </Button>

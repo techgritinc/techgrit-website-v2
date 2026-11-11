@@ -6,8 +6,8 @@ import type { ChallengesSection } from "@/cms/types/construction";
 export function ConstructionChallenges({ section }: { section: ChallengesSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-[30px] pb-[60px]" data-reveal>
-        <div className="mb-[38px] max-w-[760px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[32px] pb-[64px]" data-reveal>
+        <div className="mb-[40px] max-w-[760px]">
           <div style={{ lineHeight: "normal" }}>
             <SectionEyebrow showAccent={false}>{section.eyebrow}</SectionEyebrow>
           </div>
@@ -16,7 +16,7 @@ export function ConstructionChallenges({ section }: { section: ChallengesSection
               {section.description}
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-[18px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-[16px]">
             {section.challenges.map((challenge) => (
               <GlassCard key={challenge.order} variant="constructionChallenge" hoverBorderColor="">
                 {challenge.icon ? (

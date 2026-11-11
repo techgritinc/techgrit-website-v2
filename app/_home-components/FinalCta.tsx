@@ -6,15 +6,15 @@ export default function FinalCta({ data }: { data: CtaBannerData }) {
 
   return (
     <section id="contact" className="relative scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 pt-14 pb-25 max-tg-sm:pt-10 max-tg-sm:pb-10">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-14 pb-25 max-tg-sm:pt-10 max-tg-sm:pb-10">
         <div className="relative overflow-hidden rounded-[28px] border border-border bg-glass-4 px-10 py-20 max-tg-sm:py-10 text-center backdrop-blur-cta">
           <div
             aria-hidden="true"
             className="absolute bottom-[-120px] left-1/2 h-[340px] w-[520px] -translate-x-1/2 rounded-full bg-overlay-orange-strong blur-glow-lg"
           />
           <div className="relative">
-            <div className="leading-[normal] text-[12.5px] font-bold tracking-widest text-orange uppercase">{badgeLabel}</div>
-            <h2 className="font-display mt-4 text-testimonial-stat max-tg-sm:text-[30px] tg-sm:text-[52px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
+            <div className="leading-[normal] text-[14px] font-bold tracking-widest text-orange uppercase">{badgeLabel}</div>
+            <h2 className="font-display mt-4 text-testimonial-stat max-tg-sm:text-[32px] tg-sm:text-[48px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
               {title}
             </h2>
             <p className="mx-auto mt-5.5 max-w-[600px] text-md tg-sm:text-lg-fixed leading-[1.6] text-secondary">{subtitle}</p>
@@ -22,7 +22,7 @@ export default function FinalCta({ data }: { data: CtaBannerData }) {
               <Button
                 href={primaryCta.href}
                 size="lg"
-                className="!leading-[normal] !gap-[10px] !rounded-[13px] !px-[34px] !py-[15px] !text-[17px] !whitespace-normal hover:!shadow-btn-primary"
+                className="!leading-[normal] !gap-[8px] !rounded-[13px] !px-[32px] !py-[16px] !whitespace-normal hover:!shadow-btn-primary"
               >
                 {primaryCta.label} <span aria-hidden="true" className="text-[18px]">&rarr;</span>
               </Button>

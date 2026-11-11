@@ -5,11 +5,11 @@ import type { ServiceDetailSection } from "@/cms/types/discovery-sprints-types";
 export function DiscoverySprintsServiceDetail({ section }: { section: ServiceDetailSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <div className="mb-10 text-center">
             {section.serviceLabel && (
-              <div className="mb-3 text-[12.5px] font-extrabold uppercase leading-[normal] tracking-[0.16em] text-orange">
+              <div className="mb-3 text-[14px] font-extrabold uppercase leading-[normal] tracking-[0.16em] text-orange">
                 {section.serviceLabel}
               </div>
             )}
@@ -17,7 +17,7 @@ export function DiscoverySprintsServiceDetail({ section }: { section: ServiceDet
               {section.title}
             </h2>
             {section.subtitle && (
-              <p className="mx-auto mt-3.5 max-w-[640px] whitespace-pre-line text-[16.5px] leading-[1.6] text-text-66">
+              <p className="mx-auto mt-3.5 max-w-[640px] whitespace-pre-line text-[16px] leading-[1.6] text-text-66">
                 {section.subtitle}
               </p>
             )}
