@@ -5,7 +5,59 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
 import { CheckIcon, ClockIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
 import type { ReviewsData } from "@/cms/api/home/reviews";
-import { disableYouTubeCaptions, youTubePlayerSrc, youTubePreviewSrc } from "@/cms/utils/youtube";
+import {
+  disableYouTubeCaptions,
+  watchYouTubePreview,
+  youTubePlayerSrc,
+  youTubePreviewSrc,
+} from "@/cms/utils/youtube";
+
+// Wait for YouTube's initial pause button and title bar to fade.
+const PREVIEW_REVEAL_DELAY_MS = 4500;
+
+/** Card background video; taller than the card so YouTube's title bar is cropped. */
+function YouTubePreview({ id }: { id: string }) {
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+    let playing = false;
+    let revealTimer: number | undefined;
+
+    const stopWatching = watchYouTubePreview(frame, (isPlaying) => {
+      if (isPlaying === playing) return;
+      playing = isPlaying;
+      window.clearTimeout(revealTimer);
+      if (isPlaying) {
+        revealTimer = window.setTimeout(() => setVisible(true), PREVIEW_REVEAL_DELAY_MS);
+      } else {
+        setVisible(false);
+      }
+    });
+
+    return () => {
+      stopWatching();
+      window.clearTimeout(revealTimer);
+    };
+  }, [id]);
+
+  return (
+    <iframe
+      ref={frameRef}
+      src={youTubePreviewSrc(id)}
+      onLoad={disableYouTubeCaptions}
+      title=""
+      aria-hidden="true"
+      tabIndex={-1}
+      loading="lazy"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      referrerPolicy="strict-origin-when-cross-origin"
+      className={`pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[170%] max-w-none -translate-x-1/2 -translate-y-1/2 border-0 ${visible ? "opacity-100 transition-opacity duration-500" : "opacity-0"}`}
+    />
+  );
+}
 
 export default function TestimonialsSection({ data }: { data: ReviewsData }) {
   const { badgeLabel, title, subtitle, testimonials, metrics } = data;
@@ -109,17 +161,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   style={{ scrollSnapAlign: "start" }}
                 >
                   {testimonial.youtubeId ? (
-                    <iframe
-                      src={youTubePreviewSrc(testimonial.youtubeId)}
-                      onLoad={disableYouTubeCaptions}
-                      title=""
-                      aria-hidden="true"
-                      tabIndex={-1}
-                      loading="lazy"
-                      allow="autoplay; encrypted-media; picture-in-picture"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      className="pointer-events-none absolute left-1/2 top-1/2 aspect-video h-full max-w-none -translate-x-1/2 -translate-y-1/2 border-0"
-                    />
+                    <YouTubePreview id={testimonial.youtubeId} />
                   ) : testimonial.videoUrl ? (
                     <AutoplayVideo
                       src={testimonial.videoUrl}
@@ -181,9 +223,11 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       style={{ fontFamily: "Arial" }}
                     >{testimonial.quote}</p>
                     <div className="mt-[14px] flex items-center gap-[11px]">
-                      <div className="font-display flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] text-[14px] font-bold text-orange">
-                        {testimonial.initials}
-                      </div>
+                      {testimonial.name ? (
+                        <div className="font-display flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] text-[14px] font-bold text-orange">
+                          {testimonial.initials}
+                        </div>
+                      ) : null}
                       <div className="min-w-0">
                         <div
                           className="text-[14.5px] leading-[normal] font-bold text-white"
@@ -225,9 +269,11 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                 </div>
                 <p className="relative flex-1 text-[15px] leading-[23.25px] font-normal text-primary">{testimonial.quote}</p>
                 <div className="relative mt-4 pt-4 border-t border-border-8 flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-phase-node)] font-display text-[15px] font-bold text-white shadow-testimonial-avatar">
-                    {testimonial.initials}
-                  </div>
+                  {testimonial.name ? (
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-phase-node)] font-display text-[15px] font-bold text-white shadow-testimonial-avatar">
+                      {testimonial.initials}
+                    </div>
+                  ) : null}
                   <div>
                     <div className="text-[14.5px] leading-[normal] font-bold text-primary">{testimonial.name}</div>
                     <div className="text-[12.5px] leading-[normal] text-muted">{testimonial.role}</div>

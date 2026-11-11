@@ -53,9 +53,89 @@ const EMBED_BASE = "https://www.youtube.com/embed";
 // captions can still appear. enablejsapi=1 lets disableYouTubeCaptions() switch them off.
 const NO_CAPTIONS = "cc_load_policy=0&enablejsapi=1";
 
-/** Muted, looping, chrome-less background preview used inside the testimonial card. */
+/** Muted, controls-free preview URL; looped by watchYouTubePreview(), not `loop=1`. */
 export function youTubePreviewSrc(id: string): string {
-  return `${EMBED_BASE}/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}&playsinline=1&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3&${NO_CAPTIONS}`;
+  return `${EMBED_BASE}/${id}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3&fs=0&showinfo=0&${NO_CAPTIONS}`;
+}
+
+const YOUTUBE_ORIGIN = "https://www.youtube.com";
+const STATE_ENDED = 0;
+const STATE_PLAYING = 1;
+const LOOP_EARLY_SECONDS = 1.5;
+
+/** Reports play state of a preview iframe and loops it. Returns a cleanup function. */
+export function watchYouTubePreview(
+  frame: HTMLIFrameElement,
+  onPlayingChange: (playing: boolean) => void,
+): () => void {
+  const send = (message: object) => frame.contentWindow?.postMessage(JSON.stringify(message), YOUTUBE_ORIGIN);
+  const timers: number[] = [];
+  let duration = 0;
+  let restarting = false;
+
+  // Retry: the player ignores messages until ready.
+  const subscribe = () => {
+    for (const delay of [0, 300, 1000, 2000, 4000]) {
+      timers.push(
+        window.setTimeout(() => {
+          send({ event: "listening", id: 1 });
+          send({ event: "command", func: "addEventListener", args: ["onStateChange"] });
+        }, delay),
+      );
+    }
+  };
+
+  const onMessage = (event: MessageEvent) => {
+    if (event.origin !== YOUTUBE_ORIGIN || event.source !== frame.contentWindow) return;
+    if (typeof event.data !== "string") return;
+    let data: { event?: string; info?: unknown };
+    try {
+      data = JSON.parse(event.data);
+    } catch {
+      return;
+    }
+
+    // Loop just before the end to skip YouTube's end screen.
+    if (data.event === "infoDelivery" && data.info && typeof data.info === "object") {
+      const info = data.info as { currentTime?: unknown; duration?: unknown };
+      if (typeof info.duration === "number" && info.duration > 0) duration = info.duration;
+      if (
+        typeof info.currentTime === "number" &&
+        duration > LOOP_EARLY_SECONDS * 2 &&
+        info.currentTime >= duration - LOOP_EARLY_SECONDS &&
+        !restarting
+      ) {
+        restarting = true;
+        send({ event: "command", func: "seekTo", args: [0, true] });
+      } else if (typeof info.currentTime === "number" && info.currentTime < LOOP_EARLY_SECONDS) {
+        restarting = false;
+      }
+    }
+
+    const state =
+      data.event === "onStateChange"
+        ? data.info
+        : data.event === "infoDelivery"
+          ? (data.info as { playerState?: unknown } | undefined)?.playerState
+          : undefined;
+    if (typeof state !== "number") return;
+
+    if (state === STATE_ENDED) {
+      send({ event: "command", func: "seekTo", args: [0, true] });
+      send({ event: "command", func: "playVideo", args: [] });
+    }
+    onPlayingChange(state === STATE_PLAYING);
+  };
+
+  window.addEventListener("message", onMessage);
+  frame.addEventListener("load", subscribe);
+  subscribe();
+
+  return () => {
+    window.removeEventListener("message", onMessage);
+    frame.removeEventListener("load", subscribe);
+    timers.forEach((timer) => window.clearTimeout(timer));
+  };
 }
 
 /** Full player with sound and controls, used in the click-to-open modal. */
