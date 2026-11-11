@@ -1,4 +1,5 @@
 import { pickMediaAsset, resolveMediaUrl } from "../../utils/media";
+import { parseYouTubeId } from "../../utils/youtube";
 import type { AnySection, StrapiMedia } from "./shared";
 import { ROUTES } from "@/lib/routes";
 
@@ -12,10 +13,18 @@ export type StrapiCultureGallerySection = {
   secondaryBtnLabel: string;
   secondaryBtnLink: string;
   image: StrapiMedia[];
+  videoLinks?: { id: number; url: string | null; label?: string | null }[] | null;
   __component: "page-reusable-sections.culture-gallery";
 };
 
-export type CultureGalleryImage = { id: string; src: string | null; alt: string; type?: "image" | "video" };
+export type CultureGalleryImage = {
+  id: string;
+  src: string | null;
+  alt: string;
+  type?: "image" | "video";
+  /** Set when the video comes from a CMS `videoLinks` entry; takes precedence over an uploaded mp4. */
+  youtubeId?: string | null;
+};
 
 export type CultureGalleryData = {
   title: string;
@@ -48,17 +57,40 @@ export const DEFAULT_CULTURE_GALLERY_DATA: CultureGalleryData = {
   ],
 };
 
-export function toCultureGallery(section: StrapiCultureGallerySection): CultureGalleryData {
-  const images: CultureGalleryImage[] = section.image.map((media) => {
+/**
+ * Shared by Home, Careers and Our Story: builds the gallery items from a culture-gallery
+ * section. A valid video link wins over uploaded mp4s (photos stay); with no valid link the
+ * uploaded videos remain as the fallback.
+ */
+export function buildGalleryItems(section: {
+  image?: (Omit<StrapiMedia, "id"> & { id?: number })[] | null;
+  videoLinks?: StrapiCultureGallerySection["videoLinks"];
+}): CultureGalleryImage[] {
+  const linkVideos: CultureGalleryImage[] = (section.videoLinks ?? []).flatMap((link) => {
+    const youtubeId = parseYouTubeId(link.url);
+    return youtubeId
+      ? [{ id: `link-${link.id}`, src: null, alt: link.label ?? "", type: "video" as const, youtubeId }]
+      : [];
+  });
+
+  const mediaItems: CultureGalleryImage[] = (section.image ?? []).map((media) => {
     const isVideo = media.mime?.startsWith("video/") ?? false;
     const src = isVideo ? media.url : pickMediaAsset(media, ["medium", "small"]).url;
     return {
-      id: String(media.id),
+      id: String(media.id ?? media.url),
       src: resolveMediaUrl(src),
       alt: media.alternativeText ?? "",
       type: isVideo ? ("video" as const) : ("image" as const),
     };
   });
+
+  return linkVideos.length > 0
+    ? [...mediaItems.filter((item) => item.type !== "video"), ...linkVideos]
+    : mediaItems;
+}
+
+export function toCultureGallery(section: StrapiCultureGallerySection): CultureGalleryData {
+  const images = buildGalleryItems(section);
 
   return {
     title: section.title,

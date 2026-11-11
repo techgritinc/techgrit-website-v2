@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
 import MediaSlot from "@/components/ui/MediaSlot";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
+import YouTubePreview from "@/components/ui/YouTubePreview";
+import { disableYouTubeCaptions, youTubePlayerSrc } from "@/cms/utils/youtube";
 import { CloseIcon, PlayIcon } from "@/components/ui/icons";
 import type { CareersHeroContent, CollageImage } from "@/cms/types/careers-types";
 
@@ -102,13 +104,26 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                 >
                   {isVideo ? (
                     <>
-                      <AutoplayVideo
-                        src={image.src}
-                        className={`absolute inset-0 h-full w-full object-cover ${image.span === "wide" ? "object-[50%_25%]" : ""}`}
-                        previewClassName="h-full w-full"
-                        portalTarget={previewIndex === index ? modalVideoContainer : undefined}
-                      />
-                      <div aria-hidden="true" className="absolute inset-0 bg-pure-black/15 transition-colors duration-200 hover:bg-pure-black/30" />
+                      {image.youtubeId ? (
+                        <>
+                          {/* Poster shown until the muted autoplay preview fades in over it. */}
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={`https://i.ytimg.com/vi/${image.youtubeId}/hqdefault.jpg`}
+                            alt={image.alt}
+                            className={`absolute inset-0 h-full w-full object-cover ${image.span === "wide" ? "object-[50%_25%]" : ""}`}
+                          />
+                          <YouTubePreview id={image.youtubeId} />
+                        </>
+                      ) : (
+                        <AutoplayVideo
+                          src={image.src}
+                          className={`absolute inset-0 h-full w-full object-cover ${image.span === "wide" ? "object-[50%_25%]" : ""}`}
+                          previewClassName="h-full w-full"
+                          portalTarget={previewIndex === index ? modalVideoContainer : undefined}
+                        />
+                      )}
+                      <div aria-hidden="true" className="absolute inset-0 bg-black/15 transition-colors duration-200 hover:bg-black/30" />
                       <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] shadow-[0_10px_24px_rgba(0,0,0,0.4)]">
                           <PlayIcon className="text-orange" width={18} height={18} />
@@ -156,7 +171,21 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
             >
               <CloseIcon />
             </button>
-            <div ref={setModalVideoContainer} className="relative aspect-video overflow-hidden rounded-xl bg-ink" />
+            {previewImage.youtubeId ? (
+              <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
+                <iframe
+                  src={youTubePlayerSrc(previewImage.youtubeId)}
+                  onLoad={disableYouTubeCaptions}
+                  title={`${previewImage.alt || "Life at TechGrit"} video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full border-0"
+                />
+              </div>
+            ) : (
+              <div ref={setModalVideoContainer} className="relative aspect-video overflow-hidden rounded-xl bg-ink" />
+            )}
           </div>
         </div>
       )}

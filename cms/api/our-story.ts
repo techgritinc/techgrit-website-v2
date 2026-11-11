@@ -6,7 +6,7 @@ import type {
   StrapiHeroSection,
   StrapiStatisticsSection,
 } from "../shared/reusable-sections";
-import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
+import { buildGalleryItems } from "./home/culture-gallery";
 import type {
   AboutPageContent,
   AboutPageSectionEntry,
@@ -38,7 +38,7 @@ const ABOUT_ENDPOINT =
   "&populate[sections][on][about-us.audience-insight][populate][concernsCard][populate]=questions" +
   "&populate[sections][on][page-reusable-sections.service-detail][populate][approachSteps][populate]=icon" +
   "&populate[sections][on][page-reusable-sections.statistics][populate]=statistics" +
-  "&populate[sections][on][page-reusable-sections.culture-gallery][populate]=image" +
+  "&populate[sections][on][page-reusable-sections.culture-gallery][populate]=image,videoLinks" +
   "&populate[sections][on][page-reusable-sections.cta-banner][populate]=true";
 
 // --- Per-section mappers ---
@@ -168,16 +168,7 @@ function mapCultureGallery(cms: StrapiCultureGallerySection, order: number): Cul
     eyebrow: cms.badgeLabel,
     title: cms.title,
     subtitle: cms.subtitle,
-    photos: cms.image.map((media) => {
-      const isVideo = media.mime?.startsWith("video/") ?? false;
-      const src = isVideo ? media.url : pickMediaAsset(media, ["medium", "small"]).url;
-      return {
-        id: String(media.url),
-        src: resolveMediaUrl(src),
-        alt: media.alternativeText ?? "",
-        type: isVideo ? ("video" as const) : ("image" as const),
-      };
-    }),
+    photos: buildGalleryItems(cms),
   };
 }
 

@@ -75,6 +75,7 @@ export type StrapiCultureGallerySection = {
   subtitle: string;
   badgeLabel: string;
   image: StrapiMedia[];
+  videoLinks?: { id: number; url: string | null; label?: string | null }[] | null;
 };
 
 // The shared StrapiCtaBannerSection type (cms/shared/reusable-sections.ts) has no
@@ -141,6 +142,8 @@ export interface CollageImage {
   alt: string;
   type: "image" | "video";
   span: "tall" | "default" | "wide";
+  /** YouTube video id from a hero video link; wins over `src` (an uploaded mp4). */
+  youtubeId?: string | null;
 }
 
 export interface CareersHeroContent {

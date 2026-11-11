@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
 import MediaSlot from "@/components/ui/MediaSlot";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
+import YouTubePreview from "@/components/ui/YouTubePreview";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { CloseIcon, PlayIcon } from "@/components/ui/icons";
 import { DEFAULT_CULTURE_GALLERY_DATA } from "@/cms/api/home/culture-gallery";
+import { disableYouTubeCaptions, youTubePlayerSrc } from "@/cms/utils/youtube";
 
 export interface LifeGalleryImage {
   /** Stable, content-independent identity for keying `.map()` renders (Principle III). */
@@ -14,6 +16,8 @@ export interface LifeGalleryImage {
   src: string | null;
   alt: string;
   type?: "image" | "video";
+  /** YouTube video id from a CMS video link; wins over `src` (an uploaded mp4). */
+  youtubeId?: string | null;
 }
 
 interface LifeGalleryProps {
@@ -90,13 +94,26 @@ function GalleryTile({
     >
       {isVideo ? (
         <>
-          <AutoplayVideo
-            src={item.src ?? ""}
-            className={`absolute inset-0 h-full w-full ${videoFit === "contain" ? "object-contain" : "object-cover"}`}
-            previewClassName="h-full w-full"
-            portalTarget={previewPortalTarget}
-          />
-          <div aria-hidden="true" className="absolute inset-0 bg-pure-black/15 transition-colors duration-200 hover:bg-pure-black/30" />
+          {item.youtubeId ? (
+            <>
+              {/* Poster shown until the muted autoplay preview fades in over it. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`https://i.ytimg.com/vi/${item.youtubeId}/hqdefault.jpg`}
+                alt={item.alt}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <YouTubePreview id={item.youtubeId} />
+            </>
+          ) : (
+            <AutoplayVideo
+              src={item.src ?? ""}
+              className={`absolute inset-0 h-full w-full ${videoFit === "contain" ? "object-contain" : "object-cover"}`}
+              previewClassName="h-full w-full"
+              portalTarget={previewPortalTarget}
+            />
+          )}
+          <div aria-hidden="true" className="absolute inset-0 bg-black/15 transition-colors duration-200 hover:bg-black/30" />
           <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] shadow-[0_10px_24px_rgba(0,0,0,0.4)]">
               <PlayIcon className="text-orange" width={18} height={18} />
@@ -164,9 +181,17 @@ export default function LifeGallery({
         </div>
 
         {videoOnly ? (
-          <div className="flex justify-center" data-gallery>
+          // A single row of fixed-width cards with a gap, like the testimonials track: it
+          // scrolls sideways when there are more videos than fit, and `mx-auto w-max`
+          // centres the row while it's narrower than the container.
+          <div
+            className="overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            style={{ scrollSnapType: "x proximity", WebkitOverflowScrolling: "touch" }}
+            data-gallery
+          >
+            <div className="mx-auto flex w-max gap-6 px-1 max-tg-sm:gap-3">
             {displayImages.map((item) => (
-              <div key={item.id} className="w-full max-w-[520px]">
+              <div key={item.id} className="w-[520px] shrink-0 max-tg-sm:w-[82vw]" style={{ scrollSnapAlign: "center" }}>
                 <GalleryTile
                   item={item}
                   tileKey={item.id}
@@ -177,6 +202,7 @@ export default function LifeGallery({
                 />
               </div>
             ))}
+            </div>
           </div>
         ) : autoScroll ? (
           // Duplicating the list once and animating exactly -50% (tgmarquee) creates a
@@ -245,7 +271,21 @@ export default function LifeGallery({
             >
               <CloseIcon />
             </button>
-            <div ref={setModalVideoContainer} className="relative aspect-video overflow-hidden rounded-xl bg-ink" />
+            {previewItem.youtubeId ? (
+              <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
+                <iframe
+                  src={youTubePlayerSrc(previewItem.youtubeId)}
+                  onLoad={disableYouTubeCaptions}
+                  title={`${previewItem.alt || "Life at TechGrit"} video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full border-0"
+                />
+              </div>
+            ) : (
+              <div ref={setModalVideoContainer} className="relative aspect-video overflow-hidden rounded-xl bg-ink" />
+            )}
           </div>
         </div>
       )}

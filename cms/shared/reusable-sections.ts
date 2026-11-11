@@ -31,6 +31,8 @@ export type StrapiHeroSection = {
   badgeLabel: string;
   highlightTitle: string | null;
   backgroundImage: StrapiMedia[];
+  /** Optional YouTube links; a valid one replaces an uploaded video in `backgroundImage`. */
+  videoLinks?: { id: number; url: string | null; label?: string | null }[] | null;
 };
 
 export type StrapiStatItem = {
