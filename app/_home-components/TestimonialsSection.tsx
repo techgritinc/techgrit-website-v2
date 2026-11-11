@@ -5,59 +5,8 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
 import { CheckIcon, ClockIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
 import type { ReviewsData } from "@/cms/api/home/reviews";
-import {
-  disableYouTubeCaptions,
-  watchYouTubePreview,
-  youTubePlayerSrc,
-  youTubePreviewSrc,
-} from "@/cms/utils/youtube";
-
-// Wait for YouTube's initial pause button and title bar to fade.
-const PREVIEW_REVEAL_DELAY_MS = 4500;
-
-/** Card background video; taller than the card so YouTube's title bar is cropped. */
-function YouTubePreview({ id }: { id: string }) {
-  const frameRef = useRef<HTMLIFrameElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const frame = frameRef.current;
-    if (!frame) return;
-    let playing = false;
-    let revealTimer: number | undefined;
-
-    const stopWatching = watchYouTubePreview(frame, (isPlaying) => {
-      if (isPlaying === playing) return;
-      playing = isPlaying;
-      window.clearTimeout(revealTimer);
-      if (isPlaying) {
-        revealTimer = window.setTimeout(() => setVisible(true), PREVIEW_REVEAL_DELAY_MS);
-      } else {
-        setVisible(false);
-      }
-    });
-
-    return () => {
-      stopWatching();
-      window.clearTimeout(revealTimer);
-    };
-  }, [id]);
-
-  return (
-    <iframe
-      ref={frameRef}
-      src={youTubePreviewSrc(id)}
-      onLoad={disableYouTubeCaptions}
-      title=""
-      aria-hidden="true"
-      tabIndex={-1}
-      loading="lazy"
-      allow="autoplay; encrypted-media; picture-in-picture"
-      referrerPolicy="strict-origin-when-cross-origin"
-      className={`pointer-events-none absolute left-1/2 top-1/2 aspect-video h-[170%] max-w-none -translate-x-1/2 -translate-y-1/2 border-0 ${visible ? "opacity-100 transition-opacity duration-500" : "opacity-0"}`}
-    />
-  );
-}
+import YouTubePreview from "@/components/ui/YouTubePreview";
+import { disableYouTubeCaptions, youTubePlayerSrc } from "@/cms/utils/youtube";
 
 export default function TestimonialsSection({ data }: { data: ReviewsData }) {
   const { badgeLabel, title, subtitle, testimonials, metrics } = data;

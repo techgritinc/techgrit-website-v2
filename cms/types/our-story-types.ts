@@ -70,6 +70,7 @@ export type StrapiCultureGallerySection = {
   subtitle: string;
   badgeLabel: string;
   image: StrapiMedia[];
+  videoLinks?: { id: number; url: string | null; label?: string | null }[] | null;
 };
 
 export type StrapiUnmappedSection = { __component: string };
