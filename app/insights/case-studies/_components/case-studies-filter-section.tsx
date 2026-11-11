@@ -35,7 +35,7 @@ export function CaseStudiesFilterSection({
         {filtered.length === 0 ? (
           <section>
             <div className="tg-container py-[var(--space-11)] px-[var(--space-15)] flex flex-col items-center gap-4 text-center">
-              <p className="text-[15.5px] text-text-soft">No case studies match this filter yet.</p>
+              <p className="text-[16px] text-text-soft">No case studies match this filter yet.</p>
               <Button variant="ghost" size="sm" onClick={() => setActive(defaultTab)}>
                 Reset filter
               </Button>

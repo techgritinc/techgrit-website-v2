@@ -4,23 +4,23 @@ import type { StrategiesSection } from "../_data/types";
 export function SoftwareProductEngineeringStrategies({ section }: { section: StrategiesSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-10">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-10">
         <RevealOnScroll>
           <div
             className="rounded-3xl border border-border-orange-18 p-9"
-            style={{ background: "linear-gradient(160deg, var(--color-overlay-orange-8), rgba(255,255,255,0.02))" }}
+            style={{ background: "linear-gradient(160deg, var(--color-overlay-orange-8), rgb(var(--tg-contrast-rgb)/0.02))" }}
           >
-            <div className="mb-[22px]">
-              <div className="text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
+            <div className="mb-[20px]">
+              <div className="text-[14px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
                 {section.eyebrow}
               </div>
-              <h3 className="mt-2 text-[26px] leading-[normal] font-bold tracking-[-0.02em] text-white">{section.title}</h3>
+              <h3 className="mt-2 text-[24px] leading-[normal] font-bold tracking-[-0.02em] text-white">{section.title}</h3>
             </div>
             <div className="grid grid-cols-1 gap-2.5 md:grid-cols-3 lg:grid-cols-6">
               {section.strategies.map((strategy) => (
                 <div key={strategy.order} className="rounded-card border border-border-8 bg-ink-glass-35 p-4">
-                  <div className="text-[15px] leading-[normal] font-extrabold text-amber-badge">{strategy.name}</div>
-                  <div className="mt-1 text-[12.5px] leading-[1.5] text-60">{strategy.description}</div>
+                  <div className="text-[14px] leading-[normal] font-extrabold text-amber-badge">{strategy.name}</div>
+                  <div className="mt-1 text-[14px] leading-[1.5] text-60">{strategy.description}</div>
                 </div>
               ))}
             </div>

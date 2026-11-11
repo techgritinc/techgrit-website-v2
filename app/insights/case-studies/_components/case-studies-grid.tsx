@@ -8,7 +8,7 @@ import MediaSlot from "@/components/ui/MediaSlot";
 export function CaseStudiesGrid({ caseStudies }: { caseStudies: CaseStudyCard[] }) {
   return (
     <section>
-      <div className="tg-container pt-[var(--space-11)] pb-[60px] px-[var(--space-15)]">
+      <div className="tg-container pt-[var(--space-11)] pb-[64px] px-[var(--space-15)]">
         <RevealOnScroll>
           <div className="grid grid-cols-1 gap-6 tg-md:grid-cols-3">
             {caseStudies.map((caseStudy) => {
@@ -31,7 +31,7 @@ export function CaseStudiesGrid({ caseStudies }: { caseStudies: CaseStudyCard[] 
                       />
                     </div>
                     <div className="flex flex-col flex-1 px-[var(--space-11)] pt-[var(--space-11)] pb-[var(--space-12)]">
-                      <span className="inline-flex items-center gap-2 self-start text-[11px] font-bold tracking-[var(--ls-wider)] uppercase text-text-faded">
+                      <span className="inline-flex items-center gap-2 self-start text-[14px] font-bold tracking-[var(--ls-wider)] uppercase text-text-faded">
                         <span
                           className="w-2 h-2 rounded-full inline-block"
                           style={{ background: accentColor }}
@@ -49,12 +49,12 @@ export function CaseStudiesGrid({ caseStudies }: { caseStudies: CaseStudyCard[] 
                         <GlassCardDescription
                           variant="blogCard"
                           title={caseStudy.subtitle}
-                          className="!mt-[9px] leading-[var(--lh-relaxed)] text-text-soft"
+                          className="!mt-[8px] leading-[var(--lh-relaxed)] text-text-soft"
                         >
                           {caseStudy.subtitle}
                         </GlassCardDescription>
                       </div>
-                      <span className="inline-flex items-center mt-[18px] gap-[7px] text-[14px] font-bold text-amber-light">
+                      <span className="inline-flex items-center mt-[16px] gap-[8px] text-[14px] font-bold text-amber-light">
                         {caseStudy.ctaLabel} <span aria-hidden="true">&#8594;</span>
                       </span>
                     </div>

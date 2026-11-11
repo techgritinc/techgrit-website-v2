@@ -15,19 +15,19 @@ export function InsightsHero({ section, centered = false,}: {
       <div
         className={
           centered
-            ? "mx-auto max-w-[1280px] px-9 pt-[78px] pb-[26px]"
-            : "mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-10 px-9 pt-[78px] pb-[26px] md:grid-cols-[1.05fr_0.95fr] md:gap-16"
+            ? "mx-auto max-w-[1280px] px-9 pt-[80px] pb-[24px]"
+            : "mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-10 px-9 pt-[80px] pb-[24px] md:grid-cols-[1.05fr_0.95fr] md:gap-16"
         }
       >
         <div className={centered ? "mx-auto max-w-[860px] text-center" : undefined}>
           {section.eyebrow ? (
-            <div data-rise className="mb-[26px] inline-flex items-center gap-2.5 rounded-full border border-border-amber-soft bg-[var(--color-overlay-amber)] px-4 py-2" style={{ animationDelay: ".05s" }}
+            <div data-rise className="mb-[24px] inline-flex items-center gap-2.5 rounded-full border border-border-amber-soft bg-[var(--color-overlay-amber)] px-4 py-2" style={{ animationDelay: ".05s" }}
             >
               <span className="status-dot status-yellow" />
               <span className="text-2xs leading-[normal] font-bold tracking-[0.08em] text-white uppercase">{section.eyebrow}</span>
             </div>
           ) : null}
-          <h1 data-rise className="text-[38px] leading-[1.04] tracking-[-1.89px] md:text-[54px]" style={{ animationDelay: ".12s" }}>
+          <h1 data-rise className="text-[40px] leading-[1.04] tracking-[-1.89px] md:text-[48px]" style={{ animationDelay: ".12s" }}>
             {before}
             {section.titleHighlight ? (
               <span className="text-gradient">{section.titleHighlight}</span>
@@ -39,7 +39,7 @@ export function InsightsHero({ section, centered = false,}: {
             {section.subtitle}
           </p>
           {section.primaryCtaLabel && section.primaryCtaLink ? (
-            <div data-rise className={`mt-[34px] flex flex-wrap items-center gap-[15px] ${centered ? "justify-center" : ""}`} style={{ animationDelay: ".3s" }}>
+            <div data-rise className={`mt-[32px] flex flex-wrap items-center gap-[16px] ${centered ? "justify-center" : ""}`} style={{ animationDelay: ".3s" }}>
               <Button
                 href={section.primaryCtaLink}
                 variant="primary"
@@ -49,7 +49,7 @@ export function InsightsHero({ section, centered = false,}: {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {section.primaryCtaLabel}{" "}<span aria-hidden="true" className="text-[17px]">&#8594;</span>
+                {section.primaryCtaLabel}{" "}<span aria-hidden="true" className="text-[16px]">&#8594;</span>
               </Button>
             </div>
           ) : null}
@@ -62,7 +62,7 @@ export function InsightsHero({ section, centered = false,}: {
               ) : (
                 <div className="flex h-[360px] items-center justify-center bg-glass p-14 text-center text-sm text-faint">Whitepaper preview</div>
               )}
-              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_45%,rgba(0,0,0,0.55))]" />
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--tg-page-rgb)/0)_45%,rgb(var(--tg-page-rgb)/0.55))]" />
             </div>
           </div>
         )}

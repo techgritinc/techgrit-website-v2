@@ -10,18 +10,18 @@ import type { WhySection } from "@/cms/types/engagement-models-types";
 export function EngagementModelsWhy({ section }: { section: WhySection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <div className="text-center">
             {section.eyebrow && (
-              <div className="mb-3 text-[12.5px] font-extrabold uppercase tracking-[0.16em] text-orange">
+              <div className="mb-3 text-[14px] font-extrabold uppercase tracking-[0.16em] text-orange">
                 {section.eyebrow}
               </div>
             )}
             <h2 className="text-[clamp(28px,3.2vw,38px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
               {section.title}
             </h2>
-            <p className="mx-auto mt-3 max-w-[640px] text-[15px] leading-[1.6] text-60">{section.description}</p>
+            <p className="mx-auto mt-3 max-w-[640px] text-[14px] leading-[1.6] text-60">{section.description}</p>
           </div>
           <div className="mt-9 grid grid-cols-1 gap-4 md:grid-cols-2">
             {section.chips.map((chip) => (
@@ -30,7 +30,7 @@ export function EngagementModelsWhy({ section }: { section: WhySection }) {
                 className="flex items-center gap-3 rounded-lg border border-border-8 bg-glass-3 px-4.5 py-3.5"
               >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[var(--color-overlay-orange-14)] text-orange">
-                  {chip.icon && <Image src={chip.icon.url} alt={chip.icon.alternativeText} width={18} height={18} />}
+                  {chip.icon && <Image className="tg-icon" src={chip.icon.url} alt={chip.icon.alternativeText} width={18} height={18} />}
                 </span>
                 <span className="text-[14px] leading-[1.4] text-70">{chip.label}</span>
               </div>

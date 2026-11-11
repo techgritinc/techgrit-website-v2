@@ -10,12 +10,12 @@ import type { FeaturedCapabilitiesSection } from "@/cms/shared/industry-sections
 export function IndustryFeaturedCases({ section }: { section: FeaturedCapabilitiesSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-[70px] pb-[60px]" data-reveal>
-        <div className="mb-[38px] max-w-[760px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[64px] pb-[64px]" data-reveal>
+        <div className="mb-[40px] max-w-[760px]">
           <SectionEyebrow tone="amber" className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
           <h2 className="text-[clamp(30px,3.8vw,42px)] leading-[1.08] tracking-[-0.03em]">{section.title}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-[22px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[20px]">
           {section.cards.map((card) => (
             <GlassCard
               key={card.order}
@@ -24,19 +24,19 @@ export function IndustryFeaturedCases({ section }: { section: FeaturedCapabiliti
               className="flex h-full flex-col"
             >
               {card.metric ? (
-                <div className="leading-[normal] text-[36px] sm:text-[40px] font-display font-bold text-amber-light tracking-[-0.02em]">
+                <div className="leading-[normal] text-[32px] sm:text-[40px] font-display font-bold text-amber-light tracking-[-0.02em]">
                   {card.metric}
                 </div>
               ) : null}
               {card.label ? (
-                <div className="mt-[6px] leading-[normal] tracking-[1.5px] text-2xs font-bold uppercase text-45">
+                <div className="mt-[4px] leading-[normal] tracking-[1.5px] text-2xs font-bold uppercase text-45">
                   {card.label}
                 </div>
               ) : null}
               <GlassCardTitle
                 variant="constructionImpact"
                 title={card.title}
-                className="mt-[14px] tracking-[normal] text-[16px] md:text-[18.5px]"
+                className="mt-[12px] tracking-[normal] text-[16px] md:text-[18px]"
               >
                 {card.title}
               </GlassCardTitle>
@@ -45,7 +45,7 @@ export function IndustryFeaturedCases({ section }: { section: FeaturedCapabiliti
               </GlassCardDescription>
               <Link
                 href={card.link}
-                className="mt-auto inline-flex items-center gap-[7px] pt-[18px] text-xs font-bold text-amber-light"
+                className="mt-auto inline-flex items-center gap-[8px] pt-[16px] text-xs font-bold text-amber-light"
               >
                 {card.linkLabel} <span aria-hidden="true">&rarr;</span>
               </Link>

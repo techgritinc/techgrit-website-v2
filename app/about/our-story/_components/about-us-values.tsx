@@ -6,9 +6,9 @@ import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 export function AboutUsValues({ section }: { section: ValuesSection }) {
   return (
     <section id="values" className="relative scroll-mt-[96px]">
-      <div className="mx-auto max-w-[1280px] px-[36px] py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
-          <div className="mx-auto mb-[50px] max-w-[680px] text-center">
+          <div className="mx-auto mb-[48px] max-w-[680px] text-center">
             <SectionEyebrow showAccent={false} className="mb-4 justify-center">
               {section.eyebrow}
             </SectionEyebrow>
@@ -20,19 +20,19 @@ export function AboutUsValues({ section }: { section: ValuesSection }) {
             {section.values.map((value) => (
               <div
                 key={value.order}
-                className="flex gap-[22px] border-t border-white/10 px-[4px] py-[30px] transition-all duration-[250ms] ease-in-out hover:pl-[14px]"
+                className="flex gap-[20px] border-t border-white/10 px-[4px] py-[32px] transition-all duration-[250ms] ease-in-out hover:pl-[12px]"
               >
                 <span className="w-[24px] shrink-0 pt-[4px] text-[14px] font-bold tracking-[0.05em] text-orange">
                   {String(value.order).padStart(2, "0")}
                 </span>
                 <div>
-                  <div className="flex items-center gap-[11px]">
+                  <div className="flex items-center gap-[12px]">
                     {value.icon ? (
-                      <Image src={value.icon.url} alt={value.icon.alt} width={19} height={19} aria-hidden="true" />
+                      <Image className="tg-icon" src={value.icon.url} alt={value.icon.alt} width={19} height={19} aria-hidden="true" />
                     ) : null}
-                    <h3 className="text-[19px] font-bold leading-normal tracking-[-0.01em] text-white">{value.title}</h3>
+                    <h3 className="text-[18px] font-bold leading-normal tracking-[-0.01em] text-white">{value.title}</h3>
                   </div>
-                  <p className="mt-[8px] text-[15px] leading-[1.6] text-white/58">
+                  <p className="mt-[8px] text-[14px] leading-[1.6] text-white/58">
                     {value.description}
                   </p>
                 </div>

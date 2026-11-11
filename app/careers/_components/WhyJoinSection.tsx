@@ -36,15 +36,15 @@ export function WhyJoinSection({
 }) {
   return (
     <section>
-      <div className="mx-auto max-w-[1280px] px-9 pt-14 pb-[30px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-14 pb-[32px]">
         <h2 className="font-body max-w-[680px] text-[clamp(28px,3.4vw,40px)] font-bold leading-[normal] tracking-[-0.03em] text-white">
           {heading}
         </h2>
         {subtitle && (
-          <p className="mt-4 max-w-[680px] text-[17px] leading-[1.6] text-text-60">{subtitle}</p>
+          <p className="mt-4 max-w-[680px] text-[16px] leading-[1.6] text-text-60">{subtitle}</p>
         )}
 
-        <div className="mt-[34px] grid grid-cols-3 gap-5 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
+        <div className="mt-[32px] grid grid-cols-3 gap-5 max-tg-md:grid-cols-2 max-tg-sm:grid-cols-1">
           {benefits.map((benefit) => {
             const accent = ICON_ACCENT_CLASSES[benefit.iconName];
 
@@ -57,13 +57,13 @@ export function WhyJoinSection({
                   className={`flex h-[46px] w-[46px] items-center justify-center rounded-[12px] border ${accent.bg} ${accent.border} ${accent.text}`}
                 >
                   {benefit.icon && (
-                    <Image src={benefit.icon.url} alt={benefit.icon.alt} width={22} height={22} />
+                    <Image className="tg-icon" src={benefit.icon.url} alt={benefit.icon.alt} width={22} height={22} />
                   )}
                 </div>
-                <h3 className="font-body mt-4 text-[18.5px] font-bold leading-[normal] tracking-[0] text-white">
+                <h3 className="font-body mt-4 text-[18px] font-bold leading-[normal] tracking-[0] text-white">
                   {benefit.title}
                 </h3>
-                <p className="mt-[9px] text-[14.5px] leading-[1.6] text-text-60">
+                <p className="mt-[8px] text-[14px] leading-[1.6] text-text-60">
                   {benefit.description}
                 </p>
               </div>

@@ -9,7 +9,7 @@ export function AboutUsOurRole({ section }: { section: OurRoleSection }) {
 
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1000px] px-[36px] py-[60px] text-center">
+      <div className="mx-auto max-w-[1000px] px-[32px] py-[64px] text-center">
         <RevealOnScroll>
             <SectionEyebrow showAccent={false} className="justify-center">
               {section.eyebrow}
@@ -17,11 +17,11 @@ export function AboutUsOurRole({ section }: { section: OurRoleSection }) {
             <h2 className="text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
               {before}
               {section.titleHighlight ? (
-                <span className="bg-[linear-gradient(120deg,#F59E0B,#E87722)] bg-clip-text text-transparent">{section.titleHighlight}</span>
+                <span className="bg-[image:var(--gradient-brand-text)] bg-clip-text text-transparent">{section.titleHighlight}</span>
               ) : null}
               {after}
             </h2>
-            <p className="mx-auto mt-[22px] max-w-[680px] text-[18px] leading-[1.7] text-secondary">
+            <p className="mx-auto mt-[20px] max-w-[680px] text-[18px] leading-[1.7] text-secondary">
               {section.description}
             </p>
         </RevealOnScroll>

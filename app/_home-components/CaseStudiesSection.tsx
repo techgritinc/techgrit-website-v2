@@ -11,13 +11,13 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
 
   return (
     <section id="insights" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 py-20 max-tg-sm:py-10">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-20 max-tg-sm:py-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">{badgeLabel}</div>
-            <h2 className="mt-3.5 font-display text-[44px] max-tg-sm:text-[30px] font-bold leading-[1.04] tracking-[-0.03em] text-white">{title}</h2>
+            <div className="text-[14px] font-bold tracking-widest text-orange uppercase leading-[normal]">{badgeLabel}</div>
+            <h2 className="mt-3.5 font-display text-[40px] max-tg-sm:text-[32px] font-bold leading-[1.04] tracking-[-0.03em] text-white">{title}</h2>
           </div>
-          <Button href={viewAllLink} variant="ghost" size="nav" className="!px-[22px] !py-[13px] !text-[14.5px]">
+          <Button href={viewAllLink} variant="ghost" size="nav" className="!px-[20px] !py-[12px]">
             {viewAllLabel} <span aria-hidden="true" className="text-amber-light">&rarr;</span>
           </Button>
         </div>
@@ -27,7 +27,7 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
             <GlassCard
               variant="reimagine"
               hoverBorderColor=""
-              className="group relative flex min-h-[400px] w-full items-stretch overflow-hidden !rounded-3xl !p-[42px]"
+              className="group relative flex min-h-[400px] w-full items-stretch overflow-hidden !rounded-3xl !p-[40px]"
             >
               {/* Accent bg glow (top-left tint and top-right orb) */}
               <div
@@ -43,7 +43,7 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
 
               <div className="relative z-10 flex w-full flex-col justify-center gap-4">
                 <span
-                  className="inline-flex w-fit items-center rounded-[20px] px-[13px] py-[6px] text-12 font-bold tracking-[0.1em] uppercase"
+                  className="inline-flex w-fit items-center rounded-[20px] px-[12px] py-[4px] text-12 font-bold tracking-[0.1em] uppercase"
                   style={{
                     color: featured.accentColor,
                     background: `color-mix(in srgb, ${featured.accentColor} 14%, transparent)`,
@@ -52,14 +52,14 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
                 >
                   {featured.industry}
                 </span>
-                <div className="flex flex-wrap items-end gap-[14px]">
+                <div className="flex flex-wrap items-end gap-[12px]">
                   <span
                     className="font-display text-[clamp(48px,6vw,66px)] font-bold leading-none tracking-[-0.03em]"
                     style={{ color: featured.accentColor }}
                   >
                     {featured.metric}
                   </span>
-                  <span className="pb-3 text-[15px] text-text-60">{featured.metricLabel}</span>
+                  <span className="pb-3 text-[14px] text-text-60">{featured.metricLabel}</span>
                 </div>
                 <h3 title={featured.title} className="mt-1.5 line-clamp-2 font-display text-[clamp(23px,2.5vw,28px)] font-bold leading-[1.2] tracking-[-0.02em] text-white">
                   {featured.title}
@@ -67,8 +67,8 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
                 {featured.description && (
                   <p title={featured.description} className="line-clamp-2 max-w-[460px] text-15-5 leading-[1.6] text-text-64">{featured.description}</p>
                 )}
-                <span className="mt-1.5 inline-flex items-center gap-2 text-[15px] font-bold text-amber-light">
-                  Read case study <span aria-hidden="true" className="text-[17px]">&rarr;</span>
+                <span className="mt-1.5 inline-flex items-center gap-2 text-[14px] font-bold text-amber-light">
+                  Read case study <span aria-hidden="true" className="text-[16px]">&rarr;</span>
                 </span>
               </div>
             </GlassCard>
@@ -82,8 +82,8 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
                   hoverBorderColor=""
                   className="group flex !flex-1 w-full flex-col justify-center gap-3 !px-7 !py-6 hover:!translate-y-0 hover:translate-x-[5px]"
                 >
-                  <div className="flex items-center justify-between gap-[14px]">
-                    <span className="inline-flex items-center gap-[9px]">
+                  <div className="flex items-center justify-between gap-[12px]">
+                    <span className="inline-flex items-center gap-[8px]">
                       <span
                         className="h-2 w-2 rounded-full"
                         style={{
@@ -95,12 +95,12 @@ export default function CaseStudiesSection({ data }: { data: CaseStudiesData }) 
                     </span>
                     <span className="shrink-0 text-[18px] leading-[normal] text-amber-light transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
                   </div>
-                  <h3 title={study.title} className="line-clamp-2 min-h-[42.9px] font-display text-[16.5px] font-bold leading-[21.45px] tracking-[normal] text-white">{study.title}</h3>
-                  <div className="flex items-baseline gap-[9px]">
-                    <span className="font-display text-[22px] font-bold leading-[normal] tracking-normal" style={{ color: study.accentColor }}>
+                  <h3 title={study.title} className="line-clamp-2 min-h-[42.9px] font-display text-[16px] font-bold leading-[21.45px] tracking-[normal] text-white">{study.title}</h3>
+                  <div className="flex items-baseline gap-[8px]">
+                    <span className="font-display text-[20px] font-bold leading-[normal] tracking-normal" style={{ color: study.accentColor }}>
                       {study.metric}
                     </span>
-                    <span className="text-[13px] leading-[normal] text-dim">{study.metricLabel}</span>
+                    <span className="text-[14px] leading-[normal] text-dim">{study.metricLabel}</span>
                   </div>
                 </GlassCard>
               </Link>

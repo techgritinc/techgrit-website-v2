@@ -20,18 +20,18 @@ type ButtonAsLink = SharedProps &
 export type ButtonProps = ButtonAsButton | ButtonAsLink;
 
 const BASE =
-  "inline-flex items-center justify-center shrink-0 whitespace-nowrap font-bold transition-all duration-200 ease-[ease] cursor-pointer disabled:pointer-events-none disabled:opacity-45 aria-disabled:pointer-events-none aria-disabled:opacity-45";
+  "inline-flex items-center justify-center shrink-0 whitespace-nowrap transition-all duration-150 ease-[ease] cursor-pointer disabled:pointer-events-none disabled:opacity-45 aria-disabled:pointer-events-none aria-disabled:opacity-45";
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  sm: "gap-[7px] rounded-sm px-[18px] py-2.5 text-xs",
-  md: "gap-2 rounded-card px-[26px] py-3.5 text-sm",
-  lg: "gap-[9px] rounded-card px-7 py-4 text-base",
-  nav: "gap-2 rounded-[11px] px-[22px] py-[12px] text-[15px] leading-[normal]",
-  footer: "gap-[8px] rounded-[11px] px-[20px] py-[12px] text-[14.5px] leading-[normal]",
+  sm: "gap-[8px] rounded-[16px] px-[16px] py-2.5 text-xs font-medium",
+  md: "gap-2 rounded-[16px] px-6 py-4 text-base font-semibold max-tg-sm:text-[16px]",
+  lg: "gap-2 rounded-[16px] px-6 py-4 text-base font-semibold max-tg-sm:w-full max-tg-sm:text-[16px]",
+  nav: "gap-2 rounded-[16px] px-[20px] py-[12px] text-xs font-medium leading-[normal]",
+  footer: "gap-[8px] rounded-[16px] px-[20px] py-[12px] text-xs font-medium leading-[normal]",
   // Pill-shaped footer "Start a conversation" CTA (spec.md FR-025) — uppercase small-caps label,
   // distinct radius/padding/tracking from every other size.
-  "footer-cta": "gap-[10px] rounded-[40px] pl-[22px] pr-[20px] py-[12px] text-[13px] font-extrabold uppercase tracking-[0.08em] leading-[normal]",
-  hero: "gap-[9px] rounded-card px-7 py-4 text-[16px]",
+  "footer-cta": "gap-[8px] rounded-[40px] pl-[20px] pr-[20px] py-[12px] text-xs font-medium uppercase tracking-[0.08em] leading-[normal]",
+  hero: "gap-2 rounded-[16px] px-6 py-4 text-base font-semibold max-tg-sm:w-full max-tg-sm:text-[16px]",
 };
 
 // Primary's glow shadow scales with size: the compact nav button uses the
@@ -52,12 +52,12 @@ const PRIMARY_SHADOW_CLASSES: Record<ButtonSize, string> = {
 };
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  primary: "bg-[image:var(--gradient-brand)] text-white hover:-translate-y-[2px] active:translate-y-0",
-  ghost: "bg-[image:var(--gradient-ghost)] border border-border-ghost text-primary shadow-btn-ghost backdrop-blur-ghost hover:-translate-y-[2px] active:translate-y-0",
-  outline: "bg-transparent border border-border text-primary hover:border-orange hover:bg-glass",
+  primary: "bg-[image:var(--gradient-brand)] text-on-brand hover:-translate-y-[2px] active:translate-y-0",
+  ghost: "bg-[image:var(--gradient-ghost)] border border-border-ghost text-primary hover:border-border-ghost-hover hover:bg-[image:var(--gradient-ghost-hover)] hover:-translate-y-[2px] active:translate-y-0",
+  outline: "bg-transparent border border-border-ghost text-primary hover:border-border-ghost-hover hover:bg-glass hover:-translate-y-[2px] active:translate-y-0",
 };
 
-/** Shared CTA/link-button primitive (FR-013) — Button/Badge/FormField are the
+/** Shared CTA/link-button primitive (FR-013). Font sizes follow the Figma TG/Button styles: 18 SemiBold (md/lg/hero) and 14 Medium (sm/nav/footer/footer-cta). Figma SG 12: padding 16x24, radius 16, gap 8, hover lift -2px/150ms, full-width below 560px. — Button/Badge/FormField are the
  * three reusable components this feature introduces in place of per-section
  * markup; styling is Tailwind utility classes referencing tokens.css custom
  * properties, not globals.css's .btn* classes (see plan.md Constitution Check). */

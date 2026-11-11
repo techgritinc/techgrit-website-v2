@@ -16,11 +16,11 @@ export function CtaBannerSection({ content }: { content: CtaBannerContent }) {
           />
           <div className="relative">
             {content.badgeLabel && (
-              <div className="text-[12.5px] font-bold tracking-widest text-orange uppercase leading-[normal]">
+              <div className="text-[14px] font-bold tracking-widest text-orange uppercase leading-[normal]">
                 {content.badgeLabel}
               </div>
             )}
-            <h2 className="font-display mt-4 text-testimonial-stat tg-sm:text-[52px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
+            <h2 className="font-display mt-4 text-testimonial-stat tg-sm:text-[48px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
               {before}
               {content.headingHighlight && <span className="text-gradient">{content.headingHighlight}</span>}
               {after}
@@ -32,7 +32,7 @@ export function CtaBannerSection({ content }: { content: CtaBannerContent }) {
               <Button
                 href={content.ctaHref}
                 size="lg"
-                className="!leading-[normal] !gap-[10px] !rounded-[13px] !px-[34px] !py-[15px] !text-[17px] !whitespace-normal hover:!shadow-btn-primary"
+                className="!leading-[normal] !gap-[8px] !rounded-[13px] !px-[32px] !py-[16px] !whitespace-normal hover:!shadow-btn-primary"
               >
                 {content.ctaLabel}{" "}
                 <span aria-hidden="true" className="text-[18px]">

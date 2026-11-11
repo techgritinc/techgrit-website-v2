@@ -4,12 +4,12 @@ import type { AdvantageSection } from "@/cms/types/construction";
 export function ConstructionAdvantage({ section }: { section: AdvantageSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-10 pb-15" data-reveal>
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-10 pb-15" data-reveal>
         <div className="grid grid-cols-1 items-start gap-14 md:grid-cols-[0.8fr_1.2fr]">
           <div className="-mt-0.75">
             <SectionEyebrow showAccent={false} className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
             <h2 className="text-[clamp(28px,3.4vw,38px)] leading-[1.1] tracking-[-0.03em]">{section.title}</h2>
-            <p className="mt-4" style={{ fontSize: "16.5px", lineHeight: 1.65, color: "var(--color-text-muted)" }}>
+            <p className="mt-4" style={{ fontSize: "16px", lineHeight: 1.65, color: "var(--color-text-muted)" }}>
               {section.description}
             </p>
           </div>
@@ -23,7 +23,7 @@ export function ConstructionAdvantage({ section }: { section: AdvantageSection }
                   {String(point.order).padStart(2, "0")}
                 </span>
                 <div>
-                  <h3 className=" leading-[normal] tracking-[normal]" style={{ fontSize: "19px" }}>{point.title}</h3>
+                  <h3 className=" leading-[normal] tracking-[normal]" style={{ fontSize: "18px" }}>{point.title}</h3>
                   <p className="mt-1.75" style={{ fontSize: "var(--text-sm)", lineHeight: 1.6, color: "var(--color-text-60)" }}>
                     {point.description}
                   </p>

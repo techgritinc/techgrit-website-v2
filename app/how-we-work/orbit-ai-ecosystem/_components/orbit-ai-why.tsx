@@ -6,11 +6,11 @@ import type { ServiceDetailSection } from "@/cms/types/orbit-ai-ecosystem-types"
 export function OrbitAiWhy({ section }: { section: ServiceDetailSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <div className="mb-10 text-center">
             {section.serviceLabel && (
-              <div className="mb-3 text-[12.5px] font-extrabold uppercase leading-[normal] tracking-[0.16em] text-orange">
+              <div className="mb-3 text-[14px] font-extrabold uppercase leading-[normal] tracking-[0.16em] text-orange">
                 {section.serviceLabel}
               </div>
             )}
@@ -18,7 +18,7 @@ export function OrbitAiWhy({ section }: { section: ServiceDetailSection }) {
               {section.title}
             </h2>
             {section.subtitle && (
-              <p className="mx-auto mt-3.5 max-w-[640px] whitespace-pre-line text-[16.5px] leading-[1.6] text-text-66">
+              <p className="mx-auto mt-3.5 max-w-[640px] whitespace-pre-line text-[16px] leading-[1.6] text-text-66">
                 {section.subtitle}
               </p>
             )}
@@ -27,7 +27,7 @@ export function OrbitAiWhy({ section }: { section: ServiceDetailSection }) {
             {section.steps.map((step) => (
               <IconTile
                 key={step.id}
-                icon={step.icon && <Image src={step.icon.url} alt={step.icon.alternativeText} width={20} height={20} />}
+                icon={step.icon && <Image className="tg-icon" src={step.icon.url} alt={step.icon.alternativeText} width={20} height={20} />}
                 title={step.title}
                 description={step.subtitle}
               />

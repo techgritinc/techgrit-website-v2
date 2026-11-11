@@ -96,7 +96,7 @@ function GalleryTile({
             previewClassName="h-full w-full"
             portalTarget={previewPortalTarget}
           />
-          <div aria-hidden="true" className="absolute inset-0 bg-black/15 transition-colors duration-200 hover:bg-black/30" />
+          <div aria-hidden="true" className="absolute inset-0 bg-pure-black/15 transition-colors duration-200 hover:bg-pure-black/30" />
           <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] shadow-[0_10px_24px_rgba(0,0,0,0.4)]">
               <PlayIcon className="text-orange" width={18} height={18} />
@@ -152,15 +152,15 @@ export default function LifeGallery({
 
   return (
     <section id={id} className="relative scroll-mt-[96px]">
-      <div className="mx-auto max-w-(--container-max) px-9 pt-[60px] pb-[80px] max-tg-sm:pt-10 max-tg-sm:pb-10 leading-normal" data-reveal>
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[64px] pb-[80px] max-tg-sm:pt-10 max-tg-sm:pb-10 leading-normal" data-reveal>
         <div className="mx-auto mb-11 max-w-[680px] text-center">
-          <SectionEyebrow showAccent={false} className="leading-normal !mb-[17px]">
+          <SectionEyebrow showAccent={false} className="leading-normal !mb-[16px]">
             {eyebrow}
           </SectionEyebrow>
           <h2 className="font-display text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
             {heading}
           </h2>
-          <p className="mx-auto mt-4 text-[17px] leading-[1.6] text-muted">{description}</p>
+          <p className="mx-auto mt-4 text-[16px] leading-[1.6] text-muted">{description}</p>
         </div>
 
         {videoOnly ? (
@@ -212,10 +212,10 @@ export default function LifeGallery({
 
         {showActions && (
           <div className="mt-11 flex flex-wrap items-center justify-center gap-4">
-            <Button href={primaryBtnLink} size="md" className="leading-normal text-[15.5px] px-[27px] py-[16px]">
+            <Button href={primaryBtnLink} size="md" className="leading-normal px-[24px] py-[16px]">
               {primaryBtnLabel} <span aria-hidden="true">&rarr;</span>
             </Button>
-            <Button href={secondaryBtnLink} variant="ghost" size="md" className="leading-normal text-[16px] px-[27px] py-[15.5px]">
+            <Button href={secondaryBtnLink} variant="ghost" size="md" className="leading-normal px-[24px] py-[16px]">
               {secondaryBtnLabel}{" "}
               <span aria-hidden="true" className="text-orange">
                 &rarr;
@@ -231,6 +231,9 @@ export default function LifeGallery({
           role="dialog"
           aria-modal="true"
           aria-label={`${previewItem.alt || "Video"} preview`}
+          // Backdrop is dark in both themes (--color-modal-backdrop), so pin the dark theme
+          // for the close button inside it.
+          data-theme="dark"
           className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-modal-backdrop p-6 backdrop-blur-md"
         >
           <div onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[900px]">

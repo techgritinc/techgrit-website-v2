@@ -66,7 +66,7 @@ export default function Modal({ isOpen, onClose, children, title, labelledBy }: 
 
   return (
     <div
-      className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-black/70 px-4 py-8"
+      className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-pure-black/70 px-4 py-8"
       onClick={onClose}
     >
       <div
