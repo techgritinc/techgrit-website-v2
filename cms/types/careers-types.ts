@@ -152,7 +152,6 @@ export interface CareersHeroContent {
   headingHighlight: string;
   lead: string;
   primaryCta: { label: string; href: string };
-  secondaryCta: { label: string; href: string };
   images: [CollageImage, CollageImage, CollageImage, CollageImage];
 }
 
