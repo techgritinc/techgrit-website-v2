@@ -105,16 +105,7 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                   {isVideo ? (
                     <>
                       {image.youtubeId ? (
-                        <>
-                          {/* Poster shown until the muted autoplay preview fades in over it. */}
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={`https://i.ytimg.com/vi/${image.youtubeId}/hqdefault.jpg`}
-                            alt={image.alt}
-                            className={`absolute inset-0 h-full w-full object-cover ${image.span === "wide" ? "object-[50%_25%]" : ""}`}
-                          />
-                          <YouTubePreview id={image.youtubeId} />
-                        </>
+                        <YouTubePreview id={image.youtubeId} />
                       ) : (
                         <AutoplayVideo
                           src={image.src}

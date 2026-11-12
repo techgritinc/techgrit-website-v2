@@ -63,10 +63,10 @@ const STATE_ENDED = 0;
 const STATE_PLAYING = 1;
 const LOOP_EARLY_SECONDS = 1.5;
 
-/** Reports play state of a preview iframe and loops it. Returns a cleanup function. */
+/** Loops a preview iframe, optionally reporting play state. Returns a cleanup function. */
 export function watchYouTubePreview(
   frame: HTMLIFrameElement,
-  onPlayingChange: (playing: boolean) => void,
+  onPlayingChange?: (playing: boolean) => void,
 ): () => void {
   const send = (message: object) => frame.contentWindow?.postMessage(JSON.stringify(message), YOUTUBE_ORIGIN);
   const timers: number[] = [];
@@ -124,7 +124,7 @@ export function watchYouTubePreview(
       send({ event: "command", func: "seekTo", args: [0, true] });
       send({ event: "command", func: "playVideo", args: [] });
     }
-    onPlayingChange(state === STATE_PLAYING);
+    onPlayingChange?.(state === STATE_PLAYING);
   };
 
   window.addEventListener("message", onMessage);
