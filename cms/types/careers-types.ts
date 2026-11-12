@@ -75,7 +75,7 @@ export type StrapiCultureGallerySection = {
   subtitle: string;
   badgeLabel: string;
   image: StrapiMedia[];
-  videoLinks?: { id: number; url: string | null; label?: string | null }[] | null;
+  videoLinks?: { id: number; url: string | null; label?: string | null; thumbnail?: { url: string } | null }[] | null;
 };
 
 // The shared StrapiCtaBannerSection type (cms/shared/reusable-sections.ts) has no
@@ -144,6 +144,8 @@ export interface CollageImage {
   span: "tall" | "default" | "wide";
   /** YouTube video id from a hero video link; wins over `src` (an uploaded mp4). */
   youtubeId?: string | null;
+  /** CMS thumbnail for the video link, shown until the tile is hovered. */
+  thumbnailUrl?: string | null;
 }
 
 export interface CareersHeroContent {

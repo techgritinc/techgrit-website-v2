@@ -13,7 +13,7 @@ export type StrapiCultureGallerySection = {
   secondaryBtnLabel: string;
   secondaryBtnLink: string;
   image: StrapiMedia[];
-  videoLinks?: { id: number; url: string | null; label?: string | null }[] | null;
+  videoLinks?: { id: number; url: string | null; label?: string | null; thumbnail?: { url: string } | null }[] | null;
   __component: "page-reusable-sections.culture-gallery";
 };
 
@@ -24,6 +24,8 @@ export type CultureGalleryImage = {
   type?: "image" | "video";
   /** Set when the video comes from a CMS `videoLinks` entry; takes precedence over an uploaded mp4. */
   youtubeId?: string | null;
+  /** CMS thumbnail for the video link, shown until the tile is hovered. */
+  thumbnailUrl?: string | null;
 };
 
 export type CultureGalleryData = {
@@ -69,7 +71,16 @@ export function buildGalleryItems(section: {
   const linkVideos: CultureGalleryImage[] = (section.videoLinks ?? []).flatMap((link) => {
     const youtubeId = parseYouTubeId(link.url);
     return youtubeId
-      ? [{ id: `link-${link.id}`, src: null, alt: link.label ?? "", type: "video" as const, youtubeId }]
+      ? [
+          {
+            id: `link-${link.id}`,
+            src: null,
+            alt: link.label ?? "",
+            type: "video" as const,
+            youtubeId,
+            thumbnailUrl: link.thumbnail ? resolveMediaUrl(link.thumbnail.url) : null,
+          },
+        ]
       : [];
   });
 

@@ -18,6 +18,8 @@ export interface LifeGalleryImage {
   type?: "image" | "video";
   /** YouTube video id from a CMS video link; wins over `src` (an uploaded mp4). */
   youtubeId?: string | null;
+  /** CMS thumbnail for the video link, shown until the tile is hovered. */
+  thumbnailUrl?: string | null;
 }
 
 interface LifeGalleryProps {
@@ -67,9 +69,14 @@ function GalleryTile({
   previewPortalTarget?: HTMLElement | null;
 }) {
   const isVideo = item.type === "video";
+  const [hovered, setHovered] = useState(false);
+  // YouTube tiles show a thumbnail and play only on hover, with the play button hidden.
+  const hideOnHover = item.youtubeId ? "group-hover:opacity-0" : "";
 
   return (
     <figure
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       onClick={isVideo ? () => onPreview(item, tileKey) : undefined}
       onKeyDown={
         isVideo
@@ -85,7 +92,7 @@ function GalleryTile({
       tabIndex={isVideo ? 0 : undefined}
       aria-label={isVideo ? `Play ${item.alt || "video"} with sound` : undefined}
       className={[
-        "relative m-0 overflow-hidden rounded-xl border border-border-8 bg-glass-3 transition-transform duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:-translate-y-1",
+        "group relative m-0 overflow-hidden rounded-xl border border-border-8 bg-glass-3 transition-transform duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:-translate-y-1",
         aspectClassName,
         isVideo ? "cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-orange" : "",
       ]
@@ -95,7 +102,7 @@ function GalleryTile({
       {isVideo ? (
         <>
           {item.youtubeId ? (
-            <YouTubePreview id={item.youtubeId} />
+            <YouTubePreview id={item.youtubeId} playing={hovered} thumbnailUrl={item.thumbnailUrl} showThumbnail />
           ) : (
             <AutoplayVideo
               src={item.src ?? ""}
@@ -104,8 +111,8 @@ function GalleryTile({
               portalTarget={previewPortalTarget}
             />
           )}
-          <div aria-hidden="true" className="absolute inset-0 bg-black/15 transition-colors duration-200 hover:bg-black/30" />
-          <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div aria-hidden="true" className={`absolute inset-0 bg-black/15 transition-all duration-200 hover:bg-black/30 ${hideOnHover}`} />
+          <div aria-hidden="true" className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${hideOnHover}`}>
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] shadow-[0_10px_24px_rgba(0,0,0,0.4)]">
               <PlayIcon className="text-orange" width={18} height={18} />
             </div>

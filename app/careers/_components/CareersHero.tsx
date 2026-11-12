@@ -21,6 +21,7 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
   const after = content.heading.slice(highlightIndex + content.headingHighlight.length);
   const [previewImage, setPreviewImage] = useState<CollageImage | null>(null);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [modalVideoContainer, setModalVideoContainer] = useState<HTMLDivElement | null>(null);
 
   function openPreview(image: CollageImage, index: number) {
@@ -77,9 +78,13 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
           <div className="grid grid-cols-2 auto-rows-[150px] gap-3.5 max-tg-md:auto-rows-[180px]">
             {content.images.map((image, index) => {
               const isVideo = image.type === "video";
+              // YouTube tiles show a thumbnail and play only on hover, with the play button hidden.
+              const hideOnHover = image.youtubeId ? "group-hover:opacity-0" : "";
               return (
                 <div
                   key={index}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   onClick={isVideo ? () => openPreview(image, index) : undefined}
                   onKeyDown={
                     isVideo
@@ -95,7 +100,7 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                   tabIndex={isVideo ? 0 : undefined}
                   aria-label={isVideo ? `Play ${image.alt || "video"} with sound` : undefined}
                   className={[
-                    "relative overflow-hidden rounded-[18px] border border-border-image",
+                    "group relative overflow-hidden rounded-[18px] border border-border-image",
                     COLLAGE_SPAN_CLASSES[image.span],
                     isVideo ? "cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-orange" : "",
                   ]
@@ -105,7 +110,13 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                   {isVideo ? (
                     <>
                       {image.youtubeId ? (
-                        <YouTubePreview id={image.youtubeId} />
+                        <YouTubePreview
+                          id={image.youtubeId}
+                          playing={hoveredIndex === index}
+                          thumbnailUrl={image.thumbnailUrl}
+                          showThumbnail
+                          thumbnailClassName={image.span === "wide" ? "object-[50%_25%]" : ""}
+                        />
                       ) : (
                         <AutoplayVideo
                           src={image.src}
@@ -114,8 +125,8 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                           portalTarget={previewIndex === index ? modalVideoContainer : undefined}
                         />
                       )}
-                      <div aria-hidden="true" className="absolute inset-0 bg-black/15 transition-colors duration-200 hover:bg-black/30" />
-                      <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      <div aria-hidden="true" className={`absolute inset-0 bg-black/15 transition-all duration-200 hover:bg-black/30 ${hideOnHover}`} />
+                      <div aria-hidden="true" className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${hideOnHover}`}>
                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] shadow-[0_10px_24px_rgba(0,0,0,0.4)]">
                           <PlayIcon className="text-orange" width={18} height={18} />
                         </div>
