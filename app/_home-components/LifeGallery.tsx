@@ -95,16 +95,7 @@ function GalleryTile({
       {isVideo ? (
         <>
           {item.youtubeId ? (
-            <>
-              {/* Poster shown until the muted autoplay preview fades in over it. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`https://i.ytimg.com/vi/${item.youtubeId}/hqdefault.jpg`}
-                alt={item.alt}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-              <YouTubePreview id={item.youtubeId} />
-            </>
+            <YouTubePreview id={item.youtubeId} />
           ) : (
             <AutoplayVideo
               src={item.src ?? ""}
