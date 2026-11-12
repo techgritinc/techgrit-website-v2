@@ -65,11 +65,24 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
           <p data-rise className="mt-5 max-w-[500px] text-[18px] leading-[1.65] text-secondary [animation-delay:.2s]">{content.lead}</p>
 
           <div data-rise className="mt-[32px] flex flex-wrap gap-3.5 [animation-delay:.28s]">
-            <Button href={content.primaryCta.href} variant="primary" size="hero" className="min-h-[52px] !px-7 !py-[16px] leading-[normal]">
+            <Button
+              href={content.primaryCta.href}
+              variant="primary"
+              size="hero"
+              className="min-h-[52px] !px-7 !py-[16px] leading-[normal]"
+              onClick={(event) => {
+                // In-page anchors (the CMS sends "/careers/#roles", the fallback is "#roles"):
+                // scroll to the element directly so the URL never changes and every click works.
+                const [path, id] = content.primaryCta.href.split("#");
+                const normalize = (value: string) => value.replace(/\/+$/, "");
+                const isSamePage = !path || normalize(path) === normalize(window.location.pathname);
+                const target = id && isSamePage ? document.getElementById(id) : null;
+                if (!target) return;
+                event.preventDefault();
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+            >
               {content.primaryCta.label} <span aria-hidden="true" className="text-[16px]">&#8594;</span>
-            </Button>
-            <Button href={content.secondaryCta.href} variant="ghost" size="hero" className="min-h-[52px] !px-[24px] !py-4 leading-[normal]">
-              {content.secondaryCta.label}
             </Button>
           </div>
         </div>

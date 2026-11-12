@@ -96,10 +96,9 @@ function mapCareersHero(cms: StrapiHeroSection): CareersHeroContent {
     headingHighlight:
       cms.highlightTitle && cms.title.includes(cms.highlightTitle) ? cms.highlightTitle : "",
     lead: cms.subtitle ?? "",
-    // primaryBtnLink/secondaryBtnLink are currently null in the CMS — flagged to the CMS
-    // team; these in-page anchors are the only destinations either CTA has ever had.
+    // primaryBtnLink is currently null in the CMS — flagged to the CMS team; the in-page
+    // anchor is the only destination this CTA has ever had.
     primaryCta: { label: cms.primaryBtnLabel, href: cms.primaryBtnLink ?? "#roles" },
-    secondaryCta: { label: cms.secondaryBtnLabel ?? "", href: cms.secondaryBtnLink ?? "#life" },
     images: images as [CollageImage, CollageImage, CollageImage, CollageImage],
   };
 }
