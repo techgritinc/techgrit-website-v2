@@ -38,7 +38,8 @@ const ABOUT_ENDPOINT =
   "&populate[sections][on][about-us.audience-insight][populate][concernsCard][populate]=questions" +
   "&populate[sections][on][page-reusable-sections.service-detail][populate][approachSteps][populate]=icon" +
   "&populate[sections][on][page-reusable-sections.statistics][populate]=statistics" +
-  "&populate[sections][on][page-reusable-sections.culture-gallery][populate]=image,videoLinks" +
+  "&populate[sections][on][page-reusable-sections.culture-gallery][populate][image]=true" +
+  "&populate[sections][on][page-reusable-sections.culture-gallery][populate][videoLinks][populate]=thumbnail" +
   "&populate[sections][on][page-reusable-sections.cta-banner][populate]=true";
 
 // --- Per-section mappers ---

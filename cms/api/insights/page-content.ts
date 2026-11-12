@@ -56,6 +56,7 @@ type StrapiReviewsSection = {
     verificationStatus: string | null;
     video: StrapiMedia | null;
     videoLink?: string | null;
+    videoThumbnail?: StrapiMedia | null;
     authors: { name: string; designation: string | null }[];
   }[];
 };
@@ -170,6 +171,7 @@ function toReviews(section: StrapiReviewsSection): ReviewsData {
       initials: toInitials(name),
       rating: item.ratings ?? undefined,
       youtubeId,
+      thumbnailUrl: youtubeId && item.videoThumbnail ? resolveMediaUrl(item.videoThumbnail.url) : null,
       videoUrl: !youtubeId && item.video ? resolveMediaUrl(item.video.url) : null,
       videoDuration: item.videoDuration ? item.videoDuration.replace(".", ":") : undefined,
       verified: item.verificationStatus === "Verified",

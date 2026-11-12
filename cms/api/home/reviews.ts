@@ -16,6 +16,8 @@ export type StrapiTestimonial = {
   video: StrapiMedia | null;
   // Optional YouTube link/embed URL. Wins over `video` when both are set.
   videoLink?: string | null;
+  // Optional still shown on a YouTube card until it is hovered.
+  videoThumbnail?: StrapiMedia | null;
   authors: StrapiTestimonialAuthor[];
 };
 
@@ -38,6 +40,7 @@ export type Testimonial = {
   rating?: number;
   videoUrl?: string | null;
   youtubeId?: string | null;
+  thumbnailUrl?: string | null;
   videoDuration?: string;
   verified: boolean;
 };
@@ -79,6 +82,7 @@ export function toReviews(section: StrapiReviewsSection, metricsStat: StrapiStat
       initials: toInitials(author?.name),
       rating: item.ratings ?? undefined,
       youtubeId,
+      thumbnailUrl: youtubeId && item.videoThumbnail ? resolveMediaUrl(item.videoThumbnail.url) : null,
       videoUrl: !youtubeId && item.video ? resolveMediaUrl(item.video.url) : null,
       // CMS stores duration as "2.14"-style (minutes.seconds) — display as "2:14".
       videoDuration: item.videoDuration ? item.videoDuration.replace(".", ":") : undefined,

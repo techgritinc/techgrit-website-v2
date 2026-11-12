@@ -32,7 +32,7 @@ export type StrapiHeroSection = {
   highlightTitle: string | null;
   backgroundImage: StrapiMedia[];
   /** Optional YouTube links; a valid one replaces an uploaded video in `backgroundImage`. */
-  videoLinks?: { id: number; url: string | null; label?: string | null }[] | null;
+  videoLinks?: { id: number; url: string | null; label?: string | null; thumbnail?: { url: string } | null }[] | null;
 };
 
 export type StrapiStatItem = {

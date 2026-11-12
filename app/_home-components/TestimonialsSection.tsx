@@ -13,6 +13,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragState = useRef({ isDown: false, startX: 0, startScrollLeft: 0, moved: false });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [modalVideoContainer, setModalVideoContainer] = useState<HTMLDivElement | null>(null);
 
   function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
@@ -101,6 +102,8 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
         >
           {testimonials.map((testimonial, index) => {
             if (testimonial.type === "video") {
+              // YouTube cards show a thumbnail and play only on hover, with the text hidden.
+              const hideOnHover = testimonial.youtubeId ? "group-hover:opacity-0" : "";
               return (
                 <button
                   key={testimonial.id}
@@ -109,11 +112,18 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   // theme so the text/badges stay white-on-dark in light mode too (see tokens.css).
                   data-theme="dark"
                   onClick={() => openLightbox(index)}
-                  className="relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="group relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
                   style={{ scrollSnapAlign: "start" }}
                 >
                   {testimonial.youtubeId ? (
-                    <YouTubePreview id={testimonial.youtubeId} />
+                    <YouTubePreview
+                      id={testimonial.youtubeId}
+                      playing={hoveredIndex === index}
+                      thumbnailUrl={testimonial.thumbnailUrl}
+                      showThumbnail
+                    />
                   ) : testimonial.videoUrl ? (
                     <AutoplayVideo
                       src={testimonial.videoUrl}
@@ -132,15 +142,15 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   {/* Deepens the lower part of the footage (both themes) so the white text stays clear of the captions burned into the videos. */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-[image:var(--gradient-testimonial-video-scrim-deep)]"
+                    className={`pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-[image:var(--gradient-testimonial-video-scrim-deep)] transition-opacity duration-300 ${hideOnHover}`}
                   />
                   <QuoteIcon
                     aria-hidden="true"
                     width={76}
                     height={76}
-                    className="absolute top-24 left-5 text-white opacity-[var(--opacity-14)]"
+                    className={`absolute top-24 left-5 text-white opacity-[var(--opacity-14)] transition-opacity duration-300 ${hideOnHover}`}
                   />
-                  <div className="absolute top-5 left-5 flex items-center gap-2">
+                  <div className={`absolute top-5 left-5 flex items-center gap-2 transition-opacity duration-300 ${hideOnHover}`}>
                     <div
                       className="leading-[normal] inline-flex items-center gap-[7px] rounded-full border border-border-28 bg-badge-ink-50 py-[6px] px-[12px] text-[11px] font-bold text-white backdrop-blur-sm tracking-[1.54px]"
                       style={{ fontFamily: "Arial" }}
@@ -158,7 +168,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       </div>
                     )}
                   </div>
-                  <div className="absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <div className={`absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${hideOnHover}`}>
                     <div
                       aria-hidden="true"
                       className="absolute inset-[-12px] rounded-full bg-[rgba(255,255,255,0.2)]"
@@ -168,7 +178,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       <PlayIcon className="text-orange" />
                     </div>
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 bg-[image:var(--gradient-testimonial-video-scrim)] px-6 pt-8.5 pb-5.5">
+                  <div className={`absolute inset-x-0 bottom-0 bg-[image:var(--gradient-testimonial-video-scrim)] px-6 pt-8.5 pb-5.5 transition-opacity duration-300 ${hideOnHover}`}>
                     <div
                       className="mb-2.5 flex gap-0.5 text-[13px] tracking-[2px] leading-[normal] text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]"
                       style={{ fontFamily: "Arial" }}
