@@ -25,13 +25,13 @@ const BASE =
 const SIZE_CLASSES: Record<ButtonSize, string> = {
   sm: "gap-[8px] rounded-[16px] px-[16px] py-2.5 text-xs font-medium",
   md: "gap-2 rounded-[16px] px-6 py-4 text-base font-semibold max-tg-sm:text-[16px]",
-  lg: "gap-2 rounded-[16px] px-6 py-4 text-base font-semibold max-tg-sm:w-full max-tg-sm:text-[16px]",
+  lg: "gap-2 rounded-[16px] px-6 py-4 text-base font-semibold max-tg-sm:w-full max-tg-sm:text-[16px] max-tg-sm:whitespace-normal max-tg-sm:text-center",
   nav: "gap-2 rounded-[16px] px-[20px] py-[12px] text-xs font-medium leading-[normal]",
   footer: "gap-[8px] rounded-[16px] px-[20px] py-[12px] text-xs font-medium leading-[normal]",
   // Pill-shaped footer "Start a conversation" CTA (spec.md FR-025) — uppercase small-caps label,
   // distinct radius/padding/tracking from every other size.
   "footer-cta": "gap-[8px] rounded-[40px] pl-[20px] pr-[20px] py-[12px] text-xs font-medium uppercase tracking-[0.08em] leading-[normal]",
-  hero: "gap-2 rounded-[16px] px-6 py-4 text-base font-semibold max-tg-sm:w-full max-tg-sm:text-[16px]",
+  hero: "gap-2 rounded-[16px] px-6 py-4 text-base font-semibold max-tg-sm:w-full max-tg-sm:text-[16px] max-tg-sm:whitespace-normal max-tg-sm:text-center",
 };
 
 // Primary's glow shadow scales with size: the compact nav button uses the

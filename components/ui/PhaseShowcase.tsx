@@ -133,7 +133,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
           className="flex min-h-screen flex-col items-center justify-center max-tg-sm:justify-start overflow-hidden py-10 max-tg-sm:pt-21 max-tg-sm:pb-5 px-tg-15 max-tg-md:px-tg-17"
           style={{ position: "absolute", top: 0, left: 0, right: 0 }}
         >
-          <div className="mx-auto w-full max-w-7xl px-tg-15 max-tg-md:px-tg-17">
+          <div className="mx-auto w-full max-w-7xl px-tg-15 max-tg-md:px-tg-17 max-tg-sm:px-0">
             <div className="max-tg-sm:hidden">
               <div className="text-center">
                 <SectionEyebrow showAccent={false} className="mb-3.5! max-tg-sm:mb-2! leading-[normal]">
@@ -176,7 +176,7 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
                       type="button"
                       onClick={() => setActiveIndex(index)}
                       aria-current={isActive}
-                      className="flex cursor-pointer flex-col items-center border-none bg-transparent p-0 text-center"
+                      className="flex min-w-0 cursor-pointer flex-col items-center border-none bg-transparent p-0 text-center"
                     >
                       <div
                         className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-300 [&>img]:h-5 [&>img]:w-5 [&>svg]:h-5 [&>svg]:w-5 ${
@@ -187,13 +187,13 @@ export default function PhaseShowcase({ phases, eyebrow, heading, description }:
                         {phase.icon}
                       </div>
                       <div
-                        className="mt-3 text-[14px] leading-5 font-medium text-text-60 transition-colors duration-300"
+                        className="mt-3 text-[14px] leading-5 font-medium text-text-60 transition-colors duration-300 max-tg-sm:mt-2 max-tg-sm:text-[11px] max-tg-sm:leading-4"
                         style={{ transitionDelay: `${index * 150}ms` }}
                       >
                         {phase.week}
                       </div>
                       <div
-                        className={`mt-1 text-[18px] leading-[26px] font-semibold transition-colors duration-300 ${isActive || !isTodo ? "text-primary" : "text-text-60"}`}
+                        className={`mt-1 text-[18px] leading-[26px] font-semibold max-tg-sm:mt-0.5 max-tg-sm:text-[12px] max-tg-sm:leading-[15px] max-tg-sm:hyphens-auto transition-colors duration-300 ${isActive || !isTodo ? "text-primary" : "text-text-60"}`}
                       >
                         {phase.title}
                       </div>
