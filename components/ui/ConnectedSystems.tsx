@@ -9,7 +9,7 @@ export function ConnectedSystems({ section }: { section: ConnectedSystemsSection
   return (
     <section className="relative">
       <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-10 pb-15" data-reveal>
-        <div className="rounded-[22px] border border-border-orange-18 bg-[image:linear-gradient(160deg,var(--color-overlay-orange-8),var(--color-glass-hairline))] p-9">
+        <div className="rounded-[22px] border border-border-orange-18 bg-[image:linear-gradient(160deg,var(--color-overlay-orange-8),var(--color-glass-hairline))] p-5 tg-sm:p-9">
           <div className="mx-auto mb-8 max-w-[800px] text-center">
             <SectionEyebrow tone="amber" showAccent={false} className="leading-[normal]">
               {section.eyebrow}
@@ -20,7 +20,7 @@ export function ConnectedSystems({ section }: { section: ConnectedSystemsSection
           <div className="flex flex-col gap-[16px]">
             {section.categories.map((category) => (
               <div key={category.order} className="flex flex-wrap items-baseline gap-4">
-                <span className="min-w-[130px] shrink-0 text-[14px] font-extrabold uppercase leading-[normal] tracking-[0.14em] text-40">
+                <span className="max-w-full text-[14px] font-extrabold uppercase leading-[normal] tracking-[0.08em] text-40 tg-sm:min-w-[130px] tg-sm:shrink-0 tg-sm:tracking-[0.14em]">
                   {category.name}
                 </span>
                 <div className="flex flex-wrap gap-2">

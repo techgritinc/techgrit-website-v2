@@ -26,7 +26,7 @@ export default function Hero({ data }: { data: HeroData }) {
       </div>
 
       <div className="relative z-raised mx-auto flex min-h-[60vh] w-full max-w-(--container-max) items-center px-(--container-padding) pt-27 pb-10 tg-sm:pb-15">
-        <div className="max-w-195">
+        <div className="w-full min-w-0 max-w-195">
           {badge && (
             <a
               href={badge.href}
@@ -44,7 +44,7 @@ export default function Hero({ data }: { data: HeroData }) {
                 </span>
                 {badge.label}
               </Badge>
-              <span className="text-xs tg-sm:text-base tracking-[-0.085px] font-semibold text-bright leading-tight">{badge.text}</span>
+              <span className="min-w-0 text-xs tg-sm:text-base tracking-[-0.085px] font-semibold text-bright leading-tight">{badge.text}</span>
               <span aria-hidden="true" className="shrink-0 text-18 tg-sm:text-[20px] font-bold text-amber-light">
                 &rarr;
               </span>
@@ -69,14 +69,21 @@ export default function Hero({ data }: { data: HeroData }) {
             <Button href={primaryBtn.href} size="hero" className="leading-[normal]">
               {primaryBtn.label} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
             </Button>
-            <Button href={secondaryBtn.href} variant="ghost" size="hero" className="px-6.5 leading-[normal]">
+            <Button href={secondaryBtn.href} variant="ghost" size="hero" className="px-6.5 max-tg-sm:px-4 leading-[normal]">
               {secondaryBtn.label} <span aria-hidden="true" className="text-[16px] text-orange">&rarr;</span>
             </Button>
           </div>
 
-          <div className="opacity-0 [animation-delay:0.36s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-11.5 flex items-stretch gap-2.5 tg-sm:gap-8.5">
+          <div className="opacity-0 [animation-delay:0.36s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-11.5 grid grid-cols-2 gap-x-4 gap-y-6 tg-sm:flex tg-sm:items-stretch tg-sm:gap-8.5">
             {stats.map((stat, i) => (
-              <div key={stat.id} className={i > 0 ? "border-l border-border-strong pl-2.5 tg-sm:pl-8.5" : undefined}>
+              <div
+                key={stat.id}
+                className={[
+                  "min-w-0",
+                  i % 2 === 1 ? "border-l border-border-strong pl-4" : "",
+                  i > 0 ? "tg-sm:border-l tg-sm:border-border-strong tg-sm:pl-8.5" : "",
+                ].join(" ")}
+              >
                 <div
                   className={[
                     "font-display inline-flex items-baseline text-[20px] tg-sm:text-stat-count leading-[normal] font-bold tracking-stat-count text-primary",
