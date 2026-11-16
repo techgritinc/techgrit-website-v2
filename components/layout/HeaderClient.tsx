@@ -134,11 +134,6 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
 
         <nav aria-label="Primary" className="hidden items-center gap-1 tg-lg:flex">
           {megaGroups.map((group) => {
-            // About no longer has a page of its own to navigate to — its group is
-            // non-clickable everywhere (mouse, touch, keyboard); only its hover panel
-            // opens (FR-007). Active-state highlighting is left exactly as it was
-            // before this feature — no special-casing for About.
-            const isAboutGroup = group.label === "About";
             // None of the mega-menu groups (About, What We Do, How We Work, Insights, ...)
             // have a landing page of their own — `group.href` is whatever stray value the
             // CMS's navItem.url happens to hold (often null, which the mapper falls back to
@@ -153,45 +148,17 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                 onMouseEnter={() => openDropdownNow(group.label)}
                 onMouseLeave={() => scheduleDropdownClose(group.label)}
               >
-                                {isAboutGroup ? (
-                  <button
-                    type="button"
-                    className={triggerClassName}
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                    onClick={() => setOpenDropdown((current) => (current === group.label ? null : group.label))}
-                  >
-                    {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
-                  </button>
-                ) : (
-                  <Link
-                    href={group.href ?? "#"}
-                    // The trigger never navigates (onClick preventDefaults), and its href
-                    // (/insights, /industries, /how-we-work) has no page — prefetching it
-                    // 404s and logs console errors.
-                    prefetch={false}
-                    className={triggerClassName}
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                    onClick={(e) => {
-                      // Clicking a mega-menu trigger only opens/closes its dropdown — it never
-                      // navigates. Hover still opens the panel on its own (see onMouseEnter above).
-                      e.preventDefault();
-                      setOpenDropdown((current) => (current === group.label ? null : group.label));
-                    }}
-                    onKeyDown={(e) => {
-                      // Native <a> elements don't fire a click on Space (only Enter), so handle
-                      // it explicitly to keep keyboard toggling consistent with mouse/touch.
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setOpenDropdown((current) => (current === group.label ? null : group.label));
-                      }
-                    }}
-                    suppressHydrationWarning
-                  >
-                    {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
-                  </Link>
-                )}
+                {/* Mega-menu groups have no page of their own, so the trigger is a button (not a
+                    link): it only opens/closes its dropdown on click, Enter or Space; hover opens it too. */}
+                <button
+                  type="button"
+                  className={triggerClassName}
+                  aria-haspopup="menu"
+                  aria-expanded={isOpen}
+                  onClick={() => setOpenDropdown((current) => (current === group.label ? null : group.label))}
+                >
+                  {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
+                </button>
                 <div
                   role="menu"
                   className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid w-[min(940px,calc(100vw-40px))] -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
