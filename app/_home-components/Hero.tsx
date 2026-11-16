@@ -1,4 +1,4 @@
-import Button from "@/components/ui/Button";
+import AnchorScrollButton from "@/components/ui/AnchorScrollButton";
 import Badge from "@/components/ui/Badge";
 import AnimatedStat from "@/components/ui/AnimatedStat";
 import { splitHighlight } from "@/cms/utils/text";
@@ -66,12 +66,12 @@ export default function Hero({ data }: { data: HeroData }) {
           </p>
 
           <div className="opacity-0 [animation-delay:0.28s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-9 flex flex-wrap items-center gap-4">
-            <Button href={primaryBtn.href} size="hero" className="leading-[normal]">
+            <AnchorScrollButton href={primaryBtn.href} size="hero" className="leading-[normal]">
               {primaryBtn.label} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
-            </Button>
-            <Button href={secondaryBtn.href} variant="ghost" size="hero" className="px-6.5 max-tg-sm:px-4 leading-[normal]">
+            </AnchorScrollButton>
+            <AnchorScrollButton href={secondaryBtn.href} variant="ghost" size="hero" className="px-6.5 leading-[normal]">
               {secondaryBtn.label} <span aria-hidden="true" className="text-[16px] text-orange">&rarr;</span>
-            </Button>
+            </AnchorScrollButton>
           </div>
 
           <div className="opacity-0 [animation-delay:0.36s] animate-[tgrise_0.8s_cubic-bezier(0.2,0.7,0.2,1)_forwards] motion-reduce:animate-none motion-reduce:opacity-100 mt-11.5 grid grid-cols-2 gap-x-4 gap-y-6 tg-sm:flex tg-sm:items-stretch tg-sm:gap-8.5">

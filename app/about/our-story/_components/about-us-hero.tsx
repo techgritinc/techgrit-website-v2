@@ -1,5 +1,5 @@
 import type { HeroSection } from "@/cms/types/our-story-types";
-import Button from "@/components/ui/Button";
+import AnchorScrollButton from "@/components/ui/AnchorScrollButton";
 
 export function AboutUsHero({ section }: { section: HeroSection }) {
   const [before, after] = section.titleHighlight
@@ -42,23 +42,23 @@ export function AboutUsHero({ section }: { section: HeroSection }) {
           className="mt-[32px] flex flex-wrap items-center justify-center gap-[16px]"
           style={{ animationDelay: ".3s", opacity: 0 }}
         >
-          <Button
+          <AnchorScrollButton
             href={section.primaryCtaLink}
             variant="primary"
             size="hero"
             className="!py-[16px] min-h-[52px] leading-[normal]"
           >
             {section.primaryCtaLabel} <span aria-hidden="true" className="text-[16px]">&#8594;</span>
-          </Button>
+          </AnchorScrollButton>
           {section.secondaryCtaLabel ? (
-            <Button
+            <AnchorScrollButton
               href={section.secondaryCtaLink}
               variant="ghost"
               size="hero"
               className="!px-[24px] leading-[normal]"
             >
               {section.secondaryCtaLabel}
-            </Button>
+            </AnchorScrollButton>
           ) : null}
         </div>
       </div>

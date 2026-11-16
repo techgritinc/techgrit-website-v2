@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Button from "@/components/ui/Button";
+import AnchorScrollButton from "@/components/ui/AnchorScrollButton";
 import type { HeroSection } from "@/app/what-we-do/ai-modernization/_data/types";
 
 // `centered` drops the right-hand image and centres the copy in a single column
@@ -40,7 +40,7 @@ export function InsightsHero({ section, centered = false,}: {
           </p>
           {section.primaryCtaLabel && section.primaryCtaLink ? (
             <div data-rise className={`mt-[32px] flex flex-wrap items-center gap-[16px] ${centered ? "justify-center" : ""}`} style={{ animationDelay: ".3s" }}>
-              <Button
+              <AnchorScrollButton
                 href={section.primaryCtaLink}
                 variant="primary"
                 size="hero"
@@ -50,7 +50,7 @@ export function InsightsHero({ section, centered = false,}: {
                 rel="noopener noreferrer"
               >
                 {section.primaryCtaLabel}{" "}<span aria-hidden="true" className="text-[16px]">&#8594;</span>
-              </Button>
+              </AnchorScrollButton>
             </div>
           ) : null}
         </div>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Button from "@/components/ui/Button";
+import AnchorScrollButton from "@/components/ui/AnchorScrollButton";
 import type { HeroSection } from "@/cms/types/construction";
 
 export function ConstructionHero({ section }: { section: HeroSection }) {
@@ -71,12 +71,12 @@ export function ConstructionHero({ section }: { section: HeroSection }) {
             className="flex flex-wrap items-center"
             style={{ animationDelay: ".3s", marginTop: 34, gap: 15 }}
           >
-            <Button href={section.primaryCtaLink} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink">
+            <AnchorScrollButton href={section.primaryCtaLink} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink">
               {section.primaryCtaLabel} <span aria-hidden="true" className="leading-[normal] text-[16px]">&#8594;</span>
-            </Button>
-            <Button href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] px-[24px]">
+            </AnchorScrollButton>
+            <AnchorScrollButton href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] px-[24px]">
               {section.secondaryCtaLabel}
-            </Button>
+            </AnchorScrollButton>
           </div>
         </div>
         <div data-rise className="relative order-1 md:order-2" style={{ animationDelay: ".24s" }}>
