@@ -1,4 +1,4 @@
-import Button from "@/components/ui/Button";
+import AnchorScrollButton from "@/components/ui/AnchorScrollButton";
 import type { LeadershipHeroSection } from "@/cms/types/leadership-types";
 
 export function LeadershipHero({ section }: { section: LeadershipHeroSection }) {
@@ -43,12 +43,12 @@ export function LeadershipHero({ section }: { section: LeadershipHeroSection }) 
           className="mt-8 flex flex-wrap items-center justify-center gap-3.5"
           style={{ animationDelay: ".34s" }}
         >
-          <Button href={section.primaryCtaLink} variant="primary" size="hero" className="leading-[normal] tracking-normal">
+          <AnchorScrollButton href={section.primaryCtaLink} variant="primary" size="hero" className="leading-[normal] tracking-normal">
             {section.primaryCtaLabel} <span aria-hidden="true" className="text-[16px] leading-[normal] tracking-normal">&#8594;</span>
-          </Button>
-          <Button href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] tracking-normal">
+          </AnchorScrollButton>
+          <AnchorScrollButton href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] tracking-normal">
             {section.secondaryCtaLabel}
-          </Button>
+          </AnchorScrollButton>
         </div>
       </div>
     </section>

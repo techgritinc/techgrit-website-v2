@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Button from "@/components/ui/Button";
+import AnchorScrollButton from "@/components/ui/AnchorScrollButton";
 
 export interface IndustryHeroContent {
   eyebrow: string;
@@ -52,13 +52,13 @@ export function IndustryHero({ section }: { section: IndustryHeroContent }) {
             data-rise
             className="flex flex-wrap items-center mt-[32px] gap-[16px] [animation-delay:.3s]"
           >
-            <Button href={section.primaryCtaLink} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink">
+            <AnchorScrollButton href={section.primaryCtaLink} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink">
               {section.primaryCtaLabel} <span aria-hidden="true" className="leading-[normal] text-[16px]">&#8594;</span>
-            </Button>
+            </AnchorScrollButton>
             {section.secondaryCtaLabel && section.secondaryCtaLink ? (
-              <Button href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] !whitespace-normal !shrink">
+              <AnchorScrollButton href={section.secondaryCtaLink} variant="ghost" size="hero" className="leading-[normal] !whitespace-normal !shrink">
                 {section.secondaryCtaLabel}
-              </Button>
+              </AnchorScrollButton>
             ) : null}
           </div>
         </div>

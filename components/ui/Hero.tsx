@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import Button from "@/components/ui/Button";
+import AnchorScrollButton from "@/components/ui/AnchorScrollButton";
 
 export interface HeroCrumb {
   id: string;
@@ -138,14 +138,14 @@ export function Hero({
                 style={{ animationDelay: ".34s" }}
               >
                 {primaryCta && (
-                  <Button href={primaryCta.href} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink !px-[24px] !py-[16px] !min-h-[52px]">
+                  <AnchorScrollButton href={primaryCta.href} variant="primary" size="hero" className="leading-[normal] !whitespace-normal !shrink !px-[24px] !py-[16px] !min-h-[52px]">
                     {primaryCta.label} <span aria-hidden="true" className="text-[16px] leading-[normal]">&#8594;</span>
-                  </Button>
+                  </AnchorScrollButton>
                 )}
                 {secondaryCta && (
-                  <Button href={secondaryCta.href} variant="ghost" size="hero" className="leading-[normal] !px-[20px] !py-[12px]">
+                  <AnchorScrollButton href={secondaryCta.href} variant="ghost" size="hero" className="leading-[normal] !px-[20px] !py-[12px]">
                     {secondaryCta.label}
-                  </Button>
+                  </AnchorScrollButton>
                 )}
               </div>
             )}
