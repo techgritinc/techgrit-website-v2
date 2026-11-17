@@ -3,7 +3,8 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
-import { CheckIcon, ClockIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
+// ClockIcon is only used by the commented-out duration pill below; re-add it here when restoring that.
+import { CheckIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
 import type { ReviewsData } from "@/cms/api/home/reviews";
 import YouTubePreview from "@/components/ui/YouTubePreview";
 import { disableYouTubeCaptions, youTubePlayerSrc } from "@/cms/utils/youtube";
@@ -150,6 +151,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                     height={76}
                     className={`absolute top-24 left-5 text-white opacity-[var(--opacity-14)] transition-opacity duration-300 ${hideOnHover}`}
                   />
+                  {/* "VIDEO" badge and duration pill hidden for now.
                   <div className={`absolute top-5 left-5 flex items-center gap-2 transition-opacity duration-300 ${hideOnHover}`}>
                     <div
                       className="leading-[normal] inline-flex items-center gap-[7px] rounded-full border border-border-28 bg-badge-ink-50 py-[6px] px-[12px] text-[11px] font-bold text-white backdrop-blur-sm tracking-[1.54px]"
@@ -168,6 +170,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       </div>
                     )}
                   </div>
+                  */}
                   <div className={`absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${hideOnHover}`}>
                     <div
                       aria-hidden="true"
