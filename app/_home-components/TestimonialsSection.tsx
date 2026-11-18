@@ -115,7 +115,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   onClick={() => openLightbox(index)}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  className="group relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
+                  className="group relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 first:ml-auto last:mr-auto cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
                   style={{ scrollSnapAlign: "start" }}
                 >
                   {testimonial.youtubeId ? (
@@ -217,7 +217,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
             return (
               <div
                 key={testimonial.id}
-                className="relative flex h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 flex-col overflow-hidden rounded-[20px] border border-border-image bg-[image:var(--gradient-testimonial-card)] pt-[26px] px-[26px] pb-[24px] backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-text"
+                className="relative flex h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 first:ml-auto last:mr-auto flex-col overflow-hidden rounded-[20px] border border-border-image bg-[image:var(--gradient-testimonial-card)] pt-[26px] px-[26px] pb-[24px] backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-text"
                 style={{ scrollSnapAlign: "start" }}
               >
                 <QuoteIcon
