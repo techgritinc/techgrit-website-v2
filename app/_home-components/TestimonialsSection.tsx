@@ -153,14 +153,13 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   />
                   {/* "VIDEO" badge and duration pill hidden for now.
                   <div className={`absolute top-5 left-5 flex items-center gap-2 transition-opacity duration-300 ${hideOnHover}`}>
-                    {/* "VIDEO" label removed by request — kept commented out in case it comes back.
                     <div
                       className="leading-[normal] inline-flex items-center gap-[7px] rounded-full border border-border-28 bg-badge-ink-50 py-[6px] px-[12px] text-[11px] font-bold text-white backdrop-blur-sm tracking-[1.54px]"
                       style={{ fontFamily: "Arial" }}
                     >
                       <span className="h-[7px] w-[7px] rounded-full bg-white" />
                       VIDEO
-                    </div> */}
+                    </div>
                     {testimonial.videoDuration && (
                       <div
                         className="inline-flex items-center gap-tg-1c rounded-2xl bg-badge-ink-40 py-[5px] px-[11px] text-[11px] font-bold text-bright backdrop-blur-sm leading-[normal]"
