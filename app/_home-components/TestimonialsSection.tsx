@@ -3,7 +3,8 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
-import { CheckIcon, ClockIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
+// ClockIcon is only used by the commented-out duration pill below; re-add it here when restoring that.
+import { CheckIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
 import type { ReviewsData } from "@/cms/api/home/reviews";
 import YouTubePreview from "@/components/ui/YouTubePreview";
 import { disableYouTubeCaptions, youTubePlayerSrc } from "@/cms/utils/youtube";
@@ -114,7 +115,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                   onClick={() => openLightbox(index)}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  className="group relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
+                  className="group relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 first:ml-auto last:mr-auto cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
                   style={{ scrollSnapAlign: "start" }}
                 >
                   {testimonial.youtubeId ? (
@@ -150,6 +151,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                     height={76}
                     className={`absolute top-24 left-5 text-white opacity-[var(--opacity-14)] transition-opacity duration-300 ${hideOnHover}`}
                   />
+                  {/* "VIDEO" badge and duration pill hidden for now.
                   <div className={`absolute top-5 left-5 flex items-center gap-2 transition-opacity duration-300 ${hideOnHover}`}>
                     {/* "VIDEO" label removed by request — kept commented out in case it comes back.
                     <div
@@ -169,6 +171,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       </div>
                     )}
                   </div>
+                  */}
                   <div className={`absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${hideOnHover}`}>
                     <div
                       aria-hidden="true"
@@ -215,7 +218,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
             return (
               <div
                 key={testimonial.id}
-                className="relative flex h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 flex-col overflow-hidden rounded-[20px] border border-border-image bg-[image:var(--gradient-testimonial-card)] pt-[26px] px-[26px] pb-[24px] backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-text"
+                className="relative flex h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 first:ml-auto last:mr-auto flex-col overflow-hidden rounded-[20px] border border-border-image bg-[image:var(--gradient-testimonial-card)] pt-[26px] px-[26px] pb-[24px] backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-text"
                 style={{ scrollSnapAlign: "start" }}
               >
                 <QuoteIcon
