@@ -47,10 +47,10 @@ export default async function ConsumerLendingPage() {
           case "quote":
             return (
               <section key={section.order} className="relative">
-                <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+                <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
                   <RevealOnScroll>
                     <div className="glass-card glass-card-lg mx-auto px-9 py-12 text-center md:px-16">
-                      <blockquote className="mx-auto max-w-[820px] text-[22px] leading-[1.5] font-semibold text-white">
+                      <blockquote className="mx-auto max-w-[820px] text-[20px] leading-[1.5] font-semibold text-white">
                         &ldquo;{section.quote}&rdquo;
                       </blockquote>
                       <cite className="mt-5 block text-[14px] leading-[1.5] text-text-60 not-italic">{section.citation}</cite>
@@ -62,10 +62,10 @@ export default async function ConsumerLendingPage() {
           case "faq":
             return (
               <section key={section.order} className="relative">
-                <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+                <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
                   <RevealOnScroll>
                     <div className="mb-8">
-                      <div className="mb-3 text-[12.5px] font-extrabold uppercase tracking-[0.16em] text-orange">{section.eyebrow}</div>
+                      <div className="mb-3 text-[14px] font-extrabold uppercase tracking-[0.16em] text-orange">{section.eyebrow}</div>
                       <h2 className="text-[clamp(28px,3.2vw,38px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">{section.title}</h2>
                     </div>
                     <Faq items={section.items} />

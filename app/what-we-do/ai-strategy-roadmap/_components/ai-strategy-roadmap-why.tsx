@@ -6,10 +6,10 @@ function WhyTile({ tile }: { tile: ValuePropositionTile }) {
   return (
     <div className="flex gap-4 rounded-xl border border-border-8 bg-glass-3 p-6">
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[var(--color-overlay-orange-14)] text-orange">
-        {tile.icon && <Image src={tile.icon.url} alt={tile.icon.alternativeText} width={20} height={20} />}
+        {tile.icon && <Image className="tg-icon" src={tile.icon.url} alt={tile.icon.alternativeText} width={20} height={20} />}
       </span>
       <div>
-        <h4 className="text-[16.5px] leading-[normal] tracking-[normal] font-bold text-white">{tile.title}</h4>
+        <h4 className="text-[16px] leading-[normal] tracking-[normal] font-bold text-white">{tile.title}</h4>
         <p className="mt-1.5 text-[14px] leading-[1.55] text-60">{tile.description}</p>
       </div>
     </div>
@@ -19,10 +19,10 @@ function WhyTile({ tile }: { tile: ValuePropositionTile }) {
 export function AiStrategyRoadmapWhy({ section }: { section: WhySection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <div className="mb-10 text-center">
-            <div className="mb-3 text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
+            <div className="mb-3 text-[14px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
               {section.eyebrow}
             </div>
             <h2 className="text-[clamp(28px,3.2vw,38px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">

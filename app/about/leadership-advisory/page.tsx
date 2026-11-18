@@ -22,7 +22,7 @@ export default async function LeadershipAdvisoryPage() {
       <LeadershipProfiles profiles={content.profiles} />
       <LeadershipWhyItMatters section={content.whyItMatters} />
       <FinalCta section={content.finalCta} maxWidth={1280} paddingTop={20} paddingBottom={100}
-        cardClassName="[&_h2]:!text-[46px] [&_h2]:leading-[48.76px] [&_h2]:tracking-[-1.38px] [&_p]:!text-[17.5px]"
+        cardClassName="[&_h2]:!text-[48px] [&_h2]:leading-[48.76px] [&_h2]:tracking-[-1.38px] [&_p]:!text-[18px]"
       />
     </main>
   );

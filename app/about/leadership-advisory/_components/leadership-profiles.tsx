@@ -12,7 +12,7 @@ export function LeadershipProfiles({
 }) {
   return (
     <section>
-      <div className="mx-auto max-w-[1280px] px-9 py-15">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-15">
         {title && (
           <div className="mb-10 text-center">
             <h2 className="text-[clamp(28px,3.2vw,38px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">

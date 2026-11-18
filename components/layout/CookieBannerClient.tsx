@@ -47,8 +47,8 @@ export default function CookieBannerClient({ data }: { data: CookieBannerData })
           aria-label="Cookie consent"
           className="fixed inset-x-0 bottom-0 z-[var(--z-dropdown)] border-t border-border bg-dd-bg px-6 py-5 shadow-dropdown backdrop-blur-nav sm:px-9"
         >
-          <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-4 sm:flex-row sm:justify-between">
-            <p className="text-[14.5px] leading-[1.6] text-text-66 sm:max-w-[640px] lg:max-w-none lg:whitespace-nowrap">
+          <div className="mx-auto flex max-w-(--container-max) flex-col items-center gap-4 sm:flex-row sm:justify-between">
+            <p className="text-[14px] leading-[1.6] text-text-66 sm:max-w-[640px] lg:max-w-none lg:whitespace-nowrap">
               {data.message}
             </p>
             <div className="flex shrink-0 gap-3">

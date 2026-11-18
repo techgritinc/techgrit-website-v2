@@ -86,9 +86,9 @@ export default async function SoftwareProductEngineeringPage() {
           case "outcome":
             return (
               <section key={section.order} className="relative">
-                <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+                <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
                   {section.eyebrow && (
-                    <div className="mb-3 text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
+                    <div className="mb-3 text-[14px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
                       {section.eyebrow}
                     </div>
                   )}
@@ -112,8 +112,8 @@ export default async function SoftwareProductEngineeringPage() {
           eyebrowWeight="var(--fw-extrabold)"
           descriptionLineHeight={1.6}
           maxWidth={1280}
-          primaryBtnClassName="!py-[15px] !px-[32px] !min-h-[52px] !rounded-[13px] !whitespace-normal !h-auto !shrink"
-          secondaryBtnClassName="!py-[15px] !px-[26px] !rounded-[13px]"
+          primaryBtnClassName="!py-[16px] !px-[32px] !min-h-[52px] !rounded-[13px] !whitespace-normal !h-auto !shrink"
+          secondaryBtnClassName="!py-[16px] !px-[24px] !rounded-[13px]"
           cardClassName="!p-[80px_40px]"
           section={{
             eyebrow: ctaSection.eyebrow,

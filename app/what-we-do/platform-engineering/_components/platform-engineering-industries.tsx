@@ -8,7 +8,7 @@ function IndustryTile({ industry }: { industry: IndustryCard }) {
   const card = (
     <GlassCard variant="serviceCapability">
       <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-overlay-orange-14)] text-orange">
-        {industry.icon && <Image src={industry.icon.url} alt={industry.icon.alternativeText} width={20} height={20} />}
+        {industry.icon && <Image className="tg-icon" src={industry.icon.url} alt={industry.icon.alternativeText} width={20} height={20} />}
       </span>
       <GlassCardTitle variant="serviceCapability">{industry.name}</GlassCardTitle>
       <GlassCardDescription variant="serviceCapability">{industry.description}</GlassCardDescription>
@@ -29,10 +29,10 @@ function IndustryTile({ industry }: { industry: IndustryCard }) {
 export function PlatformEngineeringIndustries({ section }: { section: IndustriesSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <div className="mb-9 text-center">
-            <div className="mb-3 text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
+            <div className="mb-3 text-[14px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
               {section.eyebrow}
             </div>
             <h2 className="text-[clamp(26px,3vw,34px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">

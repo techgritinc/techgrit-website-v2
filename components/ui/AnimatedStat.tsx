@@ -12,8 +12,10 @@ type AnimatedStatProps = {
  * 1100ms cubic ease-out, plus a safety timeout so the value is never left
  * stuck at 0 if the observer never fires (reduced motion, slow device).
  * Uses ref-based DOM mutation to avoid ~66 React re-renders per counter.
- * The server render is "0" on purpose: rendering `target` there made the value
- * visibly drop to 0 at hydration before counting up. */
+ * The server render is `target`, so the number is correct without JavaScript. That
+ * alone made the value visibly drop to 0 at hydration before counting up, so
+ * [data-counter] is hidden by CSS (only when scripting is enabled) until the effect
+ * below resets it to 0 and sets data-ready. */
 export default function AnimatedStat({ target, durationMs = 1100 }: AnimatedStatProps) {
   const ref = useRef<HTMLSpanElement>(null);
 
@@ -23,10 +25,12 @@ export default function AnimatedStat({ target, durationMs = 1100 }: AnimatedStat
 
     if (!("IntersectionObserver" in window)) {
       node.textContent = String(target);
+      node.dataset.ready = "";
       return;
     }
 
     node.textContent = "0";
+    node.dataset.ready = "";
     let frame = 0;
 
     const observer = new IntersectionObserver(
@@ -61,13 +65,15 @@ export default function AnimatedStat({ target, durationMs = 1100 }: AnimatedStat
     };
   }, [target, durationMs]);
 
-  // The animated span only ever shows an in-between number (or 0 before JS), so it is
-  // hidden from assistive tech; the real value is in the server HTML as sr-only text.
+  // The animated span can show an in-between number while counting, so it is hidden from
+  // assistive tech; the stable value is in the server HTML as sr-only text. The animated
+  // span's server text is also the final value, so with JavaScript off the visible page,
+  // the page source and screen readers all read `target` (see data-counter in globals.css).
   return (
     <>
       <span className="sr-only">{target}</span>
-      <span ref={ref} aria-hidden="true">
-        0
+      <span ref={ref} aria-hidden="true" data-counter>
+        {target}
       </span>
     </>
   );

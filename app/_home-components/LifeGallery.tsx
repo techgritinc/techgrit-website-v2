@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
 import MediaSlot from "@/components/ui/MediaSlot";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
+import YouTubePreview from "@/components/ui/YouTubePreview";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 import { CloseIcon, PlayIcon } from "@/components/ui/icons";
 import { DEFAULT_CULTURE_GALLERY_DATA } from "@/cms/api/home/culture-gallery";
+import { disableYouTubeCaptions, youTubePlayerSrc } from "@/cms/utils/youtube";
 
 export interface LifeGalleryImage {
   /** Stable, content-independent identity for keying `.map()` renders (Principle III). */
@@ -14,6 +16,10 @@ export interface LifeGalleryImage {
   src: string | null;
   alt: string;
   type?: "image" | "video";
+  /** YouTube video id from a CMS video link; wins over `src` (an uploaded mp4). */
+  youtubeId?: string | null;
+  /** CMS thumbnail for the video link, shown until the tile is hovered. */
+  thumbnailUrl?: string | null;
 }
 
 interface LifeGalleryProps {
@@ -63,9 +69,14 @@ function GalleryTile({
   previewPortalTarget?: HTMLElement | null;
 }) {
   const isVideo = item.type === "video";
+  const [hovered, setHovered] = useState(false);
+  // YouTube tiles show a thumbnail and play only on hover, with the play button hidden.
+  const hideOnHover = item.youtubeId ? "group-hover:opacity-0" : "";
 
   return (
     <figure
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       onClick={isVideo ? () => onPreview(item, tileKey) : undefined}
       onKeyDown={
         isVideo
@@ -81,7 +92,7 @@ function GalleryTile({
       tabIndex={isVideo ? 0 : undefined}
       aria-label={isVideo ? `Play ${item.alt || "video"} with sound` : undefined}
       className={[
-        "relative m-0 overflow-hidden rounded-xl border border-border-8 bg-glass-3 transition-transform duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:-translate-y-1",
+        "group relative m-0 overflow-hidden rounded-xl border border-border-8 bg-glass-3 transition-transform duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)] hover:-translate-y-1",
         aspectClassName,
         isVideo ? "cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-orange" : "",
       ]
@@ -90,14 +101,18 @@ function GalleryTile({
     >
       {isVideo ? (
         <>
-          <AutoplayVideo
-            src={item.src ?? ""}
-            className={`absolute inset-0 h-full w-full ${videoFit === "contain" ? "object-contain" : "object-cover"}`}
-            previewClassName="h-full w-full"
-            portalTarget={previewPortalTarget}
-          />
-          <div aria-hidden="true" className="absolute inset-0 bg-black/15 transition-colors duration-200 hover:bg-black/30" />
-          <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          {item.youtubeId ? (
+            <YouTubePreview id={item.youtubeId} playing={hovered} thumbnailUrl={item.thumbnailUrl} showThumbnail />
+          ) : (
+            <AutoplayVideo
+              src={item.src ?? ""}
+              className={`absolute inset-0 h-full w-full ${videoFit === "contain" ? "object-contain" : "object-cover"}`}
+              previewClassName="h-full w-full"
+              portalTarget={previewPortalTarget}
+            />
+          )}
+          <div aria-hidden="true" className={`absolute inset-0 bg-black/15 transition-all duration-200 hover:bg-black/30 ${hideOnHover}`} />
+          <div aria-hidden="true" className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${hideOnHover}`}>
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] shadow-[0_10px_24px_rgba(0,0,0,0.4)]">
               <PlayIcon className="text-orange" width={18} height={18} />
             </div>
@@ -152,21 +167,29 @@ export default function LifeGallery({
 
   return (
     <section id={id} className="relative scroll-mt-[96px]">
-      <div className="mx-auto max-w-(--container-max) px-9 pt-[60px] pb-[80px] max-tg-sm:pt-10 max-tg-sm:pb-10 leading-normal" data-reveal>
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[64px] pb-[80px] max-tg-sm:pt-10 max-tg-sm:pb-10 leading-normal" data-reveal>
         <div className="mx-auto mb-11 max-w-[680px] text-center">
-          <SectionEyebrow showAccent={false} className="leading-normal !mb-[17px]">
+          <SectionEyebrow showAccent={false} className="leading-normal !mb-[16px]">
             {eyebrow}
           </SectionEyebrow>
           <h2 className="font-display text-[clamp(30px,3.6vw,42px)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
             {heading}
           </h2>
-          <p className="mx-auto mt-4 text-[17px] leading-[1.6] text-muted">{description}</p>
+          <p className="mx-auto mt-4 text-[16px] leading-[1.6] text-muted">{description}</p>
         </div>
 
         {videoOnly ? (
-          <div className="flex justify-center" data-gallery>
+          // A single row of fixed-width cards with a gap, like the testimonials track: it
+          // scrolls sideways when there are more videos than fit, and `mx-auto w-max`
+          // centres the row while it's narrower than the container.
+          <div
+            className="overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            style={{ scrollSnapType: "x proximity", WebkitOverflowScrolling: "touch" }}
+            data-gallery
+          >
+            <div className="mx-auto flex w-max gap-6 px-1 max-tg-sm:gap-3">
             {displayImages.map((item) => (
-              <div key={item.id} className="w-full max-w-[520px]">
+              <div key={item.id} className="w-[520px] shrink-0 max-tg-sm:w-[82vw]" style={{ scrollSnapAlign: "center" }}>
                 <GalleryTile
                   item={item}
                   tileKey={item.id}
@@ -177,6 +200,7 @@ export default function LifeGallery({
                 />
               </div>
             ))}
+            </div>
           </div>
         ) : autoScroll ? (
           // Duplicating the list once and animating exactly -50% (tgmarquee) creates a
@@ -212,10 +236,10 @@ export default function LifeGallery({
 
         {showActions && (
           <div className="mt-11 flex flex-wrap items-center justify-center gap-4">
-            <Button href={primaryBtnLink} size="md" className="leading-normal text-[15.5px] px-[27px] py-[16px]">
+            <Button href={primaryBtnLink} size="md" className="leading-normal px-[24px] py-[16px]">
               {primaryBtnLabel} <span aria-hidden="true">&rarr;</span>
             </Button>
-            <Button href={secondaryBtnLink} variant="ghost" size="md" className="leading-normal text-[16px] px-[27px] py-[15.5px]">
+            <Button href={secondaryBtnLink} variant="ghost" size="md" className="leading-normal px-[24px] py-[16px]">
               {secondaryBtnLabel}{" "}
               <span aria-hidden="true" className="text-orange">
                 &rarr;
@@ -231,6 +255,9 @@ export default function LifeGallery({
           role="dialog"
           aria-modal="true"
           aria-label={`${previewItem.alt || "Video"} preview`}
+          // Backdrop is dark in both themes (--color-modal-backdrop), so pin the dark theme
+          // for the close button inside it.
+          data-theme="dark"
           className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-modal-backdrop p-6 backdrop-blur-md"
         >
           <div onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[900px]">
@@ -242,7 +269,21 @@ export default function LifeGallery({
             >
               <CloseIcon />
             </button>
-            <div ref={setModalVideoContainer} className="relative aspect-video overflow-hidden rounded-xl bg-ink" />
+            {previewItem.youtubeId ? (
+              <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
+                <iframe
+                  src={youTubePlayerSrc(previewItem.youtubeId)}
+                  onLoad={disableYouTubeCaptions}
+                  title={`${previewItem.alt || "Life at TechGrit"} video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full border-0"
+                />
+              </div>
+            ) : (
+              <div ref={setModalVideoContainer} className="relative aspect-video overflow-hidden rounded-xl bg-ink" />
+            )}
           </div>
         </div>
       )}

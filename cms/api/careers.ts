@@ -1,6 +1,8 @@
 import { cache } from "react";
 import { fetchCms } from "./fetcher";
+import { buildGalleryItems } from "./home/culture-gallery";
 import { pickMediaAsset, resolveMediaUrl } from "../utils/media";
+import { parseYouTubeId } from "../utils/youtube";
 import { mapCtaBanner, mapSectionIcon, mapStatistics } from "../shared/reusable-sections";
 import type {
   AccentKey,
@@ -30,13 +32,15 @@ import type { StrapiHeroSection, StrapiStatisticsSection } from "../shared/reusa
 const CAREERS_ENDPOINT =
   "/api/pages/by-slug/careers" +
   "?populate[seo][populate]=*" +
-  "&populate[sections][on][page-reusable-sections.hero][populate]=backgroundImage" +
+  "&populate[sections][on][page-reusable-sections.hero][populate][backgroundImage]=true" +
+  "&populate[sections][on][page-reusable-sections.hero][populate][videoLinks][populate]=thumbnail" +
   "&populate[sections][on][page-reusable-sections.statistics][populate]=statistics" +
   "&populate[sections][on][page-reusable-sections.service-detail][populate][approachSteps][populate]=icon" +
   "&populate[sections][on][page-reusable-sections.tab-filters][populate]=TabItems" +
   "&populate[sections][on][careers.job-application-details][populate][jobs][populate]=job_category,locationIcon,clockIcon" +
   "&populate[sections][on][careers.job-application-form-content][populate][jobFormFields][populate]=icon" +
-  "&populate[sections][on][page-reusable-sections.culture-gallery][populate]=image" +
+  "&populate[sections][on][page-reusable-sections.culture-gallery][populate][image]=true" +
+  "&populate[sections][on][page-reusable-sections.culture-gallery][populate][videoLinks][populate]=thumbnail" +
   "&populate[sections][on][page-reusable-sections.cta-banner][populate]=true";
 
 // The CMS's "page-reusable-sections.service-detail" component has no color/accent field —
@@ -64,13 +68,25 @@ const JOB_TYPE_LABELS: Record<string, string> = {
 const COLLAGE_SPAN_BY_INDEX: CollageImage["span"][] = ["tall", "default", "default", "wide"];
 
 function mapCareersHero(cms: StrapiHeroSection): CareersHeroContent {
+  // A valid video link wins over an uploaded video: the Nth valid link replaces the Nth
+  // uploaded video tile in place (so the tile keeps its collage position). Links beyond the
+  // number of video tiles are ignored; with no valid link the uploaded videos stay.
+  const linkVideos = (cms.videoLinks ?? []).flatMap((link) => {
+    const id = parseYouTubeId(link.url);
+    return id ? [{ id, thumbnailUrl: link.thumbnail ? resolveMediaUrl(link.thumbnail.url) : null }] : [];
+  });
+  let nextLink = 0;
+
   const images = cms.backgroundImage.slice(0, 4).map((media, index) => {
     const isVideo = media.mime?.startsWith("video/") ?? false;
+    const link = isVideo ? linkVideos[nextLink++] : undefined;
     return {
       src: isVideo ? resolveMediaUrl(media.url) : resolveMediaUrl(pickMediaAsset(media, ["medium", "small"]).url),
       alt: media.alternativeText ?? "",
       type: isVideo ? ("video" as const) : ("image" as const),
       span: COLLAGE_SPAN_BY_INDEX[index] ?? "default",
+      youtubeId: link?.id ?? null,
+      thumbnailUrl: link?.thumbnailUrl ?? null,
     };
   });
 
@@ -80,10 +96,9 @@ function mapCareersHero(cms: StrapiHeroSection): CareersHeroContent {
     headingHighlight:
       cms.highlightTitle && cms.title.includes(cms.highlightTitle) ? cms.highlightTitle : "",
     lead: cms.subtitle ?? "",
-    // primaryBtnLink/secondaryBtnLink are currently null in the CMS — flagged to the CMS
-    // team; these in-page anchors are the only destinations either CTA has ever had.
+    // primaryBtnLink is currently null in the CMS — flagged to the CMS team; the in-page
+    // anchor is the only destination this CTA has ever had.
     primaryCta: { label: cms.primaryBtnLabel, href: cms.primaryBtnLink ?? "#roles" },
-    secondaryCta: { label: cms.secondaryBtnLabel ?? "", href: cms.secondaryBtnLink ?? "#life" },
     images: images as [CollageImage, CollageImage, CollageImage, CollageImage],
   };
 }
@@ -130,16 +145,7 @@ function mapCareersCultureGallery(cms: StrapiCultureGallerySection) {
     eyebrow: cms.badgeLabel,
     heading: cms.title,
     description: cms.subtitle,
-    images: cms.image.map((media) => {
-      const isVideo = media.mime?.startsWith("video/") ?? false;
-      const src = isVideo ? media.url : pickMediaAsset(media, ["medium", "small"]).url;
-      return {
-        id: String(media.url),
-        src: resolveMediaUrl(src),
-        alt: media.alternativeText ?? "",
-        type: isVideo ? ("video" as const) : ("image" as const),
-      };
-    }),
+    images: buildGalleryItems(cms),
   };
 }
 

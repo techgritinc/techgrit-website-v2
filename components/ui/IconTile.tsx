@@ -11,12 +11,12 @@ export interface IconTileProps {
 }
 
 const TITLE_CLASS: Record<"compact" | "default", string> = {
-  compact: "text-[14.5px] leading-[normal] font-bold text-white",
-  default: "text-[16.5px] leading-[normal] font-bold text-white",
+  compact: "text-[14px] leading-[normal] font-bold text-white",
+  default: "text-[16px] leading-[normal] font-bold text-white",
 };
 
 const DESC_CLASS: Record<"compact" | "default", string> = {
-  compact: "mt-1 text-[12.5px] leading-[1.45] text-text-55",
+  compact: "mt-1 text-[14px] leading-[1.45] text-text-55",
   default: "mt-1.5 text-[14px] leading-[1.55] text-60",
 };
 
@@ -40,7 +40,7 @@ export function IconTile({ icon, title, description, href, size = "default" }: I
   );
 
   const className =
-    "flex items-start gap-3.5 rounded-lg border border-border-8 bg-glass-3 p-4.5 transition-[transform,border-color,background] duration-200 ease-out hover:-translate-y-[3px] hover:border-[var(--color-border-orange-medium)] hover:bg-[rgba(232,119,34,0.05)]";
+    "flex items-start gap-3.5 rounded-lg border border-border-8 bg-glass-3 p-4.5 transition-[transform,border-color,background] duration-200 ease-out hover:-translate-y-[3px] hover:border-[var(--color-border-orange-medium)] hover:bg-[rgb(var(--tg-accent-tint-rgb)/0.05)]";
 
   if (href) {
     return (

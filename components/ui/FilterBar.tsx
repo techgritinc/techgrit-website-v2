@@ -19,7 +19,7 @@ export default function FilterBar({ label, children, className }: FilterBarProps
 
   return (
     <div className={outerClasses}>
-      <div className="mx-auto flex max-w-(--container-max) items-center gap-2.5 px-9 py-3.5 overflow-x-auto scrollbar-none">
+      <div className="mx-auto flex max-w-(--container-max) items-center gap-2.5 px-(--container-padding) py-3.5 overflow-x-auto scrollbar-none">
         <span className="text-xs-alt font-bold tracking-filter-label text-ghost uppercase shrink-0 whitespace-nowrap mr-1.5 leading-[normal]">{label}</span>
         {children}
       </div>

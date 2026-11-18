@@ -20,11 +20,11 @@ export default function IndustriesSection({ data }: { data: FutureIndustryData }
 
   return (
     <section id="industries" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 py-20 max-tg-sm:py-10">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-20 max-tg-sm:py-10">
         <div className="flex flex-wrap items-end justify-between gap-7.5">
           <div>
-            <h2 className="max-w-140 text-[44px] max-tg-sm:text-[30px] leading-[46.64px] max-tg-sm:leading-[1.2]">{title}</h2>
-            <p className="mt-4 max-w-[540px] text-[17px] leading-[27.2px] text-muted">{subtitle}</p>
+            <h2 className="max-w-140 text-[40px] max-tg-sm:text-[32px] leading-[46.64px] max-tg-sm:leading-[1.2]">{title}</h2>
+            <p className="mt-4 max-w-[540px] text-[16px] leading-[27.2px] text-muted">{subtitle}</p>
           </div>
         </div>
 
@@ -41,7 +41,7 @@ export default function IndustriesSection({ data }: { data: FutureIndustryData }
                 className={HOVER_GLOW[industry.slug] ?? "hover:shadow-industry-glow-violet"}
               >
                 <GlassCardIcon variant="industry" wrapperClassName={ICON_BG[industry.slug] ?? "bg-avatar-violet"}>
-                  {industry.icon && <Image src={industry.icon.url} alt={industry.icon.alt} width={24} height={24} />}
+                  {industry.icon && <Image className="tg-icon" src={industry.icon.url} alt={industry.icon.alt} width={24} height={24} />}
                 </GlassCardIcon>
                 <GlassCardTitle variant="industry">{industry.title}</GlassCardTitle>
                 <GlassCardDescription variant="industry">{industry.description}</GlassCardDescription>

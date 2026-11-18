@@ -36,14 +36,14 @@ export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }:
   if (!hasChips) {
     return (
       <section className="relative">
-        <div className="mx-auto max-w-[820px] px-9 py-[60px] text-center">
-          <div className="mb-3.5 text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
+        <div className="mx-auto max-w-[820px] px-9 py-[64px] text-center">
+          <div className="mb-3.5 text-[14px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
             {eyebrow}
           </div>
           <h2 className="text-[clamp(30px,3.4vw,40px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
             {title}
           </h2>
-          <p className="mx-auto mt-5 whitespace-pre-line text-[16.5px] leading-[1.7] text-text-66">{description}</p>
+          <p className="mx-auto mt-5 whitespace-pre-line text-[16px] leading-[1.7] text-text-66">{description}</p>
         </div>
       </section>
     );
@@ -58,19 +58,19 @@ export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }:
 
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <div className="grid grid-cols-1 items-start gap-16 min-[921px]:grid-cols-[0.9fr_1.1fr]">
           <div>
-            <div className="mb-3.5 text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
+            <div className="mb-3.5 text-[14px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
               {eyebrow}
             </div>
             <h2 className="text-[clamp(30px,3.4vw,40px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
               {title}
             </h2>
-            <p className="mt-5 text-[16.5px] leading-[1.7] text-text-66">{description}</p>
+            <p className="mt-5 text-[16px] leading-[1.7] text-text-66">{description}</p>
           </div>
           <div>
-            <div className="mb-4.5 text-[12px] leading-[normal] font-extrabold uppercase tracking-[0.14em] text-dim">
+            <div className="mb-4.5 text-[14px] leading-[normal] font-extrabold uppercase tracking-[0.14em] text-dim">
               {chipsLabel}
             </div>
             <div className="flex flex-col gap-2.5 sm:flex-row sm:gap-x-6">
@@ -79,7 +79,7 @@ export function ContentBlock({ eyebrow, title, description, chipsLabel, chips }:
                   {column.map((chip) => (
                     <span
                       key={chip.id}
-                      className="inline-flex items-center gap-[8px] rounded-pill border border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.04)] px-[14px] py-[8px] h-[33px] text-[13px] leading-[normal] font-[500] text-[rgba(255,255,255,0.78)]"
+                      className="inline-flex items-center gap-[8px] rounded-pill border border-[rgb(var(--tg-contrast-rgb)/0.12)] bg-[rgb(var(--tg-contrast-rgb)/0.04)] px-[12px] py-[8px] h-[33px] text-[14px] leading-[normal] font-[500] text-[rgb(var(--tg-contrast-rgb)/0.78)]"
                     >
                       <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-orange" />
                       {chip.label}

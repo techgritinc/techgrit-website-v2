@@ -7,12 +7,12 @@ export function BlogArticleHeader({ header }: { header: BlogArticleHeader }) {
 
   return (
     <header>
-      <div className="tg-container pt-[48px] pb-[26px] px-[var(--space-15)]">
+      <div className="tg-container pt-[48px] pb-[24px] px-[var(--space-15)]">
         <div className={BLOG_ARTICLE_COLUMN}>
           <Link
             href={header.allPostsUrl}
             data-rise
-            className="inline-flex items-center gap-[8px] mb-[30px] text-[14px] font-semibold text-text-faint"
+            className="inline-flex items-center gap-[8px] mb-[32px] text-[14px] font-semibold text-text-faint"
           >
             <span aria-hidden="true">&#8592;</span> {header.allPostsLabel}
           </Link>
@@ -32,7 +32,7 @@ export function BlogArticleHeader({ header }: { header: BlogArticleHeader }) {
             ) : null}
 
             <h1
-              className={`${header.categoryLabel || hasMeta ? "mt-[14px]" : ""} text-[clamp(30px,3.6vw,44px)] leading-[1.12] tracking-[-0.03em]`}
+              className={`${header.categoryLabel || hasMeta ? "mt-[12px]" : ""} text-[clamp(30px,3.6vw,44px)] leading-[1.12] tracking-[-0.03em]`}
             >
               {header.title}
             </h1>

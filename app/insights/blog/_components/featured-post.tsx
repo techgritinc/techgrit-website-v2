@@ -7,7 +7,7 @@ import { CardLink } from "@/components/ui/CardLink";
 export function FeaturedPost({ post }: { post: FeaturedPostContent }) {
   return (
     <section>
-      <div className="mx-auto max-w-(--container-max) px-9 pt-tg-11 pb-tg-4">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-tg-11 pb-tg-4">
         <CardLink href={post.href} style={{ display: "contents" }}>
           <GlassCard
             variant="blogFeatured"
@@ -25,20 +25,20 @@ export function FeaturedPost({ post }: { post: FeaturedPostContent }) {
                 {post.excerpt}
               </GlassCardDescription>
               <div className="mt-2 flex items-center gap-3.5">
-                <div className="flex size-tg-42 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-brand)] text-xs font-bold text-primary leading-[normal]">
+                <div className="flex size-tg-42 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-brand)] text-xs font-bold text-on-brand leading-[normal]">
                   {post.author.initials}
                 </div>
                 <div className="leading-[normal]">
-                  <div className="text-[14.5px] leading-[normal] font-bold text-primary">{post.author.name}</div>
-                  <div className="text-[13px] leading-[normal] text-muted">
+                  <div className="text-[14px] leading-[normal] font-bold text-primary">{post.author.name}</div>
+                  <div className="text-[14px] leading-[normal] text-muted">
                     {post.author.role}
                     {post.author.role && post.readTime && " · "}
                     {post.readTime}
                   </div>
                 </div>
               </div>
-              <span className="mt-2 inline-flex w-fit items-center gap-2 text-[15px] font-bold text-amber-light">
-                {post.ctaLabel} <span aria-hidden="true" className="text-[17px]">&rarr;</span>
+              <span className="mt-2 inline-flex w-fit items-center gap-2 text-[14px] font-bold text-amber-light">
+                {post.ctaLabel} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
               </span>
             </div>
 

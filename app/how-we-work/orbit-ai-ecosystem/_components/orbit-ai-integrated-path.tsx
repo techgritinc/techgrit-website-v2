@@ -12,16 +12,16 @@ export function OrbitAiIntegratedPath({ section }: { section: IntegratedPathSect
 
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <div className="mb-11 text-center">
-            <div className="mb-3 text-[12.5px] font-extrabold uppercase leading-[normal] tracking-[0.16em] text-orange">
+            <div className="mb-3 text-[14px] font-extrabold uppercase leading-[normal] tracking-[0.16em] text-orange">
               {section.eyebrow}
             </div>
             <h2 className="text-[clamp(28px,3.2vw,38px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
               {section.title}
             </h2>
-            <p className="mx-auto mt-3.5 max-w-[640px] text-[16.5px] leading-[1.6] text-text-66">
+            <p className="mx-auto mt-3.5 max-w-[640px] text-[16px] leading-[1.6] text-text-66">
               {section.subtitle}
             </p>
           </div>

@@ -3,14 +3,18 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
-import { CheckIcon, ChevronRightIcon, ClockIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
+// ClockIcon is only used by the commented-out duration pill below; re-add it here when restoring that.
+import { CheckIcon, CloseIcon, PlayIcon, QuoteIcon } from "@/components/ui/icons";
 import type { ReviewsData } from "@/cms/api/home/reviews";
+import YouTubePreview from "@/components/ui/YouTubePreview";
+import { disableYouTubeCaptions, youTubePlayerSrc } from "@/cms/utils/youtube";
 
 export default function TestimonialsSection({ data }: { data: ReviewsData }) {
   const { badgeLabel, title, subtitle, testimonials, metrics } = data;
   const trackRef = useRef<HTMLDivElement>(null);
   const dragState = useRef({ isDown: false, startX: 0, startScrollLeft: 0, moved: false });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [modalVideoContainer, setModalVideoContainer] = useState<HTMLDivElement | null>(null);
 
   function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
@@ -99,15 +103,29 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
         >
           {testimonials.map((testimonial, index) => {
             if (testimonial.type === "video") {
+              // YouTube cards show a thumbnail and play only on hover, with the text hidden.
+              const hideOnHover = testimonial.youtubeId ? "group-hover:opacity-0" : "";
               return (
                 <button
                   key={testimonial.id}
                   type="button"
+                  // Sits on video footage, which looks the same in both themes — pin the dark
+                  // theme so the text/badges stay white-on-dark in light mode too (see tokens.css).
+                  data-theme="dark"
                   onClick={() => openLightbox(index)}
-                  className="relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="group relative h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 first:ml-auto last:mr-auto cursor-pointer overflow-hidden rounded-[22px] border border-border-orange-45 bg-[image:var(--gradient-testimonial-video)] p-0 text-left outline-none transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-video"
                   style={{ scrollSnapAlign: "start" }}
                 >
-                  {testimonial.videoUrl ? (
+                  {testimonial.youtubeId ? (
+                    <YouTubePreview
+                      id={testimonial.youtubeId}
+                      playing={hoveredIndex === index}
+                      thumbnailUrl={testimonial.thumbnailUrl}
+                      showThumbnail
+                    />
+                  ) : testimonial.videoUrl ? (
                     <AutoplayVideo
                       src={testimonial.videoUrl}
                       className="absolute inset-0 h-full w-full object-cover"
@@ -122,13 +140,19 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       </div>
                     </>
                   )}
+                  {/* Deepens the lower part of the footage (both themes) so the white text stays clear of the captions burned into the videos. */}
+                  <div
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-[image:var(--gradient-testimonial-video-scrim-deep)] transition-opacity duration-300 ${hideOnHover}`}
+                  />
                   <QuoteIcon
                     aria-hidden="true"
                     width={76}
                     height={76}
-                    className="absolute top-24 left-5 text-white opacity-[var(--opacity-14)]"
+                    className={`absolute top-24 left-5 text-white opacity-[var(--opacity-14)] transition-opacity duration-300 ${hideOnHover}`}
                   />
-                  <div className="absolute top-5 left-5 flex items-center gap-2">
+                  {/* "VIDEO" badge and duration pill hidden for now.
+                  <div className={`absolute top-5 left-5 flex items-center gap-2 transition-opacity duration-300 ${hideOnHover}`}>
                     <div
                       className="leading-[normal] inline-flex items-center gap-[7px] rounded-full border border-border-28 bg-badge-ink-50 py-[6px] px-[12px] text-[11px] font-bold text-white backdrop-blur-sm tracking-[1.54px]"
                       style={{ fontFamily: "Arial" }}
@@ -146,7 +170,8 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       </div>
                     )}
                   </div>
-                  <div className="absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  */}
+                  <div className={`absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${hideOnHover}`}>
                     <div
                       aria-hidden="true"
                       className="absolute inset-[-12px] rounded-full bg-[rgba(255,255,255,0.2)]"
@@ -156,7 +181,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       <PlayIcon className="text-orange" />
                     </div>
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 px-6 pt-8.5 pb-5.5">
+                  <div className={`absolute inset-x-0 bottom-0 bg-[image:var(--gradient-testimonial-video-scrim)] px-6 pt-8.5 pb-5.5 transition-opacity duration-300 ${hideOnHover}`}>
                     <div
                       className="mb-2.5 flex gap-0.5 text-[13px] tracking-[2px] leading-[normal] text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]"
                       style={{ fontFamily: "Arial" }}
@@ -168,9 +193,11 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                       style={{ fontFamily: "Arial" }}
                     >{testimonial.quote}</p>
                     <div className="mt-[14px] flex items-center gap-[11px]">
-                      <div className="font-display flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] text-[14px] font-bold text-orange">
-                        {testimonial.initials}
-                      </div>
+                      {testimonial.name ? (
+                        <div className="font-display flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] text-[14px] font-bold text-orange">
+                          {testimonial.initials}
+                        </div>
+                      ) : null}
                       <div className="min-w-0">
                         <div
                           className="text-[14.5px] leading-[normal] font-bold text-white"
@@ -190,7 +217,7 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
             return (
               <div
                 key={testimonial.id}
-                className="relative flex h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 flex-col overflow-hidden rounded-[20px] border border-border-image bg-[image:var(--gradient-testimonial-card)] pt-[26px] px-[26px] pb-[24px] backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-text"
+                className="relative flex h-[340px] w-[380px] max-tg-sm:w-[78vw] shrink-0 first:ml-auto last:mr-auto flex-col overflow-hidden rounded-[20px] border border-border-image bg-[image:var(--gradient-testimonial-card)] pt-[26px] px-[26px] pb-[24px] backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-testimonial-hover-text"
                 style={{ scrollSnapAlign: "start" }}
               >
                 <QuoteIcon
@@ -212,9 +239,11 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
                 </div>
                 <p className="relative flex-1 text-[15px] leading-[23.25px] font-normal text-primary">{testimonial.quote}</p>
                 <div className="relative mt-4 pt-4 border-t border-border-8 flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-phase-node)] font-display text-[15px] font-bold text-white shadow-testimonial-avatar">
-                    {testimonial.initials}
-                  </div>
+                  {testimonial.name ? (
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--gradient-phase-node)] font-display text-[15px] font-bold text-white shadow-testimonial-avatar">
+                      {testimonial.initials}
+                    </div>
+                  ) : null}
                   <div>
                     <div className="text-[14.5px] leading-[normal] font-bold text-primary">{testimonial.name}</div>
                     <div className="text-[12.5px] leading-[normal] text-muted">{testimonial.role}</div>
@@ -242,6 +271,9 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
           role="dialog"
           aria-modal="true"
           aria-label={`${current.name} testimonial`}
+          // Backdrop is dark in both themes (--color-modal-backdrop), so pin the dark theme
+          // for the close button / placeholder inside it.
+          data-theme="dark"
           className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-modal-backdrop p-6 backdrop-blur-md"
         >
           <div onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[900px]">
@@ -254,7 +286,17 @@ export default function TestimonialsSection({ data }: { data: ReviewsData }) {
               <CloseIcon />
             </button>
             <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
-              {current.videoUrl ? (
+              {current.youtubeId ? (
+                <iframe
+                  src={youTubePlayerSrc(current.youtubeId)}
+                  onLoad={disableYouTubeCaptions}
+                  title={`${current.name} testimonial video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full border-0"
+                />
+              ) : current.videoUrl ? (
                 <div ref={setModalVideoContainer} className="h-full w-full" />
               ) : (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[image:var(--gradient-testimonial-placeholder)]">

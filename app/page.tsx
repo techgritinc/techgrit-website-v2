@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { getHomeData } from "@/cms/api/home";
@@ -14,6 +15,16 @@ const ReImagineSection = dynamic(() => import("@/app/_home-components/ReImagineS
 const TestimonialsSection = dynamic(() => import("@/app/_home-components/TestimonialsSection"));
 const SubscribeBand = dynamic(() => import("@/app/_home-components/SubscribeBand"));
 const LifeGallery = dynamic(() => import("@/app/_home-components/LifeGallery"));
+
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await getHomeData();
+  if (!data || !data.seo) return {};
+
+  return {
+    title: data.seo.metaTitle,
+    description: data.seo.metaDescription,
+  };
+}
 
 export default async function Home() {
   const data = await getHomeData();

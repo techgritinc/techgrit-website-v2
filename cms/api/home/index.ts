@@ -49,10 +49,13 @@ type StrapiHomeSection =
   | StrapiCtaBannerSection;
 
 type StrapiHomeData = {
+  // Strapi returns `seo: null` for pages whose SEO component hasn't been filled in.
+  seo?: { metaTitle: string | null; metaDescription: string | null } | null;
   sections: StrapiHomeSection[];
 };
 
 export type HomeData = {
+  seo: { metaTitle: string | null; metaDescription: string | null } | null;
   hero?: HeroData;
   trustedClients?: TrustedClientsData;
   newsletter?: NewsletterData;
@@ -102,6 +105,7 @@ export const getHomeData = cache(async (): Promise<HomeData | null> => {
   const ctaBannerSection = pickCtaBannerSection(sections);
 
   return {
+    seo: data.seo ? { metaTitle: data.seo.metaTitle, metaDescription: data.seo.metaDescription } : null,
     hero,
     trustedClients: trustedClientsSection ? toTrustedClients(trustedClientsSection) : undefined,
     newsletter: newsletterSection ? toNewsletter(newsletterSection) : undefined,

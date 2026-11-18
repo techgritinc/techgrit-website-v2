@@ -25,7 +25,7 @@ const CONNECTOR_PATHS = [
 export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDiagramSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-[40px] pb-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[40px] pb-[64px]">
         <div
           className="relative overflow-hidden rounded-[24px] border border-border-faint"
           style={{
@@ -55,7 +55,7 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
             </h2>
           </div>
 
-          <div className="relative mt-[46px] hidden md:block">
+          <div className="relative mt-[48px] hidden md:block">
             <svg viewBox="0 0 1100 300" className="block w-full overflow-visible" style={{ height: "auto" }} aria-hidden="true">
               <defs>
                 <linearGradient id="tg-lifecycle-flow" x1="0" y1="0" x2="1" y2="0">
@@ -91,7 +91,7 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
                 opacity={0.9}
                 style={{ transformOrigin: "550px 150px", animation: "tgpulsecore 4s ease-in-out infinite" }}
               />
-              <text className="leading-normal" x={550} y={145} textAnchor="middle" fill="#fff" fontFamily="var(--font-display)" fontWeight={700} fontSize={19}>
+              <text className="leading-normal" x={550} y={145} textAnchor="middle" fill="var(--color-badge-text)" fontFamily="var(--font-display)" fontWeight={700} fontSize={19}>
                 {section.engineLabel}
               </text>
               <text
@@ -99,7 +99,7 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
                 x={550}
                 y={166}
                 textAnchor="middle"
-                fill="rgba(255,255,255,0.85)"
+                fill="color-mix(in srgb, var(--color-badge-text) 85%, transparent)"
                 fontFamily="var(--font-body)"
                 fontWeight={600}
                 fontSize={12}
@@ -119,7 +119,7 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
                     className="rounded-[12px] border border-border"
                     style={{ background: "var(--color-nav-glass)", padding: "12px 10px", backdropFilter: "blur(6px)" }}
                   >
-                    <div style={{ fontSize: "13.5px", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
+                    <div style={{ fontSize: "14px", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
                       {node.name}
                     </div>
                   </div>
@@ -135,7 +135,7 @@ export function ConstructionLifecycleDiagram({ section }: { section: LifecycleDi
                 className="rounded-[12px] border border-border text-center leading-[normal]"
                 style={{ background: "var(--color-ink-glass-40)", padding: 14 }}
               >
-                <span style={{ fontSize: "13.5px", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
+                <span style={{ fontSize: "14px", fontWeight: "var(--fw-bold)", color: "var(--color-text-primary)" }}>
                   {node.name}
                 </span>
               </div>

@@ -1,4 +1,5 @@
 import { resolveMediaUrl } from "../../utils/media";
+import { parseYouTubeId } from "../../utils/youtube";
 import type { AnySection, StrapiMedia } from "./shared";
 import type { StrapiStatisticsSection } from "./statistics";
 import { parseStatValue } from "./statistics";
@@ -13,6 +14,10 @@ export type StrapiTestimonial = {
   videoDuration: string | null;
   verificationStatus: string | null;
   video: StrapiMedia | null;
+  // Optional YouTube link/embed URL. Wins over `video` when both are set.
+  videoLink?: string | null;
+  // Optional still shown on a YouTube card until it is hovered.
+  videoThumbnail?: StrapiMedia | null;
   authors: StrapiTestimonialAuthor[];
 };
 
@@ -34,6 +39,8 @@ export type Testimonial = {
   initials: string;
   rating?: number;
   videoUrl?: string | null;
+  youtubeId?: string | null;
+  thumbnailUrl?: string | null;
   videoDuration?: string;
   verified: boolean;
 };
@@ -64,15 +71,19 @@ function toInitials(name: string | undefined): string {
 export function toReviews(section: StrapiReviewsSection, metricsStat: StrapiStatisticsSection | undefined): ReviewsData {
   const testimonials: Testimonial[] = section.testimonial.map((item) => {
     const author = item.authors[0];
+    // videoLink wins: when a valid YouTube link exists the uploaded file is ignored.
+    const youtubeId = parseYouTubeId(item.videoLink);
     return {
       id: String(item.id),
-      type: item.video ? "video" : "text",
+      type: youtubeId || item.video ? "video" : "text",
       quote: item.reviwerDescription,
       name: author?.name ?? "",
       role: author?.designation ?? "",
       initials: toInitials(author?.name),
       rating: item.ratings ?? undefined,
-      videoUrl: item.video ? resolveMediaUrl(item.video.url) : null,
+      youtubeId,
+      thumbnailUrl: youtubeId && item.videoThumbnail ? resolveMediaUrl(item.videoThumbnail.url) : null,
+      videoUrl: !youtubeId && item.video ? resolveMediaUrl(item.video.url) : null,
       // CMS stores duration as "2.14"-style (minutes.seconds) — display as "2:14".
       videoDuration: item.videoDuration ? item.videoDuration.replace(".", ":") : undefined,
       verified: item.verificationStatus === "Verified",

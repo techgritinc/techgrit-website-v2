@@ -7,7 +7,7 @@ function FounderSegmentTile({ segment }: { segment: FounderSegmentCard }) {
   return (
     <GlassCard variant="serviceCapability">
       <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-[var(--color-overlay-orange-14)] text-orange">
-        {segment.icon && <Image src={segment.icon.url} alt={segment.icon.alternativeText} width={20} height={20} />}
+        {segment.icon && <Image className="tg-icon" src={segment.icon.url} alt={segment.icon.alternativeText} width={20} height={20} />}
       </span>
       <GlassCardTitle variant="serviceCapability">{segment.name}</GlassCardTitle>
       <GlassCardDescription variant="serviceCapability">{segment.description}</GlassCardDescription>
@@ -18,10 +18,10 @@ function FounderSegmentTile({ segment }: { segment: FounderSegmentCard }) {
 export function StartupsWhoWeHelp({ section }: { section: WhoWeHelpSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <div className="mb-9 text-center">
-            <div className="mb-3 text-[12.5px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
+            <div className="mb-3 text-[14px] leading-[normal] font-extrabold uppercase tracking-[0.16em] text-orange">
               {section.eyebrow}
             </div>
             <h2 className="text-[clamp(26px,3vw,34px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">

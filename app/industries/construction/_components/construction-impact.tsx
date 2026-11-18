@@ -6,12 +6,12 @@ import type { ImpactSection } from "@/cms/types/construction";
 export function ConstructionImpact({ section }: { section: ImpactSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-[40px] pb-[60px]" data-reveal>
-          <div className="mb-[38px] max-w-[760px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[40px] pb-[64px]" data-reveal>
+          <div className="mb-[40px] max-w-[760px]">
             <SectionEyebrow tone="amber" className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
             <h2 className="text-[clamp(30px,3.8vw,42px)] leading-[1.08] tracking-[-0.03em]">{section.title}</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-[22px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-[20px]">
             {section.caseStudies.map((caseStudy) => (
               <GlassCard
                 key={caseStudy.order}
@@ -20,7 +20,7 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
                 className="flex h-full flex-col"
               >
                 <div
-                  className="leading-[normal] text-[36px] sm:text-[40px]"
+                  className="leading-[normal] text-[32px] sm:text-[40px]"
                   style={{
                     fontFamily: "var(--font-display)",
                     fontWeight: "var(--fw-bold)",
@@ -31,7 +31,7 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
                   {caseStudy.metric}
                 </div>
                 <div
-                  className="mt-[6px] leading-[normal] tracking-[1.5px]"
+                  className="mt-[4px] leading-[normal] tracking-[1.5px]"
                   style={{
                     fontSize: "var(--text-2xs)",
                     fontWeight: "var(--fw-bold)",
@@ -44,7 +44,7 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
                 <GlassCardTitle
                   variant="constructionImpact"
                   title={caseStudy.title}
-                  className="mt-[14px] tracking-[normal] text-[16px] md:text-[18.5px]"
+                  className="mt-[12px] tracking-[normal] text-[16px] md:text-[18px]"
                 >
                   {caseStudy.title}
                 </GlassCardTitle>
@@ -53,7 +53,7 @@ export function ConstructionImpact({ section }: { section: ImpactSection }) {
                 </GlassCardDescription>
                 <Link
                   href={caseStudy.link}
-                  className="mt-auto inline-flex items-center pt-[18px]"
+                  className="mt-auto inline-flex items-center pt-[16px]"
                   style={{ gap: 7, fontSize: "var(--text-xs)", fontWeight: "var(--fw-bold)", color: "var(--color-amber-light)" }}
                 >
                   {caseStudy.linkLabel} <span aria-hidden="true">&rarr;</span>

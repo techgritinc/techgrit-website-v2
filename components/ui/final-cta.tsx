@@ -128,7 +128,7 @@ export function FinalCta({
                 {section.secondaryCta?.label && section.secondaryCta.link && (
                   <Button
                     href={section.secondaryCta.link}
-                    className={`leading-[normal] text-[16px] ${secondaryBtnClassName}`}
+                    className={`leading-[normal] ${secondaryBtnClassName}`}
                     variant="ghost"
                     size="lg"
                   >

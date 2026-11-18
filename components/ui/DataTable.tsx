@@ -34,7 +34,7 @@ export function DataTable({
   return (
     // The table keeps a min-width so three columns of prose don't crush on small screens —
     // it scrolls inside this wrapper instead of forcing the page body to scroll sideways.
-    <div className="mt-[22px] overflow-x-auto rounded-[12px] border border-border-orange">
+    <div className="mt-[20px] overflow-x-auto rounded-[12px] border border-border-orange">
       <table className="w-full min-w-[560px] border-collapse text-left">
         {caption ? <caption className="sr-only">{caption}</caption> : null}
         <thead>
@@ -44,7 +44,7 @@ export function DataTable({
                 key={headerIndex}
                 scope="col"
                 className={[
-                  "px-[18px] py-[14px] align-bottom text-[18px] font-bold leading-[1.35] text-primary",
+                  "px-[16px] py-[12px] align-bottom text-[18px] font-bold leading-[1.35] text-primary",
                   "border-b border-border-orange",
                   headerIndex > 0 ? "border-l border-border-orange-30" : "",
                 ]
@@ -74,7 +74,7 @@ export function DataTable({
                     // Body copy at one tone by default — only the header row is white; a
                     // bolded-white first column read as a second header. A comparison
                     // table's own columns override that tone (see columnTones).
-                    "px-[18px] py-[14px] align-top text-[15.5px] leading-[1.7]",
+                    "px-[16px] py-[12px] align-top text-[16px] leading-[1.7]",
                     tones[cellIndex] ?? "text-secondary",
                     cellIndex > 0 ? "border-l border-border-orange-30" : "",
                   ]

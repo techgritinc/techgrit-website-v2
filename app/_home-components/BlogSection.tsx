@@ -17,7 +17,7 @@ export default function BlogSection({ data }: { data: BlogSectionData }) {
 
   return (
     <section id="blog" className="scroll-mt-(--nav-height)">
-      <div className="mx-auto max-w-(--container-max) px-9 pt-tg-21 pb-20 max-tg-sm:pb-10">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-tg-21 pb-20 max-tg-sm:pb-10">
         <div className="mb-tg-15 flex flex-wrap items-end justify-between gap-6">
           <div>
             <div className="text-2xs leading-[normal] font-bold tracking-widest text-orange uppercase">{badgeLabel}</div>
@@ -25,7 +25,7 @@ export default function BlogSection({ data }: { data: BlogSectionData }) {
               {title}
             </h2>
           </div>
-          <Button href={viewAllLink} variant="ghost" className="px-tg-9! py-tg-5a! min-h-tg-19a! text-[15px] leading-[normal]">
+          <Button href={viewAllLink} variant="ghost" size="nav" className="px-tg-9! py-tg-5a! min-h-tg-19a! leading-[normal]">
             {viewAllLabel} <span aria-hidden="true" className="text-orange text-[16px]">&rarr;</span>
           </Button>
         </div>

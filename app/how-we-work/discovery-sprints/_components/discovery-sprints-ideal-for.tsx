@@ -5,7 +5,7 @@ import type { IdealForSection } from "@/cms/types/discovery-sprints-types";
 export function DiscoverySprintsIdealFor({ section }: { section: IdealForSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <h2 className="text-center text-[clamp(26px,3vw,34px)] leading-[1.08] font-bold tracking-[-0.03em] text-white">
             {section.title}

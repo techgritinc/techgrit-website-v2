@@ -13,17 +13,17 @@ const COLS: Record<CapabilitiesSection["role"], string> = {
 export function ConsumerLendingCapabilities({ section }: { section: CapabilitiesSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 py-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) py-[64px]">
         <RevealOnScroll>
           <div className="mb-11 text-center">
-            <div className="mb-3 text-[12.5px] font-extrabold uppercase tracking-[0.16em] text-orange">{section.eyebrow}</div>
+            <div className="mb-3 text-[14px] font-extrabold uppercase tracking-[0.16em] text-orange">{section.eyebrow}</div>
             <h2 className="text-[clamp(30px,3.6vw,42px)] leading-[1.06] font-bold tracking-[-0.03em] text-white">{section.title}</h2>
-            <p className="mx-auto mt-3.5 max-w-[640px] text-[17px] leading-[1.6] text-text-66">{section.description}</p>
+            <p className="mx-auto mt-3.5 max-w-[640px] text-[16px] leading-[1.6] text-text-66">{section.description}</p>
           </div>
           <div className={`grid grid-cols-1 gap-5 md:grid-cols-2 ${COLS[section.role]}`}>
             {section.capabilities.map((capability) => (
               <GlassCard key={capability.id} variant="serviceCapability">
-                <div className="mb-[10px] text-[12px] font-extrabold tracking-[0.14em] text-orange">{capability.stepLabel}</div>
+                <div className="mb-[8px] text-[14px] font-extrabold tracking-[0.14em] text-orange">{capability.stepLabel}</div>
                 <GlassCardTitle variant="serviceCapability">{capability.title}</GlassCardTitle>
                 {section.role !== "operatingContext" && (
                   <GlassCardDescription variant="serviceCapability">{capability.lede}</GlassCardDescription>
@@ -34,7 +34,7 @@ export function ConsumerLendingCapabilities({ section }: { section: Capabilities
                       {capability.bullets.map((bullet) => (
                         <span
                           key={bullet.id}
-                          className="flex items-center gap-2 rounded-pill border border-border-faint bg-glass-4 px-3.5 py-1.5 text-left text-[13px] leading-[normal] text-secondary"
+                          className="flex items-center gap-2 rounded-pill border border-border-faint bg-glass-4 px-3.5 py-1.5 text-left text-[14px] leading-[normal] text-secondary"
                         >
                           <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-orange" />
                           {bullet.text}
@@ -42,9 +42,9 @@ export function ConsumerLendingCapabilities({ section }: { section: Capabilities
                       ))}
                     </div>
                   ) : (
-                    <ul className="mt-3.5 flex flex-col gap-[7px]">
+                    <ul className="mt-3.5 flex flex-col gap-[8px]">
                       {capability.bullets.map((bullet) => (
-                        <li key={bullet.id} className="relative pl-4 text-[13px] leading-[1.5] text-70">
+                        <li key={bullet.id} className="relative pl-4 text-[14px] leading-[1.5] text-70">
                           <span className="absolute top-2 left-0 h-1.5 w-1.5 rounded-full bg-orange" />
                           {bullet.text}
                         </li>
@@ -55,9 +55,9 @@ export function ConsumerLendingCapabilities({ section }: { section: Capabilities
                 <div className="flex-1" />
                 {(capability.metricLabel || capability.note) && (
                   <div className="mt-4 border-t border-border-8 pt-3">
-                    {capability.metricLabel && <div className="text-[22px] font-bold text-white">{capability.metricLabel}</div>}
+                    {capability.metricLabel && <div className="text-[20px] font-bold text-white">{capability.metricLabel}</div>}
                     {capability.note && (
-                      <p className="mt-1.5 line-clamp-2 min-h-[40px] text-[13px] leading-[1.5] text-60 italic">{capability.note}</p>
+                      <p className="mt-1.5 line-clamp-2 min-h-[40px] text-[14px] leading-[1.5] text-60 italic">{capability.note}</p>
                     )}
                   </div>
                 )}

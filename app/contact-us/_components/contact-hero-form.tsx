@@ -12,8 +12,8 @@ import type { BookCallBannerSection, ContactFormSection, ContactHeroSection } fr
 /* Contact-form-specific field styling — passed to FormField via inputBaseClassName
    so it fully replaces the default INPUT_BASE (different radius, bg, font, placeholder). */
 const CONTACT_INPUT_BASE =
-  "w-full bg-[var(--color-glass)] border border-[var(--color-border)] rounded-[12px] px-4 py-[14px] text-[15px] text-white outline-none transition-colors focus:border-[var(--color-border-orange-strong)] focus:bg-[var(--color-glass-hover)] placeholder:text-[var(--color-text-placeholder)] font-[inherit]";
-const CONTACT_LABEL = "block text-[13px] font-semibold text-white/70 mb-[7px]";
+  "w-full bg-[var(--color-glass)] border border-[var(--color-border-18)] rounded-[14px] px-[18px] py-[16px] text-[16px] text-white outline-none transition-colors focus:border-[var(--tg-accent-solid)] focus:shadow-[0_0_0_3px_rgb(var(--tg-accent-solid-rgb)/0.20)] focus:bg-[var(--color-glass-hover)] placeholder:text-[var(--color-text-placeholder)] font-[inherit]";
+const CONTACT_LABEL = "block text-[14px] font-semibold text-white/70 mb-[8px]";
 
 const ICON_WRAPPER_CLASSES = [
   "bg-orange/10 border-orange/30",
@@ -125,7 +125,7 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
           style={{ animationDelay: ".05s" }}
           className="inline-flex items-center gap-2.5 bg-overlay-orange-10 border border-[var(--color-border-orange)] px-4 py-2 rounded-full mb-6"
         >
-          <span className="text-[12.5px] font-bold tracking-[0.1em] text-white/[.92] uppercase">
+          <span className="text-[14px] font-bold tracking-[0.1em] text-white/[.92] uppercase">
             {hero.badgeLabel}
           </span>
         </div>
@@ -160,11 +160,11 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
                   className={`w-11.5 h-11.5 rounded-[12px] flex items-center justify-center shrink-0 border ${ICON_WRAPPER_CLASSES[index % ICON_WRAPPER_CLASSES.length]}`}
                 >
                   {item.icon && (
-                    <Image src={item.icon.url} alt={item.icon.alt} width={20} height={20} />
+                    <Image className="tg-icon" src={item.icon.url} alt={item.icon.alt} width={20} height={20} />
                   )}
                 </span>
                 <span>
-                  <span className="block text-[12.5px] text-white/50 font-semibold">{item.label}</span>
+                  <span className="block text-[14px] text-white/50 font-semibold">{item.label}</span>
                   <span className="block text-[16px] text-white font-bold">{item.value}</span>
                 </span>
               </>
@@ -200,20 +200,20 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
           >
             <span className="w-11 h-11 rounded-[12px] bg-orange/20 border border-orange/40 inline-flex items-center justify-center shrink-0">
               {bookCall.icon && (
-                <Image src={bookCall.icon.url} alt={bookCall.icon.alt} width={20} height={20} />
+                <Image className="tg-icon" src={bookCall.icon.url} alt={bookCall.icon.alt} width={20} height={20} />
               )}
             </span>
             <div className="flex-1 min-w-45">
-              <div className="text-[12.5px] font-bold tracking-08 uppercase text-[var(--color-amber-light)]">
+              <div className="text-[14px] font-bold tracking-08 uppercase text-[var(--color-amber-light)]">
                 {bookCall.title}
               </div>
-              <div className="mt-0.75 text-[15px] font-semibold text-white leading-[1.35]">
+              <div className="mt-0.75 text-[14px] font-semibold text-white leading-[1.35]">
                 {bookCall.subtitle}
               </div>
             </div>
             <Button href={bookCall.ctaLink || "#"} variant="primary" size="nav" target="_blank" rel="noopener noreferrer">
               {bookCall.ctaLabel}{" "}
-              <span aria-hidden="true" className="text-[15px]">
+              <span aria-hidden="true" className="text-[14px]">
                 &#8594;
               </span>
             </Button>
@@ -254,7 +254,7 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
           </div>
         ) : (
           <div>
-            <div className="text-[13px] font-bold tracking-[0.04em] text-white/60 mb-3.5">
+            <div className="text-[14px] font-bold tracking-[0.04em] text-white/60 mb-3.5">
               {form.inquiryLabel}
             </div>
             <div className="flex gap-2 flex-wrap mb-6">
@@ -265,7 +265,7 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
                     key={option.order}
                     type="button"
                     onClick={() => setTopic(option.title)}
-                    className={`font-[inherit] text-[13.5px] font-bold py-2.25 px-3.75 rounded-[30px] cursor-pointer whitespace-nowrap transition-all duration-200 ease-in-out border ${
+                    className={`font-[inherit] text-[14px] font-bold py-2.25 px-3.75 rounded-[30px] cursor-pointer whitespace-nowrap transition-all duration-200 ease-in-out border ${
                       active
                         ? "border-[var(--color-border-orange-strong)] bg-[var(--color-overlay-orange)] text-white"
                         : "border-[var(--color-border)] bg-[var(--color-glass)] text-[var(--color-text-secondary)] hover:bg-[var(--color-glass-hover)]"
@@ -346,7 +346,7 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
                 {errorMessage && (
                   <div
                     role="alert"
-                    className="px-3 py-2.5 text-[13px] font-semibold text-error-light"
+                    className="px-3 py-2.5 text-[14px] font-semibold text-error-light"
                   >
                     {errorMessage}
                   </div>
@@ -354,9 +354,9 @@ export default function ContactHeroForm({ hero, form, bookCall }: ContactHeroFor
               </div>
 
               <Button type="submit" variant="primary" size="hero" disabled={isSubmitting} className="w-full mt-1">
-                {form.submitLabel} <span className="text-[17px]">&#8594;</span>
+                {form.submitLabel} <span className="text-[16px]">&#8594;</span>
               </Button>
-              <p className="text-[12.5px] text-white/45 text-center leading-[1.5]">
+              <p className="text-[14px] text-white/45 text-center leading-[1.5]">
                 {form.disclaimer}
               </p>
             </form>

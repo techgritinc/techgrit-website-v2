@@ -65,14 +65,15 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
   return (
     <section className="relative">
       <div
-        className="tg-container !px-9 grid grid-cols-1 items-center gap-9 tg-md:grid-cols-2 tg-md:gap-[60px]"
+        className="tg-container !px-9 grid grid-cols-1 items-center gap-9 tg-md:grid-cols-2 tg-md:gap-[64px]"
         style={{ paddingTop: 74, paddingBottom: 40 }}
       >
         <div>
           <Badge
             tone="orangeOutline"
+            size="lg"
             data-rise
-            className="!py-tg-2 !px-4 !text-2xs !font-bold !gap-tg-3 motion-reduce:!opacity-100 leading-[normal]"
+            className="motion-reduce:!opacity-100"
             style={{ animationDelay: ".05s", marginBottom: 24 }}
           >
             {content.badgeLabel}
@@ -97,7 +98,7 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
             onSubmit={handleSubmit}
             noValidate
             data-rise
-            className="mt-[30px] flex max-w-[460px] flex-wrap gap-3 motion-reduce:!opacity-100"
+            className="mt-[32px] flex max-w-[460px] flex-wrap gap-3 motion-reduce:!opacity-100"
             style={{ animationDelay: ".28s" }}
           >
             <FormField
@@ -127,8 +128,7 @@ export function HeroSection({ content }: { content: WebinarHeroContent }) {
             <Button
               type="submit"
               disabled={isSubmitting}
-              style={{ fontFamily: "Arial, sans-serif" }}
-              className="!py-tg-5a !px-tg-11 !text-[15.5px] !shadow-btn-subscribe !h-[52px] !w-full basis-full leading-[normal]"
+              className="!py-tg-5a !px-tg-11 !shadow-btn-subscribe !h-[52px] !w-full basis-full leading-[normal]"
             >
               {status === "success" ? "Subscribed ✓" : content.formCtaLabel}
             </Button>

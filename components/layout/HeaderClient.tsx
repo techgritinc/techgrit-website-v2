@@ -5,17 +5,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Button from "@/components/ui/Button";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import { ChevronIcon, HamburgerIcon } from "@/components/ui/icons";
 import { ROUTES } from "@/lib/routes";
 import type { HeaderData, HeaderMegaGroup } from "@/cms/types/header-types";
 
 const NAV_LINK_BASE =
-  "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-3.5 py-[9px] text-sm font-semibold text-nav leading-[normal] transition-colors hover:bg-nav-hover hover:text-white aria-expanded:bg-nav-hover aria-expanded:text-white";
+  "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-3.5 py-[8px] text-sm font-medium text-nav leading-[normal] transition-colors hover:bg-nav-hover hover:text-white aria-expanded:bg-nav-hover aria-expanded:text-white";
 
-const GRID_COLS_CLASS: Record<HeaderMegaGroup["columns"], string> = {
-  3: "grid-cols-3",
-  4: "grid-cols-4",
-};
+const MEGA_MAX_WIDTH = 940;
+const MEGA_PADDING_X = 28;
+
+function getMegaLayout(group: HeaderMegaGroup): { gridTemplateColumns: string; width: string } {
+  const columnWidth = (MEGA_MAX_WIDTH - MEGA_PADDING_X) / group.columns;
+  const usedColumns = Math.max(1, Math.min(group.columns, group.items.length));
+  return {
+    gridTemplateColumns: `repeat(${usedColumns}, minmax(0, 1fr))`,
+    width: `min(${Math.round(columnWidth * usedColumns + MEGA_PADDING_X)}px, calc(100vw - 40px))`,
+  };
+}
 
 // next.config.ts sets trailingSlash: true, so usePathname() always resolves with a
 // trailing slash (e.g. "/what-we-do/ai-modernization/"), while every href built from
@@ -110,7 +118,10 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
     : "h-nav";
 
   return (
-    <header className={`${headerClasses} leading-[normal]`} data-scrolled={scrolledAttr}>
+    <header
+      className={`${headerClasses} leading-[normal]`}
+      data-scrolled={scrolledAttr}
+    >
       <div
         ref={navRef}
         data-scrolled={scrolledAttr}
@@ -124,17 +135,12 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
             height={logo.height}
             priority
             fetchPriority="high"
-            className="h-11 w-auto block"
+            className="tg-logo h-11 w-auto block"
           />
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-1 tg-lg:flex">
           {megaGroups.map((group) => {
-            // About no longer has a page of its own to navigate to — its group is
-            // non-clickable everywhere (mouse, touch, keyboard); only its hover panel
-            // opens (FR-007). Active-state highlighting is left exactly as it was
-            // before this feature — no special-casing for About.
-            const isAboutGroup = group.label === "About";
             // None of the mega-menu groups (About, What We Do, How We Work, Insights, ...)
             // have a landing page of their own — `group.href` is whatever stray value the
             // CMS's navItem.url happens to hold (often null, which the mapper falls back to
@@ -149,49 +155,22 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                 onMouseEnter={() => openDropdownNow(group.label)}
                 onMouseLeave={() => scheduleDropdownClose(group.label)}
               >
-                                {isAboutGroup ? (
-                  <button
-                    type="button"
-                    className={triggerClassName}
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                    onClick={() => setOpenDropdown((current) => (current === group.label ? null : group.label))}
-                  >
-                    {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
-                  </button>
-                ) : (
-                  <Link
-                    href={group.href ?? "#"}
-                    // The trigger never navigates (onClick preventDefaults), and its href
-                    // (/insights, /industries, /how-we-work) has no page — prefetching it
-                    // 404s and logs console errors.
-                    prefetch={false}
-                    className={triggerClassName}
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                    onClick={(e) => {
-                      // Clicking a mega-menu trigger only opens/closes its dropdown — it never
-                      // navigates. Hover still opens the panel on its own (see onMouseEnter above).
-                      e.preventDefault();
-                      setOpenDropdown((current) => (current === group.label ? null : group.label));
-                    }}
-                    onKeyDown={(e) => {
-                      // Native <a> elements don't fire a click on Space (only Enter), so handle
-                      // it explicitly to keep keyboard toggling consistent with mouse/touch.
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setOpenDropdown((current) => (current === group.label ? null : group.label));
-                      }
-                    }}
-                    suppressHydrationWarning
-                  >
-                    {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
-                  </Link>
-                )}
+                {/* Mega-menu groups have no page of their own, so the trigger is a button (not a
+                    link): it only opens/closes its dropdown on click, Enter or Space; hover opens it too. */}
+                <button
+                  type="button"
+                  className={triggerClassName}
+                  aria-haspopup="menu"
+                  aria-expanded={isOpen}
+                  onClick={() => setOpenDropdown((current) => (current === group.label ? null : group.label))}
+                >
+                  {group.label}<ChevronIcon className={`transition-transform duration-200 ease-in-out ${isOpen ? "rotate-180" : ""}`} />
+                </button>
                 <div
                   role="menu"
-                  className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid w-[min(940px,calc(100vw-40px))] -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
-                    } ${GRID_COLS_CLASS[group.columns]}`}
+                  className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
+                    }`}
+                  style={getMegaLayout(group)}
                 >
                   {group.items.map((item) => {
                     const itemActive = isCurrentPath(item.href, pathname);
@@ -212,12 +191,12 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                       >
                         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border-orange-soft bg-hover-orange-fill-14 text-amber-light">
                           {item.icon && (
-                            <Image src={item.icon.url} alt={item.icon.alt} width={18} height={18} loading="eager" className="h-4.5 w-4.5" />
+                            <Image src={item.icon.url} alt={item.icon.alt} width={18} height={18} loading="eager" className="tg-icon h-4.5 w-4.5" />
                           )}
                         </span>
                         <span className="flex flex-col min-w-0 mt-px">
-                          <span className="text-[14px] leading-[1.2] font-bold text-white">{item.title}</span>
-                          <span className="mt-0.75 text-[11.5px] leading-[1.4] text-text-55 line-clamp-2">{item.description}</span>
+                          <span className="text-sm leading-[1.2] font-medium text-white">{item.title}</span>
+                          <span className="mt-0.75 text-xs leading-[1.4] text-text-55 line-clamp-2">{item.description}</span>
                         </span>
                       </Link>
                     );
@@ -242,21 +221,25 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
           })}
         </nav>
 
-        <div className="hidden tg-lg:block">
+        <div className="hidden items-center gap-2 tg-lg:flex">
+          <ThemeToggle />
           <Button href={cta.href} size="nav" onClick={closeMenus}>
             {cta.label} <span aria-hidden="true" className="text-[16px]">&rarr;</span>
           </Button>
         </div>
 
-        <button
-          type="button"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileOpen}
-          onClick={() => setMobileOpen((open) => !open)}
-          className="flex cursor-pointer items-center justify-center p-2 text-white tg-lg:hidden"
-        >
-          <HamburgerIcon className="h-6.5 w-6.5" />
-        </button>
+        <div className="flex items-center gap-1 tg-lg:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((open) => !open)}
+            className="flex cursor-pointer items-center justify-center p-2 text-white tg-lg:hidden"
+          >
+            <HamburgerIcon className="h-6.5 w-6.5" />
+          </button>
+        </div>
       </div>
 
       <div
@@ -276,7 +259,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                   aria-current={isCurrentPath(item.href, pathname) ? "page" : undefined}
                   onClick={closeMenus}
                   className={[
-                    "block py-2.5 pr-9 pl-13 text-[14.5px] font-semibold text-muted transition-colors hover:text-white",
+                    "block py-2.5 pr-9 pl-13 text-sm font-medium text-muted transition-colors hover:text-white",
                     isCurrentPath(item.href, pathname) && "text-white",
                   ]
                     .filter(Boolean)
@@ -297,7 +280,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                 href={link.href ?? "#"}
                 aria-current={isCurrentPath(link.href, pathname) ? "page" : undefined}
                 onClick={closeMenus}
-                className="block border-t border-border-subtle px-9 py-4 text-[16px] font-bold text-orange"
+                className="block border-t border-border-subtle px-9 py-4 text-sm font-medium text-orange"
               >
                 {link.label}
               </Link>
@@ -310,7 +293,7 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
               aria-current={isCurrentPath(link.href, pathname) ? "page" : undefined}
               onClick={closeMenus}
               className={[
-                "block border-t border-border-subtle px-9 py-3.5 text-[16px] font-semibold text-[rgba(255,255,255,0.85)]",
+                "block border-t border-border-subtle px-9 py-3.5 text-sm font-medium text-[rgb(var(--tg-contrast-rgb)/0.85)]",
                 isCurrentPath(link.href, pathname) && "text-white",
               ]
                 .filter(Boolean)
@@ -324,3 +307,4 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
     </header>
   );
 }
+

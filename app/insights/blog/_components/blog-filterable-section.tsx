@@ -28,7 +28,7 @@ export function BlogFilterableSection({
         {posts.length === 0 ? (
           <section>
             <div className="tg-container py-[var(--space-11)] px-[var(--space-15)] flex flex-col items-center gap-4 text-center">
-              <p className="text-[15.5px] text-text-soft">No posts match this topic yet.</p>
+              <p className="text-[16px] text-text-soft">No posts match this topic yet.</p>
               <Button href={resetHref} variant="ghost" size="sm">
                 Reset filter
               </Button>

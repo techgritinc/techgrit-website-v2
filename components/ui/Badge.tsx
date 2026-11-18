@@ -9,23 +9,31 @@ type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
   children: ReactNode;
 };
 
-const BASE = "inline-flex items-center rounded-full font-extrabold uppercase";
+/* Figma SG 15 · Badges, status & progress — pills are radius 999, no uppercase, no extra tracking. */
+const BASE = "inline-flex items-center rounded-full font-medium";
 
 const SIZE_CLASSES: Record<BadgeSize, string> = {
-  sm: "gap-1.5 px-[11px] py-[5px] text-[10.5px] tracking-wider",
-  /** Hero Live-Webinar badge sizing (v2.2 Phase 2) — reference-exact, distinct from `sm`. */
-  lg: "gap-3 px-5 py-[11px] text-[13.5px] tracking-widest",
+  /** Status chip / Live chip: 14px/20, 12px x 6px padding, 8px gap. */
+  sm: "gap-2 px-[12px] py-[6px] text-[14px] leading-5",
+  /** Eyebrow badge: 16px/24, 18px x 10px padding, 10px gap. */
+  lg: "gap-[10px] px-[18px] py-[10px] text-base leading-6",
 };
 
+/** Eyebrow badge: accent tint 8% fill, accent border 35%, accent text. */
+const EYEBROW = "bg-[rgb(var(--tg-accent-solid-rgb)/0.08)] border border-[rgb(var(--tg-accent-solid-rgb)/0.35)] text-[color:var(--tg-text-accent)]";
+/** Status chip: 5% ink fill, 14% ink border, primary text. */
+const STATUS = "bg-[rgb(var(--tg-contrast-rgb)/0.05)] border border-[rgb(var(--tg-contrast-rgb)/0.14)] text-primary";
+/** Live chip: success tint 12% fill, success text, no border. */
+const LIVE = "bg-[rgb(var(--tg-success-rgb)/0.12)] text-[color:var(--tg-status-success)]";
+
 const TONE_CLASSES: Record<BadgeTone, string> = {
-  orange: "bg-[image:var(--gradient-brand)] text-badge-text",
-  glass: "bg-glass border border-border text-primary backdrop-blur-sm",
-  blue: "bg-[rgba(2,132,199,0.16)] text-blue-light",
-  teal: "bg-[rgba(15,118,110,0.20)] text-teal-light",
-  accent: "bg-glass-4 border border-border",
-  orangeOutline: "bg-[var(--color-overlay-orange-10)] border border-[var(--color-border-orange-soft)] text-strong",
-  /** Hero Live-Webinar badge — same gradient/text as `orange`, plus its own chip shadow. */
-  live: "bg-[image:var(--gradient-brand)] text-badge-text shadow-[var(--shadow-live-badge-chip)]",
+  orange: EYEBROW,
+  orangeOutline: EYEBROW,
+  accent: EYEBROW,
+  glass: STATUS,
+  blue: STATUS,
+  teal: STATUS,
+  live: LIVE,
 };
 
 /** Shared status/label pill primitive (FR-014). */

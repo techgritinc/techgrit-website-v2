@@ -13,11 +13,11 @@ import type { FindFitSection } from "@/cms/types/engagement-models-types";
 export function EngagementModelsFindFit({ section }: { section: FindFitSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1000px] px-9 py-[60px]">
+      <div className="mx-auto max-w-[1000px] px-9 py-[64px]">
         <RevealOnScroll>
           <div className="mb-9 text-center">
             {section.eyebrow && (
-              <div className="mb-3 text-[12.5px] font-extrabold uppercase tracking-[0.16em] text-orange">
+              <div className="mb-3 text-[14px] font-extrabold uppercase tracking-[0.16em] text-orange">
                 {section.eyebrow}
               </div>
             )}
@@ -27,11 +27,11 @@ export function EngagementModelsFindFit({ section }: { section: FindFitSection }
           </div>
           <div className="rounded-2xl border border-border-8 border-l-[3px] border-l-orange bg-glass-3 px-tg-11 py-7">
             <div className="mb-5 hidden sm:grid sm:grid-cols-[1fr_28px_1fr] sm:gap-4">
-              <div className="text-[15px] font-extrabold uppercase tracking-[0.14em] text-text-55">
+              <div className="text-[14px] font-extrabold uppercase tracking-[0.14em] text-text-55">
                 {section.goalColumn.label}
               </div>
               <div aria-hidden="true" />
-              <div className="text-[15px] font-extrabold uppercase tracking-[0.14em] text-text-55">
+              <div className="text-[14px] font-extrabold uppercase tracking-[0.14em] text-text-55">
                 {section.modelColumn.label}
               </div>
             </div>
@@ -44,9 +44,9 @@ export function EngagementModelsFindFit({ section }: { section: FindFitSection }
                     key={row.id}
                     className="grid grid-cols-1 items-center gap-3 sm:grid-cols-[1fr_28px_1fr] sm:gap-4"
                   >
-                    <span className="text-[14.5px] font-semibold leading-[1.4] text-white">{row.text}</span>
+                    <span className="text-[14px] font-semibold leading-[1.4] text-white">{row.text}</span>
                     <ArrowRightIcon className="h-4 w-4 shrink-0 rotate-90 text-orange sm:rotate-0" />
-                    <span className="text-[14.5px] font-semibold leading-[1.4] text-white">{modelRow.text}</span>
+                    <span className="text-[14px] font-semibold leading-[1.4] text-white">{modelRow.text}</span>
                   </li>
                 );
               })}

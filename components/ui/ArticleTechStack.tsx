@@ -11,7 +11,7 @@ function TechStackBadge({ card }: { card: TechStackCardData }) {
         variant="constructionSolution"
         wrapperClassName="bg-[image:var(--gradient-step-badge)] border border-border-step-badge"
       >
-        <Image src={card.icon.url} alt={card.icon.alt} width={24} height={24} />
+        <Image className="tg-icon" src={card.icon.url} alt={card.icon.alt} width={24} height={24} />
       </GlassCardIcon>
     );
   }
@@ -30,7 +30,7 @@ export function ArticleTechStack({ section }: { section: TechStackSection }) {
   return (
     <div>
       <NarrativeHeading id={`narrative-${section.order}`}>{section.title}</NarrativeHeading>
-      <div className="mt-[22px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[22px]">
+      <div className="mt-[20px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[20px]">
         {section.cards.map((card) => (
           <GlassCard key={card.order} variant="constructionSolution" hoverBorderColor="">
             <TechStackBadge card={card} />

@@ -7,15 +7,15 @@ import type { ProductLifecycleSection } from "@/cms/shared/industry-sections";
 export function IndustryStepGrid({ section }: { section: ProductLifecycleSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-[50px] pb-[30px]" data-reveal>
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-[48px] pb-[32px]" data-reveal>
         <div className="mb-[40px] max-w-[760px] mt-[-9px]">
           <SectionEyebrow tone="amber" className="leading-[normal]">{section.eyebrow}</SectionEyebrow>
           <h2 className="text-[clamp(30px,3.8vw,42px)] leading-[1.08] tracking-[-0.03em]">{section.title}</h2>
-          <p className="mt-4 text-[16.5px] leading-[1.65] text-muted">
+          <p className="mt-4 text-[16px] leading-[1.65] text-muted">
             {section.description}
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[22px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[20px]">
           {section.cards.map((card) => (
             <GlassCard key={card.order} variant="constructionSolution" hoverBorderColor="">
               <GlassCardIcon

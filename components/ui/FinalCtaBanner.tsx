@@ -22,10 +22,10 @@ export function FinalCtaBanner({
 
   return (
     <section>
-      <div className="tg-container pt-[20px] pb-[90px] px-[var(--space-15)]">
+      <div className="tg-container pt-[20px] pb-[96px] px-[var(--space-15)]">
         <RevealOnScroll>
           <div
-            className="relative overflow-hidden flex flex-wrap items-center justify-between rounded-4xl bg-[var(--color-glass-faint)] border border-[var(--color-border)] backdrop-blur-[var(--blur-cta)] px-[48px] py-[54px] gap-[30px]"
+            className="relative overflow-hidden flex flex-wrap items-center justify-between rounded-4xl bg-[var(--color-glass-faint)] border border-[var(--color-border)] backdrop-blur-[var(--blur-cta)] px-[48px] py-[48px] gap-[32px]"
           >
             <div
               aria-hidden="true"
@@ -37,16 +37,16 @@ export function FinalCtaBanner({
                 {titleHighlight ? <span className="text-gradient">{titleHighlight}</span> : null}
                 {after}
               </h2>
-              <p className="mt-[14px] text-[16.5px] leading-[var(--lh-relaxed)] text-text-quiet">
+              <p className="mt-[12px] text-[16px] leading-[var(--lh-relaxed)] text-text-quiet">
                 {description}
               </p>
             </div>
             <Button
               href={ctaLink}
               variant="primary"
-              className="relative gap-[10px] text-[16px] !px-[30px] !py-[15px] !rounded-[12px] !min-h-[52px] whitespace-nowrap"
+              className="relative gap-[8px] !px-[32px] !py-[16px] !rounded-[12px] !min-h-[52px] whitespace-nowrap"
             >
-              {ctaLabel} <span aria-hidden="true" className="text-[17px]">&#8594;</span>
+              {ctaLabel} <span aria-hidden="true" className="text-[16px]">&#8594;</span>
             </Button>
           </div>
         </RevealOnScroll>

@@ -8,15 +8,15 @@ export function CaseStudyDetailHero({ section }: { section: DetailHeroSection })
 
   return (
     <section>
-      <div className="tg-container pt-[48px] pb-[30px] px-[var(--space-15)]">
+      <div className="tg-container pt-[48px] pb-[32px] px-[var(--space-15)]">
         <Link
           href={section.allCaseStudiesUrl}
           data-rise
-          className="inline-flex items-center gap-[8px] mb-[30px] text-[14px] font-semibold text-text-faint"
+          className="inline-flex items-center gap-[8px] mb-[32px] text-[14px] font-semibold text-text-faint"
         >
           <span aria-hidden="true">&#8592;</span> {section.allCaseStudiesLabel}
         </Link>
-        <div className="grid grid-cols-1 tg-md:grid-cols-[1.05fr_0.95fr] items-center gap-[56px]">
+        <div className="grid grid-cols-1 tg-md:grid-cols-[1.05fr_0.95fr] items-center gap-[48px]">
           <div data-rise style={{ animationDelay: ".1s" }}>
             {section.caseStudyLabel ? (
               <span className="text-[var(--text-2xs)] font-bold tracking-[var(--ls-widest)] uppercase text-teal-light">
@@ -24,17 +24,17 @@ export function CaseStudyDetailHero({ section }: { section: DetailHeroSection })
               </span>
             ) : null}
             <h1
-              className={`${section.caseStudyLabel ? "mt-[14px]" : ""} text-[clamp(34px,4.4vw,52px)] leading-[1.05] tracking-[-0.035em]`}
+              className={`${section.caseStudyLabel ? "mt-[12px]" : ""} text-[clamp(34px,4.4vw,52px)] leading-[1.05] tracking-[-0.035em]`}
             >
               {section.title}
             </h1>
             {section.subtitle ? (
-              <p className="mt-[18px] max-w-[520px] text-[18px] leading-[var(--lh-relaxed)] text-secondary">
+              <p className="mt-[16px] max-w-[520px] text-[18px] leading-[var(--lh-relaxed)] text-secondary">
                 {section.subtitle}
               </p>
             ) : null}
             {hasMeta ? (
-              <div className="inline-flex items-center flex-wrap gap-[18px] mt-[24px] text-[14px] text-text-soft">
+              <div className="inline-flex items-center flex-wrap gap-[16px] mt-[24px] text-[14px] text-text-soft">
                 {section.publishedDate ? (
                   <span className="inline-flex items-center gap-[8px]">
                     {section.publishedDateIcon ? (
@@ -43,7 +43,7 @@ export function CaseStudyDetailHero({ section }: { section: DetailHeroSection })
                         alt={section.publishedDateIcon.alt}
                         width={16}
                         height={16}
-                        className="leading-[normal]"
+                        className="tg-icon leading-[normal]"
                       />
                     ) : null}
                     {section.publishedDate}

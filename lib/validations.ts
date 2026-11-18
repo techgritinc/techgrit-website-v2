@@ -40,12 +40,23 @@ export const validateMessage = (fieldName: string, maxLength: number = 2000) =>
     .min(1, { message: `${fieldName} is required` })
     .max(maxLength, { message: `${fieldName} cannot exceed ${maxLength} characters` });
 
+/** True only for absolute http:/https: URLs — rejects javascript:, data:, mailto:, etc. */
+export function isHttpUrl(value: string): boolean {
+  try {
+    const { protocol } = new URL(value);
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 export const validateLinkedinUrl = z
   .string()
   .trim()
   .min(1, { message: "URL is required" })
   .max(300, { message: "URL cannot exceed 300 characters" })
-  .url({ message: "Please enter a valid URL" });
+  // zod's .url() accepts any scheme (including javascript:), so restrict to web links.
+  .refine(isHttpUrl, { message: "Please enter a valid URL starting with http:// or https://" });
 
 const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 const ALLOWED_RESUME_TYPES = new Set([

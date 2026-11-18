@@ -38,11 +38,11 @@ export function BlocksContent({ content }: { content: StrapiBlocksContent }) {
         if (node.type === "list") {
           const ListTag = node.format === "ordered" ? "ol" : "ul";
           return (
-            <ListTag key={nodeIndex} className="flex flex-col gap-[10px]">
+            <ListTag key={nodeIndex} className="flex flex-col gap-[8px]">
               {node.children.map((item, itemIndex) => (
                 <li key={itemIndex} className="flex items-start gap-3">
-                  <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-orange" />
-                  <span className="text-[15.5px] leading-[1.7] text-secondary whitespace-pre-line">
+                  <span className="mt-[8px] h-1.5 w-1.5 shrink-0 rounded-full bg-orange" />
+                  <span className="text-[16px] leading-[1.7] text-secondary whitespace-pre-line">
                     {item.children.map((inline, inlineIndex) => (
                       <BlockInline key={inlineIndex} node={inline} />
                     ))}
@@ -59,7 +59,7 @@ export function BlocksContent({ content }: { content: StrapiBlocksContent }) {
             // (e.g. "...pre-platform reality:\n\n" immediately before a bold sub-heading in
             // the same paragraph). HTML would collapse those, running the sub-heading onto
             // the end of the previous sentence — this keeps the authored breaks.
-            <p key={nodeIndex} className="text-[15.5px] leading-[1.7] text-secondary whitespace-pre-line">
+            <p key={nodeIndex} className="text-[16px] leading-[1.7] text-secondary whitespace-pre-line">
               {node.children.map((inline, inlineIndex) => (
                 <BlockInline key={inlineIndex} node={inline} />
               ))}

@@ -24,11 +24,11 @@ const RELATED_ICON: Record<string, (props: { width?: number; height?: number }) 
 export function AiModernizationRelated({ section }: { section: RelatedServicesSection }) {
   return (
     <section className="relative">
-      <div className="mx-auto max-w-[1280px] px-9 pt-10 pb-[60px]">
+      <div className="mx-auto max-w-(--container-max) px-(--container-padding) pt-10 pb-[64px]">
         <RevealOnScroll>
           <div className="mb-6 flex flex-wrap items-baseline justify-between gap-4">
-            <h3 className="text-[22px] leading-[normal] font-bold tracking-[-0.02em] text-white">{section.title}</h3>
-            <Link href={section.seeAllHref} className="text-[13px] font-extrabold uppercase tracking-[0.08em] text-amber-light">
+            <h3 className="text-[20px] leading-[normal] font-bold tracking-[-0.02em] text-white">{section.title}</h3>
+            <Link href={section.seeAllHref} className="text-[14px] font-extrabold uppercase tracking-[0.08em] text-amber-light">
               {section.seeAllLabel} &#8594;
             </Link>
           </div>

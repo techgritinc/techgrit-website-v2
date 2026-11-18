@@ -7,12 +7,12 @@ export function ArticleResponsibilitySection({ section }: { section: Responsibil
   return (
     <div>
       <NarrativeHeading id={`narrative-${section.order}`}>{section.title}</NarrativeHeading>
-      <div className="mt-[16px] flex flex-col gap-[22px]">
+      <div className="mt-[16px] flex flex-col gap-[20px]">
         {section.groups.map((group, groupIndex) => (
-          <div key={groupIndex} className="flex flex-col gap-[14px]">
+          <div key={groupIndex} className="flex flex-col gap-[12px]">
             {group.heading ? <h3 className="text-[20px] leading-[normal]">{group.heading}</h3> : null}
             {group.items.map((blocks, itemIndex) => (
-              <div key={itemIndex} className="flex flex-col gap-[14px]">
+              <div key={itemIndex} className="flex flex-col gap-[12px]">
                 <BlocksContent content={blocks} />
               </div>
             ))}

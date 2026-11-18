@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Button from "@/components/ui/Button";
+import AnchorScrollButton from "@/components/ui/AnchorScrollButton";
 import MediaSlot from "@/components/ui/MediaSlot";
 import AutoplayVideo from "@/components/ui/AutoplayVideo";
+import YouTubePreview from "@/components/ui/YouTubePreview";
+import { disableYouTubeCaptions, youTubePlayerSrc } from "@/cms/utils/youtube";
 import { CloseIcon, PlayIcon } from "@/components/ui/icons";
 import type { CareersHeroContent, CollageImage } from "@/cms/types/careers-types";
 
@@ -19,6 +21,7 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
   const after = content.heading.slice(highlightIndex + content.headingHighlight.length);
   const [previewImage, setPreviewImage] = useState<CollageImage | null>(null);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [modalVideoContainer, setModalVideoContainer] = useState<HTMLDivElement | null>(null);
 
   function openPreview(image: CollageImage, index: number) {
@@ -42,7 +45,7 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
 
   return (
     <section>
-      <div className="mx-auto grid max-w-[1280px] grid-cols-[1.05fr_0.95fr] items-center gap-14 px-9 pt-[74px] pb-[30px] max-tg-md:grid-cols-1 max-tg-md:gap-9">
+      <div className="mx-auto grid max-w-(--container-max) grid-cols-[1.05fr_0.95fr] items-center gap-14 px-(--container-padding) pt-[80px] pb-[32px] max-tg-md:grid-cols-1 max-tg-md:gap-9">
         <div>
           <div
             data-rise
@@ -61,13 +64,15 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
 
           <p data-rise className="mt-5 max-w-[500px] text-[18px] leading-[1.65] text-secondary [animation-delay:.2s]">{content.lead}</p>
 
-          <div data-rise className="mt-[30px] flex flex-wrap gap-3.5 [animation-delay:.28s]">
-            <Button href={content.primaryCta.href} variant="primary" size="hero" className="min-h-[52px] !px-7 !py-[15px] !text-[16px] !font-bold leading-[normal]">
-              {content.primaryCta.label} <span aria-hidden="true" className="text-[17px]">&#8594;</span>
-            </Button>
-            <Button href={content.secondaryCta.href} variant="ghost" size="hero" className="min-h-[52px] !px-[26px] !py-4 !text-[16px] !font-bold leading-[normal]">
-              {content.secondaryCta.label}
-            </Button>
+          <div data-rise className="mt-[32px] flex flex-wrap gap-3.5 [animation-delay:.28s]">
+            <AnchorScrollButton
+              href={content.primaryCta.href}
+              variant="primary"
+              size="hero"
+              className="min-h-[52px] !px-7 !py-[16px] leading-[normal]"
+            >
+              {content.primaryCta.label} <span aria-hidden="true" className="text-[16px]">&#8594;</span>
+            </AnchorScrollButton>
           </div>
         </div>
 
@@ -75,9 +80,13 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
           <div className="grid grid-cols-2 auto-rows-[150px] gap-3.5 max-tg-md:auto-rows-[180px]">
             {content.images.map((image, index) => {
               const isVideo = image.type === "video";
+              // YouTube tiles show a thumbnail and play only on hover, with the play button hidden.
+              const hideOnHover = image.youtubeId ? "group-hover:opacity-0" : "";
               return (
                 <div
                   key={index}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   onClick={isVideo ? () => openPreview(image, index) : undefined}
                   onKeyDown={
                     isVideo
@@ -93,7 +102,7 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                   tabIndex={isVideo ? 0 : undefined}
                   aria-label={isVideo ? `Play ${image.alt || "video"} with sound` : undefined}
                   className={[
-                    "relative overflow-hidden rounded-[18px] border border-border-image",
+                    "group relative overflow-hidden rounded-[18px] border border-border-image",
                     COLLAGE_SPAN_CLASSES[image.span],
                     isVideo ? "cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-orange" : "",
                   ]
@@ -102,14 +111,24 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
                 >
                   {isVideo ? (
                     <>
-                      <AutoplayVideo
-                        src={image.src}
-                        className={`absolute inset-0 h-full w-full object-cover ${image.span === "wide" ? "object-[50%_25%]" : ""}`}
-                        previewClassName="h-full w-full"
-                        portalTarget={previewIndex === index ? modalVideoContainer : undefined}
-                      />
-                      <div aria-hidden="true" className="absolute inset-0 bg-black/15 transition-colors duration-200 hover:bg-black/30" />
-                      <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      {image.youtubeId ? (
+                        <YouTubePreview
+                          id={image.youtubeId}
+                          playing={hoveredIndex === index}
+                          thumbnailUrl={image.thumbnailUrl}
+                          showThumbnail
+                          thumbnailClassName={image.span === "wide" ? "object-[50%_25%]" : ""}
+                        />
+                      ) : (
+                        <AutoplayVideo
+                          src={image.src}
+                          className={`absolute inset-0 h-full w-full object-cover ${image.span === "wide" ? "object-[50%_25%]" : ""}`}
+                          previewClassName="h-full w-full"
+                          portalTarget={previewIndex === index ? modalVideoContainer : undefined}
+                        />
+                      )}
+                      <div aria-hidden="true" className={`absolute inset-0 bg-black/15 transition-all duration-200 hover:bg-black/30 ${hideOnHover}`} />
+                      <div aria-hidden="true" className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${hideOnHover}`}>
                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[rgba(255,255,255,0.95)] shadow-[0_10px_24px_rgba(0,0,0,0.4)]">
                           <PlayIcon className="text-orange" width={18} height={18} />
                         </div>
@@ -142,6 +161,9 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
           role="dialog"
           aria-modal="true"
           aria-label={`${previewImage.alt || "Video"} preview`}
+          // Backdrop is dark in both themes (--color-modal-backdrop), so pin the dark theme
+          // for the close button inside it.
+          data-theme="dark"
           className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-modal-backdrop p-6 backdrop-blur-md"
         >
           <div onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[900px]">
@@ -153,7 +175,21 @@ export function CareersHero({ content }: { content: CareersHeroContent }) {
             >
               <CloseIcon />
             </button>
-            <div ref={setModalVideoContainer} className="relative aspect-video overflow-hidden rounded-xl bg-ink" />
+            {previewImage.youtubeId ? (
+              <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
+                <iframe
+                  src={youTubePlayerSrc(previewImage.youtubeId)}
+                  onLoad={disableYouTubeCaptions}
+                  title={`${previewImage.alt || "Life at TechGrit"} video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full border-0"
+                />
+              </div>
+            ) : (
+              <div ref={setModalVideoContainer} className="relative aspect-video overflow-hidden rounded-xl bg-ink" />
+            )}
           </div>
         </div>
       )}
