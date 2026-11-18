@@ -13,10 +13,17 @@ import type { HeaderData, HeaderMegaGroup } from "@/cms/types/header-types";
 const NAV_LINK_BASE =
   "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-3.5 py-[8px] text-sm font-medium text-nav leading-[normal] transition-colors hover:bg-nav-hover hover:text-white aria-expanded:bg-nav-hover aria-expanded:text-white";
 
-const GRID_COLS_CLASS: Record<HeaderMegaGroup["columns"], string> = {
-  3: "grid-cols-3",
-  4: "grid-cols-4",
-};
+const MEGA_MAX_WIDTH = 940;
+const MEGA_PADDING_X = 28;
+
+function getMegaLayout(group: HeaderMegaGroup): { gridTemplateColumns: string; width: string } {
+  const columnWidth = (MEGA_MAX_WIDTH - MEGA_PADDING_X) / group.columns;
+  const usedColumns = Math.max(1, Math.min(group.columns, group.items.length));
+  return {
+    gridTemplateColumns: `repeat(${usedColumns}, minmax(0, 1fr))`,
+    width: `min(${Math.round(columnWidth * usedColumns + MEGA_PADDING_X)}px, calc(100vw - 40px))`,
+  };
+}
 
 // next.config.ts sets trailingSlash: true, so usePathname() always resolves with a
 // trailing slash (e.g. "/what-we-do/ai-modernization/"), while every href built from
@@ -161,8 +168,9 @@ export default function HeaderClient({ data }: { data: HeaderData }) {
                 </button>
                 <div
                   role="menu"
-                  className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid w-[min(940px,calc(100vw-40px))] -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
-                    } ${GRID_COLS_CLASS[group.columns]}`}
+                  className={`absolute top-[calc(100%+14px)] left-1/2 z-(--z-dropdown) grid -translate-x-1/2 gap-0.5 rounded-tile border border-border bg-dd-bg p-3.5 shadow-mega backdrop-blur-nav transition-[opacity,transform,visibility] duration-[220ms] ease-out ${isOpen ? "translate-y-0 visible opacity-100" : "translate-y-2 invisible opacity-0"
+                    }`}
+                  style={getMegaLayout(group)}
                 >
                   {group.items.map((item) => {
                     const itemActive = isCurrentPath(item.href, pathname);
