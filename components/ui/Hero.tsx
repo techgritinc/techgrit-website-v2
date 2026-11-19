@@ -17,7 +17,7 @@ export interface HeroProps {
   eyebrow: string;
   title: string;
   /** Exact substring of `title` rendered via the shared `.text-gradient` span. */
-  titleHighlight: string;
+  titleHighlight?: string | null;
   subtitle: string;
   /** Optional — some pages' hero sections ship with no CTA fields from the CMS at all. */
   primaryCta?: HeroCta;
@@ -51,8 +51,10 @@ export interface HeroProps {
 // highlight case-insensitively and slices the *original* title text (preserving its
 // real casing/punctuation) rather than substituting the separate highlight string; if
 // no match exists at all, the whole title renders plainly with no gradient span.
-function splitTitleHighlight(title: string, highlight: string): [string, string, string] {
-  const needle = highlight.trim().replace(/[.!?]+$/, "");
+function splitTitleHighlight(title: string, highlight: string | null | undefined): [string, string, string] {
+  // The CMS can leave `highlightTitle` empty (null) — Strapi doesn't enforce the field —
+  // and that must render the plain title, not crash the page (it failed the prod build).
+  const needle = (highlight ?? "").trim().replace(/[.!?]+$/, "");
   if (!needle) return [title, "", ""];
   const start = title.toLowerCase().indexOf(needle.toLowerCase());
   if (start === -1) return [title, "", ""];
