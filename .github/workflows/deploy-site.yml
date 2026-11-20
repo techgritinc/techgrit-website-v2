@@ -178,6 +178,9 @@ jobs:
           MS_GRAPH_TENANT_ID: ${{ secrets.MS_GRAPH_TENANT_ID }}
           MS_GRAPH_CLIENT_ID: ${{ secrets.MS_GRAPH_CLIENT_ID }}
           MS_GRAPH_CLIENT_SECRET: ${{ secrets.MS_GRAPH_CLIENT_SECRET }}
+          # Optional: shared secret for the CMS draft Preview (app/preview/*). Must equal the
+          # CMS's PREVIEW_SECRET. When unset, Preview 404s and nothing else changes.
+          CMS_PREVIEW_SECRET: ${{ secrets.CMS_PREVIEW_SECRET }}
           MS_GRAPH_SENDER: ${{ vars.MS_GRAPH_SENDER }}
           CAREERS_NOTIFY_TO: ${{ vars.CAREERS_NOTIFY_TO }}
           CAREERS_RATE_WINDOW_MS: ${{ vars.CAREERS_RATE_WINDOW_MS }}
@@ -217,6 +220,7 @@ jobs:
               printf 'MS_GRAPH_TENANT_ID=%s\n' "$MS_GRAPH_TENANT_ID"
               printf 'MS_GRAPH_CLIENT_ID=%s\n' "$MS_GRAPH_CLIENT_ID"
               printf 'MS_GRAPH_CLIENT_SECRET=%s\n' "$MS_GRAPH_CLIENT_SECRET"
+              printf 'CMS_PREVIEW_SECRET=%s\n' "$CMS_PREVIEW_SECRET"
               printf 'MS_GRAPH_SENDER=%s\n' "$MS_GRAPH_SENDER"
               printf 'CAREERS_NOTIFY_TO=%s\n' "$CAREERS_NOTIFY_TO"
               printf 'CAREERS_RATE_WINDOW_MS=%s\n' "$CAREERS_RATE_WINDOW_MS"
