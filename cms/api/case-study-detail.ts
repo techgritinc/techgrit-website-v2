@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { fetchCms } from "./fetcher";
+import { fetchCmsDraft } from "./fetcher-draft";
 import { mapCtaBanner, mapSectionIcon, mapStatistics } from "../shared/reusable-sections";
 import {
   formatPublishedDate,
@@ -130,6 +131,20 @@ function mapCaseStudyDetailSections(
     .filter((section): section is Exclude<CaseStudyDetailSectionEntry, undefined> => section !== undefined);
 }
 
+function toCaseStudyDetailContent(data: StrapiCaseStudyDetailPage): CaseStudyDetailPageContent {
+  const parsed = parseCaseStudyDetailSections(data.sections ?? []);
+
+  return {
+    seo: {
+      metaTitle: data.seo?.metaTitle ?? "",
+      metaDescription: data.seo?.metaDescription ?? "",
+    },
+    hero: mapHero(data),
+    sections: mapCaseStudyDetailSections(parsed),
+    team: parsed.teamCms ? mapTeamComposition(parsed.teamCms) : null,
+  };
+}
+
 // Called from the Case Study detail page's Server Component, keyed per slug. Returns null
 // when the CMS itself is unreachable OR the slug doesn't exist (the endpoint 404s) — the page
 // then renders a 404 (see [slug]/page.tsx), matching the list page's own
@@ -143,18 +158,15 @@ function mapCaseStudyDetailSections(
 export const getCaseStudyDetailPageContent = cache(
   async (slug: string): Promise<CaseStudyDetailPageContent | null> => {
     const data = await fetchCms<StrapiCaseStudyDetailPage>(caseStudyDetailEndpoint(slug));
-    if (!data) return null;
+    return data ? toCaseStudyDetailContent(data) : null;
+  }
+);
 
-    const parsed = parseCaseStudyDetailSections(data.sections ?? []);
-
-    return {
-      seo: {
-        metaTitle: data.seo?.metaTitle ?? "",
-        metaDescription: data.seo?.metaDescription ?? "",
-      },
-      hero: mapHero(data),
-      sections: mapCaseStudyDetailSections(parsed),
-      team: parsed.teamCms ? mapTeamComposition(parsed.teamCms) : null,
-    };
+// Unpublished version of a case study, for the /preview route only. Never cached; null when
+// the preview secret isn't configured or the CMS rejects/doesn't find the case study.
+export const getCaseStudyDraftDetailPageContent = cache(
+  async (slug: string): Promise<CaseStudyDetailPageContent | null> => {
+    const data = await fetchCmsDraft<StrapiCaseStudyDetailPage>(caseStudyDetailEndpoint(slug));
+    return data ? toCaseStudyDetailContent(data) : null;
   }
 );

@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { fetchCms } from "./fetcher";
+import { fetchCmsDraft } from "./fetcher-draft";
 import { mapCtaBanner } from "../shared/reusable-sections";
 import {
   formatPublishedDate,
@@ -116,10 +117,7 @@ function mapBlogDetailSections(
 // Request-deduped so generateMetadata and the page body share one CMS call. Returns null
 // when the endpoint has no such post (the route then renders notFound()) — including for
 // slugs that appear on the list page but have no detail record of their own.
-export const getBlogDetailPageContent = cache(async (slug: string): Promise<BlogDetailPageContent | null> => {
-  const data = await fetchCms<StrapiBlogDetailPage>(blogDetailEndpoint(slug));
-  if (!data) return null;
-
+function toBlogDetailContent(data: StrapiBlogDetailPage): BlogDetailPageContent {
   return {
     seo: {
       // The endpoint's seo block is entirely null on every current post, so the post's own
@@ -130,4 +128,16 @@ export const getBlogDetailPageContent = cache(async (slug: string): Promise<Blog
     header: mapHeader(data),
     sections: mapBlogDetailSections(data.sections ?? [], data.title),
   };
+}
+
+export const getBlogDetailPageContent = cache(async (slug: string): Promise<BlogDetailPageContent | null> => {
+  const data = await fetchCms<StrapiBlogDetailPage>(blogDetailEndpoint(slug));
+  return data ? toBlogDetailContent(data) : null;
+});
+
+// Unpublished version of a post, for the /preview route only. Never cached; null when the
+// preview secret isn't configured or the CMS rejects/doesn't find the post.
+export const getBlogDraftDetailPageContent = cache(async (slug: string): Promise<BlogDetailPageContent | null> => {
+  const data = await fetchCmsDraft<StrapiBlogDetailPage>(blogDetailEndpoint(slug));
+  return data ? toBlogDetailContent(data) : null;
 });

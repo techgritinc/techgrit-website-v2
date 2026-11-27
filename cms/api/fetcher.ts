@@ -17,3 +17,6 @@ export async function fetchCms<T>(endpoint: string): Promise<T | null> {
     return null;
   }
 }
+
+// The draft variant (fetchCmsDraft) lives in ./fetcher-draft.ts so this file stays free of
+// server-only imports — client components reach it through cms/utils/media.ts.
